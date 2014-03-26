@@ -516,9 +516,50 @@ function delete_bbb_session($id)
 
 function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
 {
-    //Algorithm to select BBB server GOES HERE ...
-    
     global $course_code;
+    global $course_id;
+
+    $run_to = -1;
+    $min_users  = 10000000;
+    $fall_back = -1;
+    
+    //Get all course participants
+    $sql = "SELECT user_id, email FROM course_user, user
+                WHERE course_user.course_id = $course_id AND course_user.user_id = user.id";
+    $users_to_join = db_query($sql);
+        
+    //Algorithm to select BBB server GOES HERE ...
+    $query = db_query("SELECT * FROM bbb_servers");
+    
+    if (mysql_num_rows($query)) {
+        while ($row = mysql_fetch_array($query)) {
+            $max_rooms = $row['max_rooms'];
+            $max_users = $row['max_users'];
+            // GET connected Participants
+            $connected_users = get_connected_users($row['server_key'],$row['api_url']);
+            $active_rooms = get_active_rooms($row['server_key'],$row['api_url']);
+            
+            if($connected_users<$min_users)
+            {
+                $fall_back=$row['id'];
+                $min_users = $connected_users;
+            }
+            
+            IF (($max_users < (count($users_to_join) + $connected_users)) && $active_rooms < $max_rooms) // YOU FOUND THE SERVER
+            {
+                $run_to = $row['id'];
+                db_query("UPDATE bbb_session SET running_at='".$row['id']."' WHERE meeting_id=$meeting_id");
+                break;
+            }
+        }
+    }
+   
+    if($run_to == -1)
+    {
+        //WE SHOULD TAKE ACTION IF NO SERVER IS SELECTED DUE TO CAPACITY PROBLEMS
+        //db_query("UPDATE bbb_session SET running_at='$fall_back' WHERE meeting_id=$meeting_id");
+    }
+    
     //we find the bbb server that will serv the session
     $query = db_query("SELECT *
                         FROM bbb_servers
@@ -580,9 +621,11 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
 //create join as moderator link
 function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
     
+    $running_server = db_query_get_single_value("SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'");
+
     $query = db_query("SELECT *
                         FROM bbb_servers
-                        WHERE id=1");
+                        WHERE id=$running_server");
 
     if (mysql_num_rows($query)) {
         while ($row = mysql_fetch_array($query)) {
@@ -621,9 +664,11 @@ function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
 
 // create join as simple user link
 function bbb_join_user($meeting_id,$att_pw,$surname,$name){
+    $running_server = db_query_get_single_value("SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'");
+
     $query = db_query("SELECT *
                         FROM bbb_servers
-                        WHERE id=1");
+                        WHERE id=$running_server");
 
     if (mysql_num_rows($query)) {
         while ($row = mysql_fetch_array($query)) {
@@ -672,9 +717,10 @@ function bbb_session_running($meeting_id)
     if (! isset($running_server)) {
         return false;
     }
+
     $query = db_query("SELECT *
                         FROM bbb_servers
-                        WHERE id=$running_server");
+                        WHERE id='$running_server'");
 
     if (mysql_num_rows($query)) {
         while ($row = mysql_fetch_array($query)) {
@@ -720,5 +766,40 @@ function date_diff_in_minutes($start_date,$current_date)
 {
     return round((strtotime($start_date) - strtotime($current_date)) /60);
 }
+
+//Get total connected users per server
+function get_connected_users($salt,$bbb_url)
+{
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+
+    $sum = 0;
+    foreach($meetings as $meeting){
+            $mid = $meeting['meetingId'];
+            $pass = $meeting['moderatorPw'];
+            if($mid != null){
+                    $info = $bbb->getMeetingInfoWithXmlResponseArray(array('meetingId' => $mid, 'password' => $pass));
+                    $sum += $info['participantCount'];
+            }
+    }
+    return $sum;
+
+}
+
+function get_active_rooms($salt,$bbb_url)
+{
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+
+    $sum = count($meetings);
+
+    return $sum;
+
+}
+
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
