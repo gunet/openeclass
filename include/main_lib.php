@@ -1559,6 +1559,7 @@ function deleteUser($id) {
                                     WHERE dropbox_msg.author_id = ?d", $u);
             Database::get()->query("DELETE dropbox_index FROM dropbox_index INNER JOIN dropbox_msg ON dropbox_index.msg_id = dropbox_msg.id 
                                     WHERE dropbox_msg.author_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_index WHERE recipient_id = ?d", $u);
             Database::get()->query("DELETE FROM dropbox_msg WHERE author_id = ?d", $u);
             Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
