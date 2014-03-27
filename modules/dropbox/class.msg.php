@@ -31,16 +31,20 @@ Class Msg {
     var $filename;
     var $real_filename;
     var $filesize;
+    //user context
+    var $uid;
     
     /**
      * Constructor
      * Takes either one argument to load the msg from db or multiple
      * arguments to create a new msg
      */
-    public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
-        if (func_num_args() > 1) {
+    public function __construct($arg1, $arg2, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
+        if (func_num_args() > 2) {
+            $this->uid = $arg1;
             $this->createNewMsg($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9);
         } else {
+            $this->uid = $arg2;
             $this->loadMsgFromDB($arg1);
         }
     }
@@ -101,19 +105,21 @@ Class Msg {
             $thread_id = $this->id;
         }
         
-        $sql = "INSERT INTO `dropbox_index` (`msg_id`,`recipient_id`, `thread_id`, `is_read`) VALUES (?d,?d,?d,?d)";
+        $sql = "INSERT INTO `dropbox_index` (`msg_id`,`recipient_id`, `thread_id`, `is_read`, `deleted`) VALUES (?d,?d,?d,?d,?d)";
         
         $argsarr = array();
         $argsarr[] = $this->id;
         $argsarr[] = $author_id;
         $argsarr[] = $thread_id;
         $argsarr[] = 0;
+        $argsarr[] = 0;
         
         foreach ($recipients as $rec) {
-            $sql .= ",(?d,?d,?d,?d)";
+            $sql .= ",(?d,?d,?d,?d,?d)";
             $argsarr[] = $this->id;
             $argsarr[] = $rec;
             $argsarr[] = $thread_id;
+            $argsarr[] = 0;
             $argsarr[] = 0;
         }
         
@@ -124,8 +130,8 @@ Class Msg {
             $this->real_filename = $real_filename;
             $this->filesize = $filesize;
             
-            $sql = "INSERT INTO `dropbox_attachment` (`filename`, `real_filename`, `filesize`) VALUES(?s,?s,?d)";
-            Database::get()->query($sql, $filename, $real_filename, $filesize);
+            $sql = "INSERT INTO `dropbox_attachment` (`msg_id`, filename`, `real_filename`, `filesize`) VALUES(?d,?s,?s,?d)";
+            Database::get()->query($sql, $this->id, $filename, $real_filename, $filesize);
         } else {
             $this->filename = '';
             $this->real_filename = '';
@@ -134,27 +140,33 @@ Class Msg {
     }
     
     /**
-     * Delete message
-     * @param the user id
+     * Mark message for deletion
+     * Delete message if all users have marked it for deletion
      */
-    public function delete($uid) {
-        $sql = "DELETE FROM `dropbox_index` WHERE `recipient_id` = ?d AND `msg_id` = ?d";
-        Database::get()->query($sql, $uid, $this->id);
-        //delete msg that is not present in dropbox_index anymore
-        //(all recipients have deleted the msg)
-        $sql = "SELECT COUNT(`msg_id`) as c FROM `dropbox_index` WHERE `msg_id` = ?d";
-        if (Database::get()->querySingle($sql, $mid)->c == 0) {
+    public function delete() {
+        $sql = "UPDATE `dropbox_index` 
+                SET `deleted` = ?d 
+                WHERE `recipient_id` = ?d 
+                AND `msg_id` = ?d";
+        Database::get()->query($sql, 1, $this->uid, $this->id);
+        //delete msg that all recipients have marked for deletion
+        $sql = "SELECT COUNT(`msg_id`) as `c` 
+                FROM `dropbox_index` 
+                WHERE `msg_id` = ?d 
+                AND `deleted` = ?d";
+        if (Database::get()->querySingle($sql, $this->id, 0)->c == 0) {
             $sql = "DELETE FROM `dropbox_msg` WHERE `id` = ?d";
-            Database::get()->query($sql, $mid);
+            Database::get()->query($sql, $this->id);
+            $sql = "DELETE FROM `dropbox_index` WHERE `id` = ?d";
+            Database::get()->query($sql, $this->id);
             if ($this->course_id != 0) {//only course messages may have attachment
-                global $dropbox_dir;
-                $sql = "SELECT `filename` FROM `dropbox_attachment` WHERE `msg_id` = ?d";
-                $res = Database::get()->querySingle($sql, $this->id);
-                unlink($dropbox_dir . "/" . $res->filename);
-                $sql = "DELETE FROM `dropbox_attachment` WHERE `msg_id` = ?d";
-                Database::get()->query($sql, $mid);
+                if ($this->filename != '') {
+                    global $dropbox_dir;
+                    unlink($dropbox_dir . "/" . $this->filename);
+                    $sql = "DELETE FROM `dropbox_attachment` WHERE `msg_id` = ?d";
+                    Database::get()->query($sql, $this->id);
+                }
             }
         }
-        
     }
 }

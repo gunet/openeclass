@@ -25,14 +25,18 @@ Class Thread {
     var $subject;
     var $recipients;
     //var $is_read;
+    //user context
+    var $uid;
     
     /**
      * Constructor
      * @param id the thread id
+     * @param uid the user id
      */
-    public function __construct($id) {
+    public function __construct($id, $uid) {
         
         $this->id = $id;
+        $this->uid = $uid;
         
         $sql = "SELECT `dropbox_index`.`recipient_id`, `dropbox_msg`.`subject` 
                 FROM `dropbox_msg`,`dropbox_index`
@@ -50,29 +54,33 @@ Class Thread {
     }
     
     /**
-     * Get the messages of a thread
+     * Get the messages of a thread that are visible in
+     * the user context
      * @return msg objects
      */
     public function getMsgs() {
         $msgs = array();
         
-        $sql = "SELECT DISTINCT `msg_id` FROM `dropbox_index` WHERE `thread_id` = ?d";
-        $res = Database::get()->queryArray($sql, $id);
+        $sql = "SELECT DISTINCT `msg_id` 
+                FROM `dropbox_index` 
+                WHERE `thread_id` = ?d 
+                AND `deleted` = ?d
+                AND `recipient_id = ?d`";
+        $res = Database::get()->queryArray($sql, $this->id, 0, $this->uid);
         foreach ($res as $r) {
-            $msgs[] = new Msg($r->msg-id);
+            $msgs[] = new Msg($r->msg-id, $this->uid);
         }
         return $msgs;
     }
     
     /**
      * Delete thread
-     * @param the user id
      */
-    public function delete($uid) {
+    public function delete() {
         $msgs = $this->getMsgs();
         //delete all messages of this thread
         foreach ($msgs as $msg) {
-            $msg->delete($uid);
+            $msg->delete();
         }
     }
 }

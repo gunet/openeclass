@@ -23,7 +23,7 @@
  * This class represents a Mailbox
  */
 Class Mailbox {
-    
+    //mailbox context
     var $uid;
     var $courseId;
     
@@ -42,8 +42,10 @@ Class Mailbox {
      * @return int
      */
     public function unreadThreadsNumber() {
-        $sql = "SELECT COUNT(DISTINCT `thread_id`) as unread_count
-                FROM `dropbox_index` WHERE `is_read` = ?d AND `recipient_id` = ?d";
+        $sql = "SELECT COUNT(DISTINCT `thread_id`) as `unread_count`
+                FROM `dropbox_index` 
+                WHERE `is_read` = ?d 
+                AND `recipient_id` = ?d";
         return Database::get()->querySingle($sql, 0, $this->uid)->unread_count;
     }
     
@@ -55,22 +57,26 @@ Class Mailbox {
         $threads = array();
         
         if ($this->courseId == 0) {//all threads
-            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` FROM `dropbox_msg`,`dropbox_index`
+            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
+                    FROM `dropbox_msg`,`dropbox_index`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
                     AND `dropbox_index`.`recipient_id` = ?d 
-                    AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`";
-            $res = Database::get()->queryArray($sql, $this->uid);
+                    AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
+                    AND `dropbox_index`.`deleted` = ?d";
+            $res = Database::get()->queryArray($sql, $this->uid, 0);
         } else {//threads in course context
-            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` FROM `dropbox_msg`,`dropbox_index`
+            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
+                    FROM `dropbox_msg`,`dropbox_index`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND `dropbox_index`.`recipient_id` = ?d
                     AND `dropbox_msg`.`course_id` = ?d
-                    AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`";
-            $res = Database::get()->queryArray($sql, $this->uid, $this->courseId);
+                    AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
+                    AND `dropbox_index`.`deleted` = ?d";
+            $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0);
         }
         
         foreach ($res as $r) {
-           $threads[] = new Thread($r->id);
+           $threads[] = new Thread($r->id, $this->uid);
         }
         
         return $threads;
@@ -84,11 +90,21 @@ Class Mailbox {
         $msgs = array();
         
         if ($this->courseId == 0) {//all mesages
-            $sql = "SELECT id FROM `dropbox_msg` WHERE `author_id` = ?d ORDER BY `timestamp` DESC";
-            $res = Database::get()->queryArray($sql, $this->uid);
+            $sql = "SELECT `dropbox_msg`.`id` 
+                    FROM `dropbox_msg`,`dropbox_index` 
+                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
+                    AND `dropbox_index`.`deleted` = ?d 
+                    AND `author_id` = ?d 
+                    ORDER BY `timestamp` DESC";
+            $res = Database::get()->queryArray($sql, 0, $this->uid);
         } else {//messages in course context
-            $sql = "SELECT id FROM `dropbox_msg` WHERE `author_id` = ?d AND `course_id` = ?d ORDER BY `timestamp` DESC";
-            $res = Database::get()->queryArray($sql, $this->uid, $this->courseId);
+            $sql = "SELECT `dropbox_msg`.`id` 
+                    FROM `dropbox_msg` 
+                    WHERE `author_id` = ?d 
+                    AND `course_id` = ?d 
+                    AND `dropbox_index`.`deleted` = ?d
+                    ORDER BY `timestamp` DESC";
+            $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0);
         }
         
         foreach ($res as $r) {
