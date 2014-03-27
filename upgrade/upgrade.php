@@ -917,6 +917,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `recipient_id` INT(11) UNSIGNED NOT NULL,
                             `thread_id` INT(11) UNSIGNED NOT NULL,
                             `is_read` BOOLEAN NOT NULL DEFAULT 0,
+                            `deleted` BOOLEAN NOT NULL DEFAULT 0,
                             PRIMARY KEY (`msg_id`, `recipient_id`),
                             KEY `list` (`recipient_id`,`is_read`),
                             KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
