@@ -516,12 +516,11 @@ function delete_bbb_session($id)
 
 function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
 {
-    global $course_code;
+    //global $course_code;
     global $course_id;
 
     $run_to = -1;
     $min_users  = 10000000;
-    $fall_back = -1;
     
     //Get all course participants
     $sql = "SELECT user_id, email FROM course_user, user
@@ -541,29 +540,35 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
             
             if($connected_users<$min_users)
             {
-                $fall_back=$row['id'];
+                $run_to=$row['id'];
                 $min_users = $connected_users;
             }
             
-            IF (($max_users < (count($users_to_join) + $connected_users)) && $active_rooms < $max_rooms) // YOU FOUND THE SERVER
+            //cases
+            // max_users = 0 && max_rooms = 0 - UNLIMITED
+            // active_rooms < max_rooms && active_users < max_users
+            // active_rooms < max_rooms && max_users = 0 (UNLIMITED)
+            // active_users < max_users && max_rooms = 0 (UNLIMITED)
+            
+            if( ($row['max_rooms']='0' && $row['max_users']='0') || (($max_users > (count($users_to_join) + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $row['max_rooms'] && $row['max_users']='0') || (($max_users > (count($users_to_join) + $connected_users)) && $row['max_rooms']='0')) // YOU FOUND THE SERVER
             {
                 $run_to = $row['id'];
-                db_query("UPDATE bbb_session SET running_at='".$row['id']."' WHERE meeting_id=$meeting_id");
+                db_query("UPDATE bbb_session SET running_at='".$row['id']."' WHERE meeting_id='$meeting_id'");
                 break;
             }
         }
     }
-   
+
     if($run_to == -1)
     {
-        //WE SHOULD TAKE ACTION IF NO SERVER IS SELECTED DUE TO CAPACITY PROBLEMS
-        //db_query("UPDATE bbb_session SET running_at='$fall_back' WHERE meeting_id=$meeting_id");
+        //WE SHOULD TAKE ACTION IF NO SERVER AVAILABLE DUE TO CAPACITY PROBLEMS
+        db_query("UPDATE bbb_session SET running_at='$run_to' WHERE meeting_id=$meeting_id");
     }
     
     //we find the bbb server that will serv the session
     $query = db_query("SELECT *
                         FROM bbb_servers
-                        WHERE id=1");
+                        WHERE id=$run_to");
 
     if (mysql_num_rows($query)) {
         while ($row = mysql_fetch_array($query)) {
@@ -728,6 +733,9 @@ function bbb_session_running($meeting_id)
             $bbb_url = $row['api_url'];
         }
     }
+    
+    if(!isset($salt) || !isset($bbb_url)) { return 'false'; }
+    
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
@@ -790,15 +798,21 @@ function get_connected_users($salt,$bbb_url)
 
 function get_active_rooms($salt,$bbb_url)
 {
+    $sum = 0;
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
     $meetings = $bbb->getMeetingsWithXmlResponseArray();
 
-    $sum = count($meetings);
-
+    foreach($meetings as $meeting){
+        $mid = $meeting['meetingId'];
+        $pass = $meeting['moderatorPw'];
+        if($mid != null){
+            $sum += 1;
+        }
+    }
+    
     return $sum;
-
 }
 
 add_units_navigation(TRUE);
