@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -44,15 +44,7 @@ $navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $lang
 
 mysql_select_db($mysqlMainDb);
 
-if (isset($_POST['edIdBloc'])) {
-        // Save results from block edit (save action)
-        $res_id = intval($_POST['edIdBloc']);
-        $unit_id = description_unit_id($cours_id);
-        add_unit_resource($unit_id, 'description', $res_id,
-                          autounquote($_POST['edTitleBloc']),
-                          autounquote($_POST['edContentBloc']));
-        display_add_block_form();
-} elseif (isset($_REQUEST['numBloc'])) {
+if (isset($_REQUEST['numBloc'])) {
         // Display block edit form (edit action)
         $numBloc = intval($_REQUEST['numBloc']);
         if (isset($titreBloc[$numBloc])) {
@@ -79,32 +71,22 @@ if (isset($_POST['edIdBloc'])) {
                         $contentBloc = '';
                 }
         }
-        $tool_content .= "
-      <form method='post' action='index.php?course=$code_cours'>
-      <input type='hidden' name='edIdBloc' value='$numBloc' />
-        <fieldset>
-        
+        $tool_content .= "<form method='post' action='index.php?course=$code_cours'>
+        <input type='hidden' name='edIdBloc' value='$numBloc' />
+        <fieldset>        
         <table class='tbl'>
         <tr>
            <th width='100'>$langTitle:</th>";
         if ($edit_title) {
-                $tool_content .= "
-           <td><input type='text' name='edTitleBloc' $edit_title /></td>
-        </tr>";
+                $tool_content .= "<td><input type='text' name='edTitleBloc' $edit_title /></td></tr>";
         } else {
-                $tool_content .= "
-           <td><b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td>
-        </tr>";
+                $tool_content .= "<td><b>$title</b><input type='hidden' name='edTitleBloc' value='$title' /></td></tr>";
         }
 
-        $tool_content .= "
-        <tr>
-           <th valign='top'>$langContent:</th>
-           <td>".
-                    @rich_text_editor('edContentBloc', 4, 20, $contentBloc)
-                    ."</td>
-        </tr>
-        <tr>
+        $tool_content .= "<tr><th valign='top'>$langContent:</th>
+           <td>".@rich_text_editor('edContentBloc', 4, 20, $contentBloc)."</td>
+            </tr>
+            <tr>
            <td>&nbsp;</td>
            <td class='right'><input class='Login' type='submit' name='save' value='".q($langAdd)."' />&nbsp;&nbsp;
               <input class='Login' type='submit' name='ignore' value='".q($langBackAndForget)."' />
@@ -112,7 +94,7 @@ if (isset($_POST['edIdBloc'])) {
         </tr>
         </table>
       </fieldset>
-      </form>\n";
+      </form>";
 } else {
         display_add_block_form();
 }
@@ -120,10 +102,21 @@ if (isset($_POST['edIdBloc'])) {
 draw($tool_content, 2, null, $head_content);
 
 
-// Display form to to add a new block
+/**
+ * @brief Display form to to add a new block
+ * @global type $cours_id
+ * @global type $code_cours
+ * @global type $tool_content
+ * @global type $titreBloc
+ * @global type $langAddCat
+ * @global type $langAdd
+ * @global type $langSelection
+ * @global type $titreBlocNotEditable
+ */
 function display_add_block_form()
 {
         global $cours_id, $code_cours, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
+        
         $q = db_query("SELECT res_id FROM unit_resources WHERE unit_id =
                                 (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
                        ORDER BY `order`");
@@ -144,7 +137,7 @@ function display_add_block_form()
             <td><select name='numBloc' size='1'>";
         while (list($numBloc,) = each($titreBloc)) {
                 if (!isset($blocState[$numBloc])) {
-                        $tool_content .= "\n                <option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
+                        $tool_content .= "<option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
                 }
         }
         $tool_content .= "</select>
@@ -156,5 +149,5 @@ function display_add_block_form()
           </tr>
           </table>
         </fieldset>  
-        </form>\n";
+        </form>";
 }
