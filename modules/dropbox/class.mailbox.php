@@ -94,21 +94,23 @@ Class Mailbox {
                     FROM `dropbox_msg`,`dropbox_index` 
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
                     AND `dropbox_index`.`deleted` = ?d 
-                    AND `author_id` = ?d 
+                    AND `author_id` = ?d
+                    AND  `dropbox_index`.`recipient_id` = ?d
                     ORDER BY `timestamp` DESC";
-            $res = Database::get()->queryArray($sql, 0, $this->uid);
+            $res = Database::get()->queryArray($sql, 0, $this->uid, $this->uid);
         } else {//messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
-                    FROM `dropbox_msg` 
-                    WHERE `author_id` = ?d 
+                    FROM `dropbox_msg`,`dropbox_index` 
+                    WHERE `author_id` = ?d
+                    AND  `dropbox_index`.`recipient_id` = ?d 
                     AND `course_id` = ?d 
                     AND `dropbox_index`.`deleted` = ?d
                     ORDER BY `timestamp` DESC";
-            $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0);
+            $res = Database::get()->queryArray($sql, $this->uid, $this->uid, $this->courseId, 0);
         }
         
         foreach ($res as $r) {
-            $msgs[] = new Msg($r->id);
+            $msgs[] = new Msg($r->id, $this->uid);
         }
         
         return $msgs;

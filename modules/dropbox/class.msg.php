@@ -54,7 +54,7 @@ Class Msg {
      * @param the msg id
      */
     private function loadMsgFromDB($id) {
-        $sql = "SELECT * FROM `dropbox_message` WHERE `id` = ?d";
+        $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
         $res = Database::get()->querySingle($sql, $id);
         
         $this->author_id = $res->author_id;
