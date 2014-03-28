@@ -75,7 +75,7 @@ hCont;
 
         process_actions();
 
-        if (isset($_POST['edIdBloc'])) {
+        if (isset($_POST['edIdBloc']) and isset($_POST['save'])) {            
                 // Save results from block edit (save action)
                 $res_id = intval($_POST['edIdBloc']);
                 add_unit_resource($unit_id, 'description', $res_id,
@@ -97,16 +97,16 @@ if ($q and mysql_num_rows($q) > 0) {
 		$tool_content .= "
 		<table width='100%' class='tbl_border'>
 		<tr class='odd'>
-		 <td class='bold'>" . q($row['title']) . "</td>\n" .
+		 <td class='bold'>" . q($row['title']) . "</td>" .
 		 actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
 		</tr>
 		<tr>";
 	      if ($is_editor) {
-		 $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+		 $tool_content .= "<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
 	      } else {
-		 $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+		 $tool_content .= "<td>" . standard_text_escape($row['comments']) . "</td>";
 	      }
-	      $tool_content .= "</tr></table><br />\n";
+	      $tool_content .= "</tr></table><br />";
 	}
 } else {
 	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
