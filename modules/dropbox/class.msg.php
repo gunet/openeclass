@@ -84,6 +84,10 @@ Class Msg {
             $this->real_filename = '';
             $this->filesize = 0;
         }
+        
+        //after loaded, message is considered read for this user
+        $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
+        Database::get()->query($sql, 1, $id, $this->uid);
     }
     
     /**
@@ -111,7 +115,7 @@ Class Msg {
         $argsarr[] = $this->id;
         $argsarr[] = $author_id;
         $argsarr[] = $thread_id;
-        $argsarr[] = 0;
+        $argsarr[] = 1;
         $argsarr[] = 0;
         
         foreach ($recipients as $rec) {
@@ -130,7 +134,7 @@ Class Msg {
             $this->real_filename = $real_filename;
             $this->filesize = $filesize;
             
-            $sql = "INSERT INTO `dropbox_attachment` (`msg_id`, filename`, `real_filename`, `filesize`) VALUES(?d,?s,?s,?d)";
+            $sql = "INSERT INTO `dropbox_attachment` (`msg_id`, `filename`, `real_filename`, `filesize`) VALUES(?d,?s,?s,?d)";
             Database::get()->query($sql, $this->id, $filename, $real_filename, $filesize);
         } else {
             $this->filename = '';
