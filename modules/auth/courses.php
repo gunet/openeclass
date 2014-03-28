@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -305,7 +305,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 $retString .= "\n      <th width='220'>$langTeacher</th>";
                 $retString .= "\n      <th width='30' align='center'>$langType</th>";
                 $retString .= "\n    </tr>";
-                $k=0;
+                $k = 0;                
                 while ($mycours = mysql_fetch_array($result)) {
                         $cid = $mycours['cid'];
                         $course_title = q($mycours['i']);
@@ -315,7 +315,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
-                                $codelink = "<a href='../contact/index.php?from_reg=true&amp;cours_id=$cid'>$course_title</a>";
+                                if (@$myCourses[$cid]['statut'] == 5) {
+                                    $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
+                                } else { // if we are not registered
+                                    $codelink = "<a href='../contact/index.php?from_reg=true&amp;cours_id=$cid'>$course_title</a>";
+                                }
                         } else {
                                 $codelink = $course_title;
                         }
