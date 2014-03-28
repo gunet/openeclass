@@ -84,12 +84,16 @@ if (isset($_POST['modify'])) {
         db_query("UPDATE `$currentCourseID`.forums SET forum_name = $name WHERE forum_id =
                         (SELECT forum_id FROM `$mysqlMainDb`.`group` WHERE id = $group_id)");
 
-        if ($is_editor and isset($_POST['tutor'])) {
-                db_query("DELETE FROM `$mysqlMainDb`.group_members
-                                 WHERE group_id = $group_id AND is_tutor = 1");
-                foreach ($_POST['tutor'] as $tutor_id) {
-                        $tutor_id = intval($tutor_id);
-                        db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
+        if ($is_editor) {
+            if (isset($_POST['tutor'])) {
+                    db_query("DELETE FROM `$mysqlMainDb`.group_members
+                                     WHERE group_id = $group_id AND is_tutor = 1");                
+                    foreach ($_POST['tutor'] as $tutor_id) {
+                            $tutor_id = intval($tutor_id);
+                            db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
+                    }
+                } else {
+                        db_query("UPDATE group_members SET is_tutor = 0 WHERE group_id = $group_id");
                 }
         }
 
@@ -122,7 +126,7 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
-        $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>\n";
+        $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>";
         $q = db_query("SELECT user.user_id, nom, prenom,
                                    user.user_id IN (SELECT user_id FROM group_members
                                                                    WHERE group_id = $group_id AND
@@ -135,7 +139,7 @@ if ($is_editor) {
         while ($row = mysql_fetch_array($q)) {
                 $selected = $row['is_tutor']? ' selected="selected"': '';
                 $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['nom']) .
-                                       ' ' . q($row['prenom']) . "</option>\n";
+                                       ' ' . q($row['prenom']) . "</option>";
 
         }
         $tool_content_tutor .= '</select>';

@@ -207,7 +207,7 @@ if (!$is_editor) {
 		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
 		$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
 		$attempt = $tmp[0];
-	}
+	}        
 	if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 		$_SESSION['exercise_begin_time'][$exerciseId] = $RecordStartDate = $temp_CurrentDate;
 		// save begin time in db
@@ -221,6 +221,8 @@ if (!$is_editor) {
 		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
 			$result = db_query($sql);
 			$timeleft = $exerciseTimeConstrain*60;
+                        unset($_SESSION['exercise_begin_time']);
+                        unset($_SESSION['exercise_end_time']);
 		}
 	}
 	// Checking everything is between correct boundaries:
