@@ -31,6 +31,7 @@ Class Msg {
     var $filename;
     var $real_filename;
     var $filesize;
+    var $error = false;
     //user context
     var $uid;
     
@@ -57,37 +58,41 @@ Class Msg {
         $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
         $res = Database::get()->querySingle($sql, $id);
         
-        $this->author_id = $res->author_id;
-        $this->body = $res->body;
-        $this->subject = $res->subject;
-        $this->id = $id;
-        $this->course_id = $res->course_id;
-        $this->timestamp = $res->timestamp;
-        
-        $sql = "SELECT `recipient_id` FROM `dropbox_index` WHERE `msg_id` = ?d";
-        $res = Database::get()->queryArray($sql, $id);
-        
-        foreach ($res as $r) {
-            if ($r->recipient_id != $this->author_id) {
-                $this->recipients[] = $r;
-            }
-        }
-        
-        $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
-        $res = Database::get()->querySingle($sql, $id);
         if (is_object($res)) {
-            $this->filename = $res->filename;
-            $this->real_filename = $res->real_filename;
-            $this->filesize = $res->filesize;
+            $this->author_id = $res->author_id;
+            $this->body = $res->body;
+            $this->subject = $res->subject;
+            $this->id = $id;
+            $this->course_id = $res->course_id;
+            $this->timestamp = $res->timestamp;
+            
+            $sql = "SELECT `recipient_id` FROM `dropbox_index` WHERE `msg_id` = ?d";
+            $res = Database::get()->queryArray($sql, $id);
+            
+            foreach ($res as $r) {
+                if ($r->recipient_id != $this->author_id) {
+                    $this->recipients[] = $r;
+                }
+            }
+            
+            $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
+            $res = Database::get()->querySingle($sql, $id);
+            if (is_object($res)) {
+                $this->filename = $res->filename;
+                $this->real_filename = $res->real_filename;
+                $this->filesize = $res->filesize;
+            } else {
+                $this->filename = '';
+                $this->real_filename = '';
+                $this->filesize = 0;
+            }
+            
+            //after loaded, message is considered read for this user
+            $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
+            Database::get()->query($sql, 1, $id, $this->uid);
         } else {
-            $this->filename = '';
-            $this->real_filename = '';
-            $this->filesize = 0;
+            $this->error = true;
         }
-        
-        //after loaded, message is considered read for this user
-        $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
-        Database::get()->query($sql, 1, $id, $this->uid);
     }
     
     /**

@@ -76,7 +76,7 @@ Class Mailbox {
         }
         
         foreach ($res as $r) {
-           $threads[] = new Thread($r->id, $this->uid);
+           $threads[] = new Thread($r->thread_id, $this->uid);
         }
         
         return $threads;

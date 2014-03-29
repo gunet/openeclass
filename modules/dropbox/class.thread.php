@@ -24,6 +24,7 @@ Class Thread {
     var $id;
     var $subject;
     var $recipients;
+    var $error = false;
     //var $is_read;
     //user context
     var $uid;
@@ -45,12 +46,15 @@ Class Thread {
                 GROUP BY `dropbox_index`.`recipient_id`";
         
         $res = Database::get()->queryArray($sql, $id);
-        
-        foreach ($res as $r) {
-            $this->recipients[] = $r->recipient_id;
+        if (!empty($res)) {
+            foreach ($res as $r) {
+                $this->recipients[] = $r->recipient_id;
+            }
+            
+            $this->subject = $r->subject;
+        } else {
+            $this->error = true;
         }
-        
-        $this->subject = $r->subject;
     }
     
     /**
@@ -65,10 +69,10 @@ Class Thread {
                 FROM `dropbox_index` 
                 WHERE `thread_id` = ?d 
                 AND `deleted` = ?d
-                AND `recipient_id = ?d`";
+                AND `recipient_id` = ?d";
         $res = Database::get()->queryArray($sql, $this->id, 0, $this->uid);
         foreach ($res as $r) {
-            $msgs[] = new Msg($r->msg-id, $this->uid);
+            $msgs[] = new Msg($r->msg_id, $this->uid);
         }
         return $msgs;
     }
