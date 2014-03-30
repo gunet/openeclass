@@ -897,7 +897,7 @@ $langExercices = "Ασκήσεις";
 $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
 $langLinkSite = "Προσθήκη συνδέσμου στην αρχική σελίδα";
 $langModifyInfo = "Διαχείριση Μαθήματος";
-$langDropBox = "Ανταλλαγή Μηνυμάτων";
+$langDropBox = "Μηνύματα";
 $langLearnPath = "Γραμμή Μάθησης";
 $langWiki = "Σύστημα Wiki";
 $langToolManagement = "Ενεργοποίηση Εργαλείων";
@@ -1269,9 +1269,12 @@ $langDropBoxIncompatible = "Προσοχή! Το υποσύστημα 'Αντα�
 $langPurgeFile = "Προσοχή! Το μήνυμα θα διαγραφεί από όλους τους χρήστες";
 $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
+$langRecipients = "Παραλήπτες";
 $langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συννημένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
+$langParticipants = "Συμμετέχοντες";
+$langLoading = "Φόρτωση...";
 
 /* * ********************************************************
  * exercise

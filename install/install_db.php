@@ -465,27 +465,31 @@ db_query("CREATE TABLE IF NOT EXISTS videolink (
                 `visible` TINYINT(4) NOT NULL DEFAULT 1, 
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
+db_query("CREATE TABLE IF NOT EXISTS dropbox_msg (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
-                `uploader_id` INT(11) NOT NULL DEFAULT 0,
-                `filename` VARCHAR(250) NOT NULL DEFAULT '',
-                 real_filename varchar(255) NOT NULL default '',
-                `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `title` VARCHAR(250) NOT NULL DEFAULT '',
-                `description` VARCHAR(1000) NOT NULL DEFAULT '',                
-                `upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `last_upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+                `author_id` INT(11) UNSIGNED NOT NULL,
+                `subject` VARCHAR(250) NOT NULL,
+                `body` LONGTEXT NOT NULL,                
+                `timestamp` INT(11) NOT NULL) $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
-                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                PRIMARY KEY (fileId, personId)) $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `msg_id` INT(11) UNSIGNED NOT NULL,
+                `filename` VARCHAR(250) NOT NULL,
+                 real_filename varchar(255) NOT NULL,
+                `filesize` INT(11) UNSIGNED NOT NULL,
+                KEY `msg` (`msg_id`)) $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
-                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                PRIMARY KEY (fileId, recipientId)) $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS dropbox_index (
+                `msg_id` INT(11) UNSIGNED NOT NULL,
+                `recipient_id` INT(11) UNSIGNED NOT NULL,
+                `thread_id` INT(11) UNSIGNED NOT NULL,
+                `is_read` BOOLEAN NOT NULL DEFAULT 0,
+                `deleted` BOOLEAN NOT NULL DEFAULT 0,
+                PRIMARY KEY (`msg_id`, `recipient_id`),
+                KEY `list` (`recipient_id`,`is_read`),
+                KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
                 `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

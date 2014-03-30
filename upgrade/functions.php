@@ -428,33 +428,30 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') &&
             mysql_table_exists($code, 'dropbox_post')) {
 
-        list($fileid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
+        list($fileid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_msg"));
         $fileid_offset = (!$fileid_offset) ? 0 : intval($fileid_offset);
 
         db_query("CREATE TEMPORARY TABLE dropbox_map AS
                    SELECT old.id AS old_id, old.id + $fileid_offset AS new_id
                      FROM dropbox_file AS old ORDER by id");
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                        (`id`, `course_id`, `uploaderId`, `filename`, `real_filename`, `filesize`, `title`,
-                         `description`, `uploadDate`, `lastUploadDate`)
-                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`, `real_filename`, 
-                               `filesize`, `title`, `description`, `uploadDate`,
-                               `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_msg
+                        (`id`, `course_id`, `author_id`, `subject`,
+                         `body`, `timestamp`)
+                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `title`, `description`, UNIX_TIMESTAMP(`uploadDate`)
+                               FROM dropbox_file ORDER BY id") && $ok;
+        
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_attachment
+                        (`msg_id`, `filename`, `real_filename`, `filesize`)
+                        SELECT `id` + $fileid_offset, `filename`, `real_filename`, `filesize`
+                               FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") && $ok;
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person
-                         (`fileId`, `personId`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_index
+                         (`msg_id`, `recipient_id`, `thread_id`, `is_read`, `deleted`)
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, dropbox_map.new_id, 1, 0
                            FROM dropbox_person, dropbox_map
                           WHERE dropbox_person.fileId = dropbox_map.old_id
                           ORDER BY dropbox_person.fileId") && $ok;
-
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_post
-                         (`fileId`, `recipientId`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_post.recipientId
-                           FROM dropbox_post, dropbox_map
-                          WHERE dropbox_post.fileId = dropbox_map.old_id
-                          ORDER BY dropbox_post.fileId") && $ok;
 
         db_query("DROP TEMPORARY TABLE dropbox_map");
 
