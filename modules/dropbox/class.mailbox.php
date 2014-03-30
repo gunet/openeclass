@@ -101,7 +101,8 @@ Class Mailbox {
         } else {//messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index` 
-                    WHERE `author_id` = ?d
+                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
+                    AND `author_id` = ?d
                     AND  `dropbox_index`.`recipient_id` = ?d 
                     AND `course_id` = ?d 
                     AND `dropbox_index`.`deleted` = ?d

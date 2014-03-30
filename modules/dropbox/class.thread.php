@@ -24,6 +24,7 @@ Class Thread {
     var $id;
     var $subject;
     var $recipients;
+    var $course_id;
     var $error = false;
     //var $is_read;
     //user context
@@ -39,7 +40,7 @@ Class Thread {
         $this->id = $id;
         $this->uid = $uid;
         
-        $sql = "SELECT `dropbox_index`.`recipient_id`, `dropbox_msg`.`subject` 
+        $sql = "SELECT `dropbox_index`.`recipient_id`, `dropbox_msg`.`subject`, `dropbox_msg`.`course_id`  
                 FROM `dropbox_msg`,`dropbox_index`
                 WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                 AND `dropbox_index`.`thread_id` = ?d 
@@ -52,6 +53,7 @@ Class Thread {
             }
             
             $this->subject = $r->subject;
+            $this->course_id = $r->course_id;
         } else {
             $this->error = true;
         }
