@@ -104,22 +104,24 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	  <th>$langSender:</th>
 	  <td>" . q(uid_to_name($uid)) . "</td>
 	</tr>";
-    @$tool_content .= "<tr>
+    $tool_content .= "<tr>
         <th width='120'>" . $langTitle . ":</th>
-        <td><input type='input' name='message_title' size='50' value='$message_title' />	      
+        <td><input type='input' name='message_title' size='50'/>	      
         </td>
         </tr>";
-    @$tool_content .= "<tr>
+    $tool_content .= "<tr>
               <th>" . $langMessage . ":</th>
-              <td>".rich_text_editor('body', 4, 20, $description)."
+              <td>".rich_text_editor('body', 4, 20, '')."
               <small>&nbsp;&nbsp;$langMaxMessageSize</small></td>           
             </tr>";
-    $tool_content .= "<tr>
-	  <th width='120'>$langFileName:</th>
-	  <td><input type='file' name='file' size='35' />	     
-	  </td>
-	</tr>
-	<tr>
+    if ($course_id != 0) {
+        $tool_content .= "<tr>
+	      <th width='120'>$langFileName:</th>
+	      <td><input type='file' name='file' size='35' />	     
+	      </td>
+	    </tr>";
+    }
+	$tool_content .= "<tr>
 	  <th>$langSendTo:</th>
 	  <td>
 	<select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";

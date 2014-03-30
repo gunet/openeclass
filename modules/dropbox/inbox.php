@@ -85,7 +85,63 @@ if (isset($_GET['tid'])) {
         }
         
         $out .= "  </tbody>
-                 </table>";
+                 </table><br/><br/>";
+        
+        /*****Reply Form****/
+        if ($course_id == 0) {
+            $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        } else {
+            $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        }
+        //hidden variables needed in case of a reply
+        $out .= "<input type='hidden' name='message_title' value='$thread->subject' />";
+        $out .= "<input type='hidden' name='thread_id' value='$thread->id' />";
+        foreach ($thread->recipients as $rec) {
+            if ($rec != $uid) {
+                $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
+            }
+        }
+        $out .= "<fieldset>
+                   <table width='100%' class='tbl'>
+                     <tr>
+                       <th>$langSender:</th>
+                       <td>" . q(uid_to_name($uid)) . "</td>
+	                 </tr>";
+        $out .= "<tr>
+                  <th>" . $langMessage . ":</th>
+                  <td>".rich_text_editor('body', 4, 20, '')."
+                    <small><br/>$langMaxMessageSize</small></td>
+                 </tr>";
+        if ($course_id != 0) {
+            $out .= "<tr>
+                   <th width='120'>$langFileName:</th>
+                   <td><input type='file' name='file' size='35' />
+                   </td>
+                 </tr>";
+        }
+        
+        $out .= "<tr>
+	               <th>&nbsp;</th>
+                   <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
+                      $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
+                 </tr>
+               </table>
+             </fieldset>
+           </form>
+           <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
+
+         $out .= "<script type='text/javascript' src='{$urlAppend}js/jquery.multiselect.min.js'></script>\n";
+         $out .= "<script type='text/javascript'>$(document).ready(function () {
+                              $('#select-recipients').multiselect({
+                                selectedText: '$langJQSelectNum',
+                                noneSelectedText: '$langJQNoneSelected',
+                                checkAllText: '$langJQCheckAll',
+                                uncheckAllText: '$langJQUncheckAll'
+                              });
+                            });</script>
+        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+        /******End of Reply Form ********/
+
         $out .= "<script>
                    $(document).ready(function() {
                      $('#thread_table').dataTable();

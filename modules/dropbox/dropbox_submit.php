@@ -79,7 +79,11 @@ if (isset($_POST["submit"])) {
             } else {
                 $subject = $langMessage;
             }
-            $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);            
+            if (!isset($_POST['thread_id'])) {//new message
+                $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+            } else {//reply to a thread
+                $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
+            }            
         } else {
             $cwd = getcwd();
             if (is_dir($dropbox_dir)) {
@@ -113,7 +117,11 @@ if (isset($_POST["submit"])) {
                 $filename_final = $dropbox_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
-                $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+                if (!isset($_POST['thread_id'])) {
+                    $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+                } else {
+                    $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
+                }
             }            
             chdir($cwd);
         }        
