@@ -134,7 +134,7 @@ if (isset($_GET['tid'])) {
         $out .= "<table id=\"inbox_table\">
                   <thead>
                     <tr>";
-        if ($course_id == 0) {
+        if ($course_id != 0) {
             $out .= "<th>$langCourse</th>";
         }
         $out .= "     <th>$langSubject</th>
@@ -155,7 +155,7 @@ if (isset($_GET['tid'])) {
                 $urlstr = "&amp;course=".$course_code;
             }
             $out .= "<tr id='$thread->id'>";
-            if ($course_id == 0) {
+            if ($course_id != 0) {
                 $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></td>";
             }
             $out .= " <td><a href='inbox.php?tid=$thread->id".$urlstr."'>$thread->subject</a></td>
