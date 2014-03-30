@@ -824,6 +824,15 @@ if ($is_editor) {
         if ($checkForAss){
             foreach ($checkForAss as $newAssToGradebook) {
                 $content = standard_text_escape($newAssToGradebook->description);
+                
+                if($newAssToGradebook->assign_to_specific){
+                    $content .= "(Η εργασία αφορά συγεκριμένους μαθητές)<br>";
+                    $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname , user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
+                    foreach ($checkForAssSpec as $checkForAssSpecR) {
+                        $content .= $checkForAssSpecR->surname. " " . $checkForAssSpecR->givenname . "<br>";
+                    }
+                }
+                
                 //$newAssToGradebook->deadline = claro_format_locale_date($dateFormatLong, strtotime($newAssToGradebook->deadline));          
                 $d = strtotime($newAssToGradebook->deadline);
 
