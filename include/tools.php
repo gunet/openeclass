@@ -107,6 +107,7 @@ function getToolsArray($cat) {
                                                           " . MODULE_ID_WIKI . ",
                                                           " . MODULE_ID_ATTENDANCE . ",
                                                           " . MODULE_ID_GRADEBOOK . ",
+                                                          " . MODULE_ID_GRADEBOOKTOTAL . ",
                                                           " . MODULE_ID_LP . ")
 
                                         ORDER BY module_id";
