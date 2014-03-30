@@ -43,10 +43,20 @@ Class Mailbox {
      */
     public function unreadThreadsNumber() {
         $sql = "SELECT COUNT(DISTINCT `thread_id`) as `unread_count`
-                FROM `dropbox_index` 
-                WHERE `is_read` = ?d 
-                AND `recipient_id` = ?d";
-        return Database::get()->querySingle($sql, 0, $this->uid)->unread_count;
+                FROM `dropbox_index`, `course_module`, `dropbox_msg`
+                WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
+                AND (
+                     (
+                      `dropbox_msg`.`course_id` = `course_module`.`course_id`
+                      AND `course_module`.`module_id` = ?d
+                      AND `course_module`.`visible` = ?d
+                     ) 
+                     OR 
+                      `dropbox_msg`.`course_id` = ?d
+                    )
+                AND `dropbox_index`.`is_read` = ?d 
+                AND `dropbox_index`.`recipient_id` = ?d";
+        return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid)->unread_count;
     }
     
     /**
@@ -56,14 +66,23 @@ Class Mailbox {
     public function getInboxThreads() {
         $threads = array();
         
-        if ($this->courseId == 0) {//all threads
+        if ($this->courseId == 0) {//all threads except those from courses where dropbox is inactive
             $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
-                    FROM `dropbox_msg`,`dropbox_index`
-                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
+                    FROM `dropbox_msg`,`dropbox_index`, `course_module`
+                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
+                    AND (
+                     (
+                      `dropbox_msg`.`course_id` = `course_module`.`course_id`
+                      AND `course_module`.`module_id` = ?d
+                      AND `course_module`.`visible` = ?d
+                     ) 
+                     OR 
+                      `dropbox_msg`.`course_id` = ?d
+                    ) 
                     AND `dropbox_index`.`recipient_id` = ?d 
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
                     AND `dropbox_index`.`deleted` = ?d";
-            $res = Database::get()->queryArray($sql, $this->uid, 0);
+            $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0);
         } else {//threads in course context
             $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
                     FROM `dropbox_msg`,`dropbox_index`
@@ -89,15 +108,24 @@ Class Mailbox {
     public function getOutboxMsgs() {
         $msgs = array();
         
-        if ($this->courseId == 0) {//all mesages
+        if ($this->courseId == 0) {//all mesages except those from courses where dropbox is inactive
             $sql = "SELECT `dropbox_msg`.`id` 
-                    FROM `dropbox_msg`,`dropbox_index` 
-                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 
+                    FROM `dropbox_msg`,`dropbox_index`, `course_module`
+                    WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
+                    AND (
+                     (
+                      `dropbox_msg`.`course_id` = `course_module`.`course_id`
+                      AND `course_module`.`module_id` = ?d
+                      AND `course_module`.`visible` = ?d
+                     ) 
+                     OR 
+                      `dropbox_msg`.`course_id` = ?d
+                    ) 
                     AND `dropbox_index`.`deleted` = ?d 
                     AND `author_id` = ?d
                     AND  `dropbox_index`.`recipient_id` = ?d
                     ORDER BY `timestamp` DESC";
-            $res = Database::get()->queryArray($sql, 0, $this->uid, $this->uid);
+            $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, $this->uid);
         } else {//messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index` 
