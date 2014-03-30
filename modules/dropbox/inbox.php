@@ -49,15 +49,25 @@ if (isset($_GET['tid'])) {
                   });
                 </script>";
         $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+        $urlstr = '';
+        if ($course_id != 0) {
+            $urlstr = "?course=".$course_code;
+        }
+        $out .= "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
         $out .= "<h2>$langSubject: $thread->subject</h2><br/>";
+        if ($thread->course_id != 0 && $course_id == 0) {
+            $out .= "<p class=\"tags\"><span class=\"st_tag\"><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></span></p><br/>";
+        }
         $out .= "<table id=\"thread_table\">
                   <thead>
                     <tr>
                       <th>$langDate</th>
                       <th>$langSender</th>
-                      <th>$langMessage</th>
-                      <th>$langAttachedFile</th>
-                      <th>$langDelete</th>
+                      <th>$langMessage</th>";
+        if ($course_id != 0) {
+            $out .= " <th>$langAttachedFile</th>";
+        }
+        $out .= "     <th>$langDelete</th>
                     </tr>
                   </thead>
                   <tbody>";
@@ -66,9 +76,11 @@ if (isset($_GET['tid'])) {
             $out .= "<tr id='$m->id'>
                        <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
                        <td>".uid_to_name($m->author_id)."</td>
-                       <td>".standard_text_escape($m->body)."</td>
-                       <td>$m->real_filename</td>
-                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
+                       <td>".standard_text_escape($m->body)."</td>";
+            if ($course_id != 0) {
+                $out .= "<td><a href=\"dropbox_download.php?course=$course_code&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+            }
+            $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
                      </tr>";
         }
         
@@ -121,8 +133,11 @@ if (isset($_GET['tid'])) {
         $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
         $out .= "<table id=\"inbox_table\">
                   <thead>
-                    <tr>
-                      <th>$langSubject</th>
+                    <tr>";
+        if ($course_id == 0) {
+            $out .= "<th>$langCourse</th>";
+        }
+        $out .= "     <th>$langSubject</th>
                       <th>$langParticipants</th>
                       <th>$langDelete</th>
                     </tr>
@@ -132,11 +147,18 @@ if (isset($_GET['tid'])) {
         foreach ($threads as $thread) {
             $participants = '';
             foreach ($thread->recipients as $r) {
-                $participants .= uid_to_name($r).', ';
+                $participants .= uid_to_name($r).'<br/>';
             }
-            $participants = substr($participants, 0, strlen($participants)-2);
-            $out .= "<tr id='$thread->id'>
-                      <td><a href='inbox.php?tid=$thread->id'>$thread->subject</a></td>
+            $participants = substr($participants, 0, strlen($participants)-5);
+            $urlstr = '';
+            if ($course_id != 0) {
+                $urlstr = "&amp;course=".$course_code;
+            }
+            $out .= "<tr id='$thread->id'>";
+            if ($course_id == 0) {
+                $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></td>";
+            }
+            $out .= " <td><a href='inbox.php?tid=$thread->id".$urlstr."'>$thread->subject</a></td>
                       <td>$participants</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";
