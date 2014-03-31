@@ -146,7 +146,8 @@ function new_bbb_session() {
     global $desc;
     global $start_session;
     global $langBack;
-    global $langBBBNotifyUsers,$langBBBNotifyExternalUsers ;
+    global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
+    global $langBBBScheduleSessionInfo, $langBBBScheduleSessionInfo2 ;
 
     $start_session = jscal_html('start_session');
 
@@ -224,7 +225,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
 {
     global $tool_content, $langBBBAddSuccessful;
     global $langBBBScheduledSession;
-    
+    global $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2 ;
+
     $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
             . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','1','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."','".q(trim($external_users))."')");
     
@@ -249,22 +251,30 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
         }
         if(count($recipients)>0)
         {
-            $emailsubject = $langBBBScheduledSession ;
-            //$emailbody = "Test body";
-            $emailcontent = $langBBBSchedulesSessionInfo . $start_session;
-            $emilcontent .= $langBBBSchedulesSessionInfoJoin;
+            $emailsubject = $langBBBScheduledSession;
+            $emailbody = $langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session;
+            $emailcontent = $langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session;
             
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
         }
     }
+    
+    $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
+                                                   WHERE course_id = ?", $course_id)->maxorder;
+    $order = $orderMax + 1;
+            
+    $query=db_query("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
+                                             '$langBBBScheduledSession',NOW(),
+                                             '$course_id','$order','1')");
 }
 
 // update scheduled session data into database
 function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users)
 {
-    global $tool_content, $langBBBAddSuccessful;
-    
+    global $tool_content, $langBBBAddSuccessful, $course_id;
+    global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2 ;
+        
     $query = db_query("UPDATE bbb_session SET title='".q($title)."',description='".$desc."',"
             . "start_date='".$start_session."',public='$type',active='$status',unlock_interval='$minutes_before',external_users='".trim($external_users)."' WHERE id='$session_id'");
     
@@ -289,14 +299,23 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
         }
         if(count($recipients)>0)
         {
-            $emailsubject = "Test subject";
-            $emailbody = "Test body";
-            $emailcontent = "Test content";
+            $emailsubject = $langBBBScheduledSession;
+            $emailbody = $langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session;
+            $emailcontent = $langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session;
             
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
         }
     }
+    
+    $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
+                                                   WHERE course_id = ?", $course_id)->maxorder;
+    $order = $orderMax + 1;
+            
+    $query=db_query("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
+                                             '$langBBBScheduledSession',NOW(),
+                                             '$course_id','$order','1')");
+
 }
 
 //form to edit session data
