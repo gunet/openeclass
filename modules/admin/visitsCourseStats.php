@@ -204,40 +204,35 @@ if (!extension_loaded('gd')) {
         switch ($u_interval) {
             case "summary":
                 while ($row = mysql_fetch_assoc($result)) {
-                        $dataSet->addPoint(new Point($langSummary, $row['cnt']));
-                        $chart->width += 25;
+                        $dataSet->addPoint(new Point($langSummary, $row['cnt']));                        
                         $chart->setDataSet($dataSet);
                         $chart_content=1;
                 }
             break;
             case "daily":
                 while ($row = mysql_fetch_assoc($result)) {
-                        $dataSet->addPoint(new Point($row['date'], $row['cnt']));
-                        $chart->width += 25;
+                        $dataSet->addPoint(new Point($row['date'], $row['cnt']));                        
                         $chart->setDataSet($dataSet);
                         $chart_content=1;
                 }
             break;
             case "weekly":
                 while ($row = mysql_fetch_assoc($result)) {
-                        $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
-                        $chart->width += 25;
+                        $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));                        
                         $chart->setDataSet($dataSet);
                         $chart_content=1;
                 }
             break;
             case "monthly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                    $chart->width += 25;
+                    $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));                    
                     $chart->setDataSet($dataSet);
                     $chart_content=1;
                 }
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $dataSet->addPoint(new Point($row['year'], $row['cnt']));
-                    $chart->width += 25;
+                    $dataSet->addPoint(new Point($row['year'], $row['cnt']));                    
                     $chart->setDataSet($dataSet);
                     $chart_content=1;
                 }
