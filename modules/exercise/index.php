@@ -290,8 +290,7 @@ if (!$nbrExercises) {
             // how many attempts we have.
 			$currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;														  
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td align='center'>
-                                $row->time_constraint $langExerciseConstrainUnit</td>";
+                $tool_content .= "<td align='center'>";
                 // if there is an active attempt
                 $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$row->id' AND uid='$uid' AND record_end_date is NULL";
                	$tmp = mysql_fetch_row(db_query($sql));
@@ -304,6 +303,7 @@ if (!$nbrExercises) {
                         $_SESSION['exercise_begin_time'][$row->id] = $recordStartDate;
                         $timeleft = ($row->time_constraint*60) - ($temp_CurrentDate - $recordStartDate);
                         $passed = false;
+                       
                     } else {
                         $timeleft = "{$row->time_constraint} $langExerciseConstrainUnit";
                         $passed = true;
@@ -346,7 +346,7 @@ if (!$nbrExercises) {
 }
 add_units_navigation(TRUE);
 //if there is an active attempt, countdown leftime
-if(isset($timeleft)){
+if(isset($timeleft) && $timeleft > 0){
     load_js('tools.js');
     $head_content .= "<script type='text/javascript'>";
     // If not editor, enable countdown mechanism

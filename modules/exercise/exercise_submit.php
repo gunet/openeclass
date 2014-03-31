@@ -106,22 +106,19 @@ if (isset($_POST['formSent'])) {
         $exerciseResult = array();
     }
 	// checking if user's time is more than exercise's time constrain
-    if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
-        $exerciseTimeConstraint = $exerciseTimeConstraint * 60 + 10;
-        $exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
-        $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
-		if (!$is_editor) {
-	        if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
-	            unset($_SESSION['exercise_begin_time']);
-	            unset($_SESSION['exercise_end_time']);
-                    die('eimai edw');
-	            header('Location: exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
-	            exit();
-	        }
-			unset($_SESSION['exercise_begin_time']);
-			unset($_SESSION['exercise_end_time']);
-		}
-    }
+//    if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
+//        $exerciseTimeConstraint = $exerciseTimeConstraint * 60 + 10;
+//        $exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
+//        $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
+//		if (!$is_editor) {
+//                    if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
+////			$error = 'langExerciseExpiredTime';                     
+////                        header('Location: exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId.'&error='.$error);
+//                    }
+//                    unset($_SESSION['exercise_begin_time']);
+//                    unset($_SESSION['exercise_end_time']);
+//		}
+//    }
 
     // if the user has answered at least one question
     if (is_array($choice)) {
@@ -141,8 +138,9 @@ if (isset($_POST['formSent'])) {
     }
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
-    // if it is the last question (only for a sequential exercise)
-    if ($exerciseType == 1 || $questionNum >= $nbrQuestions) {
+    // if it is a non-sequential exercice OR
+    // if it is a sequnential exercise in the last question OR the time has expired
+    if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($error) && $error == 'langExerciseExpiredTime'))) {
         // goes to the script that will show the result of the exercise
         header('Location: exercise_result.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
         exit();
@@ -226,9 +224,9 @@ if (!$is_editor) {
                 
 		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
 		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
-			$sql = "INSERT INTO `$TBL_RECORDS` (eid, uid, record_start_date, total_score, total_weighting, attempt)
-		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
-			$result = db_query($sql);
+                    $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt)
+                        VALUES (?d, ?d, ?t, 0, 0, ?d)", $exerciseId, $uid, $start, $attempt)->lastInsertID;
+                    
 			$timeleft = $exerciseTimeConstraint*60;
                         unset($_SESSION['exercise_begin_time']);
                         unset($_SESSION['exercise_end_time']);
