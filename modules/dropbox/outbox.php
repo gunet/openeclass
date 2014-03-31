@@ -43,12 +43,7 @@ $out_msgs = $mbox->getOutboxMsgs();
 if (empty($out_msgs)) {
     $out = "<p class='alert1'>$langTableEmpty</p>";
 } else {
-    $out = "<script>
-              $(document).ready(function() {
-                $('#loading').hide();
-              });
-            </script>";
-    $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+    $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
     $out .= "<table id=\"outbox_table\">
                <thead>
                  <tr>
@@ -84,6 +79,7 @@ if (empty($out_msgs)) {
              </table>";
     $out .= "<script>
                $(document).ready(function() {
+                 $('div.loading').hide();
                  $('#outbox_table').dataTable();
                });
              </script>";
@@ -91,7 +87,7 @@ if (empty($out_msgs)) {
         $out .= '<script>
                    $(function() {
                      $(".delete").click(function() {
-                       $(\'#loading\').fadeIn();
+                       $(\'div.loading\').fadeIn();
                        var rowContainer = $(this).parent().parent();
                        var id = rowContainer.attr("id");
                        var string = \'mid=\'+ id ;
@@ -103,7 +99,7 @@ if (empty($out_msgs)) {
                          cache: false,
                          success: function(){
                            rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                           $(\'#loading\').fadeOut();
+                           $(\'div.loading\').fadeOut();
                          }
                        });
                      return false;

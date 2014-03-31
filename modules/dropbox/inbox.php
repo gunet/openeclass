@@ -43,12 +43,7 @@ if (isset($_GET['tid'])) {
     if (!$thread->error) {
         $msgs = $thread->getMsgs();
        
-        $out = "<script>
-                  $(document).ready(function() {
-                    $('#loading').hide();
-                  });
-                </script>";
-        $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+        $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
@@ -144,6 +139,7 @@ if (isset($_GET['tid'])) {
 
         $out .= "<script>
                    $(document).ready(function() {
+                     $('div.loading').hide();
                      $('#thread_table').dataTable();
                    });
                  </script>";
@@ -151,7 +147,7 @@ if (isset($_GET['tid'])) {
         $out .= '<script>
                   $(function() {
                     $(".delete").click(function() {
-                      $(\'#loading\').fadeIn();
+                      $(\'div.loading\').fadeIn();
                       var rowContainer = $(this).parent().parent();
                       var id = rowContainer.attr("id");
                       var string = \'mid=\'+ id ;
@@ -163,7 +159,7 @@ if (isset($_GET['tid'])) {
                         cache: false,
                         success: function(){
                           rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                          $(\'#loading\').fadeOut();
+                          $(\'div.loading\').fadeOut();
                         }
                      });
                      return false;
@@ -181,12 +177,7 @@ if (isset($_GET['tid'])) {
     if (empty($threads)) {
         $out = "<p class='alert1'>$langTableEmpty</p>";
     } else {
-        $out = "<script>
-                  $(document).ready(function() {
-                    $('#loading').hide();
-                  });
-                </script>";
-        $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+        $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
         $out .= "<table id=\"inbox_table\">
                   <thead>
                     <tr>";
@@ -224,6 +215,7 @@ if (isset($_GET['tid'])) {
                  </table>";
         $out .= "<script>
                    $(document).ready(function() {
+                     $('div.loading').hide();
                      $('#inbox_table').dataTable();
                    });
                  </script>";
@@ -231,7 +223,7 @@ if (isset($_GET['tid'])) {
         $out .= '<script>
                   $(function() {
                     $(".delete").click(function() {
-                      $(\'#loading\').fadeIn();
+                      $(\'div.loading\').fadeIn();
                       var rowContainer = $(this).parent().parent();
                       var id = rowContainer.attr("id");
                       var string = \'tid=\'+ id ;
@@ -243,7 +235,7 @@ if (isset($_GET['tid'])) {
                         cache: false,
                         success: function(){
                           rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                          $(\'#loading\').fadeOut();
+                          $(\'div.loading\').fadeOut();
                         }
                      });
                      return false;
