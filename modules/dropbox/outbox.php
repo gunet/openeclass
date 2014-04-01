@@ -48,6 +48,7 @@ if (empty($out_msgs)) {
                <thead>
                  <tr>
                    <th>$langDate</th>
+                   <th>$langSubject</th>
                    <th>$langRecipients</th>
                    <th>$langMessage</th>
                    <th>$langAttachedFile</th>
@@ -64,6 +65,7 @@ if (empty($out_msgs)) {
         $recipients = substr($recipients, 0, strlen($recipients)-2);
         $out .= "<tr id='$m->id'>
                    <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
+                   <td>".q($m->subject)."</td>
                    <td>$recipients</td>
                    <td>".standard_text_escape($m->body)."</td>";
         if ($m->filename != '') {

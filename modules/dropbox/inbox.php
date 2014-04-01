@@ -49,7 +49,7 @@ if (isset($_GET['tid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out .= "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<h2>$langSubject: $thread->subject</h2><br/>";
+        $out .= "<h2>$langSubject: ".q($thread->subject)."</h2><br/>";
         if ($thread->course_id != 0 && $course_id == 0) {
             $out .= "<p class=\"tags\"><span class=\"st_tag\"><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></span></p><br/>";
         }
@@ -206,7 +206,7 @@ if (isset($_GET['tid'])) {
             if ($course_id != 0) {
                 $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></td>";
             }
-            $out .= " <td><a href='inbox.php?tid=$thread->id".$urlstr."'>$thread->subject</a></td>
+            $out .= " <td><a href='inbox.php?tid=$thread->id".$urlstr."'>".q($thread->subject)."</a></td>
                       <td>$participants</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";
