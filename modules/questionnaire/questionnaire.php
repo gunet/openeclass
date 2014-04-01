@@ -43,6 +43,7 @@ $nameTools = $langQuestionnaire;
 
 load_js('tools.js');
 
+if ($is_editor) {
 // activate / dectivate polls
 if (isset($_GET['visibility'])) {
 		switch ($_GET['visibility']) {
@@ -73,7 +74,7 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	exit();
 }
 
-if ($is_editor) {
+
 	$tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
