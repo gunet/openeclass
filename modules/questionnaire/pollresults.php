@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
@@ -33,6 +34,10 @@ $total_answers = 0;
 $questions = array();
 $answer_total = 0;
 
+if (!$is_editor) {
+    Session::set_flashdata($langPollResultsAccess, 'alert1');
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+}
 load_js('jquery');
 
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
