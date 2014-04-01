@@ -33,6 +33,8 @@ $total_answers = 0;
 $questions = array();
 $answer_total = 0;
 
+load_js('jquery');
+
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     header("Location: $urlServer");
 }
@@ -97,7 +99,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
         }
         $chart = new Plotter(500, 300);
         foreach ($answer_counts as $i => $count) {
-            $percentage = 100 * ($count / $answer_total);
+            $percentage = round(100 * ($count / $answer_total),2);
             $chart->addPoint($answer_text[$i], $percentage);
         }
         $chart->normalize();
