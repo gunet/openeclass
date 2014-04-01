@@ -42,26 +42,12 @@ if (!isset($_REQUEST['pid']))
 
 switch ($_REQUEST['UseCase']) {
     case 1:       
-        // check if user has participated
-        $pid = $_GET['pid'];
-        $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
-        if ($has_participated > 0){
-            Session::set_flashdata($langPollAlreadyParticipated, 'alert1');
-            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
-        }        
         printPollForm();
         break;
     case 2:
         submitPoll();
         break;
-    default:
-        // check if user has participated
-        $pid = $_GET['pid'];
-        $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
-        if ($has_participated > 0){
-            Session::set_flashdata($langPollAlreadyParticipated, 'alert1');
-            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
-        }          
+    default:       
         printPollForm();
 }
 
@@ -69,10 +55,17 @@ draw($tool_content, 2);
 
 function printPollForm() {
     global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart,
-    $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
+    $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
+    $langPollAlreadyParticipated;
 
-    $pid = intval($_REQUEST['pid']);
-
+    $pid = $_REQUEST['pid'];
+    
+    // check if user has participated
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
+    if ($has_participated > 0){
+        Session::set_flashdata($langPollAlreadyParticipated, 'alert1');
+        redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+    }        
     // *****************************************************************************
     //		Get poll data
     //******************************************************************************/
