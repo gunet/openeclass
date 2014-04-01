@@ -41,7 +41,7 @@ if(!isset($_REQUEST['pid'])) die();
 switch ($_REQUEST['UseCase']) {
 case 1:
    printPollForm();
-   break;
+   break;    
 case 2:
    submitPoll();
    break;
@@ -53,10 +53,19 @@ draw($tool_content, 2);
 
 function printPollForm() {
 	global $currentCourse, $code_cours, $tool_content, $langPollStart, 
-	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
+	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
+        $langPollAlreadyParticipated, $langBack;
 	
 	$pid = intval($_REQUEST['pid']);
 	
+        // check if user has participated
+        $has_participated = mysql_fetch_array(db_query("SELECT COUNT(*) FROM poll_answer_record
+                                            WHERE user_id = $uid AND pid = '$pid'"));
+        if ($has_participated[0] > 0){
+         $tool_content .= "<p class='alert1'>".$langPollAlreadyParticipated."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+         draw($tool_content, 2, null);
+         exit();
+        }                
 	// *****************************************************************************
 	//		Get poll data
 	//******************************************************************************/

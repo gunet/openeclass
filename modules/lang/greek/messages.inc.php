@@ -2242,6 +2242,7 @@ $langPollCreateDate = "Το Ερωτηματολόγιο δημιουργήθη�
 $langPollCreationError = "<p class='caution'>Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.</p>";
 $langPollDeleted ="Το Ερωτηματολόγιο διαγράφηκε με επιτυχία.";
 $langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης στα αποτελέσματα του Ερωτηματολογίου.";
+$langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο ερωτηματολόγιο";
 $langPollDeactivated ="<p class='success'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
 $langPollActivated ="<p class='success'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
 $langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!";

@@ -1905,6 +1905,7 @@ $langPollCreateDate = "Questionnaire created on";
 $langPollCreationError = "<p class='caution'>Questionnaire creation error. Please try again.</p>";
 $langPollDeleted = "Questionnaire deleted successfully.";
 $langPollResultsAccess = "You dont have access rights to Questionnaire results.";
+$langPollAlreadyParticipated = "You have already participated in the Questionnaire.";
 $langPollDeactivated = "<p class='success'>Questionnaire deactivated successfully.</p>";
 $langPollActivated = "<p class='success'>Questionnaire activated successfully!</p>";
 $langPollSubmitted = "Thank you for your participation!";
