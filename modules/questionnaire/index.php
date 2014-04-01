@@ -43,7 +43,7 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 $nameTools = $langQuestionnaire;
 
 load_js('tools.js');
-
+if ($is_editor) {
 // activate / dectivate polls
 if (isset($_GET['visibility'])) {
     switch ($_GET['visibility']) {
@@ -79,7 +79,7 @@ if (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
     Session::set_flashdata($langPollResultsDeleted, 'success');
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
-if ($is_editor) {
+
     $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
