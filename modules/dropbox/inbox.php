@@ -58,11 +58,9 @@ if (isset($_GET['tid'])) {
                     <tr>
                       <th>$langDate</th>
                       <th>$langSender</th>
-                      <th>$langMessage</th>";
-        if ($course_id != 0) {
-            $out .= " <th>$langAttachedFile</th>";
-        }
-        $out .= "     <th>$langDelete</th>
+                      <th>$langMessage</th>
+                      <th>$langAttachedFile</th>
+                      <th>$langDelete</th>
                     </tr>
                   </thead>
                   <tbody>";
@@ -72,8 +70,10 @@ if (isset($_GET['tid'])) {
                        <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
                        <td>".uid_to_name($m->author_id)."</td>
                        <td>".standard_text_escape($m->body)."</td>";
-            if ($course_id != 0) {
-                $out .= "<td><a href=\"dropbox_download.php?course=$course_code&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+            if ($m->filename != '') {
+                $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($m->course_id)."&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+            } else {
+                $out .= "<td></td>";
             }
             $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
                      </tr>";
@@ -98,6 +98,7 @@ if (isset($_GET['tid'])) {
         }
         $out .= "<fieldset>
                    <table width='100%' class='tbl'>
+                     <caption><b>$langReply</b></caption>
                      <tr>
                        <th>$langSender:</th>
                        <td>" . q(uid_to_name($uid)) . "</td>
