@@ -1735,6 +1735,7 @@ $langPollCreation = "Creation Date";
 $langPollCreateDate = "Questionnaire created on";
 $langPollCreationError = "Questionnaire creation error. Please try again.";
 $langPollDeleted = "Questionnaire deleted successfully.";
+$langPollResultsDeleted = "Questionnaire results deleted successfully.";
 $langPollDeactivated = "Questionnaire deactivated successfully.";
 $langPollActivated = "Questionnaire activated successfully.";
 $langPollSubmitted = "Thanks for your participating!";
