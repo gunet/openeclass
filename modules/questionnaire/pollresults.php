@@ -33,6 +33,12 @@ $total_answers = 0;
 $questions = array();
 $answer_total = 0;
 
+if (!$is_editor) {
+    $tool_content .= "<p class='alert1'>".$langPollResultsAccess."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+    draw($tool_content, 2, null, $head_content);
+    exit();  
+}
+
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
         header("Location: $urlServer");        
 }
