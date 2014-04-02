@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -83,6 +83,7 @@ function fill_questions($pid) {
     $_POST['PollName'] = $poll['name'];
     $_POST['PollStart'] = $poll['start_date'];
     $_POST['PollEnd'] = $poll['end_date'];
+    $_POST['PollAnonymize'] = $poll['anonymized'];
     $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY pqid");
     $_POST['question'] = array();
     $qnumber = 0;
@@ -129,7 +130,7 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
     global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
     $langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-    $nameTools, $pid, $langSurvey, $langSelection, $course_code;
+    $nameTools, $pid, $langSurvey, $langSelection, $langPollAnonymize, $course_code;
 
     if (isset($_POST['PollName'])) {
         $PollName = htmlspecialchars($_POST['PollName']);
@@ -146,6 +147,15 @@ function printPollCreationForm() {
     } else {
         $PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
     }
+    if (isset($_POST['PollAnonymize'])) {
+        if ($_POST['PollAnonymize']==1) {
+            $PollAnonymize = 'checked';
+        } else {
+            $PollAnonymize = '';
+        }
+    } else {
+        $PollAnonymize = '';
+    }    
     if (isset($pid)) {
         $pidvar = "<input type='hidden' name='pid' value='$pid'>";
     } else {
@@ -176,6 +186,10 @@ function printPollCreationForm() {
 	  <th>$langPollEnd:</th>
 	  <td>$PollEnd</td>
 	</tr>
+	<tr>
+	  <th>$langPollAnonymize:</th>
+	  <td><input type='checkbox' name='PollAnonymize' value='1' $PollAnonymize></td>
+	</tr>        
 	</table>
         <br />";
 
@@ -273,10 +287,11 @@ function createPoll($questions, $question_types) {
     $StartDate = $_POST['PollStart'];
     $EndDate = $_POST['PollEnd'];
     $PollActive = 1;
-
+    (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
+    
     mysql_select_db($GLOBALS['mysqlMainDb']);
     $result = db_query("INSERT INTO poll
-		(course_id, creator_id, name, creation_date, start_date, end_date, active)
+		(course_id, creator_id, name, creation_date, start_date, end_date, active, anonymize)
 		VALUES ('" .
             $GLOBALS['course_id'] . "','" .
             $GLOBALS['uid'] . "','" .
@@ -284,7 +299,8 @@ function createPoll($questions, $question_types) {
             mysql_real_escape_string($CreationDate) . "','" .
             mysql_real_escape_string($StartDate) . "','" .
             mysql_real_escape_string($EndDate) . "','" .
-            mysql_real_escape_string($PollActive) . "')");
+            mysql_real_escape_string($PollActive) . "','" .
+            mysql_real_escape_string($PollAnonymize) . "')");
     $pid = mysql_insert_id();
     insertPollQuestions($pid, $questions, $question_types);
     $tool_content .= "<p class='success'>" . $langPollCreated . "</p><a href='index.php?course=$course_code'>" . $langBack . "</a>";
@@ -299,10 +315,11 @@ function editPoll($pid, $questions, $question_types) {
     $PollName = $_POST['PollName'];
     $StartDate = $_POST['PollStart'];
     $EndDate = $_POST['PollEnd'];
+    (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
 
     mysql_select_db($GLOBALS['mysqlMainDb']);
     $result = db_query("UPDATE poll SET name = '$PollName',
-		start_date = '$StartDate', end_date = '$EndDate' WHERE course_id = $course_id AND pid='$pid'");
+		start_date = '$StartDate', end_date = '$EndDate', anonymized = '$PollAnonymize' WHERE course_id = $course_id AND pid='$pid'");
     db_query("DELETE FROM poll_question_answer WHERE pqid IN
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
     db_query("DELETE FROM poll_question WHERE pid='$pid'");

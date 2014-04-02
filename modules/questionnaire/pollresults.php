@@ -74,7 +74,7 @@ $tool_content .= "
 </tr>
 </table>
 <p class='sub_title1'>$langAnswers</p>";
-$tool_content .= "<table class='tbl'>";
+$tool_content .= "<table class='tbl' width='100%'>";
 
 $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
 while ($theQuestion = mysql_fetch_array($questions)) {
@@ -84,8 +84,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                 <td>$theQuestion[question_text]</td>
         </tr>
         <tr>
-                <td>&nbsp;</td>
-                <td>";
+            <td colspan='2'>";
     if ($theQuestion['qtype'] == 'multiple') {
         $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                         FROM poll_answer_record LEFT JOIN poll_question_answer
@@ -112,12 +111,33 @@ while ($theQuestion = mysql_fetch_array($questions)) {
     } else {
         $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
                                 WHERE qid = $theQuestion[pqid]", $mysqlMainDb);
-        $tool_content .= '<dl>';
         $answer_total = mysql_num_rows($answers);
-        while ($theAnswer = mysql_fetch_array($answers)) {
-            $tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
+        $tool_content .= "<table class='tbl_border' width='100%'>
+                <tbody>
+                <tr>
+                        <th width='20%'>$langUser</th>
+                        <th width='80%'>$langAnswer</th>
+                </tr>";       
+        if ($thePoll["anonymized"]==1) {
+            $i=1;
+             while ($theAnswer = mysql_fetch_array($answers)) {     
+                $tool_content .= "
+                <tr>
+                        <td>$langMetaLearner $i</th>
+                        <td>$theAnswer[answer_text]</td>
+                </tr>";                
+                $i++;    
+            }           
+        } else {
+            while ($theAnswer = mysql_fetch_array($answers)) {
+                $tool_content .= "
+                <tr>
+                        <td>" . q(uid_to_name($theAnswer['user_id'])) ."</th>
+                        <td>$theAnswer[answer_text]</td>
+                </tr>";                     
+            }
         }
-        $tool_content .= '</dl><br />';
+        $tool_content .= '</tbody></table>';
     }
     $tool_content .= "</td></tr>";
 }

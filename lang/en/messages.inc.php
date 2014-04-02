@@ -1747,6 +1747,7 @@ $langPollInactive = "The Questionnaire has expired or is not active yet.";
 $langPollHasEnded = "Has ended";
 $langPollCharts = "Questionnaire results";
 $langPollUnknown = "Don't know / No answer";
+$langPollAnonymize = "Anonymize";
 $langIndividuals = "Results per user";
 $langCollectiveCharts = "Collective results";
 $langHasNotParticipated = "Have not participated";
