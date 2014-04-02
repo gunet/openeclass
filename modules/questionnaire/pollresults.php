@@ -93,21 +93,40 @@ while ($theQuestion = mysql_fetch_array($questions)) {
         $answer_counts = array();
         $answer_text = array();
         while ($theAnswer = mysql_fetch_array($answers)) {
-            $answer_counts[] = $theAnswer['count'];
+            $answer_counts[$theAnswer['aid']] = $theAnswer['count'];
             $answer_total += $theAnswer['count'];
             if ($theAnswer['aid'] < 0) {
-                $answer_text[] = $langPollUnknown;
+                $answer_text[$theAnswer['aid']] = $langPollUnknown;
             } else {
-                $answer_text[] = $theAnswer['answer'];
+                $answer_text[$theAnswer['aid']] = $theAnswer['answer'];
             }
         }
         $chart = new Plotter(500, 300);
+        $answers_table = "
+            <table class='tbl_border' width='100%'>
+                <tr>
+                    <th width='30%'>$langAnswer</th>
+                    <th width='30%'>$langSurveyTotalAnswers</th>".(($thePoll["anonymized"]==1)?'':'<th>'.$langStudents.'</th>')."</tr>";
         foreach ($answer_counts as $i => $count) {
             $percentage = round(100 * ($count / $answer_total),2);
             $chart->addPoint($answer_text[$i], $percentage);
+            
+            if ($thePoll["anonymized"]!=1) {
+            $names = Database::get()->queryArray("SELECT CONCAT(b.givenname, ' ', b.surname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = ?d AND a.user_id = b.id", $i);
+            $names_str = implode(', ', array_map(function($n) {
+                return $n->fullname;
+            }, $names));            
+
+            }
+            $answers_table .= "
+                <tr>
+                        <td>$answer_text[$i]</th>
+                        <td>$count</td>".(($thePoll["anonymized"]==1)?'':'<td>'.$names_str.'</td>')."</tr>";  
         }
+        $answers_table .= "</table><br>";
         $chart->normalize();
         $tool_content .= $chart->plot();
+        $tool_content .= $answers_table;
     } else {
         $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
                                 WHERE qid = $theQuestion[pqid]", $mysqlMainDb);
@@ -137,7 +156,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                 </tr>";                     
             }
         }
-        $tool_content .= '</tbody></table>';
+        $tool_content .= '</tbody></table><br>';
     }
     $tool_content .= "</td></tr>";
 }

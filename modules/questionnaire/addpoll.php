@@ -291,7 +291,7 @@ function createPoll($questions, $question_types) {
     
     mysql_select_db($GLOBALS['mysqlMainDb']);
     $result = db_query("INSERT INTO poll
-		(course_id, creator_id, name, creation_date, start_date, end_date, active, anonymize)
+		(course_id, creator_id, name, creation_date, start_date, end_date, active, anonymized)
 		VALUES ('" .
             $GLOBALS['course_id'] . "','" .
             $GLOBALS['uid'] . "','" .

@@ -2301,7 +2301,7 @@ $langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο 
 $langPollDeactivated = "<p class='success'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
 $langPollActivated = "<p class='success'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
 $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
-$langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
+$langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
 $langPollInactive = "<p class='caution'>Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.</p>";
 $langPollHasEnded = "Έχει λήξει";
