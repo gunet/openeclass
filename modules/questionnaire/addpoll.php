@@ -32,11 +32,24 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 // -------------- jscalendar -----------------
-require_once 'include/jscalendar/calendar.php';
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js'); 
+global $themeimg;
 
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
-
+$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+    <script>
+    $(function() {
+        $('input[name=PollStart], input[name=PollEnd]').datetimepicker({
+            showOn: 'both',
+            buttonImage: '{$themeimg}/calendar.png',
+            buttonImageOnly: true,
+            dateFormat: 'dd-mm-yy', 
+            timeFormat: 'HH:mm'
+        });
+    });
+    </script>";
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
@@ -105,25 +118,6 @@ function fill_questions($pid) {
 }
 
 /* * ***************************************************************************
-  Create the HTML for a jscalendar field
- * **************************************************************************** */
-
-function jscal_html($name, $u_date = FALSE) {
-    global $jscalendar;
-    if (!$u_date) {
-        $u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
-    }
-
-    $cal = $jscalendar->make_input_field(
-            array('showsTime' => true,
-        'showOthers' => true,
-        'ifFormat' => '%Y-%m-%d %H:%M'), array('style' => '',
-        'name' => $name,
-        'value' => $u_date));
-    return $cal;
-}
-
-/* * ***************************************************************************
   Prints the new poll creation form
  * **************************************************************************** */
 
@@ -137,25 +131,7 @@ function printPollCreationForm() {
     } else {
         $PollName = '';
     }
-    if (isset($_POST['PollStart'])) {
-        $PollStart = jscal_html('PollStart', $_POST['PollStart']);
-    } else {
-        $PollStart = jscal_html('PollStart');
-    }
-    if (isset($_POST['PollEnd'])) {
-        $PollEnd = jscal_html('PollEnd', $_POST['PollEnd']);
-    } else {
-        $PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
-    }
-    if (isset($_POST['PollAnonymize'])) {
-        if ($_POST['PollAnonymize']==1) {
-            $PollAnonymize = 'checked';
-        } else {
-            $PollAnonymize = '';
-        }
-    } else {
-        $PollAnonymize = '';
-    }    
+   
     if (isset($pid)) {
         $pidvar = "<input type='hidden' name='pid' value='$pid'>";
     } else {
@@ -181,14 +157,14 @@ function printPollCreationForm() {
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
-	  <td>$PollStart</td></tr>
+	  <td><input type='text' size='47' name='PollStart' value='".(isset($_POST['PollStart'])? date('d-m-Y H:i',strtotime($_POST['PollStart'])) :date('d-m-Y H:i', strtotime('now')))."'></td></tr>
 	<tr>
 	  <th>$langPollEnd:</th>
-	  <td>$PollEnd</td>
+	  <td><input type='text' size='47' name='PollEnd' value='".(isset($_POST['PollEnd'])? date('d-m-Y H:i',strtotime($_POST['PollEnd'])) :date('d-m-Y H:i', strtotime('now +1 year')))."'></td>
 	</tr>
 	<tr>
 	  <th>$langPollAnonymize:</th>
-	  <td><input type='checkbox' name='PollAnonymize' value='1' $PollAnonymize></td>
+	  <td><input type='checkbox' name='PollAnonymize' value='1' ".((isset($_POST['PollAnonymize']) && $_POST['PollAnonymize']==1)?'checked':'')."></td>
 	</tr>        
 	</table>
         <br />";
@@ -284,8 +260,8 @@ function createPoll($questions, $question_types) {
 
     $CreationDate = date("Y-m-d H:i");
     $PollName = $_POST['PollName'];
-    $StartDate = $_POST['PollStart'];
-    $EndDate = $_POST['PollEnd'];
+    $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
+    $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
     $PollActive = 1;
     (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
     
@@ -313,8 +289,8 @@ function editPoll($pid, $questions, $question_types) {
     global $pid, $tool_content, $course_id, $course_code, $langPollEdited, $langBack;
 
     $PollName = $_POST['PollName'];
-    $StartDate = $_POST['PollStart'];
-    $EndDate = $_POST['PollEnd'];
+    $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
+    $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
     (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
 
     mysql_select_db($GLOBALS['mysqlMainDb']);
