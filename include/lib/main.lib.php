@@ -262,6 +262,13 @@ function js_escape($s)
 function load_js($file, $init = '')
 {
         global $head_content, $urlAppend, $theme;
+        static $loaded;
+
+        if (isset($loaded[$file])) {
+            return;
+        } else {
+            $loaded[$file] = true;
+        }
 
         if ($file == 'jquery') {
 		$file = 'jquery-1.10.2.min.js';
@@ -285,6 +292,9 @@ function load_js($file, $init = '')
         } elseif ($file == 'colorbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/colorbox/colorbox.css'>";
             $file = 'colorbox/jquery.colorbox-min.js';
+        } elseif ($file == 'slick') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/slick-master/slick/slick.css' />";
+            $file = 'slick-master/slick/slick.min.js';
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {

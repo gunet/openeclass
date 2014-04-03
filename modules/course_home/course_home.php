@@ -51,8 +51,21 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('jquery');
+load_js('slick');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function() {
+            $('.course_description').slick({
+                dots: false,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                touchMove: false
+            });
+            $('.inline').colorbox({ inline: true, 
+                                    width: '50%' });
+        })
+        </script>";
 
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
@@ -82,23 +95,34 @@ $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_i
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
                         AND (visibility = 'v' OR res_id < 0)
                  ORDER BY `order`");
+   
 if ($res and mysql_num_rows($res) > 0) {
-        while ($row = mysql_fetch_array($res)) {
-                if ($row['res_id'] == -1) {
-                        $description = standard_text_escape($row['comments']);
-                } elseif ($row['res_id'] == -2) {
-                        $addon = standard_text_escape($row['comments']);
-                } else {
-                        if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
-                                $element_id = "class='course_info' id='{$idBloc[$row['res_id']]}'";
-                        } else {
-                                $element_id = 'class="course_info other"';
-                        }
-                        $main_extra .= "<div $element_id><h1>" . q($row['title']) . "</h1>" .
-                                standard_text_escape($row['comments']) . "</div>\n";
-                }
-        }
+    $main_extra .= "<div class = 'course_description' style='width: 520px;'>";
+    $tool_content .= "<div style='display: none'>";
+    while ($row = mysql_fetch_array($res)) {
+            if ($row['res_id'] == -1) {
+                    $description = standard_text_escape($row['comments']);
+            } elseif ($row['res_id'] == -2) {
+                    $addon = standard_text_escape($row['comments']);
+            } else {
+                    if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
+                            $element_id = "class='course_info' id='{$idBloc[$row['res_id']]}'";
+                    } else {
+                            $element_id = 'class="course_info other"';
+                    }
+                    $hidden_id = "hidden_$row[res_id]";
+                    $tool_content .= "<div id='$hidden_id'><h1>" .
+                            q($row['title']) . "</h1>" .
+                            standard_text_escape($row['comments']) . "</div>\n";
+                    $main_extra .= "<div $element_id><a href='#$hidden_id' class='inline' style='font-weight: bold; width: 10em;'>" .
+                            q($row['title']) .
+                            "</a></div>\n";
+            }
+    }
+    $main_extra .= "</div>";    
+    $tool_content .= "</div>";
 }
+
 if ($is_editor) {
         $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'>
                 <img src='$themeimg/edit.png' title='".q($langEdit)."' alt='".q($langEdit)."' /></a>";
@@ -120,6 +144,7 @@ $main_content .= "</div>\n";
 if (!empty($addon)) {
 	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+        
 $main_content .= $main_extra;
 
 units_set_maxorder();
@@ -402,4 +427,5 @@ $tool_content .= "
   </table>
 </div>
 ";
+
 draw($tool_content, 2, null, $head_content);
