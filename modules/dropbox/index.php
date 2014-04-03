@@ -67,7 +67,7 @@ if ($course_id != 0) {
     $tool_content .="
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1'>$langNewMessage</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
         <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
       </ul>
     </div>";
@@ -75,7 +75,8 @@ if ($course_id != 0) {
     $tool_content .="
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewMessage</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
       </ul>
     </div>";
 }
@@ -93,8 +94,14 @@ load_js('jquery-ui');
 
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
+        if (isset($_GET['type']) && $_GET['type'] == 'cm') {
+            $type = 'cm';
+        } else {
+            $type = 'pm';
+        }
         $tool_content .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
+        $type = 'cm'; //only course messages are allowed in the context of a course
         $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
@@ -104,9 +111,49 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	  <th>$langSender:</th>
 	  <td>" . q(uid_to_name($uid)) . "</td>
 	</tr>";
+    if ($type == 'cm' && $course_id == 0) {//course message from central interface
+        //find user's courses
+        $sql = "SELECT course.code code, course.title title
+                FROM course, course_user
+                WHERE course.id = course_user.course_id
+                AND course_user.user_id = ?d
+                ORDER BY title";
+        $res = Database::get()->queryArray($sql, $uid);
+        
+        $head_content .= "<script type='text/javascript'>
+                            $(document).on('change','#courseselect',function(){
+                              $.ajax({
+                                type: 'POST',
+                                dataType: 'json',
+                                url: 'load_recipients.php',
+                                data: {'course' : $('#courseselect').val() }
+                              }).done(function(data) {
+                                $('#select-recipients').empty();
+                                if(!($.isEmptyObject(data))) {
+                                  $('#select-recipients').empty();
+                                  $.each(data, function(key,value){
+                                    $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                  });
+                                }
+                                $('#select-recipients').multiselect('refresh');
+                              });
+                            });
+                          </script>";
+        
+        $tool_content .= "<tr>
+            <th width='120'>".$langCourse.":</th>
+              <td>
+                <select id='courseselect' name='course'>";
+        foreach ($res as $course) {    
+            $tool_content .="<option value='-1'>&nbsp;</option><option value='".$course->code."'>$course->title</option>";
+        }
+        $tool_content .="    </select>
+                           </td>
+                         </tr>";
+    }
     $tool_content .= "<tr>
         <th width='120'>" . $langTitle . ":</th>
-        <td><input type='input' name='message_title' size='50'/>	      
+        <td><input type='text' name='message_title' size='50'/>	      
         </td>
         </tr>";
     $tool_content .= "<tr>
@@ -114,7 +161,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
               <td>".rich_text_editor('body', 4, 20, '')."
               <small>&nbsp;&nbsp;$langMaxMessageSize</small></td>           
             </tr>";
-    if ($course_id != 0) {
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $tool_content .= "<tr>
 	      <th width='120'>$langFileName:</th>
 	      <td><input type='file' name='file' size='35' />	     
@@ -124,7 +171,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	$tool_content .= "<tr>
 	  <th>$langSendTo:</th>
 	  <td>
-	<select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";
+	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
 
     if ($course_id != 0) {//course messages
         //select all users from this course except yourself
@@ -136,7 +183,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 AND u.id != ?d
                 ORDER BY UPPER(u.surname), UPPER(u.givenname)";
         $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
-    } else {//personal messages
+    } elseif ($type == 'pm' && $course_id == 0) {//personal messages
         //select all users that follow the same courses as you 
         $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
                 FROM user u, course_user cu
@@ -147,8 +194,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 ORDER BY UPPER(u.surname), UPPER(u.givenname)";
         $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid);
     }
-    foreach ($res as $r) {
-        $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+    if ($course_id != 0 OR ($type == 'pm' && $course_id == 0) ) {
+        foreach ($res as $r) {
+            $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+        }
     }
 
     $tool_content .= "</select></td></tr>
@@ -174,7 +223,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 } else {//mailbox
     load_js('datatables');
-    $head_content .= "<script>
+    $head_content .= "<script type='text/javascript'>
 		              $(function() {
 		                $( \"#tabs\" ).tabs({
 		                  collapsible: false,

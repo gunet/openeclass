@@ -31,7 +31,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
-if (!isset($course_id)) {
+if (!isset($course_id) || !$course_id) {
     $course_id = 0;
 }
 
@@ -80,7 +80,15 @@ if (isset($_POST["submit"])) {
                 $subject = $langMessage;
             }
             if (!isset($_POST['thread_id'])) {//new message
-                $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+                if (isset($_POST['course'])) {//for the case of course messages from central ui
+                    $cid = course_code_to_id($_POST['course']);
+                    if ($cid === false) {
+                        $cid = $course_id;
+                    }
+                } else {
+                    $cid = $course_id;
+                }
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {//reply to a thread
                 $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
             }            
