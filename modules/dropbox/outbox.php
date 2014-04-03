@@ -89,22 +89,24 @@ if (empty($out_msgs)) {
         $out .= '<script>
                    $(function() {
                      $(".delete").click(function() {
-                       $(\'div.loading\').fadeIn();
-                       var rowContainer = $(this).parent().parent();
-                       var id = rowContainer.attr("id");
-                       var string = \'mid=\'+ id ;
-    
-                       $.ajax({
-                         type: "POST",
-                         url: "delete.php",
-                         data: string,
-                         cache: false,
-                         success: function(){
-                           rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                           $(\'div.loading\').fadeOut();
-                         }
-                       });
-                     return false;
+                       if (confirm("' . $langConfirmDelete . '")) {
+                         $(\'div.loading\').fadeIn();
+                         var rowContainer = $(this).parent().parent();
+                         var id = rowContainer.attr("id");
+                         var string = \'mid=\'+ id ;
+        
+                         $.ajax({
+                           type: "POST",
+                           url: "delete.php",
+                           data: string,
+                           cache: false,
+                           success: function(){
+                             rowContainer.slideUp(\'slow\', function() {$(this).remove();});
+                             $(\'div.loading\').fadeOut();
+                           }
+                         });
+                         return false;
+                       }
                      });
                    });
                  </script>';

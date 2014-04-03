@@ -148,25 +148,29 @@ if (isset($_GET['tid'])) {
         $out .= '<script>
                   $(function() {
                     $(".delete").click(function() {
-                      $(\'div.loading\').fadeIn();
-                      var rowContainer = $(this).parent().parent();
-                      var id = rowContainer.attr("id");
-                      var string = \'mid=\'+ id ;
-        
-                      $.ajax({
-                        type: "POST",
-                        url: "delete.php",
-                        data: string,
-                        cache: false,
-                        success: function(){
-                          rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                          $(\'div.loading\').fadeOut();
-                        }
-                     });
-                     return false;
+                      if (confirm("' . $langConfirmDelete . '")) {
+                        $(\'div.loading\').fadeIn();
+                        var rowContainer = $(this).parent().parent();
+                        var id = rowContainer.attr("id");
+                        var string = \'mid=\'+ id ;
+            
+                        $.ajax({
+                          type: "POST",
+                          url: "delete.php",
+                          data: string,
+                          cache: false,
+                          success: function(){
+                            rowContainer.slideUp(\'slow\', function() {$(this).remove();});
+                            $(\'div.loading\').fadeOut();
+                          }
+                       });
+                       return false;
+                     }
                    });
                  });
                  </script>';
+        //head content has the scripts necessary for tinymce as a result of calling rich_text_editor
+        $out .= $head_content;
     }
 } else {
     require_once("class.mailbox.php");
@@ -224,22 +228,24 @@ if (isset($_GET['tid'])) {
         $out .= '<script>
                   $(function() {
                     $(".delete").click(function() {
-                      $(\'div.loading\').fadeIn();
-                      var rowContainer = $(this).parent().parent();
-                      var id = rowContainer.attr("id");
-                      var string = \'tid=\'+ id ;
+                      if (confirm("' . $langConfirmDelete . '")) {
+                        $(\'div.loading\').fadeIn();
+                        var rowContainer = $(this).parent().parent();
+                        var id = rowContainer.attr("id");
+                        var string = \'tid=\'+ id ;
 
-                      $.ajax({
-                        type: "POST",
-                        url: "delete.php",
-                        data: string,
-                        cache: false,
-                        success: function(){
-                          rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                          $(\'div.loading\').fadeOut();
-                        }
-                     });
-                     return false;
+                        $.ajax({
+                          type: "POST",
+                          url: "delete.php",
+                          data: string,
+                          cache: false,
+                          success: function(){
+                            rowContainer.slideUp(\'slow\', function() {$(this).remove();});
+                            $(\'div.loading\').fadeOut();
+                          }
+                       });
+                       return false;
+                     }
                    });
                  });
                  </script>';
