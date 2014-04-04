@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,7 +24,7 @@
   @last update: 15-05-2007 by Thanos Kyritsis
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-  based on Claroline version 1.7.9 licensed under GPL
+  based on Claroline version 1.7.9 licensed under GPL, updated from version 1.11
   copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
   original file: class.wiki2xhtmlrenderer Revision: 1.8.2.6
@@ -56,6 +56,7 @@ define("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9])([A-Z][a-z]+){2,}(?![A-Za-z0-9]))'
 class Wiki2xhtmlRenderer extends wiki2xhtml {
 
     var /* % Wiki */ $wiki;
+    var $addAtEnd = array();
 
     /**
      * Constructor
@@ -68,7 +69,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
 
         // set wiki rendering options
         // use wikiwords to link wikipages
-        $this->setOpt('active_wikiwords', 1);
+        $this->setOpt('active_wikiwords', 0);
         // auto detect images
         $this->setOpt('active_auto_img', 1);
         // set first wiki title level
@@ -83,8 +84,190 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
         $this->setOpt('note_str', '<div class="footnotes"><a name="footNotes"></a><h2>Notes</h2>%s</div>');
         // use urls to link wikipages
         $this->setOpt('active_wiki_urls', 1);
+        // use macros
+        $this->setOpt('active_macros', 1);
+        // use tables
+        $this->setOpt('active_tables', 1);
     }
+	
+    /**
+     * Overwrite wiki2xhtml __getLine method
+     * @access private
+     * @see class.wiki2xhtml.php
+     */
+    function __getLine($i, &$type, &$mode) {
+        $pre_type = $type;
+        $pre_mode = $mode;
+        $type = $mode = NULL;
 
+        if (empty($this->T[$i])) {
+            return false;
+        }
+
+        $line = htmlspecialchars($this->T[$i], ENT_NOQUOTES);
+
+        # Ligne vide
+        if (empty($line)) {
+            $type = NULL;
+        }
+        elseif ($this->getOpt('active_empty') && preg_match('/^øøø(.*)$/',$line,$cap)) {
+            $type = NULL;
+            $line = trim($cap[1]);
+        }
+        # Titre
+        elseif ($this->getOpt('active_title') && preg_match('/^([!]{1,4})(.*)$/', $line, $cap)) {
+            $type = 'title';
+            $mode = strlen($cap[1]);
+            $line = trim($cap[2]);
+        }
+        # Ligne HR
+        elseif ($this->getOpt('active_hr') && preg_match('/^[-]{4}[- ]*$/', $line)) {
+            $type = 'hr';
+            $line = NULL;
+        }
+        # Blockquote
+        elseif ($this->getOpt('active_quote') && preg_match('/^(&gt;|;:)(.*)$/', $line, $cap)) {
+            $type = 'blockquote';
+            $line = trim($cap[2]);
+        }
+        # Liste
+        elseif ($this->getOpt('active_lists') && preg_match('/^([*#]+)(.*)$/', $line, $cap)) {
+            $type = 'list';
+            $mode = $cap[1];
+            $valid = true;
+
+            # V�rification d'int�grit�
+            $dl = ($type != $pre_type) ? 0 : strlen($pre_mode);
+            $d = strlen($mode);
+            $delta = $d - $dl;
+
+            if ($delta < 0 && strpos($pre_mode, $mode) !== 0) {
+                $valid = false;
+            }
+            if ($delta > 0 && $type == $pre_type && strpos($mode, $pre_mode) !== 0) {
+                $valid = false;
+            }
+            if ($delta == 0 && $mode != $pre_mode) {
+                $valid = false;
+            }
+            if ($delta > 1) {
+                $valid = false;
+            }
+
+            if (!$valid) {
+                $type = 'p';
+                $mode = NULL;
+                $line = '<br />' . $line;
+            } else {
+                $line = trim($cap[2]);
+            }
+        }
+        # Pr�format�
+        elseif ($this->getOpt('active_pre') && preg_match('/^[ ]{1}(.*)$/', $line, $cap)) {
+            $type = 'pre';
+            $line = $cap[1];
+        }
+		# tables
+        elseif ($this->getOpt('active_tables')) {
+            # table start
+            if (preg_match('/^\s*{\|(.+)\s*/', $line, $cap)) {
+                $type = null;
+                $line = '<table class="wikitable">';
+                $caption = trim($cap[1]);
+                $line .= '<caption>'.$caption.'</caption>';
+            }
+            elseif (preg_match('/^\s*{\|\s*/', $line, $cap)) {
+                $type = null;
+                $line = '<table class="wikitable">';
+            }
+            # table end
+            elseif (preg_match('/^\s*\|}\s*$/', $line, $cap)) {
+                $type = null;
+                $line = '</table>';
+            }
+            # table row
+            elseif( preg_match('/^\s*\|\|(.*)\|\|\s*$/', $line, $cap) ) {
+                $type = null;
+                
+                $line = trim($cap[1]);
+
+                $line = $this->__inlineWalk($line);
+                
+                $line = $this->_parseTableLine($line);
+            } 
+            else {
+                $type = 'p';
+                $line = trim($line);
+            }
+        }
+        # Paragraphe
+        else {
+            $type = 'p';
+            $line = trim($line);
+        }
+
+        return $line;
+    }
+	
+    function _parseTableLine($line) {
+        $cell = array();
+        $offset = 0;
+        $th = false;
+        
+        while (strlen($line) > 0)
+        {
+            if (false !== ($pos = strpos($line,'|', $offset))) {
+                if (($pos-1 >= 0) &&  $line[$pos-1] == '\\') {
+                    $offset = $pos+1;
+                    continue;
+                }
+                else{
+                    $r = substr($line, 0, $pos);
+                    
+                    if (strpos($r,'!') === 0) {
+                        $th = true;
+                        $cell[] = substr($r,1);
+                    }
+                    else{
+                        $cell[] = $r;
+                    }
+                    
+                    $line = substr($line, $pos+1);
+                    $offset = 0;
+                }
+            }
+            else{
+                $r = $line;
+                
+                if (strpos($r,'!') === 0) {
+                    $th = true;
+                    $cell[] = substr($r,1);
+                }
+                else {
+                    $cell[] = $r;
+                }
+
+                $line = '';
+                $offset = 0;
+            }
+        }
+        
+        $ret = '';
+        
+        if (true === $th) {
+            $ret = '<tr><th>';
+            $ret .= implode('</th><th>', $cell);
+            $ret .= '</th></tr>';
+        }
+        else{
+            $ret = '<tr><td>';
+            $ret .= implode('</td><td>', $cell);
+            $ret .= '</td></tr>';
+        }
+        
+        return $ret;
+    }
+	
     /**
      * Parse WikiWords and create hypertext reference to wiki page
      *
@@ -113,6 +296,84 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                     . "</a>"
             ;
         }
+    }
+	
+    /**
+     * Parse and execute wiki2xhtml macros
+     *
+     *  enabled macros are :
+     *      - """home""" or """main""" : link to Main page
+     * @access private
+     * @see class.wiki2xhtml.php
+     * @return string macro execution result
+     */
+    function parseMacro($str,&$tag,&$attr,&$type) { 
+        $tag = '';
+        $attr = '';
+        
+        $trimmedStr = trim($str,'"');
+        
+        $matches = array();
+        
+        if (preg_match('/^color([0-9])/',$trimmedStr,$matches)) {
+            $colorCodeList = array(
+                0 => '#DD0000',
+                1 => '#006600',
+                2 => '#0000DD',
+                3 => '#660099',
+                4 => '#008888',
+                5 => '#55AA22',
+                6 => '#888800',
+                7 => '#DE8822',
+                8 => '#804020',
+                9 => '#990022',
+            );
+            
+            $colorCode = isset($colorCodeList[(int)$matches[1]]) ? $colorCodeList[(int)$matches[1]] : '#000000';
+            $trimmedStr = 'color';
+        }
+        elseif(preg_match('/^color\(([a-zA-Z]+|#[a-fA-F0-9]{3}|#[a-fA-F0-9]{6})\)/',$trimmedStr,$matches)) {
+            $colorCode = $matches[ 1 ];
+            $trimmedStr = 'color';
+        }
+        
+        switch($trimmedStr)
+        {
+            // link to main page
+            case 'home':
+            case 'main':
+            {
+			    global $langWikiMainPage,$course_code;
+                $str = "<a href=\"".$_SERVER['PHP_SELF']
+                    ."?course=".$course_code."&amp;action=show&amp;title=".rawurlencode('__MainPage__')
+                    . "&amp;wikiId=" . $this->wiki->getWikiId()
+                    . "\" class=\"wikiShow\">"
+                    . $langWikiMainPage
+                    . "</a>"
+                    ;
+                break;
+            }
+            // toc
+            case 'toc':
+            {
+                $str = '';
+                $this->addAtEnd[] = '<script type="text/javascript" src="lib/javascript/toc.js"></script>';
+                $this->addAtEnd[] = '<script type="text/javascript">createTOC();</script>';
+                break;
+            }
+            case 'color':
+            {
+                $str = '<span style="color: ' . $colorCode . ';">';
+                break;
+            }
+            case '/color':
+            {
+                $str = '</span>';
+                break;
+            }
+        }
+        
+        return $str;
     }
 
     /**
@@ -161,14 +422,11 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                 $img_size = @getimagesize($path_img);
             }
 
-            $attr = ' src="' . $this->protectAttr($this->protectUrls($url)) . '"' . $attr .= (count($data) > 1 ) ? ' alt="' . $this->protectAttr($content) . '"' :
-                    ' alt=""';
-            $attr .= ($lang ) ? ' lang="' . $lang . '"' :
-                    '';
-            $attr .= ($title ) ? ' title="' . $this->protectAttr($title) . '"' :
-                    '';
-            $attr .= (is_array($img_size) ) ? ' ' . $img_size[3] :
-                    '';
+            $attr = ' src="' . $this->protectAttr($this->protectUrls($url)) . '"'; 
+			$attr .= (count($data) > 1 ) ? ' alt="' . $this->protectAttr($content) . '"' : ' alt=""';
+            $attr .= ($lang ) ? ' lang="' . $lang . '"' : '';
+            $attr .= ($title ) ? ' title="' . $this->protectAttr($title) . '"' : '';
+            $attr .= (is_array($img_size) ) ? ' ' . $img_size[3] : '';
 
             $tag = 'img';
             $type = 'close';
@@ -199,7 +457,14 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
      * @return string xhtml-rendered string
      */
     function render($txt) {
-        return $this->transform($txt);
+        $ret = preg_replace( '/\\\\((\!|\|)+)/', '$1', $this->transform($txt ) );
+        
+        foreach ( $this->addAtEnd as $line )
+        {
+            $ret .= $line . "\n";
+        }
+        
+        return $ret;
     }
 
     /**
@@ -210,23 +475,35 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
      * @return string hypertext reference to wiki page
      */
     function _getWikiPageLink($pageName) {
-        global $course_code;
+        global $course_code, $langWikiMainPage;
 
+		if ($langWikiMainPage == $pageName){
+            $pageName = '__MainPage__';
+        }
+		
         // allow links to use wikiwords for wiki page locations
         if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern')) {
-            $pageName = preg_replace('/' . $this->getOpt('words_pattern') . '/msU', '$1', $pageName);
+            $pageName = preg_replace('/¶¶¶'.$this->getOpt('words_pattern').'¶¶¶/msU', '$1', $pageName);
         }
 
+		$fragment = '';
+
+        /*if (preg_match('/(#\w+)$/', $pageName, $matches))
+        {
+            $fragment = $matches[1];
+            $pageName = preg_replace( '/(#\w+)$/', '', $pageName );
+        }*/
+		
         if ($this->wiki->pageExists($pageName)) {
             return ' href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;action=show&amp;title=' . rawurlencode($pageName)
-                    . '&amp;wikiId=' . $this->wiki->getWikiId()
+                    . '&amp;wikiId=' . $this->wiki->getWikiId() . $fragment
                     . '" class="wikiShow"'
             ;
         } else {
             return ' href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;action=edit&amp;title=' . rawurlencode($pageName)
-                    . '&amp;wikiId=' . $this->wiki->getWikiId()
+                    . '&amp;wikiId=' . $this->wiki->getWikiId() . $fragment
                     . '" class="wikiEdit"'
             ;
         }
@@ -247,8 +524,9 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             'ins' => array('++', '++'),
             'u' => array('__', '__'),
             'note' => array('$$', '$$'),
-            'word' => array('���', '���'),
-            'macro' => array('"""', '"""')
+            'word' => array('¶¶¶','¶¶¶'),
+            'macro' => array('"""', '"""'),
+		    'color' => array('//','//')
         );
 
         # Suppression des tags selon les options
@@ -299,6 +577,25 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
 
         $this->escape_table = $this->all_tags;
         array_walk($this->escape_table, create_function('&$a', '$a = \'\\\\\'.$a;'));
+    }
+	
+    function __parseColor($str, &$tag, &$attr, &$type) {
+        $n_str = $this->__inlineWalk($str);
+        $data = $this->__splitTagsAttr($n_str );
+        
+        $tag = "span";
+        $type= "open";
+        
+        if (count($data) == 1) {
+            $content = $str;
+            $attr = ' style="color: #000000"';
+        }
+        elseif (count($data) > 1) {
+            $attr = ' style="color: ' . trim( $data[ 0 ] ) .'"';
+            $content = $data[ 1 ];
+        }
+        
+        return $content;
     }
 
 }
