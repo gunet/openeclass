@@ -36,11 +36,6 @@ $navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $lang
 
 mysql_select_db($mysqlMainDb);
 
-if (isset($_POST['submit'])) {
-        $unit_id = description_unit_id($cours_id);
-        add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
-}
-
 $description = '';
 $unit_id = description_unit_id($cours_id);
 $q = db_query("SELECT id, res_id, comments FROM unit_resources WHERE unit_id = $unit_id

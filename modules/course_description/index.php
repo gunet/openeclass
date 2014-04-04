@@ -75,7 +75,7 @@ hCont;
 
         process_actions();
 
-        if (isset($_POST['edIdBloc']) and isset($_POST['save'])) {            
+        if (isset($_POST['edIdBloc']) and !isset($_POST['ignore'])) {
                 // Save results from block edit (save action)
                 $res_id = intval($_POST['edIdBloc']);
                 add_unit_resource($unit_id, 'description', $res_id,
