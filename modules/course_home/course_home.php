@@ -104,17 +104,20 @@ if ($res and mysql_num_rows($res) > 0) {
                     $description = standard_text_escape($row['comments']);
             } elseif ($row['res_id'] == -2) {
                     $addon = standard_text_escape($row['comments']);
-            } else {
+            } else {                
                     if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
                             $element_id = "class='course_info' id='{$idBloc[$row['res_id']]}'";
+                            $icon_url = "$themeimg/bloc/$row[res_id].png";
                     } else {
                             $element_id = 'class="course_info other"';
+                            $icon_url = "$themeimg/bloc/default.png";
                     }
                     $hidden_id = "hidden_$row[res_id]";
                     $tool_content .= "<div id='$hidden_id'><h1>" .
                             q($row['title']) . "</h1>" .
                             standard_text_escape($row['comments']) . "</div>\n";
-                    $main_extra .= "<div $element_id><a href='#$hidden_id' class='inline' style='font-weight: bold; width: 10em;'>" .
+                    $main_extra .= "<div $element_id>" .
+                            "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
                             q($row['title']) .
                             "</a></div>\n";
             }
