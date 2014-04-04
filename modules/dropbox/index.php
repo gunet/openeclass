@@ -99,7 +99,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         } else {
             $type = 'pm';
         }
-        $tool_content .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<form id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
         $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
@@ -168,40 +168,91 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	      </td>
 	    </tr>";
     }
-	$tool_content .= "<tr>
-	  <th>$langSendTo:</th>
-	  <td>
-	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
-
-    if ($course_id != 0) {//course messages
-        //select all users from this course except yourself
-        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                FROM user u, course_user cu
-			    WHERE cu.course_id = ?d
-                AND cu.user_id = u.id
-                AND cu.status != ?d
-                AND u.id != ?d
-                ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-        $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+    
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
+    	$tool_content .= "<tr>
+    	  <th>$langSendTo:</th>
+    	  <td>
+    	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
+    
+        if ($course_id != 0) {//course messages
+            //select all users from this course except yourself
+            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                    FROM user u, course_user cu
+    			    WHERE cu.course_id = ?d
+                    AND cu.user_id = u.id
+                    AND cu.status != ?d
+                    AND u.id != ?d
+                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+            $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+            
+            foreach ($res as $r) {
+                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+            }
+        } 
+    
+        $tool_content .= "</select></td></tr>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
-        //select all users that follow the same courses as you 
-        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                FROM user u, course_user cu
-			    WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
-                AND cu.user_id = u.id
-                AND cu.status != ?d
-                AND u.id != ?d
-                ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-        $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid);
+        $head_content .= " <script type='text/javascript'>
+                             var selected = [];
+                             $(function() {
+                               function split( val ) {
+                                 return val.split( /,\s*/ );
+                                }
+                                function extractLast( term ) {
+                                  return split( term ).pop();
+                                }
+                                $(\"#recipients\" )
+                                // don't navigate away from the field on tab when selecting an item
+                                .bind( \"keydown\", function( event ) {
+                                  if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( \"ui-autocomplete\" ).menu.active ) {
+                                    event.preventDefault();
+                                  }
+                                })
+                                .autocomplete({
+                                  source: function( request, response ) {
+                                    $.getJSON( \"load_recipients.php?autocomplete=1\", {
+                                      term: extractLast( request.term )
+                                    }, response );
+                                  },
+                                  search: function() {
+                                    // custom minLength
+                                    var term = extractLast( this.value );
+                                    if ( term.length < 2 ) {
+                                      return false;
+                                    }
+                                  },
+                                  focus: function() {
+                                    // prevent value inserted on focus
+                                    return false;
+                                  },
+                                  select: function( event, ui ) {
+                                    var terms = split( this.value );
+                                    // remove the current input
+                                    terms.pop();
+                                    // add the selected item
+                                    terms.push( ui.item.label );
+                                    // add placeholder to get the comma-and-space at the end
+                                    terms.push( \"\" );
+                                    this.value = terms.join( \", \" );
+                                    //do not add a recipient already selected
+                                    if ($.inArray(ui.item.value, selected) == -1) {
+                                      $('#newmsg').append('<input type=\'hidden\' name=\'recipients[]\' value=\''+ui.item.value+'\'/>');
+                                      selected.push(ui.item.value);
+                                    }
+                                    return false;
+                                  }
+                                });
+                              });
+                            </script>";
+        
+        $tool_content .= "<tr>
+    	                    <th>$langSendTo:</th>
+    	                    <td><input name='autocomplete' id='recipients' /></td>
+                          </tr>";        
     }
-    if ($course_id != 0 OR ($type == 'pm' && $course_id == 0) ) {
-        foreach ($res as $r) {
-            $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
-        }
-    }
-
-    $tool_content .= "</select></td></tr>
-	<tr>
+    
+	$tool_content .= "<tr>
 	  <th>&nbsp;</th>
 	  <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
 	  $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
@@ -211,16 +262,18 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         </form>
 	<p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
-    load_js('jquery.multiselect.min.js');
-    $head_content .= "<script type='text/javascript'>$(document).ready(function () {
-            $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
-            });
-    });</script>
-    <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
+    	load_js('jquery.multiselect.min.js');
+        $head_content .= "<script type='text/javascript'>$(document).ready(function () {
+                $('#select-recipients').multiselect({
+                    selectedText: '$langJQSelectNum',
+                    noneSelectedText: '$langJQNoneSelected',
+                    checkAllText: '$langJQCheckAll',
+                    uncheckAllText: '$langJQUncheckAll'
+                });
+        });</script>
+        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+	}
 } else {//mailbox
     load_js('datatables');
     $head_content .= "<script type='text/javascript'>
