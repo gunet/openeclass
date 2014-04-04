@@ -55,7 +55,7 @@ $_gid = isset($_REQUEST['gid']) ? $_REQUEST['gid'] : null;
 
 //check if groups are enabled for this course
 //if not user will be shown the course wiki page
-$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?";
+$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?d";
 $result = Database::get()->querySingle($sql, $course_id);
 if (is_object($result) && $result->wiki == 1) {
     $is_groupAllowed = true;
@@ -75,7 +75,7 @@ if ($_gid && $_gid != 0 && $is_groupAllowed) {
     // group context
     $groupId = intval($_gid);
     
-    $sql = "SELECT `name` FROM `group` WHERE `id` = ?";
+    $sql = "SELECT `name` FROM `group` WHERE `id` = ?d";
     $result = Database::get()->querySingle($sql, $groupId);
     if (is_object($result)) {
         $group_name = $result->name;

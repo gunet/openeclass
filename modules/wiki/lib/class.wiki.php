@@ -164,8 +164,8 @@ class Wiki {
 
         $sql = "SELECT `id`, `title`, `description`, `group_id` "
                 . "FROM `wiki_properties` "
-                . "WHERE `id` = ? "
-                . "AND `course_id` = ?"
+                . "WHERE `id` = ?d "
+                . "AND `course_id` = ?d"
         ;
         
         $result = Database::get()->querySingle($sql, $wikiId, $course_id);
@@ -184,7 +184,7 @@ class Wiki {
 
         $sql = "SELECT `flag`, `value` "
                 . "FROM `wiki_acls` "
-                . "WHERE `wiki_id` = ?"
+                . "WHERE `wiki_id` = ?d"
         ;
         
         $result = Database::get()->queryArray($sql, $wikiId);
@@ -222,7 +222,7 @@ class Wiki {
     function saveACL() {
 
         $sql = "SELECT COUNT(`wiki_id`) as `c` FROM `wiki_acls` "
-                . "WHERE `wiki_id` = ?"
+                . "WHERE `wiki_id` = ?d"
         ;
 
         $that = $this;
@@ -238,9 +238,9 @@ class Wiki {
                 $value = ( $value == false ) ? 'false' : 'true';
 
                 $sql = "UPDATE `wiki_acls` "
-                        . "SET `value`= ? "
-                        . "WHERE `wiki_id` = ? "
-                        . "AND `flag` = ?"
+                        . "SET `value`= ?s "
+                        . "WHERE `wiki_id` = ?d "
+                        . "AND `flag` = ?s"
                 ;
 
                 Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -260,7 +260,7 @@ class Wiki {
                         . "("
                         . "`wiki_id`, `flag`, `value`"
                         . ") "
-                        . "VALUES(?,?,?)"
+                        . "VALUES(?d,?s,?s)"
                 ;
 
                 Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -284,7 +284,7 @@ class Wiki {
                     . "`("
                     . "`course_id`, `title`,`description`,`group_id`"
                     . ") "
-                    . "VALUES(?,?,?,?)"
+                    . "VALUES(?d,?s,?s,?d)"
             ;
 
             // GET WIKIID
@@ -304,11 +304,11 @@ class Wiki {
             // UPDATE PROPERTIES
             $sql = "UPDATE `wiki_properties` "
                     . "SET "
-                    . "`title` = ?, "
-                    . "`description` = ?, "
-                    . "`group_id` = ? "
-                    . "WHERE `id` = ?"
-                    . " AND `course_id` = ?"
+                    . "`title` = ?s, "
+                    . "`description` = ?s, "
+                    . "`group_id` = ?d "
+                    . "WHERE `id` = ?d"
+                    . " AND `course_id` = ?d"
             ;
 
             $that = $this;
@@ -334,8 +334,8 @@ class Wiki {
 
         $sql = "SELECT COUNT(`id`) as `c` "
                 . "FROM `wiki_pages` "
-                . "WHERE BINARY `title` = ? "
-                . "AND `wiki_id` = ?"
+                . "WHERE BINARY `title` = ?s "
+                . "AND `wiki_id` = ?d"
         ;
 
         $result = Database::get()->querySingle($sql, $title, $this->wikiId);
@@ -357,8 +357,8 @@ class Wiki {
 
         $sql = "SELECT COUNT(`id`) as `c` "
                 . "FROM `wiki_properties` "
-                . "WHERE `title` = ? "
-                . "AND `course_id` = ?"
+                . "WHERE `title` = ?s "
+                . "AND `course_id` = ?d"
         ;
 
         $result = Database::get()->querySingle($sql, $title, $course_id);
@@ -380,8 +380,8 @@ class Wiki {
 
         $sql = "SELECT COUNT(`id`) as `c` "
                 . "FROM `wiki_properties` "
-                . "WHERE `id` = ? "
-                . "AND `course_id` = ?"
+                . "WHERE `id` = ?d "
+                . "AND `course_id` = ?d"
         ;
 
         $result = Database::get()->querySingle($sql, $id, $course_id);
@@ -402,7 +402,7 @@ class Wiki {
 
         $sql = "SELECT `title` "
                 . "FROM `wiki_pages` "
-                . "WHERE `wiki_id` = ? "
+                . "WHERE `wiki_id` = ?d "
                 . "ORDER BY `title` ASC"
         ;
         
@@ -417,7 +417,7 @@ class Wiki {
     public function allPagesByCreationDate() {
         $sql = "SELECT `title` "
                 . "FROM `wiki_pages` "
-                . "WHERE `wiki_id` = ? "
+                . "WHERE `wiki_id` = ?d "
                 . "ORDER BY `ctime` ASC"
         ;
 
@@ -437,7 +437,7 @@ class Wiki {
         $sql = "SELECT `page`.`title`, `page`.`last_mtime`, `content`.`editor_id` "
                 . "FROM `wiki_pages` `page`, "
                 . "`wiki_pages_content` `content` "
-                . "WHERE `page`.`wiki_id` = ? "
+                . "WHERE `page`.`wiki_id` = ?d "
                 . "AND `page`.`last_version` = `content`.`id` "
                 . "ORDER BY `page`.`last_mtime` DESC "
                 . $limit
@@ -450,7 +450,7 @@ class Wiki {
         $sql = "
             SELECT count( `id` ) as `pages` 
             FROM `wiki_pages` 
-            WHERE `wiki_id` = ?";
+            WHERE `wiki_id` = ?d";
 
         $result = Database::get()->querySingle($sql, $this->getWikiId());
 

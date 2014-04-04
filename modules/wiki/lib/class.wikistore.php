@@ -82,8 +82,8 @@ class WikiStore {
 
         $sql = "SELECT COUNT(`id`) as `c` "
         		. "FROM `wiki_pages` "
-        		. "WHERE BINARY `title` = ? "
-        		. "AND `wiki_id` = ?"
+        		. "WHERE BINARY `title` = ?s "
+        		. "AND `wiki_id` = ?d"
         ;
         
         $result = Database::get()->querySingle($sql, $title, $wikiId);
@@ -105,8 +105,8 @@ class WikiStore {
 
         $sql = "SELECT COUNT(`id`) as `c` "
                 . "FROM `wiki_properties` "
-                . "WHERE `id` = ? "
-                . "AND `course_id` = ?"
+                . "WHERE `id` = ?d "
+                . "AND `course_id` = ?d"
         ;
         
         $result = Database::get()->querySingle($sql, $wikiId, $course_id);
@@ -130,8 +130,8 @@ class WikiStore {
 
         $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `wiki_properties` "
-                . "WHERE `group_id` = ? "
-                . "AND `course_id` = ? "
+                . "WHERE `group_id` = ?d "
+                . "AND `course_id` = ?d "
                 . "ORDER BY `id` ASC"
         ;
         
@@ -156,12 +156,12 @@ class WikiStore {
 
         $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `wiki_properties` "
-                . "WHERE `group_id` != 0 "
-                . "AND `course_id` = ? "
+                . "WHERE `group_id` != ?d "
+                . "AND `course_id` = ?d "
                 . "ORDER BY `group_id` ASC"
         ;
         
-        return Database::get()->queryArray($sql, $course_id);
+        return Database::get()->queryArray($sql, 0, $course_id);
     }
 
     function getNumberOfPagesInWiki($wikiId) {
@@ -169,7 +169,7 @@ class WikiStore {
         if ($this->wikiIdExists($wikiId)) {
             $sql = "SELECT count( `id` ) as `pages` "
                     . "FROM `wiki_pages` "
-                    . "WHERE `wiki_id` = ?"
+                    . "WHERE `wiki_id` = ?d"
             ;
             
             $result = Database::get()->querySingle($sql, $wikiId); 
@@ -190,7 +190,7 @@ class WikiStore {
 
         if ($this->wikiIdExists($wikiId)) {
             
-            $sql = "SELECT title FROM wiki_properties WHERE course_id = ? AND id = ?";
+            $sql = "SELECT title FROM wiki_properties WHERE course_id = ?d AND id = ?d";
             $that = $this;
             $result = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
@@ -199,8 +199,8 @@ class WikiStore {
             
             // delete properties
             $sql = "DELETE FROM `wiki_properties` "
-                    . "WHERE `id` = ?"
-                    . " AND `course_id` = ?"
+                    . "WHERE `id` = ?d"
+                    . " AND `course_id` = ?d"
             ;
 
             $result = Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -213,7 +213,7 @@ class WikiStore {
 
             // delete wiki acl
             $sql = "DELETE FROM `wiki_acls` "
-                    . "WHERE `wiki_id` = ?"
+                    . "WHERE `wiki_id` = ?d"
             ;
 
             $result = Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -226,7 +226,7 @@ class WikiStore {
 
             $sql = "SELECT `id` "
                     . "FROM `wiki_pages` "
-                    . "WHERE `wiki_id` = ?"
+                    . "WHERE `wiki_id` = ?d"
             ;
 
             $pageIds = Database::get()->queryArray($sql, function ($errormsg) use ($that) {
@@ -240,7 +240,7 @@ class WikiStore {
             foreach ($pageIds as $pageId) {
                 $sql = "DELETE "
                         . "FROM `wiki_pages_content` "
-                        . "WHERE `pid` = ?"
+                        . "WHERE `pid` = ?d"
                 ;
 
                 Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -269,7 +269,7 @@ class WikiStore {
 #                }
 
             $sql = "DELETE FROM `wiki_pages` "
-                    . "WHERE `wiki_id` = ?"
+                    . "WHERE `wiki_id` = ?d"
             ;
 
             Database::get()->query($sql, function ($errormsg) use ($that) {

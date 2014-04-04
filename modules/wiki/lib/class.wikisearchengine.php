@@ -65,7 +65,7 @@ class WikiSearchEngine {
                 `wiki_pages` AS p, 
                 `wiki_pages_content` AS c 
             WHERE 
-                p.`wiki_id` = ?
+                p.`wiki_id` = ?d
             AND " 
                 .$searchArr[0];
 		
@@ -137,16 +137,16 @@ class WikiSearchEngine {
         $searchPageArr_args = array();
 
         if (!is_null($groupId)) {
-            $groupstr = "( w.`group_id` = ?  AND w.`id` = p.`wiki_id`)";
+            $groupstr = "( w.`group_id` = ?d  AND w.`id` = p.`wiki_id`)";
             $groupstr[] = $groupId;
         } else {
             $groupstr = "(w.`id` = p.`wiki_id`)";
         }
 
         foreach ($keywords as $keyword) {
-            $searchTitleArr[] = " p.`title` LIKE ? ";
+            $searchTitleArr[] = " p.`title` LIKE ?s ";
             $searchTitleArr_args[] = '%'.$keyword.'%';
-            $searchPageArr[] = " c.`content` LIKE ? ";
+            $searchPageArr[] = " c.`content` LIKE ?s ";
             $searchPageArr_args[] = '%'.$keyword.'%';
         }
 

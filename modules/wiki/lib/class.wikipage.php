@@ -149,7 +149,7 @@ class WikiPage {
         // (OPT) backup last version
         // 1st delete page info
         $sql = "DELETE FROM `wiki_pages` "
-                . "WHERE `id` = ?"
+                . "WHERE `id` = ?d"
         ;
 
         $that = $this;
@@ -160,7 +160,7 @@ class WikiPage {
         if (!$this->hasError()) {
             // 2nd delete page versions
             $sql = "DELETE FROM `wiki_pages_content` "
-                    . "WHERE `pid` = ?"
+                    . "WHERE `pid` = ?d"
             ;
 
             $that = $this;
@@ -199,7 +199,7 @@ class WikiPage {
                 // 1st insert page info
                 $sql = "INSERT INTO `wiki_pages`"
                         . "(`wiki_id`, `owner_id`,`title`,`ctime`, `last_mtime`) "
-                        . "VALUES(?,?,?,?,?)"
+                        . "VALUES(?d,?d,?s,?t,?t)"
                 ;
                 
                 $that = $this;
@@ -234,7 +234,7 @@ class WikiPage {
 
         $sql = "SELECT `id`, `editor_id`, `mtime`, `changelog` "
                 . "FROM `wiki_pages_content` "
-                . "WHERE `pid` = ?"
+                . "WHERE `pid` = ?d"
                 . $order
                 . $limit
         ;
@@ -257,8 +257,8 @@ class WikiPage {
 
         $sql = "SELECT COUNT(`id`) as `c` "
                 . "FROM `wiki_pages` "
-                . "WHERE BINARY `title` = ? "
-                . "AND `wiki_id` = ?"
+                . "WHERE BINARY `title` = ?s "
+                . "AND `wiki_id` = ?d"
         ;
         
         $result = Database::get()->querySingle($sql, $title, $this->getWikiId());
@@ -284,9 +284,9 @@ class WikiPage {
                 . "c.`editor_id`, c.`content` "
                 . "FROM `wiki_pages` p"
                 . ", `wiki_pages_content` c "
-                . "WHERE BINARY p.`title` = ? "
+                . "WHERE BINARY p.`title` = ?s "
                 . "AND c.`id` = p.`last_version` "
-                . "AND `wiki_id` = ?"
+                . "AND `wiki_id` = ?d"
         ;
         
         $params = array($title, $this->getWikiId());
@@ -361,7 +361,7 @@ class WikiPage {
         // 1st insert page content
         $sql = "INSERT INTO `wiki_pages_content`"
                 . "(`pid`,`editor_id`,`mtime`, `content`, `changelog`) "
-                . "VALUES(?,?,?,?,?)";
+                . "VALUES(?d,?d,?t,?s,?s)";
 
         $that = $this;
         $result = Database::get()->query($sql, function ($errormsg) use ($that) {
@@ -376,9 +376,9 @@ class WikiPage {
 
         // 2nd update page info
         $sql = "UPDATE `wiki_pages` "
-                . "SET `last_version` = ? ,"
-                . "`last_mtime` = ? "
-                . "WHERE `id` = ?"
+                . "SET `last_version` = ?d ,"
+                . "`last_mtime` = ?t "
+                . "WHERE `id` = ?d"
         ;
 
         Database::get()->query($sql, function ($errormsg) use ($that) {

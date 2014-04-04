@@ -50,7 +50,7 @@ $style = '';
 
 //check if groups are enabled for this course
 //if not user will be shown the course wiki page
-$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?";
+$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?d";
 $result = Database::get()->querySingle($sql, $course_id);
 if (is_object($result) && $result->wiki == 1) {
     $is_groupAllowed = true;
@@ -58,7 +58,7 @@ if (is_object($result) && $result->wiki == 1) {
     $is_groupAllowed = false;
 }
 
-$sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ? AND `user_id` = ?";
+$sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
 $result = Database::get()->querySingle($sql, $course_id, $uid);
 if ($result->c > 0) {
     $is_courseMember = true;
@@ -94,8 +94,8 @@ $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
 // and to wikis from non-existent groups or disabled group wikis
 $sql = "SELECT `group_id` "
         . "FROM `wiki_properties` "
-        . "WHERE `id` = ?"
-        . " AND `course_id` = ?"
+        . "WHERE `id` = ?d"
+        . " AND `course_id` = ?d"
 ;
 
 $result = Database::get()->querySingle($sql, $wikiId, $course_id);
@@ -106,7 +106,7 @@ if (is_object($result)) {
         
         if ($is_groupAllowed) {
             //check if user is group member
-            $sql = "SELECT `user_id` FROM `group_members`  WHERE user_id = ? and group_id = ?";
+            $sql = "SELECT `user_id` FROM `group_members`  WHERE user_id = ?d and group_id = ?d";
             $result = Database::get()->querySingle($sql, $uid, $groupId);
             if (is_object($result)) {
             	$is_groupMember = true;
@@ -114,7 +114,7 @@ if (is_object($result)) {
             	$is_groupMember = false;
             }
             
-            $sql = "SELECT `name` FROM `group` WHERE `id` = ?";
+            $sql = "SELECT `name` FROM `group` WHERE `id` = ?d";
             $result = Database::get()->querySingle($sql, $groupId);
             if (is_object($result)) {
             	$group_name = $result->name;
