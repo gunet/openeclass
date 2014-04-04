@@ -24,6 +24,7 @@ $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
+$TBL_RECORDS = 'exercise_user_record';
 
 include('exercise.class.php');
 include('question.class.php');
@@ -45,6 +46,23 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+load_js('tools.js');
+$head_content .= "<script type='text/javascript'>";
+	// If not editor, enable countdown mechanism
+	if (!$is_editor) {            
+	    $head_content .= "
+    		$(document).ready(function(){
+    			timer = $('#progresstime');                        
+    			timer.time = timer.text();                        
+                            timer.text(secondsToHms(timer.time--));
+    		    countdown(timer, function() {
+    		        alert('$langExerciseEndTime');
+    		        $('.exercise').submit();
+    		    });
+    		});";
+	}
+$head_content .="$(exercise_enter_handler);</script>";
+
 if (isset($_REQUEST['exerciseId'])) {
     $exerciseId = intval($_REQUEST['exerciseId']);
 }
@@ -54,19 +72,20 @@ if (isset($exerciseId)) {
     $active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE`
                                                 WHERE course_id = $course_id AND id = '$exerciseId'"));
     if (($active['active'] == 0) and (!$is_editor)) {
-        header('Location: index.php?course=' . $course_code);
-        exit();
+        $error = 'langExerciseExpired';
+		header('Location: exercise_redirect.php?course='.$course_id.'&exerciseId='.$exerciseId.'&error='.$error);
+		exit();
     }
-}
-
-if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
-    $_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
 // if the user has clicked on the "Cancel" button
 if (isset($_POST['buttonCancel'])) {
     // returns to the exercise list
-    header('Location: index.php?course=' . $course_code);
+	$error = 'langResultsFailed';
+	$exerciseId = isset($_POST['exerciseId']) ? $_POST['exerciseId'] : "";
+	unset($_SESSION['exercise_begin_time']);
+	unset($_SESSION['exercise_end_time']);
+	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
     exit();
 }
 
@@ -86,25 +105,21 @@ if (isset($_POST['formSent'])) {
     } else {
         $exerciseResult = array();
     }
-
+	// checking if user's time is more than exercise's time constrain
     if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
-        $exerciseTimeConstraint = $exerciseTimeConstraint * 60;
+        $exerciseTimeConstraint = $exerciseTimeConstraint * 60 + 10;
         $exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
         $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
-
-        if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
-            unset($_SESSION['exercise_begin_time']);
-            unset($_SESSION['exercise_end_time']);
-            header('Location: exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
-            exit();
-        }
-    }
-    $recordEndDate = date("Y-m-d H:i:s", time());
-    if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
-        mysql_select_db($mysqlMainDb);
-        $sql = "INSERT INTO exercise_user_record (eid, uid, record_start_date, record_end_date, total_score, total_weighting, attempt)
-			VALUES ('$eid_temp', '$uid', '$recordStartDate', '$recordEndDate', 0, $exercisetotalweight, 1)";
-        $result = db_query($sql);
+		if (!$is_editor) {
+	        if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
+	            unset($_SESSION['exercise_begin_time']);
+	            unset($_SESSION['exercise_end_time']);
+	            header('Location: exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
+	            exit();
+	        }
+			unset($_SESSION['exercise_begin_time']);
+			unset($_SESSION['exercise_end_time']);
+		}
     }
 
     // if the user has answered at least one question
@@ -163,45 +178,67 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
-$recordStartDate = date("Y-m-d H:i:s", time());
 
-$temp_CurrentDate = date("Y-m-d H:i");
-$temp_StartDate = $objExercise->selectStartDate();
-$temp_EndDate = $objExercise->selectEndDate();
-$temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
-$temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
-$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-
+$temp_CurrentDate = $recordStartDate = time();
+$exercise_StartDate = strtotime($objExercise->selectStartDate());
+$exercise_EndDate = strtotime($objExercise->selectEndDate());
 if (!$is_editor) {
-    $error = FALSE;
-    // check if exercise has expired or is active
-    $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-                        WHERE eid = '$eid_temp' AND uid = '$uid'", $course_code));
-    ++$currentAttempt[0];
-    if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
-        $message = $langExerciseMaxAttemptsReached;
-        $error = TRUE;
+	$error = FALSE;
+	// determine begin time: 
+	// either from a previews attempt meaning that user hasn't sumbited his answers    
+	// 		and exerciseTimeConstrain hasn't yet passed,
+	// either start a new attempt and count now() as begin time.
+	$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
+	$tmp = mysql_fetch_row(db_query($sql));
+	if ($tmp[0] > 0) {
+		$recordStartDate = strtotime($tmp[1]);
+		// if exerciseTimeConstrain has not passed yet calculate the remaining time
+		if ($recordStartDate + ($exerciseTimeConstraint*60) >= $temp_CurrentDate) {
+			$_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate;
+			$timeleft = ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
+		}
+		// what # of attempt is this?
+		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
+		$tmp = mysql_fetch_row(db_query($sql));
+		$attempt = $tmp[0];
+	}
+	if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
+		$_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
+		// save begin time in db
+		$start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
+		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
+		$tmp = mysql_fetch_row(db_query($sql));
+		$attempt = $tmp[0] + 1;
+		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
+		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
+			$sql = "INSERT INTO `$TBL_RECORDS` (eid, uid, record_start_date, total_score, total_weighting, attempt)
+		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
+			$result = db_query($sql);
+			$timeleft = $exerciseTimeConstraint*60;
+		}
+	}
+	// Checking everything is between correct boundaries:
+	
+	// Number of Attempts
+    if ($exerciseAllowedAttempts > 0 && $attempt > $exerciseAllowedAttempts) {
+    	$error = 'langExerciseMaxAttemptsReached';
     }
-    if (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate)) {
-        $message = $langExerciseExpired;
-        $error = TRUE;
+    // Remaining Time
+    if ($recordStartDate + ($exerciseTimeConstraint*60) < $temp_CurrentDate) {
+    	$error = 'langExerciseExpiredTime';
     }
-    if ($error == TRUE) {
-        $tool_content .= "
-                  <br/>
-                    <table width='100%' class='tbl'>
-                    <tr>
-                      <td class='alert1'>$message</td>
-                    </tr>
-                    <tr>
-                      <td><br/><br/><br/><div align='center'>
-                        <a href='index.php?course=$course_code'>$langBack</a></div></td>
-                    </tr>
-                    </table>";
-        draw($tool_content, 2);
-        exit();
+    // Exercise's Expiration
+    if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise_EndDate)) { 
+		$error = 'langExerciseExpired';
+    }
+    if ($error) {
+    	unset($_SESSION['exercise_begin_time']);
+    	unset($_SESSION['exercise_end_time']);
+    	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
+    	exit();
     }
 }
+
 if (isset($_SESSION['questionList'][$exerciseId])) {
     $questionList = $_SESSION['questionList'][$exerciseId];
 }
@@ -224,7 +261,7 @@ if (!isset($questionNum) || $_POST['questionNum']) {
     }
 }
 
-if (@$_POST['questionNum']) {
+if (isset($_POST['questionNum'])) {
     $QUERY_STRING = "questionNum = $questionNum";
 }
 
@@ -232,8 +269,11 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <th colspan='2'>" . q($exerciseTitle) . "</th>
-  </tr>
+    <th colspan='2'>";
+        if (!$is_editor and isset($timeleft)) {
+            $tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
+        }
+        $tool_content .= q($exerciseTitle). "</th></tr>
   <tr class='even'>
     <td colspan='2'>$exerciseDescription_temp</td>
   </tr>
@@ -241,7 +281,7 @@ $tool_content .= "
 
   <br />
 
-  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' class='exercise' >
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />
   <input type='hidden' name='exerciseType' value='$exerciseType' />

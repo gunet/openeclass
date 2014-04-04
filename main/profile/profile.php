@@ -97,6 +97,7 @@ if (isset($_POST['submit'])) {
     // First process language changes
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
+        touch($webDir."courses/userimg/index.htm");
     }
     $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
@@ -256,8 +257,8 @@ $desc_form = $myrow['description'];
 $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
 
-$sec = $urlSecure . 'modules/profile/profile.php';
-$passurl = $urlSecure . 'modules/profile/password.php';
+$sec = $urlSecure . 'main/profile/profile.php';
+$passurl = $urlSecure . 'main/profile/password.php';
 
 $tool_content .= "
   <div id='operations_container'>
@@ -268,9 +269,9 @@ if ($allow_password_change) {
         <li><a href='$passurl'>$langChangePass</a></li> ";
 }
 $tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></li>
-        <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>
+        <li><a href='../unreguser.php'>$langUnregUser</a></li>
     </ul>
-  </div>\n";
+  </div>";
 $tool_content .= "
    <form method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
    <fieldset>
@@ -289,20 +290,13 @@ if ($allow_name_change) {
           </td>";
 }
 
-$tool_content .= "
-        </tr>
-        <tr>
-          <th>$langSurname:</th>";
+$tool_content .= "</tr><tr><th>$langSurname:</th>";
 if ($allow_name_change) {
-    $tool_content .= "
-          <td><input type='text' size='40' name='surname_form' value='$surname_form' /></td>";
+    $tool_content .= "<td><input type='text' size='40' name='surname_form' value='$surname_form' /></td>";
 } else {
-    $tool_content .= "
-          <td><b>" . $surname_form . "</b>
-            <input type='hidden' name='surname_form' value='$surname_form' /></td>";
+    $tool_content .= "<td><b>" . $surname_form . "</b><input type='hidden' name='surname_form' value='$surname_form' /></td>";
 }
-$tool_content .= "
-        </tr>";
+$tool_content .= "</tr>";
 
 if ($allow_username_change) {
     $tool_content .= "
@@ -325,13 +319,10 @@ $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
     ACCESS_PROFS => $langProfileInfoProfs,
     ACCESS_USERS => $langProfileInfoUsers);
 
-$tool_content .= "
-        <tr>
-          <th>$langEmail:</th>";
+$tool_content .= "<tr><th>$langEmail:</th>";
 
 //if ($allow_name_change) {
-$tool_content .= "
-          <td><input type='text' size='40' name='email_form' value='$email_form' />";
+$tool_content .= "<td><input type='text' size='40' name='email_form' value='$email_form' />";
 //} else {
 //        $tool_content .= "
 //           <td><b>$email_form</b> [$auth_text]

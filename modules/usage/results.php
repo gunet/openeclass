@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,13 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-/*
- * Created on 1 June 2006
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
+/**
+ * @file results.php
+ * @brief display graph results
  */
 
 require_once 'modules/graphics/plotter.php';
@@ -34,7 +30,7 @@ $usage_defaults = array(
     'u_stats_value' => 'visits',
     'u_interval' => 'daily',
     'u_module_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
+    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
     'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
 );
 
@@ -54,7 +50,7 @@ if ($u_module_id != -1) {
 
 
 $date_fmt = '%d-%m-%Y';
-$date_where = "(`day` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+$date_where = "(`day` BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "";
 
 switch ($u_interval) {
@@ -173,8 +169,6 @@ switch ($u_stats_value) {
         break;
 }
 mysql_free_result($result);
-
-
 
 $errorMsg = '<p class="alert1">' . $langNoStatistics . '</p>';
 $tool_content .= $chart->plot($errorMsg);

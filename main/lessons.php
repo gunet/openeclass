@@ -46,8 +46,26 @@
 function getUserLessonInfo($uid, $type) {
     global $session;
 
-    //	TODO: add the new fields for memory in the db
-    if ($session->status == USER_STUDENT) {    
+    //	TODO: add the new fields for memory in the db  
+    $myCourses = array();
+    if ($session->status == USER_TEACHER) {            
+        $user_courses = "SELECT course.id course_id,
+                                course.code code,
+                                course.public_code,
+	                        course.title title,
+                                course.prof_names professor,
+	                        course.lang,
+	                        course_user.status status,
+	                        user.announce_flag,
+                                user.doc_flag,
+                                user.forum_flag
+	                   FROM course, course_user, user
+                          WHERE course.id = course_user.course_id AND
+	                        course_user.user_id = ?d AND
+	                        user.id = ?d
+                       ORDER BY course.title, course.prof_names";
+        $myCourses = Database::get()->queryArray($user_courses, intval($uid), intval($uid));
+    } else {
         $user_courses = "SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
@@ -58,51 +76,34 @@ function getUserLessonInfo($uid, $type) {
                                 user.announce_flag,
                                 user.doc_flag,
                                 user.forum_flag
-                             FROM course, course_user, user
-                             WHERE course.id = course_user.course_id AND
-                                   course_user.user_id = $uid AND
-                                   user.id = $uid AND
-                                   course.visible != " . COURSE_INACTIVE . "
-                             ORDER BY course.title, course.prof_names";
-    } elseif ($session->status == USER_TEACHER) {            
-        $user_courses = "SELECT course.id course_id,
-                                course.code code,
-                                course.public_code,
-	                            course.title title,
-                                course.prof_names professor,
-	                            course.lang,
-	                            course_user.status status,
-	                            user.announce_flag,
-                                user.doc_flag,
-                                user.forum_flag
-	                         FROM course, course_user, user
-                             WHERE course.id = course_user.course_id AND
-	                               course_user.user_id = $uid AND
-	                               user.id = $uid
-                             ORDER BY course.title, course.prof_names";
+                           FROM course, course_user, user
+                          WHERE course.id = course_user.course_id AND
+                                course_user.user_id = ?d AND
+                                user.id = ?d AND
+                                course.visible != ?d
+                       ORDER BY course.title, course.prof_names";
+        $myCourses = Database::get()->queryArray($user_courses, intval($uid), intval($uid), COURSE_INACTIVE);
     }
 
     $lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code = $lesson_professor = $lesson_status = array();
-    $mysql_query_result = db_query($user_courses);
     $repeat_val = 0;
     //getting user's lesson info
-    while ($mycourses = mysql_fetch_array($mysql_query_result)) {
-        $lesson_id[$repeat_val] = $mycourses['course_id'];
-        $lesson_titles[$repeat_val] = $mycourses['title'];
-        $lesson_code[$repeat_val] = $mycourses['code'];
-        $lesson_professor[$repeat_val] = $mycourses['professor'];
-        $lesson_status[$repeat_val] = $mycourses['status'];
-        $lesson_publicCode[$repeat_val] = $mycourses['public_code'];
+    foreach ($myCourses as $mycourse) {
+        $lesson_id[$repeat_val] = $mycourse->course_id;
+        $lesson_titles[$repeat_val] = $mycourse->title;
+        $lesson_code[$repeat_val] = $mycourse->code;
+        $lesson_professor[$repeat_val] = $mycourse->professor;
+        $lesson_status[$repeat_val] = $mycourse->status;
+        $lesson_publicCode[$repeat_val] = $mycourse->public_code;
         $repeat_val++;
     }
 
-    $memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
-                      FROM user WHERE user.id = $uid";
-    $memory_result = db_query($memory);
-    while ($my_memory_result = mysql_fetch_row($memory_result)) {
-        $lesson_announce_f = str_replace('-', ' ', $my_memory_result[0]);
-        $lesson_doc_f = str_replace('-', ' ', $my_memory_result[1]);
-        $lesson_forum_f = str_replace('-', ' ', $my_memory_result[2]);
+    $memorySql = "SELECT user.announce_flag, user.doc_flag, user.forum_flag FROM user WHERE user.id = ?d";
+    $memories = Database::get()->queryArray($memorySql, intval($uid));
+    foreach ($memories as $memory) {
+        $lesson_announce_f = str_replace('-', ' ', $memory->announce_flag);
+        $lesson_doc_f = str_replace('-', ' ', $memory->doc_flag);
+        $lesson_forum_f = str_replace('-', ' ', $memory->forum_flag);
     }
     $max_repeat_val = $repeat_val;
     $ret_val[0] = $max_repeat_val;
@@ -146,7 +147,7 @@ function htmlInterface($data, $lesson_code) {
             $lesson_content .= "<td align='center'>";
             if ($data[4][$i] == USER_STUDENT) {
                 $lesson_content .= "
-				<a href='${urlServer}modules/unreguser/unregcours.php?cid=" . $data[8][$i] . "&amp;uid=" . $uid . "'>
+				<a href='${urlServer}main/unregcours.php?cid=" . $data[8][$i] . "&amp;uid=" . $uid . "'>
 				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
             } elseif ($data[4][$i] == USER_TEACHER) {
                 $lesson_content .= "

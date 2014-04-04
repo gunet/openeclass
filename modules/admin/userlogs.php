@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,7 +26,6 @@
  */
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
 require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -41,13 +40,31 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
 load_js('jquery');
+load_js('jquery-ui');
 load_js('tools.js');
+load_js('jquery-ui-timepicker-addon.min.js');
+
 $head_content .= '<script type="text/javascript">
         var platform_actions = ["-2", "' . LOG_PROFILE . '", "' . LOG_CREATE_COURSE . '", "' . LOG_DELETE_COURSE . '" , "' . LOG_MODIFY_COURSE . '"];
         $(course_log_controls_init);
 </script>';
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content .= $jscalendar->get_load_files_code();
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $u = isset($_GET['u']) ? intval($_GET['u']) : '';
 $u_date_start = isset($_GET['u_date_start']) ? $_GET['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -15 day'));
@@ -72,23 +89,6 @@ if (isset($_GET['submit'])) {
     }
 }
 
-//calendar for determining start and end date
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => '',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
-
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => '',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
-
 //possible courses
 $qry = "SELECT LEFT(title, 1) AS first_letter FROM course
                 GROUP BY first_letter ORDER BY first_letter";
@@ -102,7 +102,7 @@ while ($row = mysql_fetch_assoc($result)) {
 if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
     $qry = "SELECT id, title FROM course
-                                WHERE LEFT(title,1) = " . quote($firstletter);
+                WHERE LEFT(title,1) = " . quote($firstletter);
 } else {
     $qry = "SELECT id, title FROM course";
 }
@@ -137,9 +137,9 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
       <legend>$langUserLog</legend>
       <table class='tbl'>
         <tr><th width='220' class='left'>$langStartDate</th>
-            <td>$start_cal</td></tr>
+            <td><input type='text' name = 'u_date_start' value = '$u_date_start'></td></tr>
         <tr><th class='left'>$langEndDate</th>
-            <td>$end_cal</td></tr>
+            <td><input type='text' name = 'u_date_end' value = '$u_date_end'></td></tr>
         <tr><th class='left'>$langLogTypes :</th>
             <td>" . selection($log_types, 'logtype', $logtype) . "</td></tr>
         <tr class='course'><th class='left'>$langFirstLetterCourse</th>

@@ -42,7 +42,7 @@ initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-    if (isset($uid) and !$is_member and $statut != USER_GUEST) {
+    if (isset($uid) and !$is_member and $status != USER_GUEST) {
         if ($max_members == 0 or $member_count < $max_members) {
             $sqlReg = db_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id, description = ''");
 

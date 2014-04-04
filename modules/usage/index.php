@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,18 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
-  ===========================================================================
-  usage/index.php
-  @version $Id$
-  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
-  ==============================================================================
-  @Description: Main script for the usage statistics module
-
-
-  @todo: Nothing much; most functionality is already in form.php and results.php
-  ==============================================================================
+/**
+ * @file index.php
+ * @brief Main script for the usage statistics module
  */
 
 $require_current_course = true;
@@ -45,22 +36,22 @@ load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
-<script>
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
 $(function() {
 $('input[name=u_date_start]').datetimepicker({
     dateFormat: 'yy-mm-dd', 
     timeFormat: 'hh:mm'
     });
 });
-</script>";
 
-/*$head_content .= "
-<script>
 $(function() {
-$('#datepicker').datepicker();
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
 });
-</script>";*/
+</script>";
 
 $tool_content .= "
 <div id='operations_container'>
@@ -76,9 +67,6 @@ $tool_content .= "
 
 $dateNow = date("d-m-Y / H:i:s", time());
 $nameTools = $langUsage;
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #edecdf; padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
 
 if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";

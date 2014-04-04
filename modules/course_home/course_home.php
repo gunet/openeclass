@@ -303,7 +303,7 @@ if ($course_license) {
 
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
-$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
+$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -337,7 +337,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 $emailnotification = '';
 if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
     $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
-        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course
 $receive_mail = FALSE;

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -126,17 +126,17 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_)
-            $moduleImg = "exercise_$image_bullet.png";
-        else if ($module['contentType'] == CTLINK_)
-            $moduleImg = "links_$image_bullet.png";
-        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-            $moduleImg = "description_$image_bullet.png";
-        else if ($module['contentType'] == CTDOCUMENT_) {
+            $moduleImg = "exercise_$image_bullet";
+        elseif ($module['contentType'] == CTLINK_)
+            $moduleImg = "links_$image_bullet";
+        elseif ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+            $moduleImg = "description_$image_bullet";
+        elseif ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
-        } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "lp_check.png";
+        } elseif ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
+            $moduleImg = "lp_check";
         else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-            $moduleImg = "videos_on.png";
+            $moduleImg = "videos_on";
         else
             $moduleImg = choose_image(basename($module['path']));
 
@@ -145,16 +145,18 @@ foreach ($flatElementList as $module) {
         // eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-            if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
-                $moduleImg = "tick.png";
-            else
-                $imagePassed = '<img src="' . $themeimg . '/tick.png" alt="' . $module['lesson_status'] . '" title="' . $module['lesson_status'] . '" />';
+            if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
+                $moduleImg = 'tick';
+            } else {
+                $imagePassed = icon('tick', $module['lesson_status']);
+            }
         }
 
-        if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
-            $moduleImg = "lp_failed.png";
+        if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
+            $moduleImg = 'lp_failed';
+        }
 
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><img src=\"" . $themeimg . '/' . $moduleImg . "\" alt='' title='' />";
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg, '');
 
         // emphasize currently displayed module or not
         if ($_SESSION['lp_module_id'] == $module['module_id'])
@@ -165,8 +167,9 @@ foreach ($flatElementList as $module) {
             echo "&nbsp;&nbsp;" . $imagePassed;
         echo "</li>";
 
-        if ($module['lock'] == 'CLOSE') {
-            $is_blocked = true;
+        if (($module['lock'] == 'CLOSE') 
+            and ($module['credit'] != 'CREDIT' or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
+                    $is_blocked = true;
         }
     }
 } // end of foreach

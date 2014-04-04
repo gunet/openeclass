@@ -110,19 +110,21 @@ function compat_in_array($value, $arr) {
 // A helper function, when passed a number representing KB,
 // and optionally the number of decimal places required,
 // it returns a formated number string, with unit identifier.
-function format_bytesize($kbytes, $dec_places = 2) {
-    global $text;
-    if ($kbytes > 1048576) {
-        $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
-        $result .= '&nbsp;' . $text['gb'];
-    } elseif ($kbytes > 1024) {
-        $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
-        $result .= '&nbsp;' . $text['mb'];
-    } else {
-        $result = sprintf('%.' . $dec_places . 'f', $kbytes);
-        $result .= '&nbsp;' . $text['kb'];
+if (!function_exists('format_bytesize')) {
+    function format_bytesize($kbytes, $dec_places = 2) {
+        global $text;
+        if ($kbytes > 1048576) {
+            $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
+            $result .= '&nbsp;' . $text['gb'];
+        } elseif ($kbytes > 1024) {
+            $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
+            $result .= '&nbsp;' . $text['mb'];
+        } else {
+            $result = sprintf('%.' . $dec_places . 'f', $kbytes);
+            $result .= '&nbsp;' . $text['kb'];
+        }
+        return $result;
     }
-    return $result;
 }
 
 ?>

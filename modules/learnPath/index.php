@@ -263,12 +263,12 @@ if ($is_editor) {
                         list($orderMax) = mysql_fetch_row($result);
                         $order = $orderMax + 1;
                         // create new learning path
-                        $sql = "INSERT INTO `" . $TABLELEARNPATH . "` (`course_id`, `name`, `comment`, `rank`)
-							VALUES ($course_id, " . quote($_POST['newPathName']) . "," . quote($_POST['newComment']) . "," . intval($order) . ")";
+                        $sql = "INSERT INTO `" . $TABLELEARNPATH . "` (`course_id`, `name`, `comment`, `visible`, `rank`)
+							VALUES ($course_id, " . quote($_POST['newPathName']) . "," . quote($_POST['newComment']) . ", 1, " . intval($order) . ")";
                         $lp_id = db_query($sql);
                         Log::record($course_id, MODULE_ID_LP, LOG_INSERT, array('id' => $lp_id,
-                            'name' => $_POST['newPathName'],
-                            'comment' => $_POST['newComment']));
+                                                                                'name' => $_POST['newPathName'],
+                                                                                'comment' => $_POST['newComment']));
                     } else {
                         // display error message
                         $dialogBox = $langErrorNameAlreadyExists;
@@ -277,26 +277,25 @@ if ($is_editor) {
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
                     $nameTools = $langCreateNewLearningPath;
-                    $dialogBox = "
-                                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                                        <fieldset>
-                                        <legend>$langLearningPathData</legend>
-                                        <table width='100%' class='tbl'>
-                                        <tr>
-                                        <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
-                                        <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
-                                        </tr>
-                                        <tr>
-                                        <th><label for='newComment'>$langComment</label>:</th>
-                                        <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
-                                        </tr>
-                                        <tr>
-                                        <th>&nbsp;</th>
-                                        <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
-                                        </tr>
-                                        </table>
-                                        </fieldset>
-                                        </form>";
+                    $dialogBox = " <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        <fieldset>
+                        <legend>$langLearningPathData</legend>
+                        <table width='100%' class='tbl'>
+                        <tr>
+                        <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
+                        <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
+                        </tr>
+                        <tr>
+                        <th><label for='newComment'>$langComment</label>:</th>
+                        <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
+                        </tr>
+                        </table>
+                        </fieldset>
+                        </form>";
                 }
                 break;
             default:

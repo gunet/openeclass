@@ -42,32 +42,42 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
-require_once 'include/jscalendar/calendar.php';
+
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
+    <li><a href='displaylog.php?course=$course_code'>$langUsersLog</a></li>
     <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
     <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
     <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
     <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
     <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
-</div>\n";
-
+</div>";
 
 $nameTools = $langUserLogins;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
-
-
-
-
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
 
 $usage_defaults = array(
     'u_user_id' => -1,
@@ -84,8 +94,8 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 $date_fmt = '%Y-%m-%d';
-$date_where = ' (date_time BETWEEN ' . quote("$u_date_start 00:00:00") .
-        ' AND ' . quote("$u_date_end 23:59:59") . ') ';
+$date_where = ' (date_time BETWEEN ' . quote("$u_date_start") .
+        ' AND ' . quote("$u_date_end") . ') ';
 $date_what = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
 if ($u_user_id != -1) {
@@ -105,7 +115,7 @@ $sql_2 = "SELECT a.id, a.surname, a.givenname, a.username
                  WHERE b.course_id = $course_id AND " . $user_where;
 
 // Take data from logins
-$result_2 = db_query($sql_2, $mysqlMainDb);
+$result_2 = db_query($sql_2);
 
 $users = array();
 while ($row = mysql_fetch_assoc($result_2)) {
@@ -119,14 +129,15 @@ $unknown_users = array();
 $k = 0;
 while ($row = mysql_fetch_assoc($result)) {
     $known = false;
-    if (isset($users[$row['id']])) {
-        $user = $users[$row['id']];
+    if (isset($users[$row['user_id']])) {
+        $user = $users[$row['user_id']];
         $known = true;
-    } elseif (isset($unknown_users[$row['id']])) {
-        $user = $unknown_users[$row['id']];
+    } elseif (isset($unknown_users[$row['user_id']])) {
+        $user = $unknown_users[$row['user_id']];        
     } else {
-        $user = uid_to_name($row['id']);
+        $user = uid_to_name($row['user_id']);
         if ($user === false) {
+            echo "here";
             $user = $langAnonymous;
         }
         $unknown_users[$row['user_id']] = $user;
@@ -147,18 +158,17 @@ while ($row = mysql_fetch_assoc($result)) {
                 <td align='center'>" . $row['ip'] . "</td>
                 <td align='center'>" . $row['date_time'] . "</td>
                 </tr>";
-
     $k++;
 }
 
 //Records exist?
 if (count($unknown_users) > 0) {
-    $tool_content .= "<p>$langAnonymousExplain</p>\n";
+    $tool_content .= "<p class='info'>$langAnonymousExplain</p>";
 }
 
 if ($table_cont) {
     $tool_content .= "
-        <table width='99%' class='tbl_alt'>
+        <table width='100%' class='tbl_alt'>
         <tr>
         <th colspan='4'>$langUserLogins</th>
         </tr>
@@ -173,32 +183,14 @@ if ($table_cont) {
 }
 
 if (!($table_cont)) {
-    $tool_content .= '<p class="alert1">' . $langNoLogins . '</p>';
+    $tool_content .= "<p class='alert1'>$langNoLogins</p>";
 }
-
-//make form
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
-
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
-
 
 $qry = "SELECT LEFT(a.surname, 1) AS first_letter
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
         WHERE b.course_id = $course_id
         GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry, $mysqlMainDb);
+$result = db_query($qry);
 
 $letterlinks = '';
 while ($row = mysql_fetch_assoc($result)) {
@@ -217,9 +209,8 @@ if (isset($_GET['first'])) {
             WHERE b.course_id = $course_id";
 }
 
-
 $user_opts = '<option value="-1">' . $langAllUsers . "</option>\n";
-$result = db_query($qry, $mysqlMainDb);
+$result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
     if ($u_user_id == $row['id']) {
         $selected = 'selected';
@@ -233,7 +224,6 @@ $tool_content .= '
 <form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
 <fieldset>
   <legend>' . $langUserLogins . '</legend>
-
   <table class="tbl">
   <tbody>
   <tr>
@@ -242,11 +232,11 @@ $tool_content .= '
   </tr>
   <tr>
     <th>' . $langStartDate . ':</th>
-    <td>' . "$start_cal" . '</td>
+    <td><input type=text name = "u_date_start" value="' . $u_date_start . '"></td>
   </tr>
   <tr>
     <th>' . $langEndDate . ':</th>
-    <td>' . "$end_cal" . '</td>
+    <td><input type=text name = "u_date_end" value="' . $u_date_end . '"></td>
   </tr>
   <tr>
     <th valign="top">' . $langUser . ':</th>
@@ -262,5 +252,4 @@ $tool_content .= '
 </fieldset>
 </form>';
 
-load_js('tools.js');
 draw($tool_content, 2, null, $head_content);

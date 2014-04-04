@@ -40,9 +40,9 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
     $eclass_module_id = intval($_GET['eclass_module_id']);
     $cid = course_code_to_id($course_code);
     $visible = ($_GET['hide'] == 0) ? 0 : 1;
-    db_query("UPDATE course_module SET visible = $visible
-                        WHERE module_id = $eclass_module_id AND
-                        course_id = $cid");
+    Database::get()->query("UPDATE course_module SET visible = ?d
+                        WHERE module_id = ?d AND
+                        course_id = ?d", $visible, $eclass_module_id, $cid);
 }
 
 if (isset($toolContent_ErrorExists)) {
@@ -50,7 +50,7 @@ if (isset($toolContent_ErrorExists)) {
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
@@ -109,6 +109,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $toolArr = ($is_mobile) ? array() : getSideMenu($menuTypeID);
     $numOfToolGroups = count($toolArr);
 
+    $template_settings = 'template/' . $theme . '/settings.php';
+    if (file_exists($template_settings)) {
+        require $template_settings;
+    }
     $t = new Template('template/' . $theme);
 
     if ($is_mobile)
@@ -131,10 +135,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('template_base', $urlAppend . 'template/' . $theme);
     $t->set_var('img_base', $themeimg);
 
+    $current_module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $_SERVER['REQUEST_URI']);
     if (is_array($toolArr)) {
 
         for ($i = 0; $i < $numOfToolGroups; $i ++) {
-
+            $t->set_var ( 'NAV_BLOCK_CLASS', $toolArr[$i][0]['class'] );
             if ($toolArr [$i] [0] ['type'] == 'none') {
                 $t->set_var('ACTIVE_TOOLS', '&nbsp;');
                 $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
@@ -151,6 +156,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
             $numOfTools = count($toolArr[$i][1]);
             for ($j = 0; $j < $numOfTools; $j++) {
+                $module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $toolArr[$i][2][$j]);
+                if ($module_dir == $current_module_dir) {
+                    $tool_class = 'active';
+                } else {
+                    $tool_class = '';
+                }
                 $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
                 $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                 if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
@@ -161,6 +172,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 
                 $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
+                $img_class = basename($toolArr [$i] [3] [$j], ".png");
+                $img_class = preg_replace('/_(on|off)$/', '', $img_class);
+                if (isset($icon_map[$img_class])) {
+                    $img_class = $icon_map[$img_class];
+                }
+                $t->set_var('IMG_CLASS', $img_class);
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
 
@@ -181,7 +198,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('SITE_NAME', $siteName);
 
-    
+
         //If there is a message to display, show it (ex. Session timeout)
         if ($messages = Session::render_flashdata()) {
             $t->set_var('EXTRA_MSG', $messages);
@@ -211,7 +228,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } else {
             if (!get_config('dont_display_login_form')) {
                 $t->set_var('LANG_LOGOUT', $langLogin);
-                $t->set_var('LOGOUT_LINK', $urlSecure . 'login_form.php');
+                $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
             } else {
                 $t->set_var('LOGOUT_LINK', '#');
             }
@@ -223,7 +240,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } elseif ($menuTypeID == 3) {
             $t->set_var('THIRD_BAR_TEXT', $langAdmin);
             $t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
-        } elseif ($menuTypeID > 0 and $menuTypeID < 3 ) {
+        } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
             $t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
             $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
         } elseif ($menuTypeID > 0) {
@@ -287,7 +304,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
-        if ($status != USER_GUEST) {            
+        if ($status != USER_GUEST) {
             if (!isset($_SESSION['uid'])) {
                 $t->set_var('BREAD_TEXT', $langHomePage);
             } else {
@@ -562,7 +579,6 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     if ($default_langcode === false) {
         $default_langcode = $session->language;
     }
- 
-    return selection($session->native_language_names,
-            $name, $default_langcode, $onchange_js);
+
+    return selection($session->native_language_names, $name, $default_langcode, $onchange_js);
 }

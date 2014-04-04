@@ -231,7 +231,7 @@ function is_admin($username, $password) {
         $_SESSION['prenom'] = $row['prenom'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['uname'] = $username;
-        $_SESSION['statut'] = $row['statut'];
+        $_SESSION['status'] = $row['status'];
         $_SESSION['is_admin'] = true;
 
         return true;
@@ -300,6 +300,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_4($code, $lang);
     upgrade_course_2_5($code, $lang);
     upgrade_course_2_8($code, $lang);
+    upgrade_course_2_8_5($code, $lang);
     upgrade_course_3_0($code);
 }
 
@@ -435,9 +436,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                      FROM dropbox_file AS old ORDER by id");
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,
+                        (`id`, `course_id`, `uploaderId`, `filename`, `real_filename`, `filesize`, `title`,
                          `description`, `uploadDate`, `lastUploadDate`)
-                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
+                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`, `real_filename`, 
                                `filesize`, `title`, `description`, `uploadDate`,
                                `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
 
@@ -1060,6 +1061,19 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 }
 
+function upgrade_course_2_8_5($code, $lang, $extramessage = '') {
+
+    global $langUpgCourse, $global_messages;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8.5) $extramessage<br>";
+    flush();   
+     if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
+             db_query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+             db_query("UPDATE dropbox_file SET real_filename = filename");
+     }
+}
+
 function upgrade_course_2_8($code, $lang, $extramessage = '') {
 
     global $langUpgCourse, $global_messages;
@@ -1392,6 +1406,7 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
 
     if (!file_exists("$course_base_dir/temp")) {
         mkdir("$course_base_dir/temp", 0777);
+        touch("$course_base_dir/temp/index.htm");
     }
 
     echo "$langUpgCourse <b>$code</b><br>";
@@ -2500,8 +2515,9 @@ function touch_or_error($filename) {
 
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages() {
-    global $global_messages, $session, $webDir, $siteName,
-           $InstitutionUrl, $Institution;
+    global $global_messages, $session, $webDir, $language_codes;
+    // these may seem unused, but they are needed when including messages.inc.php
+    global $siteName, $InstitutionUrl, $Institution;
 
     foreach ($session->native_language_names as $code => $name) {
         // include_messages

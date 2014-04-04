@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,21 +18,37 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
-  ===========================================================================
-  admin/visitsCourseStats.php
-  @last update: 23-09-2006
-  @authors list: ophelia neofytou
-  ==============================================================================
-  @Description:  Shows statistics conserning the number of visits on courses for a time period.
+/**
+ * @file visitsCourseStats.php
+ * @description Shows statistics conserning the number of visits on courses for a time period.
   Statistics can be shown for a specific course or for all courses.
-
-  ==============================================================================
  */
 
 $require_admin = true;
 
 require_once '../../include/baseTheme.php';
+
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $nameTools = $langVisitsCourseStats;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -48,10 +63,6 @@ $tool_content .= "
     </ul>
   </div>";
 
-require_once 'include/jscalendar/calendar.php';
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
-
 /* * ******************************************
   start making the chart
  * ******************************************* */
@@ -61,7 +72,7 @@ require_once 'modules/graphics/plotter.php';
 $usage_defaults = array(
     'u_interval' => 'daily',
     'u_course_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
+    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
     'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
 );
 
@@ -74,7 +85,7 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 $date_fmt = '%Y-%m-%d';
-$date_where = "(day BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+$date_where = "(day BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "";
 
 
@@ -188,8 +199,9 @@ if ($u_course_id == -1) {
         $chart->growWithPoint(key($point), $newp);
         next($point);
     }
-    if ($res1 !== false)
+    if ($res1 !== false) {
         mysql_free_result($res1);
+    }
 } else {    //show chart for a specific course
     $cid = course_code_to_id($u_course_id);
     $query = "SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
@@ -230,34 +242,16 @@ if ($u_course_id == -1) {
         mysql_free_result($result);
 }
 
-
 $tool_content .= $chart->plot($langNoStatistics);
 
 /* * ***********************************************************************
   Form for determining time period, time interval and course
  * ************************************************************************* */
 
-//calendar for determining start and end date
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => '',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
-
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => '',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
-
 //possible courses
 $qry = "SELECT LEFT(title, 1) AS first_letter FROM course
             GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry, $mysqlMainDb);
+$result = db_query($qry);
 $letterlinks = '';
 while ($row = mysql_fetch_assoc($result)) {
     $first_letter = $row['first_letter'];
@@ -273,7 +267,7 @@ if (isset($_GET['first'])) {
 }
 
 $cours_opts = '<option value="-1">' . $langAllCourses . "</option>\n";
-$result = db_query($qry, $mysqlMainDb);
+$result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
     if ($u_course_id == $row['code']) {
         $selected = 'selected';
@@ -297,11 +291,11 @@ $tool_content .= '
     <tbody>
     <tr>
       <th width="220" class="left">' . $langStartDate . '</th>
-      <td>' . "$start_cal" . '</td>
+      <td><input type="text" name="u_date_start" value = "' . $u_date_start . '"></td>      
     </tr>
     <tr>
       <th class="left">' . $langEndDate . '</th>
-      <td>' . "$end_cal" . '</td>
+      <td><input type="text" name="u_date_end" value = "' . $u_date_end . '"></td>
     </tr>
     <tr>
       <th class="left">' . $langFirstLetterCourse . '</th>
@@ -323,5 +317,4 @@ $tool_content .= '
     </table>
     </form>';
 
-load_js('tools.js');
 draw($tool_content, 3, null, $head_content);

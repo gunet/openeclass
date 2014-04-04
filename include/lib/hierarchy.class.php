@@ -137,7 +137,7 @@ class Hierarchy {
             db_query("CALL update_node($id, " . quote($name) . ", $nodelft, $lft, $rgt, $parentlft, " . quote($code) . ", $allow_course, $allow_user, $order_priority)");
         } else {
             $query = "UPDATE " . $this->dbtable . " SET name = " . quote($name) . ",  lft = $lft, rgt = $rgt,
-                    code = " . quote($code) . ", allow_course = $allow_course, allow_user = $allow_user
+                    code = " . quote($code) . ", allow_course = $allow_course, allow_user = $allow_user, 
                     order_priority = $order_priority WHERE id = $id";
             db_query($query);
 
@@ -404,9 +404,11 @@ class Hierarchy {
 
         while ($row = mysql_fetch_assoc($result)) {
             $prefix = '';
-            if ($dashprefix)
-                for ($i = 0; $i < $row['depth']; $i++)
+            if ($dashprefix) {
+                for ($i = 0; $i < $row['depth']; $i++) {
                     $prefix .= '&nbsp;-&nbsp;';
+                }
+            }
 
             $tree_array[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
             $idmap[$row[$useKey]] = $row['id'];
@@ -669,8 +671,9 @@ class Hierarchy {
         // close remaining open tags
         $remain_depth = $current_depth - $start_depth;
         if ($remain_depth > 0)
-            for ($j = 0; $j < $remain_depth; $j++)
+            for ($j = 0; $j < $remain_depth; $j++) {
                 $out .= ($xmlout) ? '<\/item>' : '</li></ul>';
+            }
 
         if ($xmlout)
             $out .= '<\/root>';
@@ -686,8 +689,9 @@ class Hierarchy {
     public function buildRootsArray() {
         $ret = array();
         $res = ($this->useProcedures()) ? db_query("SELECT id FROM " . $this->dbdepth . " WHERE depth = 0") : db_query("SELECT id FROM " . $this->view . " WHERE depth = 0");
-        while ($row = mysql_fetch_assoc($res))
+        while ($row = mysql_fetch_assoc($res)) {
             $ret[] = $row['id'];
+        }
         return $ret;
     }
 
@@ -700,8 +704,9 @@ class Hierarchy {
     public function buildJSTreeInitOpen() {
         // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
         $initopen = '';
-        foreach ($this->buildRootsArray() as $id)
+        foreach ($this->buildRootsArray() as $id) {
             $initopen .= '"nd' . $id . '",';
+        }
         return $initopen;
     }
 
@@ -1159,8 +1164,9 @@ jContent;
                  ORDER BY node.lft";
 
         $result = db_query($sql);
-        while ($row = mysql_fetch_assoc($result))
+        while ($row = mysql_fetch_assoc($result)) {
             $subs[] = $row['id'];
+        }
 
         return $subs;
     }
@@ -1264,12 +1270,14 @@ jContent;
 
         if (mysql_num_rows($res) > 0) {
             $nodes = array();
-            while ($node = mysql_fetch_assoc($res))
+            while ($node = mysql_fetch_assoc($res)) {
                 $nodes[] = $node['id'];
+            }
 
             return $this->buildNodesNavigationHtml($nodes, $url, $countCallback);
-        } else
+        } else {
             return "";
+        }
     }
 
     /**
@@ -1293,8 +1301,9 @@ jContent;
 
             // construct array with names
             $nodenames = array();
-            while ($node = mysql_fetch_array($res))
+            while ($node = mysql_fetch_array($res)) {
                 $nodenames[$node['id']] = self::unserializeLangField($node['name']);
+            }
             asort($nodenames);
 
             $ret .= "<select $params>";
@@ -1327,5 +1336,3 @@ jContent;
     }
 
 }
-
-?>

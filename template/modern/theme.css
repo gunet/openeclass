@@ -1453,6 +1453,11 @@ td.subsection {
     border-bottom: none;
 }
 
+#timedisplay {
+    padding-left: 1em;
+    float: right;
+}
+
 /* Wiki table of contents and diff */
 #toc {
     padding:5px;

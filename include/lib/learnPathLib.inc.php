@@ -455,21 +455,19 @@ function display_path_content() {
             $output .= '<b>' . $module['name'] . '</b>';
         } else { // module
             if ($module['contentType'] == CTEXERCISE_)
-                $moduleImg = 'exercise_on.png';
+                $moduleImg = 'exercise_on';
             else if ($module['contentType'] == CTLINK_)
-                $moduleImg = "links_on.png";
+                $moduleImg = 'links_on';
             else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-                $moduleImg = "description_on.png";
+                $moduleImg = 'description_on';
             else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-                $moduleImg = "videos_on.png";
+                $moduleImg = 'videos_on';
             else
                 $moduleImg = choose_image(basename($module['path']));
 
             $contentType_alt = selectAlt($module['contentType']);
 
-            $output .= '<img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" />'
-                    . $module['name']
-            ;
+            $output .= icon($moduleImg, $contentType_alt) . $module['name'];
         }
         $output .= '</td>' . "\n"
                 . '</tr>' . "\n\n";
@@ -796,7 +794,7 @@ function display_my_documents($dialogBox, $style) {
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
             } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
-                $image = 'folder.png';
+                $image = 'folder';
                 $size = '&nbsp;';
                 $date = '&nbsp;';
                 $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';
@@ -804,7 +802,7 @@ function display_my_documents($dialogBox, $style) {
 
             $output .= '
                 <tr ' . $style . '>
-                <td class="center" width="1"><img src="' . $themeimg . '/' . $image . '" hspace="5" /></td>
+                <td class="center" width="1">' . icon($image, '') . '</td>
                 <td align="left">' . $urlFileName . '</td>
                 <td width="80" class="center">' . $size . '</td>
                 <td width="80" class="center">' . $date . '</td>';
@@ -1690,16 +1688,19 @@ function get_limited_list($sql, $limiter) {
  */
 
 function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extraDepth = false) {
+    
     global $course_id;
+    
     $depth = ($extraDepth) ? "../" : "./";
 
-    if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id'])) {
+    if (!isset($_SESSION['path_id']) or !isset($_SESSION['lp_module_id']) 
+                        or empty($_SESSION['path_id']) or empty($_SESSION['lp_module_id'])) {
         header("Location: " . $depth . "index.php?course=$course_code");
         exit();
     }
 
     if ($extraQuery) {
-        $q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '" . (int) $_SESSION['path_id'] . "' AND `course_id` = $course_id");
+        $q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '" . $_SESSION['path_id'] . "' AND `course_id` = $course_id");
         $lp = mysql_fetch_array($q);
 
         if (!$is_editor && $lp['visible'] == 0) {
@@ -1709,26 +1710,23 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
         }
 
         if (!$is_editor) {
-            $lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`");
-            if ($lps != false) {
-                $block_met = false;
-                foreach ($lps as $lp) {
-                    if ($lp['learnPath_id'] == $_SESSION['path_id']) {
-                        if ($block_met) {
-                            // if a previous learning path was blocked, don't allow users in it
-                            header("Location: " . $depth . "index.php?course=$course_code");
-                            exit();
-                        } else
-                            break; // our lp is surely not in the block list
-                    }
-                    if ($lp['lock'] == "CLOSE")
-                        $block_met = true;
-                }
+            // check for blocked learning path
+                $lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
+                                    WHERE learnPath_id = $_SESSION[path_id] AND `course_id` = $course_id ORDER BY `rank`");
+                 $q = db_query("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id AND `rank` < $lps[rank]");
+                while ($lp = mysql_fetch_array($q)) {
+                    if ($lp['lock'] == 'CLOSE') {
+                        $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                                
+                        if ($prog < 100) {                                
+                            header("Location: ./index.php?course=$course_code");
+                        }
+                 }
             }
         }
     }
 
-    $q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '" . (int) $_SESSION['path_id'] . "' AND module_id = '" . (int) $_SESSION['lp_module_id'] . "'");
+    $q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '" . $_SESSION['path_id'] . "' 
+                                AND module_id = '" . $_SESSION['lp_module_id'] . "'");
     $lpm = mysql_fetch_array($q2);
     if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
         // if the combination path/module is invalid, don't allow users in it
@@ -1736,22 +1734,23 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
         exit();
     }
 
-    if (!$is_editor) {
-        $lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '" . (int) $_SESSION['path_id'] . "' ORDER BY `rank`");
-        if ($lpms != false) {
-            $block_met = false;
-            foreach ($lpms as $lpm) {
-                if ($lpm['module_id'] == $_SESSION['lp_module_id']) {
-                    if ($block_met) {
-                        // if a previous learning path module was blocked, don't allow users in it
-                        header("Location: " . $depth . "index.php?course=$course_code");
-                        exit();
-                    } else
-                        break; // our lp module is surely not in the block list
+    if (!$is_editor) { // check if we try to overwrite a blocked module
+            $lpm_id = db_query_get_single_row("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
+                                    WHERE `learnPath_id` = ". $_SESSION['path_id']."
+                                    AND module_id = " . $_SESSION['lp_module_id']."");
+                    $q = db_query("SELECT learnPath_module_id FROM lp_rel_learnPath_module WHERE learnPath_id = " . $_SESSION['path_id'] . " 
+                                                    AND `rank` < " . $lpm_id['rank'] . "");
+                while ($m = mysql_fetch_array($q)) {
+                    $progress = db_query_get_single_row("SELECT credit, lesson_status FROM lp_user_module_progress 
+                                                        WHERE learnPath_module_id = $m[learnPath_module_id]
+                                                            AND learnPath_id = $_SESSION[path_id] 
+                                                            AND user_id= $_SESSION[uid]");
+                        if (($lpm_id['lock'] == 'CLOSE') 
+                            and ($progress['credit'] != 'CREDIT' 
+                            or ($progress['lesson_status'] != 'COMPLETED' and $progress['lesson_status'] != 'PASSED'))) {
+                                header("Location: ".$depth."index.php?course=$course_code");
+                                exit();
+                        }
                 }
-                if ($lpm['lock'] == "CLOSE")
-                    $block_met = true;
-            }
         }
-    }
 }
