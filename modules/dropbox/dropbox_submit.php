@@ -79,18 +79,18 @@ if (isset($_POST["submit"])) {
             } else {
                 $subject = $langMessage;
             }
-            if (!isset($_POST['thread_id'])) {//new message
-                if (isset($_POST['course'])) {//for the case of course messages from central ui
-                    $cid = course_code_to_id($_POST['course']);
-                    if ($cid === false) {
-                        $cid = $course_id;
-                    }
-                } else {
+            if (isset($_POST['course'])) {//for the case of course messages from central ui
+                $cid = course_code_to_id($_POST['course']);
+                if ($cid === false) {
                     $cid = $course_id;
                 }
+            } else {
+                $cid = $course_id;
+            }
+            if (!isset($_POST['thread_id'])) {//new message
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {//reply to a thread
-                $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
             }            
         } else {
             $cwd = getcwd();
@@ -125,27 +125,35 @@ if (isset($_POST["submit"])) {
                 $filename_final = $dropbox_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
-                if (!isset($_POST['thread_id'])) {
-                    $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+                if (isset($_POST['course'])) {//for the case of course messages from central ui
+                    $cid = course_code_to_id($_POST['course']);
+                    if ($cid === false) {
+                        $cid = $course_id;
+                    }
                 } else {
-                    $msg = new Msg($uid, $course_id, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
+                    $cid = $course_id;
+                }
+                if (!isset($_POST['thread_id'])) {
+                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+                } else {
+                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
                 }
             }            
             chdir($cwd);
         }        
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
-            if ($course_id != 0) {//message in course context
-                $c = course_code_to_title($course_code);
-                $subject_dropbox = "$c ($course_code) - $langNewDropboxFile";
+            if ($course_id != 0 || isset($_POST['course'])) {//message in course context
+                $c = course_id_to_title($cid);
+                $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
                 foreach ($recipients as $userid) {
-                    if (get_user_email_notification($userid, $course_id)) {
-                        $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-                        $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
+                    if (get_user_email_notification($userid, $cid)) {
+                        $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
+                        $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                         $body_dropbox_message = "$langSender: $_SESSION[givenname] $_SESSION[surname] <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
                         if ($filesize > 0) {
-                                $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/dropbox_download.php?course=$course_code&amp;id=$msg->id'>[$langAttachedFile]</a><br /><br />";
+                                $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/dropbox_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a><br /><br />";
                         }
-                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php?course=$course_code'>$langHere</a>.<br />";
+                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php?course=".course_id_to_code($cid)."'>$langHere</a>.<br />";
                         $body_dropbox_message .= "$unsubscribe $linkhere";
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
@@ -157,13 +165,10 @@ if (isset($_POST["submit"])) {
                 foreach ($recipients as $userid) {
                     if (get_user_email_notification($userid)) {
                         $linkhere = "<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
-                        $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
+                        //$unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
                         $body_dropbox_message = "$langSender: $_SESSION[givenname] $_SESSION[surname] <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
-                        if ($filesize > 0) {
-                            $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/dropbox_download?id=$msg->id'>[$langAttachedFile]</a><br /><br />";
-                        }
                         $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php'>$langHere</a>.<br />";
-                        $body_dropbox_message .= "$unsubscribe $linkhere";
+                        //$body_dropbox_message .= "$unsubscribe $linkhere";
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
                         send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);

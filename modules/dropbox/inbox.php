@@ -85,6 +85,9 @@ if (isset($_GET['tid'])) {
         /*****Reply Form****/
         if ($course_id == 0) {
             $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+            if ($thread->course_id != 0) {//thread belonging to a course viewed from the central ui
+                $out .= "<input type='hidden' name='course' value='".course_id_to_code($thread->course_id)."' />";
+            }
         } else {
             $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
         }
