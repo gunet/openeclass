@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,9 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_login = true;
-$require_current_course = true;
-$require_help = true;
+$require_login = TRUE;
+$require_current_course = TRUE;
+$require_help = TRUE;
 $helpTopic = 'Gradebook';
 
 require_once '../../include/baseTheme.php';
@@ -29,14 +29,6 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'modules/admin/admin.inc.php';
 
 define('COURSE_USERS_PER_PAGE', 15);
-
-//activity types (new)
-define('GRADE_ORAL', "Προφορικός βαθμός"); //1
-define('GRADE_LAB', "Βαθμός εργαστηρίου"); //2
-define('GRADE_PROGRESS', "Βαθμός προόδου"); //3
-define('GRADE_EXAMS', "Γραπτές εξατάσεις"); //4
-define('GRADE_OTHER_TYPE', "Άλλη δραστηριότητα"); //5
-
 
 //Module name
 $nameTools = $langGradebook;
@@ -68,11 +60,12 @@ if(!$gradebook_id){
     $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d ", $course_id)->lastInsertID;
 }
 
-
+//==============================================
 //tutor view
+//==============================================
 if ($is_editor) {  
 
-    // Admin gradebook (list of users), Add new gradebook activity
+    // Top menu
     $tool_content .= "
 
     <div id='operations_container'>
@@ -103,28 +96,30 @@ if ($is_editor) {
     //EDIT: edit range
     if (isset($_POST['submitGradebookRange'])) {
         $gradebook_range = intval($_POST['degreerange']);
-        Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+        if($gradebook_range == 10 || $gradebook_range == 100 || $gradebook_range == 5){
+            Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
 
-        $message = "<p class='success'>$langGradebookEdit</p>";
-        $tool_content .= $message . "<br/>";
-
+            $message = "<p class='success'>$langGradebookEdit</p>";
+            $tool_content .= $message . "<br/>";
+        }
     }
     
-    //EDIT: edit users only semester
+    //UPDATE/INSERT DB: edit users display number 
     if (isset($_POST['submitGradebookActiveUsers'])) {
         $gradebook_users_limit = intval($_POST['usersLimit']);
-        Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
+        if($gradebook_users_limit ==1 || $gradebook_users_limit == 0){
+            Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
+            $message = "<p class='success'>$langGradebookEdit</p>";
+            $tool_content .= $message . "<br/>";
 
-        $message = "<p class='success'>$langGradebookEdit</p>";
-        $tool_content .= $message . "<br/>";
-
-        //update value for the check box and the users query
-        $showSemesterParticipants = $gradebook_users_limit;
+            //update value for the check box and the users query
+            $showSemesterParticipants = $gradebook_users_limit;
+        }
     }
 
-    //number of students for this gradebook book (depends on the limit of the last semester selection)
+    //Number of students for this gradebook book and limit_date (depends on the limit of the last semester selection - if $showSemesterParticipants = 1 --> Users that have logged in to the course the last 6 months)
     if ($showSemesterParticipants) {
-        //six months limit
+        //Six months limit
         $limitDate = date('Y-m-d', strtotime(' -6 months'));
         $participantsNumber = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) as count FROM actions_daily, user WHERE actions_daily.user_id = user.id AND user.status = ?d AND course_id = ?d AND actions_daily.day > ?t ", USER_STUDENT, $course_id, $limitDate)->count;
     } else {
@@ -138,17 +133,17 @@ if ($is_editor) {
         $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>
-            <legend>Δραστηριότητα βαθμολογίου</legend>
+            <legend>$langGradebookActAttend</legend>
             <table class='tbl' width='100%'>";
         
         if (isset($_GET['modify'])) { //edit an existed activity
             $id = intval($_GET['modify']);
+            $id  = filter_var($id , FILTER_VALIDATE_INT);
             
-            //all activity data (check if it is in this gradebook)
+            //All activity data (check if it is in this gradebook)
             $mofifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
             $titleToModify = $mofifyActivity->title;
             $contentToModify = $mofifyActivity->description;
-            //$date = getJsDeadline($mofifyActivity->date);
             $date = $mofifyActivity->date;
             $module_auto_id = $mofifyActivity->module_auto_id;
             $auto = $mofifyActivity->auto;
@@ -158,42 +153,40 @@ if ($is_editor) {
 
         } else { //new activity 
             $gradebookActivityToModify = "";
-            //$date = $end_cal_Work;
             $activity_type = "";
         }
 
         $tool_content .= "
-            <tr><th>Τύπος:</th></tr>
+            <tr><th>$langGradebookType:</th></tr>
             <tr>
               <td><select name='activity_type'>
-                    <option value=''  " . typeSelected($mofifyActivity->activity_type, '') . " >Επιλογή</option>
-                    <option value='4' " . typeSelected($mofifyActivity->activity_type, 4) . " >" . GRADE_EXAMS . "</option>
-                    <option value='2' " . typeSelected($mofifyActivity->activity_type, 2) . " >" . GRADE_LAB . "</option>
-                    <option value='1' " . typeSelected($mofifyActivity->activity_type, 1) . " >" . GRADE_ORAL . "</option>
-                    <option value='3' " . typeSelected($mofifyActivity->activity_type, 3) . " >" . GRADE_PROGRESS . "</option>
-                    <option value='5' " . typeSelected($mofifyActivity->activity_type, 5) . " >" . GRADE_OTHER_TYPE . "</option>
+                    <option value=''  " . typeSelected($mofifyActivity->activity_type, '') . " >-</option>
+                    <option value='4' " . typeSelected($mofifyActivity->activity_type, 4) . " >" . $gradebook_exams . "</option>
+                    <option value='2' " . typeSelected($mofifyActivity->activity_type, 2) . " >" . $gradebook_labs . "</option>
+                    <option value='1' " . typeSelected($mofifyActivity->activity_type, 1) . " >" . $gradebook_oral . "</option>
+                    <option value='3' " . typeSelected($mofifyActivity->activity_type, 3) . " >" . $gradebook_progress . "</option>
+                    <option value='5' " . typeSelected($mofifyActivity->activity_type, 5) . " >" . $gradebook_other_type . "</option>
                   </select>
               </td>
             </tr>
 
-            <tr><th>Τίτλος:</th></tr>
+            <tr><th>$langGradebookActivityTitle:</th></tr>
             <tr>
               <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
             </tr>
-            <tr><th>Ημερομηνία:</th></tr>
+            <tr><th>$langGradebookActivityDate2:</th></tr>
             <tr>
               <td><input type='text' name='date' value='" . datetime_remove_seconds($date) . "'></td>
             </tr>
-            <tr><th>Βαρός (ποσοστό):</th></tr>
+            <tr><th>$langGradebookActivityWeight:</th></tr>
             <tr>
-              <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, $id) . " % διαθέσιμο)</td>
+              <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, $id) . " % $langGradebookActivityWeightLeft)</td>
             </tr>
-            <tr><th>Περιγραφή:</th></tr>
+            <tr><th>$langGradebookDesc:</th></tr>
             <tr>
               <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
             </tr>";
         if($module_auto_id){ //accept the auto booking mechanism
-            //$nameTools = "Επεξεργασία δραστηριότητας από το σύστημα";
             $tool_content .= "
                 <tr>
                   <td>$langGradebookInsAut: <input type='checkbox' value='1' name='auto' ";
@@ -216,13 +209,14 @@ if ($is_editor) {
         $showGradebookActivities = 0;
     }
 
-    //ADD: new activity from exersices or assignments
+    //UPDATE/INSERT DB: new activity from exersices, assignments, lps or scorm
     elseif(isset($_GET['addCourseActivity'])){
 
         $id = intval($_GET['addCourseActivity']);
+        $type = intval($_GET['type']);
         
-        //check the type of the modlue (assignments)
-        if ($_GET['type'] == 1) {
+        //check the type of the module (1 for assignments)
+        if ($type == 1) {
             //checking if it is new or not
             $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1) AND assignment.id = ?d", function ($errormsg) {
                 echo "An error has occured: " . $errormsg;
@@ -230,10 +224,8 @@ if ($is_editor) {
         }
         if ($checkForAss) {
             $module_auto_id = $checkForAss->id;
-            $module_auto_type = 1;
-            if ($_GET['type'] == 1) { //one for assignments
-                $module_auto = 1;
-            }
+            $module_auto_type = 1; //one for assignments
+            $module_auto = 1; //auto grade enabled by default
             $actTitle = $checkForAss->title;
             $actDate = $checkForAss->deadline;
             $actDesc = $checkForAss->description;
@@ -241,8 +233,8 @@ if ($is_editor) {
             Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
         }
 
-        //check the type of the module (exercises)
-        if ($_GET['type'] == 2) {
+        //check the type of the module (2 for exercises)
+        if ($type == 2) {
             //checking if it is new or not
             $checkForExe = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2) AND exercise.id = ?d", function ($errormsg) {
                 echo "An error has occured: " . $errormsg;
@@ -250,10 +242,8 @@ if ($is_editor) {
         }
         if ($checkForExe) {
             $module_auto_id = $checkForExe->id;
-            $module_auto_type = 2;
-            if ($_GET['type'] == 2) { //one for assignments
-                $module_auto = 1;
-            }
+            $module_auto_type = 2; //one for assignments
+            $module_auto = 1;
             $actTitle = $checkForExe->title;
             $actDate = $checkForExe->end_date;
             $actDesc = $checkForExe->description;
@@ -261,10 +251,9 @@ if ($is_editor) {
             Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
         }
         
-        //check the type of the module (LP - scorm and exercises)
-        if ($_GET['type'] == 3) {
+        //check the type of the module (3 for LP - scorm and exercises)
+        if ($type == 3) {
             //checking if it is new or not
-            
             $checkForLp = Database::get()->querySingle("SELECT 
                 lp_module.module_id, lp_module.name, lp_module.contentType, lp_learnPath.name as lp_name
                 FROM lp_module, lp_rel_learnPath_module,lp_learnPath 
@@ -278,10 +267,8 @@ if ($is_editor) {
         }
         if ($checkForLp) {
             $module_auto_id = $checkForLp->module_id;
-            $module_auto_type = 3;
-            if ($_GET['type'] == 3) { //one for lp
-                $module_auto = 1;
-            }
+            $module_auto_type = 3; //3 for lp
+            $module_auto = 1;
             $actTitle = $checkForLp->lp_name;
             $actDate = date("Y-m-d");
             $actDesc = $langGradebookActivityLp . ": " . $checkForLp->lp_name;
@@ -289,19 +276,23 @@ if ($is_editor) {
             Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
         }
 
-
+        //show gradebook activities
         $showGradebookActivities = 1;
     }
 
-    //ADD-EDIT: add or edit activity to gradebook module (edit concerns and course activities)
+    //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
     elseif(isset($_POST['submitGradebookActivity'])){
-
-        $actTitle = $_POST['actTitle'];  
+        
+        if (!ctype_alnum($_POST['actTitle'])) {
+            $actTitle = $_POST['actTitle'];  
+        }else{
+            $actTitle = "";
+        }
         $actDesc = purify($_POST['actDesc']);
-        $actDate = $_POST['date'];
         $auto = intval($_POST['auto']);
         $weight = intval($_POST['weight']);
         $type = intval($_POST['activity_type']);
+        $actDate = $_POST['date'];
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
@@ -327,7 +318,7 @@ if ($is_editor) {
         $showGradebookActivities = 1;
     }
 
-    //FORM: delete activity form to gradebook module (plus delete all the marks for alla students for this activity)
+    //DELETE DB: delete activity form to gradebook module (plus delete all the marks for alla students for this activity)
     elseif (isset($_GET['delete'])) {
             $delete = intval($_GET['delete']);
             $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $delete, $gradebook_id)->affectedRows;
@@ -343,10 +334,10 @@ if ($is_editor) {
             $tool_content .= $message . "<br/>";
         }
 
-        
     //DISPLAY: stats -> means for all the activities
     elseif(isset($_GET['statsGradebook'])){
-    //get all the activities
+        
+        //get all the activities
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
         $actNumber = count($result);
 
@@ -433,7 +424,7 @@ if ($is_editor) {
         $showGradebookActivities = 0;
     }    
         
-    //FORM-DISPLAY: list of users and form for each user
+    //DISPLAY: list of users and form for each user
     elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])){
         
         //record booking
@@ -579,12 +570,12 @@ if ($is_editor) {
             }
         }
 
-        
+        //========================
         //show all the students
+        //========================
         $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
         
         //Count only students base on their initial record (not the course)
-        //$countUser = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
         $countUser = $participantsNumber;
         
         $limit_sql = '';
@@ -697,22 +688,19 @@ if ($is_editor) {
         // display number of users
         $tool_content .= "
     <div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
-      <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
-           2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
+      <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id'>$langcsvenc2</a>
+           2. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id&amp;enc=1253'>$langcsvenc1</a>
       </div>";
-        
+        //========================
         
         //do not show activities list
         $showGradebookActivities = 0;
     }
 
-    //FORM-DISPLAY: list of gradebook activities
+    //DISPLAY: list of gradebook activities
     if($showGradebookActivities == 1){
         
-        //1.ergasies
-        //$checkForExer = Database::get()->queryArray("SELECT assignment.id FROM assignment LEFT OUTER JOIN gradebook_activities ON assignment.id = gradebook_activities.module_auto_id WHERE assignment.course_id = ?d AND  assignment.active = 1", $course_id);
-
-        //check if there are left weight
+        //check if there is spare weight
         if(weightleft($gradebook_id, 0)){
             $weightLeftMessage = "<div class='alert2'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
         }
@@ -754,10 +742,28 @@ if ($is_editor) {
 
                 if (empty($announce->title)) {
                     $tool_content .= "$langGradebookNoTitle<br>";
-                    $tool_content .= "<div class='smaller'>" . actType($announce->activity_type) . "</div>";
+                    $tool_content .= "<div class='smaller'>";
+                    switch ($announce->activity_type) {
+                        case 1: $tool_content .= "($gradebook_oral)"; break;
+                        case 2: $tool_content .= "($gradebook_labs)"; break;
+                        case 3: $tool_content .= "($gradebook_progress)"; break;
+                        case 4: $tool_content .= "($gradebook_exams)"; break;
+                        case 5: $tool_content .= "($gradebook_other_type)"; break;
+                        default : $tool_content .= "";
+                    }
+                    $tool_content .= "</div>";
                 } else {
                     $tool_content .= q($announce->title);
-                    $tool_content .= "<div class='smaller'>" . actType($announce->activity_type) . "</div>";
+                    $tool_content .= "<div class='smaller'>";
+                    switch ($announce->activity_type) {
+                        case 1: $tool_content .= "($gradebook_oral)"; break;
+                        case 2: $tool_content .= "($gradebook_labs)"; break;
+                        case 3: $tool_content .= "($gradebook_progress)"; break;
+                        case 4: $tool_content .= "($gradebook_exams)"; break;
+                        case 5: $tool_content .= "($gradebook_other_type)"; break;
+                        default : $tool_content .= "";
+                    }
+                    $tool_content .= "</div>";
                 }
                 $tool_content .= "</b>";
                 $tool_content .= "</td>"
@@ -799,8 +805,10 @@ if ($is_editor) {
         $tool_content .= "</table></fieldset>";
 
 
-
+        //==============================================
         //Course activities availiable for the gradebook
+        //==============================================
+        
         //Assignments
         $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1)", $course_id);
 
@@ -826,14 +834,13 @@ if ($is_editor) {
                 $content = standard_text_escape($newAssToGradebook->description);
                 
                 if($newAssToGradebook->assign_to_specific){
-                    $content .= "(Η εργασία αφορά συγεκριμένους μαθητές)<br>";
+                    $content .= "($langGradebookAssignSpecific)<br>";
                     $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname , user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
                     foreach ($checkForAssSpec as $checkForAssSpecR) {
                         $content .= $checkForAssSpecR->surname. " " . $checkForAssSpecR->givenname . "<br>";
                     }
                 }
                 
-                //$newAssToGradebook->deadline = claro_format_locale_date($dateFormatLong, strtotime($newAssToGradebook->deadline));          
                 $d = strtotime($newAssToGradebook->deadline);
 
                 if ($k % 2 == 0) {
@@ -889,7 +896,7 @@ if ($is_editor) {
         if ($checkForExer) {
             foreach ($checkForExer as $newExerToGradebook) {
                 $content = standard_text_escape($newExerToGradebook->description);
-                //$newExerToGradebook->deadline = claro_format_locale_date($dateFormatLong, strtotime($newExerToGradebook->deadline));          
+                
                 $d = strtotime($newExerToGradebook->end_date);
 
                 if ($k % 2 == 0) {
@@ -983,8 +990,9 @@ if ($is_editor) {
         $tool_content .= "</table></fieldset>";
         
         
-        
+        //==============================================
         //show active users limit
+        //==============================================
         $tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
@@ -1005,8 +1013,9 @@ if ($is_editor) {
             </fieldset>
             </form>";
         
-        
+        //==============================================
         //show degree range
+        //==============================================
         $tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
@@ -1039,14 +1048,14 @@ if ($is_editor) {
     }
 
     
-}else{ //Student View
+}else{ //==========Student View==============
     
     $userID = $uid;
     
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert1'>Δεν έχει γίνει ακόμη καταχώρηση βαθμών</div>";
+        $tool_content .="<div class='alert1'>$langGradebookTotalGradeNoInput</div>";
     }
 
 
@@ -1054,23 +1063,23 @@ if ($is_editor) {
     $announcementNumber = count($result);
 
     if ($announcementNumber > 0) {
-        $tool_content .= "<fieldset><legend>Βαθμοί</legend>";
-        $tool_content .= "<div class='center'>Συνολικός βαθμός: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
+        $tool_content .= "<fieldset><legend>$langGradebookGrades</legend>";
+        $tool_content .= "<div class='center'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
         
         if(weightleft($gradebook_id, 0) != 0){
-            $tool_content .= "<p class='alert1'>Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν</p>";
+            $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
         }
         
         
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
-        $tool_content .= "<tr><th  colspan='2'>Τίτλος</th><th >Ημερομηνία</th><th>Περιγραφή</th><th>Βαρύτητα</th><th>Βαθμός</th></tr>";
+        $tool_content .= "<tr><th  colspan='2'>Τίτλος</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
     } else {
-        $tool_content .= "<p class='alert1'>Δεν υπάρχουν δραστηριότητες στο παρουσίολόγιο</p>";
+        $tool_content .= "<p class='alert1'>$langGradebookNoActMessage5</p>";
     }
     $k = 0;
 
-    if ($result)
+    if ($result){
         foreach ($result as $announce) {
             
             //check if the user has attend for this activity
@@ -1106,38 +1115,26 @@ if ($is_editor) {
             if ($userAttend) {
                 $tool_content .= $userAttend;
             }else{
-                $tool_content .= "Δεν υπάρχει καταχώρηση";
+                $tool_content .= $langGradebookAlertNoInput;
             }
             $tool_content .= "</td>";
             
             $k++;
         } // end of while
+    }
     $tool_content .= "</table></fieldset>";
 }
 
+//================================================
 
-
-//
-function actType($actType){
-    switch ($actType) {
-        case 1: return "(Προφορικός βαθμός)";
-        case 2: return "(Βαθμός εργαστηρίου)";
-        case 3: return "(Βαθμός προόδου)";
-        case 4: return "(Γραπτές εξατάσεις)";
-        case 5: return "(Άλλη δραστηριότητα)";
-        default : return "";
-            
-    }
-}
-
-//
+//function to help selected option
 function typeSelected($type, $optionType){
     if($type == $optionType){
         return "selected";
     }
 }
 
-//
+//function to calculate the weight left
 function weightleft($gradebook_id, $currentActivity){
     if($currentActivity){
         $left = Database::get()->querySingleNT("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d AND id != ?d", $gradebook_id, $currentActivity)->count;
@@ -1153,7 +1150,7 @@ function weightleft($gradebook_id, $currentActivity){
 }
 
 
-//Function to return auto grades
+//function to return auto grades
 function attendForAutoGrades($userID, $exeID, $exeType, $range){
     if($exeType == 1){ //asignments: valid submission!
        $autoAttend = Database::get()->querySingle("SELECT grade, max_grade FROM assignment_submit,assignment  WHERE assignment.id = assignment_id AND uid = ?d AND assignment_id = ?d", $userID, $exeID); 
@@ -1206,7 +1203,7 @@ function attendForAutoGrades($userID, $exeID, $exeType, $range){
 
 
 
-//Function to get the total attend number for a user in a course gradebook
+//function to get the total grade for a user in a course gradebook
 function userGradeTotal ($gradebook_id, $userID){
 
     $userGradeTotal = Database::get()->querySingleNT("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
@@ -1219,7 +1216,7 @@ function userGradeTotal ($gradebook_id, $userID){
 }
 
 
-//Function to get the total gradebook number 
+//function to get the total gradebook number 
 function userGradebookTotalActivityStats ($activityID, $participantsNumber, $showSemesterParticipants, $courseID, $limitDate){
     //check who to include in the stats
     if($showSemesterParticipants){

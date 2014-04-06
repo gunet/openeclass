@@ -111,6 +111,13 @@ $archive_conditions = array(
     'assignment' => $sql_course,
     'assignment_submit' => "assignment_id IN (SELECT id FROM assignment
                                                          WHERE course_id = $course_id)",
+    
+    'gradebook' => $sql_course,
+    'gradebook_activities' => "gradebook_id IN (SELECT id FROM gradebook
+                                                         WHERE course_id = $course_id)",
+    'gradebook_book' => "gradebook_activity_id IN (SELECT gradebook_activities.id FROM gradebook_activities, gradebook
+                                                         WHERE gradebook.course_id = $course_id AND gradebook_activities.gradebook_id = gradebook.id)",
+    
     'agenda' => $sql_course,
     'exercise' => $sql_course,
     'exercise_question' => $sql_course,
