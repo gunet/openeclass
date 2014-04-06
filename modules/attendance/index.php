@@ -626,7 +626,7 @@ if ($is_editor) {
             $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceNoActMessage2</a> $langAttendanceNoActMessage3</p>\n";
         }
         $k = 0;
-        if ($result)
+        if ($result){
             foreach ($result as $announce) {
                 $content = standard_text_escape($announce->description);
                // $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
@@ -673,6 +673,7 @@ if ($is_editor) {
                       <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;</td>";
                 $k++;
             } // end of while
+        }
         $tool_content .= "</table></fieldset>";
 
         //Assignments

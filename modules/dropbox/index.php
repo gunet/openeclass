@@ -19,17 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * 
- * @file index.php
- * @abstract This is responsible for exchanging files between the users of a course
- *
- * Based on code by Jan Bols <jan@ivpv.ugent.be>
- */
-
-
 $require_login = TRUE;
-$require_current_course = TRUE;
+if(isset($_GET['course'])) {//course messages
+    $require_current_course = TRUE;
+} else {//personal messages
+    $require_current_course = FALSE;
+}
 $guest_allowed = FALSE;
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
@@ -37,72 +32,56 @@ $helpTopic = 'Dropbox';
 include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-/* * ** The following is added for statistics purposes ** */
-require_once 'include/action.php';
-$action = new action();
-$action->record(MODULE_ID_DROPBOX);
-/* * *********************************** */
 
-$dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
-if (!is_dir($dropbox_dir)) {
-    mkdir($dropbox_dir);
+if (!isset($course_id)) {
+    $course_id = 0;
 }
-$thisisJustMessage = FALSE;
-// get dropbox quotas from database
-$d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code = '$course_code'"));
-$diskQuotaDropbox = $d['dropbox_quota'];
-$diskUsed = dir_total_space($dropbox_dir);
 
-require_once 'include/log.php';
-require_once 'dropbox_class.inc.php';
+if ($course_id != 0) {
+    $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
+    if (!is_dir($dropbox_dir)) {
+        mkdir($dropbox_dir);
+    }
+    
+    // get dropbox quotas from database
+    $d = Database::get()->querySingle("SELECT dropbox_quota FROM course WHERE code = ?s", $course_code);
+    $diskQuotaDropbox = $d->dropbox_quota;
+    $diskUsed = dir_total_space($dropbox_dir);
+}
 
 // javascript functions
 $head_content = '<script type="text/javascript">
-                function confirmation () {
-                        if (confirm("' . $langConfirmDelete . '")) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                        return true;
-                }                
-                
-                function confirmationpurge () {
-                        if (confirm("' . $langPurgeFile . '" )) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                        return true;
-                }
-
-		function checkForm (frm) {
+                    function checkForm (frm) {
                         if (frm.elements["recipients[]"].selectedIndex < 0) {
                                 alert("' . $langNoUserSelected . '");
                                 return false;
                         } else {
                                 return true;
                         }
-                }
-        </script>';
+                    }
+                </script>';
 
 $nameTools = $langDropBox;
 
-if (get_config('dropbox_allow_student_to_student') == true) {
-    $allowStudentToStudent = true;
+if ($course_id != 0) {
+    $tool_content .="
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
+      </ul>
+    </div>";
 } else {
-    $allowStudentToStudent = false;
+    $tool_content .="
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
+      </ul>
+    </div>";
 }
 
-$tool_content .="
-<div id='operations_container'>
-  <ul id='opslist'>
-    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1'>$langNewMessage</a></li>
-    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
-  </ul>
-</div>";
-
-if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
     $nameTools = $langQuotaBar;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
     $tool_content .= showquota($diskQuotaDropbox, $diskUsed);
@@ -110,310 +89,240 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
     exit;
 }
 
-if (isset($_GET['rm_id'])) {
-    $r_message_id = intval($_GET['rm_id']);
-    $dropbox_person = new Dropbox_Person($uid, false);
-} elseif (isset($_GET['sm_id'])) {
-    $s_message_id = intval($_GET['sm_id']);
-    $dropbox_person = new Dropbox_Person($uid, true, false);
-} else {
-    $dropbox_person = new Dropbox_Person($uid);
-}
-/*
- * ========================================
- * FORM UPLOAD FILE
- * ========================================
- */
+load_js('jquery');
+load_js('jquery-ui');
 
-if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
-    $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
+    if ($course_id == 0) {
+        if (isset($_GET['type']) && $_GET['type'] == 'cm') {
+            $type = 'cm';
+        } else {
+            $type = 'pm';
+        }
+        $tool_content .= "<form id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+    } else {
+        $type = 'cm'; //only course messages are allowed in the context of a course
+        $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+    }
     $tool_content .= "
 	<fieldset>
-	<legend>$langDownloadFile</legend>
 	<table width='100%' class='tbl'>
         <tr>
 	  <th>$langSender:</th>
 	  <td>" . q(uid_to_name($uid)) . "</td>
 	</tr>";
-    @$tool_content .= "<tr>
+    if ($type == 'cm' && $course_id == 0) {//course message from central interface
+        //find user's courses
+        $sql = "SELECT course.code code, course.title title
+                FROM course, course_user
+                WHERE course.id = course_user.course_id
+                AND course_user.user_id = ?d
+                ORDER BY title";
+        $res = Database::get()->queryArray($sql, $uid);
+        
+        $head_content .= "<script type='text/javascript'>
+                            $(document).on('change','#courseselect',function(){
+                              $.ajax({
+                                type: 'POST',
+                                dataType: 'json',
+                                url: 'load_recipients.php',
+                                data: {'course' : $('#courseselect').val() }
+                              }).done(function(data) {
+                                $('#select-recipients').empty();
+                                if(!($.isEmptyObject(data))) {
+                                  $('#select-recipients').empty();
+                                  $.each(data, function(key,value){
+                                    $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                  });
+                                }
+                                $('#select-recipients').multiselect('refresh');
+                              });
+                            });
+                          </script>";
+        
+        $tool_content .= "<tr>
+            <th width='120'>".$langCourse.":</th>
+              <td>
+                <select id='courseselect' name='course'>";
+        foreach ($res as $course) {    
+            $tool_content .="<option value='-1'>&nbsp;</option><option value='".$course->code."'>$course->title</option>";
+        }
+        $tool_content .="    </select>
+                           </td>
+                         </tr>";
+    }
+    $tool_content .= "<tr>
         <th width='120'>" . $langTitle . ":</th>
-        <td><input type='input' name='message_title' size='50' value='$message_title' />	      
+        <td><input type='text' name='message_title' size='50'/>	      
         </td>
         </tr>";
-    @$tool_content .= "<tr>
+    $tool_content .= "<tr>
               <th>" . $langMessage . ":</th>
-              <td>".rich_text_editor('description', 4, 20, $description)."
+              <td>".rich_text_editor('body', 4, 20, '')."
               <small>&nbsp;&nbsp;$langMaxMessageSize</small></td>           
             </tr>";
-    $tool_content .= "<tr>
-	  <th width='120'>$langFileName:</th>
-	  <td><input type='file' name='file' size='35' />	     
-	  </td>
-	</tr>
-	<tr>
-	  <th>$langSendTo:</th>
-	  <td>
-	<select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";
-
-    /*
-     *  if current user is a teacher then show all users of current course
-     */
-    if ($is_editor or $allowStudentToStudent) {
-        // select all users except yourself
-        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                                FROM user u, course_user cu
-			WHERE cu.course_id = $course_id
-                                AND cu.user_id = u.id
-                                AND cu.status != " . USER_GUEST . "
-                                AND u.id != $uid
-                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
+        $tool_content .= "<tr>
+	      <th width='120'>$langFileName:</th>
+	      <td><input type='file' name='file' size='35' />	     
+	      </td>
+	    </tr>";
     }
-    /*
-     * if current user is student then show all teachers of current course
-     */ else {
-        // select all the teachers except yourself
-        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                                FROM user u, course_user cu
-			WHERE cu.course_id = $course_id
-                                AND cu.user_id = u.id
-                                AND (cu.status = " . USER_TEACHER . " OR cu.tutor = 1)
-                                AND u.id != $uid
-                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+    
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
+    	$tool_content .= "<tr>
+    	  <th>$langSendTo:</th>
+    	  <td>
+    	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
+    
+        if ($course_id != 0) {//course messages
+            //select all users from this course except yourself
+            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                    FROM user u, course_user cu
+    			    WHERE cu.course_id = ?d
+                    AND cu.user_id = u.id
+                    AND cu.status != ?d
+                    AND u.id != ?d
+                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+            $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+            
+            foreach ($res as $r) {
+                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+            }
+        } 
+    
+        $tool_content .= "</select></td></tr>";
+    } elseif ($type == 'pm' && $course_id == 0) {//personal messages
+        $head_content .= " <script type='text/javascript'>
+                             var selected = [];
+                             $(function() {
+                               function split( val ) {
+                                 return val.split( /,\s*/ );
+                                }
+                                function extractLast( term ) {
+                                  return split( term ).pop();
+                                }
+                                $(\"#recipients\" )
+                                // don't navigate away from the field on tab when selecting an item
+                                .bind( \"keydown\", function( event ) {
+                                  if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( \"ui-autocomplete\" ).menu.active ) {
+                                    event.preventDefault();
+                                  }
+                                })
+                                .autocomplete({
+                                  source: function( request, response ) {
+                                    $.getJSON( \"load_recipients.php?autocomplete=1\", {
+                                      term: extractLast( request.term )
+                                    }, response );
+                                  },
+                                  search: function() {
+                                    // custom minLength
+                                    var term = extractLast( this.value );
+                                    if ( term.length < 2 ) {
+                                      return false;
+                                    }
+                                  },
+                                  focus: function() {
+                                    // prevent value inserted on focus
+                                    return false;
+                                  },
+                                  select: function( event, ui ) {
+                                    var terms = split( this.value );
+                                    // remove the current input
+                                    terms.pop();
+                                    // add the selected item
+                                    terms.push( ui.item.label );
+                                    // add placeholder to get the comma-and-space at the end
+                                    terms.push( \"\" );
+                                    this.value = terms.join( \", \" );
+                                    //do not add a recipient already selected
+                                    if ($.inArray(ui.item.value, selected) == -1) {
+                                      $('#newmsg').append('<input type=\'hidden\' name=\'recipients[]\' value=\''+ui.item.value+'\'/>');
+                                      selected.push(ui.item.value);
+                                    }
+                                    return false;
+                                  }
+                                });
+                              });
+                            </script>";
+        
+        $tool_content .= "<tr>
+    	                    <th>$langSendTo:</th>
+    	                    <td><input name='autocomplete' id='recipients' /></td>
+                          </tr>";        
     }
-    $result = db_query($sql);
-    while ($res = mysql_fetch_array($result)) {
-        $tool_content .= "<option value=" . $res['user_id'] . ">" . q($res['name']) . "</option>";
-    }
-
-    $tool_content .= "</select></td></tr>
-	<tr>
+    
+	$tool_content .= "<tr>
 	  <th>&nbsp;</th>
-	  <td class='left'><input type='submit' name='submitWork' value='" . q($langSend) . "' />&nbsp;
+	  <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
 	  $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
 	</tr>
         </table>
         </fieldset>	
         </form>
 	<p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
-}
-
-/*
- * --------------------------------------
- * RECEIVED FILES LIST:  TABLE HEADER
- * --------------------------------------
- */
-if (!isset($s_message_id)) {    
-    if (!isset($_GET['mailing'])) {
-        $numberDisplayed = count($dropbox_person->receivedWork);
-        $tool_content .= "<p class='sub_title1'>$langReceivedFiles";
-        // check if there are received documents. If yes then display the icon deleteall       
-        if ($numberDisplayed > 0) {
-            $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=all' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>";
-        }
-        $tool_content .= "</p>";
-
-        /*
-         * --------------------------------------
-         * RECEIVED FILES LIST
-         * --------------------------------------
-         */
-        if ($numberDisplayed == 0) {
-            $tool_content .= "<p class='alert1'>$langTableEmpty</p>";
-        } else {
-            $tool_content .= "
-                    <script type='text/javascript' src='../auth/sorttable.js'></script>
-                    <table width='100%' class='sortable' id='t1'>
-                    <tr>
-                     <th colspan='2' class='left' width='200'>$langFileName</th>
-                     <th width='130'>$langSender</th>
-                     <th width='100'>$langDate</th>
-                     <th width='20'>$langDelete</th>
-                    </tr>";
-            $numberDisplayed = count($dropbox_person->receivedWork);  // RH
-            $i = 0;
-            foreach ($dropbox_person->receivedWork as $w) {            
-                if ($w->uploaderId == $uid) {
-                    $numberDisplayed -= 1;
-                    continue;
-                }
-                if ($i % 2 == 0) {
-                    $tool_content .= "<tr>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-                $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='" . q($w->title) . "' /></td>";
-                if (($w->filename != '') and ($w->filesize != 0)) {
-                    $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;rm_id=$w->id'>".q($w->title)."</a>&nbsp;&nbsp;<a href='dropbox_download.php?course=$course_code&amp;id=" . urlencode($w->id) . "' target=_blank><img src='$themeimg/inbox.png' /><small>$langAttachedFile</small></a>";
-                    $tool_content .= "<span class='smaller'>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</span><br />" .
-                            "<small>" . standard_text_escape($w->description) . "</small></td>";
-                } else {
-                    $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;rm_id=$w->id'>" . q($w->title) . "</a><br /><small>" . standard_text_escape($w->description) . "</small></td>";
-                }
-                $tool_content .= "<td><small>" . display_user($w->uploaderId, false, false) . "</small></td>
-                                              <td><small>" . $w->uploadDate;
-                if ($w->uploadDate != $w->lastUploadDate) {
-                    $tool_content .= " (" . $langlastUpdated . " $w->lastUploadDate)";
-                }
-                $tool_content .= "</small></td><td class='center'>";
-                $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=" . urlencode($w->id) . "' onClick='return confirmation();'>
-                                            <img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>";
-                $tool_content .= "</td></tr>";
-                $i++;
-            } //end of foreach
-            $tool_content .= "</table>";
-        }
-    }
-}
- 
- /* sent files list - table header */
-if (!isset($r_message_id)) {
-    $numSent = count($dropbox_person->sentWork);
-    $tool_content .= "<br /><p class='sub_title1'>";
-    $tool_content .= $langSentFiles;
-    // if the user has sent files then display the icon delete all
-    if ($numSent > 0) {
-        $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=all' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>";
-    }
-    $tool_content .= "</p>";
-
-    /* sent files list */
-    if ($numSent == 0) {
-        $tool_content .= "<p class='alert1'>$langTableEmpty</p>";
+    
+	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
+    	load_js('jquery.multiselect.min.js');
+        $head_content .= "<script type='text/javascript'>$(document).ready(function () {
+                $('#select-recipients').multiselect({
+                    selectedText: '$langJQSelectNum',
+                    noneSelectedText: '$langJQNoneSelected',
+                    checkAllText: '$langJQCheckAll',
+                    uncheckAllText: '$langJQUncheckAll'
+                });
+        });</script>
+        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+	}
+} else {//mailbox
+    load_js('datatables');
+    $head_content .= "<script type='text/javascript'>
+		              $(function() {
+		                $( \"#tabs\" ).tabs({
+		                  collapsible: false,
+                          //cache tab and avoid reload
+                          beforeLoad: function( event, ui ) {
+                            if ( ui.tab.data( \"loaded\" ) ) {
+                              event.preventDefault();
+                              return;
+                            }
+                            ui.jqXHR.success(function() {
+                              ui.tab.data( \"loaded\", true );
+                            });
+                          },
+                          //open links inside tabs
+                          load: function(event, ui) {
+                            $(\".ui-tabs-panel.ui-widget-content\").delegate('a', 'click', function(event) {
+                              if (event.target.className != 'outtabs' && event.target.className != 'paginate_enabled_next' 
+                                  && event.target.className != 'paginate_disabled_previous' && event.target.className != 'paginate_disabled_next'
+                                  && event.target.className != 'paginate_enabled_previous') {
+                                event.preventDefault();
+                                $(this).closest('.ui-tabs-panel.ui-widget-content').load(this.href);
+                              }
+                            });
+                          }
+                         })
+                      })
+                      </script>";
+    if ($course_id == 0) {
+        $tool_content .= "<div id=\"tabs\">
+                           <ul>
+                             <li><a href=\"inbox.php\">Inbox</a></li>
+                             <li><a href=\"outbox.php\">Outbox</a></li>
+                           </ul>
+                         </div>";
     } else {
-        $tool_content .= "
-            <script type='text/javascript' src='../auth/sorttable.js'></script>
-            <table width=100% class='sortable' id='t2'>
-            <tr>
-            <th colspan='2' class='left'>$langFileName</th>
-            <th width='130'>$langRecipient</th>
-            <th width='100'>$langDate</th>
-            <th width='20'>$langDelete</th>
-            </tr>";
-        $i = 0;
-        foreach ($dropbox_person->sentWork as $w) {
-            $langSentTo .= '&nbsp;';
-            $ahref = "dropbox_download.php?course=$course_code&amp;id=" . urlencode($w->id);
-            $imgsrc = $themeimg . '/outbox.png';
-            if ($i % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-            $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='" . q($w->title) . "' /></td>";
-            if (($w->filename != '') and ($w->filesize != 0)) {
-                $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sm_id=$w->id'>".q($w->title)."</a>&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>";
-                $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</small><br />
-                                    <small>" . standard_text_escape($w->description) . "</small></td>";
-            } else {
-                $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sm_id=$w->id'>" . q($w->title) . "</a><br /><small>" . standard_text_escape($w->description) . "</small></td>";
-            }
-            $tool_content .= "<td>";
-            $recipients_names = '';
-            foreach ($w->recipients as $r) {
-                $recipients_names .= display_user($r['id'], false, false) . " <br />";
-            }
-            if (isset($_GET['d']) and $_GET['d'] == 'all') {
-                $tool_content .= "<small>$recipients_names</small>";
-            } else {
-                $tool_content .= "<small>".ellipsize_html($recipients_names, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>")."</small>";
-            }
-            $tool_content .= "</td>
-                            <td class='center'><small>$w->uploadDate</small></td>
-                            <td class='center'>
-                            <div class='cellpos'>";
-            $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=" . urlencode($w->id) . "' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>";
-            $tool_content .= "</div></td></tr>";
-
-            if ($w->uploadDate != $w->lastUploadDate) {
-                $tool_content .= "<tr><td colspan='2'>
-                            <span class='dropbox_detail'>$langlastResent <span class='dropbox_date'>$w->lastUploadDate</span></span></td>
-                            </tr>";
-            }
-            $i++;
-        } //end of foreach
-        $tool_content .= "</table>";
+        $tool_content .= "<div id=\"tabs\">
+                           <ul>
+                             <li><a href=\"inbox.php?course=$course_code\">Inbox</a></li>
+                             <li><a href=\"outbox.php?course=$course_code\">Outbox</a></li>
+                           </ul>
+                         </div>";
     }
 }
-// display all user files sent and received (only to course admin)
-if ($is_editor) {
-    if (isset($_GET['other']) and $_GET['other']) {
-        $num = count($dropbox_person->allsentWork);
-        if ($num > 0) {
-                $tool_content .= "<br /><p class='sub_title1'>";
-                $tool_content .= $langOtherDropBoxFiles;
-                $tool_content .= "</p>";
-                $tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width=100% class='sortable' id='t2'>
-                        <tr>
-                        <th colspan='2' class='left'>$langFileName</th>
-                        <th width='65'>$langSender</th>
-                        <th width='65'>$langDestination</th>
-                        <th width='100'>$langDate</th>
-                        <th width='20'>$langDelete</th>
-                        </tr>";
-                $i = 0;
-                foreach ($dropbox_person->allsentWork as $w) {
-                    $langSentTo .= '&nbsp;';
-                    $ahref = "dropbox_download.php?course=$course_code&amp;id=" . urlencode($w->id);
-                    $imgsrc = $themeimg . '/outbox.png';
-                    if ($i % 2 == 0) {
-                        $tool_content .= "<tr class='even'>";
-                    } else {
-                        $tool_content .= "<tr class='odd'>";
-                    }
-                    $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='" . q($w->title) . "' /></td>";
-                    if (($w->filename != '') and ($w->filesize != 0)) {
-                        $tool_content .= "<td>".q($w->title)."&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>";
-                        $tool_content .= "<small class='smaller'>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</spanl><br />
-                                                        <small>" . standard_text_escape($w->description) . "</small></td>";
-                    } else {
-                        $tool_content .= "<td>" . q($w->title) . "<br /><small>" . standard_text_escape($w->description) . "</small></td>";
-                    }
-                    $tool_content .= "<td><small>" . display_user($w->uploaderId, false, false) . "</small></td>";
-                    $tool_content .= "<td>";
-                    $recipients_names = '';
-                    foreach ($w->recipients as $r) {
-                        $recipients_names .= display_user($r['id'], false, false) . " <br />";
-                    }
-                    if (isset($_GET['d']) and $_GET['d'] == 'all') {
-                        $tool_content .= "<small>$recipients_names</small>";
-                    } else {
-                        $tool_content .= "<small>".ellipsize_html($recipients_names, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>")."</small>";
-                    }
-                    $tool_content .= "</td>
-                                        <td class='center'><small>$w->uploadDate</small></td>
-                                        <td class='center'>
-                                        <div class='cellpos'>";
-                    $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;AdminDeleteSent=" . urlencode($w->id) . "' onClick='return confirmationpurge();'><img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>";
-                    $tool_content .= "</div></td></tr>";
-                    if ($w->uploadDate != $w->lastUploadDate) {
-                        $tool_content .= "<tr><td colspan='2'>
-                                        <span class='dropbox_detail'>$langlastResent <span class='dropbox_date'>$w->lastUploadDate</span></span></td>
-                                        </tr>";
-                    }
-                    $i++;
-                } //end of foreach        
-                $tool_content .= "</table>";
-            }
-        } else { // end of $other 
-                $tool_content .= "<br /><p class='sub_title1'>";
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;other=1'>$langOtherDropBoxFiles</a>&nbsp;<span class='smaller'>[...]</span>";
-                $tool_content .= "</p>";
-        }    
+
+if ($course_id == 0) {
+    draw($tool_content, 1, null, $head_content);
+} else {
+    draw($tool_content, 2, null, $head_content);
 }
-
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
-        });
-});</script>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
-
-draw($tool_content, 2, null, $head_content);

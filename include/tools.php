@@ -105,8 +105,11 @@ function getToolsArray($cat) {
                                                           " . MODULE_ID_FORUM . ",
                                                           " . MODULE_ID_GROUPS . ",
                                                           " . MODULE_ID_WIKI . ",
-                                                          " . MODULE_ID_LP . ",
-                                                          " . MODULE_ID_ATTENDANCE . ")
+                                                          " . MODULE_ID_ATTENDANCE . ",
+                                                          " . MODULE_ID_GRADEBOOK . ",
+                                                          " . MODULE_ID_GRADEBOOKTOTAL . ",
+                                                          " . MODULE_ID_LP . ")
+
                                         ORDER BY module_id";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
@@ -248,6 +251,18 @@ function loggedInMenu() {
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
         array_push($sideMenuImg, "arrow.png");
     }
+    
+    require_once 'modules/dropbox/class.mailbox.php';
+    
+    $mbox = new Mailbox($uid, 0);
+    $new_msgs = $mbox->unreadThreadsNumber();
+    if ($new_msgs == 0) {
+        array_push($sideMenuText, $GLOBALS['langDropBox']);
+    } else {
+        array_push($sideMenuText, "<b>".$GLOBALS['langDropBox']." (".$new_msgs.")</b>");
+    }
+    array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
+    array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
