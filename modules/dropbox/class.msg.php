@@ -19,6 +19,8 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+require_once 'include/log.php';
+
 Class Msg {
     
     var $id;
@@ -146,6 +148,13 @@ Class Msg {
             $this->real_filename = '';
             $this->filesize = 0;
         }
+        
+        Log::record($this->course_id, MODULE_ID_DROPBOX, LOG_INSERT,
+                array('id' => $this->id,
+                      'user_id' => $this->author_id,
+                      'filename' => $this->filename,
+                      'subject' => $this->subject,
+                      'body' => $this->body));
     }
     
     /**
@@ -158,6 +167,10 @@ Class Msg {
                 WHERE `recipient_id` = ?d 
                 AND `msg_id` = ?d";
         Database::get()->query($sql, 1, $this->uid, $this->id);
+        
+        Log::record($this->course_id, MODULE_ID_DROPBOX, LOG_DELETE, array('user_id' => $this->uid,
+        'subject' => $this->subject));
+        
         //delete msg that all recipients have marked for deletion
         $sql = "SELECT COUNT(`msg_id`) as `c` 
                 FROM `dropbox_index` 

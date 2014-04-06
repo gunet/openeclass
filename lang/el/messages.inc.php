@@ -1264,7 +1264,8 @@ $langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
 /* * ***********************************************
  * dropbox.php
  * *********************************************** */
-$langNewMessage = "Νέο μήνυμα";
+$langNewPersoMessage = "Νέο προσωπικό μήνυμα";
+$langNewCourseMessage = "Νέο μήνυμα μαθήματος";
 $langBadFormData = "Η αποστολή του αρχείου απέτυχε";
 $langSendTo = "Αποστολή στον/στην";
 $langReceivedFiles = "Εισερχόμενα";

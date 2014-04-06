@@ -43,22 +43,16 @@ $out_msgs = $mbox->getOutboxMsgs();
 if (empty($out_msgs)) {
     $out = "<p class='alert1'>$langTableEmpty</p>";
 } else {
-    $out = "<script>
-              $(document).ready(function() {
-                $('#loading').hide();
-              });
-            </script>";
-    $out .= "<div id=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+    $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
     $out .= "<table id=\"outbox_table\">
                <thead>
                  <tr>
                    <th>$langDate</th>
+                   <th>$langSubject</th>
                    <th>$langRecipients</th>
-                   <th>$langMessage</th>";
-    if ($course_id != 0) {
-        $out .= "<th>$langAttachedFile</th>";
-    }
-    $out .= "      <th>$langDelete</th>
+                   <th>$langMessage</th>
+                   <th>$langAttachedFile</th>
+                   <th>$langDelete</th>
                  </tr>
                </thead>
                <tbody>";
@@ -71,10 +65,13 @@ if (empty($out_msgs)) {
         $recipients = substr($recipients, 0, strlen($recipients)-2);
         $out .= "<tr id='$m->id'>
                    <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
+                   <td>".q($m->subject)."</td>
                    <td>$recipients</td>
                    <td>".standard_text_escape($m->body)."</td>";
-        if ($course_id != 0) {
-            $out .= "<td><a href=\"dropbox_download.php?course=$course_code&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+        if ($m->filename != '') {
+            $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($m->course_id)."&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+        } else {
+            $out .= "<td></td>";
         }
         $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                  </tr>";
@@ -84,6 +81,7 @@ if (empty($out_msgs)) {
              </table>";
     $out .= "<script>
                $(document).ready(function() {
+                 $('div.loading').hide();
                  $('#outbox_table').dataTable();
                });
              </script>";
@@ -91,22 +89,24 @@ if (empty($out_msgs)) {
         $out .= '<script>
                    $(function() {
                      $(".delete").click(function() {
-                       $(\'#loading\').fadeIn();
-                       var rowContainer = $(this).parent().parent();
-                       var id = rowContainer.attr("id");
-                       var string = \'mid=\'+ id ;
-    
-                       $.ajax({
-                         type: "POST",
-                         url: "delete.php",
-                         data: string,
-                         cache: false,
-                         success: function(){
-                           rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                           $(\'#loading\').fadeOut();
-                         }
-                       });
-                     return false;
+                       if (confirm("' . $langConfirmDelete . '")) {
+                         $(\'div.loading\').fadeIn();
+                         var rowContainer = $(this).parent().parent();
+                         var id = rowContainer.attr("id");
+                         var string = \'mid=\'+ id ;
+        
+                         $.ajax({
+                           type: "POST",
+                           url: "delete.php",
+                           data: string,
+                           cache: false,
+                           success: function(){
+                             rowContainer.slideUp(\'slow\', function() {$(this).remove();});
+                             $(\'div.loading\').fadeOut();
+                           }
+                         });
+                         return false;
+                       }
                      });
                    });
                  </script>';
