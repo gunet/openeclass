@@ -946,6 +946,7 @@ $langAttendanceActCour = "Δραστηριότητα μαθήματος";
 $langAttendanceInsAut = "αυτόματη καταχώρηση παρουσίας";
 $langAttendanceInsMan = "μη αυτόματη καταχώρηση παρουσίας";
 $langAttendanceActAttend = "Δραστηριότητα παρουσιολογίου";
+$langAttendanceAdd = "Προσθήκη";
 $langAttendanceDesc = "Περιγραφή";
 $langAttendanceType = "Τύπος";
 $langAttendanceActList = "Δραστηριότητες του παρουσιολογίου";
@@ -959,6 +960,10 @@ $langAttendanceStats = "Στατιστικά";
 $langAttendanceMEANS = "Τιμές";
 $langAttendanceActiveUsers = "Χρήστες παρουσιολογίου";
 $langAttendanceActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
+$langAttendanceActivity = "Δραστηριότητα";
+$langAttendanceSystemEditActivity = "Επεξεργασία δραστηριότητας από το σύστημα";
+$langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
+
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
