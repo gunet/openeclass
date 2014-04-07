@@ -422,33 +422,29 @@ if (!defined('EXPORTING')) {
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td class='title1'>$langTools</td>
-          <td class='left'>$toggle_student_view
-             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'>
-              <img src='$themeimg/email.png' alt='".q($langContactProf)."' title='".q($langContactProf)."' /></a>&nbsp;&nbsp;
-             <a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'>
-              <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='".q($langAddAsBookmark)."' /></a>&nbsp;&nbsp;";
+          <td class='left'>$toggle_student_view";
+        if (isset($_SESSION['uid'])) {
+                $tool_content .= "<a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='".q($langContactProf)."' title='".q($langContactProf)."' /></a>&nbsp;&nbsp;";
+        }
+             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='".q($langAddAsBookmark)."' /></a>&nbsp;&nbsp;";
                 if (visible_module(7)) {
                        $tool_content .= "
                         <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'>
                         <img src='$themeimg/feed.png' alt='".q($langRSSFeed)."' title='".q($langRSSFeed)."' /></a></span>&nbsp;$toggle_student_view_close";
                 }
-            $tool_content .= "</td>
-        </tr>        
+        $tool_content .= "</td>
+        </tr>
         </table>
         $emailnotification
         <br />
-      </td>\n";
+      </td>";
 }
-$tool_content .= "
-   </tr>
-   </table>
-
+$tool_content .= "</tr></table>
    <table width='100%' class='tbl'>
    <tr>
      <td>$cunits_content</td>
    </tr>
   </table>
-</div>
-";
+</div>";
 
 draw($tool_content, 2, null, $head_content);
