@@ -679,6 +679,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             }
         }
         
+        if ($oldversion < '2.9.1') {
+            mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
+                db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
+        }
+        
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
                 db_query("ALTER TABLE `annonces` ADD `preview` TEXT NOT NULL DEFAULT ''");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

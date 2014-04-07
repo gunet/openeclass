@@ -563,6 +563,7 @@ db_query("CREATE TABLE `course_units` (
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
 	`comments` MEDIUMTEXT,
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+        `public` TINYINT(4) NOT NULL DEFAULT 1,
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
 

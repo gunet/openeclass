@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -54,6 +54,14 @@ if (isset($_REQUEST['edit_submit'])) {
 }
 
 $form = process_actions();
+
+// check if we are trying to access a protected resource directly
+$access = db_query_get_single_value("SELECT public FROM course_units WHERE id = $id");
+if (!resource_access(1, $access)) {
+    $tool_content .= "<p class='caution'>$langForbidden</p>";
+    draw($tool_content, 2, null, $head_content);
+    exit;    
+}
 
 if ($is_editor) {
 	$tool_content .= "&nbsp;<div id='operations_container'>
@@ -112,12 +120,20 @@ foreach (array('previous', 'next') as $i) {
                 $arrow1 = '';
                 $arrow2 = ' »';
         }
-        $q = db_query("SELECT id, title FROM course_units
+        
+        if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+            $access_check = "";
+        } else {
+            $access_check = "AND public = 1";
+        }
+        
+        $q = db_query("SELECT id, title, public FROM course_units
                        WHERE course_id = $cours_id
                              AND id <> $id
                              AND `order` $op $info[order]
                              AND `order` >= 0
                              $visibility_check
+                             $access_check
                        ORDER BY `order` $dir
                        LIMIT 1");
         if ($q and mysql_num_rows($q) > 0) {
@@ -137,8 +153,7 @@ if ($is_editor) {
         $comment_edit_link = '';
 }
 
-$tool_content .= "
-    <table class='$units_class' width='99%'>";
+$tool_content .= "<table class='$units_class' width='99%'>";
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
 $tool_content .= "
     <tr class='odd'>
