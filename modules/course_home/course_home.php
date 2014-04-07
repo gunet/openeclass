@@ -58,7 +58,7 @@ $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {
             $('.course_description').slick({
                 dots: false,
-                slidesToShow: 3,
+                slidesToShow: 4,
                 slidesToScroll: 1,
                 touchMove: false
             });
@@ -108,7 +108,7 @@ if ($res and mysql_num_rows($res) > 0) {
                     if (isset($titreBloc[$row['res_id']])) {
                             $element_id = "class='course_info' id='{$titreBloc[$row['res_id']]}'";                            
                             $icon_url = "$themeimg/bloc/$row[res_id].png";                            
-                    } else {
+                    } else {                        
                             $element_id = 'class="course_info other"';
                             $icon_url = "$themeimg/bloc/default.png";
                     }                           
