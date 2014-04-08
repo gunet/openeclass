@@ -53,19 +53,15 @@ load_js('tools.js');
 load_js('jquery');
 load_js('slick');
 ModalBoxHelper::loadModalBox();
-$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
-$head_content .= "<script type='text/javascript'>
+$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+<script type='text/javascript'>
     $(document).ready(function() {
             $('.course_description').slick({
-                dots: false,
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                touchMove: false
+                dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
-            $('.inline').colorbox({ inline: true, 
-                                    width: '50%' });
-        })
-        </script>";
+            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info' });
+    })
+</script>";
 
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
