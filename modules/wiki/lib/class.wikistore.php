@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,19 +34,10 @@
   ==============================================================================
  */
 
-require_once dirname(__FILE__) . "/class.dbconnection.php";
 require_once dirname(__FILE__) . "/class.wiki.php";
 require_once 'include/log.php';
 
-// Error codes
-!defined("WIKI_NO_TITLE_ERROR") && define("WIKI_NO_TITLE_ERROR", "Missing title");
-!defined("WIKI_NO_TITLE_ERRNO") && define("WIKI_NO_TITLE_ERRNO", 1);
-!defined("WIKI_ALREADY_EXISTS_ERROR") && define("WIKI_ALREADY_EXISTS_ERROR", "Wiki already exists");
-!defined("WIKI_ALREADY_EXISTS_ERRNO") && define("WIKI_ALREADY_EXISTS_ERRNO", 2);
-!defined("WIKI_CANNOT_BE_UPDATED_ERROR") && define("WIKI_CANNOT_BE_UPDATED_ERROR", "Wiki cannot be updated");
-!defined("WIKI_CANNOT_BE_UPDATED_ERRNO") && define("WIKI_CANNOT_BE_UPDATED_ERRNO", 3);
 !defined("WIKI_NOT_FOUND_ERROR") && define("WIKI_NOT_FOUND_ERROR", "Wiki not found");
-!defined("WIKI_NOT_FOUND_ERRNO") && define("WIKI_NOT_FOUND_ERRNO", 4);
 
 /**
  * Class representing the WikiStore
@@ -54,29 +45,13 @@ require_once 'include/log.php';
  */
 class WikiStore {
 
-    // private fields
-    var $con;
-    // default configuration
-    var $config = array(
-        'tbl_wiki_pages' => 'wiki_pages',
-        'tbl_wiki_pages_content' => 'wiki_pages_content',
-        'tbl_wiki_properties' => 'wiki_properties',
-        'tbl_wiki_acls' => 'wiki_acls'
-    );
-    // error handling
     var $error = '';
-    var $errno = 0;
-
+    
     /**
      * Constructor
-     * @param DatabaseConnection con connection to the database
-     * @param array config associative array containing tables name
      */
-    function WikiStore(&$con, $config = null) {
-        if (is_array($config)) {
-            $this->config = array_merge($this->config, $config);
-        }
-        $this->con = $con;
+    function WikiStore() {
+
     }
 
     // load and save
@@ -86,13 +61,13 @@ class WikiStore {
      * @return Wiki the loaded Wiki
      */
     function loadWiki($wikiId) {
-        $wiki = new Wiki($this->con, $this->config);
-
-        $wiki->load($wikiId);
-
+        $wiki = new Wiki();
+        
         if ($wiki->hasError()) {
-            $this->setError($wiki->error, $wiki->errno);
+        	$this->setError($wiki->error);
         }
+        
+        $wiki->load($wikiId);
 
         return $wiki;
     }
@@ -105,13 +80,19 @@ class WikiStore {
      */
     function pageExists($wikiId, $title) {
 
-        $sql = "SELECT `id` "
-                . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                . "WHERE BINARY `title` = '" . addslashes($title) . "' "
-                . "AND `wiki_id` = " . $wikiId
+        $sql = "SELECT COUNT(`id`) as `c` "
+        		. "FROM `wiki_pages` "
+        		. "WHERE BINARY `title` = ?s "
+        		. "AND `wiki_id` = ?d"
         ;
+        
+        $result = Database::get()->querySingle($sql, $title, $wikiId);
 
-        return $this->con->queryReturnsResult($sql);
+        if($result->c > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -122,13 +103,19 @@ class WikiStore {
     function wikiIdExists($wikiId) {
         global $course_id;
 
-        $sql = "SELECT `id` "
-                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
-                . "WHERE `id` = '" . $wikiId . "' "
-                . "AND `course_id` = $course_id"
+        $sql = "SELECT COUNT(`id`) as `c` "
+                . "FROM `wiki_properties` "
+                . "WHERE `id` = ?d "
+                . "AND `course_id` = ?d"
         ;
-
-        return $this->con->queryReturnsResult($sql);
+        
+        $result = Database::get()->querySingle($sql, $wikiId, $course_id);
+        
+        if($result->c > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Wiki methods
@@ -140,18 +127,15 @@ class WikiStore {
      */
     function getWikiListByGroup($groupId) {
         global $course_id;
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
 
         $sql = "SELECT `id`, `title`, `description` "
-                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
-                . "WHERE `group_id` = " . $groupId . " "
-                . "AND `course_id` = $course_id "
+                . "FROM `wiki_properties` "
+                . "WHERE `group_id` = ?d "
+                . "AND `course_id` = ?d "
                 . "ORDER BY `id` ASC"
         ;
-
-        return $this->con->getAllRowsFromQuery($sql);
+        
+        return Database::get()->queryArray($sql, $groupId, $course_id);
     }
 
     /**
@@ -171,28 +155,27 @@ class WikiStore {
         global $course_id;
 
         $sql = "SELECT `id`, `title`, `description` "
-                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
-                . "WHERE `group_id` != 0 "
-                . "AND `course_id` = $course_id "
+                . "FROM `wiki_properties` "
+                . "WHERE `group_id` != ?d "
+                . "AND `course_id` = ?d "
                 . "ORDER BY `group_id` ASC"
         ;
-
-        return $this->con->getAllRowsFromQuery($sql);
+        
+        return Database::get()->queryArray($sql, 0, $course_id);
     }
 
     function getNumberOfPagesInWiki($wikiId) {
 
         if ($this->wikiIdExists($wikiId)) {
             $sql = "SELECT count( `id` ) as `pages` "
-                    . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                    . "WHERE `wiki_id` = " . $wikiId
+                    . "FROM `wiki_pages` "
+                    . "WHERE `wiki_id` = ?d"
             ;
+            
+            $result = Database::get()->querySingle($sql, $wikiId); 
 
-            $result = $this->con->getRowFromQuery($sql);
-
-            return $result['pages'];
+            return $result->pages;
         } else {
-            $this->setError(WIKI_NOT_FOUND_ERROR, WIKI_NOT_FOUND_ERRNO);
             return false;
         }
     }
@@ -206,37 +189,49 @@ class WikiStore {
         global $course_id;
 
         if ($this->wikiIdExists($wikiId)) {
-            $wiki_title = db_query_get_single_value("SELECT title FROM wiki_properties 
-                                                                WHERE course_id = $course_id AND id = $wikiId");
+            
+            $sql = "SELECT title FROM wiki_properties WHERE course_id = ?d AND id = ?d";
+            $that = $this;
+            $result = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $course_id, $wikiId);
+            $wiki_title = $result->title;
+            
             // delete properties
-            $sql = "DELETE FROM `" . $this->config['tbl_wiki_properties'] . "` "
-                    . "WHERE `id` = " . $wikiId
-                    . " AND `course_id` = $course_id"
+            $sql = "DELETE FROM `wiki_properties` "
+                    . "WHERE `id` = ?d"
+                    . " AND `course_id` = ?d"
             ;
 
-            $numrows = $this->con->executeQuery($sql);
+            $result = Database::get()->query($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $wikiId, $course_id);
 
-            if ($numrows < 1 || $this->hasError()) {
+            if ($result->affectedRows < 1) {
                 return false;
             }
 
             // delete wiki acl
-            $sql = "DELETE FROM `" . $this->config['tbl_wiki_acls'] . "` "
-                    . "WHERE `wiki_id` = " . $wikiId
+            $sql = "DELETE FROM `wiki_acls` "
+                    . "WHERE `wiki_id` = ?d"
             ;
 
-            $numrows = $this->con->executeQuery($sql);
+            $result = Database::get()->query($sql, function ($errormsg) use ($that) {
+            	$that->setError($errormsg);
+            }, $wikiId);
 
-            if ($numrows < 1 || $this->hasError()) {
+            if ($result->affectedRows < 1) {
                 return false;
             }
 
             $sql = "SELECT `id` "
-                    . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                    . "WHERE `wiki_id` = " . $wikiId
+                    . "FROM `wiki_pages` "
+                    . "WHERE `wiki_id` = ?d"
             ;
 
-            $pageIds = $this->con->getAllRowsFromQuery($sql);
+            $pageIds = Database::get()->queryArray($sql, function ($errormsg) use ($that) {
+            	    $that->setError($errormsg);
+                }, $wikiId);
 
             if ($this->hasError()) {
                 return false;
@@ -244,11 +239,13 @@ class WikiStore {
 
             foreach ($pageIds as $pageId) {
                 $sql = "DELETE "
-                        . "FROM `" . $this->config['tbl_wiki_pages_content'] . "` "
-                        . "WHERE `pid` = " . $pageId['id']
+                        . "FROM `wiki_pages_content` "
+                        . "WHERE `pid` = ?d"
                 ;
 
-                $this->con->executeQuery($sql);
+                Database::get()->query($sql, function ($errormsg) use ($that) {
+                	$that->setError($errormsg);
+                }, $pageId->id);
 
                 if ($this->hasError()) {
                     return false;
@@ -271,11 +268,13 @@ class WikiStore {
 #                    return false;
 #                }
 
-            $sql = "DELETE FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                    . "WHERE `wiki_id` = " . $wikiId
+            $sql = "DELETE FROM `wiki_pages` "
+                    . "WHERE `wiki_id` = ?d"
             ;
 
-            $numrows = $this->con->executeQuery($sql);
+            Database::get()->query($sql, function ($errormsg) use ($that) {
+                	$that->setError($errormsg);
+                }, $wikiId);
 
             if ($this->hasError()) {
                 return false;
@@ -286,34 +285,29 @@ class WikiStore {
 
             return true;
         } else {
-            $this->setError(WIKI_NOT_FOUND_ERROR, WIKI_NOT_FOUND_ERRNO);
+            $this->setError(WIKI_NOT_FOUND_ERROR);
             return false;
         }
     }
 
     // error handling
 
-    function setError($errmsg = '', $errno = 0) {
+    function setError($errmsg = '') {
         $this->error = ($errmsg != '') ? $errmsg : "Unknown error";
-        $this->errno = $errno;
     }
 
     function getError() {
-        if ($this->con->hasError()) {
-            return $this->con->getError();
-        } else if ($this->error != '') {
-            $errno = $this->errno;
+        if ($this->error != '') {
             $error = $this->error;
             $this->error = '';
-            $this->errno = 0;
-            return $errno . ' - ' . $error;
+            return $error;
         } else {
             return false;
         }
     }
 
     function hasError() {
-        return ( $this->error != '' ) || $this->con->hasError();
+        return ($this->error != '');
     }
 
 }
