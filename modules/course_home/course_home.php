@@ -59,7 +59,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
             $('.course_description').slick({
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
-            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info' });
+            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
     })
 </script>";
 
