@@ -3224,18 +3224,18 @@ $langWikiAccessControl = "Διαχείριση ελέγχου πρόσβασης
 $langWikiAccessControlText = "Μπορείτε να θέσετε τα δικαιώματα πρόσβασης για τους χρήστες χρησιμοποιώντας το ακόλουθο πλέγμα: ";
 $langWikiAllPages = "Όλες οι σελίδες";
 $langWikiBackToPage = "Πίσω στη σελίδα";
-$langWikiConflictHowTo = "<p>Η σελίδα που θέλετε να αλλάξετε φαίνετε ότι έχει τροποποιηθεί από την τελευταία φορά που την τροποποίησατε.<br /><br />
-Τι θέλετε να γίνει;<ul>
-<li>Μπορείτε να αντιγράψετε/επικολλήσετε τις αλλαγές σας σε ένα κειμενογράφο και κάντε κλίκ 
-στο 'Αλλαγή τελευταίας έκδοσης' για να προσπαθήσετε να προσθέσετε τις αλλαγές σας στην καινούργια έκδοση της σελίδας.</li>
-<li>Μπορείτε επίσης να πατήσετε στο άκυρο για να ακυρώσετε τις αλλαγές σας.</li>
-</ul></p>";
+$langWikiLockInfo = "<p>Η σελίδα που θέλετε να αλλάξετε έχει κλειδωθεί, γίνεται επεξεργασία της από κάποιον άλλο χρήστη. Δοκιμάστε ξανά σε λίγο.</p>";
+$langWikiLockTimeRemaining = "Χρόνος κλειδώματος επεξεργασίας: ";
+$langWikiLockTimeEnd = "Η Wiki σελίδα έπαψε να είναι κλειδωμένη για επεξεργασία. Μπορείτε να συνεχίσετε να την επεξεργάζεστε, αλλά ενδέχεται να μην μπορέσετε να αποθηκεύσετε άμεσα τις αλλαγές σας";
 $langWikiContentEmpty = "Αυτή η σελίδα είναι κενή, κάνε κλικ στο 'Αλλαγή της σελίδας' για να προσθέσετε περιεχόμενο";
 $langWikiCourseMembers = "Μέλη μαθήματος ";
 $langWikiCreateNewWiki = "Δημιουργήστε ένα νέο Wiki";
 $langWikiCreatePrivilege = "Δημιουργήστε σελίδες ";
 $langWikiCreationSucceed = "Η δημιουργία του Wiki ήταν επιτυχημένη";
 $langWikiDeleteWiki = "Διαγραφή Wiki";
+$langWikiDeletePage = "Διαγραφή της Σελίδας";
+$langWikiDeletePageError = "Σφάλμα κατά τη διαγραφή της σελίδας";
+$langWikiDeletePageWarning = "Είστε σίγουροι ότι θέλετε να διαγράψετε τη Wiki σελίδα;";
 $langWikiDeleteWikiWarning = "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: πρόκειται να διαγράψετε αυτό το wiki και όλες τις σελίδες του. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;";
 $langWikiDeletionSucceed = "Η διαγραφή του Wiki ήταν επιτυχημένη";
 $langWikiDescription = "Περιγραφή του Wiki";
@@ -3248,12 +3248,13 @@ $langWikiDiffUnchangedLine = "Αμετάβλητη γραμμή ";
 $langWikiDifferenceKeys = "Κλειδιά:";
 $langWikiDifferencePattern = "διαφορές μεταξύ της έκδοσης %1\$s τροποποιημένης από %2\$s και της έκδοσης %3\$s τροποποιημένης από %4\$s";
 $langWikiDifferenceTitle = "Διαφορές:";
-$langWikiEditConflict = "Προειδοποίηση διένεξης";
+$langWikiEditLock = "Προειδοποίηση κλειδώματος";
 $langWikiEditLastVersion = "Αλλαγή τελευταίας έκδοσης";
 $langWikiEditPage = "Αλλαγή της σελίδας";
 $langWikiEditPrivilege = "Αλλαγή σελίδων";
 $langWikiEditProperties = "Αλλαγή ιδιοτήτων";
 $langWikiEditionSucceed = "Οι αλλαγές πραγματοποιηθήκαν";
+$langWikiExport = "Εξαγωγή του Wiki";
 $langWikiGroupMembers = "Μέλη ομάδας";
 $langWikiIdenticalContent = " Ίδιο περιεχόμενο <br />καμιά αλλαγή δεν αποθηκεύθηκε";
 $langWikiInvalidWikiId = "Μη έγκυρο Wiki";
@@ -3267,7 +3268,13 @@ $langWikiNotAllowedToRead = "Δεν επιτρέπεται να διαβάσετ
 $langWikiNumberOfPages = "Αριθμός σελίδων";
 $langWikiOtherUsers = "Άλλοι χρήστες (*)";
 $langWikiOtherUsersText = "(*) ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";
+$langWikiPageMakeCurrent = "(τρέχουσα)";
+$langSureToMakeWikiPageCurrent = "Είστε σίγουροι ότι θέλετε να κάνετε αυτή την έκδοση τρέχουσα;";
+$langWikiPageRevertedVersion = "Επαναφορά παλαιότερης έκδοσης";
+$langWikiPageDeleted = "Η σελίδα Wiki διαγράφηκε επιτυχώς";
 $langWikiPageHistory = "Ιστορικό σελίδας";
+$langWikiPageNotLoaded = "Η σελίδα %s δεν ήταν δυνατό να φορτωθεί";
+$langWikiPagePrintable = "Εκτυπώσιμη έκδοση";
 $langWikiPageSaved = "Η σελίδα αποθηκεύτηκε";
 $langWikiPreviewTitle = "Προεπισκόπηση: ";
 $langWikiPreviewWarning = " ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Αυτή η σελίδα είναι προεπισκόπηση!  Οι τροποποιήσεις σας στο wiki δεν έχουν αποθηκευτεί ακόμα! Για να τις αποθηκεύσετε κάντε κλικ στο 'Αποθήκευση'.";
@@ -3276,6 +3283,9 @@ $langWikiReadPrivilege = "Διάβασε τις σελίδες";
 $langWikiRecentChanges = "Πρόσφατες αλλαγές";
 $langWikiRecentChangesPattern = "%1\$s τροποποιήθηκε στις %2\$s από %3\$s";
 $langWikiShowDifferences = "Δείξε τις διαφορές";
+$langWikiSearchInPages = "Αναζήτηση στις σελίδες";
+$langWikiSearchResults = "Αποτελέσματα αναζήτησης";
+$langWikiSearchMissingKeywords = "Δεν εισήχθησαν λέξεις κλειδιά";
 $langWikiTitle = "Τίτλος του wiki";
 $langWikiTitleEdit = "Wiki : Αλλάξτε τις ιδιότητες";
 $langWikiTitleNew = "Wiki : Δημιουργήστε καινούργιο Wiki";
@@ -3303,6 +3313,11 @@ $wiki_toolbar['Unorderedlist'] = "Μη διατεταγμένη λίστα";
 $wiki_toolbar['Orderedlist'] = "Διατεταγμένη λίστα";
 $wiki_toolbar['Externalimage'] = "Εξωτερική εικόνα";
 $wiki_toolbar['Link'] = "Σύνδεσμος";
+$wiki_toolbar['Hr'] = "Οριζόντια Γραμμή";
+$wiki_toolbar['H1'] = "Επικεφαλίδα 1";
+$wiki_toolbar['H2'] = "Επικεφαλίδα 2";
+$wiki_toolbar['H3'] = "Επικεφαλίδα 3";
+$wiki_toolbar['H4'] = "Επικεφαλίδα 4";
 
 /* * ***********************************************************
  * work.php
