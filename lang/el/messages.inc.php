@@ -3696,6 +3696,9 @@ $langBBBOptions = 'Τροποποίηση';
 $langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
 $langBBBRemoveServer = 'Κατάργηση';
 
+$langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
+
+
 $langBBB = "Τηλεδιάσκεψη";
 $langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
 $langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
@@ -3719,3 +3722,12 @@ $langBBBNoteEnableJoin = "Ο σύνδεσμος για σύνδεση είναι
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος για σύνδεση ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
 
 $langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
+
+$langBBBSessionAvailable = "Ενεργοποίηση συμμετοχής";
+$langBBBMinutesBefore = "λεπτά νωρίτερα από την προγραμματισμένη έναρξη";
+
+$langBBBScheduledSession = "Προγραμματισμός τηλεδιάσκεψης";
+$langBBBScheduleSessionInfo = "Η τηλεδιάσκεψη με τίτλο ";
+$langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
+$langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλον του μαθήματος για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
