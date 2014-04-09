@@ -63,6 +63,8 @@ db_query("DROP TABLE IF EXISTS monthly_summary");
 db_query("DROP TABLE IF EXISTS user_request");
 db_query("DROP TABLE IF EXISTS prof_request");
 db_query("DROP TABLE IF EXISTS user");
+db_query("DROP TABLE IF EXISTS bbb_servers");
+db_query("DROP TABLE IF EXISTS bbb_session");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -1113,7 +1115,7 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         PRIMARY KEY  (`id`))");
 
 // bbb_servers table
-db_query('CREATE TABLE `bbb_servers` (
+db_query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hostname` varchar(255) DEFAULT NULL,
   `ip` varchar(255) NOT NULL,
@@ -1127,7 +1129,7 @@ db_query('CREATE TABLE `bbb_servers` (
   KEY `idx_bbb_servers` (`hostname`)');
     
 // bbb_sessions tables
-db_query('CREATE TABLE `bbb_session` (
+db_query('CREATE TABLE IF NOT EXISTS `bbb_session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `course_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
@@ -1140,7 +1142,7 @@ db_query('CREATE TABLE `bbb_session` (
   `mod_pw` varchar(255) DEFAULT NULL,
   `att_pw` varchar(255) DEFAULT NULL,
   `unlock_interval` int(11) DEFAULT NULL,
-  `external_users` varchar(255) DEFAULT NULL,
+  `external_users` varchar(255) DEFAULT NULL
   PRIMARY KEY (`id`)
 )');
 
