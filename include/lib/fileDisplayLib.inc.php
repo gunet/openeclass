@@ -55,7 +55,7 @@ function stripSubmitValue(&$submitArray) {
 
 /*
  * Define the image to display for each file extension
- * This needs an existing image repository to works
+ * This needs an existing image repository to work
  *
  * @author - Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -66,44 +66,48 @@ function stripSubmitValue(&$submitArray) {
 function choose_image($fileName) {
     static $type, $image;
 
-    /*     * * Tables initiliasation ** */
+    // Table initialisation
     if (!$type || !$image) {
-        $type['word'] = array('doc', 'dot', 'rtf', 'mcw', 'wps', 'docx');
-        $type['web'] = array('htm', 'html', 'htx', 'xml', 'xsl', 'php', 'phps', 'meta');
-        $type['css'] = array('css');
-        $type['image'] = array('gif', 'jpg', 'png', 'bmp', 'jpeg');
-        $type['audio'] = array('wav', 'mp2', 'mp3', 'mp4', 'vqf');
-        $type['midi'] = array('midi', 'mid');
-        $type['video'] = array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv', 'asf', 'asx');
-        $type['real'] = array('ram', 'rm');
-        $type['flash'] = array('swf', 'flv');
-        $type['excel'] = array('xls', 'xlt', 'xlsx');
-        $type['compressed'] = array('zip', 'tar', 'gz', 'bz2', 'tar.gz', 'tar.bz2', '7z');
-        $type['rar'] = array('rar');
-        $type['code'] = array('js', 'cpp', 'c', 'java');
-        $type['acrobat'] = array('pdf');
-        $type['powerpoint'] = array('ppt', 'pptx', 'pps', 'ppsx');
-        $type['text'] = array('txt');
+        $type = array(
+            'word' => array('doc', 'dot', 'rtf', 'mcw', 'wps', 'docx'),
+            'web' => array('htm', 'html', 'htx', 'xml', 'xsl', 'php', 'phps', 'meta'),
+            'css' => array('css'),
+            'image' => array('gif', 'jpg', 'png', 'bmp', 'jpeg', 'tif', 'tiff'),
+            'audio' => array('wav', 'mp2', 'mp3', 'mp4', 'vqf'),
+            'midi' => array('midi', 'mid'),
+            'video' => array('avi', 'mpg', 'mpeg', 'mov', 'divx', 'wmv', 'asf', 'asx'),
+            'real' => array('ram', 'rm'),
+            'flash' => array('swf', 'flv'),
+            'excel' => array('xls', 'xlt', 'xlsx'),
+            'compressed' => array('zip', 'tar', 'gz', 'bz2', 'tar.gz', 'tar.bz2', '7z'),
+            'rar' => array('rar'),
+            'code' => array('js', 'cpp', 'c', 'java'),
+            'acrobat' => array('pdf'),
+            'powerpoint' => array('ppt', 'pptx', 'pps', 'ppsx'),
+            'text' => array('txt'),
+        );
 
-        $image['word'] = 'doc.png';
-        $image['web'] = 'html.png';
-        $image['css'] = 'css.png';
-        $image['image'] = 'gif.png';
-        $image['audio'] = 'wav.png';
-        $image['midi'] = 'midi.png';
-        $image['video'] = 'mpg.png';
-        $image['ram'] = 'ram.png';
-        $image['flash'] = 'flash.png';
-        $image['excel'] = 'xls.png';
-        $image['compressed'] = 'zip.png';
-        $image['rar'] = 'rar.png';
-        $image['code'] = 'js.png';
-        $image['acrobat'] = 'pdf.png';
-        $image['powerpoint'] = 'ppt.png';
-        $image['text'] = 'txt.png';
+        $image = array(
+            'word' => 'doc',
+            'web' => 'html',
+            'css' => 'css',
+            'image' => 'gif',
+            'audio' => 'wav',
+            'midi' => 'midi',
+            'video' => 'mpg',
+            'ram' => 'ram',
+            'flash' => 'flash',
+            'excel' => 'xls',
+            'compressed' => 'zip',
+            'rar' => 'rar',
+            'code' => 'js',
+            'acrobat' => 'pdf',
+            'powerpoint' => 'ppt',
+            'text' => 'txt',
+        );
     }
 
-    /*     * * function core ** */
+    // function core
     if (preg_match('/\.([[:alnum:]]+)$/', $fileName, $extension)) {
         $ext = strtolower($extension[1]);
         foreach ($type as $genericType => $typeList) {
@@ -113,7 +117,7 @@ function choose_image($fileName) {
         }
     }
 
-    return "default.png";
+    return 'default';
 }
 
 /*

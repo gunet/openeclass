@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -56,9 +56,9 @@ require_once dirname(__FILE__) . "/lib.url.php";
  * @return string HTML code of the wiki editor
  */
 function claro_disp_wiki_editor($wikiId, $title, $versionId
-, $content, $script = null, $showWikiToolBar = true
+, $content, $changelog = '', $script = null, $showWikiToolBar = true
 , $forcePreview = true) {
-    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $course_code;
+    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langNote, $course_code;
 
     // create script
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -69,7 +69,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 
     // display title
     $out = '<div class="wikiTitle">' . "\n";
-    $out .= '<h2>' . $localtitle . '</h2>' . "\n";
+    $out .= '<h1>' . $localtitle . '</h1>' . "\n";
     $out .= '</div>' . "<br />";
 
     // display editor
@@ -88,6 +88,13 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
         $out .= q($content);
         $out .= '</textarea>' . "\n";
     }
+	
+    //notes
+    $out .= '<div style="padding:10px;">' . "\n";
+    $out .= '<b>'.$langNote.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
+	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
+    $out .= '</div>' . "\n";
+    //end notes
 
     $out .= '<div style="padding:10px;">' . "\n";
 
@@ -167,7 +174,7 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
  * @param string script callback script url
  * @return string html code of the preview pannel button bar
  */
-function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $script = null) {
+function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog = '', $script = null) {
     global $langSave, $langEdit, $langCancel, $course_code;
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -176,11 +183,15 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $script = nu
             . '" name="previewform" id="previewform">' . "\n"
     ;
     $out .= '<input type="hidden" name="wiki_content" value="'
-            . htmlspecialchars($content) . '" />' . "\n"
+            . q($content) . '" />' . "\n"
     ;
 
+    $out .= '<input type="hidden" name="changelog" value="'
+            . q($changelog) . '" />' . "\n"
+    ;
+    				
     $out .= '<input type="hidden" name="title" value="'
-            . htmlspecialchars($title)
+            . q($title)
             . '" />' . "\n"
     ;
 
@@ -258,8 +269,8 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
             . '        <td>' . "\n"
             . '        <input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
             . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
-            . '        <input type="hidden" name="groupId" value="' . $groupId . '" />' . "\n"
-            . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . htmlspecialchars($title) . '" />' . "\n"
+            . '        <input type="hidden" name="gid" value="' . $groupId . '" />' . "\n"
+            . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . q($title) . '" />' . "\n"
             . '        </td>' . "\n"
             . '      </tr>' . "\n"
             . '      <tr>' . "\n"
@@ -287,7 +298,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
       . '</div>' . "\n"
       . '</fieldset>' . "\n"
      */
-    ; // atkyritsis, for the moment we skip wiki ACL
+     // atkyritsis, for the moment we skip wiki ACL
 // commenting below and hardwiring the default ACL properties
     /*            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
       . '<legend>' . $langWikiAccessControl . '</legend>' . "\n"
@@ -331,24 +342,32 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
       ; */
 // atkyritsis
 // hardwiring
-    $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[course_edit]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[course_create]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_read]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    if ($groupId == 0) {
+        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_edit]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_create]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    } else {//default values for group wikis
+        $form .= '<input type="hidden" name="acl[group_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[group_edit]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[group_create]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_create]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_read]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    }
 
 // hardwiring over
     //$form .= '<div style="padding: 10px">' . "\n" ;
 
-    if ($groupId != 0) {
-        $form .= '<input type="hidden" name="gidReq" value="' . $groupId . '" />' . "\n";
-    }
-
     $form .= '</td></tr><tr><th>&nbsp;</th><td>';
 
     $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button($_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;action=list', $langCancel) . "\n"
+            . disp_button($_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid=' . $groupId . 'action=list', $langCancel) . "\n"
     ;
 
     $form .= '</td></tr></table></fieldset></form>';

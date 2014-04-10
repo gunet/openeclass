@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -115,6 +115,12 @@ class Wiki2xhtmlArea {
 		tb.btDel('" . $wiki_toolbar['Deleted'] . "');
 		tb.btQ('" . $wiki_toolbar['Inlinequote'] . "');
 		tb.btCode('" . $wiki_toolbar['Code'] . "');
+		tb.btHr('" . $wiki_toolbar['Hr'] . "');
+		tb.addSpace(10);
+		tb.btH1('" . $wiki_toolbar['H1'] . "');
+		tb.btH2('" . $wiki_toolbar['H2'] . "');
+		tb.btH3('" . $wiki_toolbar['H3'] . "');
+		tb.btH4('" . $wiki_toolbar['H4'] . "');
 		tb.addSpace(10);
 		tb.btBr('" . $wiki_toolbar['Linebreak'] . "');
 		tb.addSpace(10);

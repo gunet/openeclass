@@ -139,7 +139,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                       AND M.`contentType` = '" . CTDOCUMENT_ . "'
                       AND M.`course_id` = $course_id";
             $query = db_query($sql);
-            $num = mysql_numrows($query);
+            $num = mysql_num_rows($query);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
 
             if ($num == 0) {
@@ -194,7 +194,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                           AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
                           AND M.`course_id` = $course_id";
                 $query2 = db_query($sql);
-                $num = mysql_numrows($query2);
+                $num = mysql_num_rows($query2);
                 if ($num == 0) {     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     $thisDocumentModule = mysql_fetch_array($query);
                     // determine the default order of this Learning path

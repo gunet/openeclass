@@ -42,7 +42,7 @@ initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-    if (isset($uid) and !$is_member and $statut != USER_GUEST) {
+    if (isset($uid) and !$is_member and $status != USER_GUEST) {
         if ($max_members == 0 or $member_count < $max_members) {
             $sqlReg = db_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id, description = ''");
 
@@ -183,6 +183,7 @@ draw($tool_content, 2);
  * @global type $has_forum
  * @global type $forum_id
  * @global type $documents
+ * @global type $wiki
  * @global type $langForums
  * @global type $group_id
  * @global type $langGroupDocumentsLink
@@ -195,7 +196,7 @@ draw($tool_content, 2);
  * @return string
  */
 function loadGroupTools() {
-    global $has_forum, $forum_id, $documents, $langForums,
+    global $has_forum, $forum_id, $documents, $wiki, $langWiki, $langForums,
     $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,
     $langUsage, $course_code;
 
@@ -209,7 +210,9 @@ function loadGroupTools() {
     if ($documents) {
         $group_tools .= "<li><a href='document.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
     }
-
+    if ($wiki) {
+    	$group_tools .= "<li><a href='../wiki/?course=$course_code&amp;gid=$group_id'>$langWiki</a></li>";
+    }
     if ($is_editor or $is_tutor) {
         $group_tools .= "<li><a href='group_email.php?course=$course_code&amp;group_id=$group_id'>$langEmailGroup</a></li>
                 <li><a href='group_usage.php?course=$course_code&amp;group_id=$group_id'>$langUsage</a></li>";

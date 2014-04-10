@@ -1,7 +1,14 @@
 syntax: regexp
+
+^\.htaccess$
+
 ^courses/
 ^video/
 ^config/.*\.php
 ^html/
+
 ^nbproject/private/
-^\.htaccess
+
+^\.buildpath$
+^\.project$
+^\.settings$

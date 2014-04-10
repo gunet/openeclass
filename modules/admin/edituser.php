@@ -60,8 +60,8 @@ load_js('jquery-ui');
 load_js('jstree');
 load_js('jquery-ui-timepicker-addon.min.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
-<script>
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
 $(function() {
 $('input[name=expires_at]').datetimepicker({
     dateFormat: 'yy-mm-dd', 
@@ -301,24 +301,18 @@ if ($u) {
                     $tool_content .= " " . nice_format($logs['reg_date']) . " ";
                 }
                 $tool_content .= "</td><td align='center'>";
-                switch ($logs['status']) {
-                    case 1:
+                if ($logs['status'] == 1) {
                         $tool_content .= $langTeacher;
                         $tool_content .= "</td><td align='center'>---</td></tr>\n";
-                        break;
-                    case 5:
-                        $tool_content .= $langStudent;
-                        $tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[id]'>
-						<img src='$themeimg/cunregister.png' title='$langUnregCourse'></a></td>
-  						</tr>\n";
-                        break;
-                    default:
-                        $tool_content .= $langVisitor;
-                        $tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[id]'>
-						<img src='$themeimg/cunregister.png' title='$langUnregCourse'></img></a></td></tr>\n";
-                        break;
+                } else {
+                        if ($logs['status'] == 5) {
+                            $tool_content .= $langStudent;
+                        } else {
+                            $tool_content .= $langVisitor;
+                        }
+                        $tool_content .= "</td><td align='center'>" .
+                            icon('cunregister', $langUnregCourse,
+                                 "unreguser.php?u=$u&amp;c=$logs[id]") . "</tr>\n";
                 }
                 $k++;
             }

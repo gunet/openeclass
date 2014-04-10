@@ -45,7 +45,6 @@ if (!session_id()) {
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$active_ui_languages = array('el', 'en', 'es', 'de');
 
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
@@ -88,8 +87,8 @@ if (isset($language)) {
     $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;
-    $active_ui_languages = explode(' ', get_config('active_ui_languages'));
+    $language = $session->language;     
+    
 }
 
 // HTML Purifier
@@ -106,13 +105,7 @@ $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
 define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
-// Set active user interface languages
-$native_language_names = array();
-foreach ($active_ui_languages as $langcode) {
-    if (isset($native_language_names_init[$langcode])) {
-        $native_language_names[$langcode] = $native_language_names_init[$langcode];
-    }
-}
+
 if (!isset($urlSecure)) {
     $urlSecure = $urlServer;
 }
@@ -248,7 +241,7 @@ if (isset($require_current_course) and $require_current_course) {
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
-                                                 course.code=?"
+                                                 course.code=?s"
                 , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$title, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseDepartment, &$currentCourseTitular, &$currentCourseLanguage ) {
             $course_id = $course_info->cid;
             $public_code = $course_info->public_code;
@@ -291,8 +284,8 @@ if (isset($require_current_course) and $require_current_course) {
             $status = USER_TEACHER;
         } else {
             $stat = Database::get()->querySingle("SELECT status FROM course_user
-                                                           WHERE user_id = ? AND
-                                                           course_id = ?", $uid, $course_id);
+                                                           WHERE user_id = ?d AND
+                                                           course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
             }
@@ -336,6 +329,8 @@ if (isset($require_current_course) and $require_current_course) {
     }
 }
 
+// get message array for copyright info
+require_once "license_info.php";
 // ----------------------------------------
 // Course modules array
 // user modules
@@ -440,11 +435,11 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
     if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
-                                             course_id = ?", $course_id);
+                                             course_id = ?d", $course_id);
     } else {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
-                              course_id = ? AND
+                              course_id = ?d AND
                                 module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                   " . MODULE_ID_ASSIGN . ",
                                                   " . MODULE_ID_BBB . ",
@@ -452,7 +447,6 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                                                   " . MODULE_ID_QUESTIONNAIRE . ",
                                                   " . MODULE_ID_FORUM . ",
                                                   " . MODULE_ID_GROUPS . ",
-                                                  " . MODULE_ID_WIKI . ",
                                                   " . MODULE_ID_LP . ")", $course_id);
     }
     $publicModules = array();

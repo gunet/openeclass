@@ -37,10 +37,22 @@ class Session {
     public $course_title;
     public $courses;
     public $language;
+    public $active_ui_languages;
+    public $native_language_names;
 
     public function __construct() {
+        global $native_language_names_init;
+        
+        $this->active_ui_languages = explode(' ', get_config('active_ui_languages'));
+        // Set active user interface languages
+        $this->native_language_names = array();
+        foreach ($this->active_ui_languages as $langcode) {
+            if (isset($native_language_names_init[$langcode])) {
+                $this->native_language_names[$langcode] = $native_language_names_init[$langcode];
+            }
+        }
         if (isset($_REQUEST['localize'])) {
-            $this->language = $_SESSION['langswitch'] = validate_language_code($_REQUEST['localize']);
+            $this->language = $_SESSION['langswitch'] = $this->validate_language_code($_REQUEST['localize']);
         } elseif (isset($_SESSION['langswitch'])) {
             $this->language = $_SESSION['langswitch'];
         } else {
@@ -53,7 +65,7 @@ class Session {
             $this->user_id = 0;
         }
         if (isset($_SESSION['status'])) {
-            $this->status = $_SESSION['status'];
+            $this->status = intval($_SESSION['status']);
         } else {
             $this->status = 0;
         }
@@ -75,6 +87,7 @@ class Session {
         }
         $item_messages = $_SESSION['messages'][$item];
         unset($_SESSION['messages'][$item]);
+        $msg_boxes = '';
         foreach($item_messages as $row => $value){
             $msg_boxes .= "<div class='$row'><ul><li>".implode('</li><li>', $value)."</li></ul></div>";
         }
@@ -86,5 +99,14 @@ class Session {
             $_SESSION['messages'] = array();
         }
         $_SESSION['messages'][$item][$class][] = $message;
+    }
+    
+    // Make sure a language code is valid - if not, default language is Greek
+    public function validate_language_code($langcode, $default = 'el') {     
+        if (array_search($langcode, $this->active_ui_languages) === false) {
+            return $default;
+        } else {
+            return $langcode;
+        }
     }
 }

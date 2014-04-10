@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,16 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-/** ===========================================================================
-  userstats.php
-  @last update: 04-09-2006 by Ophelia Neofytou
-  @authors list:
-  ==============================================================================
-  @Description: user statistics
-
-  ==============================================================================
+/**
+  @file: userstats.php
+  @brief: user statistics
  */
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
@@ -40,6 +33,8 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
+load_js('jquery');
+
 $nameTools = $langUserStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsers);
@@ -50,93 +45,89 @@ if (isDepartmentAdmin())
     validateUserNodes(intval($u), true);
 
 if (!empty($u)) {
-    $sql = db_query("SELECT username FROM user WHERE user_id = $u");
-    $info = mysql_fetch_array($sql);
-    $tool_content .= "<p class='title1'>$langUserStats: <b>$info[username]</b></p>
+    $info = Database::get()->querySingle("SELECT username FROM user WHERE id =?d", $u)->username;
+    $tool_content .= "<p class='title1'>$langUserStats: <b>$info</b></p>
 		<p><b>$langStudentParticipation</b></p>";
-    $sql = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+
+    // display user courses (if any)
+    $foundUsers = false;
+    $k = 0;
+    Database::get()->queryFunc("SELECT DISTINCT a.code, a.title, b.status, a.id
                            FROM course AS a
                            JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
                            LEFT JOIN course_user AS b ON a.id = b.course_id
-                           WHERE b.user_id = $u
-                           ORDER BY b.statut, hierarchy.name");
-
-    // display user courses (if any)
-    if (mysql_num_rows($sql) > 0) {
-        $tool_content .= "
+                           WHERE b.user_id = ?d
+                           ORDER BY b.status, hierarchy.name", function($logs) use (&$foundUsers, &$k, $langCourseCode, $langProperty, $langTeacher, $langStudent, $langVisitor ) {
+        if (!$foundUsers) {
+            $foundUsers = true;
+            $tool_content .= "
 		<table class='tbl_alt' width='99%' align='left'>
 		<tr>
 		  <th colspan='2'><div align='left'>&nbsp;&nbsp;$langCourseCode</div></th>
 		  <th>$langProperty</th>
 		</tr>";
-        $k = 0;
-        for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-            $logs = mysql_fetch_array($sql);
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-            $tool_content .= "<td class='bullet' width='1'></td>
-				<td align=''>" . htmlspecialchars($logs['code']) . " (" . htmlspecialchars($logs['title']) . ")</td>
-				<td><div align='left'>";
-            switch ($logs['statut']) {
-                case USER_TEACHER:
-                    $tool_content .= $langTeacher;
-                    break;
-                case USER_STUDENT:
-                    $tool_content .= $langStudent;
-                    break;
-                default:
-                    $tool_content .= $langVisitor;
-                    break;
-            }
-            $k++;
         }
-        $tool_content .= "</div></td></tr></table>\n";
+        if ($k % 2 == 0) {
+            $tool_content .= "<tr class='even'>";
+        } else {
+            $tool_content .= "<tr class='odd'>";
+        }
+        $tool_content .= "<td class='bullet' width='1'></td>
+				<td align=''>" . htmlspecialchars($logs->code) . " (" . htmlspecialchars($logs->title) . ")</td>
+				<td><div align='left'>";
+        switch ($logs->status) {
+            case USER_TEACHER:
+                $tool_content .= $langTeacher;
+                break;
+            case USER_STUDENT:
+                $tool_content .= $langStudent;
+                break;
+            default:
+                $tool_content .= $langVisitor;
+                break;
+        }
+        $k++;
+    }, $u);
+    if ($foundUsers) {
+        $tool_content .= "</div></td></tr></table>";
     } else {
         $tool_content .= "<p>$langNoStudentParticipation </p>";
     }
+
     $tool_content .= "<p><b>$langTotalVisits</b>: ";
-    // Chart display added - haniotak
     $totalHits = 0;
-    $result = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+    $course_code_result = Database::get()->queryArray("SELECT DISTINCT a.code, a.title, b.status, a.id
                                      FROM course AS a
                                      JOIN course_department ON a.id = course_department.course
                                      JOIN hierarchy ON course_department.department = hierarchy.id
                                 LEFT JOIN course_user AS b ON a.id = b.course_id
-                                    WHERE b.user_id = $u
-                                 ORDER BY b.statut, hierarchy.name");
+                                    WHERE b.user_id = ?d
+                                 ORDER BY b.status, hierarchy.name", $u);
     $hits = array();
-    if (mysql_num_rows($result) > 0) {
-        while ($row = mysql_fetch_assoc($result)) {
-            $course_codes[] = $row['code'];
-            $course_names[$row['code']] = $row['title'];
+    if (sizeof($course_code_result) > 0) {
+        foreach ($course_code_result as $row) {
+            $course_codes[] = $row->code;
+            $course_names[$row->code] = $row->title;
         }
-        mysql_free_result($result);
+        $course_code_result = null;
+
         foreach ($course_codes as $code) {
-            $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
-                                       WHERE user_id = $u AND course_id = " . course_code_to_id($code);
-            $result = db_query($sql);
-            while ($row = mysql_fetch_assoc($result)) {
-                $totalHits += $row['cnt'];
-                $hits[$code] = $row['cnt'];
-            }
-            mysql_free_result($result);
+            Database::get()->queryFunc("SELECT SUM(hits) AS cnt FROM actions_daily
+                                       WHERE user_id = ?d AND course_id =?d", function($row) use (&$totalHits, &$hits, $code) {
+                $totalHits += $row->cnt;
+                $hits[$code] = $row->cnt;
+            }, $u, course_code_to_id($code));
         }
     }
     $tool_content .= "<b>$totalHits</b></p>";
-    $chart = new Plotter();
+    $chart = new Plotter(220, 200);
     $chart->setTitle($langCourseVisits);
     foreach ($hits as $code => $count) {
-        $chart->addPoint($course_names[$code], $count);
+        $chart->growWithPoint($course_names[$code], $count);
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
-    $sql = "SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15";
-
-    $result = db_query($sql);
     $tool_content .= "<p>$langLastUserVisits $info[username]</p>\n";
     $tool_content .= "
 	      <table class='tbl_alt' width='99%'>
@@ -144,12 +135,13 @@ if (!empty($u)) {
 		<th colspan='2'><div align='left'>&nbsp;&nbsp;$langDate</div></th>
 		<th>$langAction</th>
 	      </tr>";
-    $i = 0;
     $Action["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
     $Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
-    while ($r = mysql_fetch_array($result)) {
-        $when = $r["when"];
-        $action = $r["action"];
+
+    $i = 0;
+    Database::get()->queryFunc("SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15", function($r) use (&$i, $Action) {
+        $when = $r->when;
+        $action = $r->action;
         if ($i % 2 == 0) {
             $tool_content .= "<tr>";
         } else {
@@ -160,7 +152,8 @@ if (!empty($u)) {
 			<td align='center'><div align='center'>" . $Action[$action] . "</div></td>
 		      </tr>";
         $i++;
-    }
+    });
+
     $tool_content .= "</table>";
 } else {
     $tool_content .= "<p class='caution'>$langNoUserSelected</p>

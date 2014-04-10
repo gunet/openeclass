@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -47,9 +47,20 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 $style = '';
-$_gid = null;
 
-if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0) {
+//check if groups are enabled for this course
+//if not user will be shown the course wiki page
+$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?d";
+$result = Database::get()->querySingle($sql, $course_id);
+if (is_object($result) && $result->wiki == 1) {
+    $is_groupAllowed = true;
+} else {
+    $is_groupAllowed = false;
+}
+
+$sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
+$result = Database::get()->querySingle($sql, $course_id, $uid);
+if ($result->c > 0) {
     $is_courseMember = true;
 } else {
     $is_courseMember = false;
@@ -62,83 +73,65 @@ if (!isset($_REQUEST['wikiId'])) {
     exit();
 }
 
-// set admin mode and groupId
-
+// set admin mode
 $is_allowedToAdmin = $is_editor;
 
-if ($_gid && $is_groupAllowed) {
-    // group context
-    $grouId = $_gid;
-    $navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
-    $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $_group['name']);
-} elseif ($_gid && !$is_groupAllowed) {
-    die($langNotAllowed);
-} else {
-    // course context
-    $groupId = 0;
-}
-
 // Wiki specific classes and libraries
-require_once 'modules/wiki/lib/class.clarodbconnection.php';
 require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
 require_once 'modules/wiki/lib/class.wiki.php';
+require_once "modules/wiki/lib/class.wikisearchengine.php";
+require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
-require_once 'modules/wiki/lib/lib.wikisql.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/wiki/lib/lib.javascript.php';
 
-// security fix : disable access to other groups wiki
-if (isset($_REQUEST['wikiId'])) {
-    $wikiId = (int) $_REQUEST['wikiId'];
-
-    // Database nitialisation
-
-    $tblList = array();
-    $tblList["wiki_properties"] = "wiki_properties";
-    $tblList["wiki_pages"] = "wiki_pages";
-    $tblList["wiki_pages_content"] = "wiki_pages_content";
-    $tblList["wiki_acls"] = "wiki_acls";
-
-    $con = new ClarolineDatabaseConnection();
-
-    $sql = "SELECT `group_id` "
-            . "FROM `" . $tblList["wiki_properties"] . "` "
-            . "WHERE `id` = " . $wikiId
-            . " AND `course_id` = $course_id"
-    ;
-
-    $result = $con->getRowFromQuery($sql);
-
-    $wikiGroupId = (int) $result['group_id'];
-
-    if (isset($_gid) && $_gid != $wikiGroupId) {
-        die($langNotAllowed);
-    } elseif (!isset($_gid) && $result['group_id'] != 0) {
-        die($langNotAllowed);
-    }
-}
-
 // set request variables
-$wikiId = ( isset($_REQUEST['wikiId']) ) ? (int) $_REQUEST['wikiId'] : 0;
+$wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
 
-// Database nitialisation
-$config = array();
-$config["tbl_wiki_properties"] = $tblList["wiki_properties"];
-$config["tbl_wiki_pages"] = $tblList["wiki_pages"];
-$config["tbl_wiki_pages_content"] = $tblList["wiki_pages_content"];
-$config["tbl_wiki_acls"] = $tblList["wiki_acls"];
+// security fix : disable access to other groups wiki
+// and to wikis from non-existent groups or disabled group wikis
+$sql = "SELECT `group_id` "
+        . "FROM `wiki_properties` "
+        . "WHERE `id` = ?d"
+        . " AND `course_id` = ?d"
+;
 
-$con = new ClarolineDatabaseConnection();
+$result = Database::get()->querySingle($sql, $wikiId, $course_id);
 
-// auto create wiki in devel mode
-if (defined("DEVEL_MODE") && ( DEVEL_MODE == true )) {
-    init_wiki_tables($con, false);
+if (is_object($result)) {
+    $groupId = $result->group_id;
+    if ($groupId != 0) {
+        
+        if ($is_groupAllowed) {
+            //check if user is group member
+            $sql = "SELECT `user_id` FROM `group_members`  WHERE user_id = ?d and group_id = ?d";
+            $result = Database::get()->querySingle($sql, $uid, $groupId);
+            if (is_object($result)) {
+            	$is_groupMember = true;
+            } else {
+            	$is_groupMember = false;
+            }
+            
+            $sql = "SELECT `name` FROM `group` WHERE `id` = ?d";
+            $result = Database::get()->querySingle($sql, $groupId);
+            if (is_object($result)) {
+            	$group_name = $result->name;
+            	$navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
+            	$navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
+            }    
+        } else {//redirect user to course wiki
+            header("Location: index.php?course=$course_code");
+            exit();
+        }
+    }
+} else {
+    $groupId = 0;
 }
 
 // Objects instantiation
-$wikiStore = new WikiStore($con, $config);
+$wikiStore = new WikiStore();
 
 if (!$wikiStore->wikiIdExists($wikiId)) {
     die($langWikiInvalidWikiId);
@@ -146,7 +139,7 @@ if (!$wikiStore->wikiIdExists($wikiId)) {
 }
 
 $wiki = $wikiStore->loadWiki($wikiId);
-$wikiPage = new WikiPage($con, $config, $wikiId);
+$wikiPage = new WikiPage($wikiId);
 $wikiRenderer = new Wiki2xhtmlRenderer($wiki);
 
 $accessControlList = $wiki->getACL();
@@ -160,7 +153,7 @@ $is_allowedToCreate = false;
 
 // set user access rights using user status and wiki access control list
 
-if ($_gid && $is_groupAllowed) {
+if ($groupId != 0 && $is_groupAllowed) {
     // group_context
     if (is_array($accessControlList)) {
         $is_allowedToRead = $is_allowedToAdmin || ( $is_groupMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
@@ -190,15 +183,16 @@ if ($_gid && $is_groupAllowed) {
 
 if ($is_allowedToEdit || $is_allowedToCreate) {
     $valid_actions = array("edit", "preview", "save"
-        , "show", "recent", "diff", "all", "history"
+        , "delete", "show", "recent", "diff", "all", "history"
+        , "rqSearch", "exSearch"
     );
 } else {
     $valid_actions = array("show", "recent", "diff", "all"
-        , "history"
+        , "history", "rqSearch", "exSearch"
     );
 }
 
-$_CLEAN = filter_by_key('action', $valid_actions, "R", true);
+$_CLEAN = filter_by_key('action', $valid_actions, "R", false);
 
 $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'show';
 
@@ -206,13 +200,15 @@ $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'show';
 
 $creatorId = $uid;
 
-$versionId = ( isset($_REQUEST['versionId']) ) ? (int) $_REQUEST['versionId'] : 0;
+$versionId = ( isset($_REQUEST['versionId']) ) ? intval($_REQUEST['versionId']) : 0;
 
 $wiki_title = ( isset($_REQUEST['title']) ) ? strip_tags($_REQUEST['title']) : '';
 
+$changelog = ( isset($_POST['changelog']) ) ? strip_tags($_POST['changelog']) : '';
+
 if ($action == "diff") {
-    $old = ( isset($_REQUEST['old']) ) ? (int) $_REQUEST['old'] : 0;
-    $new = ( isset($_REQUEST['new']) ) ? (int) $_REQUEST['new'] : 0;
+    $old = ( isset($_REQUEST['old']) ) ? intval($_REQUEST['old']) : 0;
+    $new = ( isset($_REQUEST['new']) ) ? intval($_REQUEST['new']) : 0;
 }
 
 // get content
@@ -222,7 +218,7 @@ if ($action == "edit") {
         if (!get_magic_quotes_gpc()) {
             $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
         } else {
-            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : stripslashes($_REQUEST['wiki_content']);
+            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
         }
     } else {
         $content = '';
@@ -231,7 +227,7 @@ if ($action == "edit") {
     if (!get_magic_quotes_gpc()) {
         $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
     } else {
-        $content = ( isset($_REQUEST['wiki_content']) ) ? stripslashes($_REQUEST['wiki_content']) : '';
+        $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
     }
 }
 
@@ -243,10 +239,6 @@ if ($wiki_title === '') {
 
     if ($wikiStore->pageExists($wikiId, $wiki_title)) {
         // do nothing
-    }
-    // auto create wiki in devel mode
-    elseif ((!$wikiStore->pageExists($wikiId, $wiki_title) ) && ( defined("DEVEL_MODE") && ( DEVEL_MODE == true ) )) {
-        init_wiki_main_page($con, $wikiId, $creatorId);
     } else {
         // something weird's happened
         die("$langWrongWikiPageTitle");
@@ -259,134 +251,180 @@ if ($wiki_title === '') {
 $message = '';
 
 switch ($action) {
+    case 'rqSearch': {
+        break;
+    }
+    case 'exSearch': {
+        $pattern = isset($_REQUEST['searchPattern']) ? trim($_REQUEST['searchPattern']) : null;
+        
+        if (!empty($pattern)) {
+            $searchEngine = new WikiSearchEngine();
+            $searchResult = $searchEngine->searchInWiki($pattern, $wikiId, CLWIKI_SEARCH_ANY);
+
+            if (is_null( $searchResult )) {
+                $searchResult = array();
+            }
+        
+            $wikiList = $searchResult;
+        }
+        else {
+            $message = $langWikiSearchMissingKeywords;
+            $style = 'caution';
+            $action = 'rqSearch';
+        }
+        break;
+    }
     // show differences
     case 'diff': {
-            include 'modules/wiki/lib/lib.diff.php';
+        include 'modules/wiki/lib/lib.diff.php';
 
-            if ($wikiStore->pageExists($wikiId, $wiki_title)) {
-                // older version
-                $wikiPage->loadPageVersion($old);
-                $old = $wikiPage->getContent();
-                $oldTime = $wikiPage->getCurrentVersionMtime();
-                $oldEditor = $wikiPage->getEditorId();
+        if ($wikiStore->pageExists($wikiId, $wiki_title)) {
+            // older version
+            $wikiPage->loadPageVersion($old);
+            $old = $wikiPage->getContent();
+            $oldTime = $wikiPage->getCurrentVersionMtime();
+            $oldEditor = $wikiPage->getEditorId();
 
-                // newer version
-                $wikiPage->loadPageVersion($new);
-                $new = $wikiPage->getContent();
-                $newTime = $wikiPage->getCurrentVersionMtime();
-                $newEditor = $wikiPage->getEditorId();
+            // newer version
+            $wikiPage->loadPageVersion($new);
+            $new = $wikiPage->getContent();
+            $newTime = $wikiPage->getCurrentVersionMtime();
+            $newEditor = $wikiPage->getEditorId();
 
-                // get differences
-                $diff = '<table style="border: 0;">' . diff($old, $new, true, 'format_table_line') . '</table>';
-            }
-
-            break;
+            // get differences
+            $diff = '<table style="border: 0;">' . diff($old, $new, true, 'format_table_line') . '</table>';
         }
+        break;
+    }
+    // page history
+    //case 'history':
     // recent changes
     case 'recent': {
-            $recentChanges = $wiki->recentChanges();
-            break;
-        }
+        $recentChanges = $wiki->recentChanges();
+        break;
+    }
     // all pages
     case 'all': {
-            $allPages = $wiki->allPages();
-            break;
-        }
+        $allPages = $wiki->allPages();
+        break;
+    }
     // edit page content
     case 'edit': {
+        
+        $lock_manager = new LockManager();
+        
+        //require a lock for this page
+        $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
+        
+        if ($gotLock) {//succesfully locked page
+            
             if ($wikiStore->pageExists($wikiId, $wiki_title)) {
-                if ($versionId == 0) {
-                    $wikiPage->loadPage($wiki_title);
-                } else {
-                    $wikiPage->loadPageVersion($versionId);
-                }
-                if ($content == '') {
-                    $content = $wikiPage->getContent();
-                }
-                if ($content == "__CONTENT__EMPTY__") {
-                    $content = '';
-                }
-
-                $wiki_title = $wikiPage->getTitle();
-                $_SESSION['wikiLastVersion'] = $wikiPage->getLastVersionId();
+            	if ($versionId == 0) {
+            		$wikiPage->loadPage($wiki_title);
+            	} else {
+            		$wikiPage->loadPageVersion($versionId);
+            	}
+            	if ($content == '') {
+            		$content = $wikiPage->getContent();
+            	}
+            	if ($content == "__CONTENT__EMPTY__") {
+            		$content = '';
+            	}
+            
+            	$wiki_title = $wikiPage->getTitle();
             } else {
-                if ($content == '') {
-                    $message = $langWikiNoContent;
-                    $style = 'caution';
-                }
+            	if ($content == '') {
+            		$message = $langWikiNoContent;
+            		$style = 'caution';
+            	}
             }
-            break;
+        } else {//already locked by another user
+            $action = 'conflict';
         }
+        
+        break;
+    }
     // view page
     case 'show': {
-            unset($_SESSION['wikiLastVersion']);
-
-            if ($wikiStore->pageExists($wikiId, $wiki_title)) {
-                if ($versionId == 0) {
-                    $wikiPage->loadPage($wiki_title);
-                } else {
-                    $wikiPage->loadPageVersion($versionId);
-                }
-
-                $content = $wikiPage->getContent();
-
-                $wiki_title = $wikiPage->getTitle();
+        if ($wikiStore->pageExists($wikiId, $wiki_title)) {
+            if ($versionId == 0) {
+                $wikiPage->loadPage($wiki_title);
             } else {
-                $message = $langWikiPageNotFound;
-                $style = 'caution';
+                $wikiPage->loadPageVersion($versionId);
             }
-            break;
+
+            $content = $wikiPage->getContent();
+
+            $wiki_title = $wikiPage->getTitle();
+        } else {
+            $message = $langWikiPageNotFound;
+            $style = 'caution';
         }
+        break;
+    }
     // save page
     case 'save': {
-            if (isset($content)) {
-                $time = date('Y-m-d H:i:s');
-
-                if ($wikiPage->pageExists($wiki_title)) {
-                    $wikiPage->loadPage($wiki_title);
-                    if ($content == $wikiPage->getContent()) {
-                        unset($_SESSION['wikiLastVersion']);
-
-                        $message = $langWikiIdenticalContent;
-                        $style = 'caution';
-                        $action = 'show';
-                    } else {
-                        if (isset($_SESSION['wikiLastVersion']) && $wikiPage->getLastVersionId() != $_SESSION['wikiLastVersion']) {
-                            $action = 'conflict';
-                        } else {
-                            $wikiPage->edit($creatorId, $content, $time, true);
-                            unset($_SESSION['wikiLastVersion']);
-                            if ($wikiPage->hasError()) {
-                                $message = "Database error : " . $wikiPage->getError();
-                                $style = "caution";
-                            } else {
-                                $message = $langWikiPageSaved;
-                                $style = "success";
-                            }
-                            $action = 'show';
-                        }
-                    }
-                } else {
-                    $wikiPage->create($creatorId, $wiki_title, $content, $time, true);
-                    if ($wikiPage->hasError()) {
-                        $message = 'Database error : ' . $wikiPage->getError();
-                        $style = 'caution';
-                    } else {
-                        $message = $langWikiPageSaved;
-                        $style = 'success';
-                    }
-                    $action = 'show';
-                }
+        $lock_manager = new LockManager();
+        
+        //require a lock for this page
+        $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
+        
+        if ($gotLock) {//a lock was acquired, so we can proceed in saving
+            if(isset($_REQUEST['current']) AND $_REQUEST['current']=='yes') {
+            	$wikiPage->loadPageVersion($versionId);
+            	$content = $wikiPage->getContent();
+            	$changelog = $langWikiPageRevertedVersion;
+            	$versionId = 0;
             }
-            break;
+            
+            if (isset($content)) {
+            	$time = date('Y-m-d H:i:s');
+            
+            	if ($wikiPage->pageExists($wiki_title)) {
+            		$wikiPage->loadPage($wiki_title);
+            		if ($content == $wikiPage->getContent()) {
+            
+            			$message = $langWikiIdenticalContent;
+            			$style = 'caution';
+            			$action = 'show';
+            		} else {
+            			$wikiPage->edit($creatorId, $content, $changelog, $time, true);
+            			if ($wikiPage->hasError()) {
+            				$message = "Database error : " . $wikiPage->getError();
+            				$style = "caution";
+            			} else {
+            				$message = $langWikiPageSaved;
+            				$style = "success";
+            			}
+            			$action = 'show';
+            		}
+            	} else {
+            		$wikiPage->create($creatorId, $wiki_title, $content, $changelog, $time, true);
+            		if ($wikiPage->hasError()) {
+            			$message = 'Database error : ' . $wikiPage->getError();
+            			$style = 'caution';
+            		} else {
+            			$message = $langWikiPageSaved;
+            			$style = 'success';
+            		}
+            		$action = 'show';
+            	}
+            }
+            //release the lock after finishing saving
+            $lock_manager->releaseLock($wiki_title, $wikiId);
+        } else {//failed to lock, unable to save
+            $action = 'conflict';
         }
+        
+        break;
+    }
     // page history
     case 'history': {
-            $wikiPage->loadPage($wiki_title);
-            $wiki_title = $wikiPage->getTitle();
-            $history = $wikiPage->history(0, 0, 'DESC');
-            break;
-        }
+        $wikiPage->loadPage($wiki_title);
+        $wiki_title = $wikiPage->getTitle();
+        $history = $wikiPage->history(0, 0, 'DESC');
+        break;
+    }
 }
 
 // change to use empty page content
@@ -408,7 +446,7 @@ $head_content .= "<script type=\"text/javascript\">"
 ;
 //navigation bar
 if (!add_units_navigation()) {
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langWiki);
+    $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;gid=' . $groupId, 'name' => $langWiki);
     $navigation[] = array('url' => 'page.php?course=' . $course_code . '&amp;wikiId=' . $wikiId . '&amp;action=show', 'name' => $wiki->getTitle());
 }
 
@@ -430,6 +468,14 @@ switch ($action) {
             $nameTools = $langWikiRecentChanges;
             break;
         }
+    case "rqSearch": {
+        	$nameTools = $langSearch;
+        	break;
+        }
+    case "exSearch": {
+        	$nameTools = $langSearch;
+        	break;
+        }   
     case "history": {
             $dispTitle = ( $wiki_title == "__MainPage__" ) ? $langWikiMainPage : $wiki_title;
             $navigation[] = array('url' => 'page.php?course=' . $course_code . '&amp;action=show&amp;wikiId='
@@ -448,33 +494,37 @@ switch ($action) {
 $toolTitle = array();
 $toolTitle['mainTitle'] = sprintf($langWikiTitlePattern, $wiki->getTitle());
 
-if ($_gid) {
-    $toolTitle['supraTitle'] = $_group['name'];
+if ($groupId != 0) {
+    $toolTitle['supraTitle'] = $group_name;
 }
 
 switch ($action) {
     case "all": {
-            $toolTitle['subTitle'] = $langWikiAllPages;
-            break;
-        }
+        $toolTitle['subTitle'] = $langWikiAllPages;
+        break;
+    }
     case "recent": {
-            $toolTitle['subTitle'] = $langWikiRecentChanges;
-            break;
-        }
+        $toolTitle['subTitle'] = $langWikiRecentChanges;
+        break;
+    }
     case "history": {
-            $toolTitle['subTitle'] = $langWikiPageHistory;
-            break;
-        }
+        $toolTitle['subTitle'] = $langWikiPageHistory;
+        break;
+    }
+    case 'rqSearch':
+    case 'exSearch': {
+        $toolTitle['subTitle'] = $langWikiSearchInPages;
+    }
     default: {
-            $subTitle = ( $wiki_title == "__MainPage__" ) ? $langWikiMainPage : $wiki_title;
-            break;
-        }
+        $subTitle = ( $wiki_title == "__MainPage__" ) ? $langWikiMainPage : $wiki_title;
+        break;
+    }
 }
 
 if (!empty($message)) {
     $tool_content .= "<table width=\"99%\">
 	<tbody><tr>
-	<td class='success'>
+	<td class='$style'>
 	    <p><b>$message</b></p>
 	  </td>
 	</tr>
@@ -482,8 +532,6 @@ if (!empty($message)) {
 	</table><br />";
 }
 
-// Check for javascript
-$javascriptEnabled = is_javascript_enabled();
 // user is not allowed to read this page
 
 if (!$is_allowedToRead) {
@@ -520,17 +568,24 @@ $tool_content .= '          <li>'
 ;
 
 $tool_content .= '<li>'
-        . '<img src="' . $themeimg . '/list.png" align="middle" />&nbsp;<a class="claroCmd" href="' . 'index.php?course=' . $course_code
+        . '<img src="' . $themeimg . '/list.png" align="middle" />&nbsp;<a class="claroCmd" href="' . 'index.php?course=' . $course_code . '&amp;gid=' . $groupId
         . '">'
         . $langWikiList . '</a></li>' . "\n"
 ;
 
+$tool_content .= '          <li>'
+        . '<img src="' . $themeimg . '/search.png" align="middle" />&nbsp;<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+        . '&amp;wikiId=' . $wiki->getWikiId()
+        . '&amp;action=rqSearch">'
+        . $langSearch . '</a></li>' . "\n"
+;
+
 $tool_content .= '</ul></div>';
 
-if ($action != 'recent' && $action != 'all') {
+if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {
 
     $tool_content .= '<p align="right">';
-    if ($action == "edit" || $action == "diff" || $action == "history") {
+    if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
         $tool_content .= ''
                 . '<img src="' . $themeimg . '/back.png" align="middle" />&nbsp;'
                 . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
@@ -554,6 +609,19 @@ if ($action != 'recent' && $action != 'all') {
                     . '">'
                     . $langWikiEditPage . '</a>'
             ;
+            
+            if($wiki_title != "__MainPage__" and $is_editor) { //only teacher can delete a wiki page
+                $tool_content .= '&nbsp;&nbsp;&nbsp;'
+                    . '<img src="'. $themeimg .'/delete.png" align="middle" />&nbsp;'
+                    . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] .'?course='. $course_code
+                    . '&amp;wikiId=' . $wiki->getWikiId()
+                    . '&amp;action=delete'
+                    . '&amp;title=' . rawurlencode($wiki_title)
+                    . '" onClick="return confirm(\''.$langWikiDeletePageWarning.'\');">'
+                    . $langWikiDeletePage.'</a>'
+                ;
+            }
+            
         }
     }
 
@@ -567,6 +635,19 @@ if ($action != 'recent' && $action != 'all') {
                 . '&amp;title=' . rawurlencode($wiki_title)
                 . '">'
                 . $langWikiPageHistory . '</a>'
+        ;
+    }
+    
+    if ( $action == "show" )
+    {
+        $tool_content .= '&nbsp;&nbsp;&nbsp;'
+            . '<img src="' . $themeimg . '/printer.png" align="middle" />&nbsp;'
+            . '<a target="_blank" class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'].'?course=' . $course_code
+            . '&amp;wikiId=' . $wiki->getWikiId()
+            . '&amp;action=show&amp;printable=yes&amp;versionId=' . $versionId
+            . '&amp;title=' . rawurlencode($wiki_title)
+            . '">'
+       		. $langWikiPagePrintable . '</a>'
         ;
     }
 
@@ -584,64 +665,13 @@ if ($action != 'recent' && $action != 'all') {
 }
 
 switch ($action) {
-    case "conflict": {
-            if ($wiki_title === '__MainPage__') {
-                //$displaytitle = $langWikiMainPage;
-                $displaytitle = '';
-            } else {
-                //$displaytitle = $wiki_title;
-                $displaytitle = '';
-            }
-
-            $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $displaytitle
-                    . ' : ' . $langWikiEditConflict
-                    . '</h2>'
-                    . "\n"
-            ;
-            $tool_content .= '</div>' . "\n";
-            $message = $langWikiConflictHowTo;
-            $tool_content .= "<div class='caution'>$message</div></br />";
-            $tool_content .= '<form id="editConflict" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
-            $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
-                    . ' cols="80" rows="15" wrap="virtual">'
-            ;
-            $tool_content .= q($content);
-            $tool_content .= '</textarea><br /><br />' . "\n";
-            $tool_content .= '<div>' . "\n";
-            $tool_content .= '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n";
-            $tool_content .= '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n";
-            $tool_content .= '<input type="submit" name="action[edit]" value="' . $langWikiEditLastVersion . '" />' . "\n";
-            $url = $_SERVER['SCRIPT_NAME']
-                    . '?course=' . $course_code
-                    . '&amp;wikiId=' . $wikiId
-                    . '&amp;title=' . $wiki_title
-                    . '&amp;action=show'
-            ;
-            $tool_content .= disp_button($url, $langCancel) . "\n";
-            $tool_content .= '</div>' . "\n";
-            $tool_content .= '</form>';
-            break;
-        }
     case "diff": {
-            if ($wiki_title === '__MainPage__') {
-                //$displaytitle = $langWikiMainPage;
-                $displaytitle = '';
-            } else {
-                //$displaytitle = $wiki_title;
-                $displaytitle = '';
-            }
-
-            $oldTime = claro_format_locale_date($dateTimeFormatLong
-                    , strtotime($oldTime))
-            ;
+            $oldTime = nice_format($oldTime, true);
 
             $userInfo = user_get_data($oldEditor);
             $oldEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
 
-            $newTime = claro_format_locale_date($dateTimeFormatLong
-                    , strtotime($newTime))
-            ;
+            $newTime = nice_format($newTime, TRUE);
 
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
@@ -656,8 +686,7 @@ switch ($action) {
             ;
 
             $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $displaytitle
-                    . $versionInfo
+            $tool_content .= '<h2>' . $versionInfo
                     . '</h2>'
                     . "\n"
             ;
@@ -683,22 +712,20 @@ switch ($action) {
                 $tool_content .= '<ul>' . "\n";
 
                 foreach ($recentChanges as $recentChange) {
-                    $pgtitle = ( $recentChange['title'] == "__MainPage__" ) ? $langWikiMainPage : $recentChange['title']
+                    $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title
                     ;
 
                     $entry = '<strong><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
-                            . $wikiId . '&amp;title=' . rawurlencode($recentChange['title'])
+                            . $wikiId . '&amp;title=' . rawurlencode($recentChange->title)
                             . '&amp;action=show"'
                             . '>' . $pgtitle . '</a></strong>'
                     ;
 
-                    $time = claro_format_locale_date($dateTimeFormatLong
-                            , strtotime($recentChange['last_mtime']))
-                    ;
+                    $time = nice_format($recentChange->last_mtime,TRUE);
 
-                    $userInfo = user_get_data($recentChange['editor_id']);
+                    $userInfo = user_get_data($recentChange->editor_id);
 
-                    $userStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
+                    $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
                     $userUrl = $userStr;
                     $tool_content .= '<li>'
                             . sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl)
@@ -728,16 +755,16 @@ switch ($action) {
                 $tool_content .= '<ul>' . "\n";
 
                 foreach ($allPages as $page) {
-                    if ($page['title'] == "__MainPage__") {
+                    if ($page->title == "__MainPage__") {
                         // skip main page
                         continue;
                     }
 
-                    $pgtitle = rawurlencode($page['title']);
+                    $pgtitle = rawurlencode($page->title);
 
                     $link = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
-                            . '>' . $page['title'] . '</a>'
+                            . '>' . $page->title . '</a>'
                     ;
 
                     $tool_content .= '<li>' . $link . '</li>' . "\n";
@@ -746,6 +773,27 @@ switch ($action) {
             }
             break;
         }
+    case "conflict": {
+   
+    	$tool_content .= '<div class="wikiTitle">' . "\n";
+    	$tool_content .= '<h2>' . $langWikiEditLock
+    	. '</h2>'
+        . "\n"
+    	;
+    	
+		$tool_content .= '</div>' . "\n";
+		$message = $langWikiLockInfo;
+		$tool_content .= "<div class='caution'>$message</div></br />";
+
+
+		if (isset($content) && $content != '') {
+		    //proceed to edit for, in order to save the content later
+			$action = 'edit';
+			$pre_action = 'conflict';
+		} else {
+		    break;
+		}
+    }    
     // edit page
     case "edit": {
             if (!$wiki->pageExists($wiki_title) && !$is_allowedToCreate) {
@@ -754,13 +802,83 @@ switch ($action) {
                 $tool_content .= $langWikiNotAllowedToEdit;
             } else {
                 $script = $_SERVER['SCRIPT_NAME'] . "?course=$course_code";
-
-                $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $script
+                
+                //Do not show progress bar if a lock conflict was detected
+                if (!isset($pre_action) || $pre_action != 'conflict') {
+                    //add lock time progress bar
+                    load_js('jquery');
+                    
+                    $head_content .= "<script type='text/javascript'>
+                        function secondsToHms(d) {
+                        d = Number(d);
+                        var h = Math.floor(d / 3600);
+                        var m = Math.floor(d % 3600 / 60);
+                        var s = Math.floor(d % 3600 % 60);
+                        return ((h > 0 ? h + \":\" : \"\") + (m > 0 ? (h > 0 && m < 10 ? \"0\" : \"\") + m + \":\" : \"0:\") + (s < 10 ? \"0\" : \"\") + s); }
+                    </script>\n\n";
+                    
+                    $head_content .= "<script type='text/javascript'>
+                                        	function countdown(callback) {
+                                        	    var bar = document.getElementById('progress'),
+                                        	    timer = document.getElementById('progresstime'),
+                                        	    time = max = ".($lock_manager->lock_duration-5).",
+                                        	            
+                                        	    url = 'lib/confirmlock.php'
+                                        	    data = { uid : ".$uid.", page_title : \"".rawurlencode($wiki_title)."\", wiki_id : ".$wikiId." }
+                                        	            
+                                        	    int = setInterval(function() {    
+                                        	    	timer.innerHTML = secondsToHms(time);
+                                        	        bar.style.width = Math.floor(100 * time-- / max) + '%';
+                                        	        if (time + 1 == 0) {
+                                        	            clearInterval(int);
+                                        	            // 600ms - width animation time
+                                        	            callback && setTimeout(callback, 600);
+                                        	        }
+                                        	        if ((max - time) % 25 == 0) {//ajax polling to keep lock alive   
+                                        	            $.post(url, data);    
+                                        	        }
+                                        	    }, 1000);
+                                        	}
+                                        	            
+                                        	$(document).ready(function(){
+                                        	    countdown(function() {
+                                        	        alert('".$langWikiLockTimeEnd."');
+                                        	    });
+                                            })
+                                    </script>\n";
+                    
+                    $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span></div>
+                                      <div class='progress'>
+                                        <div class='bar' id='progress'></div>
+                                      </div>";
+                    $tool_content .= "<noscript><div><img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId' /></div></noscript>";
+                }
+                
+                $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
                         , true, false)
                 ;
             }
 
             break;
+        }
+        //delete page
+        case "delete": {
+             if($wiki_title != "__MainPage__" and $is_editor) { //only a teacher can delete a page
+                 if ($wikiStore->pageExists($wikiId, $wiki_title)) {
+                     $wikiPage->loadPage($wiki_title);
+                     if ($wikiPage->delete()) {
+                         $message = "<p class='success'>$langWikiPageDeleted</p>";
+                         $tool_content .= $message . "<br/>";
+                     } else {
+                         $message = "<p class='caution'>$langWikiDeletePageError</p>";
+                         $tool_content .= $message . "<br/>";
+                     }
+                 } else {
+                     $message = "<p class='caution'>$langWikiPageNotFound</p>";
+                     $tool_content .= $message . "<br/>";
+                 }
+             }
+             break;
         }
     // page preview
     case "preview": {
@@ -769,7 +887,7 @@ switch ($action) {
             }
 
             $tool_content .= claro_disp_wiki_preview($wikiRenderer, $wiki_title, $content);
-            $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content);
+            $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content, $changelog);
             break;
         }
     // view page
@@ -777,6 +895,13 @@ switch ($action) {
             if ($wikiPage->hasError()) {
                 $tool_content .= $wikiPage->getError();
             } else {
+                
+                //unlock after edit cancellation
+                //only if current user is the lock owner (to avoid unlocking with GET)
+                $lock_manager = new LockManager();
+                if ($lock_manager->getLockOwner($wiki_title, $wikiId) == $uid) {
+                    $lock_manager->releaseLock($wiki_title, $wikiId);
+                } 
 
                 // get localized value for wiki main page title
                 if ($wiki_title === '__MainPage__') {
@@ -791,12 +916,11 @@ switch ($action) {
                 if ($versionId != 0) {
                     $editorInfo = user_get_data($wikiPage->getEditorId());
 
-                    $editorStr = q($editorInfo['firstname']) . "&nbsp;" . q($editorInfo['lastname']);
+                    $editorStr = q($editorInfo['givenname']) . "&nbsp;" . q($editorInfo['username']);
 
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
 
-                    $mtime = claro_format_locale_date($dateTimeFormatLong
-                            , strtotime($wikiPage->getCurrentVersionMtime()))
+                    $mtime = nice_format($wikiPage->getCurrentVersionMtime(), true);
                     ;
 
                     $versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
@@ -807,113 +931,218 @@ switch ($action) {
                 } else {
                     $versionInfo = '';
                 }
-
-                $tool_content .= '<div class="wikiTitle">' . "\n";
-                $tool_content .= '<h2>' . $displaytitle
-                        . $versionInfo
-                        . '</h2>'
-                        . "\n"
-                ;
-                $tool_content .= '</div>' . "\n";
-
-                $tool_content .= '<div class="wiki2xhtml">' . "\n";
-                $tool_content .= $wikiRenderer->render($content);
-                $tool_content .= '</div>' . "\n";
-
-                $tool_content .= '<div style="clear:both;"><!-- spacer --></div>' . "\n";
+                
+                if(isset($_GET['printable']) and $_GET['printable']=="yes") {
+                    if ($versionId == 0) {
+                	    $wikiPage->loadPage($title);
+                	}
+                    else {
+                        $wikiPage->loadPageVersion($versionId);
+                    }
+                    
+                    $htmltitle = ($title=='__MainPage__') ? $langWikiMainPage : $title;
+                    
+                    $style = '<style type="text/css">
+                            table { border: black solid 1px; }
+                            td { border: black solid 1px; }
+                              </style>';
+                    $printable_content = '<html><head><meta charset="utf-8"><title>'.
+                                          $htmltitle.'</title>'.
+                                          $style.'</head><body>';
+                    
+                    $printable_content .= '<h1>'.$htmltitle. '</h1>'."\n";
+                    
+                    $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
+                    //remove the toc script (if it exists) with preg_replace
+                    $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
+                    $printable_content .= '<hr/>';
+                		
+                    $editorInfo = user_get_data($wikiPage->getEditorId());
+                    $editorStr = $editorInfo['givenname'] . "&nbsp;" . $editorInfo['surname'];
+                    $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
+                
+                    $cur_ver_time = $wikiPage->getCurrentVersionMtime();
+                    $time = explode(" ", $cur_ver_time);
+                    
+                    $mtime = nice_format($wikiPage->getCurrentVersionMtime(), TRUE);
+                
+                	$versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
+                	$printable_content .= $versionInfo;
+                	$printable_content .= '</body></html>';
+                }
+                else {
+                    $tool_content .= '<div class="wikiTitle">' . "\n";
+                    $tool_content .= '<h2>'.$displaytitle
+                    . $versionInfo
+                    . '</h2>'
+                    . "\n";
+                    $tool_content .= '</div>' . "\n";               
+                    $tool_content .= '<div id="mainContent" class="wiki2xhtml">' . "\n";
+                    $tool_content .= $wikiRenderer->render($content);
+                    $tool_content .= '</div>' . "\n";
+                
+                    $tool_content .= '<div style="clear:both;"><!-- spacer --></div>' . "\n";
+                }
             }
 
             break;
         }
     case "history": {
-            if ($wiki_title === '__MainPage__') {
-                //$displaytitle = $langWikiMainPage;
-                $displaytitle = '';
-            } else {
-                //$displaytitle = $wiki_title;
-                $displaytitle = '';
-            }
+        if ($wiki_title === '__MainPage__') {
+            //$displaytitle = $langWikiMainPage;
+            $displaytitle = '';
+        } else {
+            //$displaytitle = $wiki_title;
+            $displaytitle = '';
+        }
 
-            $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $displaytitle . '</h2>' . "\n";
-            $tool_content .= '</div>' . "\n";
+        $tool_content .= '<div class="wikiTitle">' . "\n";
+        $tool_content .= '<h2>' . $displaytitle . '</h2>' . "\n";
+        $tool_content .= '</div>' . "\n";
 
-            $tool_content .= '<form id="differences" method="GET" action="'
-                    . $_SERVER['SCRIPT_NAME']
-                    . '">'
-                    . "\n"
-            ;
+        $tool_content .= '<form id="differences" method="GET" action="'
+                . $_SERVER['SCRIPT_NAME']
+                . '">'
+                . "\n"
+        ;
 
-            $tool_content .= '<div>' . "\n"
-                    . '<input type="hidden" name="course" value="' . $course_code . '" />' . "\n"
-                    . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
-                    . '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n"
-                    . '<input type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" />' . "\n"
-                    . '</div>' . "\n"
-            ;
+        $tool_content .= '<div>' . "\n"
+                . '<input type="hidden" name="course" value="' . $course_code . '" />' . "\n"
+                . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
+                . '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n"
+                . '<input type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" />' . "\n"
+                . '</div>' . "\n"
+        ;
 
-            $tool_content .= '<table style="border: 0px;">' . "\n";
+        $tool_content .= '<table style="border: 0px;">' . "\n";
 
-            if (is_array($history)) {
-                $firstPass = true;
+        if (is_array($history)) {
+            $firstPass = true;
 
-                foreach ($history as $version) {
-                    $tool_content .= '<tr>' . "\n";
+            foreach ($history as $version) {
+                $tool_content .= '<tr>' . "\n";
 
-                    if ($firstPass == true) {
-                        $checked = ' checked="checked"';
-                        $firstPass = false;
-                    } else {
-                        $checked = '';
-                    }
-
-                    $tool_content .= '<td>'
-                            . '<input type="radio" name="old" value="' . $version['id'] . '"' . $checked . ' />' . "\n"
-                            . '</td>'
-                            . "\n"
-                    ;
-
-                    $tool_content .= '<td>'
-                            . '<input type="radio" name="new" value="' . $version['id'] . '"' . $checked . ' />' . "\n"
-                            . '</td>'
-                            . "\n"
-                    ;
-
-                    $userInfo = user_get_data($version['editor_id']);
-                    mysql_select_db($mysqlMainDb);
-
-                    $userStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
-
-                    $userUrl = $userStr;
-
-                    $versionUrl = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                if ($firstPass == true) {
+                    $checked = ' checked="checked"';
+                    $makecurrent = '';
+                    $firstPass = false;
+                } else {
+                    $checked = '';
+                    if ($is_allowedToEdit || $is_allowedToCreate) {
+                        $makecurrent = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;wikiId='
                             . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
-                            . '&amp;action=show&amp;versionId=' . $version['id']
-                            . '">'
-                            . claro_format_locale_date($dateTimeFormatLong
-                                    , strtotime($version['mtime']))
-                            . '</a>'
-                    ;
-
-                    $tool_content .= '<td>'
-                            . sprintf($langWikiVersionPattern, $versionUrl, $userUrl)
-                            . '</td>'
-                            . "\n"
-                    ;
-
-                    $tool_content .= '</tr>' . "\n";
+                            . '&amp;action=save&amp;current=yes&amp;versionId=' . $version->id
+                            . '" onClick="return confirm(\''.$langSureToMakeWikiPageCurrent.'\');">'.$langWikiPageMakeCurrent.'</a>';
+                    }
                 }
-            }
 
-            $tool_content .= '</table>' . "\n";
-            $tool_content .= '</form>';
-            break;
+                $tool_content .= '<td>'
+                        . '<input type="radio" name="old" value="' . $version->id . '"' . $checked . ' />' . "\n"
+                        . '</td>'
+                        . "\n"
+                ;
+
+                $tool_content .= '<td>'
+                        . '<input type="radio" name="new" value="' . $version->id . '"' . $checked . ' />' . "\n"
+                        . '</td>'
+                        . "\n"
+                ;
+
+                $userInfo = user_get_data($version->editor_id);
+                mysql_select_db($mysqlMainDb);
+
+                $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
+
+                $userUrl = $userStr;
+
+                $versionUrl = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                        . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
+                        . '&amp;action=show&amp;versionId=' . $version->id
+                        . '">'
+                        . nice_format($version->mtime,TRUE)
+                        . '</a>'
+                ;
+
+                $tool_content .= '<td>'
+                        . sprintf($langWikiVersionPattern, $versionUrl, $userUrl)
+                        . '</td><td>'.$makecurrent.'</td><td colspan="3"></td>'
+                        . "\n"
+                ;
+                
+                if ($version->changelog != '') {
+                	$tool_content .='<td colspan="4">(<i>'.$version->changelog
+                	. '</i>)</td>'
+                	. "\n";
+                }
+                
+                $tool_content .= '</tr>' . "\n";
+            }
         }
+
+        $tool_content .= '</table>' . "\n";
+        $tool_content .= '</form>';
+        break;
+    }
+    case 'exSearch':
+    {
+        $tool_content .= '<h3>'.$langWikiSearchResults.'</h3>' . "\n";
+
+        if (!empty($searchResult)) {
+            $tool_content .= '<ul>' . "\n";
+    
+            foreach ($searchResult as $page) {
+                if ('__MainPage__' == $page->title) {
+                    $title = $langWikiMainPage;
+                }
+                else {
+                    $title = $page->title;
+                }
+    
+                $urltitle = rawurlencode($page->title);
+    
+                $link = '<a href="'
+                        . htmlspecialchars($_SERVER['SCRIPT_NAME'] . '?wikiId='
+                        . $wikiId . '&title=' . $urltitle
+                        . '&action=show') . '">' . $title . '</a>';
+    
+                $tool_content .= '<li>' . $link. '</li>' . "\n";
+            }
+            $tool_content .= '</ul>' . "\n";
+        } else {
+            $tool_content .= $langNoResult;
+        }
+        
+        break;
+    }
+    case 'rqSearch':
+    {
+        $searchForm = '<form method="post" action="'
+            . htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)
+            .'">'."\n"
+            . '<input type="hidden" name="action" value="exSearch" />'. "\n"
+            . '<label for="searchPattern">'
+            . $langSearch
+            . '</label><br />'."\n"
+            . '<input type="text" id="searchPattern" name="searchPattern" />'."\n"
+            . '<input type="submit" value="'.$langSubmit.'" />'."\n"
+            . disp_button(
+                htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code), $langCancel)
+            . '</form>'."\n";
+        
+        $tool_content .= $searchForm;
+
+        break;
+    }
     default: {
-            trigger_error("Invalid action supplied to " . $_SERVER['SCRIPT_NAME'], E_USER_ERROR);
-        }
+        trigger_error("Invalid action supplied to " . $_SERVER['SCRIPT_NAME'], E_USER_ERROR);
+    }
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['printable']) and $_GET['printable']=="yes") {
+    print $printable_content;
+}
+else {
+    draw($tool_content, 2, null, $head_content);
+}
 

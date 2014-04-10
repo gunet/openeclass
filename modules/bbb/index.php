@@ -261,7 +261,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     }
     
     $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
-                                                   WHERE course_id = ?", $course_id)->maxorder;
+                                                   WHERE course_id = ?d", $course_id)->maxorder;
+ 
     $order = $orderMax + 1;
             
     $query=db_query("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
@@ -309,7 +310,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
     }
     
     $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
-                                                   WHERE course_id = ?", $course_id)->maxorder;
+                                                   WHERE course_id = ?d", $course_id)->maxorder;
     $order = $orderMax + 1;
             
     $query=db_query("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',

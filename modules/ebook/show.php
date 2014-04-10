@@ -84,7 +84,7 @@ if ($show_orphan_file and $file_path) {
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
-        echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath);
+        echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
         exit();
     }
 }
@@ -214,7 +214,7 @@ if (isset($_SESSION['glossary_terms_regexp']) and !empty($_SESSION['glossary_ter
             $new_contents = glossary_expand($textNode->data);
             if ($new_contents != $textNode->data) {
                 $newdoc = new DOMDocument();
-                $newdoc->loadXML('<span>' . $new_contents . '</span>');
+                $newdoc->loadXML('<span>' . $new_contents . '</span>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
                 $newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
                 $textNode->parentNode->replaceChild($newnode, $textNode);
             }

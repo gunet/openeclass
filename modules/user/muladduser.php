@@ -125,7 +125,7 @@ function adduser($userid, $cid) {
         return false;
     }
 
-    db_query("INSERT INTO course_user (user_id, course_id, statut, reg_date)
+    db_query("INSERT INTO course_user (user_id, course_id, status, reg_date)
                                    VALUES ($userid, $cid, " . USER_STUDENT . ", CURDATE())");
 
     Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,

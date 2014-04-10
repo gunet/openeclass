@@ -50,7 +50,7 @@ $tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'>
 $sql_course = "course_id = $course_id";
 $archive_conditions = array(
     'course' => "id = $course_id",
-    'user' => "user_id IN (SELECT user_id FROM course_user
+    'user' => "id IN (SELECT user_id FROM course_user
                                       WHERE course_id = $course_id)",
     'course_user' => "course_id = $course_id",
     'course_department' => "course = $course_id",

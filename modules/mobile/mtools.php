@@ -46,9 +46,13 @@ $tool->type = 'coursedescription';
 $tool->active = true;
 $toolsArr[0][] = $tool;
 
-$first_unit_id = Database::get()->querySingle("SELECT id FROM course_units
-                                                WHERE course_id = ? AND `order` >= 0
-                                             ORDER BY `order` ASC LIMIT 1", intval($course_id));
+$first_unit_id = null;
+$first_unit = Database::get()->querySingle("SELECT id FROM course_units
+                                             WHERE course_id = ?d AND `order` >= 0
+                                          ORDER BY `order` ASC LIMIT 1", intval($course_id));
+if ($first_unit) {
+    $first_unit_id = $first_unit->id;
+}
 
 $tool = new stdClass();
 $tool->id = 1;

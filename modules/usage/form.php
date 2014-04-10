@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,26 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file form.php
+ * @brief display form for creating graph statistics
+ */
+
 $require_current_course = true;
 $require_course_admin = true;
 $require_login = true;
-
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
-
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
-
 
 $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = " . $course_id;
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
@@ -62,7 +50,7 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
         '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>\n";
 
 $tool_content .= '
-<form method="post" action="' . $_SERVER['PHP_SELF'] . '?course=' . $course_code . '">
+<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
 <fieldset>
   <legend>' . $langUsageVisits . '</legend>
   <table class="tbl">
@@ -76,11 +64,11 @@ $tool_content .= '
   </tr>
   <tr>
     <th>' . $langStartDate . ':</th>
-    <td>' . "$start_cal" . '</td>
+    <td><input type="text" name="u_date_start" value="' . $u_date_start .'"></td>
   </tr>
   <tr>
     <th>' . $langEndDate . ':</th>
-    <td>' . "$end_cal" . '</td>
+    <td><input type="text" name="u_date_end" value="' . $u_date_end .'"></td>    
   </tr>
   <tr>
     <th>' . $langModule . ':</th>
