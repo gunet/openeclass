@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,17 +39,10 @@
   ==============================================================================
  */
 
-require_once dirname(__FILE__) . "/class.dbconnection.php";
-
 define("PAGE_NO_TITLE_ERROR", "Missing title");
-define("PAGE_NO_TITLE_ERRNO", 1);
 define("PAGE_ALREADY_EXISTS_ERROR", "Page already exists");
-define("PAGE_ALREADY_EXISTS_ERRNO", 2);
 define("PAGE_CANNOT_BE_UPDATED_ERROR", "Page cannot be updated");
-define("PAGE_CANNOT_BE_UPDATED_ERRNO", 3);
 define("PAGE_NOT_FOUND_ERROR", "Page not found");
-define("PAGE_NOT_FOUND_ERRNO", 4);
-
 
 // TODO rewrite WikiPage as a subclass of DatabaseConnection ?
 
@@ -70,30 +63,17 @@ class WikiPage {
     var $wikiId = 0;            // attr_reader:
     var $currentVersionMtime = '0000-00-00 00:00:00'; // attr_reader:
     var $currentVersionEditorId = 0; // attr_reader:
-    // private fields
-    var $con = null;            // private
-    // default configuration
-    var $config = array(
-        'tbl_wiki_pages' => 'wiki_pages',
-        'tbl_wiki_pages_content' => 'wiki_pages_content',
-        'tbl_wiki_properties' => 'wiki_properties',
-        'tbl_wiki_acls' => 'wiki_acls'
-    );
+
     // error handling
     var $error = '';
-    var $errno = 0;
 
     /**
      * Constructor
      * @param DatabaseConnection con connection to the database
      * @param array config associative array containing tables name
      */
-    function WikiPage(/* % DatabaseConnection */ &$con, $config = null, $wikiId = 0) {
-        if (is_array($config)) {
-            $this->config = array_merge($this->config, $config);
-        }
+    function WikiPage($wikiId = 0) {
         $this->wikiId = $wikiId;
-        $this->con = $con;
     }
 
     // public methods
@@ -107,19 +87,19 @@ class WikiPage {
      *      to database if set to true (default false)
      * @return boolean true on success, false on failure
      */
-    function edit($editorId, $content = '', $mtime = '', $auto_save = false) {
+    function edit($editorId, $content = '', $changelog = '', $mtime = '', $auto_save = false) {
         if (( $auto_save === true ) && (!$this->pageExists($this->getTitle()) )) {
-            $this->setError(PAGE_NOT_FOUND_ERROR, PAGE_NOT_FOUND_ERROR);
+            $this->setError(PAGE_NOT_FOUND_ERROR);
             return false;
         } else if (( $auto_save === false ) && ( $this->getTitle() === '' )) {
-            $this->setError(PAGE_NO_TITLE_ERROR, PAGE_NO_TITLE_ERRNO);
+            $this->setError(PAGE_NO_TITLE_ERROR);
             return false;
         } else {
             $this->setEditorId($editorId);
             $this->setLastEditTime($mtime);
             $this->setContent($content);
             if ($auto_save === true) {
-                return $this->save();
+                return $this->save($changelog);
             } else {
                 return true;
             }
@@ -136,13 +116,13 @@ class WikiPage {
      *      to database if set to true (default false)
      * @return boolean true on success, false on failure
      */
-    function create($ownerId, $title, $content = '', $ctime = '', $auto_save = false) {
+    function create($ownerId, $title, $content = '', $changelog = '', $ctime = '', $auto_save = false) {
         if (!$title) {
-            $this->setError(PAGE_NO_TITLE_ERROR, PAGE_NO_TITLE_ERRNO);
+            $this->setError(PAGE_NO_TITLE_ERROR);
             return false;
         } else {
             if (( $auto_save === true ) && ( $this->pageExists($title) )) {
-                $this->setError(PAGE_ALREADY_EXISTS_ERROR, PAGE_ALREADY_EXISTS_ERRNO);
+                $this->setError(PAGE_ALREADY_EXISTS_ERROR);
                 return false;
             } else {
                 $this->setOwnerId($ownerId);
@@ -153,7 +133,7 @@ class WikiPage {
                 $this->setLastEditTime($ctime);
 
                 if ($auto_save === true) {
-                    return $this->save();
+                    return $this->save($changelog);
                 } else {
                     return true;
                 }
@@ -166,31 +146,31 @@ class WikiPage {
      * @return boolean true on success, false on failure
      */
     function delete() {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
-
         // (OPT) backup last version
         // 1st delete page info
-        $sql = "DELETE FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                . "WHERE `id` = " . $this->getPageId()
+        $sql = "DELETE FROM `wiki_pages` "
+                . "WHERE `id` = ?d"
         ;
 
-        $numrows = $this->con->executeQuery($sql);
+        $that = $this;
+        Database::get()->query($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $this->getPageId());
 
-        if ($numrows == 1) {
+        if (!$this->hasError()) {
             // 2nd delete page versions
-            $sql = "DELETE FROM `" . $this->config['tbl_wiki_pages_content'] . "` "
-                    . "WHERE `pid` = " . $this->getPageId()
+            $sql = "DELETE FROM `wiki_pages_content` "
+                    . "WHERE `pid` = ?d"
             ;
 
-            $numrows = $this->con->executeQuery($sql);
+            $that = $this;
+            Database::get()->query($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $this->getPageId());
 
             $this->_setPageId(0);
             $this->_setLastVersionId(0);
-
-            return ( $numrows > 0 );
+            return (!$this->hasError());
         } else {
             return false;
         }
@@ -200,11 +180,7 @@ class WikiPage {
      * Save the page
      * @return boolean true on success, false on failure
      */
-    function save() {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
+    function save($changelog = '') {
 
         if ($this->getCreationTime() === '') {
             $this->setCreationTime(date("Y-m-d H:i:s"));
@@ -221,28 +197,26 @@ class WikiPage {
             } else {
                 // insert new page
                 // 1st insert page info
-                $sql = "INSERT INTO `" . $this->config['tbl_wiki_pages'] . "`"
+                $sql = "INSERT INTO `wiki_pages`"
                         . "(`wiki_id`, `owner_id`,`title`,`ctime`, `last_mtime`) "
-                        . "VALUES("
-                        . $this->getWikiId() . ", "
-                        . $this->getOwnerId() . ", "
-                        . "'" . addslashes($this->getTitle()) . "', "
-                        . "'" . $this->getCreationTime() . "', "
-                        . "'" . $this->getLastEditTime() . "'"
-                        . ")"
+                        . "VALUES(?d,?d,?s,?t,?t)"
                 ;
-                $this->con->executeQuery($sql);
+                
+                $that = $this;
+                $result = Database::get()->query($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $this->getWikiId(), $this->getOwnerId(), $this->getTitle(), $this->getCreationTime(), $this->getLastEditTime());
 
                 // 2nd update pageId
-                $pageId = $this->con->getLastInsertId();
+                $pageId = $result->lastInsertID;
                 $this->_setPageId($pageId);
 
                 // 3rd update version
-                return $this->_updateVersion();
+                return $this->_updateVersion($changelog);
             }
         } else {
             // update version
-            return $this->_updateVersion();
+            return $this->_updateVersion($changelog);
         }
     }
 
@@ -251,25 +225,21 @@ class WikiPage {
      * @return array page history on success, null on failure
      */
     function history($offset = 0, $limit = 0, $order = 'DESC') {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
 
-        $limit = ( $limit == 0 ) ? "" : "LIMIT " . $offset . "," . $limit . " ";
+        $limit = ($limit == 0 && $offset == 0) ? "" : "LIMIT " . $offset . "," . $limit . " ";
 
         $order = ($order === 'ASC') ? " ORDER BY `id` ASC " : " ORDER BY `id` DESC ";
         // retreive versionId and editorId and mtime for each version
         // of the page
 
-        $sql = "SELECT `id`, `editor_id`, `mtime` "
-                . "FROM `" . $this->config['tbl_wiki_pages_content'] . "` "
-                . "WHERE `pid` = " . $this->getPageId()
+        $sql = "SELECT `id`, `editor_id`, `mtime`, `changelog` "
+                . "FROM `wiki_pages_content` "
+                . "WHERE `pid` = ?d"
                 . $order
                 . $limit
         ;
 
-        $result = $this->con->getAllRowsFromQuery($sql);
+        $result = Database::get()->queryArray($sql, $this->getPageId());
 
         if (is_array($result)) {
             return $result;
@@ -277,25 +247,27 @@ class WikiPage {
             return null;
         }
     }
-
+	
     /**
      * Check if a page exists in the wiki
      * @param string title page title
      * @return boolean true on success, false on failure
      */
     function pageExists($title) {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
+
+        $sql = "SELECT COUNT(`id`) as `c` "
+                . "FROM `wiki_pages` "
+                . "WHERE BINARY `title` = ?s "
+                . "AND `wiki_id` = ?d"
+        ;
+        
+        $result = Database::get()->querySingle($sql, $title, $this->getWikiId());
+        if($result->c > 0) {
+            return true;
+        } else {
+            return false;
         }
 
-        $sql = "SELECT `id` "
-                . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
-                . "WHERE BINARY `title` = '" . addslashes($title) . "' "
-                . "AND `wiki_id` = " . $this->getWikiId();
-        ;
-
-        return $this->con->queryReturnsResult($sql);
     }
 
     // public factory methods
@@ -306,23 +278,20 @@ class WikiPage {
      * @return boolean true on success, false on failure
      */
     function loadPage($title) {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
-
         // retreive page (last version)
         $sql = "SELECT p.`id`, p.`owner_id`, p.`title`, "
                 . "p.`ctime`, p.`last_version`, p.`last_mtime`, "
                 . "c.`editor_id`, c.`content` "
-                . "FROM `" . $this->config['tbl_wiki_pages'] . "` p"
-                . ", `" . $this->config['tbl_wiki_pages_content'] . "` c "
-                . "WHERE BINARY p.`title` = '" . addslashes($title) . "' "
+                . "FROM `wiki_pages` p"
+                . ", `wiki_pages_content` c "
+                . "WHERE BINARY p.`title` = ?s "
                 . "AND c.`id` = p.`last_version` "
-                . "AND `wiki_id` = " . $this->getWikiId();
+                . "AND `wiki_id` = ?d"
         ;
+        
+        $params = array($title, $this->getWikiId());
 
-        return $this->_updatePageFields($sql);
+        return $this->_updatePageFields($sql, 'loadPage', $params);
     }
 
     /**
@@ -331,22 +300,19 @@ class WikiPage {
      * @return boolean true on success, false on failure
      */
     function loadPageVersion($versionId) {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
-
         // retreive page (given version)
         $sql = "SELECT p.`id`, p.`owner_id`, p.`title`, "
                 . "p.`ctime`, p.`last_version`, p.`last_mtime`, "
                 . "c.`editor_id`, c.`content`, c.`mtime` AS `current_mtime`, c.`id` AS `current_version` "
-                . "FROM `" . $this->config['tbl_wiki_pages'] . "` p, "
-                . "`" . $this->config['tbl_wiki_pages_content'] . "` c "
-                . "WHERE c.`id` = '" . $versionId . "' "
+                . "FROM `wiki_pages` p, "
+                . "`wiki_pages_content` c "
+                . "WHERE c.`id` = ? "
                 . "AND p.`id` = c.`pid`"
         ;
 
-        if ($this->_updatePageFields($sql)) {
+        $params = array($versionId);
+        
+        if ($this->_updatePageFields($sql, 'loadPageVersion', $params)) {
             $this->_setCurrentVersionId($versionId);
             return true;
         } else {
@@ -359,22 +325,19 @@ class WikiPage {
      * @param int pageId ID of the page
      */
     function loadPageById($pageId) {
-        // reconnect if needed
-        if (!$this->con->isConnected()) {
-            $this->con->connect();
-        }
 
         // retreive page (last version)
         $sql = "SELECT p.`id`, p.`owner_id`, p.`title`, "
                 . "p.`ctime`, p.`last_version`, p.`last_mtime`, "
                 . "c.`editor_id`, c.`content` "
-                . "FROM `" . $this->config['tbl_wiki_pages'] . "` p,"
-                . " `" . $this->config['tbl_wiki_pages_content'] . "` c "
-                . "WHERE p.`id` = '" . $pageId . "' "
+                . "FROM `wiki_pages` p,"
+                . " `wiki_pages_content` c "
+                . "WHERE p.`id` = ? "
                 . "AND c.`id` = p.`last_version`"
         ;
 
-        return $this->_updatePageFields($sql);
+        $params = array($pageId);
+        return $this->_updatePageFields($sql, 'loadPageById', $params);
     }
 
     /**
@@ -394,35 +357,33 @@ class WikiPage {
      * @access private
      * @return boolean true on success, false on failure
      */
-    function _updateVersion() {
+    function _updateVersion($changelog = '') {
         // 1st insert page content
-        $sql = "INSERT INTO `" . $this->config['tbl_wiki_pages_content'] . "`"
-                . "(`pid`,`editor_id`,`mtime`, `content`) "
-                . "VALUES("
-                . $this->getPageId() . ", "
-                . "'" . $this->getEditorId() . "', "
-                . "'" . $this->getLastEditTime() . "', "
-                . "'" . addslashes($this->getContent()) . "'"
-                . ")"
-        ;
+        $sql = "INSERT INTO `wiki_pages_content`"
+                . "(`pid`,`editor_id`,`mtime`, `content`, `changelog`) "
+                . "VALUES(?d,?d,?t,?s,?s)";
 
-        $this->con->executeQuery($sql);
+        $that = $this;
+        $result = Database::get()->query($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $this->getPageId(), $this->getEditorId(), $this->getLastEditTime(), $this->getContent(), $changelog);
 
         // update last version id
-        $lastVersionId = $this->con->getLastInsertId();
-
+        $lastVersionId = $result->lastInsertID;
+        
         $this->_setLastVersionId($lastVersionId);
         $this->_setCurrentVersionId($lastVersionId);
 
         // 2nd update page info
-        $sql = "UPDATE `" . $this->config['tbl_wiki_pages'] . "` "
-                . "SET `last_version` = "
-                . $this->getLastVersionId() . ", "
-                . "`last_mtime` = '" . $this->getLastEditTime() . "' "
-                . "WHERE `id` = " . $this->getPageId()
+        $sql = "UPDATE `wiki_pages` "
+                . "SET `last_version` = ?d ,"
+                . "`last_mtime` = ?t "
+                . "WHERE `id` = ?d"
         ;
 
-        $this->con->executeQuery($sql);
+        Database::get()->query($sql, function ($errormsg) use ($that) {
+                $that->setError($errormsg); 
+            }, $this->getLastVersionId(), $this->getLastEditTime(), $this->getPageId());
 
         return !$this->hasError();
     }
@@ -433,30 +394,41 @@ class WikiPage {
      * @param string sql SQL query
      * @return boolean true on success, false on failure
      */
-    function _updatePageFields($sql) {
-        $page = $this->con->getRowFromQuery($sql);
+    function _updatePageFields($sql, $orig, $params) {
+        
+        $that = $this;
+        
+        if ($orig == 'loadPage') {
+            $page = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
+                    $that->setError($errormsg); 
+                }, $params[0], $params[1]);
+        } elseif ($orig == 'loadPageVersion' || $orig == 'loadPageById') {
+            $page = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
+            	    $that->setError($errormsg);
+                }, $params[0]);
+        }
 
-        if (is_array($page)) {
-            $this->_setPageId($page['id']);
-            $this->setOwnerId($page['owner_id']);
-            $this->setTitle($this->stripSlashesForWiki($page['title']));
-            $this->_setLastVersionId($page['last_version']);
-            $this->_setCurrentVersionId($page['last_version']);
-            $this->setCreationTime($page['ctime']);
-            $this->setLastEditTime($page['last_mtime']);
-            $this->setEditorId($page['editor_id']);
-            $this->setContent($this->stripSlashesForWiki($page['content']));
+        if (is_object($page)) {
+            $this->_setPageId($page->id);
+            $this->setOwnerId($page->owner_id);
+            $this->setTitle($page->title);
+            $this->_setLastVersionId($page->last_version);
+            $this->_setCurrentVersionId($page->last_version);
+            $this->setCreationTime($page->ctime);
+            $this->setLastEditTime($page->last_mtime);
+            $this->setEditorId($page->editor_id);
+            $this->setContent($page->content);
 
-            $this->currentVersionId = ( isset($page['current_version']) ) ? $page['current_version'] : $page['last_version']
+            $this->currentVersionId = ( isset($page->current_version) ) ? $page->current_version : $page->last_version
             ;
 
-            $this->currentVersionMtime = ( isset($page['current_mtime']) ) ? $page['current_mtime'] : $page['last_mtime']
+            $this->currentVersionMtime = ( isset($page->current_mtime) ) ? $page->current_mtime : $page->last_mtime
             ;
 
             return $this;
         } else {
-            if (!$this->con->hasError()) {
-                $this->setError(PAGE_CANNOT_BE_UPDATED_ERROR, PAGE_CANNOT_BE_UPDATED_ERRNO);
+            if (!$this->hasError()) {
+                $this->setError(PAGE_CANNOT_BE_UPDATED_ERROR);
             }
             return null;
         }
@@ -464,27 +436,22 @@ class WikiPage {
 
     // error handling
 
-    function setError($errmsg = '', $errno = 0) {
+    function setError($errmsg = '') {
         $this->error = ($errmsg != '') ? $errmsg : "Unknown error";
-        $this->errno = $errno;
     }
 
     function getError() {
-        if ($this->con->hasError()) {
-            return $this->con->getError();
-        } else if ($this->error != '') {
-            $errno = $this->errno;
+         if ($this->error != '') {
             $error = $this->error;
             $this->error = '';
-            $this->errno = 0;
-            return $errno . ' - ' . $error;
+            return $error;
         } else {
             return false;
         }
     }
 
     function hasError() {
-        return ( $this->error != '' ) || $this->con->hasError();
+        return ($this->error != '');
     }
 
     // public accessors
@@ -579,6 +546,7 @@ class WikiPage {
 #                    str_replace( "\'", "'", $str ) ) );
 
         return str_replace('\\', "\\", str_replace('\"', '"', $str));
+		
     }
 
 }

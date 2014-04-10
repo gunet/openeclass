@@ -544,7 +544,15 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
                 `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-                `content` TEXT NOT NULL )  $charset_spec");
+                `content` TEXT NOT NULL,
+                `changelog` VARCHAR(200) )  $charset_spec");
+db_query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
+                `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
+                `wiki_id` INT(11) UNSIGNED NOT NULL,
+                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+                PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -554,7 +562,8 @@ db_query("CREATE TABLE IF NOT EXISTS `poll` (
                 `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` INT(11) NOT NULL DEFAULT 0 ) $charset_spec");
+                `active` INT(11) NOT NULL DEFAULT 0,
+                `anonymized` INT(1) NOT NULL DEFAULT 0) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
