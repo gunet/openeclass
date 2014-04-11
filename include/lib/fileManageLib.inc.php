@@ -338,10 +338,12 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         die("error: " . $zipfile->errorInfo(true));
     }
     $real_paths = array();
-    foreach ($GLOBALS['common_docs'] as $path => $real_path) {
-        $filename = $GLOBALS['map_filenames'][$path];
-        $GLOBALS['common_filenames'][$real_path] = $filename;
-        $real_paths[] = $real_path;
+    if (isset($GLOBALS['common_docs'])) {
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+            $filename = $GLOBALS['map_filenames'][$path];
+            $GLOBALS['common_filenames'][$real_path] = $filename;
+            $real_paths[] = $real_path;
+        }
     }
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
     if (!$v) {
