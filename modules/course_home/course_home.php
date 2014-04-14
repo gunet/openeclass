@@ -123,10 +123,10 @@ if ($res and mysql_num_rows($res) > 0) {
 }
 
 if ($is_editor) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'>
-                <img src='$themeimg/edit.png' title='".q($langEdit)."' alt='".q($langEdit)."' /></a>";
+    $edit_link = "&nbsp;" .
+        icon('edit', $langEdit, "../../modules/course_description/editdesc.php?course=$code_cours");
 } else {
-        $edit_link = '';
+    $edit_link = '';
 }
 $main_content .= "<div class='course_info'>";
 if (!empty($description)) {
