@@ -138,7 +138,7 @@ if (!empty($description)) {
 if (!empty($keywords)) {
 	$main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
 }
-$main_content .= "</div>\n";
+$main_content .= "</div>";
 
 if (!empty($addon)) {
 	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";

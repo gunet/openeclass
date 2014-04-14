@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,12 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * Announcements Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+/** 
+ * @file announcements.php
+ * @brief announcements module
  * @abstract This component offers several operations regarding a course's announcements.
  * The course administrator can:
  * 1. Re-arrange the order of the announcements
@@ -50,13 +47,45 @@ $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
 
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
+   
+load_js('tools.js');
+load_js('jquery');
+load_js('datatables');
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#ann_table').DataTable ({
+                'sPaginationType': 'full_numbers',
+                    'aoColumns': [
+                        { 'bSortable': false },
+                        null,
+                        { 'bSortable': false }
+                    ],
+                    'oLanguage': {
+                       'sProcessing':   'Επεξεργασία...',
+                       'sLengthMenu':   'Εμφάνισε _MENU_ εγγραφές',
+                       'sZeroRecords':  'Δεν βρέθηκαν εγγραφές που να ταιριάζουν',
+                       'sInfo':         'Εμφανίζονται _START_ εως _END_ από _TOTAL_ εγγραφές',
+                       'sInfoEmpty':    'Εμφανίζονται 0 εως 0 από 0 εγγραφές',
+                       'sInfoFiltered': '(φιλτραρισμένες από _MAX_ συνολικά εγγραφές)',
+                       'sInfoPostFix':  '',
+                       'sSearch':       'Αναζήτηση:',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    'Πρώτη',
+                           'sPrevious': 'Προηγούμενη',
+                           'sNext':     'Επόμενη',
+                           'sLast':     'Τελευταία'
+                       }
+                   }
+            });
+        });
+        </script>";
+ModalBoxHelper::loadModalBox();
 
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
-ModalBoxHelper::loadModalBox();
-if ($is_editor) {
-	load_js('tools.js');
+if ($is_editor) {	
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
 
@@ -278,98 +307,82 @@ if ($is_editor) {
 	}
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-
-	$tool_content .= "
-        <script type='text/javascript' src='../auth/sorttable.js'></script>
-        <table width='100%' class='sortable' id='t1'>";
-	if ($announcementNumber > 0) {
-		$tool_content .= "<tr><th colspan='2'>$langAnnouncement</th>";
-                if ($announcementNumber > 1) {
-                    $colsNum= 2;
-                } else {
-                    $colsNum= 2;
-                }
+        if ($announcementNumber > 0) {
+                $tool_content .= "<table id='ann_table' class='display'>";
+                $tool_content .= "<thead>";	
+		$tool_content .= "<tr><th>&nbsp;</th><th>$langAnnouncement</th>";                
 		if ($is_editor) {
-		    $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
+		    $tool_content .= "<th width='60' class='center'>$langActions</th>";
 		}
-		$tool_content .= "</tr>\n";
-	}
-	$k = 0;
-        while ($myrow = mysql_fetch_array($result)) {
-                $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
-		if ($is_editor and $myrow['visibility'] == 'i') {
-			$visibility = 1;
-			$vis_icon = 'invisible';
-			$tool_content .= "<tr class='invisible'>";
-                } else {
-                        $visibility = 0;
-                        $vis_icon = 'visible';
-                        if ($k%2 == 0) {
-                                $tool_content .= "<tr class='even'>";
-                        } else {
-                                $tool_content .= "<tr class='odd'>";
-                        }
-                }
-		$tool_content .= "<td width='16' valign='top'>
-			<img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>
-			<td><b>";
-		if (empty($myrow['title'])) {
-		    $tool_content .= $langAnnouncementNoTille;
-		} else {
-		    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
-		}
-		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
-		if (isset($_GET['an_id'])) {
-			$navigation[] = array('url' => "announcements.php?course=$code_cours", 'name' => $langAnnouncements);
-			$nameTools = q($myrow['title']);
-			$tool_content .= standard_text_escape($myrow['contenu']);
-		} else {
-                        $tool_content .= create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
-		}
-		$tool_content .= "</td>";
+		$tool_content .= "</tr>";	
+                $tool_content .= "</thead>";
+                $tool_content .= "<tbody>";
+                $k = 0;
+                while ($myrow = mysql_fetch_array($result)) {
+                    $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
+                    if ($is_editor and $myrow['visibility'] == 'i') {
+                            $visibility = 1;
+                            $vis_icon = 'invisible';
+                            $tool_content .= "<tr class='invisible'>";
+                    } else {
+                            $visibility = 0;
+                            $vis_icon = 'visible';
+                            $tool_content .= "<tr>";
+                    }
+                    $tool_content .= "<td width='16' valign='top'>
+                            <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>
+                            <td><b>";
+                    if (empty($myrow['title'])) {
+                        $tool_content .= $langAnnouncementNoTille;
+                    } else {
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
+                    }
+                    $tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
+                    if (isset($_GET['an_id'])) {
+                            $navigation[] = array('url' => "announcements.php?course=$code_cours", 'name' => $langAnnouncements);
+                            $nameTools = q($myrow['title']);
+                            $tool_content .= standard_text_escape($myrow['contenu']);
+                    } else {
+                            $tool_content .= create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
+                    }
+                    $tool_content .= "</td>";
 
-		if ($is_editor) {
-			$tool_content .= "<td width='70' class='right'>" .
-                                icon('edit', $langModify,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]") .
-                                "&nbsp;" . icon('delete', $langDelete,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]",
-                                        "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
-                                "&nbsp;" . icon($vis_icon, $langVisible,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") .
-                                "</td>";
-			if ($announcementNumber > 1)  {
-				$tool_content .= "<td align='center' width='35' class='right'>";
-			}
-			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
-			    <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ." ". q($langUp) . "' />
-			    </a>";
-			}
-			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
-			    <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ." ". q($langDown) . "' />
-			    </a>";
-			}
-			if ($announcementNumber > 1) {
-				$tool_content .= "</td>";
-			}
-		}
-		$tool_content .= "</tr>";
-		$iterator ++;
-		$k++;
-        } // end of while
-        $tool_content .= "</table>\n";
-
-    if ($announcementNumber < 1) {
-        $no_content = true;
-        if (isset($_GET['addAnnounce'])) {
-            $no_content = false;
+                    if ($is_editor) {
+                            $tool_content .= "<td width='100' class='right'>" .
+                                    icon('edit', $langModify,
+                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]") .
+                                    "&nbsp;" . icon('delete', $langDelete,
+                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]",
+                                            "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
+                                    "&nbsp;" . icon($vis_icon, $langVisible,
+                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") ."";                            
+                            if ($iterator != 1)  {
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
+                                <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ."' alt = '". q($langUp) . "' />
+                                </a>";
+                            }
+                            if ($iterator < $bottomAnnouncement) {
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
+                                <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ."' alt = '". q($langDown) . "' />
+                                </a>";
+                            }                            
+                            $tool_content .= "</td>";
+                    }
+                    $tool_content .= "</tr>";
+                    $iterator ++;
+                    $k++;
+            } // end of while
+            $tool_content .= "</tbody>";
+            $tool_content .= "</table>";
+        } else  {
+            $no_content = true;
+            if (isset($_GET['addAnnounce'])) {
+                $no_content = false;
+            }
+            if (isset($_GET['modify'])) {
+                $no_content = false;
+            }
+            if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
         }
-        if (isset($_GET['modify'])) {
-            $no_content = false;
-        }
-        if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
-    }
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
