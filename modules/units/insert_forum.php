@@ -25,7 +25,7 @@ function list_forums()
         global $id, $currentCourseID, $tool_content, $urlServer,
                $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $code_cours;
 
-        $result = db_query("SELECT * FROM forums WHERE cat_id <> 1", $currentCourseID);
+        $result = db_query("SELECT * FROM forums", $currentCourseID);
         $foruminfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $foruminfo[] = array(
