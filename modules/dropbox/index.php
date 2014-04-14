@@ -23,6 +23,7 @@ require_once("functions.php");
 $nameTools = $langDropBox;
 $basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
 $diskUsed = dir_total_space($basedir);
+$displayall = false;
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -32,6 +33,20 @@ $action->record('MODULE_ID_DROPBOX');
 
 require_once('dropbox_class.inc.php');
 
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery.multiselect.min.js');
+$head_content .= "<script type='text/javascript'>$(document).ready(function () {
+        $('#select-recipients').multiselect({
+                selectedText: '$langJQSelectNum',
+                noneSelectedText: '$langJQNoneSelected',
+                checkAllText: '$langJQCheckAll',
+                uncheckAllText: '$langJQUncheckAll'
+        });
+});</script>
+<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
+<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
 	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $langDropBox);
@@ -39,14 +54,31 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	draw($tool_content, 2);
 	exit;
 }
+if ($is_editor) {
+    if (isset($_GET['other']) and $_GET['other']) {
+        $displayall = true;    
+        if (isset($_GET['id'])) {
+            $messagebody = true;
+            $r_message_id = intval($_GET['id']);
+            $dropbox_person = new Dropbox_Person($uid, false);
+        }
+    }
+}
+
+if ($is_editor) {
+        
+}
 
 if (isset($_GET['rm_id'])) {
+    $messagebody = true;
     $r_message_id = intval($_GET['rm_id']);
     $dropbox_person = new Dropbox_Person($uid, false);
 } elseif (isset($_GET['sm_id'])) {
+    $messagebody = true;
     $s_message_id = intval($_GET['sm_id']);
     $dropbox_person = new Dropbox_Person($uid, true, false);
 } else {
+    $messagebody = false;
     $dropbox_person = new Dropbox_Person($uid);
 }
 
@@ -149,128 +181,222 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
  * RECEIVED FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
-if (!isset($s_message_id)) {    
-    if (!isset($_GET['mailing'])) {
-            $numberDisplayed = count($dropbox_person -> receivedWork);
-            $tool_content .= "<p class='sub_title1'>".strtoupper($dropbox_lang["receivedTitle"])."";
-            // check if there are received documents. If yes then display the icon deleteall
-            $dr_unid = urlencode($dropbox_unid);
-            if ($numberDisplayed > 0) {
-                    $dr_lang_all = addslashes( $dropbox_lang["all"]);
-                    $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmation();\">
-                    <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
-            }
-            $tool_content .= "</p>";
+if (!$displayall) {
+    if (!isset($s_message_id)) {
+        if (!isset($_GET['mailing'])) {
+                $numberDisplayed = count($dropbox_person -> receivedWork);
+                $tool_content .= "<p class='sub_title1'>".strtoupper($dropbox_lang["receivedTitle"])."";
+                // check if there are received documents. If yes then display the icon deleteall
+                $dr_unid = urlencode($dropbox_unid);
+                if ($numberDisplayed > 0) {
+                        $dr_lang_all = addslashes( $dropbox_lang["all"]);
+                        $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmation();\">
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                }
+                $tool_content .= "</p>";
 
-     /*
-     * --------------------------------------
-     * RECEIVED FILES LIST
-     * --------------------------------------
-     */
-            if ($numberDisplayed == 0) {
-                    $tool_content .= "<p class='alert1'>".$dropbox_lang['tableEmpty']."</p>";
-            } else {
-                    $tool_content .= "
-                    <script type='text/javascript' src='../auth/sorttable.js'></script>
-                    <table width='100%' class='sortable' id='t1'>
-                    <tr>
-                     <th colspan='2' class='left' width='200'>$dropbox_lang[file]</th>
-                     <th width='130'>$langSender</th>
-                     <th width='100'>$langDate</th>
-                     <th width='20'>$langDelete</th>
-                    </tr>";
-                    $numberDisplayed = count($dropbox_person -> receivedWork);
-                    $i = 0;
-                    foreach ($dropbox_person -> receivedWork as $w) {                    
-                            if ($w -> uploaderId == $uid)
-                            {
-                                    $numberDisplayed -= 1; 
-                                    continue;
-                            }
-                            if ($i%2==0) {
-                                    $tool_content .= "<tr>";
-                            } else {
-                                    $tool_content .= "<tr class='odd'>";
-                            }
-                            $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
-                            if (($w->filename != '') and ($w->filesize != 0)) {                                
-                                    $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;rm_id=$w->id'>".q($w->title)."</a>&nbsp;&nbsp;<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank><img src='$themeimg/inbox.png' /><small>$langAttachedFile</small></a>";
-                                    $tool_content .= "<span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />" .
-                                                     "<small>".standard_text_escape($w->description)."</small></td>";
-                            } else {                                
-                                    $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;rm_id=$w->id'>".q($w->title)."</a><br /><small>".standard_text_escape($w->description)."</small></td>";
-                            }
-                            $tool_content .= "<td><small>".display_user($w->uploaderId, false, false)."</small></td>";
-                            $tool_content .= "<td><small>".$w->uploadDate;
-                            if ($w->uploadDate != $w->lastUploadDate) {
-                                    $tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
-                            }
-                            $tool_content .= "</small></td><td class='center'>";
-                            $tool_content .= "
-                                <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>
-                                <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
-                            $tool_content .= "</td></tr>";
-                            $i++;
-                    } //end of foreach
-                    $tool_content .= "</table>";
-            }
-    }  
-}
-/*
- * --------------------------------------
- *SENT FILES LIST:  TABLE HEADER
- * --------------------------------------
- */
-if (!isset($r_message_id)) {
-    $numSent = count($dropbox_person -> sentWork);
-    $tool_content .= "<br /><p class='sub_title1'>";
-    $tool_content .= $dropbox_lang["sentTitle"];
-    // if the user has sent files then display the icon deleteall
-    if ($numSent > 0) {
-            $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
-            onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+         /*
+         * --------------------------------------
+         * RECEIVED FILES LIST
+         * --------------------------------------
+         */
+                if ($numberDisplayed == 0) {
+                        $tool_content .= "<p class='alert1'>".$dropbox_lang['tableEmpty']."</p>";
+                } else {
+                        $tool_content .= "
+                        <script type='text/javascript' src='../auth/sorttable.js'></script>
+                        <table width='100%' class='sortable' id='t1'>
+                        <tr>
+                         <th colspan='2' class='left' width='200'>$dropbox_lang[file]</th>
+                         <th width='130'>$langSender</th>
+                         <th width='100'>$langDate</th>
+                         <th width='20'>$langDelete</th>
+                        </tr>";
+                        $numberDisplayed = count($dropbox_person -> receivedWork);
+                        $i = 0;                    
+                        foreach ($dropbox_person -> receivedWork as $w) {
+                                if ($w -> uploaderId == $uid)
+                                {
+                                        $numberDisplayed -= 1; 
+                                        continue;
+                                }
+                                if ($i%2==0) {
+                                        $tool_content .= "<tr>";
+                                } else {
+                                        $tool_content .= "<tr class='odd'>";
+                                }                                                        
+                                $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
+                                $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;rm_id=$w->id'>".q($w->title)."</a>";
+                                if (($w->filename != '') and ($w->filesize != 0)) {
+                                        $tool_content .= "&nbsp;&nbsp;<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>"
+                                                      . "<img src='$themeimg/inbox.png' /><small>$langAttachedFile</small>"
+                                                      . "</a>"
+                                                      . "<span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />";    
+                                }
+                                $tool_content .= "<br /><small>";
+                                if (!$messagebody) {
+                                        $tool_content .= standard_text_escape(ellipsize_html($w->description, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;rm_id=$w->id'>[$langMore]</span></a></strong>"));
+                                } else {
+                                        $tool_content .= standard_text_escape($w->description);
+                                }
+                                $tool_content .= "</small></td>";                            
+                                $tool_content .= "<td><small>".display_user($w->uploaderId, false, false)."</small></td>";
+                                $tool_content .= "<td><small>".$w->uploadDate;
+                                if ($w->uploadDate != $w->lastUploadDate) {
+                                        $tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
+                                }
+                                $tool_content .= "</small></td><td class='center'>";
+                                $tool_content .= "
+                                    <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>
+                                    <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                                $tool_content .= "</td></tr>";
+                                $i++;
+                        } //end of foreach
+                        $tool_content .= "</table>";
+                }
+        }  
     }
-    $tool_content .= "</p>";
-
     /*
      * --------------------------------------
-     * SENT FILES LIST
+     *SENT FILES LIST:  TABLE HEADER
      * --------------------------------------
      */
+    if (!isset($r_message_id)) {
+        $numSent = count($dropbox_person -> sentWork);
+        $tool_content .= "<br /><p class='sub_title1'>";
+        $tool_content .= $dropbox_lang["sentTitle"];
+        // if the user has sent files then display the icon deleteall
+        if ($numSent > 0) {
+                $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
+                onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+        }
+        $tool_content .= "</p>";
 
-    if ($numSent == 0) {
-            $tool_content .= "<p class='alert1'>".$dropbox_lang['tableEmpty']."</p>";
-    } else {
-           $tool_content .= "
+        /*
+         * --------------------------------------
+         * SENT FILES LIST
+         * --------------------------------------
+         */
+
+        if ($numSent == 0) {
+                $tool_content .= "<p class='alert1'>".$dropbox_lang['tableEmpty']."</p>";
+        } else {
+               $tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width=100% class='sortable' id='t2'>
+                <tr>
+                <th colspan='2' class='left'>$dropbox_lang[file]</th>
+                <th width='130'>$dropbox_lang[col_recipient]</th>
+                <th width='100'>$langDate</th>
+                <th width='20'>$langDelete</th>
+                </tr>";
+
+                $i = 0;
+                foreach ($dropbox_person -> sentWork as $w) {
+                        $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';  
+                        $ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id) ;               
+                        if ($i%2 == 0) {
+                                $tool_content .= "<tr class='even'>";
+                        } else {
+                                $tool_content .= "<tr class='odd'>";
+                        }
+                        $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
+                        $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sm_id=$w->id'>".q($w->title)."</a>";
+                        if (($w->filename != '') and ($w->filesize != 0)) {
+                                $tool_content .= "&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>
+                                        <span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />";
+                        }
+                        $tool_content .= "<small>";
+                        if (!$messagebody) {
+                                $tool_content .= standard_text_escape(ellipsize_html($w->description, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sm_id=$w->id'>[$langMore]</span></a></strong>"));
+                        } else {
+                                $tool_content .= standard_text_escape($w->description);
+                        }
+                        $tool_content .= "</small></td>";
+                        $tool_content .= "<td>";
+                        $recipients_names = '';                
+                        foreach($w -> recipients as $r) {
+                                $recipients_names .= display_user($r['id'], false, false) . " <br />";
+                        }
+                        if (isset($_GET['d']) and $_GET['d'] == 'all') {
+                                $tool_content .= "<small>$recipients_names</small>";
+                        } else {
+                                $tool_content .= "<small>".ellipsize_html($recipients_names, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>")."</small>";
+                        }
+                        $tool_content .= "</td>
+                                        <td><small>$w->uploadDate</small></td>
+                                        <td class='center'>
+                                        <div class='cellpos'>";
+                        //<!--	Users cannot delete their own sent files -->
+
+                        $tool_content .= "
+                        <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
+                                onClick=\"return confirmation();\">
+                                <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                        $tool_content .= "</div></td></tr>";
+
+                        if ($w -> uploadDate != $w->lastUploadDate) {
+                                $tool_content .= "<tr><td colspan='2'>
+                                <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
+                                </tr>";
+                        }
+                        $i++;
+                } //end of foreach
+                $tool_content .= "</table>";
+        }
+    }
+    
+    if ($is_editor) {
+        $tool_content .= "<br /><p class='sub_title1'>";
+        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;other=1'>$langOtherDropBoxFiles</a>&nbsp;<span class='smaller'>[...]</span>";
+        $tool_content .= "</p>";
+    }
+}
+
+// display all user files sent and received (only to course admin)
+if ($displayall) {
+    $num = count($dropbox_person->allsentWork);
+    if ($num > 0) {                        
+            $tool_content .= "<br /><p class='sub_title1'>";
+            $tool_content .= $langOtherDropBoxFiles;                
+            $tool_content .= "</p>";
+
+            $tool_content .= "
             <script type='text/javascript' src='../auth/sorttable.js'></script>
             <table width=100% class='sortable' id='t2'>
             <tr>
             <th colspan='2' class='left'>$dropbox_lang[file]</th>
-            <th width='130'>$dropbox_lang[col_recipient]</th>
+            <th width='65'>$langSender</th>
+            <th width='65'>$dropbox_lang[col_recipient]</th>
             <th width='100'>$langDate</th>
             <th width='20'>$langDelete</th>
             </tr>";
-
             $i = 0;
-            foreach ($dropbox_person -> sentWork as $w) {
-                    $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';  
-                    $ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id) ;               
+            foreach ($dropbox_person -> allsentWork as $w) {                            
+                    $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';
+                    $ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id);
                     if ($i%2 == 0) {
                             $tool_content .= "<tr class='even'>";
                     } else {
                             $tool_content .= "<tr class='odd'>";
                     }
                     $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
-                    if (($w->filename != '') and ($w->filesize != 0)) {                        
-                            $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sm_id=$w->id'>".q($w->title)."</a>&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>
-                                    <span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />
-                                    <small>". standard_text_escape($w->description)."</small></td>";
-                    } else {                        
-                            $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sm_id=$w->id'>".q($w->title)."</a><br /><small>". standard_text_escape($w->description)."</small></td>";
-                    }               
+                    $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;other=1&amp;a_id=$w->id'>".q($w->title)."</a>";
+                    if (($w->filename != '') and ($w->filesize != 0)) {
+                            $tool_content .= "&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>
+                                            <span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />";
+                    } 
+                    $tool_content .= "<small>";
+                    if (!$messagebody) {
+                        $tool_content .= standard_text_escape(ellipsize_html($w->description, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;other=1&amp;a_id=$w->id'>[$langMore]</span></a></strong>"));
+                    } else {
+                        $tool_content .= standard_text_escape($w->description);
+                    }
+                    $tool_content .= "</small></td>";
+                    $tool_content .= "<td><small>".display_user($w->uploaderId, false, false)."</small></td>";
                     $tool_content .= "<td>";
                     $recipients_names = '';                
-                    foreach($w -> recipients as $r) {
+                    foreach($w -> recipients as $r) {                                
                             $recipients_names .= display_user($r['id'], false, false) . " <br />";
                     }
                     if (isset($_GET['d']) and $_GET['d'] == 'all') {
@@ -281,111 +407,21 @@ if (!isset($r_message_id)) {
                     $tool_content .= "</td>
                                     <td><small>$w->uploadDate</small></td>
                                     <td class='center'>
-                                    <div class='cellpos'>";
-                    //<!--	Users cannot delete their own sent files -->
-
+                                    <div class='cellpos'>";                
                     $tool_content .= "
-                    <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
-                            onClick=\"return confirmation();\">
+                    <a href=\"dropbox_submit.php?course=$code_cours&amp;AdminDeleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
+                            onClick=\"return confirmationpurge();\">
                             <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                     $tool_content .= "</div></td></tr>";
-
                     if ($w -> uploadDate != $w->lastUploadDate) {
                             $tool_content .= "<tr><td colspan='2'>
-                            <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
+                            <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class='dropbox_date'>$w->lastUploadDate</span></span></td>
                             </tr>";
                     }
                     $i++;
-            } //end of foreach
+            } //end of foreach        
             $tool_content .= "</table>";
     }
 }
-        
-
-// display all user files sent and received (only to course admin)
-if ($is_editor) {       
-        if (isset($_GET['other']) and $_GET['other']) {
-                $num = count($dropbox_person->allsentWork);
-                if ($num > 0) {                        
-                        $tool_content .= "<br /><p class='sub_title1'>";
-                        $tool_content .= $langOtherDropBoxFiles;                
-                        $tool_content .= "</p>";
-
-                        $tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width=100% class='sortable' id='t2'>
-                        <tr>
-                        <th colspan='2' class='left'>$dropbox_lang[file]</th>
-                        <th width='65'>$langSender</th>
-                        <th width='65'>$dropbox_lang[col_recipient]</th>
-                        <th width='100'>$langDate</th>
-                        <th width='20'>$langDelete</th>
-                        </tr>";
-                        $i = 0;
-                        foreach ($dropbox_person -> allsentWork as $w) {                        
-                                $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';
-                                $ahref = "dropbox_download.php?course=$code_cours&amp;id=" . urlencode($w->id) ;                        
-                                if ($i%2 == 0) {
-                                        $tool_content .= "<tr class='even'>";
-                                } else {
-                                        $tool_content .= "<tr class='odd'>";
-                                }
-                                $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
-                                if (($w->filename != '') and ($w->filesize != 0)) {
-                                        $tool_content .= "<td>".q($w->title)."&nbsp;&nbsp;<a href='$ahref' target='_blank'><small>$langAttachedFile</small><img src='$themeimg/inbox.png' /></a>
-                                                        <span class='smaller'>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</span><br />
-                                                        <small>".standard_text_escape($w->description)."</small></td>";
-                                } else {                                
-                                        $tool_content .= "<td>".q($w->title)."<br /><small>".standard_text_escape($w->description)."</small></td>";
-                                }
-                                $tool_content .= "<td><small>".display_user($w->uploaderId, false, false)."</small></td>";
-                                $tool_content .= "<td>";
-                                $recipients_names = '';                
-                                foreach($w -> recipients as $r) {                                
-                                        $recipients_names .= display_user($r['id'], false, false) . " <br />";
-                                }
-                                if (isset($_GET['d']) and $_GET['d'] == 'all') {
-                                        $tool_content .= "<small>$recipients_names</small>";
-                                } else {
-                                        $tool_content .= "<small>".ellipsize_html($recipients_names, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>")."</small>";
-                                }
-                                $tool_content .= "</td>
-                                                <td><small>$w->uploadDate</small></td>
-                                                <td class='center'>
-                                                <div class='cellpos'>";                
-                                $tool_content .= "
-                                <a href=\"dropbox_submit.php?course=$code_cours&amp;AdminDeleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
-                                        onClick=\"return confirmationpurge();\">
-                                        <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
-                                $tool_content .= "</div></td></tr>";
-                                if ($w -> uploadDate != $w->lastUploadDate) {
-                                        $tool_content .= "<tr><td colspan='2'>
-                                        <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class='dropbox_date'>$w->lastUploadDate</span></span></td>
-                                        </tr>";
-                                }
-                                $i++;
-                        } //end of foreach        
-                        $tool_content .= "</table>";
-                }
-        } else { // end of $other 
-                $tool_content .= "<br /><p class='sub_title1'>";
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;other=1'>$langOtherDropBoxFiles</a>&nbsp;<span class='smaller'>[...]</span>";
-                $tool_content .= "</p>";
-        }
-} // end of $is_editor
-
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
-        });
-});</script>
-<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
 draw($tool_content, 2, null, $head_content);
