@@ -342,7 +342,7 @@ while ($myrow = mysql_fetch_array($result)) {
         // opencourses reviewer right
         if (get_config('opencourses_enable')) {
             if ($myrow['user_id'] != $_SESSION["uid"]) {
-                if ($is_opencourses_reviewer) {
+                if ($is_opencourses_reviewer and !$is_admin) {
                     // do nothing as the reviewer cannot give the reviewer right to other users
                     $tool_content .= "<td></td>";
                 } else {
