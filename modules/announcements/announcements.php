@@ -60,21 +60,20 @@ $head_content .= "<script type='text/javascript'>
                         null,
                         { 'bSortable': false }
                     ],
-                    'oLanguage': {
-                       'sProcessing':   'Επεξεργασία...',
-                       'sLengthMenu':   'Εμφάνισε _MENU_ εγγραφές',
-                       'sZeroRecords':  'Δεν βρέθηκαν εγγραφές που να ταιριάζουν',
-                       'sInfo':         'Εμφανίζονται _START_ εως _END_ από _TOTAL_ εγγραφές',
-                       'sInfoEmpty':    'Εμφανίζονται 0 εως 0 από 0 εγγραφές',
-                       'sInfoFiltered': '(φιλτραρισμένες από _MAX_ συνολικά εγγραφές)',
+                    'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '".$langNoResult."',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       'Αναζήτηση:',
+                       'sSearch':       '".$langSearch."',
                        'sUrl':          '',
                        'oPaginate': {
-                           'sFirst':    'Πρώτη',
-                           'sPrevious': 'Προηγούμενη',
-                           'sNext':     'Επόμενη',
-                           'sLast':     'Τελευταία'
+                           'sFirst':    '".$langFirst."',
+                           'sPrevious': '".$langPreviousPage."',
+                           'sNext':     '".$langNextPage."',
+                           'sLast':     '".$langLast."'
                        }
                    }
             });

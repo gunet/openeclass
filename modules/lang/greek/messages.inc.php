@@ -180,6 +180,7 @@ $langAnnouncements = "Ανακοινώσεις";
 $langNumEachRec = "Αριθμός εγγραφών ανά μάθημα";
 $langFrom = "Από";
 $langFrom2 = "από";
+$langTo = "έως";
 $langNotExist = "Δεν υπάρχουν";
 $langExist = "Υπάρχουν!";
 $langResult =" Αποτέλεσμα";
@@ -607,6 +608,12 @@ $langEmailUnsubSuccess = "Δεν θα λαμβάνετε πλέον e-mails απ
 $langEmailFromCourses = "Λήψη e-mails από τα μαθήματά μου";
 $langEmailUnsubscribeWarning = "Έχετε απενεργοποιήσει τη λήψη μηνυμάτων από την πλατφόρμα. 
 Δεν μπορείτε να ρυθμίσετε τη λήψη από συγκεκριμένα μαθήματα πριν την επανενεργοποιήσετε.";
+$langDisplay = "Εμφάνισε";
+$langLast = "Τελευταία";
+$langFirst = "Πρώτη";
+$langTotalResults = "συνολικά αποτελέσματα";
+$langDisplayed = "Εμφανίζονται";
+$langTill = "έως";
 
 /*******************************************
 * archive_course.php
@@ -1310,6 +1317,7 @@ $langExerciseLis="Λίστα ασκήσεων";
 $langExerciseEndTime = "Τέλος χρόνου";
 $langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults="Αποτελέσματα";
+$langResults2="αποτελέσματα";
 $langResultsFailed="Αποτυχία";
 $langYourTotalScore2="Συνολική βαθμολογία";
 $langExerciseScores1="HTML";

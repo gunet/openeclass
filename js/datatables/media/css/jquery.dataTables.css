@@ -8,7 +8,7 @@ table.dataTable {
 	width: 100%;
 }
 
-table.dataTable thead th {
+table.dataTable thead th {        
 	padding: 3px 18px 3px 10px;
 	border-bottom: 1px solid black;
 	font-weight: bold;
@@ -63,8 +63,9 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 /*
  * Page length menu
  */
-.dataTables_length {
+.dataTables_length {    
 	float: left;
+        padding-bottom: 18px; // added
 }
 
 
@@ -80,9 +81,10 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 /*
  * Table information
  */
-.dataTables_info {
+.dataTables_info {        
 	clear: both;
 	float: left;
+        padding-top: 20px; //added
 }
 
 
@@ -92,6 +94,8 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 .dataTables_paginate {
 	float: right;
 	text-align: right;
+        padding-top: 20px; // added
+        
 }
 
 /* Two button pagination - previous / next */
