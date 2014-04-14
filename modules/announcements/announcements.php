@@ -47,7 +47,7 @@ $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
 
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
-   
+
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
@@ -312,7 +312,9 @@ if ($is_editor) {
 		$tool_content .= "<tr><th>&nbsp;</th><th>$langAnnouncement</th>";                
 		if ($is_editor) {
 		    $tool_content .= "<th width='60' class='center'>$langActions</th>";
-		}
+		} else {
+                    $tool_content .= "<th>&nbsp;</th>";
+                }
 		$tool_content .= "</tr>";	
                 $tool_content .= "</thead>";
                 $tool_content .= "<tbody>";
@@ -345,7 +347,7 @@ if ($is_editor) {
                             $tool_content .= create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
                     }
                     $tool_content .= "</td>";
-
+                    
                     if ($is_editor) {
                             $tool_content .= "<td width='100' class='right'>" .
                                     icon('edit', $langModify,
@@ -366,6 +368,8 @@ if ($is_editor) {
                                 </a>";
                             }                            
                             $tool_content .= "</td>";
+                    } else {
+                        $tool_content .= "<td>&nbsp;</td>";
                     }
                     $tool_content .= "</tr>";
                     $iterator ++;
