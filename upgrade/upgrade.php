@@ -1069,7 +1069,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `active` INT(11) NOT NULL DEFAULT 0)
+                            `active` INT(11) NOT NULL DEFAULT 0,
+                            `anonymized` INT(1) NOT NULL DEFAULT 0)
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                             `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
