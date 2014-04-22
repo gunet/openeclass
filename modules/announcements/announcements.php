@@ -374,6 +374,7 @@ if ($is_editor) {
     /* display announcements */
     if (isset($_GET['an_id'])) {
         $nameTools = $row['title'];
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$code_cours", "name" => $langAnnouncements);
         $tool_content .= $row['contenu'];
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
