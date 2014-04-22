@@ -116,14 +116,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
    
 load_js('tools.js');
 load_js('jquery');
+//check if Datables code is needed
+if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
-$head_content .= "<script type='text/javascript'>
+load_js('datatables_filtering_delay');
+$head_content .= "<script type='text/javascript'>  
         $(document).ready(function() {
-            $('#ann_table').DataTable ({
+           $('#ann_table').DataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
-                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
+                'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',                   
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
@@ -147,9 +151,10 @@ $head_content .= "<script type='text/javascript'>
                            'sLast':     '&raquo;'
                        }
                    }
-            });
+            }).fnSetFilteringDelay(1000);
         });
         </script>";
+}
 ModalBoxHelper::loadModalBox();
 
 $fake_code = course_id_to_fake_code($cours_id);
