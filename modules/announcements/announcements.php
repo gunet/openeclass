@@ -47,20 +47,91 @@ $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
 
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
+//Identifying ajax request
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $limit = $_GET['iDisplayLength'];
+    $offset = $_GET['iDisplayStart'];
+    $keyword = $_GET['sSearch'];
+    
+    (!$is_editor)? $student_sql = "AND visibility = 'v'" : $student_sql = "";
+    $all_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id $student_sql", $mysqlMainDb);
+    $all_announc = mysql_fetch_assoc($all_announc);
+    $filtered_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id AND title LIKE '%$keyword%' $student_sql", $mysqlMainDb);
+    $filtered_announc = mysql_fetch_assoc($filtered_announc);
+    ($limit>0) ? $extra_sql = "LIMIT $offset,$limit" : $extra_sql = "";
 
+    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND title LIKE '%$keyword%' $student_sql ORDER BY ordre DESC $extra_sql", $mysqlMainDb);
+
+    $data['iTotalRecords'] = $all_announc['total'];
+    $data['iTotalDisplayRecords'] = $filtered_announc['total'];
+    $data['aaData'] = array();
+    if ($is_editor) {
+        $iterator = 1;
+        while ($myrow = mysql_fetch_array($result)) {
+            //checking visibility status
+            if ($myrow['visibility'] == 'i') {
+                $visibility = 1;
+                $vis_icon = 'invisible';
+            } else {
+                $visibility = 0;
+                $vis_icon = 'visible';               
+            }
+            //checking ordering status and initializing appropriate arrows
+            $up_arrow = $down_arrow = '';
+            if ($iterator != 1)  {
+                $up_arrow = "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
+                                <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ."' alt = '". q($langUp) . "' />
+                                </a>";
+            }
+            if ($iterator < $all_announc['total']) {
+                $down_arrow = "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
+                                <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ."' alt = '". q($langDown) . "' />
+                                </a>";
+            }
+            //setting datables column data
+            $preview = create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
+            $data['aaData'][] = array(
+                'DT_RowClass' => $vis_icon,
+                '0' => date('d-m-Y', strtotime($myrow['temps'])), 
+                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&an_id='.$myrow['id'].'">'.$myrow['title'].'</a>'.$preview, 
+                '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]")  .
+                       "&nbsp;" . icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]", "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
+                       "&nbsp;" . icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") . 
+                       "&nbsp;" . $down_arrow . $up_arrow
+                );
+            $iterator++;
+        }
+    } else {
+        while ($myrow = mysql_fetch_array($result)) {
+            $preview = create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
+            $data['aaData'][] = array(
+                '0' => date('d-m-Y', strtotime($myrow['temps'])), 
+                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&an_id='.$myrow['id'].'">'.$myrow['title'].'</a>'.$preview
+                );
+        }        
+    }
+    echo json_encode($data);
+    exit();
+}
+   
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#ann_table').DataTable ({
+                'bStateSave': true,
+                'bProcessing': true,
+                'bServerSide': true,
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
+                'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],                    
                 'sPaginationType': 'full_numbers',
-                    'aoColumns': [
-                        { 'bSortable': false },
-                        null,
-                        { 'bSortable': false }
-                    ],
-                    'oLanguage': {                       
+                'bSort': true,\n"
+                .(($is_editor) ? "'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [ 0 ] }, { 'bSortable': false, 'aTargets': [ 1 ] }, { 'bSortable': false, 'aTargets': [ 2 ] }]," : "").                
+                "'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -70,10 +141,10 @@ $head_content .= "<script type='text/javascript'>
                        'sSearch':       '".$langSearch."',
                        'sUrl':          '',
                        'oPaginate': {
-                           'sFirst':    '".$langFirst."',
-                           'sPrevious': '".$langPreviousPage."',
-                           'sNext':     '".$langNextPage."',
-                           'sLast':     '".$langLast."'
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
                        }
                    }
             });
@@ -84,6 +155,11 @@ ModalBoxHelper::loadModalBox();
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
+if (isset($_GET['an_id'])) {
+    (!$is_editor)? $student_sql = "AND visibility = 'v'" : $student_sql = "";
+    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = ". intval($_GET['an_id']) ." ".$student_sql, $mysqlMainDb);
+    $row = mysql_fetch_array($result);
+}
 if ($is_editor) {	
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
@@ -239,7 +315,7 @@ if ($is_editor) {
     }
 
     /* display form */
-    if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
+    if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$code_cours."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
@@ -283,109 +359,31 @@ if ($is_editor) {
 	/* display actions toolbar */
 	$tool_content .= "
 	<div id='operations_container'>
-	  <ul id='opslist'>
-	    <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$code_cours . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>
-	  </ul>
+	  <ul id='opslist'>";
+        if (isset($_GET['an_id'])) {
+            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$code_cours . "&amp;modify=$row[id]'>" . $langModify . "</a></li>
+                              <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$code_cours . "&amp;delete=$row[id]' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";
+        } else {
+            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$code_cours . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>";
+        }
+        $tool_content .= "  </ul>
 	</div>";
     }
 } // end: teacher only
 
     /* display announcements */
-	if ($is_editor) {
-		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = ". intval($_GET['an_id']), $mysqlMainDb);
-		} else {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
-		}
-	} else {
-		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = ". intval($_GET['an_id']) ." AND visibility = 'v'", $mysqlMainDb);
-		} else {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
-		}
-	}
-        $iterator = 1;
-        $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-        if ($announcementNumber > 0) {
-                $tool_content .= "<table id='ann_table' class='display'>";
-                $tool_content .= "<thead>";	
-		$tool_content .= "<tr><th>&nbsp;</th><th>$langAnnouncement</th>";                
-		if ($is_editor) {
-		    $tool_content .= "<th width='60' class='center'>$langActions</th>";
-		} else {
-                    $tool_content .= "<th>&nbsp;</th>";
-                }
-		$tool_content .= "</tr>";	
-                $tool_content .= "</thead>";
-                $tool_content .= "<tbody>";
-                $k = 0;
-                while ($myrow = mysql_fetch_array($result)) {
-                    $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
-                    if ($is_editor and $myrow['visibility'] == 'i') {
-                            $visibility = 1;
-                            $vis_icon = 'invisible';
-                            $tool_content .= "<tr class='invisible'>";
-                    } else {
-                            $visibility = 0;
-                            $vis_icon = 'visible';
-                            $tool_content .= "<tr>";
-                    }
-                    $tool_content .= "<td width='16' valign='top'>
-                            <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>
-                            <td><b>";
-                    if (empty($myrow['title'])) {
-                        $tool_content .= $langAnnouncementNoTille;
-                    } else {
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
-                    }
-                    $tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
-                    if (isset($_GET['an_id'])) {
-                            $navigation[] = array('url' => "announcements.php?course=$code_cours", 'name' => $langAnnouncements);
-                            $nameTools = q($myrow['title']);
-                            $tool_content .= standard_text_escape($myrow['contenu']);
-                    } else {
-                            $tool_content .= create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
-                    }
-                    $tool_content .= "</td>";
-                    
-                    if ($is_editor) {
-                            $tool_content .= "<td width='100' class='right'>" .
-                                    icon('edit', $langModify,
-                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]") .
-                                    "&nbsp;" . icon('delete', $langDelete,
-                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]",
-                                            "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
-                                    "&nbsp;" . icon($vis_icon, $langVisible,
-                                            "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") ."";                            
-                            if ($iterator != 1)  {
-                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
-                                <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ."' alt = '". q($langUp) . "' />
-                                </a>";
-                            }
-                            if ($iterator < $bottomAnnouncement) {
-                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
-                                <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ."' alt = '". q($langDown) . "' />
-                                </a>";
-                            }                            
-                            $tool_content .= "</td>";
-                    } else {
-                        $tool_content .= "<td>&nbsp;</td>";
-                    }
-                    $tool_content .= "</tr>";
-                    $iterator ++;
-                    $k++;
-            } // end of while
-            $tool_content .= "</tbody>";
-            $tool_content .= "</table>";
-        } else  {
-            $no_content = true;
-            if (isset($_GET['addAnnounce'])) {
-                $no_content = false;
-            }
-            if (isset($_GET['modify'])) {
-                $no_content = false;
-            }
-            if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>";
+    if (isset($_GET['an_id'])) {
+        $nameTools = $row['title'];
+        $tool_content .= $row['contenu'];
+    }
+    if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
+        $tool_content .= "<table id='ann_table' class='display'>";
+        $tool_content .= "<thead>";	
+        $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";                
+        if ($is_editor) {
+            $tool_content .= "<th width='100' class='center'>$langActions</th>";
         }
+        $tool_content .= "</tr></thead><tbody></tbody></table>";
+    }
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
