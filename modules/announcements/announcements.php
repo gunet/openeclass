@@ -122,8 +122,19 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>  
         $(document).ready(function() {
+            function save_dt_view (oSettings, oData) {
+              sessionStorage.setItem( 'DataTables{$cours_id}_'+window.location.pathname, JSON.stringify(oData) );
+            }
+            function load_dt_view (oSettings) {
+              return JSON.parse( sessionStorage.getItem('DataTables{$cours_id}_'+window.location.pathname) );
+            }
+            function reset_dt_view() {
+              sessionStorage.removeItem('DataTables{$cours_id}_'+window.location.pathname);
+            }    
            $('#ann_table').DataTable ({
-                'bStateSave': true,
+                'bStateSave': true,  
+                'fnStateSave': function(oSettings, oData) { save_dt_view(oSettings, oData); },
+                'fnStateLoad': function(oSettings) { return load_dt_view(oSettings); },                
                 'bProcessing': true,
                 'bServerSide': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
@@ -140,6 +151,7 @@ $head_content .= "<script type='text/javascript'>
                     } else {
                         $('.dataTables_paginate').css('display', 'none');
                         $('.dataTables_filter').css('display', 'none');
+                        reset_dt_view();
                     }
                     if (this.fnSettings().fnRecordsDisplay() > 10)  {
                         $('.dataTables_length').css('display', 'block');
