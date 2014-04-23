@@ -133,6 +133,20 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],                    
                 'sPaginationType': 'full_numbers',
+                'fnDrawCallback': function() {
+                    if (Math.ceil((this.fnSettings().fnRecordsDisplay()) / this.fnSettings()._iDisplayLength) > 1)  {
+                        $('.dataTables_paginate').css('display', 'block'); 
+                        $('.dataTables_filter').css('display', 'block');                       
+                    } else {
+                        $('.dataTables_paginate').css('display', 'none');
+                        $('.dataTables_filter').css('display', 'none');
+                    }
+                    if (this.fnSettings().fnRecordsDisplay() > 10)  {
+                        $('.dataTables_length').css('display', 'block');
+                    } else {
+                        $('.dataTables_length').css('display', 'none');
+                    }
+                },               
                 'bSort': true,\n"
                 .(($is_editor) ? "'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [ 0 ] }, { 'bSortable': false, 'aTargets': [ 1 ] }, { 'bSortable': false, 'aTargets': [ 2 ] }]," : "").                
                 "'oLanguage': {                       
