@@ -1,4 +1,4 @@
-jQuery.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay ) {
+$.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay ) {
     var _that = this;
  
     if ( iDelay === undefined ) {
@@ -29,4 +29,33 @@ jQuery.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay )
         return this;
     } );
     return this;
+};
+$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+{
+    return {
+        "iStart":         oSettings._iDisplayStart,
+        "iEnd":           oSettings.fnDisplayEnd(),
+        "iLength":        oSettings._iDisplayLength,
+        "iTotal":         oSettings.fnRecordsTotal(),
+        "iFilteredTotal": oSettings.fnRecordsDisplay(),
+        "iPage":          oSettings._iDisplayLength === -1 ?
+            0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+        "iTotalPages":    oSettings._iDisplayLength === -1 ?
+            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+    };
+};
+$.fn.dataTableExt.oApi.fnDisplayStart = function ( oSettings, iStart, bRedraw )
+{
+    if ( typeof bRedraw == 'undefined' ) {
+        bRedraw = true;
+    }
+ 
+    oSettings._iDisplayStart = iStart;
+    if ( oSettings.oApi._fnCalculateEnd ) {
+        oSettings.oApi._fnCalculateEnd( oSettings );
+    }
+ 
+    if ( bRedraw ) {
+        oSettings.oApi._fnDraw( oSettings );
+    }
 };

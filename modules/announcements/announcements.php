@@ -49,6 +49,11 @@ $action->record('MODULE_ID_ANNOUNCE');
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['action']) && $_POST['action']=='delete') {
+	$row_id = intval($_POST['value']);
+        $result = db_query("DELETE FROM annonces WHERE id='$row_id'", $mysqlMainDb);      
+        exit();
+    }
     $limit = $_GET['iDisplayLength'];
     $offset = $_GET['iDisplayStart'];
     $keyword = $_GET['sSearch'];
@@ -91,11 +96,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //setting datables column data
             $preview = create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
             $data['aaData'][] = array(
+                'DT_RowId' => $myrow['id'],
                 'DT_RowClass' => $vis_icon,
                 '0' => date('d-m-Y', strtotime($myrow['temps'])), 
                 '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&an_id='.$myrow['id'].'">'.$myrow['title'].'</a>'.$preview, 
                 '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]")  .
-                       "&nbsp;" . icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]", "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
+                       "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\" onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
                        "&nbsp;" . icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") . 
                        "&nbsp;" . $down_arrow . $up_arrow
                 );
@@ -113,7 +119,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data);
     exit();
 }
-   
+$deleted_code='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]';   
 load_js('tools.js');
 load_js('jquery');
 //check if Datables code is needed
@@ -122,19 +128,8 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>  
         $(document).ready(function() {
-            function save_dt_view (oSettings, oData) {
-              sessionStorage.setItem( 'DataTables{$cours_id}_'+window.location.pathname, JSON.stringify(oData) );
-            }
-            function load_dt_view (oSettings) {
-              return JSON.parse( sessionStorage.getItem('DataTables{$cours_id}_'+window.location.pathname) );
-            }
-            function reset_dt_view() {
-              sessionStorage.removeItem('DataTables{$cours_id}_'+window.location.pathname);
-            }    
-           $('#ann_table').DataTable ({
-                'bStateSave': true,  
-                'fnStateSave': function(oSettings, oData) { save_dt_view(oSettings, oData); },
-                'fnStateLoad': function(oSettings) { return load_dt_view(oSettings); },                
+           var oTable = $('#ann_table').DataTable ({
+                'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
@@ -151,12 +146,6 @@ $head_content .= "<script type='text/javascript'>
                     } else {
                         $('.dataTables_paginate').css('display', 'none');
                         $('.dataTables_filter').css('display', 'none');
-                        reset_dt_view();
-                    }
-                    if (this.fnSettings().fnRecordsDisplay() > 10)  {
-                        $('.dataTables_length').css('display', 'block');
-                    } else {
-                        $('.dataTables_length').css('display', 'none');
                     }
                 },               
                 'bSort': true,\n"
@@ -178,6 +167,20 @@ $head_content .= "<script type='text/javascript'>
                        }
                    }
             }).fnSetFilteringDelay(1000);
+            $(document).on( 'click','.delete_btn', function (e) {
+                e.preventDefault();
+                var row_id = $(this).closest('tr').attr('id');
+                $.post('', { action: 'delete', value: row_id}, function() {
+                    var per_page = oTable.fnPagingInfo().iLength;
+                    var page_number = oTable.fnPagingInfo().iPage;
+                    if(num_page_records==1){
+                        if(page_number!=0) {
+                            page_number--;
+                        }
+                    }
+                    oTable.fnDisplayStart(page_number*per_page);
+                }, 'json');                             
+            });            
         });
         </script>";
 }
