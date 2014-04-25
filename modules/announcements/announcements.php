@@ -49,11 +49,23 @@ $action->record('MODULE_ID_ANNOUNCE');
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if (isset($_POST['action']) && $_POST['action']=='delete') {
-	$row_id = intval($_POST['value']);
-        $result = db_query("DELETE FROM annonces WHERE id='$row_id'", $mysqlMainDb);      
-        exit();
-    }
+    if (isset($_POST['action']) && $is_editor) {
+        if ($_POST['action']=='delete') {
+            $row_id = intval($_POST['value']);
+            $result = db_query("DELETE FROM annonces WHERE id='$row_id'", $mysqlMainDb);      
+            exit();
+        } elseif ($_POST['action']=='visibility') {
+            /* modify visibility */
+           $row_id = intval($_POST['value']);
+           $visibility = intval($_POST['visibility']);
+           if ($visibility == 0) {
+                $result = db_query("UPDATE annonces SET visibility = 'i' WHERE id = '$row_id'", $mysqlMainDb);
+           } else {
+                $result = db_query("UPDATE annonces SET visibility = 'v' WHERE id = '$row_id'", $mysqlMainDb);
+           }
+           exit();
+        }
+    }  
     $limit = $_GET['iDisplayLength'];
     $offset = $_GET['iDisplayStart'];
     $keyword = $_GET['sSearch'];
@@ -102,7 +114,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&an_id='.$myrow['id'].'">'.$myrow['title'].'</a>'.$preview, 
                 '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]")  .
                        "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\" onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
-                       "&nbsp;" . icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") . 
+                       "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visibility\"") . 
                        "&nbsp;" . $down_arrow . $up_arrow
                 );
             $iterator++;
@@ -119,7 +131,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data);
     exit();
 }
-$deleted_code='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]';   
 load_js('tools.js');
 load_js('jquery');
 //check if Datables code is needed
@@ -182,6 +193,15 @@ $head_content .= "<script type='text/javascript'>
                     $('.success').html('$langAnnDel');
                     oTable.fnDisplayStart(page_number*per_page);
                 }, 'json');                             
+            });
+            $(document).on( 'click','.vis_btn', function (e) {
+                e.preventDefault();              
+                var vis = $(this).data('vis');
+                var row_id = $(this).closest('tr').attr('id');
+                $.post('', { action: 'visibility', value: row_id, visibility: vis}, function() {
+                    var page_number = oTable.fnPagingInfo().iPage;
+                    oTable.fnDisplayStart(page_number);
+                }, 'json');                             
             });            
         });
         </script>";
@@ -234,17 +254,6 @@ if ($is_editor) {
 			}
 		}
 	}
-
-    /* modify visibility */
-    if (isset($_GET['mkvis'])) {
-	$mkvis = intval($_GET['mkvis']);
-	if ($_GET['vis'] == 1) {
-	    $result = db_query("UPDATE annonces SET visibility = 'v' WHERE id = '$mkvis'", $mysqlMainDb);
-	}
-	if ($_GET['vis'] == 0) {
-	    $result = db_query("UPDATE annonces SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
-	}
-    }
 
     /* modify */
     if (isset($_GET['modify'])) {
