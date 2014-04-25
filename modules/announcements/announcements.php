@@ -171,6 +171,7 @@ $head_content .= "<script type='text/javascript'>
                 e.preventDefault();
                 var row_id = $(this).closest('tr').attr('id');
                 $.post('', { action: 'delete', value: row_id}, function() {
+                    var num_page_records = oTable.fnGetData().length;
                     var per_page = oTable.fnPagingInfo().iLength;
                     var page_number = oTable.fnPagingInfo().iPage;
                     if(num_page_records==1){
@@ -178,6 +179,7 @@ $head_content .= "<script type='text/javascript'>
                             page_number--;
                         }
                     }
+                    $('.success').html('$langAnnDel');
                     oTable.fnDisplayStart(page_number*per_page);
                 }, 'json');                             
             });            
@@ -242,12 +244,6 @@ if ($is_editor) {
 	if ($_GET['vis'] == 0) {
 	    $result = db_query("UPDATE annonces SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
 	}
-    }
-    /* delete */
-    if (isset($_GET['delete'])) {
-	$delete = intval($_GET['delete']);
-        $result = db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
-        $message = "<p class='success'>$langAnnDel</p>";
     }
 
     /* modify */
