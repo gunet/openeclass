@@ -66,18 +66,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
            exit();
         }
     }  
-    $limit = $_GET['iDisplayLength'];
-    $offset = $_GET['iDisplayStart'];
-    $keyword = $_GET['sSearch'];
+    $limit = intval($_GET['iDisplayLength']);
+    $offset = intval($_GET['iDisplayStart']);
+    $keyword = quote('%' . $_GET['sSearch'] . '%');
     
-    (!$is_editor)? $student_sql = "AND visibility = 'v'" : $student_sql = "";
+    $student_sql = $is_editor? '': "AND visibility = 'v'";
     $all_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id $student_sql", $mysqlMainDb);
     $all_announc = mysql_fetch_assoc($all_announc);
-    $filtered_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id AND title LIKE '%$keyword%' $student_sql", $mysqlMainDb);
+    $filtered_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id AND title LIKE $keyword $student_sql", $mysqlMainDb);
     $filtered_announc = mysql_fetch_assoc($filtered_announc);
     ($limit>0) ? $extra_sql = "LIMIT $offset,$limit" : $extra_sql = "";
 
-    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND title LIKE '%$keyword%' $student_sql ORDER BY ordre DESC $extra_sql", $mysqlMainDb);
+    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND title LIKE $keyword $student_sql ORDER BY ordre DESC $extra_sql", $mysqlMainDb);
 
     $data['iTotalRecords'] = $all_announc['total'];
     $data['iTotalDisplayRecords'] = $filtered_announc['total'];
@@ -95,15 +95,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
             //checking ordering status and initializing appropriate arrows
             $up_arrow = $down_arrow = '';
-            if ($iterator != 1)  {
-                $up_arrow = "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
-                                <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ."' alt = '". q($langUp) . "' />
-                                </a>";
+            if ($iterator != 1 or $offset > 0)  {
+                $up_arrow = icon('up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;up={$myrow['id']}");
             }
-            if ($iterator < $all_announc['total']) {
-                $down_arrow = "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
-                                <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ."' alt = '". q($langDown) . "' />
-                                </a>";
+            if ($offset + $iterator < $all_announc['total']) {
+                $down_arrow = icon('down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;down={$myrow['id']}");
             }
             //setting datables column data
             $preview = create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
