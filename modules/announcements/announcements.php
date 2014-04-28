@@ -176,19 +176,21 @@ $head_content .= "<script type='text/javascript'>
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                var row_id = $(this).closest('tr').attr('id');
-                $.post('', { action: 'delete', value: row_id}, function() {
-                    var num_page_records = oTable.fnGetData().length;
-                    var per_page = oTable.fnPagingInfo().iLength;
-                    var page_number = oTable.fnPagingInfo().iPage;
-                    if(num_page_records==1){
-                        if(page_number!=0) {
-                            page_number--;
+                if (confirmation('$langSureToDelAnnounce')) {
+                    var row_id = $(this).closest('tr').attr('id');
+                    $.post('', { action: 'delete', value: row_id}, function() {
+                        var num_page_records = oTable.fnGetData().length;
+                        var per_page = oTable.fnPagingInfo().iLength;
+                        var page_number = oTable.fnPagingInfo().iPage;
+                        if(num_page_records==1){
+                            if(page_number!=0) {
+                                page_number--;
+                            }
                         }
-                    }
-                    $('.success').html('$langAnnDel');
-                    oTable.fnPageChange(page_number);
-                }, 'json');                             
+                        $('.success').html('$langAnnDel');
+                        oTable.fnPageChange(page_number);
+                    }, 'json');
+                 }
             });
             $(document).on( 'click','.vis_btn', function (g) {
                 g.preventDefault();              
