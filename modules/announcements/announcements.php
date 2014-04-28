@@ -135,7 +135,7 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>  
         $(document).ready(function() {
-           var oTable = $('#ann_table').DataTable ({
+           var oTable = $('#ann_table{$cours_id}').DataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
@@ -187,16 +187,17 @@ $head_content .= "<script type='text/javascript'>
                         }
                     }
                     $('.success').html('$langAnnDel');
-                    oTable.fnDisplayStart(page_number*per_page);
+                    oTable.fnPageChange(page_number);
                 }, 'json');                             
             });
-            $(document).on( 'click','.vis_btn', function (e) {
-                e.preventDefault();              
+            $(document).on( 'click','.vis_btn', function (g) {
+                g.preventDefault();              
                 var vis = $(this).data('vis');
                 var row_id = $(this).closest('tr').attr('id');
                 $.post('', { action: 'visibility', value: row_id, visibility: vis}, function() {
                     var page_number = oTable.fnPagingInfo().iPage;
-                    oTable.fnDisplayStart(page_number);
+                    var per_page = oTable.fnPagingInfo().iLength;
+                    oTable.fnPageChange(page_number);
                 }, 'json');                             
             });            
         });
@@ -413,7 +414,7 @@ if ($is_editor) {
         $tool_content .= $row['contenu'];
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-        $tool_content .= "<table id='ann_table' class='display'>";
+        $tool_content .= "<table id='ann_table{$cours_id}' class='display'>";
         $tool_content .= "<thead>";	
         $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";                
         if ($is_editor) {
