@@ -109,7 +109,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 '0' => date('d-m-Y', strtotime($myrow['temps'])), 
                 '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&an_id='.$myrow['id'].'">'.$myrow['title'].'</a>'.$preview, 
                 '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]")  .
-                       "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\" onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
+                       "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\"") .
                        "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visibility\"") . 
                        "&nbsp;" . $down_arrow . $up_arrow
                 );
