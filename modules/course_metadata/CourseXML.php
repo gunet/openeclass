@@ -35,10 +35,11 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public function getAttribute($name) {
         $attributes = $this->attributes();
-        if (isset($attributes[$name]))
+        if (isset($attributes[$name])) {
             return $attributes[$name];
-        else
+        } else {
             return false;
+        }
     }
     
     /**
@@ -49,11 +50,13 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public function setLeafAttribute($name, $value) {
         $children = $this->children();
-        if (count($children) == 0)
+        if (count($children) == 0) {
             $this->addAttribute($name, $value);
+        }
         
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $ele->setLeafAttribute($name, $value);
+        }
     }
     
     /**
@@ -77,8 +80,9 @@ class CourseXMLElement extends SimpleXMLElement {
                        <li><a href='#tabs-4'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                     </ul>
                  <div id='tabs-1'>";
-        if ($data != null)
+        if ($data != null) {
             $this->populate($data);
+        }
         $out .= $this->populateForm();
         $out .= "</div>
                  <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
@@ -103,8 +107,9 @@ class CourseXMLElement extends SimpleXMLElement {
                        <li><a href='#tabs-4'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                     </ul>
                  <div id='tabs-1'>";
-        if ($data != null)
+        if ($data != null) {
             $this->populate($data);
+        }
         $out .= $this->populateDiv();
         $out .= "</div>
                  </div>";
@@ -121,12 +126,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
-        if (count($children) == 0)
+        if (count($children) == 0) {
             return $this->appendLeafFormField($fullKey);
+        }
         
         $out = "";
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $out .= $ele->populateForm($fullKey);
+        }
         
         return $out;
     }
@@ -141,12 +148,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
-        if (count($children) == 0)
+        if (count($children) == 0) {
             return $this->appendLeafDivElement($fullKey);
+        }
         
         $out = "";
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $out .= $ele->populateDiv($fullKey);
+        }
         
         return $out;
     }
@@ -170,72 +179,85 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
             $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
-            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage))
+            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage)) {
                 $sameAsCourseLang = true;
-            else
+            } else {
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
+            }
         }
         
         // proper divs initializations
         $fieldStart = "";
-        if (in_array($fullKey, self::$breakAccordionStartFields))
+        if (in_array($fullKey, self::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
+        }
         $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div title='$help' class='cmetarow'>
             <span class='$cmetalabel'>";
-        if (in_array($fullKey, self::$linkedFields))
+        if (in_array($fullKeyNoLang, self::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . self::getLinkedValue($fullKey) ."' target='_blank'>" . q($keyLbl . $lang) . "</a>";
-        else
+        } else {
             $fieldStart .= q($keyLbl . $lang); 
+        }
         $fieldStart .= ":</span>
             <span class='cmetafield'>";
         
         $fieldEnd = "</span>";
-        if (in_array($fullKey, self::$mandatoryFields))
+        if (in_array($fullKey, self::$mandatoryFields)) {
             $fieldEnd .= "<span class='cmetamandatory'>*</span>";
+        }
         $fieldEnd .= "</div>";
-        if (in_array($fullKey, self::$breakAccordionEndFields))
+        if (in_array($fullKey, self::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div>";
-        if (array_key_exists($fullKey, self::$breakFields))
+        }
+        if (array_key_exists($fullKey, self::$breakFields)) {
             $fieldEnd .= "</div><div id='tabs-". self::$breakFields[$fullKey] ."'>";
+        }
         
         // hidden/auto-generated fields
-        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             return;
+        }
         
         // boolean fields
         if (in_array($fullKeyNoLang, self::$booleanFields)) {
             $value = (string) $this;
-            if (empty($value))
+            if (empty($value)) {
                 $value = 'false';
+            }
             return $fieldStart . selection(array('false' => $GLOBALS['langCMeta']['false'], 
                                                  'true'  => $GLOBALS['langCMeta']['true']), $fullKey, $value) . $fieldEnd;
         }
         
         // enumeration fields
-        if (in_array($fullKeyNoLang, self::$enumerationFields))
+        if (in_array($fullKeyNoLang, self::$enumerationFields)) {
             return $fieldStart . selection(self::getEnumerationValues($fullKey), $fullKey, (string) $this) . $fieldEnd;
+        }
 
         // multiple enumeration fields
-        if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
+        if (in_array($fullKeyNoLang, self::$multiEnumerationFields)) {
             return $fieldStart . multiselection(self::getEnumerationValues($fullKey), $fullKey . '[]', explode(',', (string) $this), 'id="multiselect" multiple="true"') . $fieldEnd;
+        }
         
         // readonly fields
         $readonly = '';
-        if (in_array($fullKeyNoLang, self::$readOnlyFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+        if (in_array($fullKeyNoLang, self::$readOnlyFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $readonly = 'disabled readonly';
+        }
         
         // integer fields
         if (in_array($fullKeyNoLang, self::$integerFields)) {
             $value = (string) $this;
-            if (empty($value))
+            if (empty($value)) {
                 $value = 0;
+            }
             return $fieldStart ."<input type='text' size='2' name='". q($fullKey) ."' value='". intval($value) ."' $readonly>". $fieldEnd;
         }
         
         // textarea fields
-        if (in_array($fullKeyNoLang, self::$textareaFields))
+        if (in_array($fullKeyNoLang, self::$textareaFields)) {
             return $fieldStart ."<textarea cols='53' rows='2' name='". q($fullKey) ."'>". q((string) $this) ."</textarea>". $fieldEnd;
+        }
         
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, self::$binaryFields)) {
@@ -281,44 +303,52 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
             $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
-            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage))
+            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage)) {
                 $sameAsCourseLang = true;
+            }
         }
         
         // proper divs initializations
         $fieldStart = "";
-        if (in_array($fullKey, self::$breakAccordionStartFields))
+        if (in_array($fullKey, self::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
+        }
         $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield'>";
         
         $fieldEnd = "</span></div>";
-        if (in_array($fullKey, self::$breakAccordionEndFields))
+        if (in_array($fullKey, self::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div>";
-        if (array_key_exists($fullKey, self::$breakFields))
+        }
+        if (array_key_exists($fullKey, self::$breakFields)) {
             $fieldEnd .= "</div><div id='tabs-". self::$breakFields[$fullKey] ."'>";
+        }
         
         // hidden/auto-generated fields
-        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             return;
+        }
         
         // fields hidden from anonymous users
         if ( (!isset($GLOBALS['code_cours']) || $_SESSION['status'][$GLOBALS['code_cours']] == 0) 
-            && in_array($fullKeyNoLang, self::$hiddenFromAnonymousFields) )
+            && in_array($fullKeyNoLang, self::$hiddenFromAnonymousFields) ) {
             return;
+        }
         
         // print nothing for empty and non-breaking-necessary fields
         if ( !in_array($fullKey, self::$breakAccordionStartFields) &&
              !in_array($fullKey, self::$breakAccordionEndFields) &&
              !array_key_exists($fullKey, self::$breakFields) &&
-             strlen((string) $this) <= 0 )
+             strlen((string) $this) <= 0 ) {
             return;
+        }
         
         // boolean fields
         if (in_array($fullKeyNoLang, self::$booleanFields)) {
             $value = (string) $this;
-            if (empty($value))
+            if (empty($value)) {
                 $value = 'false';
+            }
             $valueOut = $GLOBALS['langCMeta'][$value];
             return $fieldStart . $valueOut . $fieldEnd;
         }
@@ -335,8 +365,9 @@ class CourseXMLElement extends SimpleXMLElement {
             $valArr = self::getEnumerationValues($fullKey);
             $i = 1;
             foreach (explode(',', (string) $this) as $value) {
-                if ($i > 1)
+                if ($i > 1) {
                     $valueOut .= ', ';
+                }
                 $valueOut .= $valArr[$value];
                 $i++;
             }
@@ -355,8 +386,9 @@ class CourseXMLElement extends SimpleXMLElement {
             return $html;
         }
         
-        if($fullKey == 'course_language')
+        if($fullKey == 'course_language') {
             return $fieldStart . $GLOBALS['native_language_names_init'][((string) $this)] . $fieldEnd;
+        }
         
         // all others get a typical printout
         return $fieldStart . q((string) $this) . $fieldEnd;
@@ -372,11 +404,13 @@ class CourseXMLElement extends SimpleXMLElement {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
-        if (count($children) == 0)
+        if (count($children) == 0) {
             return $this->populateLeaf($data, $fullKey);
+        }
         
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $ele->populate($data, $fullKey);
+        }
     }
     
     /**
@@ -387,22 +421,25 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     private function populateLeaf($data, $fullKey) {
         $fullKeyNoLang = $fullKey;
-        if ($this->getAttribute('lang'))
+        if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
+        }
         
         if (isset($data[$fullKey])) {
             if (!is_array($data[$fullKey])) {
-                if (in_array($fullKeyNoLang, self::$integerFields))
+                if (in_array($fullKeyNoLang, self::$integerFields)) {
                     $this->{0} = intval($data[$fullKey]);
-                else
+                } else {
                     $this->{0} = $data[$fullKey];
+                }
                 
-                if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
+                if (in_array($fullKeyNoLang, self::$binaryFields)) { // mime attribute for mime fields 
                     $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
+                }
             } else { // multiple entities (multiEnum and units) use associative indexed arrays
-                if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
+                if (in_array($fullKeyNoLang, self::$multiEnumerationFields)) {
                     $this->{0} = implode(',', $data[$fullKey]); // comma separated
-                else { // units
+                } else { // units
                     $index = intval($this->getAttribute('index')) - 1;
                     if ($index >= 0 && isset($data[$fullKey][$index])) {
                         $this->{0} = $data[$fullKey][$index];
@@ -447,20 +484,23 @@ class CourseXMLElement extends SimpleXMLElement {
         
         $children = $this->children();
         if (count($children) == 0) {
-            if ($this->getAttribute('lang'))
+            if ($this->getAttribute('lang')) {
                 $fullKey .= '_' . $this->getAttribute('lang');
+            }
             
             $ret = array($fullKey => (string) $this);
             
-            if ($this->getAttribute('mime'))
+            if ($this->getAttribute('mime')) {
                 $ret = array_merge($ret, array($fullKey .'_mime' => (string) $this->getAttribute('mime')));
+            }
             
             return $ret;
         }
         
         $out = array();
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $out = array_merge($out, $ele->asFlatArrayRec($fullKey));
+        }
         
         return $out;
     }
@@ -502,8 +542,9 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     private function mendFullKey($parentKey) {
         $fullKey = $this->getName();
-        if (!empty($parentKey))
+        if (!empty($parentKey)) {
             $fullKey = $parentKey . "_" . $fullKey;
+        }
         return $fullKey;
     }
     
@@ -514,12 +555,14 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public function countAll() {
         $children = $this->children();
-        if (count($children) == 0)
+        if (count($children) == 0) {
             return 1;
+        }
         
         $sum = 0;
-        foreach ($children as $ele)
+        foreach ($children as $ele) {
             $sum += $ele->countAll();
+        }
         
         return $sum;
     }
@@ -532,19 +575,24 @@ class CourseXMLElement extends SimpleXMLElement {
     public function hasMandatoryMetadata() {
         $data = $this->asFlatArray();
         
-        foreach (self::$mandatoryFields as $mfield)
-            if (!isset($data[$mfield]) || empty($data[$mfield]))
+        foreach (self::$mandatoryFields as $mfield) {
+            if (!isset($data[$mfield]) || empty($data[$mfield])) {
                 return false;
+            }
+        }
             
         // check mandatory unit fields
-        if (!isset($data['course_numberOfUnits']) || !intval($data['course_numberOfUnits']) > 0)
+        if (!isset($data['course_numberOfUnits']) || !intval($data['course_numberOfUnits']) > 0) {
             return false;
+        }
         // check each unit title and description
         for ($i = 0; $i < intval($data['course_numberOfUnits']); $i++) {
-            if (!isset($data['course_unit_title_el'][$i]) || empty($data['course_unit_title_el'][$i]))
+            if (!isset($data['course_unit_title_el'][$i]) || empty($data['course_unit_title_el'][$i])) {
                 return false;
-            if (!isset($data['course_unit_description_el'][$i]) || empty($data['course_unit_description_el'][$i]))
+            }
+            if (!isset($data['course_unit_description_el'][$i]) || empty($data['course_unit_description_el'][$i])) {
                 return false;
+            }
         }
             
         return true;
@@ -614,12 +662,14 @@ class CourseXMLElement extends SimpleXMLElement {
         
         if (file_exists($xmlFile)) {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
-            if (!$xml)
+            if (!$xml) {
                 return false;
-            else
+            } else {
                 return $xml;
-        } else
+            }
+        } else {
             return false;
+        }
     }
     
     /**
@@ -661,8 +711,9 @@ class CourseXMLElement extends SimpleXMLElement {
     
         $res1 = db_query("SELECT * FROM `$mysqlMainDb`.cours WHERE cours_id = " . intval($courseId));
         $course = mysql_fetch_assoc($res1);
-        if (!$course)
+        if (!$course) {
             return array();
+        }
 
         $clang = langname_to_code($course['languageCourse']);
         $data['course_language'] = $clang;
@@ -722,16 +773,18 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return boolean
      */
     public static function isCertified($courseCode) {
-        if (!get_config('course_metadata'))
+        if (!get_config('course_metadata')) {
             return false;
+        }
         
         $xml = self::initFromFile($courseCode);
         if ($xml !== false) {
             $xmlData = $xml->asFlatArray();
             if ( (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true') || 
                  (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true') || 
-                 (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') )
+                 (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') ) {
                 return true;
+            }
         }
         
         return false;
@@ -745,8 +798,9 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     public static function getLevel($key) {
-        if (!get_config('course_metadata'))
+        if (!get_config('course_metadata')) {
             return null;
+        }
         
         $valArr = array(
             self::A_MINUS_LEVEL => $GLOBALS['langOpenCoursesAMinusLevel'],
@@ -754,10 +808,11 @@ class CourseXMLElement extends SimpleXMLElement {
             self::A_PLUS_LEVEL  => $GLOBALS['langOpenCoursesAPlusLevel']
         );
         
-        if (isset($valArr[$key]))
+        if (isset($valArr[$key])) {
             return $valArr[$key];
-        else
+        } else {
             return null;
+        }
     }
     
     /**
@@ -787,10 +842,11 @@ class CourseXMLElement extends SimpleXMLElement {
                                      'interactive exercises' => $GLOBALS['langCMeta']['interactive exercises'])
         );
         
-        if (isset($valArr[$key]))
-            return $valArr[$key];
-        else
+        if (isset($valArr[$key])) {
+            return $valArr[$key];  
+        } else {
             return array();
+        }
     }
     
     /**
@@ -952,9 +1008,9 @@ class CourseXMLElement extends SimpleXMLElement {
      * @var array 
      */
     public static $linkedFields = array(
-        'course_title_el', 'course_instructor_fullName_el', 
-        'course_language', 'course_keywords_el', 
-        'course_unit_title_el', 'course_unit_description_el',
+        'course_title', 'course_instructor_fullName', 
+        'course_language', 'course_keywords', 
+        'course_unit_title', 'course_unit_description',
         'course_numberOfUnits', 'course_license'
     );
     
@@ -973,26 +1029,28 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     public static function getLinkedValue($key) {
-        global $urlServer, $code_cours;
+        global $urlServer, $code_cours, $currentCourseLanguage;
         
         $infocours = $urlServer . 'modules/course_info/infocours.php?course=' . $code_cours;
         $coursehome = $urlServer .'courses/' . $code_cours . '/index.php';
+        $clang = langname_to_code($currentCourseLanguage);
         
         $valArr = array(
-            'course_title_el' => $infocours,
-            'course_instructor_fullName_el' => $urlServer . 'modules/profile/profile.php',
+            'course_title_' . $clang => $infocours,
+            'course_instructor_fullName_' . $clang => $infocours,
             'course_language' => $infocours,
-            'course_keywords_el' => $infocours,
-            'course_unit_title_el' => $coursehome,
-            'course_unit_description_el' => $coursehome,
+            'course_keywords_' . $clang => $infocours,
+            'course_unit_title_' . $clang => $coursehome,
+            'course_unit_description_' . $clang => $coursehome,
             'course_numberOfUnits' => $coursehome,
             'course_license' => $infocours
         );
         
-        if (isset($valArr[$key]))
+        if (isset($valArr[$key])) {
             return $valArr[$key];
-        else
+        } else {
             return null;
+        }
     }
     
     /**
