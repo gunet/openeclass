@@ -40,10 +40,10 @@ header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
 
 echo csv_escape($langQuestions), $crlf, $crlf;
-$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid", $currentCourseID);
+$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY qtype", $currentCourseID);
 while ($theQuestion = mysql_fetch_array($questions)) {
-        if ($theQuestion['qtype'] == 'multiple') { // only for questions with mupliple answers
-                echo csv_escape($theQuestion['question_text']), $crlf;                
+        if ($theQuestion['qtype'] == 'multiple') { // questions with mupliple answers
+                echo csv_escape($theQuestion['question_text']), $crlf;
                 $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                                 FROM poll_answer_record LEFT JOIN poll_question_answer
                                 ON poll_answer_record.aid = poll_question_answer.pqaid
@@ -60,12 +60,19 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                                 $answer_text[] = $theAnswer['answer'];
                         }
                 }
-                echo csv_escape($langAnswers).";".csv_escape($langResults)." (%)", $crlf;
+                echo csv_escape($langAnswers).";".csv_escape($langResults).";".csv_escape($langResults)." (%)", $crlf;
                 foreach ($answer_counts as $i => $count) {
                         $percentage = round(100 * ($count / $answer_total));
                         $label = $answer_text[$i];                        
-                        echo csv_escape($label), ';', csv_escape($percentage), $crlf;
+                        echo csv_escape($label), ';', csv_escape($count), ';', csv_escape($percentage), $crlf;
                 }        
                 echo $crlf;
+        } else { // free text questions
+            echo csv_escape($theQuestion['question_text']), $crlf;
+            $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
+                                WHERE qid = $theQuestion[pqid]", $currentCourseID);                
+            while ($theAnswer = mysql_fetch_array($answers)) {
+                    echo csv_escape(uid_to_name($theAnswer['user_id'])), ';', csv_escape($theAnswer['answer_text']), $crlf;
+            }
         }
 }
