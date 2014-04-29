@@ -12,3 +12,4 @@ syntax: regexp
 ^\.buildpath$
 ^\.project$
 ^\.settings$
+^\.htaccess$
