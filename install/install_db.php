@@ -134,13 +134,17 @@ db_query("CREATE TABLE admin_announcement (
 #
 
 db_query("CREATE TABLE `agenda` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`course_id` INT(11) NOT NULL,
-	`title` VARCHAR(200) NOT NULL,
-	`content` TEXT NOT NULL,
-	`start` DATETIME NOT NULL DEFAULT '0000-00-00',
-	`duration` VARCHAR(20) NOT NULL,
-	`visible` TINYINT(4)) $charset_spec");
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time DEFAULT NULL,
+        `visible` tinyint(4) DEFAULT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        PRIMARY KEY (`id`)
+       $charset_spec");
 
 #
 # table `course`
@@ -1127,19 +1131,6 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY (`id`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `note` (
-        `id` int(11) NOT NULL auto_increment,
-        `user_id` int(11) NOT NULL,
-        `title` varchar(300),
-        `content` text NOT NULL,
-        `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-        `order` mediumint(11) NOT NULL default 0,
-        `reference_obj_module` mediumint(11) default NULL,
-        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
-        `reference_obj_id` int(11) default NULL,
-        `reference_obj_course` int(11) default NULL,
-        PRIMARY KEY  (`id`))");
-
 db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
         `setting_id` INT(11) NOT NULL,
         `course_id` INT(11) NOT NULL,
@@ -1147,16 +1138,36 @@ db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
         PRIMARY KEY (`setting_id`, `course_id`))");
 
 db_query("CREATE TABLE `personal_calendar` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `title` varchar(200) NOT NULL,
-  `content` text NOT NULL,
-  `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `duration` time NOT NULL,
-  `source_event_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-)");
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `reference_obj_module` mediumint(11) DEFAULT NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+        `reference_obj_id` int(11) DEFAULT NULL,
+        `reference_obj_course` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`))");
+ 
+db_query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+        `user_id` int(11) NOT NULL,
+        `view_type` enum('month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT NULL,
+        `course_color` varchar(30) DEFAULT NULL,
+        `deadline_color` varchar(30) DEFAULT NULL,
+        `show_personal` bit(1) DEFAULT b'1',
+        `show_course` bit(1) DEFAULT b'1',
+        `show_deadline` bit(1) DEFAULT b'1',
+        PRIMARY KEY (`user_id`))");
 
+//create triggers
+db_query("CREATE TRIGGER personal_calendar_settings_init "
+        . "AFTER INSERT ON `user` FOR EACH ROW "
+        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
@@ -1169,3 +1180,6 @@ db_query('CREATE INDEX `cid` ON videolink (course_id)');
 db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
 db_query('CREATE INDEX `user_notes` ON note (user_id)');
 db_query('CREATE INDEX `user_events` ON personal_calendar (user_id)');
+db_query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start)');
+db_query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
+db_query('CREATE INDEX `deadline_dates` ON assignment (course_id,deadline)');

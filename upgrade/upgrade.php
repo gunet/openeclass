@@ -1079,17 +1079,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
 
-                    db_query("DROP TABLE IF EXISTS agenda");
-                    db_query("CREATE TABLE IF NOT EXISTS `agenda` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `course_id` INT(11) NOT NULL,
-                            `title` VARCHAR(200) NOT NULL,
-                            `content` TEXT NOT NULL,
-                            `start` DATETIME NOT NULL DEFAULT '0000-00-00',                                
-                            `duration` VARCHAR(20) NOT NULL,
-                            `visible` TINYINT(4))
+                    //db_query("DROP TABLE IF EXISTS agenda");
+                    if (mysql_table_exists($mysqlMainDb, 'agenda')){
+                        db_query("ALTER TABLE agenda CHANGE COLUMN duration duration time");
+                        db_query("ALTER TABLE agenda ADD COLUMN recursion_period varchar(30)");
+                        db_query("ALTER TABLE agenda ADD COLUMN recursion_end date");
+                    }
+                    else{
+                        db_query("CREATE TABLE `agenda` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `course_id` int(11) NOT NULL,
+                            `title` varchar(200) NOT NULL,
+                            `content` text NOT NULL,
+                            `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `duration` time DEFAULT NULL,
+                            `visible` tinyint(4) DEFAULT NULL,
+                            `recursion_period` varchar(30) DEFAULT NULL,
+                            `recursion_end` date DEFAULT NULL,
+                            PRIMARY KEY (`id`)
                             $charset_spec");
-
+                    }
+                    
                     db_query("CREATE TABLE IF NOT EXISTS `exercise` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -1196,16 +1206,39 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `value` INT(11) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`setting_id`, `course_id`))");
                     
-                    db_query("CREATE TABLE `personal_calendar` (
-                          `id` int(11) NOT NULL AUTO_INCREMENT,
-                          `user_id` int(11) NOT NULL,
-                          `title` varchar(200) NOT NULL,
-                          `content` text NOT NULL,
-                          `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-                          `duration` time NOT NULL,
-                          `source_event_id` int(11) DEFAULT NULL,
-                          PRIMARY KEY (`id`))");
+                    db_query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` int(11) NOT NULL,
+                        `title` varchar(200) NOT NULL,
+                        `content` text NOT NULL,
+                        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        `duration` time NOT NULL,
+                        `recursion_period` varchar(30) DEFAULT NULL,
+                        `recursion_end` date DEFAULT NULL,
+                        `source_event_id` int(11) DEFAULT NULL,
+                        `reference_obj_module` mediumint(11) DEFAULT NULL,
+                        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+                        `reference_obj_id` int(11) DEFAULT NULL,
+                        `reference_obj_course` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`))");
 
+                    db_query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+                        `user_id` int(11) NOT NULL,
+                        `view_type` enum('month','week') DEFAULT 'month',
+                        `personal_color` varchar(30) DEFAULT NULL,
+                        `course_color` varchar(30) DEFAULT NULL,
+                        `deadline_color` varchar(30) DEFAULT NULL,
+                        `show_personal` bit(1) DEFAULT b'1',
+                        `show_course` bit(1) DEFAULT b'1',
+                        `show_deadline` bit(1) DEFAULT b'1',
+                        PRIMARY KEY (`user_id`))");
+
+                    //create triggers
+                    db_query("CREATE TRIGGER personal_calendar_settings_init "
+                            . "AFTER INSERT ON `user` FOR EACH ROW "
+                            . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
+                    db_query("INSERT INTO personal_calendar_settings(user_id) SELECT id FROM user");
+                    
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;
@@ -1602,6 +1635,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         db_query('CREATE INDEX `user_notes` ON note (user_id)');
                 mysql_index_exists('personal_calendar', 'user_events') or
                         db_query('CREATE INDEX `user_events` ON personal_calendar (user_id)');
+                mysql_index_exists('personal_calendar', 'user_events_dates') or
+                        db_query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start)');
+                mysql_index_exists('agenda','agenda_item_dates') or
+                        db_query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
+                mysql_index_exists('assignment','deadline_dates') or
+                        db_query('CREATE INDEX `deadline_dates` ON assignment (course_id,deadline)');
+
 
                 db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,

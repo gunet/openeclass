@@ -56,6 +56,7 @@ require_once 'main/announcements.php';
 require_once 'main/documents.php';
 require_once 'main/agenda.php';
 require_once 'main/forumPosts.php';
+require_once 'main/personal_calendar/calendar_events.class.php';
 
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
@@ -145,6 +146,14 @@ if ($user_lesson_info[0][0] > 0) {
     $user_forumPosts = "<p>-</p>";
 }
 
+//BEGIN - Get user personal calendar
+$today = getdate();
+$day = $today['mday'];
+$month = $today['mon'];
+$year = $today['year'];    
+$user_personal_calendar = Calendar_Events::small_month_calendar($day,$month,$year);
+//END - Get personal calendar
+
 // ==  BEGIN create array with personalised content
 $perso_tool_content = array(
     'lessons_content' => $user_lesson_info[1],
@@ -152,7 +161,8 @@ $perso_tool_content = array(
     'announce_content' => $user_announcements,
     'docs_content' => $user_documents,
     'agenda_content' => $user_agenda,
-    'forum_content' => $user_forumPosts
+    'forum_content' => $user_forumPosts,
+    'personal_calendar_content' => $user_personal_calendar
 );
 
 // == END create array with personalised content

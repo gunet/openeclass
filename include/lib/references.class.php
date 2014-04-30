@@ -184,7 +184,7 @@ class References {
                 $objmodule = $objmoduleinfo['mid'];
                 $objgentype = $objmoduleinfo['gentype'];
                 if($objgentype == 'course' || $objtype == 'course'){
-                   $objcourse = Database::get()->querySingle("SELECT {$objmoduleinfo['course_field']} cid FROM {$objmoduleinfo['objtable']} WHERE {$objmoduleinfo['id_field']} = ?", $objid)->cid;
+                   $objcourse = Database::get()->querySingle("SELECT {$objmoduleinfo['course_field']} cid FROM {$objmoduleinfo['objtable']} WHERE {$objmoduleinfo['id_field']} = ?d", $objid)->cid;
                 }
             }
         }
@@ -198,7 +198,7 @@ class References {
     public static function get_user_courselist(){
         if (isset($_SESSION['uid']) AND $_SESSION['uid']) {
             $uc = Database::get()->queryArray("SELECT CONCAT('course:',c.id) id, CONCAT(c.title, ' (',c.code,')') name FROM course_user cu JOIN course c ON c.id=cu.course_id
-                                             WHERE user_id = ? AND visible > 0", $_SESSION['uid']);
+                                             WHERE user_id = ?d AND visible > 0", $_SESSION['uid']);
             $user_courses = array();
             foreach($uc as $v){
                 $user_courses[$v->id] = $v->name;
@@ -219,7 +219,7 @@ class References {
         if (isset($_SESSION['uid']) AND $_SESSION['uid']) {
             $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module cm JOIN course_user cu ON cm.course_id=cu.course_id
                                              WHERE visible = 1 AND
-                                             cm.course_id = ? AND user_id = ? AND module_id IN (".self::get_module_list('course').")", $course, $_SESSION['uid']);
+                                             cm.course_id = ?d AND user_id = ?d AND module_id IN (".self::get_module_list('course').")", $course, $_SESSION['uid']);
             foreach($moduleIDs as $mod){ 
                 $tempname = array_keys(self::$ref_object_types['course'][$mod->module_id]);
                 $modules[$mod->module_id] = isset($GLOBALS[self::$lang_vars[$mod->module_id]])? $GLOBALS[self::$lang_vars[$mod->module_id]]: $tempname[0];    
@@ -324,13 +324,13 @@ class References {
     public static function get_course_module_items($course, $module){
         error_log("*************************************** get_course_module_items($course, $module)");
         if (isset($_SESSION['uid']) && $_SESSION['uid']) {
-            $user_associated_to_course = Database::get()->querySingle("SELECT count(*) c FROM course_user WHERE course_id = ? AND user_id = ?", intval($course), intval($_SESSION['uid']))->c;
+            $user_associated_to_course = Database::get()->querySingle("SELECT count(*) c FROM course_user WHERE course_id = ?d AND user_id = ?d", intval($course), intval($_SESSION['uid']))->c;
             if($user_associated_to_course == 1){
-                $is_course_tool_visible = Database::get()->querySingle("SELECT visible FROM course_module WHERE course_id = ? AND module_id = ?", $course, $module)->visible;
+                $is_course_tool_visible = Database::get()->querySingle("SELECT visible FROM course_module WHERE course_id = ?d AND module_id = ?d", $course, $module)->visible;
                 if(in_array($module, array_keys(self::$ref_object_types['course'])) && $is_course_tool_visible == 1){
                     $items = array();
                     foreach(self::$ref_object_types['course'][$module] as $objtype => $objprops){
-                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['course_field']} = ?", $course);    
+                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['course_field']} = ?d", $course);    
                         foreach($newitems as $ni){
                             $items[$ni->id] = $ni->title;
                         }
@@ -377,7 +377,7 @@ class References {
         global $urlServer;
         $itemurl = $urlServer;
         $objprops = self::get_module_from_objtype($item_type);
-        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?", $item_id);    
+        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);    
         if($res){
             $itemattributes = $res[0];
             if($item_type == 'course'){

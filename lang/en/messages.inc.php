@@ -3038,6 +3038,44 @@ $langNotes = "Notes";
 $langNotesDeleted = "Notes deleted.";
 $langNoteTitle = "Title";
 $langPersonalEvent = "Personal event";
+$langReferencedObject = "Refers to";
 $langSelectFromMenu = "Select...";
 $langSureToDelNote = "Are you sure about deleting this note?";
 $langSureToDelNoteAll = "Are you sure about deleting all your notes?";
+
+/* * ******************************************
+  Personal calendar
+ * ***************************************** */
+$langAddEvent = "New event";
+$langDateTime = "Date and time";
+$langDays= "days";
+$langDocument = "Document";
+$langDuration = "Duration";
+$langEmptyEventTitle = "New event";
+$langEvent = "Event";
+$langEventAdd = "Event added.";
+$langEventBody = "Summary";
+$langEventcourse = "course events";
+$langEventDel = "Event deletes.";
+$langEventdeadline = "deadlines";
+$langEventModified = "Event modified.";
+$langEventModify = "Event modified.";
+$langEventNoTitle = "Empty title";
+$langEventpersonal = "personal events";
+$langEvents = "Events";
+$langEventsDeleted = "Your personal events have been deleted.";
+$langEventTitle = "Title";
+$langEvery = "every";
+$langiCalExport = "Export iCal";
+$langLastUpdate = "Last update";
+$langModifEvent = "Modify event";
+$langMonthsAbstract = "months";
+$langNoEvent = "You haven't any events";
+$langPersonalEvent = "Personal event";
+$langReferencedObject = "Refers to";
+$langRepeat = "Repeat";
+$langSelectFromMenu = "Select...";
+$langSureToDelEvent = "Are you sure to delete the event?";
+$langSureToDelEventAll = "Are you sure to delete all events?";
+$langUntil = "until";
+$langWeeks = "weeks";
