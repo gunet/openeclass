@@ -145,19 +145,9 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],                    
-                'sPaginationType': 'full_numbers',
-                'fnDrawCallback': function() {
-                    if (Math.ceil((this.fnSettings().fnRecordsDisplay()) / this.fnSettings()._iDisplayLength) > 1)  {
-                        $('.dataTables_paginate').css('display', 'block'); 
-                        $('.dataTables_filter').css('display', 'block');                       
-                    } else {
-                        $('.dataTables_paginate').css('display', 'none');
-                        $('.dataTables_filter').css('display', 'none');
-                    }
-                },               
-                'bSort': true,\n"
-                .(($is_editor) ? "'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [ 0 ] }, { 'bSortable': false, 'aTargets': [ 1 ] }, { 'bSortable': false, 'aTargets': [ 2 ] }]," : "").                
-                "'oLanguage': {                       
+                'sPaginationType': 'full_numbers',              
+                'bSort': false,               
+                'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
