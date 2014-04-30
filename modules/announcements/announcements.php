@@ -187,13 +187,14 @@ $head_content .= "<script type='text/javascript'>
                                 page_number--;
                             }
                         }
-                        $('.success').html('$langAnnDel');
+                        $('#tool_title').after('<p class=\"success\">$langAnnDel</p>');
+                        $('.success').delay(3000).fadeOut(1500);    
                         oTable.fnPageChange(page_number);
                     }, 'json');
                  }
             });
             $(document).on( 'click','.vis_btn', function (g) {
-                g.preventDefault();              
+                g.preventDefault();
                 var vis = $(this).data('vis');
                 var row_id = $(this).closest('tr').attr('id');
                 $.post('', { action: 'visibility', value: row_id, visibility: vis}, function() {
@@ -201,7 +202,8 @@ $head_content .= "<script type='text/javascript'>
                     var per_page = oTable.fnPagingInfo().iLength;
                     oTable.fnPageChange(page_number);
                 }, 'json');                             
-            });            
+            });
+            $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
 }
