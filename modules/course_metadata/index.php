@@ -31,10 +31,10 @@ if (!get_config('course_metadata')) {
     exit();
 }
 
-if (isset($_POST['submit']))
+if (isset($_POST['submit'])) {
     $tool_content .= submitForm();
-else
-    $tool_content .= displayForm();
+}
+$tool_content .= displayForm();
 
 $head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
 load_js('jquery');
@@ -127,8 +127,9 @@ function submitForm() {
     list($dnum)  = mysql_fetch_row(db_query("select count(id) from document where course_id = " . $cours_id, $mysqlMainDb));
     list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $code_cours));
     list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $code_cours));
-    if ($dnum + $vnum + $vlnum < 1)
+    if ($dnum + $vnum + $vlnum < 1) {
         $data['course_confirmVideolectures'] = 'false';
+    }
     
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
     $xml->adapt($data);
@@ -136,9 +137,9 @@ function submitForm() {
     
     CourseXMLElement::save($code_cours, $xml);
 
-    return "<p class='success'>$langModifDone</p>
-            <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>$langBack</a></p>
-            <p>&laquo; <a href='{$urlServer}courses/$code_cours/index.php'>$langBackCourse</a></p>";
+    return "<p class='success'>$langModifDone</p>";
+//    return "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>$langBack</a></p>
+//            <p>&laquo; <a href='{$urlServer}courses/$code_cours/index.php'>$langBackCourse</a></p>";
 }
 
 function isValidImage($type) {
