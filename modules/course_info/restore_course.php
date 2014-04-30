@@ -169,7 +169,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
         create_modules($course_id);
     }
-    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id), 'delete' => array('id')));
+    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id), 'delete' => array('id', 'preview')));
     restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $course_id)));
     $group_map = restore_table($restoreThis, 'group', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'));
     restore_table($restoreThis, 'group_members', array('map' => array('group_id' => $group_map, 'user_id' => $userid_map)));
@@ -195,7 +195,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             && isset($backupData['query']) && is_array($backupData['query'])) {
         $postsText = get_tabledata_from_parsed('posts_text');
         foreach ($postsText as $ptData) {
-            Database::get()->query("UPDATE forum_post SET post_text = ?s WHERE id = ?d", $ptData['post_text'], intval($forum_post_map[$ptData['post_id']]));
+            if (array_key_exists($ptData['post_id'], $forum_post_map)) {
+                Database::get()->query("UPDATE forum_post SET post_text = ?s WHERE id = ?d", $ptData['post_text'], intval($forum_post_map[$ptData['post_id']]));
+            }
         }
     }
 

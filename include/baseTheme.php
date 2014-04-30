@@ -110,6 +110,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $toolArr = ($is_mobile) ? array() : getSideMenu($menuTypeID);
     $numOfToolGroups = count($toolArr);
 
+    $template_settings = 'template/' . $theme . '/settings.php';
+    if (file_exists($template_settings)) {
+        require $template_settings;
+    }
     $t = new Template('template/' . $theme);
 
     if ($is_mobile)
@@ -132,10 +136,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('template_base', $urlAppend . 'template/' . $theme);
     $t->set_var('img_base', $themeimg);
 
+    $current_module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $_SERVER['REQUEST_URI']);
     if (is_array($toolArr)) {
 
         for ($i = 0; $i < $numOfToolGroups; $i ++) {
-
+            $t->set_var ( 'NAV_BLOCK_CLASS', $toolArr[$i][0]['class'] );
             if ($toolArr [$i] [0] ['type'] == 'none') {
                 $t->set_var('ACTIVE_TOOLS', '&nbsp;');
                 $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
@@ -152,6 +157,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
             $numOfTools = count($toolArr[$i][1]);
             for ($j = 0; $j < $numOfTools; $j++) {
+                $module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $toolArr[$i][2][$j]);
+                if ($module_dir == $current_module_dir) {
+                    $tool_class = 'active';
+                } else {
+                    $tool_class = '';
+                }
                 $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
                 $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                 if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
@@ -162,6 +173,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 
                 $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
+                $img_class = basename($toolArr [$i] [3] [$j], ".png");
+                $img_class = preg_replace('/_(on|off)$/', '', $img_class);
+                if (isset($icon_map[$img_class])) {
+                    $img_class = $icon_map[$img_class];
+                }
+                $t->set_var('IMG_CLASS', $img_class);
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
 

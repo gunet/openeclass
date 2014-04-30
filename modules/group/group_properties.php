@@ -47,6 +47,7 @@ $checked['has_forum'] = $has_forum ? ' checked="1"' : '';
 $checked['documents'] = $documents ? ' checked="1"' : '';
 $checked['private_forum_yes'] = $private_forum ? ' checked="1"' : '';
 $checked['private_forum_no'] = $private_forum ? '' : ' checked="1"';
+$checked['wiki'] = ($wiki==0) ? '' : ' checked="1"';
 
 $tool_content = "
 <form method='post' action='index.php?course=$course_code'>
@@ -83,6 +84,12 @@ $tool_content = "
       <th class='left'>$langDoc:</th>
       <td>
         <input type='checkbox' name='documents' value='1'$checked[documents] />
+      </td>
+    </tr>
+    <tr>
+      <th class='left'>$langWiki:</th>
+      <td>
+        <input type='checkbox' name='wiki' value='1'$checked[wiki] />
       </td>
     </tr>
     <tr>
