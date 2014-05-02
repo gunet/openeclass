@@ -3239,6 +3239,7 @@ $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργα
 $langRequestStudent="Η αίτηση του $langsOfStudent έκλεισε!";
 $langRequestReject="Η αίτηση απορρίφθηκε";
 $langInformativeEmail="Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση";
+$langUserDeleted="Ο χρήστης διαγράφηκε";
 
 /*************************************************************
 editpost.php

@@ -238,13 +238,14 @@ $head_content .= "
                                 page_number--;
                             }
                         }
-                        $('#tool_title').after('<p class=\"success\">$langAnnDel</p>');
+                        $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
                         $('.success').delay(3000).fadeOut(1500);    
                         oTable.fnPageChange(page_number);
                     }, 'json');
                  }
             });
             $('.dataTables_filter input').attr('placeholder', '$langName, Username, Email');
+            $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
 

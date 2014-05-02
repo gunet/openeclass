@@ -3120,3 +3120,4 @@ $langExportIMSCP = "Export in IMS CP 1.1.4";
 $langEmptyPollTitle = "Please enter Questionnaire title";
 $langNameOfLang['slovene'] = "Slovenian";
 $langNameOfLang['slovak'] = "Slovak";
+$langUserDeleted="User deleted sucessfully";
