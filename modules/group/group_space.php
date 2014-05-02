@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -137,35 +137,29 @@ $myIndex = 0;
 	foreach ($members as $member){
 		$user_group_description = $member['description'];
                 if ($myIndex % 2 == 0) {
-                    $tool_content .= "
-        <tr class='even'>";
+                    $tool_content .= "<tr class='even'>";
                 } else {
-                    $tool_content .= "
-        <tr class='odd'>";
+                    $tool_content .= "<tr class='odd'>";
                 }
 
-		$tool_content .= "
-          <td>" . display_user($member);  
+		$tool_content .= "<td>" . display_user($member);  
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
 		}
-                $tool_content .= "</td>
-          <td class='center'>";
+                $tool_content .= "</td><td class='center'>";
 		if (!empty($member['am'])) {
 			$tool_content .=  q($member['am']);
 		} else {
 			$tool_content .= '-';
 		}
-                $tool_content .= "</td>
-          <td class='center'>";
+                $tool_content .= "</td><td class='center'>";
                 $email = q(trim($member['email']));
                 if (!empty($email)) {
                         $tool_content .= "<a href='mailto:$email'>$email</a>";
                 } else {
                         $tool_content .= '-';
                 }
-                $tool_content .= "</td>
-        </tr>\n";
+                $tool_content .= "</td></tr>";
         $myIndex++;
 	}
 } else {
@@ -175,8 +169,7 @@ $myIndex = 0;
         </tr>";
 }
 
-$tool_content .=  "
-        </table>";
+$tool_content .=  "</table>";
 $tool_content .= "
       </td>
     </tr>
@@ -186,9 +179,9 @@ draw($tool_content, 2);
 
 
 function loadGroupTools(){
-        global $self_reg, $has_forum, $forum_id, $documents, $secret_directory, $langForums,
+        global $self_reg, $has_forum, $forum_id, $documents, $langForums,
                $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,
-               $langUsage, $code_cours;
+               $langUsage, $code_cours, $urlServer;
 
 	$group_tools = '';
         if (!$self_reg) {
@@ -203,8 +196,8 @@ function loadGroupTools(){
         }
 	
         if ($is_editor or $is_tutor) {
-                $group_tools .=  "<li><a href='group_email.php?course=$code_cours&amp;group_id=$group_id'>$langEmailGroup</a></li>
-                <li><a href='group_usage.php?course=$code_cours&amp;group_id=$group_id'>$langUsage</a></li>";
+                $group_tools .=  "<li><a href='{$urlServer}modules/dropbox/index.php?course=$code_cours&amp;upload=1&amp;group_id=$group_id'>$langEmailGroup</a></li>
+                                  <li><a href='group_usage.php?course=$code_cours&amp;group_id=$group_id'>$langUsage</a></li>";
         }
 	$group_tools .= "</ul></div>";
 	return $group_tools;

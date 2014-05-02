@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -78,40 +78,40 @@ require_once("dropbox_class.inc.php");
 */
 if (isset($_POST["submitWork"]))
 {
-	$error = FALSE;
-	$errormsg = '';
-
-	if (!isset($_POST['authors']) || !isset($_POST['description']))
-	{
-		$error = TRUE;
-		$errormsg = $dropbox_lang["badFormData"];
-	}
-	elseif (!isset( $_POST['recipients']) || count( $_POST['recipients']) <= 0)
-	{
-		$error = TRUE;
-		$errormsg = $dropbox_lang["noUserSelected"];
-	}
-	else
-	{
-		$thisIsJustUpload = FALSE;  // RH
-		foreach($_POST['recipients'] as $rec)
-		{
-			if ($rec == 0)
-			{
-				$thisIsJustUpload = TRUE;
-			}
-		}
-		if ($thisIsJustUpload && ( count($_POST['recipients']) != 1))
-		{
-			$error = TRUE;
-			$errormsg = $dropbox_lang["mailingJustUploadNoOther"];
-		}
-		elseif (empty( $_FILES['file']['name']))
-		{
-                        $thisisJustMessage = TRUE;
-		}
-	}
-
+    
+    $error = FALSE;
+    $errormsg = '';
+    if (!isset($_POST['authors']) || !isset($_POST['description']))
+    {
+            $error = TRUE;
+            $errormsg = $dropbox_lang["badFormData"];
+    }
+    elseif (!isset($_POST['recipients']) || count($_POST['recipients']) <= 0)
+    {
+            $error = TRUE;
+            $errormsg = $dropbox_lang["noUserSelected"];
+    }
+    else
+    {
+            $thisIsJustUpload = FALSE;
+            if (empty( $_FILES['file']['name']))
+            {
+                    $thisisJustMessage = TRUE;
+            }
+    }
+            
+    $recipients = array();
+    foreach ($_POST['recipients'] as $r) {  // group ids have been prefixed with '_'
+        if (preg_match('/^_/', $r)) {            
+            $sql = db_query("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX('$r', '_', -1)", $mysqlMainDb);
+            while ($ar = mysql_fetch_array($sql)) {
+                array_push($recipients, $ar['user_id']);
+            }
+        } else {
+            array_push($recipients, $r);
+        }
+    }
+        
      /*
      * --------------------------------------
      *     FORM SUBMIT : UPLOAD NEW FILE
@@ -121,15 +121,14 @@ if (isset($_POST["submitWork"]))
                 if ($thisisJustMessage) {
                         $dropbox_filename = '';
                         $real_dropbox_filename = '';
-                        $dropbox_filesize = 0;
-                        $newWorkRecipients = $_POST["recipients"];
+                        $dropbox_filesize = 0;                        
                         if (isset($_POST['title']) and $_POST['title'] != '') {
                                 $dropbox_title = $_POST['title'];
                         } else {
                                 $dropbox_title = $langMessage;
                         }
-                        $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);                        
-                } else {
+                        $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $recipients);
+                } else {                   
                         $cwd = getcwd();
                         if (is_dir($dropbox_cnf["sysPath"])) {
                                 $dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
@@ -165,20 +164,14 @@ if (isset($_POST["submitWork"]))
                         {
                                 $_POST['authors'] = uid_to_name($uid);
                         }
-                        if ($error) {}
-                        elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
-                        {
-                                $newWorkRecipients = array();
-                        } else {
-                                $newWorkRecipients = $_POST["recipients"];
-                        }
+                        
                         //After uploading the file, create the db entries
                         if (!$error) {                                                               
                                 $filename_final = $dropbox_cnf['sysPath'] . '/' . $dropbox_filename;
                                 move_uploaded_file($dropbox_filetmpname, $filename_final)
                                         or die($dropbox_lang["uploadError"]);
                                 @chmod($filename_final, 0644);
-                                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);                                
+                                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $recipients);                                
                         }                
                     chdir ($cwd);
                 }
@@ -186,7 +179,7 @@ if (isset($_POST["submitWork"]))
                 if (isset($_POST['mailing']) and $_POST['mailing']) {
                         $c = course_code_to_title($currentCourseID);
                         $subject_dropbox = "$c ($currentCourseID) - $dropbox_lang[newDropboxFile]";                        
-                        foreach($newWorkRecipients as $userid) {
+                        foreach($recipients as $userid) {                         
                                 if (get_user_email_notification($userid, $cours_id)) {
                                         $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
                                         $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            

@@ -25,6 +25,7 @@ $basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
 $diskUsed = dir_total_space($basedir);
 $displayall = false;
 $display_outcoming = false;
+$is_tutor = FALSE;
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -112,6 +113,12 @@ $dropbox_unid = md5(uniqid(crypto_rand_secure(), true)); //this var is used to g
  */
 
 if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
+        if (isset($_GET['group_id'])) {            
+            $group_id = intval($_GET['group_id']);            
+            $tutor_id = db_query_get_single_value("SELECT is_tutor FROM group_members WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);            
+            $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
+        }
+                
 	$tool_content .= "<form method='post' action='dropbox_submit.php?course=$code_cours' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
 	$tool_content .= "
             <fieldset>
@@ -141,13 +148,12 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
               <th>".$langSend.":</th>
               <td>
             <select name='recipients[]' multiple='true' class='auth_input' id='select-recipients'>";
-
-	/*
-	*  if current user is a teacher then show all users of current course
-	*/
-	if ($is_editor or $dropbox_cnf["allowStudentToStudent"])
-	{
-		// select all users except yourself
+	
+        if (isset($group_id) and ($is_editor or $is_tutor)) { // if we come from groups and user is tutor show only his group              
+                $row = db_query_get_single_row("SELECT id, name FROM `group` WHERE course_id = $cours_id AND id = $group_id", $mysqlMainDb);
+                $tool_content .= "<option value = '_$row[id]' selected>".q($row['name'])."</option>";
+        } else {
+            if ($is_editor or $dropbox_cnf["allowStudentToStudent"]) { // if user is a teacher then show all users of current course
 		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
 			FROM user u, cours_user cu
 			WHERE cu.cours_id = $cours_id
@@ -155,27 +161,38 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 				AND cu.statut != 10
 				AND u.user_id != $uid
 				ORDER BY UPPER(u.nom), UPPER(u.prenom)";
-	}
-	/*
-	* if current user is student then show all teachers of current course
-	*/
-	else
-	{
-		// select all the teachers except yourself
-		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
-			FROM user u, cours_user cu
-			WHERE cu.cours_id = $cours_id
-				AND cu.user_id = u.user_id
-				AND (cu.statut <> 5 OR cu.tutor = 1)
-				AND u.user_id != $uid
-				ORDER BY UPPER(u.nom), UPPER(u.prenom)";
-	}
-	$result = db_query($sql, $mysqlMainDb);
-	while ($res = mysql_fetch_array($result))
-	{
-		$tool_content .= "<option value=".$res['user_id'].">".q($res['name'])."</option>";
-	}
-		
+                // also select all course groups if exist
+                $sql_g = "SELECT id, name FROM `group` WHERE course_id = $cours_id";                
+                $result_g = db_query($sql_g, $mysqlMainDb);
+                while ($res_g = mysql_fetch_array($result_g))
+                {
+                    $tool_content .= "<option value = '_$res_g[id]'>".q($res_g['name'])."</option>";
+                }	                 
+            } else {
+                    // if user is tutor show its group
+                    $s = db_query("SELECT group_id, is_tutor FROM group_members WHERE user_id = $uid", $mysqlMainDb);
+                    while ($r = mysql_fetch_array($s)) {
+                        if ($r['is_tutor'] == 1) {
+                            $row = db_query_get_single_row("SELECT id, name FROM `group` WHERE course_id = $cours_id and id = $r[group_id]", $mysqlMainDb);
+                            $tool_content .= "<option value = '_$row[id]'>".q($row['name'])."</option>";
+                        }                        
+                    }
+                    // if user is student then show all teachers of current course
+                    $sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
+                            FROM user u, cours_user cu
+                            WHERE cu.cours_id = $cours_id
+                                    AND cu.user_id = u.user_id
+                                    AND (cu.statut <> 5 OR cu.tutor = 1)
+                                    AND u.user_id != $uid
+                                    ORDER BY UPPER(u.nom), UPPER(u.prenom)";
+            }
+
+            $result = db_query($sql, $mysqlMainDb);
+            while ($res = mysql_fetch_array($result))
+            {
+                    $tool_content .= "<option value = ".$res['user_id'].">".q($res['name'])."</option>";
+            }
+        }	
 	$tool_content .= "</select></td></tr>
 	<tr>
 	  <th>&nbsp;</th>
