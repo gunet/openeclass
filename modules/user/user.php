@@ -29,21 +29,142 @@ include '../admin/admin.inc.php';
 
 define ('COURSE_USERS_PER_PAGE', 15);
 
+//Identifying ajax request
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $limit = intval($_GET['iDisplayLength']);
+    $offset = intval($_GET['iDisplayStart']);
+    
+    if (!empty($_GET['sSearch'])) {
+        $keyword = quote("%".$_GET['sSearch']."%");
+        $search_sql = 'AND (user.nom LIKE '.$keyword.' OR user.prenom LIKE '.$keyword.' OR user.email LIKE '.$keyword.')';     
+    } else {
+        $search_sql='';
+    }
+    $limit_sql = ($limit>0) ? "LIMIT $offset,$limit" : "";
+    
+    $all_users = db_query("SELECT COUNT(*) AS total FROM cours_user, user WHERE `user`.`user_id` = `cours_user`.`user_id`
+        AND `cours_user`.`cours_id` = $cours_id");
+    $all_users = mysql_fetch_assoc($all_users);
+    $filtered_users = db_query("SELECT COUNT(*) AS total FROM cours_user, user WHERE `user`.`user_id` = `cours_user`.`user_id`
+        AND `cours_user`.`cours_id` = $cours_id $search_sql");
+    $filtered_users = mysql_fetch_assoc($filtered_users);    
+    $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.parent_email,
+                           user.am, user.has_icon, cours_user.statut,
+                           cours_user.tutor, cours_user.editor, cours_user.reviewer, 
+                           cours_user.reg_date
+                    FROM cours_user, user
+                    WHERE `user`.`user_id` = `cours_user`.`user_id` 
+                    AND `cours_user`.`cours_id` = $cours_id
+                    $search_sql $limit_sql"); 
+    
+//    $student_sql = $is_editor? '': "AND visibility = 'v'";
+//    $all_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id $student_sql", $mysqlMainDb);
+//    $all_announc = mysql_fetch_assoc($all_announc);
+//    $filtered_announc = db_query("SELECT COUNT(*) AS total FROM annonces WHERE cours_id = $cours_id AND title LIKE $keyword $student_sql", $mysqlMainDb);
+//    $filtered_announc = mysql_fetch_assoc($filtered_announc);
+//    ($limit>0) ? $extra_sql = "LIMIT $offset,$limit" : $extra_sql = "";
+//
+//    $result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND title LIKE $keyword $student_sql ORDER BY ordre DESC $extra_sql", $mysqlMainDb);
+    
+    $data['iTotalRecords'] = $all_users['total'];
+    $data['iTotalDisplayRecords'] = $filtered_users['total'];
+    $data['aaData'] = array();
+        $iterator = 1;
+        while ($myrow = mysql_fetch_array($result)) {
+            
+            //Create appropriate role control buttons
+            //Tutor right
+            if ($myrow['tutor'] == '0') {
+                $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveTutor=$myrow[user_id]'>
+                        <img src='$themeimg/group_manager_add.png' title='".q($langGiveRightTutor)."' alt='".q($langGiveRightTutor)."' /></a>";
+            } else {
+                $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeTutor=$myrow[user_id]' title='".q($langRemoveRightTutor)."'>
+                        <img src='$themeimg/group_manager_remove.png' title='".q($langRemoveRightTutor)."' alt='".q($langRemoveRightTutor)."' /></a>";
+            }
+            //Editor right
+            if ($myrow['editor'] == '0') {
+                $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveEditor=$myrow[user_id]'>
+                        <img src='$themeimg/assistant_add.png' title='".q($langGiveRightEditor)."' alt='".q($langGiveRightEditor)."' /></a>";
+            } else {
+                $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeEditor=$myrow[user_id]' title='$langRemoveRightEditor'>
+                        <img src='$themeimg/assistant_remove.png' title ='".q($langRemoveRightEditor)."' alt='".q($langRemoveRightEditor)."' /></a>";
+            }
+            // Admin right
+            if ($myrow['user_id'] != $_SESSION["uid"]) {
+                    if ($myrow['statut']=='1') {
+                        if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
+                            $user_role_controls .= "<img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' />";
+                        } else {
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]' title='".q($langRemoveRightAdmin)."'>
+                                            <img src='$themeimg/teacher_remove.png' title='".q($langRemoveRightAdmin)."' alt='".q($langRemoveRightAdmin)."' /></a>";
+                        }
+                    } else {
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]'>
+                                    <img src='$themeimg/teacher_add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a>";
+                    }
+            } else {
+                    if ($myrow['statut']=='1') {
+                            $user_role_controls .= "<img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' />";
+                    } else {
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]\'>
+                                            <img src='$themeimg/add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a>";
+                    }
+            }              
+            //setting datables column data
+            $data['aaData'][] = array(
+                'DT_RowId' => $myrow['user_id'],
+                '0' => $iterator, 
+                '1' => $myrow['prenom'].' '.$myrow['nom'], 
+                '2' => 'test2',
+                '3' => ($myrow['reg_date'] == '0000-00-00')? $langUnknownDate : nice_format($myrow['reg_date']),
+                '4' => $user_role_controls 
+                );
+            $iterator++;
+        }  
+    echo json_encode($data);
+    exit();
+}
+
 $limit = isset($_REQUEST['limit'])? intval($_REQUEST['limit']): 0;
 
 $nameTools = $langAdminUsers;
-
-$head_content = '
-<script type="text/javascript">
-function confirmation (name)
-{
-    if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.' ?"))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-';
+load_js('jquery');
+load_js('datatables');
+load_js('datatables_filtering_delay');
+$head_content .= "
+<script type='text/javascript'>
+        $(document).ready(function() {
+           var oTable = $('#users_table{$cours_id}').DataTable ({
+                'bStateSave': true,
+                'bProcessing': true,
+                'bServerSide': true,
+                'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',                   
+                'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],                    
+                'sPaginationType': 'full_numbers',              
+                'bSort': false,               
+                'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '".$langNoResult."',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '".$langSearch."',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
+            }).fnSetFilteringDelay(1000);
+        });
+        </script>";
 
 $sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
 	WHERE cours_user.cours_id = $cours_id AND cours_user.user_id = user.user_id";
@@ -222,154 +343,155 @@ if (isset($_GET['all'])) {
 $addRoleSpan = (get_config('opencourses_enable')) ? 4 : 3;
 
 $tool_content .= "
-<table width='100%' class='tbl_alt custom_list_order'>
+<table width='100%' id='users_table{$cours_id}' class='tbl_alt custom_list_order'>
+<thead>
 <tr>
   <th width='1'>$langID</th>
   <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
   <th class='center' width='160'>$langGroup</th>
   <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
-  <th colspan='$addRoleSpan' class='center'>$langAddRole</th>
+  <th class='center' width='90'>$langAddRole</th>
 </tr>";
 
 
 // Numerating the items in the list to show: starts at 1 and not 0
-$i = $limit + 1;
-$ord = isset($_GET['ord'])?$_GET['ord']:'';
-
-switch ($ord) {
-        case 's': $order_sql = 'ORDER BY nom';
-                break;
-        case 'e': $order_sql = 'ORDER BY email';
-                break;
-        case 'am': $order_sql = 'ORDER BY am';
-                break;
-        case 'rd': $order_sql = 'ORDER BY cours_user.reg_date DESC';
-                break;
-        default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
-                break;
-}
-$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.parent_email,
-                           user.am, user.has_icon, cours_user.statut,
-                           cours_user.tutor, cours_user.editor, cours_user.reviewer, 
-                           cours_user.reg_date
-                    FROM cours_user, user
-                    WHERE `user`.`user_id` = `cours_user`.`user_id` 
-                    AND `cours_user`.`cours_id` = $cours_id
-                    $search_sql $order_sql $limit_sql"); 
-
-while ($myrow = mysql_fetch_array($result)) {
-        // bi colored table
-        if ($i%2 == 0) {
-                $tool_content .= "<tr class='odd'>";
-        } else {
-                $tool_content .= "<tr class='even'>";
-        }
-        // show public list of users
-        $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
-        $link_parent_email = "";
-        if (get_config('enable_secondary_email')) {
-                if ($myrow['editor'] == 1 or $myrow['tutor'] == 1 or $myrow['statut'] == 1 or empty($myrow['parent_email'])) {
-                        $link_parent_email = "";
-                } else {
-                        $link_parent_email = "<a href='emailparent.php?course=$code_cours&amp;id=$myrow[user_id]'>
-                                <img src='$themeimg/email.png' title='".q($langEmailToParent)."' alt='".q($langEmailToParent)."' />
-                                </a>";                
-                }
-        }
-        $tool_content .= "
-        <td class='smaller' valign='top' align='right'>$i.</td>\n" .
-                "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $link_parent_email $am_message</td>\n";
-        $tool_content .= "\n" .
-                "<td class='smaller' valign='top' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
-                "<td align='center' class='smaller'>";
-        if ($myrow['reg_date'] == '0000-00-00') {
-                $tool_content .= $langUnknownDate;
-        } else {
-                $tool_content .= nice_format($myrow['reg_date']);
-        }
-        $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
-                         onClick=\"return confirmation('" . js_escape($alert_uname) .
-                         "');\"><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";
-
-        $tool_content .= "</td>";
-        // tutor right
-        if ($myrow['tutor'] == '0') {
-                $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/group_manager_add.png' title='".q($langGiveRightTutor)."' alt='".q($langGiveRightTutor)."' /></a></td>";
-        } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='".q($langRemoveRightTutor)."'>
-                                <img src='$themeimg/group_manager_remove.png' title='".q($langRemoveRightTutor)."' alt='".q($langRemoveRightTutor)."' /></a></td>";
-        }
-        // editor right
-        if ($myrow['editor'] == '0') {
-            $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/assistant_add.png' title='".q($langGiveRightEditor)."' alt='".q($langGiveRightEditor)."' /></a></td>";
-        } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
-                                <img src='$themeimg/assistant_remove.png' title ='".q($langRemoveRightEditor)."' alt='".q($langRemoveRightEditor)."' /></a></td>";
-        }
-        // admin right
-        if ($myrow['user_id'] != $_SESSION["uid"]) {
-                if ($myrow['statut']=='1') {
-                    if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
-                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
-                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
-                    } else {
-                        $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='".q($langRemoveRightAdmin)."'>
-                                        <img src='$themeimg/teacher_remove.png' title='".q($langRemoveRightAdmin)."' alt='".q($langRemoveRightAdmin)."' /></a></td>";
-                    }
-                } else {
-                        $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/teacher_add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
-                }
-        } else {
-                if ($myrow['statut']=='1') {
-                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
-                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
-                } else {
-                        $tool_content .= "<td class='smaller' valign='top' align='center'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                        <img src='$themeimg/add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
-                }
-        }
-        
-        // opencourses reviewer right
-        if (get_config('opencourses_enable')) {
-            if ($myrow['user_id'] != $_SESSION["uid"]) {
-                if ($is_opencourses_reviewer and !$is_admin) {
-                    // do nothing as the reviewer cannot give the reviewer right to other users
-                    $tool_content .= "<td></td>";
-                } else {
-                    if ($myrow['reviewer'] == '1') {
-                        $tool_content .= "<td class='add_teacherLabel' align='center' width='30'>
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeReviewer=$myrow[user_id]$extra_link' title='" . q($langRemoveRightReviewer) . "'>
-                                                    <img src='$themeimg/reviewer_remove.png' title='" . q($langRemoveRightReviewer) . "' alt='" . q($langRemoveRightReviewer) . "' /></a></td>";
-                    } else {
-                        $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveReviewer=$myrow[user_id]$extra_link'>
-                                            <img src='$themeimg/reviewer_add.png' title='" . q($langGiveRightReviewer) . "' alt='" . q($langGiveRightReviewer) . "' /></a></td>";
-                    }
-                }
-            } else {
-                if ($myrow['reviewer'] == '1') {
-                    $tool_content .= "<td valign='top' class='add_teacherLabel' align='center' width='30'>
-                                                <img src='$themeimg/reviewer.png' title='" . q($langOpenCoursesReviewer) . "' alt='" . q($langOpenCoursesReviewer) . "' /></td>";
-                } else {
-                    // do nothing as the course teacher cannot make himeself a reviewer
-                    $tool_content .= "<td></td>";
-                }
-            }
-        }
-        
-        $tool_content .= "</tr>";
-        $i++;
-}
-$tool_content .= "</table>";
+//$i = $limit + 1;
+//$ord = isset($_GET['ord'])?$_GET['ord']:'';
+//
+//switch ($ord) {
+//        case 's': $order_sql = 'ORDER BY nom';
+//                break;
+//        case 'e': $order_sql = 'ORDER BY email';
+//                break;
+//        case 'am': $order_sql = 'ORDER BY am';
+//                break;
+//        case 'rd': $order_sql = 'ORDER BY cours_user.reg_date DESC';
+//                break;
+//        default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
+//                break;
+//}
+//$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.parent_email,
+//                           user.am, user.has_icon, cours_user.statut,
+//                           cours_user.tutor, cours_user.editor, cours_user.reviewer, 
+//                           cours_user.reg_date
+//                    FROM cours_user, user
+//                    WHERE `user`.`user_id` = `cours_user`.`user_id` 
+//                    AND `cours_user`.`cours_id` = $cours_id
+//                    $search_sql $order_sql $limit_sql"); 
+//
+//while ($myrow = mysql_fetch_array($result)) {
+//        // bi colored table
+//        if ($i%2 == 0) {
+//                $tool_content .= "<tr class='odd'>";
+//        } else {
+//                $tool_content .= "<tr class='even'>";
+//        }
+//        // show public list of users
+//        $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
+//        $link_parent_email = "";
+//        if (get_config('enable_secondary_email')) {
+//                if ($myrow['editor'] == 1 or $myrow['tutor'] == 1 or $myrow['statut'] == 1 or empty($myrow['parent_email'])) {
+//                        $link_parent_email = "";
+//                } else {
+//                        $link_parent_email = "<a href='emailparent.php?course=$code_cours&amp;id=$myrow[user_id]'>
+//                                <img src='$themeimg/email.png' title='".q($langEmailToParent)."' alt='".q($langEmailToParent)."' />
+//                                </a>";                
+//                }
+//        }
+//        $tool_content .= "
+//        <td class='smaller' valign='top' align='right'>$i.</td>\n" .
+//                "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $link_parent_email $am_message</td>\n";
+//        $tool_content .= "\n" .
+//                "<td class='smaller' valign='top' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
+//                "<td align='center' class='smaller'>";
+//        if ($myrow['reg_date'] == '0000-00-00') {
+//                $tool_content .= $langUnknownDate;
+//        } else {
+//                $tool_content .= nice_format($myrow['reg_date']);
+//        }
+//        $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
+//        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
+//                         onClick=\"return confirmation('" . js_escape($alert_uname) .
+//                         "');\"><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";
+//
+//        $tool_content .= "</td>";
+//        // tutor right
+//        if ($myrow['tutor'] == '0') {
+//                $tool_content .= "<td valign='top' align='center' class='add_user'>
+//                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
+//                                <img src='$themeimg/group_manager_add.png' title='".q($langGiveRightTutor)."' alt='".q($langGiveRightTutor)."' /></a></td>";
+//        } else {
+//                $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
+//                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='".q($langRemoveRightTutor)."'>
+//                                <img src='$themeimg/group_manager_remove.png' title='".q($langRemoveRightTutor)."' alt='".q($langRemoveRightTutor)."' /></a></td>";
+//        }
+//        // editor right
+//        if ($myrow['editor'] == '0') {
+//            $tool_content .= "<td valign='top' align='center' class='add_user'>
+//                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
+//                                <img src='$themeimg/assistant_add.png' title='".q($langGiveRightEditor)."' alt='".q($langGiveRightEditor)."' /></a></td>";
+//        } else {
+//                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
+//                                <img src='$themeimg/assistant_remove.png' title ='".q($langRemoveRightEditor)."' alt='".q($langRemoveRightEditor)."' /></a></td>";
+//        }
+//        // admin right
+//        if ($myrow['user_id'] != $_SESSION["uid"]) {
+//                if ($myrow['statut']=='1') {
+//                    if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
+//                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
+//                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
+//                    } else {
+//                        $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
+//                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='".q($langRemoveRightAdmin)."'>
+//                                        <img src='$themeimg/teacher_remove.png' title='".q($langRemoveRightAdmin)."' alt='".q($langRemoveRightAdmin)."' /></a></td>";
+//                    }
+//                } else {
+//                        $tool_content .= "<td valign='top' align='center' class='add_user'>
+//                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+//                                <img src='$themeimg/teacher_add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
+//                }
+//        } else {
+//                if ($myrow['statut']=='1') {
+//                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
+//                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
+//                } else {
+//                        $tool_content .= "<td class='smaller' valign='top' align='center'>
+//                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+//                                        <img src='$themeimg/add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
+//                }
+//        }
+//        
+//        // opencourses reviewer right
+//        if (get_config('opencourses_enable')) {
+//            if ($myrow['user_id'] != $_SESSION["uid"]) {
+//                if ($is_opencourses_reviewer and !$is_admin) {
+//                    // do nothing as the reviewer cannot give the reviewer right to other users
+//                    $tool_content .= "<td></td>";
+//                } else {
+//                    if ($myrow['reviewer'] == '1') {
+//                        $tool_content .= "<td class='add_teacherLabel' align='center' width='30'>
+//                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeReviewer=$myrow[user_id]$extra_link' title='" . q($langRemoveRightReviewer) . "'>
+//                                                    <img src='$themeimg/reviewer_remove.png' title='" . q($langRemoveRightReviewer) . "' alt='" . q($langRemoveRightReviewer) . "' /></a></td>";
+//                    } else {
+//                        $tool_content .= "<td valign='top' align='center' class='add_user'>
+//                                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveReviewer=$myrow[user_id]$extra_link'>
+//                                            <img src='$themeimg/reviewer_add.png' title='" . q($langGiveRightReviewer) . "' alt='" . q($langGiveRightReviewer) . "' /></a></td>";
+//                    }
+//                }
+//            } else {
+//                if ($myrow['reviewer'] == '1') {
+//                    $tool_content .= "<td valign='top' class='add_teacherLabel' align='center' width='30'>
+//                                                <img src='$themeimg/reviewer.png' title='" . q($langOpenCoursesReviewer) . "' alt='" . q($langOpenCoursesReviewer) . "' /></td>";
+//                } else {
+//                    // do nothing as the course teacher cannot make himeself a reviewer
+//                    $tool_content .= "<td></td>";
+//                }
+//            }
+//        }
+//        
+//        $tool_content .= "</tr>";
+//        $i++;
+//}
+$tool_content .= "</thead><tbody></tbody></table>";
 
 draw($tool_content, 2, null, $head_content);
