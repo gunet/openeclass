@@ -156,7 +156,7 @@ class Dropbox_Work {
 		/*
 		* insert entries into person table
 		*/
-		$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
+		$sql="INSERT IGNORE INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
 				VALUES ($this->id, $this->uploaderId)";
                 $result = db_query($sql, $currentCourseID);	//if work already exists no error is generated
 	}
@@ -269,13 +269,13 @@ class Dropbox_SentWork extends Dropbox_Work {
 		* insert data in dropbox_post and dropbox_person table for each recipient
 		*/
 		foreach ($this->recipients as $rec) {	
-			$sql="INSERT INTO `".$dropbox_cnf["postTbl"]."` 
+			$sql="INSERT IGNORE INTO `".$dropbox_cnf["postTbl"]."` 
 				(fileId, recipientId)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
 	        $result = db_query($sql,$currentCourseID);	//if work already exists no error is generated
 						
 			//insert entries into person table
-			$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
+			$sql="INSERT IGNORE INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."')";
         	// RH: do not add recipient in person table if mailing zip or just upload
 			if (!$justSubmit) {
