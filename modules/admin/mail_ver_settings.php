@@ -52,9 +52,7 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
-        $qry = "UPDATE `user` set verified_mail=$new_mail_ver WHERE verified_mail=$old_mail_ver AND user_id!=1";
-        $result = db_query($qry);
-        if ($result) {
+        if (Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND user_id!=1", $new_mail_ver, $old_mail_ver)->affectedRows > 0) {
             $count = mysql_affected_rows();
             if ($count > 0) {
                 $user = ($count == 1) ? $langOfUser : $langUsersS;
@@ -86,25 +84,25 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 		<tr><td colspan='3'>&nbsp;</td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
 			<td class='center'><b>" .
-            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";") .
+            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt .
             "</b></td><td class='right'><input type='submit' name='submit1' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
 			<td class='center'><b>" .
-            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";") .
+            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt .
             "</b></td><td class='right'><input type='submit' name='submit2' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
 			<td class='center'><b>" .
-            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";") .
+            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt .
             "</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
     if (!get_config('email_required')) {
         $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
                                 <td class='center'><b>" .
-                list_1Result("SELECT COUNT(*) FROM user WHERE email = '';") .
+                Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE email = '';")->cnt .
                 "</b></td><td class='right'>&nbsp;</td></tr>";
     }
     $tool_content .= "<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
 			<td class='center'><b>" .
-            list_1Result("SELECT COUNT(*) FROM user;") .
+            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt .
             "</b></td><td class='right'>&nbsp;</td></tr>
 	</table></form>";
 }
@@ -122,7 +120,7 @@ else {
     } else {
         $sub = NULL;
     }
-    $c = list_1Result("SELECT count(*) FROM user WHERE verified_mail = $sub;");
+    $c = Database::get()->querySingle("SELECT count(*) as cnt FROM user WHERE verified_mail = $sub;")->cnt;
 
     if (isset($sub)) {
         $tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
@@ -145,13 +143,5 @@ else {
 
 $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
 $tool_content .= "<p class='info'>$langMailVerificationNoticeAdmin</p>";
-
-function list_1Result($sql) {
-
-    $res = db_query($sql);
-    $res = mysql_fetch_array($res);
-
-    return $res[0];
-}
 
 draw($tool_content, 3);

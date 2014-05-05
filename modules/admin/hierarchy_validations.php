@@ -43,10 +43,9 @@ function validateNode($id, $checkOwn) {
     if ($id <= 0)
         exitWithError($notallowed);
 
-    $result = db_query("SELECT * FROM " . $tree->getDbtable() . " WHERE id = " . intval($id));
-
-    if (mysql_num_rows($result) < 1)
+    if (!Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE id = ?d", $id)) {
         exitWithError($notallowed);
+    }
 
     if ($checkOwn) {
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
@@ -73,14 +72,13 @@ function validateParentLft($nodelft, $checkOwn) {
     if ((!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0))
         exitWithError($notallowed);
 
-    $result = db_query("SELECT * FROM " . $tree->getDbtable() . " WHERE lft = " . intval($nodelft));
+    $result = Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE lft = ?d", $nodelft);
 
-    if (mysql_num_rows($result) < 1 && $nodelft > 0)
+    if (!$result && $nodelft > 0)
         exitWithError($notallowed);
 
     if ($checkOwn) {
-        $row = mysql_fetch_assoc($result);
-        $parentid = $row['id'];
+        $parentid = $result->id;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
         if (!in_array($parentid, $subtrees))

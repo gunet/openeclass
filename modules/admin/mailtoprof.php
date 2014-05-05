@@ -66,21 +66,21 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     // Where to send the email
     if ($_POST['sendTo'] == '0') { // All users
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND " . $depwh);
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND " . $depwh);
         else
-            $sql = db_query("SELECT email, user_id FROM user");
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user");
     }
     elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='1' AND " . $depwh);
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='1' AND " . $depwh);
         else
-            $sql = db_query("SELECT email, user_id FROM user where status='1'");
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user where status='1'");
     }
     elseif ($_POST['sendTo'] == "2") { // Only students
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='5' AND " . $depwh);
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='5' AND " . $depwh);
         else
-            $sql = db_query("SELECT email, user_id FROM user where status='5'");
+            $sql = Database::get()->queryArray("SELECT email, user_id FROM user where status='5'");
     }
     else { // invalid sendTo var
         die();
@@ -96,7 +96,8 @@ $langTel $telephone
 $langEmail : $emailhelpdesk
 ";
     // Send email to all addresses
-    while ($m = mysql_fetch_array($sql)) {
+    foreach ($sql as $$m) {
+        $m = (array) $m;
         $emailTo = $m["email"];
         $user_id = $m["user_id"];
         if (get_user_email_notification($user_id)) {

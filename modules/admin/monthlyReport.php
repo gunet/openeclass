@@ -65,12 +65,12 @@ $tool_content .= '
 if (isset($_POST["selectedMonth"])) {
     $month = q($_POST["selectedMonth"]);
     list($m, $y) = explode(' ', $month);  //only month
-    $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
-                       FROM monthly_summary WHERE `month` = " . quote($month);
 
-    $result = db_query($sql);
     $coursNum = '';
-    while ($row = mysql_fetch_assoc($result)) {
+    $row = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
+                       FROM monthly_summary WHERE `month` = " . quote($month));
+    if ($row) {
+        $row = (array) $row;
         $profesNum = $row['profesNum'];
         $studNum = $row['studNum'];
         $visitorsNum = $row['visitorsNum'];
@@ -78,7 +78,6 @@ if (isset($_POST["selectedMonth"])) {
         $logins = $row['logins'];
         $details = $row['details'];
     }
-    mysql_free_result($result);
 
     if (isset($localize) and $localize == 'greek') {
         $msg_of_month = substr($langMonths[$m], 0, -1);

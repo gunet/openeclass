@@ -173,9 +173,10 @@ if (isset($_POST['submit'])) {
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
 
-        $sql = db_query($qry);
-        while ($users = mysql_fetch_array($sql))
-            $usernames .= $users['username'] . "\n";
+        Database::get()->queryFunc($qry
+                , function($users) use(&$usernames) {
+            $usernames .= $users->username . "\n";
+        });
     }
 
 
@@ -202,9 +203,9 @@ draw($tool_content, 3, 'admin', $head_content);
 
 // Translate username to uid
 function usernameToUid($uname) {
-    if ($r = mysql_fetch_row(db_query("SELECT id FROM user WHERE username = " . quote($uname)))) {
-        return intval($r[0]);
-    } else {
+    $r = Database::get()->querySingle("SELECT id FROM user WHERE username = %s", $uname);
+    if ($r)
+        return $r->id;
+    else
         return false;
-    }
 }

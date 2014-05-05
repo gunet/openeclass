@@ -75,11 +75,11 @@ if (!$doit) {
     $tool_content .= "<div class='right'><a href='edituser.php?u=$u'>$langBack</a></div><br/>";
 } else {
     if ($c and $u) {
-        $q = db_query("DELETE from course_user WHERE user_id = $u AND course_id = $c");
-        if (mysql_affected_rows() > 0) {
-            db_query("DELETE FROM group_members
-                            WHERE user_id = $u AND
-                            group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
+        $q = Database::get()->query("DELETE from course_user WHERE user_id = ?d AND course_id = ?d", $u, $c);
+        if ($q->affectedRows>0) {
+            Database::get()->query("DELETE FROM group_members
+                            WHERE user_id = ?d AND
+                            group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
             $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></p>\n";
             $m = 1;
         }

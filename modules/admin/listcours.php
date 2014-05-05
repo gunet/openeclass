@@ -49,8 +49,7 @@ $depwh = (isDepartmentAdmin()) ? ' AND course_department.department IN (' . impl
 $depq = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course " . $depwh : '';
 
 // Manage list limits
-$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course" . $depq));
-$fulllistsize = $countcourses['cnt'];
+$fulllistsize = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course" . $depq)->cnt;
 
 define('COURSES_PER_PAGE', 15);
 
@@ -107,28 +106,28 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
     }
     $query = join(' AND ', $searchcours);
     if (!empty($query)) {
-        $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+        $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department AND $query $depwh
                                ORDER BY course.code");
-        $caption .= "$langFound " . mysql_num_rows($sql) . " $langCourses ";
+        $caption .= "$langFound " . count($sql) . " $langCourses ";
     } else {
-        $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+        $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department $depwh
                                ORDER BY course.code");
-        $caption .= "$langFound " . mysql_num_rows($sql) . " $langCourses ";
+        $caption .= "$langFound " . count($sql) . " $langCourses ";
     }
 }
 // Normal list, no search, select all courses
 else {
 
-    $a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM course" . $depq));
-    $caption .= $langManyExist . ": <b>" . $a[0] . " $langCourses</b>";
+    $a = Database::get()->querySingle("SELECT COUNT(*) as cnt FROM course" . $depq)->cnt;
+    $caption .= $langManyExist . ": <b>" . $a . " $langCourses</b>";
 
-    $sql = db_query("SELECT course.code, course.title, course.prof_names, course.visible, course.id
+    $sql = Database::get()->queryArray("SELECT course.code, course.title, course.prof_names, course.visible, course.id
                        FROM course" . $depq . " 
                    ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
 
@@ -138,7 +137,7 @@ else {
     }
 }
 
-$key = mysql_num_rows($sql);
+$key = count($sql);
 if ($key == 0) {
     $tool_content .= "<p class='alert1'>$langNoCourses</p>";
 } else {
@@ -158,8 +157,9 @@ if ($key == 0) {
         <th scope='col' width='" . $width . "' class='odd'>" . $langActions . "</th>
         </tr>";
     $k = 0;
-    for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-        $logs = mysql_fetch_array($sql);
+    for ($j = 0; $j < count($sql); $j++) {
+        $logs = $sql[$j];
+        $logs = (array) $logs;
         if ($k % 2 == 0) {
             $tool_content .= "<tr class='even'>";
         } else {

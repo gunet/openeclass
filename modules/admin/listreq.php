@@ -69,11 +69,10 @@ $limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
 
 // id validation
 if (intval($id) > 0) {
-    $sql = db_query("SELECT faculty_id FROM user_request WHERE id = " . intval($id));
-    if (mysql_num_rows($sql) < 1)
+    $req = Database::get()->querySingle("SELECT faculty_id FROM user_request WHERE id = ?d", $id);
+    if (!$req)
         exitWithError("<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>");
-    $req = mysql_fetch_assoc($sql);
-    validateNode($req['faculty_id'], isDepartmentAdmin());
+    validateNode($req->faculty_id, isDepartmentAdmin());
 }
 
 // department admin additional query where clause
@@ -112,13 +111,11 @@ $tool_content .= "
 if (!empty($show) and $show == 'closed') {
     if (!empty($id) and $id > 0) {
         // restore request
-        $sql = db_query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = $id");
+        Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         $tool_content = "<p class='success'>$langReintroductionApplication</p>";
     } else {
-        $result = db_query("SELECT * FROM user_request
-                                        WHERE (state = 2 AND status = $list_status)");
 
-        $count_req = mysql_num_rows($result);
+        $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
 
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
                              phone, am, date_open, date_closed, comment
@@ -130,11 +127,12 @@ if (!empty($show) and $show == 'closed') {
         }
         $q .= "ORDER BY date_open DESC LIMIT $limit, " . REQUESTS_PER_PAGE . "";
 
-        $sql = db_query($q);
+        $sql = Database::get()->queryArray($q);
         $tool_content .= "<table class='tbl_alt' width='100%'>";
         $tool_content .= table_header(1, $langDateClosed_small);
         $k = 0;
-        while ($req = mysql_fetch_array($sql)) {
+        foreach ($sql as $req) {
+            $req = (array) $req;
             if ($k % 2 == 0) {
                 $tool_content .= "<tr class='even'>";
             } else {
@@ -162,7 +160,7 @@ if (!empty($show) and $show == 'closed') {
 } elseif (!empty($show) && ($show == 'rejected')) {
     if (!empty($id) && ($id > 0)) {
         // restore request
-        $sql = db_query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = $id");
+        Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         $tool_content = "
 		<p class=\"success\">$langReintroductionApplication</p>";
     } else {
@@ -219,7 +217,7 @@ if (!empty($show) and $show == 'closed') {
                                    comment = " . autoquote($_POST['comment']) . "
                                WHERE id = $id";
                     if (db_query($sql)) {
-                        if (isset($_POST['sendmail']) and ($_POST['sendmail'] == 1)) {
+                        if (isset($_POST['sendmail']) and ( $_POST['sendmail'] == 1)) {
                             $telephone = get_config('phone');
                             $emailsubject = $langemailsubjectBlocked;
                             $emailbody = "$langemailbodyBlocked
@@ -339,7 +337,7 @@ else {
 
 // If show is set then we return to listreq, else return to admin index.php
 //if (isset($close) or isset($closed)) {
-if (!empty($show) or !empty($close)) {
+if (!empty($show) or ! empty($close)) {
     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]$linkget'>$langBackRequests</a></p><br>";
 }
 $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
