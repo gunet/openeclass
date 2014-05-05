@@ -115,14 +115,14 @@ function do_user_merge($source, $target) {
     $source_id = $source['user_id'];
     $target_id = $target['user_id'];
     $courses = array();
-    $q_course = db_query("SELECT code FROM course_user, course
+    Database::get()->queryFunc("SELECT code FROM course_user, course
                                      WHERE course.id = course_user.course_id AND
-                                           user_id = $target_id");
-    while (list($code) = mysql_fetch_row($q_course)) {
-        $courses[] = $code;
-    }
+                                           user_id = ?d"
+            , function($row) use(&$courses) {
+        $courses[] = $row->code;
+    }, $target_id);
     $tmp_table = "user_merge_{$source_id}_{$target_id}";
-    $q = db_query("CREATE TEMPORARY TABLE `$tmp_table` AS
+    $q = Database::get()->query("CREATE TEMPORARY TABLE `$tmp_table` AS
                               SELECT course_id, $target_id AS user_id,
                                      MIN(status) AS status, MAX(team) AS team, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,

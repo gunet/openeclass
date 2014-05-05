@@ -182,8 +182,8 @@ $tool_content .= "
 
 // CRON RELATED
 $tool_content .= "<img src='cron.php' width='2' height='1' alt=''/>";
-$res = db_query("SELECT name, last_run FROM cron_params");
-if (mysql_num_rows($res) >= 1) {
+$res = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
+if (count($res) >= 1) {
     $tool_content .= "
       <fieldset>
       <legend>$langCronInfo</legend>
@@ -193,8 +193,8 @@ if (mysql_num_rows($res) >= 1) {
           <td>$langCronLastRun</td>
         </tr>";
 
-    while ($row = mysql_fetch_assoc($res))
-        $tool_content .= "<tr><th>" . $row['name'] . "</th><td>" . $row['last_run'] . "</td></tr>";
+    foreach ($res as $row)
+        $tool_content .= "<tr><th>" . $row->name . "</th><td>" . $row->last_run . "</td></tr>";
 
     $tool_content .= "
       </tbody>

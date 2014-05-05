@@ -209,7 +209,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $type_message = '';
     }
 
-    $req = db_query();
     if (Database::get()->querySingle('SELECT * FROM user WHERE username = ?s', $uname)) {
         $GLOBALS['error'] = "$GLOBALS[langMultiRegUsernameError] ($uname)";
         return false;
