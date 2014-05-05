@@ -46,7 +46,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $auth = isset($_GET['auth']) ? $_GET['auth'] : '';
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
-if (!empty($auth) and !empty($active)) {
+if (!empty($auth) and ! empty($active)) {
     $s = get_auth_settings($auth);
     $settings = $s['auth_settings'];
 
@@ -58,7 +58,7 @@ if (!empty($auth) and !empty($active)) {
         default: $q = 0;
             break;
     }
-    db_query("UPDATE auth SET auth_default = $q WHERE auth_id = " . intval($auth));
+    Database::get()->query("UPDATE auth SET auth_default = ?d WHERE auth_id = ?d", $q, $auth);
 }
 
 $auth_methods = get_auth_active_methods();
