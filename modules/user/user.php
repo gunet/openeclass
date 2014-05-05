@@ -28,7 +28,7 @@ include '../../include/baseTheme.php';
 include '../admin/admin.inc.php';
 
 //Identifying ajax request
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action']=='delete') {
             $unregister_gid = intval($_POST['value']);
             $unregister_ok = true;
