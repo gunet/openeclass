@@ -329,6 +329,18 @@ function upgrade_course($code, $lang)
         upgrade_course_2_5($code, $lang);
         upgrade_course_2_8($code, $lang);
         upgrade_course_2_9($code, $lang);
+        upgrade_course_2_10($code, $lang);
+}
+
+function upgrade_course_2_10($code, $lang, $extramessage = '') {
+
+    global $langUpgCourse, $global_messages;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
+    flush();
+
+    db_query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");    
 }
 
 function upgrade_course_2_9($code, $lang, $extramessage = '') {

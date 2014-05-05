@@ -558,7 +558,7 @@ db_query("CREATE TABLE `assignment_submit` (
       real_filename varchar(255) NOT NULL default '',
       filesize int(11) unsigned NOT NULL default '0',
       title varchar(250) default '',
-      description varchar(1000) default '',      
+      description text,      
       author varchar(250) default '',
       uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
       lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
