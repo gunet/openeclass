@@ -26,7 +26,7 @@ include '../../include/init.php';
 if (!isset($_GET['pid'])) {
     header("Location: $urlServer");
 } else {
-    $pid = intval($_GET['pid']);
+    $pid = $_GET['pid'];
 }
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
@@ -39,28 +39,28 @@ $crlf = "\r\n";
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
 
-$pid = db_query_get_single_value("SELECT pid FROM poll WHERE course_id = $course_id AND pid = $pid");
+$p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
 
 echo csv_escape($langQuestions), $crlf, $crlf;
-$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
-while ($theQuestion = mysql_fetch_array($questions)) {
-    if ($theQuestion['qtype'] == 'multiple') { // only for questions with mupliple answers
-        echo $theQuestion['question_text'];
+$q = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid=?d",$p->pid);
+foreach ($q as $question) {
+    if ($question->qtype == 'multiple') { // only for questions with mupliple answers
+        echo $question->question_text;
         echo "$crlf";
-        $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
+        $a = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                                 FROM poll_answer_record LEFT JOIN poll_question_answer
                                 ON poll_answer_record.aid = poll_question_answer.pqaid
-                                WHERE qid = $theQuestion[pqid] GROUP BY aid");
+                                WHERE qid = ?d GROUP BY aid", $question->pqid);
         $answer_counts = array();
         $answer_text = array();
         $answer_total = 0;
-        while ($theAnswer = mysql_fetch_array($answers)) {
-            $answer_counts[] = $theAnswer['count'];
-            $answer_total += $theAnswer['count'];
-            if ($theAnswer['aid'] < 0) {
+        foreach ($a as $answer) {
+            $answer_counts[] = $answer->count;
+            $answer_total += $answer->count;
+            if ($answer->aid < 0) {
                 $answer_text[] = $langPollUnknown;
             } else {
-                $answer_text[] = $theAnswer['answer'];
+                $answer_text[] = $answer->answer;
             }
         }
         echo csv_escape($langAnswers) . ";" . csv_escape($langResults) . " (%)", $crlf;
@@ -71,5 +71,12 @@ while ($theQuestion = mysql_fetch_array($questions)) {
             ";" . csv_escape($percentage) . "$crlf";
         }
         echo "$crlf";
+    } else { // free text questions
+            echo csv_escape($question->question_text), $crlf;
+            $a = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
+                                              WHERE qid = ?d", $question->pqid);            
+            foreach ($a as $answer) {
+                    echo csv_escape(uid_to_name($answer->user_id)), ';', csv_escape($answer->answer_text), $crlf;
+            }
     }
 }
