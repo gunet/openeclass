@@ -109,6 +109,6 @@ function removeUnusedFiles()
         $result1 = db_query($sql, $currentCourseID);
 
 		//delete file from server
-        unlink($dropbox_cnf["sysPath"] . "/" . $res["filename"]);
+        @unlink($dropbox_cnf["sysPath"] . "/" . $res["filename"]);
     }
 }

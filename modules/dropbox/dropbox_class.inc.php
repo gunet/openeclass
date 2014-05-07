@@ -330,7 +330,7 @@ class Dropbox_Person {
 	var $_orderBy = '';	//private property that determines by which field 
 						//the receivedWork and the sentWork arrays are sorted
 
-	public function Dropbox_Person ($userId, $displayallrecieved = true, $displayallsent = true) {
+	public function Dropbox_Person ($userId, $keyword='', $limit=0, $offset = 0, $displayallrecieved = true, $displayallsent = true) {
 		/*
 		* Constructor for recreating the Dropbox_Person object
 		*/
@@ -372,15 +372,17 @@ class Dropbox_Person {
                 /*
 		* find all entries where this person is the sender/uploader
 		*/
+                $query_sql = (!empty($keyword)) ? 'AND f.title LIKE '.$keyword : '';
+                $extra_sql = ($limit>0) ? "LIMIT $offset,$limit" : "";
 		if (!$displayallsent) {
                     $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f
 				WHERE f.uploaderId = '".addslashes($this->userId)."'				
-				AND f.id = $s_message_id";
-                } else {
+				AND f.id = $s_message_id $query_sql $extra_sql";
+                } else {        
                         $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
 				WHERE f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
-				AND f.id = p.fileId";
+				AND f.id = p.fileId $query_sql $extra_sql";
                 }
                 $result = db_query($sql, $currentCourseID);
 		while ($res = mysql_fetch_array($result)) {
@@ -402,8 +404,48 @@ class Dropbox_Person {
                         $this->allsentWork[] = new Dropbox_SentWork($res["id"]);
                 }
         }
-			
-	
+ 	public function filterMessages ($message_type, $keyword, $limit=0, $offset=0) {
+            global $dropbox_cnf, $currentCourseID, $r_message_id, $s_message_id;
+            
+            unset($this->{$message_type.'Work'});
+            $this->{$message_type.'Work'} = array();
+            
+            $query_sql = (!empty($keyword)) ? 'AND f.title LIKE '.$keyword : '';
+            $extra_sql = ($limit>0) ? "LIMIT $offset,$limit" : "";
+            if ($message_type == 'sent') {
+                $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
+                                    WHERE f.uploaderId = '".addslashes($this->userId)."'
+                                    AND f.uploaderId = p.personId
+                                    AND f.id = p.fileId $query_sql $extra_sql";
+            } elseif ($message_type == 'allsent') {
+                $sql = "SELECT DISTINCT f.id FROM dropbox_file f, dropbox_person p, dropbox_post r
+				WHERE f.uploaderId = p.personId
+                                AND f.uploaderId != $this->userId
+				AND f.id = p.fileId
+                                AND r.recipientId != $this->userId
+                                AND r.fileId = f.id $query_sql $extra_sql";                
+            } else {
+                 $sql = "SELECT r.fileId FROM 
+                                `".$dropbox_cnf["fileTbl"]."` f,
+				`".$dropbox_cnf["postTbl"]."` r,
+				`".$dropbox_cnf["personTbl"]."` p
+				WHERE r.recipientId = '".addslashes($this->userId)."' 
+					AND r.recipientId = p.personId
+					AND r.fileId = p.fileId
+                                        AND f.id = p.fileId $query_sql $extra_sql";
+            }
+            $result = db_query($sql, $currentCourseID);
+            if ($message_type == 'received') {     
+                while ($res = mysql_fetch_array($result)) {
+                $this->{$message_type.'Work'}[] = new Dropbox_Work($res["fileId"]);
+                }                
+            } else {
+                while ($res = mysql_fetch_array($result)) {
+                    $this->{$message_type.'Work'}[] = new Dropbox_SentWork($res["id"]);
+
+                }                
+            }
+        }       
 	public function deleteAllReceivedWork () {
 		/*
 		* Deletes all the received work of this person
@@ -432,7 +474,7 @@ class Dropbox_Person {
 			   $found = true; break;
 			}
 		}
-		if (! $found) die($dropbox_lang["generalError"]);
+		if (!$found) die($dropbox_lang["generalError"]);
 		
 		//delete entries in person table concerning received works
 		db_query("DELETE FROM `".$dropbox_cnf["personTbl"]."` 
@@ -491,6 +533,6 @@ class Dropbox_Person {
                 db_query("DELETE FROM dropbox_file WHERE id = $id", $currentCourseID);
                 
                 //delete file
-                unlink($dropbox_cnf["sysPath"] . "/" . $filename);
+                @unlink($dropbox_cnf["sysPath"] . "/" . $filename);
         }
 }
