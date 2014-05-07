@@ -30,7 +30,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $u = isset($_GET['u']) ? intval($_GET['u']) : false;
 $doit = isset($_GET['doit']);
 
-$u_account = $u ? q(uid_to_username($u)) : '';
+$u_account = $u ? q(uid_to_name($u, 'username')) : '';
 $u_realname = $u ? q(uid_to_name($u)) : '';
 $t = 0;
 
@@ -43,8 +43,7 @@ if (!$doit) {
             <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;doit=yes'>$langDelete</a></p>";
     } else {
         $tool_content .= "<p>$langErrorDelete</p>";
-    }
-    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
+    }    
 } else {
     if ($u == 1) {
         $tool_content .= $langTryDeleteAdmin;
@@ -55,8 +54,8 @@ if (!$doit) {
         } else {
             $tool_content .= "<p>$langErrorDelete</p>";
         }
-    }
-    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
+    }    
 }
 
+$tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 draw($tool_content, 3);
