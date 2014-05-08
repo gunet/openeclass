@@ -463,6 +463,7 @@ fieldset table.th {
 	padding: 5px;
 	border-bottom: 1px dashed #dfdfdf;
 	font-weight: bold;
+        margin-bottom:10px;
 }
 
 .descr_title {
