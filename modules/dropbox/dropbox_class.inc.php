@@ -330,7 +330,7 @@ class Dropbox_Person {
 	var $_orderBy = '';	//private property that determines by which field 
 						//the receivedWork and the sentWork arrays are sorted
 
-	public function Dropbox_Person ($userId, $keyword='', $limit=0, $offset = 0, $displayallrecieved = true, $displayallsent = true) {
+	public function Dropbox_Person ($userId, $displayallrecieved = true, $displayallsent = true) {
 		/*
 		* Constructor for recreating the Dropbox_Person object
 		*/
@@ -372,17 +372,15 @@ class Dropbox_Person {
                 /*
 		* find all entries where this person is the sender/uploader
 		*/
-                $query_sql = (!empty($keyword)) ? 'AND f.title LIKE '.$keyword : '';
-                $extra_sql = ($limit>0) ? "LIMIT $offset,$limit" : "";
 		if (!$displayallsent) {
                     $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f
 				WHERE f.uploaderId = '".addslashes($this->userId)."'				
-				AND f.id = $s_message_id $query_sql $extra_sql";
+				AND f.id = $s_message_id";
                 } else {        
                         $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
 				WHERE f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
-				AND f.id = p.fileId $query_sql $extra_sql";
+				AND f.id = p.fileId";
                 }
                 $result = db_query($sql, $currentCourseID);
 		while ($res = mysql_fetch_array($result)) {

@@ -89,22 +89,31 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         
         $dropbox_unid = md5(uniqid(crypto_rand_secure(), true));
         
+        
+        
         //Creating sender field ONLY for allsent datatable
         if ($message_type=='allsent' || $message_type == 'received') {
             $td[1] = "<small>".display_user($w->uploaderId, false, false)."</small>";
             //because of extra field added move all fields to the right by 1
             if ($message_type=='allsent') {
                 $index_offset = 1;
+                $message_link_parameter = '&amp;other=1';
             } else {
                 $index_offset = 0;
                 //if not allsent datatable forth column will be empty
-                $td[4] = ''; 
+                $td[4] = '';
+                $message_link_parameter = '';
             }
         } else {
-            $index_offset = 0;
-            //if not allsent datatable, forth column will be empty
-            $td[4] = ''; 
+            $index_offset = 0; //if not allsent datatable, there will be no offset
+            $td[4] = ''; //if not allsent datatable, forth column will be empty
+            $message_link_parameter = '&amp;s=1';
         }
+        
+        //Generating icon, message title,message link and message ellipsized content
+        $td[0] = "<img src='$themeimg/message.png' title='".q($w->title)."' />
+                  <a href='$_SERVER[SCRIPT_NAME]?course={$code_cours}{$message_link_parameter}&amp;id=$w->id'>".$w->title."</a>".$file_name."
+                  <small>".standard_text_escape(ellipsize_html($w->description, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course={$code_cours}{$message_link_parameter}&amp;id=$w->id'>[$langMore]</span></a></strong>"))."</small>";        
         
         // Get Recipient for datatables other than received (inbox)
         if ($message_type != 'received'){
@@ -127,9 +136,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                     <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a></div>";
         $data['aaData'][] = array(
                     'DT_RowId' => $w->id,
-                    '0' => "<img src='$themeimg/message.png' title='".q($w->title)."' />
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;s=1&amp;sm_id=$w->id'>".$w->title."</a>".$file_name."
-                            <small>".standard_text_escape(ellipsize_html($w->description, 50, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;s=1&amp;sm_id=$w->id'>[$langMore]</span></a></strong>"))."</small", 
+                    '0' => $td[0], 
                     '1' => $td[1],
                     '2' => $td[2],
                     '3' => $td[3],
@@ -212,6 +219,10 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
 <link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
+
+$dropbox_unid = md5(uniqid(crypto_rand_secure(), true)); //this var is used to give a unique value to every
+                                                         //page request. This is to prevent resubmiting data
+
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
 	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $langDropBox);
@@ -223,31 +234,72 @@ if ($is_editor) {
     if (isset($_GET['other']) and $_GET['other']) {
         $displayall = true;    
         if (isset($_GET['id'])) {
-            $messagebody = true;
             $r_message_id = intval($_GET['id']);
             $dropbox_person = new Dropbox_Person($uid, false);
+            foreach ($dropbox_person->sentWork as $w){
+                $nameTools = $w->title;
+                $tool_content .= "
+                <div id='operations_container'>
+                  <ul id='opslist'>
+                    <li><a href=\"dropbox_submit.php?course=$code_cours&amp;AdminDeleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>$langDelete</a></li>
+                  </ul>
+                </div>";            
+                $tool_content .= standard_text_escape($w->description);
+            }
+        draw($tool_content, 2);
+	exit;             
         }
     }
 }
 
 if (isset($_GET['s']) and $_GET['s']) {
     $display_outcoming = true;
-    $messagebody = false;
+    $require_help = false;
+    $nameTools = $dropbox_lang['sentTitle'];
+    $navigation[]= array (
+        "url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $langDropBox
+    );
     $dropbox_person = new Dropbox_Person($uid);
-    if (isset($_GET['sm_id'])) {
-        $messagebody = true;
-        $s_message_id = intval($_GET['sm_id']);
+    if (isset($_GET['id'])) {
+        $s_message_id = intval($_GET['id']);
         $navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;s=1", "name"=> $dropbox_lang['sentTitle']);
         $dropbox_person = new Dropbox_Person($uid, true, false);
+        foreach ($dropbox_person->sentWork as $w){
+            $nameTools = $w->title;
+            $tool_content .= "
+            <div id='operations_container'>
+              <ul id='opslist'>
+                <li><a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>$langDelete</a></li>
+              </ul>
+            </div>";            
+            $tool_content .= standard_text_escape($w->description);
+        }
+        draw($tool_content, 2);
+	exit;        
     }
 } else {
-    $messagebody = false;
+    //$messagebody = false;
+    $navigation[]= array (
+        "url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $langDropBox
+    );
+    $nameTools = $dropbox_lang['receivedTitle'];
     $dropbox_person = new Dropbox_Person($uid);
-    if (isset($_GET['rm_id'])) {
+    if (isset($_GET['id'])) {
         $messagebody = true;
-        $r_message_id = intval($_GET['rm_id']);
-        $navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $dropbox_lang['receivedTitle']);
+        $r_message_id = intval($_GET['id']);        
         $dropbox_person = new Dropbox_Person($uid, false, true);
+        foreach ($dropbox_person->receivedWork as $w){
+            $nameTools = $w->title;
+            $tool_content .= "
+                <div id='operations_container'>
+                  <ul id='opslist'>
+                    <li><a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>$langDelete</a></li>
+                  </ul>
+                </div>";            
+            $tool_content .= standard_text_escape($w->description);
+        }
+        draw($tool_content, 2);
+	exit;           
     }   
 }
 
@@ -267,8 +319,6 @@ $tool_content .= " <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sho
   </ul>
 </div>";
 
-$dropbox_unid = md5(uniqid(crypto_rand_secure(), true)); //this var is used to give a unique value to every
-                                                         //page request. This is to prevent resubmiting data
 /*
  * ========================================
  * FORM UPLOAD FILE
