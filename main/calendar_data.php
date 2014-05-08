@@ -23,12 +23,33 @@
 
 $require_login = TRUE;
 
+$require_valid_uid = true;
+require_once '../include/lib/textLib.inc.php';
 require_once '../include/init.php';
 require_once 'personal_calendar/calendar_events.class.php';
 
+Calendar_Events::get_calendar_settings();
 if(isset($_GET['caltype']) && $_GET['caltype'] == 'small'){
     $day = (isset($_GET['day']))? intval($_GET['day']):null;
     $month = (isset($_GET['month']))? intval($_GET['month']):null;
     $year = (isset($_GET['year']))? intval($_GET['year']):null;
     echo Calendar_Events::calendar_view($day, $month, $year, 'small'); 
+}
+elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'week'){
+   $day = (isset($_GET['day']))? intval($_GET['day']):null;
+   $month = (isset($_GET['month']))? intval($_GET['month']):null;
+   $year = (isset($_GET['year']))? intval($_GET['year']):null;
+   echo Calendar_Events::calendar_view($day, $month, $year, 'week'); 
+}
+elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'day'){
+   $day = (isset($_GET['day']))? intval($_GET['day']):null;
+   $month = (isset($_GET['month']))? intval($_GET['month']):null;
+   $year = (isset($_GET['year']))? intval($_GET['year']):null;
+   echo Calendar_Events::calendar_view($day, $month, $year, 'day'); 
+}
+else{
+   $day = (isset($_GET['day']))? intval($_GET['day']):null;
+   $month = (isset($_GET['month']))? intval($_GET['month']):null;
+   $year = (isset($_GET['year']))? intval($_GET['year']):null;
+   echo Calendar_Events::calendar_view($day, $month, $year, 'month'); 
 }

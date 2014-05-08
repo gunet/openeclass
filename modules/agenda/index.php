@@ -377,12 +377,7 @@ if (mysql_num_rows($result) > 0) {
         
         $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
         if ($myrow['duration'] != '') {
-            if ($myrow['duration'] == 1) {
-                $message = $langHour;
-            } else {
-                $message = $langHours;
-            }
-            $msg = "($langDuration: " . q($myrow['duration']) . " $message)";
+            $msg = "($langDuration: " . q($myrow['duration']) . ")";
         } else {
             $msg = '';
         }

@@ -376,6 +376,9 @@ class References {
         
         global $urlServer;
         $itemurl = $urlServer;
+        if(is_null($item_type) || empty($item_type)){
+            return false;
+        }
         $objprops = self::get_module_from_objtype($item_type);
         $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);    
         if($res){

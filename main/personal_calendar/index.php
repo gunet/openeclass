@@ -43,10 +43,10 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 
-
+Calendar_Events::get_calendar_settings();
 $dateNow = date("j-n-Y / H:i", time());
 $datetoday = date("Y-n-j H:i", time());
-
+$today = getdate();
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 }
@@ -60,8 +60,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jq
 <script type='text/javascript'>
 $(function() {
 $('input[name=startdate]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
+    dateFormat: 'yy-mm-dd'
     });
 $('input[name=enddate]').datepicker({
     dateFormat: 'yy-mm-dd'
@@ -70,9 +69,30 @@ $('input[name=duration]').timepicker({
     timeFormat: 'H:mm',
     showDuration: true
     });
-});
-
-</script>";
+});".
+'
+var selectedday = '.$today['mday'].';
+var selectedmonth = '.$today['mon'].';
+var selectedyear = '.$today['year'].';
+function show_month(day,month,year){
+    selectedday = day;
+    selectedmonth = month;
+    selectedyear = year;
+    $.get("../calendar_data.php",{day:day, month: month, year: year}, function(data){$("#monthcalendar").html(data);});    
+}
+function show_week(day,month,year){
+    selectedday = day;
+    selectedmonth = month;
+    selectedyear = year;
+    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "week"}, function(data){$("#monthcalendar").html(data);});    
+}
+function show_day(day,month,year){
+    selectedday = day;
+    selectedmonth = month;
+    selectedyear = year;
+    $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "day"}, function(data){$("#monthcalendar").html(data);});    
+}
+</script>';
 
 //angela: Do we need recording of personal actions????
 // The following is added for statistics purposes
@@ -90,8 +110,6 @@ load_js('references.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
         $langEmptyEventTitle . '";</script>';
 
-$eventNumber = Calendar_Events::count_user_events();
-
 $displayForm = true;
 
 /* submit form: new or updated event*/
@@ -104,10 +122,13 @@ if (isset($_POST['submitEvent'])) {
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
-        Calendar_Events::update_event($id, $newTitle, $newContent, $refobjid);
+        Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, $refobjid);
         $message = "<p class='success'>$langEventModify</p>";
     } else { // new event 
-        $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
+        $recursion = null;
+        if(!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber'])>0 && !empty($_POST['enddate'])){
+            array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
+        }
         $id = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid);
         $message = "<p class='success'>$langEventAdd</p>";
     }    
@@ -204,7 +225,7 @@ if ($displayForm and (isset($_GET['addEvent']) or isset($_GET['modify']))) {
         }
         $tool_content .= "</select>"
                 . "<select name='frequencyperiod'> "
-                . "<option>$langSelectFromMenu...</option>"
+                . "<option value=\"\">$langSelectFromMenu...</option>"
                 . "<option value=\"D\">$langDays</option>"
                 . "<option value=\"W\">$langWeeks</option>"
                 . "<option value=\"M\">$langMonthsAbstract</option>"
@@ -239,12 +260,12 @@ if ($displayForm and (isset($_GET['addEvent']) or isset($_GET['modify']))) {
 
 
 /* display events */
-$eventlist = isset($_GET['evid']) ? array(Calendar_Events::get_event(intval($_GET['evid']))) : Calendar_Events::get_user_events();
-
 $day = (isset($_GET['day']))? intval($_GET['day']):null;
 $month = (isset($_GET['month']))? intval($_GET['month']):null;
 $year = (isset($_GET['year']))? intval($_GET['year']):null;
+$tool_content .= '<div id="monthcalendar" style="width:100%">';
 $tool_content .= Calendar_Events::calendar_view($day, $month, $year);
+$tool_content .= '</div>';
 
 add_units_navigation(TRUE);
 

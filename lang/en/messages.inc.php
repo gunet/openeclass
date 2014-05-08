@@ -3113,4 +3113,5 @@ $langSelectFromMenu = "Select...";
 $langSureToDelEvent = "Are you sure to delete the event?";
 $langSureToDelEventAll = "Are you sure to delete all events?";
 $langUntil = "until";
+$langWeek = "Eβδομάδα";
 $langWeeks = "weeks";

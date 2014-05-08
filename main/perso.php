@@ -150,7 +150,8 @@ if ($user_lesson_info[0][0] > 0) {
 $today = getdate();
 $day = $today['mday'];
 $month = $today['mon'];
-$year = $today['year'];    
+$year = $today['year']; 
+Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day,$month,$year);
 //END - Get personal calendar
 
