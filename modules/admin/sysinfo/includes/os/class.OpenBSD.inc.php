@@ -1,117 +1,145 @@
 <?php
-//
-// phpSysInfo - A PHP System Information Script
-// http://phpsysinfo.sourceforge.net/
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-// $Id$
-//
-
-echo "<center><b>Note: The Net/OpenBSD version of phpSysInfo is work in progress, some things currently don't work</b></center>";
-
-require('./includes/os/class.BSD.common.inc.php');
-
-class sysinfo extends bsd_common
+/**
+ * OpenBSD System Class
+ *
+ * PHP version 5
+ *
+ * @category  PHP
+ * @package   PSI OpenBSD OS class
+ * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
+ * @copyright 2009 phpSysInfo
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @version   SVN: $Id: class.OpenBSD.inc.php 621 2012-07-29 18:49:04Z namiltd $
+ * @link      http://phpsysinfo.sourceforge.net
+ */
+ /**
+ * OpenBSD sysinfo class
+ * get all the required information from OpenBSD systems
+ *
+ * @category  PHP
+ * @package   PSI OpenBSD OS class
+ * @author    Michael Cramer <BigMichi1@users.sourceforge.net>
+ * @copyright 2009 phpSysInfo
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @version   Release: 3.0
+ * @link      http://phpsysinfo.sourceforge.net
+ */
+class OpenBSD extends BSDCommon
 {
-    var $cpu_regexp;
-    var $scsi_regexp;
-
-    // Our contstructor
-    // this function is run on the initialization of this class
-    function sysinfo ()
+    /**
+     * define the regexp for log parser
+     */
+    public function __construct()
     {
-        $this->cpu_regexp = "^cpu.* @ (.*) MHz";
-        $this->scsi_regexp = "^(.*) at scsibus.*: <(.*)> .*";
+        parent::__construct();
+        $this->setCPURegExp1("^cpu(.*) (.*) MHz");
+        $this->setCPURegExp2("/(.*),(.*),(.*),(.*),(.*)/");
+        $this->setSCSIRegExp1("^(.*) at scsibus.*: <(.*)> .*");
+        $this->setSCSIRegExp2("^(da[0-9]): (.*)MB ");
+        $this->setPCIRegExp1("/(.*) at pci[0-9] .* \"(.*)\"/");
+        $this->setPCIRegExp2("/\"(.*)\" (.*).* at [.0-9]+ irq/");
     }
 
-    function get_sys_ticks ()
+    /**
+     * UpTime
+     * time the system is running
+     *
+     * @return void
+     */
+    private function _uptime()
     {
-        $a = $this->grab_key('kern.boottime');
-        $sys_ticks = time() - $a;
-        return $sys_ticks;
+        $a = $this->grabkey('kern.boottime');
+        $this->sys->setUptime(time() - $a);
     }
 
-    // get the pci device information out of dmesg
-    function pci ()
+    /**
+     * get network information
+     *
+     * @return void
+     */
+    private function _network()
     {
-        $results = array();
-
-        for ($i=0; $i < count($this->read_dmesg()); $i++) {
-            $buf = $this->dmesg[$i];
-            if (preg_match('/(.*) at pci[0-9] (.*) "(.*)" (.*)$/', $buf, $ar_buf)) {
-                $results[$i] = $ar_buf[1].": ".$ar_buf[3];
-            } elseif (preg_match('/"(.*)" (.*).* at [.0-9]+ irq/', $buf, $ar_buf)) {
-                $results[$i] = $ar_buf[1].": ".$ar_buf[2];
-            }
-            sort($results);
-        }
-        return $results;
-    }
-
-    function network ()
-    {
-        $netstat_b = execute_program('netstat', '-nbdi | cut -c1-25,44- | grep Link | grep -v \'* \'');
-        $netstat_n = execute_program('netstat', '-ndi | cut -c1-25,44- | grep Link | grep -v \'* \'');
-        $lines_b = explode("\n", $netstat_b);
-        $lines_n = explode("\n", $netstat_n);
-        $results = array();
-        for ($i = 0; $i < sizeof($lines_b); $i++) {
+        CommonFunctions::executeProgram('netstat', '-nbdi | cut -c1-25,44- | grep Link | grep -v \'* \'', $netstat_b, PSI_DEBUG);
+        CommonFunctions::executeProgram('netstat', '-ndi | cut -c1-25,44- | grep Link | grep -v \'* \'', $netstat_n, PSI_DEBUG);
+        $lines_b = preg_split("/\n/", $netstat_b, -1, PREG_SPLIT_NO_EMPTY);
+        $lines_n = preg_split("/\n/", $netstat_n, -1, PREG_SPLIT_NO_EMPTY);
+        for ($i = 0, $max = sizeof($lines_b); $i < $max; $i++) {
             $ar_buf_b = preg_split("/\s+/", $lines_b[$i]);
             $ar_buf_n = preg_split("/\s+/", $lines_n[$i]);
-            if (!empty($ar_buf_b[0]) && !empty($ar_buf_n[3])) {
-                $results[$ar_buf_b[0]] = array();
-
-                $results[$ar_buf_b[0]]['rx_bytes'] = $ar_buf_b[3];
-                $results[$ar_buf_b[0]]['rx_packets'] = $ar_buf_n[3];
-                $results[$ar_buf_b[0]]['rx_errs'] = $ar_buf_n[4];
-                $results[$ar_buf_b[0]]['rx_drop'] = $ar_buf_n[8];
-
-                $results[$ar_buf_b[0]]['tx_bytes'] = $ar_buf_b[4];
-                $results[$ar_buf_b[0]]['tx_packets'] = $ar_buf_n[5];
-                $results[$ar_buf_b[0]]['tx_errs'] = $ar_buf_n[6];
-                $results[$ar_buf_b[0]]['tx_drop'] = $ar_buf_n[8];
-
-                $results[$ar_buf_b[0]]['errs'] = $ar_buf_n[4] + $ar_buf_n[6];
-                $results[$ar_buf_b[0]]['drop'] = $ar_buf_n[8];
+            if (! empty($ar_buf_b[0]) && ! empty($ar_buf_n[3])) {
+                $dev = new NetDevice();
+                $dev->setName($ar_buf_b[0]);
+                $dev->setTxBytes($ar_buf_b[4]);
+                $dev->setRxBytes($ar_buf_b[3]);
+                $dev->setErrors($ar_buf_n[4] + $ar_buf_n[6]);
+                $dev->setDrops($ar_buf_n[8]);
+                $this->sys->setNetDevices($dev);
             }
         }
-        return $results;
     }
 
-    // get the ide device information out of dmesg
-    function ide ()
+    /**
+     * IDE information
+     *
+     * @return void
+     */
+    protected function ide()
     {
-        $results = array();
-
-        $s = 0;
-        for ($i=0; $i < count($this->read_dmesg()); $i++) {
-            $buf = $this->dmesg[$i];
-            if (preg_match('/^(.*) at pciide[0-9] (.*): <(.*)>/', $buf, $ar_buf)) {
-                $s = $ar_buf[1];
-                $results[$s]['model'] = $ar_buf[3];
-                $results[$s]['media'] = 'Hard Disk';
+        foreach ($this->readdmesg() as $line) {
+            if (preg_match('/^(.*) at pciide[0-9] (.*): <(.*)>/', $line, $ar_buf)) {
+                $dev = new HWDevice();
+                $dev->setName($ar_buf[0]);
                 // now loop again and find the capacity
-                for ($j=0; $j < count($this->read_dmesg()); $j++) {
-                    $buf_n = $this->dmesg[$j];
-                    if (preg_match("/^($s): (.*), (.*), (.*)MB, .*$/", $buf_n, $ar_buf_n)) {
-                        $results[$s]['capacity'] = $ar_buf_n[4] * 2048 * 1.049;;
+                foreach ($this->readdmesg() as $line2) {
+                    if (preg_match("/^(".$ar_buf[0]."): (.*), (.*), (.*)MB, .*$/", $line2, $ar_buf_n)) {
+                        $dev->setCapacity($ar_buf_n[4] * 2048 * 1.049);
                     }
                 }
+                $this->sys->setIdeDevices($dev);
             }
         }
-        return $results;
+    }
+
+    /**
+     * get CPU information
+     *
+     * @return void
+     */
+    protected function cpuinfo()
+    {
+        $dev = new CpuDevice();
+        $dev->setModel($this->grabkey('hw.model'));
+        $dev->setCpuSpeed($this->grabkey('hw.cpuspeed'));
+        $ncpu = $this->grabkey('hw.ncpu');
+        if ( is_null($ncpu) || (trim($ncpu) == "") || (!($ncpu >= 1)) )
+            $ncpu = 1;
+        for ($ncpu ; $ncpu > 0 ; $ncpu--) {
+            $this->sys->setCpus($dev);
+        }
+    }
+
+    /**
+     * get icon name
+     *
+     * @return void
+     */
+    private function _distroicon()
+    {
+        $this->sys->setDistributionIcon('OpenBSD.png');
+    }
+
+    /**
+     * get the information
+     *
+     * @see BSDCommon::build()
+     *
+     * @return Void
+     */
+    public function build()
+    {
+        parent::build();
+        $this->_distroicon();
+        $this->_network();
+        $this->_uptime();
     }
 }
