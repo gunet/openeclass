@@ -20,10 +20,13 @@
 
 class CourseXMLElement extends SimpleXMLElement {
     
+    const DEFAULT_NS = 'http://www.openeclass.org';
     const NO_LEVEL = 0;
     const A_MINUS_LEVEL = 1;
     const A_LEVEL = 2;
     const A_PLUS_LEVEL = 3;
+    
+    private static $tmpData = array();
     
     /**
      * Get element's attribute if exists.
@@ -119,20 +122,21 @@ class CourseXMLElement extends SimpleXMLElement {
     /**
      * Recursively populate the HTML Form.
      * 
-     * @param  string $parentKey
+     * @param  string           $parentKey
+     * @param  CourseXMLElement $parent
      * @return string
      */
-    private function populateForm($parentKey = '') {
+    private function populateForm($parentKey = '', $parent = null) {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
         if (count($children) == 0) {
-            return $this->appendLeafFormField($fullKey);
+            return $this->appendLeafFormField($fullKey, $parent);
         }
         
         $out = "";
         foreach ($children as $ele) {
-            $out .= $ele->populateForm($fullKey);
+            $out .= $ele->populateForm($fullKey, $this);
         }
         
         return $out;
@@ -163,11 +167,12 @@ class CourseXMLElement extends SimpleXMLElement {
     /**
      * Populate a single simple HTML Form Field (leaf).
      * 
-     * @global string $currentCourseLanguage
-     * @param  string $fullKey
+     * @global string           $currentCourseLanguage
+     * @param  string           $fullKey
+     * @param  CourseXMLElement $parent
      * @return string
      */
-    private function appendLeafFormField($fullKey) {
+    private function appendLeafFormField($fullKey, $parent) {
         global $currentCourseLanguage;
         
         // init vars
@@ -192,21 +197,21 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
         }
         $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div title='$help' class='cmetarow'>
-            <span class='$cmetalabel'>";
+        $fieldStart .= "<div title='$help' class='cmetarow'><span class='$cmetalabel'>";
         if (in_array($fullKeyNoLang, self::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . self::getLinkedValue($fullKey) ."' target='_blank'>" . q($keyLbl . $lang) . "</a>";
         } else {
             $fieldStart .= q($keyLbl . $lang); 
         }
-        $fieldStart .= ":</span>
-            <span class='cmetafield'>";
+        $fieldStart .= ":</span><span class='cmetafield'>";
         
         $fieldEnd = "</span>";
         if (in_array($fullKey, self::$mandatoryFields)) {
             $fieldEnd .= "<span class='cmetamandatory'>*</span>";
         }
         $fieldEnd .= "</div>";
+        
+        // break divs
         if (in_array($fullKey, self::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div>";
         }
@@ -261,18 +266,64 @@ class CourseXMLElement extends SimpleXMLElement {
         
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, self::$binaryFields)) {
-            $html = $fieldStart;
-            $value = (string) $this;
-            if (!empty($value)) { // image already exists
-                $mime = (string) $this->getAttribute('mime');
-                $html .= "<img id='" . $fullKey . "_image' src='data:". q($mime) .";base64,". q($value) ."'/>
-                          <img id='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
-                          <input id='" . $fullKey . "_hidden' type='hidden' name='". q($fullKey) ."' value='". q($value) ."'>
-                          <input id='" . $fullKey . "_hidden_mime' type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'>
-                          </span></div>
-                          <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
+            $html = '';
+            $is_multiple = (in_array($fullKey, self::$multipleFields)) ? true : false;
+            $multiplicity = ($is_multiple) ? '[]' : '';
+            
+            if (!$is_multiple) {
+                $html .= $fieldStart;
+                $value = (string) $this;
+                if (!empty($value)) { // image already exists
+                    $mime = (string) $this->getAttribute('mime');
+                    $html .= "<img id='" . $fullKey . "_image' src='data:" . q($mime) . ";base64,". q($value) . "'/>
+                              <img id='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
+                              <input id='" . $fullKey . "_hidden' type='hidden' name='". q($fullKey) . $multiplicity . "' value='". q($value) ."'>
+                              <input id='" . $fullKey . "_hidden_mime' type='hidden' name='". q($fullKey) . "_mime" . $multiplicity . "' value='". q($mime) ."'>
+                              </span></div>
+                              <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
+                }
+                $html .= "<input type='file' size='30' name='" . q($fullKey) . $multiplicity . "'>";
+                $html .= $fieldEnd;
+            } else {
+                // do nothing if field already walked/processed
+                $walked = isset(self::$tmpData[$fullKey . '_walked']);
+                if (!$walked) {
+                    $html .= "<div id='" . $fullKey . "_container'>";
+                    $html .= $fieldStart;
+                    $name = $this->getName();
+                    $cnt = 0;
+                    
+                    if ($parent !== null && $name !== null) {
+                        foreach ($parent->{$name} as $currentField) {
+                            $value = (string) $currentField;
+                            if (!empty($value)) { // image already exists
+                                $mime = (string) $currentField->getAttribute('mime');
+                                if ($cnt > 0) {
+                                    $html .= "</span></div><div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
+                                }
+                                $html .= "<img id='" . $fullKey . $cnt . "_image' src='data:". q($mime) . ";base64," . q($value) ."'/>
+                                          <a id='" . $fullKey . $cnt . "_delete' href='javascript:photoDelete(\"#" . $fullKey . $cnt . "\");'>
+                                          <img src='" . $GLOBALS['themeimg'] . "/delete.png'/></a>
+                                          <input id='" . $fullKey . $cnt . "_hidden' type='hidden' name='". q($fullKey) . $multiplicity . "' value='". q($value) ."'>
+                                          <input id='" . $fullKey . $cnt . "_hidden_mime' type='hidden' name='". q($fullKey) . "_mime" . $multiplicity . "' value='". q($mime) ."'>";
+                                $cnt++;
+                            }
+                        }
+                    }
+                    
+                    if ($cnt == 0) {
+                        $html .= "<input type='file' size='30' name='". q($fullKey) . $multiplicity . "'>";
+                    }
+                    $html .= $fieldEnd;
+                    $html .= "</div>"; // close container
+                    // + button
+                    $html .= "<div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
+                    $html .= "<a id='" . $fullKey . "_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a>";
+                    $html .= "</span></div>";
+                    self::$tmpData[$fullKey . '_walked'] = true;
+                }
             }
-            $html .= "<input type='file' size='30' name='". q($fullKey) ."'>". $fieldEnd;
+            
             return $html;
         }
         
@@ -386,7 +437,7 @@ class CourseXMLElement extends SimpleXMLElement {
             return $html;
         }
         
-        if($fullKey == 'course_language') {
+        if ($fullKey == 'course_language') {
             return $fieldStart . $GLOBALS['native_language_names_init'][((string) $this)] . $fieldEnd;
         }
         
@@ -397,29 +448,31 @@ class CourseXMLElement extends SimpleXMLElement {
     /**
      * Populate the XML with data.
      * 
-     * @param  array $data
-     * @param  string $parentKey
+     * @param array            $data
+     * @param string           $parentKey
+     * @param CourseXMLElement $parent
      */
-    public function populate($data, $parentKey = '') {
+    public function populate(&$data, $parentKey = '', $parent = null) {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
         if (count($children) == 0) {
-            return $this->populateLeaf($data, $fullKey);
+            return $this->populateLeaf($data, $fullKey, $parent);
         }
         
         foreach ($children as $ele) {
-            $ele->populate($data, $fullKey);
+            $ele->populate($data, $fullKey, $this);
         }
     }
     
     /**
      * Populate a single simple xml node (leaf).
      * 
-     * @param array  $data
-     * @param string $fullKey
+     * @param array            $data
+     * @param string           $fullKey
+     * @param CourseXMLElement $parent
      */
-    private function populateLeaf($data, $fullKey) {
+    private function populateLeaf(&$data, $fullKey, $parent) {
         $fullKeyNoLang = $fullKey;
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
@@ -432,13 +485,41 @@ class CourseXMLElement extends SimpleXMLElement {
                 } else {
                     $this->{0} = $data[$fullKey];
                 }
-                
-                if (in_array($fullKeyNoLang, self::$binaryFields)) { // mime attribute for mime fields 
+                // mime attribute for mime fields 
+                if (in_array($fullKeyNoLang, self::$binaryFields)) {
                     $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
                 }
-            } else { // multiple entities (multiEnum and units) use associative indexed arrays
+            } else {
+                // multiple entities (multiEnum, multiFields and units) use associative indexed arrays
                 if (in_array($fullKeyNoLang, self::$multiEnumerationFields)) {
-                    $this->{0} = implode(',', $data[$fullKey]); // comma separated
+                    // multiEnums are just comma separated
+                    $this->{0} = implode(',', $data[$fullKey]);
+                } else if (in_array($fullKeyNoLang, self::$multipleFields)) {
+                    // multiplicity fields
+                    if ($parent !== null) {
+                        $name = $this->getName();
+                        // calc index to locate the proper child
+                        $i = 0;
+                        if (isset($data[$fullKey . '_walked'])) {
+                            $i = intval($data[$fullKey . '_walked']) + 1;
+                        }
+                        // this part is walked n independent times, where n = count($data[$fullKey])
+                        // for each walking, we have to remember which was the previous index
+                        // and assign the next array value to the (next) proper parent element
+                        if ($i < count($data[$fullKey])) {
+                            if (in_array($fullKeyNoLang, self::$integerFields)) {
+                                $parent->{$name}[$i] = intval($data[$fullKey][$i]);
+                            } else {
+                                $parent->{$name}[$i] = $data[$fullKey][$i];
+                            }
+                            // mime attribute for mime fields
+                            if (in_array($fullKeyNoLang, self::$binaryFields)) {
+                                $parent->{$name}[$i]['mime'] = isset($data[$fullKey .'_mime'][$i]) ? $data[$fullKey .'_mime'][$i] : '';
+                            }
+                            // store index for locating the proper child at the next iteration
+                            $data[$fullKey . '_walked'] = $i;
+                        }
+                    }
                 } else { // units
                     $index = intval($this->getAttribute('index')) - 1;
                     if ($index >= 0 && isset($data[$fullKey][$index])) {
@@ -469,7 +550,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $unitsCount++;
         }
 
-        $ret = array_merge($data, $extra);
+        $ret = array_merge_recursive($data, $extra);
         return $ret;
     }
     
@@ -491,7 +572,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $ret = array($fullKey => (string) $this);
             
             if ($this->getAttribute('mime')) {
-                $ret = array_merge($ret, array($fullKey .'_mime' => (string) $this->getAttribute('mime')));
+                $ret = array_merge_recursive($ret, array($fullKey .'_mime' => (string) $this->getAttribute('mime')));
             }
             
             return $ret;
@@ -499,7 +580,7 @@ class CourseXMLElement extends SimpleXMLElement {
         
         $out = array();
         foreach ($children as $ele) {
-            $out = array_merge($out, $ele->asFlatArrayRec($fullKey));
+            $out = array_merge_recursive($out, $ele->asFlatArrayRec($fullKey));
         }
         
         return $out;
@@ -514,6 +595,34 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public function adapt($data) {
         global $webDir;
+        
+        // adapt to the multiplicity of these fields
+        foreach (self::$multipleFields as $field) {
+            $dataCount = 0;
+            if (isset($data[$field])) {
+                $dataCount = count($data[$field]);
+            }
+            
+            $xmlCount = 0;
+            $asarr = $this->asFlatArray();
+            if (isset($asarr[$field])) {
+                $xmlCount = count($asarr[$field]);
+            }
+            
+            $parentXPath = self::getMultipleFieldParentXPath($field);
+            $fieldName = self::getMultipleFieldName($field);
+            
+            if ($dataCount > $xmlCount && $parentXPath !== null && $fieldName !== null) {
+                // locate parent node
+                $this->registerXPathNamespace('n', self::DEFAULT_NS);
+                $parents = $this->xpath($parentXPath);
+                
+                // add children to match both counts
+                for ($i = 0; $i < $dataCount - $xmlCount; $i++) {
+                    $parents[0]->addChild($fieldName, '');
+                }
+            }
+        }
         
         // adapt for units in data
         $unitsNo = (isset($data['course_numberOfUnits'])) ? intval($data['course_numberOfUnits']) : 0;
@@ -629,7 +738,7 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!$xml) { // fallback if xml is broken
                 return $skeletonXML;
             } else { // xml is valid, merge autogen data and current xml data
-                $new_data = array_merge($xml->asFlatArray(), $data);
+                $new_data = array_merge_recursive($xml->asFlatArray(), $data);
                 $data = $new_data;
             }
         } else { // fallback if starting fresh
@@ -641,7 +750,8 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // load xml from skeleton if it has more fields (useful for incremental updates)
         if ($skeletonXML->countAll() > $xml->countAll()) {
-            $skeletonXML->populate($xml->asFlatArray());
+            $skd = $xml->asFlatArray();
+            $skeletonXML->populate($skd);
             return $skeletonXML;
         }
 
@@ -917,6 +1027,50 @@ class CourseXMLElement extends SimpleXMLElement {
     public static $multiEnumerationFields = array(
         'course_format'
     );
+    
+    /**
+     * Fields with multiplicity.
+     * @var array
+     */
+    public static $multipleFields = array(
+        'course_instructor_photo'
+    );
+
+    /**
+     * XPaths to locate the parents of multiplicity fields.
+     * 
+     * @param  string      $field
+     * @return string|null
+     */
+    public static function getMultipleFieldParentXPath($field) {
+        $valArr = array(
+            'course_instructor_photo' => '/n:course/n:instructor'
+        );
+        
+        if (isset($valArr[$field])) {
+            return $valArr[$field];
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Provide the field name for multiplicity fields. 
+     * 
+     * @param  string      $field
+     * @return string|null
+     */
+    public static function getMultipleFieldName($field) {
+        $valArr = array(
+            'course_instructor_photo' => 'photo'
+        );
+        
+        if (isset($valArr[$field])) {
+            return $valArr[$field];
+        } else {
+            return null;
+        }
+    }
     
     /**
      * Textarea HTML Form fields.
