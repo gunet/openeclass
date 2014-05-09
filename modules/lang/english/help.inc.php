@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2014-03-31 11:40:44
+// Generated 2014-05-09 10:56:47
 
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
@@ -446,20 +446,13 @@ after them (you cannot go to step 2 before step 1). That sequence can only be su
 All learning objects have a status: completed or incomplete and the students progress is available through the <i>Tracking</i> tool at any time. 
 To attend a learning object within a learning path click on its title. Select the one you want to attend/read from the displayed list of objects (notice: it is essential that some learning paths are followed in a given order). The progress meter bar (on the right) adjusts its rate according to the actions taking place (e.g. watching presentation slides online). 
 Selection of button <img src='$themeimg/monitor.png' width=16 height=16> allows you to see the details of a learning object such as: Title, Comments, Module type, Total time, etc.</p>";
-$langHDropbox = "DropBox";
+$langHDropbox = "Message Exchange";
 $langHDropbox_student = $langHDropbox;
-$langDropboxContent = "<p>Dropbox is a tool for exchanging files with other course users.Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description.
-Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure. </p>
-<p>Two Dropbox folders are displayed: </p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file. </p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed, along with additional information on the files exchange. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>
-<p>Finally, a list with other Dropbox files is presented along with additional information on the files exchange.</p>";
-$langDropbox_studentContent = "<p>Dropbox is a tool for exchanging files with the users registered to the course. Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure.</p>
-<p>Two Dropbox folders are displayed:</p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file.</p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed along with additional information on the files. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>";
+$langDropboxContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from other users. Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>
+<p>Note that if you can have access to course users mail messages by clicking in 'Other messages'.</p>";
+$langDropbox_studentContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from course teachers (or/and with other users if platform administrator has given you appropriate permissions). Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>";
 $langHUsage = "Usage Statistics";
 $langUsageContent = "<p>This module presents course usage statistics information. More specifically,</p>
 <p>

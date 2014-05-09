@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2014-03-31 11:40:44
+// Generated 2014-05-09 10:56:47
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -369,7 +369,7 @@ $langReplaceBackupFile = "Replace config_backup.php.";
 $langencryptedPasswd = "Mandatory passwords encryption";
 $langDocQuota = "Documents quota";
 $langVideoQuota = "Video quota";
-$langDropboxQuota = "Dropbox quota";
+$langDropboxQuota = "Message Exchange quota";
 $langGroupQuota = "Group quota";
 $langEclassThemes = "Platform Theme";
 $langThemes = "Theme Selection";
@@ -701,7 +701,7 @@ $langExercices = "Exercises";
 $langAddPageHome = "Upload Webpage";
 $langLinkSite = "Link to a site";
 $langModifyInfo = "Course Administration";
-$langDropBox = "Dropbox";
+$langDropBox = "Message Exchange";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
 $langToolManagement = "Tool Management";
@@ -1904,8 +1904,6 @@ $langPollCreation = "Creation Date";
 $langPollCreateDate = "Questionnaire created on";
 $langPollCreationError = "<p class='caution'>Questionnaire creation error. Please try again.</p>";
 $langPollDeleted = "Questionnaire deleted successfully.";
-$langPollResultsAccess = "You dont have access rights to Questionnaire results.";
-$langPollAlreadyParticipated = "You have already participated in the Questionnaire.";
 $langPollDeactivated = "<p class='success'>Questionnaire deactivated successfully.</p>";
 $langPollActivated = "<p class='success'>Questionnaire activated successfully!</p>";
 $langPollSubmitted = "Thank you for your participation!";
@@ -3120,4 +3118,16 @@ $langExportIMSCP = "Export in IMS CP 1.1.4";
 $langEmptyPollTitle = "Please enter Questionnaire title";
 $langNameOfLang['slovene'] = "Slovenian";
 $langNameOfLang['slovak'] = "Slovak";
-$langUserDeleted="User deleted sucessfully";
+$langExternalFile = "Link external file";
+$langExternalFileInfo = "External file URL";
+$langDisplay = "Display";
+$langLast = "Last";
+$langFirst = "First";
+$langTotalResults = "Total results";
+$langDisplayed = "Displayed";
+$langTill = "till";
+$langResults2 = "results";
+$langPollResultsAccess = "You are not allowed to acccess questionnaire results";
+$langPollAlreadyParticipated = "You have already participated in questionnaire";
+$langExternalFileLink = 'External File';
+$langUserDeleted = "User deleted";
