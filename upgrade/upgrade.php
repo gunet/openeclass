@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -126,9 +126,9 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
-touch_or_error('../courses/temp/index.htm');
+touch_or_error('courses/temp/index.htm');
 mkdir_or_error('courses/userimg');
-touch_or_error('../courses/userimg/index.htm');
+touch_or_error('courses/userimg/index.htm');
 touch_or_error($webDir . '/video/index.htm');
 
 // ********************************************

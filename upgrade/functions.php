@@ -208,10 +208,12 @@ function is_admin($username, $password) {
         $r = db_query("SELECT * FROM user, admin
 				WHERE admin.idUser = user.user_id AND
 				BINARY user.username = " . quote($username));
+        $db_schema = 0;
     } else {
         $r = db_query("SELECT * FROM user, admin
 				WHERE admin.user_id = user.id AND
 				BINARY user.username = " . quote($username));
+        $db_schema = 1;
     }
 
     if (!$r or mysql_num_rows($r) == 0) {
@@ -226,9 +228,15 @@ function is_admin($username, $password) {
         if (!$hasher->CheckPassword($password, $row['password']))
             return false;
 
-        $_SESSION['uid'] = $row['user_id'];
-        $_SESSION['nom'] = $row['nom'];
-        $_SESSION['prenom'] = $row['prenom'];
+        if ($db_schema == 0) {
+            $_SESSION['uid'] = $row['user_id'];
+            $_SESSION['givenname'] = $row['prenom'];
+            $_SESSION['surname'] = $row['nom'];
+        } else {
+            $_SESSION['uid'] = $row['id'];
+            $_SESSION['givenname'] = $row['givenname'];
+            $_SESSION['surname'] = $row['surname'];
+        }
         $_SESSION['email'] = $row['email'];
         $_SESSION['uname'] = $username;
         $_SESSION['status'] = $row['status'];
