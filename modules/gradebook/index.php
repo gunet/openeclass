@@ -170,7 +170,7 @@ if ($is_editor) {
               </td>
             </tr>
 
-            <tr><th>$langGradebookActivityTitle:</th></tr>
+            <tr><th>$langTitle:</th></tr>
             <tr>
               <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
             </tr>
@@ -271,7 +271,7 @@ if ($is_editor) {
             $module_auto = 1;
             $actTitle = $checkForLp->lp_name;
             $actDate = date("Y-m-d");
-            $actDesc = $langGradebookActivityLp . ": " . $checkForLp->lp_name;
+            $actDesc = $langLearningPath . ": " . $checkForLp->lp_name;
 
             Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
         }
@@ -346,7 +346,7 @@ if ($is_editor) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                                         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=$userID' onsubmit=\"return checkrequired(this, 'antitle');\">
                                       <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
             $tool_content .= "<th width='10'  class='center'>$langGradebookMEANS</th>";
             $tool_content .= "</tr>";
         } else {
@@ -475,7 +475,7 @@ if ($is_editor) {
                     $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                                         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=$userID' onsubmit=\"return checkrequired(this, 'antitle');\">
                                       <table width='100%' class='sortable' id='t2'>";
-                    $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+                    $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
                     $tool_content .= "<th width='10'  class='center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
@@ -602,7 +602,7 @@ if ($is_editor) {
       <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
       <th class='center'>$langRole</th>
       <th class='center'>$langGradebookGrade</th>
-      <th class='center'>$langGradebookEdits</th>
+      <th class='center'>$langActions</th>
     </tr>";
 
 
@@ -717,7 +717,7 @@ if ($is_editor) {
             $tool_content .= $weightLeftMessage;
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookDesc</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookDesc</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
             $tool_content .= "<th width='60' colspan='' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
@@ -775,7 +775,7 @@ if ($is_editor) {
                         $tool_content .= "<td class='smaller'>$langGradebookAss";
                     }
                     if($announce->module_auto_type == 2){
-                        $tool_content .= "<td class='smaller'>$langGradebookExe";
+                        $tool_content .= "<td class='smaller'>$langExercise ";
                     }
                     if($announce->module_auto_type == 3){
                         $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
@@ -820,7 +820,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langGradebookActToAddAss</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
@@ -866,7 +866,7 @@ if ($is_editor) {
                 $tool_content .= "
                 <td width='70' class='right'>
                       <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToGradebook->id&amp;type=1'>
-                      $langGradebookGradeAdd</a>&nbsp;";
+                      $langAdd</a>&nbsp;";
 
                 $k++;
             } // end of while
@@ -885,7 +885,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langGradebookActToAddExe</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         } else {
@@ -922,7 +922,7 @@ if ($is_editor) {
                 $tool_content .= "
                 <td width='70' class='right'>
                       <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->id&amp;type=2'>
-                      $langGradebookGradeAdd</a>&nbsp;";
+                      $langAdd</a>&nbsp;";
 
                 $k++;
             } // end of while
@@ -949,7 +949,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langGradebookActToAddLp</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langGradebookActivityTitle</th><th>$langGradebookActivityLp</th><th>$langGradebookType</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th>$langLearningPath</th><th>$langGradebookType</th>";
             $tool_content .= "<th colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         } else {
@@ -982,7 +982,7 @@ if ($is_editor) {
                 $tool_content .= "
                 <td width='70' class='right'>
                       <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3'>
-                      $langGradebookGradeAdd</a>&nbsp;";
+                      $langAdd</a>&nbsp;";
 
                 $k++;
             } // end of while

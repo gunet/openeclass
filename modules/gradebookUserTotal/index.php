@@ -37,7 +37,7 @@ $userID = $uid;
 $courses = Database::get()->queryArray("SELECT course_id,code,title FROM course_user,course WHERE course_id=id AND visible > 0 AND user_id = ?d", $userID);
 
 
-$tool_content .= "<table class='sortable'  width='100%' id='t2'><tr><th>$langGradebookLesson</th><th>$langGradebookGrade</th><th>$langGradebookMore</th></tr>";
+$tool_content .= "<table class='sortable'  width='100%' id='t2'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
 
 foreach ($courses as $course1) {
 

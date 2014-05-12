@@ -962,9 +962,7 @@ $langAttendanceActiveUsersSemester = "Φοιτητές μόνο τελευταί
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
-$langGradebookEdits = "Ενεργείες";
 $langGradebookAddActivity = "Προσθήκη νέας δραστηριότητας";
-$langGradebookActivityTitle = "Τίτλος";
 $langGradebookActivityDescription = "Περιγραφή";
 $langGradebookActivityDate = "Ημερομηνία διεξαγωγής";
 $langGradebookActivityDate2 = "Ημερομηνία";
@@ -1010,11 +1008,7 @@ $langGradebookAutoGrade = "αυτόματη καταχώρηση βαθμού";
 $langGradebookNoAutoGrade = "μη αυτόματη καταχώρηση βαθμού";
 $langGradebookGrade = "Βαθμός";
 $langGradebookGradeAlert = "Προσοχή στο υπόλοιπο βαρύτητας";
-$langGradebookGradeAdd = "Προσθήκη";
-$langGradebookActivityLp = "Γραμμή μάθησης";
 $langGradebookAss = "Εργασία";
-$langGradebookExe = "Άσκηση";
-$langGradebookActivityLp = "Γραμμή μάθησης";
 $langGradebookActivityAct = "Δραστηριότητα γραμμής μάθησης";
 $langGradebookActivityLpExe = "Άσκηση γραμμής μάθησης";
 $langGradebookActToAddLp = "Δραστηριότητες γραμμής μάθησης προς εισαγωγή στο βαθμολόγιο";
@@ -1033,8 +1027,8 @@ $langGradebookTotalGradeNoInput = "Δεν έχει γίνει ακόμη κατ�
 $langGradebookGrades = "Βαθμοί";
 $langGradebookAlertToChange = "Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν";
 $langGradebookAlertNoInput = "Δεν υπάρχει καταχώρηση";
-$langGradebookLesson = "Μάθημα";
-$langGradebookMore = "Περισσότερα";
+$langGradeTotal = "Συνολικό Βαθμολόγιο";
+
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
