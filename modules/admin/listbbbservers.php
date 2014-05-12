@@ -194,7 +194,7 @@ while ( $aRow = mysql_fetch_array( $rResult ) )
         
         array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
         array_push($row, "$connected_users");
-        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation();'>Remove server</a>");
+        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>Remove server</a>");
         array_shift($row);
         $output['aaData'][] = $row;
         

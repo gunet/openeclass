@@ -30,6 +30,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('jquery');
 load_js('datatables/jquery.dataTables.js');
+load_js('tools.js');
 
     
 $head_content .= <<<EOF
@@ -50,17 +51,6 @@ $head_content .= <<<EOF
 /* ]]> */
 </script>
 EOF;
-
-$head_content .="
-<script type='text/javascript'>
-function confirmation ()
-{
-        if (confirm('$langConfirmDelete'))
-                {return true;}
-        else
-                {return false;}
-}
-</script>";
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
