@@ -574,16 +574,16 @@ class Log {
      */
     private function dropbox_action_details($details) {
 
-        global $langFileName, $langTitle, $langComments;
+        global $langFileName, $langSubject, $langMessage;
 
         $details = unserialize($details);
         
-        $content = "$langTitle &laquo" . $details['title'] . "&raquo";
+        $content = "$langSubject &laquo" . q($details['subject']) . "&raquo";
         if (!empty($details['filename'])) {
             $content .= "&nbsp;&mdash;&nbsp;$langFileName &laquo" . $details['filename'] . "&raquo";
         }
-        if (!empty($details['comment'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo" . $details['comment'] . "&raquo";
+        if (!empty($details['body'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langMessage &laquo" . standard_text_escape($details['body']) . "&raquo";
         }
         return $content;
     }

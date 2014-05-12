@@ -80,7 +80,11 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_SETTINGS', 30);
+define('MODULE_ID_GRADEBOOK', 32);
+define('MODULE_ID_GRADEBOOKTOTAL', 33);
+define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_SETTINGS', 31);
+
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -297,6 +301,9 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
+    } elseif ($file == 'datatables') {
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/jquery.dataTables.css'>\n";
+        $file = 'datatables/jquery.dataTables.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     if ($file == 'jquery-1.10.2.min.js')
@@ -1493,9 +1500,9 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
     Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM videolink WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_file WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM dropbox_attachment WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_index WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_msg WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
@@ -1551,9 +1558,12 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d", $u);
+            Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id 
+                                    WHERE dropbox_msg.author_id = ?d", $u);
+            Database::get()->query("DELETE dropbox_index FROM dropbox_index INNER JOIN dropbox_msg ON dropbox_index.msg_id = dropbox_msg.id 
+                                    WHERE dropbox_msg.author_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_index WHERE recipient_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_msg WHERE author_id = ?d", $u);
             Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);

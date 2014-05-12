@@ -403,3 +403,4 @@ if (!isset($_POST['create_course'])) {
                                             'visible' => $_POST['formvisible']));
 } // end of submit
 draw($tool_content, 1, null, $head_content);
+
