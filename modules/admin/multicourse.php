@@ -33,7 +33,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['submit'])) {
     $line = strtok($_POST['courses'], "\n");
-    
+
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
         header("Location:" . $urlServer . "modules/admin/multicourse.php");
         exit;
     }
-    
+
     $vis = intval($_POST['formvisible']);
     while ($line !== false) {
         $line = canonicalize_whitespace($line);
@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
             if (isset($info[1])) {
                 $prof_info = trim($info[1]);
                 $prof_uid = find_prof(trim($info[1]));
-                if ($prof_info and !$prof_uid) {
+                if ($prof_info and ! $prof_uid) {
                     $prof_not_found = true;
                 }
             }
@@ -65,14 +65,14 @@ if (isset($_POST['submit'])) {
             list($code, $cid) = create_course('', $_POST['lang'], $title, $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
                 if ($prof_uid) {
-                    db_query("INSERT INTO course_user
+                    Database::get()->query("INSERT INTO course_user
                                 SET course_id = $cid,
                                     user_id = $prof_uid,
                                     status = 1,
                                     tutor = 1,
                                     reg_date = NOW()");
                 }
-                db_query("INSERT INTO group_properties SET
+                Database::get()->query("INSERT INTO group_properties SET
                             course_id = $cid,
                             self_registration = 1,
                             multiple_registration = 0,
@@ -128,14 +128,14 @@ if (isset($_POST['submit'])) {
     $tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>";
-        
+
 // Type field is not available in 3.0
 //    $tool_content .= "<tr>
 //	  <th class='left'>$langType:</th>
 //	  <td>" . selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
 //	  <td>&nbsp;</td>
 //        </tr>";
-    
+
     $tool_content .= "<tr>
           <th>$langAvailableTypes:</th>
 	<td>
@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
 	  <br />
 	</td>
       </tr>";
-    
+
 // Subsystems are created in a different way in 3.0
 //    $tool_content .= "<tr>
 //	<th colspan='2'>$langSubsystems</td>
@@ -256,7 +256,7 @@ if (isset($_POST['submit'])) {
 //	    <td>&nbsp;</td>
 //	    <td>&nbsp;</td>
 //	  </tr>";
-        $tool_content .= "</table>
+    $tool_content .= "</table>
         <br />
 	</td>
       </tr>
@@ -280,8 +280,7 @@ draw($tool_content, 3, null, $head_content);
 
 // Helper function
 function prof_query($sql) {
-    return db_query_get_single_value("SELECT id FROM user
-                                                 WHERE status = 1 AND ( $sql )");
+    return Database::get()->querySingle("SELECT id FROM user WHERE status = 1 AND ( $sql )")->id;
 }
 
 // Find a professor by name ("Name surname") or username

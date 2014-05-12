@@ -87,7 +87,7 @@ if ($is_editor) {
     }
     if(!isset($_GET['statsAttendance'])){
         $tool_content .= "    
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langAttendanceStats</a></li>";
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStats</a></li>";
     }
     $tool_content .= "    
       </ul>
@@ -146,7 +146,7 @@ if ($is_editor) {
         }
 
         $tool_content .= "
-            <tr><th>$langAttendanceActivityTitle:</th></tr>
+            <tr><th>$langTitle:</th></tr>
             <tr>
               <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
             </tr>
@@ -154,7 +154,7 @@ if ($is_editor) {
             <tr>
               <td><input type='text' name='date' value='" . datetime_remove_seconds($date) . "'></td>
             </tr>
-            <tr><th>$langAttendanceActivityDescription:</th></tr>
+            <tr><th>$langDescription:</th></tr>
             <tr>
               <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
             </tr>";
@@ -288,14 +288,14 @@ if ($is_editor) {
         $announcementNumber = count($result);
 
         if ($announcementNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langAttendanceStats - $langAttendanceActList</legend>";
+            $tool_content .= "<fieldset><legend>$langStats - $langAttendanceActList</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langAttendanceActivityTitle</th><th >$langAttendanceActivityDate</th><th>$langAttendanceDesc</th><th>$langAttendanceType</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langDescription</th><th>$langType</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langAttendanceMEANS</th>";
             $tool_content .= "</tr>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceNoActMessage2</a> $langAttendanceNoActMessage3</p>\n";
+            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
         }
         $k = 0;
         if ($result){
@@ -400,12 +400,12 @@ if ($is_editor) {
                                   <table width='100%' class='sortable' id='t2'>";
                 $tool_content .= "<tr><th  colspan='2'>" . $m['title'] . "</th>"
                                 . "<th >" . $langdate . "</th>"
-                                . "<th>$langAttendanceDesc</th>"
-                                . "<th>$langAttendanceType</th>";
+                                . "<th>$langDescription</th>"
+                                . "<th>$langType</th>";
                 $tool_content .= "<th width='60' colspan='$colsNum' class='center'>" . $langAttendanceBooking . "</th>";
                 $tool_content .= "</tr>";
             } else {
-                $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceNoActMessage2</a> $langAttendanceNoActMessage3</p>\n";
+                $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
             }
             
             //ui counter 
@@ -511,7 +511,7 @@ if ($is_editor) {
           <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
           <th class='center'>$langRole</th>
           <th class='center'>$langAttendanceΑbsences</th>
-          <th class='center'>$langAttendanceEdits</th>
+          <th class='center'>$langActions</th>
         </tr>";
 
 
@@ -606,12 +606,12 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langAttendanceActList</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langAttendanceActivityTitle</th><th >$langAttendanceActivityDate</th><th>$langAttendanceDesc</th><th>$langAttendanceType</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langDescription</th><th>$langType</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
         else{
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceNoActMessage2</a> $langAttendanceNoActMessage3</p>\n";
+            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
         }
         $k = 0;
         if ($result){
@@ -674,7 +674,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langAttendanceActToAddAss</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langAttendanceActivityTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
@@ -712,7 +712,7 @@ if ($is_editor) {
                 $tool_content .= "
                 <td width='70' class='right'>
                       <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1'>
-                      $langAttendanceAdd</a>&nbsp;";
+                      $langAdd</a>&nbsp;";
 
                 $k++;
             } // end of while
@@ -731,7 +731,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langAttendanceActToAddExe</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langAttendanceActivityTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         } else {
@@ -767,7 +767,7 @@ if ($is_editor) {
                 $tool_content .= "
                 <td width='70' class='right'>
                       <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToAttendance->id&amp;type=2'>
-                      $langAttendanceAdd</a>&nbsp;";
+                      $langAdd</a>&nbsp;";
 
                 $k++;
             } // end of while
@@ -836,7 +836,7 @@ if ($is_editor) {
         $tool_content .= "<div class='center'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceΑbsencesFrom . " ". $attendance_limit . " " . $langAttendanceΑbsencesFrom2. " </div><br>";
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
-        $tool_content .= "<tr><th  colspan='2'>$langAttendanceActivityTitle</th><th>$langAttendanceActivityDate2</th><th>$langAttendanceDesc</th><th>$langAttendanceΑbsencesYesNo</th></tr>";
+        $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceΑbsencesYesNo</th></tr>";
     } else {
         $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage5</p>";
     }

@@ -50,8 +50,8 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
         $course_names[$row['code']] = $row['title'];
     }
     mysql_free_result($result);
-    foreach ($course_codes as $code) {
-        $cid = course_code_to_id($code);
+    foreach ($course_codes as $code) {                        
+        $cid = course_code_to_id($code);        
         $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                 WHERE user_id = $uid
                                 AND course_id = $cid";
@@ -108,7 +108,7 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
         } else {
             $tool_content .= "<tr class='odd'>";
         }
-        $i++;
+        $i++;        
         $tool_content .= "
                 <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
                 <td>" . q(course_code_to_title($code)) . "</td>
