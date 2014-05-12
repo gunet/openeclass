@@ -1107,8 +1107,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) NOT NULL,
                             file_path VARCHAR(200) NOT NULL,
-                            file_name VARCHAR(200) NOT NULL,
-                            )
+                            file_name VARCHAR(200) NOT NULL)
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
