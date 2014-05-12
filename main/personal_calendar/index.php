@@ -127,7 +127,7 @@ if (isset($_POST['submitEvent'])) {
     } else { // new event 
         $recursion = null;
         if(!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber'])>0 && !empty($_POST['enddate'])){
-            array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
+            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
         }
         $id = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid);
         $message = "<p class='success'>$langEventAdd</p>";

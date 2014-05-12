@@ -27,4 +27,5 @@ require_once 'calendar_events.class.php';
 
 header('Content-Type:text/calendar; charset='.$charset); 
 header("Content-Disposition: attachment; filename=\"mycalendar.ics\"");
+Calendar_Events::get_calendar_settings();
 echo Calendar_Events::icalendar();
