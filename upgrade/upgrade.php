@@ -1034,8 +1034,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
-                            `value` ENUM('false','true') NOT NULL DEFAULT 'false'),
-                            PRIMARY KEY (wiki_id, flag) )
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+                            PRIMARY KEY (wiki_id, flag))
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1107,7 +1107,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) NOT NULL,
                             file_path VARCHAR(200) NOT NULL,
-                            file_name VARCHAR(200) NOT NULL',
+                            file_name VARCHAR(200) NOT NULL,
                             )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
