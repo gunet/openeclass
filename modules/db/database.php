@@ -370,7 +370,7 @@ final class Database {
         if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
         if ($pdo_error)
-            $pdo_error_text = " with error " . $pdo_error[2] . " (" . $pdo_error[1] . ":" . $pdo_error[0] . ")";
+            $pdo_error_text = " with error: \"" . $pdo_error[2] . "\" (SQLSTATE=" . $pdo_error[1] . " ERROR=" . $pdo_error[0] . ")";
         else
             $pdo_error_text = "";
         Database::dbg("Error: " . $error_msg . $pdo_error_text, $statement, $init_time, $backtrace_info);
