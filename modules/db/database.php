@@ -381,7 +381,7 @@ final class Database {
      * Private function to call master Debug object
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+        Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }
