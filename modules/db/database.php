@@ -327,28 +327,28 @@ final class Database {
         /* Prepare statement */
         $stm = $this->dbh->prepare($statement);
         if (!$stm)
-            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement with error '" . $this->dbh->errorInfo() . "'", $statement, $init_time, $backtrace_info);
 
         /* Bind values - with type safety and '?' notation  */
         for ($i = 0; $i < $variable_size; $i++) {
             if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
-                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, $backtrace_info, false);
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i with error '" . $stm->errorInfo() . "'", $statement, $init_time, $backtrace_info, false);
         }
 
         /* Execute statement */
         if (!$stm->execute())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement with error '" . $stm->errorInfo() . "'", $statement, $init_time, $backtrace_info);
 
         /* fetch results */
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
             if ($result != false && !is_object($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object with error '" . $stm->errorInfo() . "'", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects with error '" . $stm->errorInfo() . "'", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
