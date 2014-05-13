@@ -59,16 +59,14 @@ $lang = ($language == 'el') ? 'el' : 'en';
 
 //make chart
 require_once 'modules/graphics/plotter.php';
-$query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON " .
-        " course.id = course_user.course_id GROUP BY course.id";
 
-$result = db_query($query);
 $chart = new Plotter();
 $chart->setTitle($langUsersCourse);
-while ($row = mysql_fetch_assoc($result)) {
-    $chart->growWithPoint($row['name'], $row['cnt']);
-}
-mysql_free_result($result);
+    Database::get()->queryFunc("SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON course.id = course_user.course_id GROUP BY course.id"
+        , function ($row) use($chart) {
+    $chart->growWithPoint($row->name, $row->cnt);
+});
+
 $tool_content .= $chart->plot();
 
 load_js('tools.js');

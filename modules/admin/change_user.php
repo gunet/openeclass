@@ -44,17 +44,16 @@ if (isset($_REQUEST['username'])) {
     } else {
         $sql .= "COLLATE utf8_bin = " . quote($_REQUEST['username']);
     }
-    $result = db_query($sql);
-    if (mysql_num_rows($result) > 0) {
-        $myrow = mysql_fetch_array($result);
-        $_SESSION['uid'] = $myrow['id'];
-        $_SESSION['surname'] = $myrow['surname'];
-        $_SESSION['givenname'] = $myrow['givenname'];
-        $_SESSION['status'] = $myrow['status'];
-        $_SESSION['email'] = $myrow['email'];
-        $_SESSION['is_admin'] = !(!($myrow['is_admin'])); // double 'not' to handle NULL
-        $_SESSION['uname'] = $myrow['username'];
-        $_SESSION['langswitch'] = $myrow['lang'];
+    $myrow = Database::get()->querySingle($sql);
+    if ($myrow) {
+        $_SESSION['uid'] = $myrow->id;
+        $_SESSION['surname'] = $myrow->surname;
+        $_SESSION['givenname'] = $myrow->givenname;
+        $_SESSION['status'] = $myrow->status;
+        $_SESSION['email'] = $myrow->email;
+        $_SESSION['is_admin'] = !(!($myrow->is_admin)); // double 'not' to handle NULL
+        $_SESSION['uname'] = $myrow->username;
+        $_SESSION['langswitch'] = $myrow->lang;
         redirect_to_home_page();
     } else {
         $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";

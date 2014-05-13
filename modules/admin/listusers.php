@@ -230,11 +230,12 @@ if ($c) { // users per course
 }
 
 // User statistics
-$sql = db_query($count_qry . ' GROUP BY user_type');
 $countUser = $teachers = $students = $visitors = $other = 0;
-while ($row = mysql_fetch_assoc($sql, MYSQL_ASSOC)) {
+Database::get()->queryArray($count_qry . ' GROUP BY user_type');
+foreach ($sql as $$row) {
+    $row = (array) $row;
     $countUser += $row['num'];
-    ;
+
     switch ($row['user_type']) {
         case USER_TEACHER:
             $teachers += $row['num'];
@@ -250,7 +251,6 @@ while ($row = mysql_fetch_assoc($sql, MYSQL_ASSOC)) {
             break;
     }
 }
-mysql_free_result($sql);
 
 $caption = '';
 $pagination_link = '&amp;' . implode('&amp;', $params);

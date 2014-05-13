@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,6 @@
   cummulative monthly data are stored.
  * 
  */
-
 $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
@@ -67,9 +67,8 @@ $tool_content .= "
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
 $query = "SELECT MIN(`when`) as min_when FROM loginout";
-$result = db_query($query);
-while ($row = mysql_fetch_assoc($result)) {
-    $min_when = strtotime($row['min_when']);
+foreach (Database::get()->queryArray($query) as $row) {
+    $min_when = strtotime($row->min_when);
 }
 $min_w = date("d-m-Y", $min_when);
 
@@ -103,18 +102,17 @@ $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login
                         WHERE $date_where
                         GROUP BY MONTH(start_date)";
 
-$result = db_query($query);
+$result = Database::get()->queryArray($query);
 
-if (mysql_num_rows($result) > 0) {
+if (count($result) > 0) {
     $chart = new Plotter();
     $chart->setTitle($langOldStats);
 
     //add points to chart
-    while ($row = mysql_fetch_assoc($result)) {
-        $mont = $langMonths[$row['month']];
-        $chart->growWithPoint($mont . " - " . $row['year'], $row['visits']);
+    foreach ($result as $row) {
+        $mont = $langMonths[$row->month];
+        $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
     }
-    mysql_free_result($result);
     $tool_content .= "<p>" . $langVisits . "</p>\n" . $chart->plot($langNoStatistics);
 }
 $tool_content .= '<br />';

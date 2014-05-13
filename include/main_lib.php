@@ -80,7 +80,11 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_SETTINGS', 30);
+define('MODULE_ID_GRADEBOOK', 32);
+define('MODULE_ID_GRADEBOOKTOTAL', 33);
+define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_SETTINGS', 31);
+
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -298,6 +302,9 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
+    } elseif ($file == 'datatables') {
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/jquery.dataTables.css'>\n";
+        $file = 'datatables/jquery.dataTables.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     if ($file == 'jquery-1.10.2.min.js')
@@ -305,11 +312,6 @@ function load_js($file, $init = '') {
 
     if (strlen($init) > 0)
         $head_content .= $init;
-}
-
-// Translate uid to username
-function uid_to_username($uid) {
-    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", intval($uid))->username;
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
@@ -378,31 +380,33 @@ function uid_to_name($uid, $name_type = 'fullname') {
     }
 }
 
-// Translate uid to real surname
-function uid_to_surname($uid) {
-    $r = mysql_fetch_row(db_query("SELECT surname FROM user WHERE id = " . intval($uid)));
-    if ($r !== false) {
-        return $r[0];
-    } else {
-        return false;
-    }
-}
 
-// Translate uid to user email
+/**
+ * @brief Translate uid to user email
+ * @param type $uid
+ * @return boolean
+ */
 function uid_to_email($uid) {
-    $r = mysql_fetch_row(db_query("SELECT email FROM user WHERE id = " . intval($uid)));
-    if ($r !== false) {
-        return $r[0];
+    
+    $r = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d", $uid);    
+    if ($r) {
+        return $r->email;
     } else {
         return false;
     }
 }
 
-// Translate uid to AM (student number)
+
+/**
+ * @brief Translate uid to AM (student number)
+ * @param type $uid
+ * @return boolean
+ */
 function uid_to_am($uid) {
-    $r = mysql_fetch_array(db_query("SELECT am from user WHERE id = " . intval($uid)));
-    if ($r !== false) {
-        return $r[0];
+    
+    $r = Database::get()->querySingle("SELECT am from user WHERE id = ?d", $uid);
+    if ($r) {
+        return $r->am;
     } else {
         return false;
     }
@@ -509,10 +513,9 @@ function user_groups($course_id, $user_id, $format = 'html') {
 }
 
 // Find secret subdir of group gid
-function group_secret($gid) {
-    global $mysqlMainDb;
+function group_secret($gid) {    
 
-    $res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'", $mysqlMainDb);
+    $res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'");
     if ($res) {
         $secret = mysql_fetch_row($res);
         return $secret[0];
@@ -590,19 +593,19 @@ function selection3($entries, $name, $default = '') {
     return $select_box;
 }
 
-// ------------------------------------------
-// function to check if user is a guest user
-// ------------------------------------------
 
+/**
+ * @brief function to check if user is a guest user
+ * @global type $uid
+ * @return boolean
+ */
 function check_guest() {
     global $uid;
 
     if (isset($uid) and $uid) {
-        $res = db_query("SELECT status FROM user WHERE id = $uid");
-        $g = mysql_fetch_row($res);
-
-        if ($g[0] == USER_GUEST) {
-            return true;
+        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;        
+        if ($status == USER_GUEST) {
+            return TRUE;
         } else {
             return false;
         }
@@ -610,18 +613,20 @@ function check_guest() {
     return false;
 }
 
-// ------------------------------------------------
-// function to check if user is a course editor
-// ------------------------------------------------
+/**
+ * @brief function to check if user is a course editor
+ * @global type $uid
+ * @global type $course_id
+ * @return boolean
+ */
 function check_editor() {
     global $uid, $course_id;
 
     if (isset($uid)) {
-        $res = db_query("SELECT editor FROM course_user
-                                WHERE user_id = $uid AND
-                                      course_id = $course_id");
-        $s = mysql_fetch_array($res);
-        if ($s['editor'] == 1) {
+        $s = Database::get()->querySingle("SELECT editor FROM course_user
+                                        WHERE user_id = ?d AND
+                                        course_id = ?d", $uid, $course_id);        
+        if ($s->editor == 1) {
             return true;
         } else {
             return false;
@@ -756,19 +761,6 @@ function mysql_version() {
         return false;
 }
 
-/**
- * @param $text
- * @return $text
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version June 2004
- * @desc apply parsing to content to parse tex commandos that are seperated by [tex][/tex] to make itreadable for techexplorer plugin.
- */
-function parse_tex($textext) {
-    $textext = str_replace("[tex]", "<EMBED TYPE='application/x-techexplorer' TEXDATA='", $textext);
-    $textext = str_replace("[/tex]", "' width='100%'>", $textext);
-    return $textext;
-}
-
 // --------------------------------------
 // Useful functions for creating courses
 // -------------------------------------
@@ -876,11 +868,9 @@ function datetime_remove_seconds($datetime) {
 
 // Returns user's previous login date, or today's date if no previous login
 function last_login($uid) {
-    global $mysqlMainDb;
-
-    $q = db_query("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') FROM loginout
-                          WHERE id_user = $uid AND action = 'LOGIN'");
-    list($last_login) = mysql_fetch_row($q);
+       
+    $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') AS last_login FROM loginout
+                          WHERE id_user = ?d AND action = 'LOGIN'", $uid)->last_login;
     if (!$last_login) {
         $last_login = date('Y-m-d');
     }
@@ -1349,7 +1339,8 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // page from a unit resource link. If entry_page == true this is the initial page of module
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = false) {
-    global $navigation, $course_id, $is_editor, $mysqlMainDb, $course_code;
+    global $navigation, $course_id, $is_editor, $course_code;
+    
     if ($entry_page and !isset($_GET['unit'])) {
         unset($_SESSION['unit']);
         return false;
@@ -1366,7 +1357,7 @@ function add_units_navigation($entry_page = false) {
         }
         $q = db_query("SELECT title FROM course_units
                        WHERE id = $unit_id AND course_id = $course_id " .
-                $visibility_check, $mysqlMainDb);
+                $visibility_check);
         if ($q and mysql_num_rows($q) > 0) {
             list($unit_name) = mysql_fetch_row($q);
             $navigation[] = array("url" => "../units/index.php?course=$course_code&amp;id=$unit_id", "name" => htmlspecialchars($unit_name));
@@ -1397,61 +1388,73 @@ function ellipsize_html($string, $maxlen, $postfix = '&hellip;') {
     return $output->cut();
 }
 
-// Find the title of a course from its code
+/**
+ * @brief Find the title of a course from its code
+ * @param type $code
+ * @return boolean
+ */
 function course_code_to_title($code) {
-    global $mysqlMainDb;
-    $r = db_query("SELECT title FROM course WHERE code = " . quote($code));
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+    $r = Database::get()->querySingle("SELECT title FROM course WHERE code = ?s", $code);
+    if ($r) {                
+        return $r->title;
     } else {
         return false;
     }
 }
 
-// Find the course id of a course from its code
-function course_code_to_id($code) {
-    global $mysqlMainDb;
-    $r = db_query("SELECT id FROM course WHERE code = " . quote($code), $mysqlMainDb);
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+/**
+ * @brief Find the course id of a course from its code
+ * @param type $code
+ * @return boolean
+ */
+function course_code_to_id($code) {    
+    $r = Database::get()->querySingle("SELECT id FROM course WHERE code = ?s", $code);
+    if ($r) {
+           return $r->id;
     } else {
         return false;
     }
 }
 
-// Find the title of a course from its id
-function course_id_to_title($cid) {
-    global $mysqlMainDb;
-    $r = db_query("SELECT title FROM course WHERE id = $cid", $mysqlMainDb);
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+
+/**
+ * @brief Find the title of a course from its id
+ * @param type $cid
+ * @return boolean
+ */
+function course_id_to_title($cid) {    
+    $r = Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $cid);
+    if ($r) {        
+        return $r->title;
     } else {
         return false;
     }
 }
 
-// find the course code from its id
-function course_id_to_code($cid) {
-    global $mysqlMainDb;
-    $r = db_query("SELECT code FROM course WHERE id = $cid ", $mysqlMainDb);
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+/**
+ * @brief Find the course code from its id
+ * @param type $cid
+ * @return boolean
+ */
+function course_id_to_code($cid) {   
+    $r = Database::get()->querySingle("SELECT code FROM course WHERE id = ?d", $cid );
+    if ($r) {        
+        return $r->code;
     } else {
         return false;
     }
 }
 
-// find the public course code from its id
-function course_id_to_public_code($cid) {
-    global $mysqlMainDb;
-    $r = db_query("SELECT public_code FROM course WHERE id = $cid ", $mysqlMainDb);
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+
+/**
+ * @brief Find the public course code from its id
+ * @param type $cid
+ * @return boolean
+ */
+function course_id_to_public_code($cid) {    
+    $r = Database::get()->querySingle("SELECT public_code FROM course WHERE id = ?d", $cid);
+    if ($r) {        
+        return $r->public_code;
     } else {
         return false;
     }
@@ -1498,9 +1501,9 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
     Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM videolink WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_file WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM dropbox_attachment WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_index WHERE msg_id IN (SELECT id FROM dropbox_msg WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_msg WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
@@ -1556,9 +1559,12 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d", $u);
+            Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id 
+                                    WHERE dropbox_msg.author_id = ?d", $u);
+            Database::get()->query("DELETE dropbox_index FROM dropbox_index INNER JOIN dropbox_msg ON dropbox_index.msg_id = dropbox_msg.id 
+                                    WHERE dropbox_msg.author_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_index WHERE recipient_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_msg WHERE author_id = ?d", $u);
             Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
