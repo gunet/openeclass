@@ -58,7 +58,7 @@ function list_docs()
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(
-			'id' => $row['id'],
+                        'id' => $row['id'],
                         'is_dir' => is_dir($basedir . $row['path']),
                         'size' => filesize($basedir . $row['path']),
                         'title' => $row['title'],

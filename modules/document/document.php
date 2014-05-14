@@ -23,7 +23,7 @@ $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'ti
 if (!defined('COMMON_DOCUMENTS')) {
         $require_current_course = TRUE;
         $menuTypeID = ($is_in_tinymce) ? 5: 2;
-} else {        
+} else {
         if ($is_in_tinymce) {
                 $menuTypeID = 5;
         } else {
@@ -132,7 +132,7 @@ function headlink($label, $this_sort)
         }
         if ($sort == $this_sort) {
                 $this_reverse = !$reverse;
-                $indicator = " <img src='$themeimg/arrow_" . 
+                $indicator = " <img src='$themeimg/arrow_" .
                         ($reverse? 'up': 'down') . ".png' />";
         } else {
                 $this_reverse = $reverse;
@@ -147,11 +147,11 @@ function headlink($label, $this_sort)
 
 
 if ($is_in_tinymce) {
-    
+
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter='. $_REQUEST['docsfilter'] .'&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;'. $docsfilter;
-    
+
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
@@ -195,7 +195,7 @@ if ($subsystem == EBOOK) {
 // ---------------------------
 if (isset($_GET['download'])) {
         $downloadDir = $_GET['download'];
-        
+
         if ($downloadDir == '/') {
                 $format = '.dir';
                 $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
@@ -206,14 +206,14 @@ if (isset($_GET['download'])) {
                 if (!$q or mysql_num_rows($q) != 1) {
                         not_found($downloadDir);
                 }
-                list($real_filename, $format, $visibility, $extra_path) = mysql_fetch_row($q);                
+                list($real_filename, $format, $visibility, $extra_path) = mysql_fetch_row($q);
                 if (($visibility != 'v') and (isset($statut) and $statut != 1)) {
                         not_found($downloadDir);
                 }
         }
         // Allow unlimited time for creating the archive
         @set_time_limit(0);
-        
+
         if ($format == '.dir') {
                 $real_filename = $real_filename.'.zip';
                 $dload_filename = $webDir . 'courses/temp/'.safe_filename('zip');
@@ -360,7 +360,42 @@ if ($can_upload) {
                                 }
                         }
                 }
-	} // end if is_uploaded_file
+    } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
+        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
+        $extra_path = canonicalize_url($fileURL);
+        if (preg_match('/^javascript/', $extra_path)) {
+            $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
+                q($extra_path) . "</p>";
+        }
+        $components = explode('/', $extra_path);
+        $fileName = php2phps(add_ext_on_mime(end($components)));
+        $safe_fileName = safe_filename(get_file_extension($fileName));
+        $file_path = $uploadPath . '/' . $safe_fileName;
+        $file_date = date("Y\-m\-d G\:i\:s");
+        $file_format = get_file_extension($fileName);
+
+        db_query("INSERT INTO document SET
+            course_id = $cours_id,
+            subsystem = $subsystem,
+            subsystem_id = $subsystem_id,
+            path = " . quote($file_path) . ",
+            extra_path = " . quote($extra_path) . ",
+            filename = " . autoquote($fileName) . ",
+            visibility = 'v',
+            comment = " . autoquote($_POST['file_comment']) . ",
+            category = " . intval($_POST['file_category']) . ",
+            title = " . autoquote($_POST['file_title']) . ",
+            creator = " . autoquote($_POST['file_creator']) . ",
+            date = '$file_date',
+            date_modified = '$file_date',
+            subject = " . autoquote($_POST['file_subject']) . ",
+            description = " . autoquote($_POST['file_description']) . ",
+            author = " . autoquote($_POST['file_author']) . ",
+            format = " . autoquote($file_format) . ",
+            language = " . autoquote($_POST['file_language']) . ",
+            copyrighted = " . intval($_POST['file_copyrighted']));
+    }
+
 
 	/**************************************
 	MOVE FILE OR DIRECTORY
@@ -417,7 +452,7 @@ if ($can_upload) {
 		// Check if file actually exists
                 $result = db_query("SELECT path, extra_path, format, filename FROM document
 					WHERE $group_sql AND path=" . autoquote($delete));
-                $r = mysql_fetch_array($result);                
+                $r = mysql_fetch_array($result);
                 $filename = $r['filename'];
                 $delete_ok = true;
                 if (mysql_num_rows($result) > 0) {
@@ -555,26 +590,26 @@ if ($can_upload) {
 			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
-	
+
 	// add/update/remove metadata
 	// h $metadataPath periexei to path tou arxeiou gia to opoio tha epikyrwthoun ta metadata
 	if (isset($_POST['metadataPath'])) {
-		
+
 		$metadataPath = $_POST['metadataPath'] . ".xml";
 		$oldFilename = $_POST['meta_filename'] . ".xml";
 		$xml_filename = $basedir . str_replace('/..', '', $metadataPath);
 		$xml_date = date("Y\-m\-d G\:i\:s");
 		$file_format = ".meta";
-		
+
 		metaCreateDomDocument($xml_filename);
-		
+
 		$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($metadataPath));
 		if (mysql_num_rows($result) > 0) {
 			db_query("UPDATE document SET
 				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
 				date_modified = NOW(),
 				format = " . autoquote($file_format) . ",
-				language = ". autoquote($_POST['meta_language']) ." 
+				language = ". autoquote($_POST['meta_language']) ."
 				WHERE $group_sql AND path = ". autoquote($metadataPath) );
 		} else {
 			db_query("INSERT INTO document SET
@@ -590,7 +625,7 @@ if ($can_upload) {
 				format = " . autoquote($file_format) . ",
 				language = " . autoquote($_POST['meta_language']));
 		}
-		
+
 		$action_message = "<p class='success'>$langMetadataMod</p>";
 	}
 
@@ -736,11 +771,11 @@ if ($can_upload) {
 			    <th>$langAuthor : </th>
 			    <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
 			  </tr>";
-		  
+
                         $dialogBox .= "<tr><th>$langCopyrighted : </th><td>";
                         $dialogBox .= selection($copyright_titles,
                                                 'file_copyrighted', $oldCopyrighted) . "</td></tr>";
-                        
+
                         $dialogBox .= "<tr><th>$langLanguage :</th><td>" .
                                 selection(array('en' => $langEnglish,
                                                 'fr' => $langFrench,
@@ -772,24 +807,24 @@ if ($can_upload) {
 
 	// Emfanish ths formas gia tropopoihsh metadata
 	if (isset($_GET['metadata'])) {
-		
+
 		$metadata = $_GET['metadata'];
 		$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($metadata));
-		
+
 		if (mysql_num_rows($result) > 0) {
-			
+
 			$row = mysql_fetch_array($result);
 			$oldFilename = q($row['filename']);
-			
+
 			// filesystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
 			// (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
 			// $fileName gia thn provolh tou onomatos arxeiou
 			$fileName = my_basename($metadata);
 			if (empty($oldFilename)) $oldFilename = $fileName;
 			$real_filename = $basedir . str_replace('/..', '', q($metadata));
-			
+
 			$dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
-			
+
 		} else {
 			$action_message = "<p class='caution'>$langFileNotFound</p>";
 		}
@@ -809,14 +844,14 @@ if ($can_upload) {
 					        path = " . autoquote($visibilityPath));
 		$action_message = "<p class='success'>$langViMod</p>";
 	}
-        
+
         // Public accessibility commands
         if (isset($_GET['public']) || isset($_GET['limited'])) {
                 $new_public_status = intval(isset($_GET['public']));
                 $path = isset($_GET['public'])? $_GET['public']: $_GET['limited'];
                 db_query("UPDATE document SET public = $new_public_status
                                           WHERE $group_sql AND
-                                                path = " . autoquote($path));         
+                                                path = " . autoquote($path));
                 $action_message = "<p class='success'>$langViMod</p>";
         }
 } // teacher only
@@ -825,7 +860,7 @@ if ($can_upload) {
 // define current directory
 
 
-$curDirPath = 
+$curDirPath =
         pathvar($_GET['openDir'], false) .
         pathvar($_GET['createDir'], false) .
         pathvar($_POST['moveTo'], false) .
@@ -878,8 +913,8 @@ if (isset($_GET['rev'])) {
         $reverse = true;
 }
 
-list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
-        ? select_proper_filters($_REQUEST['docsfilter']) 
+list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
+        ? select_proper_filters($_REQUEST['docsfilter'])
         : array('', true);
 
 /*** Retrieve file info for current directory from database and disk ***/
@@ -927,7 +962,7 @@ $dspCurDirName = htmlspecialchars($curDirName);
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 
-if($can_upload) {        
+if($can_upload) {
 	// Action result message
 	if (!empty($action_message))
 	{
@@ -937,7 +972,8 @@ if($can_upload) {
         if (!$is_in_tinymce and !defined('EXPORTING')) {
             $tool_content .= "<div id='operations_container'><ul id='opslist'>";
             $tool_content .= "<li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
-            $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+            $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
+                       <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
             if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
                     $tool_content .= "<li><a href='../units/insert.php?course=$code_cours&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             }
@@ -991,8 +1027,8 @@ if ($doc_count == 0) {
                          "<th width='60' class='center'><b>$langSize</b></th>" .
                          "<th class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
         if (!$is_in_tinymce and !defined('EXPORTING')) {
-            if($can_upload) {                    
-		$width = (get_config("insert_xml_metadata")) ? 185 : 165;                
+            if($can_upload) {
+		$width = (get_config("insert_xml_metadata")) ? 185 : 165;
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
             } else {
 		$tool_content .= "\n      <th width='135' class='center'><b>$langCommands</b></th>";
@@ -1007,8 +1043,8 @@ if ($doc_count == 0) {
         foreach (array(true, false) as $is_dir) {
                 foreach ($fileinfo as $entry) {
                         $link_title_extra = '';
-                        if (($entry['is_dir'] != $is_dir) or 
-                                (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {                                        
+                        if (($entry['is_dir'] != $is_dir) or
+                                (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {
                                 continue;
                         }
                         $cmdDirName = $entry['path'];
@@ -1041,12 +1077,13 @@ if ($doc_count == 0) {
                                                 // External file URL
                                                 $file_url = $entry['extra_path'];
                                                 if ($is_editor) {
-                                                        $link_title_extra .= '&nbsp;external';
+                                                    $link_title_extra .= '&nbsp;' .
+                                                        icon('external_link', $langExternalFileLink);
                                                 }
                                         }
                                 }
                                 if ($copyid = $entry['copyrighted'] and
-                                    $copyicon = $copyright_icons[$copyid]) {                                    
+                                    $copyicon = $copyright_icons[$copyid]) {
                                         $link_title_extra .= "&nbsp;" .
                                                 icon($copyicon,
                                                      $copyright_titles[$copyid],
@@ -1054,16 +1091,16 @@ if ($doc_count == 0) {
                                                      null, 'png', 'target="_blank"');
                                 }
                                 $dload_msg = $langSave;
-                                
+
                                 $dObj = $entry['object'];
                                 $dObj->setAccessURL($file_url);
                                 $dObj->setPlayURL(file_playurl($cmdDirName, $entry['filename']));
                                 if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
                                     $dObj->setPlayURL($dObj->getAccessURL());
-                                
+
                                 $link_href = MultimediaHelper::chooseMediaAhref($dObj);
                         }
-                        $img_href = "<img src='$image' />";                       
+                        $img_href = "<img src='$image' alt='".q($entry['format'])."'/>";
                         if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
                                 // Normal or common document
                                 $download_url = $base_url . "download=$cmdDirName";
@@ -1075,7 +1112,7 @@ if ($doc_count == 0) {
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";
                         $tool_content .= "\n<td>". $link_href ." ".$link_title_extra;
-			
+
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>" .
@@ -1087,16 +1124,20 @@ if ($doc_count == 0) {
                         $padding2 = '';
                         $date = nice_format($entry['date'], true, true);
                         $date_with_time = nice_format($entry['date'], true);
-                        if ($is_dir) {                         
+                        if ($is_dir) {
                                 $tool_content .= "\n<td>&nbsp;</td>\n<td class='center' title='$date_with_time'>$date</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         } else if ($entry['format'] == ".meta") {
-                                $size = format_file_size($entry['size']);                            
+                                $size = format_file_size($entry['size']);
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                 $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                        } else {                                
-                                $size = format_file_size($entry['size']);                               
+                        } else {
+                                if ($entry['extra_path'] and !$entry['size']) {
+                                    $size = '';
+                                } else {
+                                    $size = format_file_size($entry['size']);
+                                }
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
                         }
                         if (!$is_in_tinymce and !defined('EXPORTING')) {
@@ -1133,7 +1174,7 @@ if ($doc_count == 0) {
 	                                $tool_content .= "<img src='$themeimg/lom.png' " .
 	                                                 "title='".q($langMetadata)."' alt='".q($langMetadata)."' /></a>&nbsp;";
                                 }
-                                /*** visibility command ***/                                
+                                /*** visibility command ***/
                                 if ($entry['visible']) {
                                         $tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
                                                          "<img src='$themeimg/visible.png' " .
@@ -1178,8 +1219,8 @@ if ($doc_count == 0) {
         $tool_content .= "\n    <br />";
 }
 if (defined('SAVED_COURSE_CODE')) {
-        $code_cours = SAVED_COURSE_CODE;        
-        $cours_id = SAVED_COURSE_ID;        
+        $code_cours = SAVED_COURSE_CODE;
+        $cours_id = SAVED_COURSE_ID;
 }
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);
@@ -1189,7 +1230,7 @@ draw($tool_content, $menuTypeID, null, $head_content);
 function select_proper_filters($requestDocsFilter) {
     $filter = '';
     $compatiblePlugin = true;
-    
+
     switch ($requestDocsFilter) {
         case 'image':
                 $ors = '';

@@ -497,6 +497,9 @@ $langCleanup = 'Εκκαθάριση';
 // common documents
 $langCommonDocs = "Κοινόχρηστα Αρχεία";
 $langExplainCommonDocs = "Το αρχείο που θα ανεβάσετε θα είναι προσβάσιμο από όλα τα μαθήματα μέσω του υποσυστήματος 'Εγγραφα'";
+$langExternalFile = "Σύνδεση εξωτερικού αρχείου";
+$langExternalFileInfo = "Διεύθυνση (URL) εξωτερικού αρχείου";
+$langExternalFileLink = 'Εξωτερικό αρχείο';
 
 // multicourseuser.php
 $langMultiCourseUser = "Μαζική εγγραφή χρηστών σε μαθήματα";
@@ -943,7 +946,7 @@ $langMultiCourseData = 'Στοιχεία Μαθημάτων';
 /******************************************************
 * document.php
 ******************************************************/
-$langUpload = "Ανέβασμα";
+$langUpload = "Αποστολή αρχείου";
 $langDownloadFile= "Ανέβασμα αρχείου στον εξυπηρέτη";
 $langPathUploadFile= "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir="Δημιουργία καταλόγου";
