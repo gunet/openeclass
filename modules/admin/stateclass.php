@@ -103,38 +103,33 @@ if (isset($_GET['stats'])) {
             $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
             break;
         case 'login':
-            $result = db_query("SELECT code FROM course");
             $course_codes = array();
-            while ($row = mysql_fetch_assoc($result)) {
-                $course_codes[] = $row['code'];
-            }
-            mysql_free_result($result);
+            $result = Database::get()->queryFunc("SELECT code FROM course"
+                    , function($row) use(&$course_codes) {
+                $course_codes[] = $row->code;
+            });
 
             $first_date_time = time();
             $totalHits = 0;
 
             foreach ($course_codes as $course_code) {
-                $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
-                                        WHERE course_id = " . course_code_to_id($course_code);
-                $result = db_query($sql);
-                while ($row = mysql_fetch_assoc($result)) {
-                    $totalHits += $row['cnt'];
-                }
-                mysql_free_result($result);
 
-                $sql = "SELECT UNIX_TIMESTAMP(MIN(day)) AS first
+                Database::get()->queryFunc("SELECT SUM(hits) AS cnt FROM actions_daily WHERE course_id = ?d"
+                        , function ($row) use(&$totalHits) {
+                    $totalHits += $row->cnt;
+                }, course_code_to_id($course_code));
+
+                Database::get()->queryFunc("SELECT UNIX_TIMESTAMP(MIN(day)) AS first
                                         FROM actions_daily
-                                        WHERE course_id = " . course_code_to_id($course_code);
-                $result = db_query($sql);
-                while ($row = mysql_fetch_assoc($result)) {
-                    $tmp = $row['first'];
+                                        WHERE course_id = ?d"
+                        , function($row) use(&$first_date_time) {
+                    $tmp = $row->first;
                     if (!empty($tmp)) {
                         if ($tmp < $first_date_time) {
                             $first_date_time = $tmp;
                         }
                     }
-                }
-                mysql_free_result($result);
+                }, course_code_to_id($course_code));
             }
             $uptime = date("d-m-Y", $first_date_time);
 
@@ -143,24 +138,24 @@ if (isset($_GET['stats'])) {
 			<th colspan='2'>$langNbLogin</th>
 			</tr>
 			<tr>
-			<td>$langFrom " . db_query_get_single_value("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1") . "</td>
-			<td class='right' width='200'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM loginout
-				WHERE loginout.action ='LOGIN'") . "</b></td>
+			<td>$langFrom " . Database::get()->querySingle("SELECT loginout.when as when FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</td>
+			<td class='right' width='200'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
+				WHERE loginout.action ='LOGIN'")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<td>$langLast30Days</td>
-			<td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))") . "</b></td>
+			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
+				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<td>$langLast7Days</td>
-			<td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))") . "</b></td>
+			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
+				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<td>$langToday</td>
-			<td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > curdate())") . "</b></td>
+			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
+				WHERE action ='LOGIN' AND (loginout.when > curdate())")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<td>$langTotalHits</td>
@@ -177,24 +172,24 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td>$langNbProf</td>
                                     <td class='right' width='200'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_TEACHER . ";") .
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_TEACHER . ";")->cnt .
                     "</b></td></tr>
                                 <tr><td>$langNbStudents</td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_STUDENT . ";") .
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_STUDENT . ";")->cnt .
                     "</b></td></tr>
                                 <tr><td>$langNumGuest</td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_GUEST . ";") .
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_GUEST . ";")->cnt .
                     "</b></td></tr>
                                 <tr><td>$langTotal</td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user;") .
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt .
                     "</b></td></tr>
                                 <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
-				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . db_query_get_single_value("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1") . "</a></td>
+				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . Database::get()->querySingle("SELECT loginout.when as when FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</a></td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;")->cnt .
                     "</b></td></tr>
                             </table>";
             break;
@@ -205,7 +200,7 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td class='left'>$langNumCourses</td>
-			<td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM course") . "</b></td>
+			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM course")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
@@ -243,14 +238,12 @@ if (isset($_GET['stats'])) {
             $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
             $teachers = $students = $visitors = 0;
-            $result = db_query("SELECT id, code, title, prof_names FROM course ORDER BY title");
-            while ($row = mysql_fetch_array($result)) {
-                $result_numb = db_query("SELECT user.id, course_user.status FROM course_user, user, course
-                                                        WHERE course.id = $row[id] 
-                                                        AND course_user.user_id = user.id");
-                $cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");
-                while ($numrows = mysql_fetch_array($result_numb)) {
-                    switch ($numrows['status']) {
+            foreach (Database::get()->queryArray("SELECT id, code, title, prof_names FROM course ORDER BY title") as $row) {
+                $cu_key = q("$row->title ($row->code) -- $row->prof_names");
+                foreach (Database::get()->queryArray("SELECT user.id, course_user.status FROM course_user, user, course
+                                                        WHERE course.id = ?d 
+                                                        AND course_user.user_id = user.id", $row->id) as $numrows) {
+                    switch ($numrows->status) {
                         case USER_TEACHER: $teachers++;
                             break;
                         case USER_STUDENT: $students++;
@@ -311,15 +304,15 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";") . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";") . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";") . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
-                                    <td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM user;") . "</b></td></tr>
+                                    <td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt . "</b></td></tr>
                             </table>";
             break;
         default:

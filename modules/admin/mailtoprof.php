@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,29 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
-/* ===========================================================================
-  mailtoprof.php
-  @last update: 31-05-2006 by Pitsiougas Vagelis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Send mail to the users of the platform
-
-  This script allows the administrator to send a message by email to all
-  users or just the professors of the platform
-
-  The user can : - Send a message by email to all users or just the pofessors
-  - Return to main administrator page
-
-  @Comments: The script is organised in three sections.
-
-  1) Write message and select where to send it
-  2) Try to send the message by email
-  3) Display all on an HTML page
-
-  ============================================================================== */
 
 $require_usermanage_user = TRUE;
 
@@ -60,47 +37,49 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
 
-    if (isDepartmentAdmin())
+    if (isDepartmentAdmin()) {
         $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ';
+    }
 
-    // Where to send the email
+    // where we want to send the email ?
     if ($_POST['sendTo'] == '0') { // All users
-        if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND " . $depwh);
-        else
-            $sql = db_query("SELECT email, user_id FROM user");
+        if (isDepartmentAdmin()) {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user AND " . $depwh);
+        } else {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user");
+        }
     }
     elseif ($_POST['sendTo'] == "1") { // Only professors
-        if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='1' AND " . $depwh);
-        else
-            $sql = db_query("SELECT email, user_id FROM user where status='1'");
+        if (isDepartmentAdmin()) {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user 
+                                                                AND user.status = ".USER_TEACHER." AND " . $depwh);
+        } else {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = ".USER_TEACHER."");
+        }
     }
     elseif ($_POST['sendTo'] == "2") { // Only students
-        if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='5' AND " . $depwh);
-        else
-            $sql = db_query("SELECT email, user_id FROM user where status='5'");
-    }
-    else { // invalid sendTo var
-        die();
-    }
+        if (isDepartmentAdmin()) {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
+                                            AND user.status = ".USER_STUDENT." AND " . $depwh);
+        } else {
+            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = ".USER_STUDENT."");
+        }
+    }    
 
     $recipients = array();
     $emailsubject = $langInfoAboutEclass;
     $emailbody = "" . $_POST['body_mail'] . "
 
 $langManager $siteName
-$administratorName $administratorSurname
-$langTel $telephone
-$langEmail : $emailhelpdesk
+" . get_config('admin_name') . "
+$langEmail: " . get_config('email_helpdesk') . "
 ";
     // Send email to all addresses
-    while ($m = mysql_fetch_array($sql)) {
-        $emailTo = $m["email"];
-        $user_id = $m["user_id"];
-        if (get_user_email_notification($user_id)) {
-            // checks if user is notified by email
+    foreach ($sql as $m) {        
+        $emailTo = $m->email;
+        $user_id = $m->id;
+        // checks if user is notified by email
+        if (get_user_email_notification($user_id)) {            
             array_push($recipients, $emailTo);
         }
         $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";

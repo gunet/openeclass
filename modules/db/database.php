@@ -245,15 +245,15 @@ final class Database {
         $backtrace_entry = debug_backtrace();
         $backtrace_info = $backtrace_entry[2];
 
-        $isTransactional &= !$this->dbh->inTransaction();
+        $isTransactional &=!$this->dbh->inTransaction();
         if (is_null($statement) || !is_string($statement) || empty($statement))
-            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), null, $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))
-            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), null, $statement, $init_time, $backtrace_info);
 
         /* Start transaction, if required */
         if ($isTransactional && !$this->dbh->beginTransaction())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", null, $statement, $init_time, $backtrace_info);
 
         /* flatten parameter array */
         $flatten = array();
@@ -327,28 +327,28 @@ final class Database {
         /* Prepare statement */
         $stm = $this->dbh->prepare($statement);
         if (!$stm)
-            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $this->dbh->errorInfo(), $statement, $init_time, $backtrace_info);
 
         /* Bind values - with type safety and '?' notation  */
         for ($i = 0; $i < $variable_size; $i++) {
             if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
-                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, $backtrace_info, false);
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $stm->errorInfo(), $statement, $init_time, $backtrace_info, false);
         }
 
         /* Execute statement */
         if (!$stm->execute())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
 
         /* fetch results */
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
             if ($result != false && !is_object($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
@@ -364,12 +364,16 @@ final class Database {
         return $result;
     }
 
-    private function errorFound($callback_error, $isTransactional, $error_msg, $statement, $init_time, $backtrace_info, $close_transaction = true) {
+    private function errorFound($callback_error, $isTransactional, $error_msg, $pdo_error, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
         if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-        Database::dbg("Error: " . $error_msg, $statement, $init_time, $backtrace_info);
+        if ($pdo_error)
+            $pdo_error_text = " with error: \"" . $pdo_error[2] . "\" (SQLSTATE=" . $pdo_error[1] . " ERROR=" . $pdo_error[0] . ")";
+        else
+            $pdo_error_text = "";
+        Database::dbg("Error: " . $error_msg . $pdo_error_text, $statement, $init_time, $backtrace_info);
         return null;
     }
 
@@ -377,7 +381,7 @@ final class Database {
      * Private function to call master Debug object
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+        Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }

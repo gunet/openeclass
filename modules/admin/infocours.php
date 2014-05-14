@@ -94,9 +94,9 @@ if (isset($_POST['submit'])) {
     }
 
     // Update query
-    db_query("UPDATE course SET title = " . quote($_POST['title']) . ",
-                    prof_names = " . quote($_POST['prof_names']) . "
-                    WHERE code = " . quote($_GET['c']));
+    Database::get()->query("UPDATE course SET title = ?s,
+                    prof_names = ?s
+                    WHERE code = ?s", $_POST['title'], $_POST['prof_names'], $_GET['c']);
 
     $course->refresh($cId, $departments);
 
@@ -105,10 +105,9 @@ if (isset($_POST['submit'])) {
 }
 // Display edit form for course basic information
 else {
-    $sql = "SELECT course.code, course.title, course.prof_names, course.id
+    $row = Database::get()->querySingle("SELECT course.code as code, course.title as title , course.prof_names as prof_name, course.id as id
 		  FROM course
-		 WHERE course.code = '" . mysql_real_escape_string($_GET['c']) . "'";
-    $row = mysql_fetch_array(db_query($sql));
+		 WHERE course.code = ?s" ,$_GET['c']);
     $tool_content .= "
 	<form action='" . $_SERVER['SCRIPT_NAME'] . "?c=" . htmlspecialchars($_GET['c']) . "' method='post' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
@@ -116,24 +115,24 @@ else {
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
 
     if (isDepartmentAdmin())
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id']), 'allowables' => $user->getDepartmentIds($uid)));
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
     else
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id'])));
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id)));
 
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</td></tr>
 	<tr>
 	  <th width='150'>" . $langCourseCode . ":</th>
-	  <td><i>" . $row['code'] . "</i></td>
+	  <td><i>" . $row->code . "</i></td>
 	</tr>
 	<tr>
 	  <th>" . $langTitle . ":</th>
-	  <td><input type='text' name='title' value='" . q($row['title']) . "' size='60'></td>
+	  <td><input type='text' name='title' value='" . q($row->title) . "' size='60'></td>
 	</tr>
 	<tr>
 	  <th>" . $langTeacher . ":</th>
-	  <td><input type='text' name='prof_names' value='" . q($row['prof_names']) . "' size='60'></td>
+	  <td><input type='text' name='prof_names' value='" . q($row->prof_names) . "' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>

@@ -58,10 +58,7 @@ $tool_content .= "</td>
 
 
 // Count prof requests with status = 1
-$result = db_query("SELECT COUNT(*) AS cnt FROM user_request
-                        WHERE state = 1 AND status = 1");
-$myrow = mysql_fetch_array($result);
-$count_prof_requests = $myrow['cnt'];
+$count_prof_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user_request WHERE state = 1 AND status = 1")->cnt;
 if ($count_prof_requests > 0) {
     $prof_request_msg = "$langThereAre $count_prof_requests $langOpenRequests";
 } else {
@@ -69,49 +66,34 @@ if ($count_prof_requests > 0) {
 }
 
 // Find last course created
-$sql = "SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1";
-$result = db_query($sql);
-if (mysql_num_rows($result)) {
-    $myrow = mysql_fetch_array($result);
-    $last_course_info = "<b>" . q($myrow['title']) . "</b> " . q($myrow['code']) . ", " . q($myrow['prof_names']) . ")";
+$myrow = Database::get()->querySingle("SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1");
+if ($myrow) {
+    $last_course_info = "<b>" . q($myrow->title) . "</b> " . q($myrow->code) . ", " . q($myrow->prof_names) . ")";
 } else {
     $last_course_info = $langNoCourses;
 }
 
 // Find last prof registration
-$result = db_query("SELECT givenname, surname, username, registered_at FROM user
-                       WHERE status = 1 ORDER BY id DESC LIMIT 0,1");
-$myrow = mysql_fetch_array($result);
-$last_prof_info = "<b>" . q($myrow['givenname']) . " " . q($myrow['surname']) . "</b> (" . q($myrow['username']) . ", " . date("j/n/Y H:i", strtotime($myrow['registered_at'])) . ")";
+$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 1 ORDER BY id DESC LIMIT 0,1");
+$last_prof_info = "<b>" . q($myrow->givenname) . " " . q($myrow->surname) . "</b> (" . q($myrow->username) . ", " . date("j/n/Y H:i", strtotime($myrow->registered_at)) . ")";
 
 // Find last stud registration
-$result = db_query("SELECT givenname, surname, username, registered_at FROM user
-                        WHERE status = 5 ORDER BY id DESC LIMIT 0,1");
-if (($myrow = mysql_fetch_array($result)) != FALSE) {
-    $last_stud_info = "<b>" . q($myrow['givenname']) . " " . q($myrow['surname']) . "</b> (" . q($myrow['username']) . ", " . date("j/n/Y H:i", strtotime($myrow['registered_at'])) . ")";
+$myrow = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = 5 ORDER BY id DESC LIMIT 0,1");
+if ($myrow) {
+    $last_stud_info = "<b>" . q($myrow->givenname) . " " . q($myrow->surname) . "</b> (" . q($myrow->username) . ", " . date("j/n/Y H:i", strtotime($myrow->registered_at)) . ")";
 } else {
     // no student is yet registered
     $last_stud_info = $langLastStudNone;
 }
 
 // Find admin's last login
-$result = db_query("SELECT `when` FROM loginout
-                        WHERE id_user = $uid AND action = 'LOGIN'
-                        ORDER BY `when` DESC LIMIT 1,1");
-$myrow = mysql_fetch_array($result);
-$lastadminlogin = quote($myrow['when']);
+$lastadminlogin = Database::get()->querySingle("SELECT `when` FROM loginout WHERE id_user = ?d AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1", $uid)->when;
 
 // Count profs registered after last login
-$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > " . $lastadminlogin;
-$result = db_query($sql);
-$myrow = mysql_fetch_array($result);
-$lastregisteredprofs = $myrow['cnt'];
+$lastregisteredprofs = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ?t", $lastadminlogin)->cnt;
 
 // Count studs registered after last login
-$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > " . $lastadminlogin;
-$result = db_query($sql);
-$myrow = mysql_fetch_array($result);
-$lastregisteredstuds = $myrow['cnt'];
+$lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ?t", $lastadminlogin)->cnt;
 
 
 $tool_content .= "
@@ -200,8 +182,8 @@ $tool_content .= "
 
 // CRON RELATED
 $tool_content .= "<img src='cron.php' width='2' height='1' alt=''/>";
-$res = db_query("SELECT name, last_run FROM cron_params");
-if (mysql_num_rows($res) >= 1) {
+$res = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
+if (count($res) >= 1) {
     $tool_content .= "
       <fieldset>
       <legend>$langCronInfo</legend>
@@ -211,8 +193,8 @@ if (mysql_num_rows($res) >= 1) {
           <td>$langCronLastRun</td>
         </tr>";
 
-    while ($row = mysql_fetch_assoc($res))
-        $tool_content .= "<tr><th>" . $row['name'] . "</th><td>" . $row['last_run'] . "</td></tr>";
+    foreach ($res as $row)
+        $tool_content .= "<tr><th>" . $row->name . "</th><td>" . $row->last_run . "</td></tr>";
 
     $tool_content .= "
       </tbody>

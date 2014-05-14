@@ -116,8 +116,7 @@ if (!isset($_POST['changePass'])) {
     // All checks ok. Change password!
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_POST['password_form']);
-    $sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `id` = $userid";
-    db_query($sql, $mysqlMainDb);
+    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
     $tool_content .= mes($langPassChanged, $langHome, 'success');
     draw($tool_content, 3);
     exit();

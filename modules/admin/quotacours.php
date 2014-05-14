@@ -79,10 +79,10 @@ if (isset($_POST['submit'])) {
     $gq = $_POST['gq'] * MB;
     $drq = $_POST['drq'] * MB;
     // Update query
-    $sql = db_query("UPDATE course SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
-			WHERE code = " . autoquote($_GET['c']));
+    $sql = Database::get()->query("UPDATE course SET doc_quota=%f, video_quota=?f, group_quota=?f, dropbox_quota=?f
+			WHERE code = %s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
-    if (mysql_affected_rows() > 0) {
+    if ($sql->affectedRows > 0) {
         $tool_content .= "<p>" . $langQuotaSuccess . "</p>";
     }
     // Nothing updated
@@ -92,13 +92,12 @@ if (isset($_POST['submit'])) {
 }
 // Display edit form for course quota
 else {
-    $q = mysql_fetch_array(db_query("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM course WHERE code = " . autoquote($_GET['c'])));
-    $quota_info .= $langTheCourse . " <b>" . q($q['title']) . "</b> " . $langMaxQuota;
-    $dq = $q['doc_quota'] / MB;
-    $vq = $q['video_quota'] / MB;
-    $gq = $q['group_quota'] / MB;
-    $drq = $q['dropbox_quota'] / MB;
+    $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
+    $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
+    $dq = $q->doc_quota / MB;
+    $vq = $q->video_quota / MB;
+    $gq = $q->group_quota / MB;
+    $drq = $q->dropbox_quota / MB;
 
     $tool_content .= "
 	<form action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>

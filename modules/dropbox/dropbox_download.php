@@ -26,7 +26,7 @@ $require_login = TRUE;
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
-require_once 'dropbox_class.inc.php';
+require_once 'class.msg.php';
 require_once 'include/lib/forcedownload.php';
 
 $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
@@ -37,10 +37,11 @@ if (isset($_GET['id'])) {
     header("Location: $urlServer");
 }
 
-$work = new Dropbox_work($id);
-
-$path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
-$file = $work->real_filename;
-
-send_file_to_client($path, $file, null, true);
+$work = new Msg($id, $uid);
+if (!$work->error) {
+    $path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
+    $file = $work->real_filename;
+    
+    send_file_to_client($path, $file, null, true);
+}
 exit;

@@ -81,40 +81,37 @@ if ($u_user_id != -1) {
 
 switch ($u_stats_type) {
     case "visits":
-        $query = "SELECT " . $date_what . " COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC";
-        $result = db_query($query);
+        $result = Database::get()->queryArray("SELECT " . $date_what . " COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC");
         $chart = new Plotter(220, 200);
         $chart->setTitle($langVisits);
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($langSummary, $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($langSummary, $row->cnt);
                 }
                 break;
             case "daily":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['date'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->date, $row->cnt);
                 }
                 break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['week_start'] . ' - ' . $row['week_end'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
                 }
                 break;
             case "monthly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($langMonths[$row['month']], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($langMonths[$row->month], $row->cnt);
                 }
                 break;
             case "yearly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['year'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->year, $row->cnt);
                 }
                 break;
         }
         break;
 }
-if ($result !== false)
-    mysql_free_result($result);
 
 $tool_content .= $chart->plot($langNoStatistics);

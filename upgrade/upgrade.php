@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -126,9 +126,9 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
-touch_or_error('../courses/temp/index.htm');
+touch_or_error('courses/temp/index.htm');
 mkdir_or_error('courses/userimg');
-touch_or_error('../courses/userimg/index.htm');
+touch_or_error('courses/userimg/index.htm');
 touch_or_error($webDir . '/video/index.htm');
 
 // ********************************************
@@ -477,6 +477,48 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public_id` VARCHAR(11) NOT NULL,
                             `file_id` INT(11) NOT NULL,
                             `title` TEXT) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `gradebook` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
+                            `range` TINYINT(4) NOT NULL DEFAULT 10) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_id` MEDIUMINT(11) NOT NULL,
+                            `title` VARCHAR(250) DEFAULT NULL,
+                            `activity_type` INT(11) DEFAULT NULL,
+                            `date` DATETIME DEFAULT NULL,
+                            `description` TEXT NOT NULL,
+                            `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                            `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                            `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+                            `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
+                            `uid` int(11) NOT NULL DEFAULT 0,
+                            `grade` FLOAT NOT NULL DEFAULT -1,
+                            `comments` TEXT NOT NULL) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `attendance` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `course_id` INT(11) NOT NULL,
+                                `limit` TINYINT(4) NOT NULL DEFAULT 0,
+                                `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_id` MEDIUMINT(11) NOT NULL,
+                                `title` VARCHAR(250) DEFAULT NULL,
+                                `date` DATETIME DEFAULT NULL,
+                                `description` TEXT NOT NULL,
+                                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+                                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
+                                `uid` int(11) NOT NULL DEFAULT 0,
+                                `attend` TINYINT(4) NOT NULL DEFAULT 0,
+                                `comments` TEXT NOT NULL) $charset_spec");
 
                     if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
                         db_query("RENAME TABLE prof_request TO user_request");
@@ -700,7 +742,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     // rename them otherwise
                     $new_tables = array('cron_params', 'log', 'log_archive', 'forum',
                         'forum_category', 'forum_post', 'forum_topic',
-                        'video', 'videolink', 'dropbox_file', 'dropbox_person', 'dropbox_post',
+                        'video', 'videolink', 'dropbox_msg', 'dropbox_attachment', 'dropbox_index',
                         'lp_module', 'lp_learnPath', 'lp_rel_learnPath_module', 'lp_asset',
                         'lp_user_module_progress', 'wiki_properties', 'wiki_acls', 'wiki_pages',
                         'wiki_pages_content', 'poll', 'poll_answer_record', 'poll_question',
@@ -708,7 +750,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department');
+                        'course_department', 'user_department', 'wiki_locks');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -896,28 +938,31 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
-                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    db_query("CREATE TABLE IF NOT EXISTS dropbox_msg (
+				            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
-                            `uploaderId` INT(11) NOT NULL DEFAULT 0,
-                            `filename` VARCHAR(250) NOT NULL DEFAULT '',
-                            `real_filename` varchar(255) NOT NULL default ''                           
-                            `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                            `title` VARCHAR(250) NOT NULL DEFAULT '',
-                            `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
-                            `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')
-                            $charset_spec");
+                            `author_id` INT(11) UNSIGNED NOT NULL,
+                            `subject` VARCHAR(250) NOT NULL,
+                            `body` LONGTEXT NOT NULL,                
+                            `timestamp` INT(11) NOT NULL) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
-                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-                            `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                            PRIMARY KEY (fileId, personId))");
+                    db_query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `msg_id` INT(11) UNSIGNED NOT NULL,
+                            `filename` VARCHAR(250) NOT NULL,
+                            `real_filename` varchar(255) NOT NULL,
+                            `filesize` INT(11) UNSIGNED NOT NULL,
+                            KEY `msg` (`msg_id`)) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
-                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                            `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                            PRIMARY KEY (fileId, recipientId))");
+                    db_query("CREATE TABLE IF NOT EXISTS dropbox_index (
+                            `msg_id` INT(11) UNSIGNED NOT NULL,
+                            `recipient_id` INT(11) UNSIGNED NOT NULL,
+                            `thread_id` INT(11) UNSIGNED NOT NULL,
+                            `is_read` BOOLEAN NOT NULL DEFAULT 0,
+                            `deleted` BOOLEAN NOT NULL DEFAULT 0,
+                            PRIMARY KEY (`msg_id`, `recipient_id`),
+                            KEY `list` (`recipient_id`,`is_read`),
+                            KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
                             `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -989,8 +1034,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
-                            `value` ENUM('false','true') NOT NULL DEFAULT 'false'),
-                            PRIMARY KEY (wiki_id, flag) )
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+                            PRIMARY KEY (wiki_id, flag))
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1006,8 +1051,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-                            `content` TEXT NOT NULL)
-                            $charset_spec");
+                            `content` TEXT NOT NULL,
+                            `changelog` VARCHAR(200) )  $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
+                            `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
+                            `wiki_id` INT(11) UNSIGNED NOT NULL,
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1017,7 +1069,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `active` INT(11) NOT NULL DEFAULT 0)
+                            `active` INT(11) NOT NULL DEFAULT 0,
+                            `anonymized` INT(1) NOT NULL DEFAULT 0)
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                             `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1054,8 +1107,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) NOT NULL,
                             file_path VARCHAR(200) NOT NULL,
-                            file_name VARCHAR(200) NOT NULL',
-                            )
+                            file_name VARCHAR(200) NOT NULL)
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -42,18 +42,19 @@ if (isset($_REQUEST['u'])) {
         draw($tool_content, 3);
         exit;
     }
-    $q = db_query("SELECT * FROM user WHERE user_id = $u");
-    if ($q and mysql_num_rows($q)) {
-        $info = mysql_fetch_assoc($q);
+    $info = Database::get()->querySingle("SELECT * FROM user WHERE user_id = ?s", $u);
+    if ($info) {
+        $info = (array) $info;
         $auth_id = isset($auth_ids[$info['password']]) ? $auth_ids[$info['password']] : 1;
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
         $status_names = array(10 => $langGuest, 1 => $langTeacher, 5 => $langStudent);
         $target = false;
         if (isset($_POST['target'])) {
-            $q1 = db_query("SELECT * FROM user WHERE username COLLATE utf8_bin = " . quote($_POST['target']));
-            if ($q1 and mysql_num_rows($q1)) {
-                $target = mysql_fetch_assoc($q1);
-            }
+            $target = Database::get()->querySingle("SELECT * FROM user WHERE username COLLATE utf8_bin = ?s", $_POST['target']);
+            if ($target)
+                $target = (array) $target;
+            else
+                $target = false;
         }
         $target_field = $target_user_input = '';
         $submit_button = $langSearch;
@@ -114,14 +115,14 @@ function do_user_merge($source, $target) {
     $source_id = $source['user_id'];
     $target_id = $target['user_id'];
     $courses = array();
-    $q_course = db_query("SELECT code FROM course_user, course
+    Database::get()->queryFunc("SELECT code FROM course_user, course
                                      WHERE course.id = course_user.course_id AND
-                                           user_id = $target_id");
-    while (list($code) = mysql_fetch_row($q_course)) {
-        $courses[] = $code;
-    }
+                                           user_id = ?d"
+            , function($row) use(&$courses) {
+        $courses[] = $row->code;
+    }, $target_id);
     $tmp_table = "user_merge_{$source_id}_{$target_id}";
-    $q = db_query("CREATE TEMPORARY TABLE `$tmp_table` AS
+    $q = Database::get()->query("CREATE TEMPORARY TABLE `$tmp_table` AS
                               SELECT course_id, $target_id AS user_id,
                                      MIN(status) AS status, MAX(team) AS team, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
@@ -130,10 +131,10 @@ function do_user_merge($source, $target) {
                                  WHERE user_id IN ($source_id, $target_id)
                                  GROUP BY course_id");
     if ($q) {
-        db_query("DELETE FROM user WHERE user_id = $source_id");
-        db_query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
-        db_query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
-        db_query("DROP TEMPORARY TABLE `$tmp_table`");
+        Database::get()->query("DELETE FROM user WHERE user_id = ?d", $source_id);
+        Database::get()->query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
+        Database::get()->query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
+        Database::get()->query("DROP TEMPORARY TABLE `$tmp_table`");
         fix_table('forum_notify', 'user_id', $source_id, $target_id);
         fix_table('loginout', 'id_user', $source_id, $target_id);
         fix_table('log', 'user_id', $source_id, $target_id);
@@ -160,8 +161,8 @@ function do_user_merge($source, $target) {
 }
 
 function fix_table($table, $field, $source, $target) {
-    db_query("UPDATE IGNORE `$table`
+    Database::get()->query("UPDATE IGNORE `$table`
                          SET `$field` = $target
                          WHERE `$field` = $source");
-    db_query("DELETE FROM `$table` WHERE `$field` = $source");
+    Database::get()->query("DELETE FROM `$table` WHERE `$field` = $source");
 }
