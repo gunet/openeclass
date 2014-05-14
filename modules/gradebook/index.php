@@ -446,7 +446,7 @@ if ($is_editor) {
                         Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend, $checkForBook->id);
                     }else{
                         //insert
-                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f", $userID, $announce->id, $attend);
+                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $announce->id, $attend, '');
                     }
                 }
                 $message = "<p class='success'>$langGradebookEdit</p>";
@@ -654,7 +654,7 @@ if ($is_editor) {
                 $tool_content .= nice_format($myrow->reg_date);
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td class='$class center' width='30'>";
+            $tool_content .= "<td class='center' width='30'>";
 
             // tutor right
             if ($myrow->tutor == '1') {
@@ -671,7 +671,7 @@ if ($is_editor) {
             if(weightleft($gradebook_id, 0) == 0){
                 $tool_content .= userGradeTotal($gradebook_id, $myrow->userID);
             }elseif(userGradeTotal($gradebook_id, $myrow->userID) != "-"){ //alert message only when grades have been submitted
-                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID)."<br>".$langGradebookGradeAlert;
+                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID)."<div class='alert1'>".$langGradebookGradeAlert."</div>";
             }
             if(userGradeTotal($gradebook_id, $myrow->userID) > $gradebook_range){
                 $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>"; 
@@ -702,7 +702,7 @@ if ($is_editor) {
         
         //check if there is spare weight
         if(weightleft($gradebook_id, 0)){
-            $weightLeftMessage = "<div class='alert2'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
+            $weightLeftMessage = "<div class='alert1'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
         }
         else{
             $weightLeftMessage = "";
@@ -806,7 +806,7 @@ if ($is_editor) {
 
 
         //==============================================
-        //Course activities availiable for the gradebook
+        //Course activities available for the gradebook
         //==============================================
         
         //Assignments
@@ -820,8 +820,8 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langGradebookActToAddAss</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langDescription</th>";
+            $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
         else{
@@ -863,11 +863,9 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToGradebook->id&amp;type=1'>
-                      $langAdd</a>&nbsp;";
-
+                $tool_content .= "<td width='70' class='right'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToGradebook->id&amp;type=1")."&nbsp;";
+                      /*<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToGradebook->id&amp;type=1'>
+                      $langAdd</a>&nbsp;"; */
                 $k++;
             } // end of while
         }
@@ -886,7 +884,7 @@ if ($is_editor) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
+            $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "<p class='alert1'>$langGradebookNoActMessageExe4</p>\n";
@@ -919,11 +917,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->id&amp;type=2'>
-                      $langAdd</a>&nbsp;";
-
+                $tool_content .= "<td width='70' class='right'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->id&amp;type=2")."&nbsp;";
                 $k++;
             } // end of while
         }
@@ -950,7 +944,7 @@ if ($is_editor) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th>$langLearningPath</th><th>$langGradebookType</th>";
-            $tool_content .= "<th colspan='$colsNum' class='center'>$langActions</th>";
+            $tool_content .= "<th class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "<p class='alert1'>$langGradebookNoActMessageExe4</p>\n";
@@ -980,9 +974,10 @@ if ($is_editor) {
                 }
                 $tool_content .= "</td>";
                 $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3'>
-                      $langAdd</a>&nbsp;";
+                <td width='70' class='right'>";
+                $tool_content .= "<td width='70' class='right'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3")."&nbsp;";
+                /*      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3'>
+                      $langAdd</a>&nbsp;"; */
 
                 $k++;
             } // end of while
