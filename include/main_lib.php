@@ -303,8 +303,10 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     } elseif ($file == 'datatables') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/jquery.dataTables.css'>\n";
-        $file = 'datatables/jquery.dataTables.min.js';
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/datatables/media/css/jquery.dataTables.css' />";            
+        $file = 'datatables/media/js/jquery.dataTables.min.js';                
+    } elseif ($file == 'datatables_filtering_delay') {
+            $file = 'datatables/media/js/jquery.dataTables_delay.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     if ($file == 'jquery-1.10.2.min.js')
