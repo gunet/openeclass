@@ -1031,7 +1031,9 @@ $langGradebookGrades = "Βαθμοί";
 $langGradebookAlertToChange = "Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν";
 $langGradebookAlertNoInput = "Δεν υπάρχει καταχώρηση";
 $langGradeTotal = "Συνολικό Βαθμολόγιο";
-
+$langMeanValue = "Μέσος όρος";
+$langMinValue = "Ελάχιστη";
+$langMaxValue = "Μέγιστη";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
