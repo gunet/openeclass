@@ -315,7 +315,7 @@ function add_assignment() {
     
     $title = $_POST['title'];
     $desc = $_POST['desc'];
-    $deadline = (trim($_POST['WorkEnd'])!='') ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '';
+    $deadline = (trim($_POST['WorkEnd'])!='') ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
     $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
     $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
@@ -334,13 +334,13 @@ function add_assignment() {
                 $no_files = true;
             } else {
                 $no_files = false;
-            }
-            validateUploadedFile($_FILES['userfile']['name'], 2);
-            if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-                return;
-            }
+                validateUploadedFile($_FILES['userfile']['name'], 2);
+                if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                    $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                    $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                    return;
+                }
+            }            
             
             $local_name = uid_to_name($uid);
             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
