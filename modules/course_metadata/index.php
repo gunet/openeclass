@@ -108,21 +108,21 @@ function submitForm() {
     foreach (CourseXMLElement::$binaryFields as $bkey) {
         if (in_array($bkey, CourseXMLElement::$multipleFields)) {
             if (isset($_FILES[$bkey]) && isset($_FILES[$bkey]['tmp_name']) && isset($_FILES[$bkey]['type'])
-                    && is_array($_FILES[$bkey]['tmp_name']) ) {
+                    && is_array($_FILES[$bkey]['tmp_name'])) {
                 for ($i = 0; $i < count($_FILES[$bkey]['tmp_name']); $i++) {
                     if (is_uploaded_file($_FILES[$bkey]['tmp_name'][$i])
                             && isValidImage($_FILES[$bkey]['type'][$i])) {
                         // convert to resized jpg if possible
                         $uploaded = $_FILES[$bkey]['tmp_name'][$i];
-                        $copied = $_FILES[$bkey]['tmp_name'][$i].'.new';
+                        $copied = $_FILES[$bkey]['tmp_name'][$i] . '.new';
                         $type = $_FILES[$bkey]['type'][$i];
 
                         if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
                             $fileData[$bkey][$i] = base64_encode(file_get_contents($copied));
-                            $fileData[$bkey .'_mime'][$i] = 'image/jpeg'; // copy_resized_image always outputs jpg
+                            $fileData[$bkey . '_mime'][$i] = 'image/jpeg'; // copy_resized_image always outputs jpg
                         } else { // erase possible previous image or failed conversion
                             $fileData[$bkey][$i] = '';
-                            $fileData[$bkey .'_mime'][$i] = '';
+                            $fileData[$bkey . '_mime'][$i] = '';
                         }
                     }
                 }
@@ -133,7 +133,7 @@ function submitForm() {
                     && isValidImage($_FILES[$bkey]['type'])) {
                 // convert to resized jpg if possible
                 $uploaded = $_FILES[$bkey]['tmp_name'];
-                $copied = $_FILES[$bkey]['tmp_name'].'.new';
+                $copied = $_FILES[$bkey]['tmp_name'] . '.new';
                 $type = $_FILES[$bkey]['type'];
 
                 if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
@@ -144,7 +144,7 @@ function submitForm() {
                     unset($_POST[$bkey . '_mime']);
                 } else { // erase possible previous image or failed conversion
                     $fileData[$bkey] = '';
-                    $fileData[$bkey .'_mime'] = '';
+                    $fileData[$bkey . '_mime'] = '';
                 }
             }
         }
