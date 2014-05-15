@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.8
  * E-learning and Course Management System
@@ -28,7 +29,7 @@ if (!get_config('opencourses_enable')) {
 }
 
 $nameTools = $langListOpenCourses;
-$navigation[] = array ('url' => 'openfaculties.php', 'name' => $langSelectFac);
+$navigation[] = array('url' => 'openfaculties.php', 'name' => $langSelectFac);
 if (isset($_GET['fc'])) {
     $fc = intval($_GET['fc']);
 }
@@ -50,7 +51,7 @@ if (!($fac = $fac[0])) {
 $icons = array(2 => "<img src='$themeimg/lock_open.png'   alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
     1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
-    );
+);
 
 // find all certified opencourses
 $opencourses = array();
@@ -91,7 +92,7 @@ if (count($opencourses) > 0) {
         if ($counter != 1) {
             $tool_content .= " | ";
         }
-        $tool_content .= "<a href='#$t'>" . ${'lang'.$ts} . "</a>";
+        $tool_content .= "<a href='#$t'>" . ${'lang' . $ts} . "</a>";
         $counter++;
     }
     $tool_content .= "</div></th>
@@ -103,8 +104,8 @@ if (count($opencourses) > 0) {
     // and finally we do the secondary sort by course title and but teacher's name
     $tid = 0;
     foreach (array("pre" => $langpres,
-            "post" => $langposts,
-            "other" => $langothers) as $type => $message) {
+ "post" => $langposts,
+ "other" => $langothers) as $type => $message) {
         $result = db_query("SELECT cours.code k,
                                    cours.fake_code c,
                                    cours.intitule i,
@@ -116,10 +117,10 @@ if (count($opencourses) > 0) {
                             LEFT JOIN course_review ON (course_review.course_id = cours.cours_id)
                             WHERE cours.faculteid = $fc 
                             AND cours.type = '$type'
-                            AND cours.visible != ".COURSE_INACTIVE."
+                            AND cours.visible != " . COURSE_INACTIVE . "
                             AND cours_id IN ($commaIds)
                             ORDER BY cours.intitule, cours.titulaires", $mysqlMainDb);
-    
+
         if (mysql_num_rows($result) == 0) {
             continue;
         }
@@ -142,41 +143,41 @@ if (count($opencourses) > 0) {
                 <th class='left' width='220'>$m[professor]</th>
                 <th width='30'>$langOpenCoursesLevel</th>
             </tr>";
-    
+
         $k = 0;
         while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
-                    $codelink = "<a href='../../courses/$mycours[k]/'>" .
-                            q($mycours['i'])."</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
+                $codelink = "<a href='../../courses/$mycours[k]/'>" .
+                        q($mycours['i']) . "</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
             } else {
                 $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
             }
-    
-            if ($k%2 == 0) {
+
+            if ($k % 2 == 0) {
                 $tool_content .= "\n<tr class='even'>";
             } else {
                 $tool_content .= "\n<tr class='odd'>";
             }
             $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
-            
+
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";
             // show the necessary access icon
-            /*foreach ($icons as $visible => $image) {
-                if ($visible == $mycours['visible']) {
-                    $tool_content .= $image;
-                }
-            }*/
-            
+            /* foreach ($icons as $visible => $image) {
+              if ($visible == $mycours['visible']) {
+              $tool_content .= $image;
+              }
+              } */
+
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
             $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['level']) .
-                "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
-                $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 
-                "<img src='${themeimg}/lom.png'/></a>";
-            
+                    "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" .
+                    $metadata->asDiv() . "</div>
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" .
+                    "<img src='${themeimg}/lom.png'/></a>";
+
             $tool_content .= "</td>\n";
             $tool_content .= "</tr>";
             $k++;
@@ -239,4 +240,4 @@ $head_content .= <<<EOF
 </style>
 EOF;
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0, null, $head_content);
+draw($tool_content, (isset($uid) and $uid) ? 1 : 0, null, $head_content);

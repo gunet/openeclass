@@ -6,303 +6,303 @@
            xmlns="http://www.openeclass.org"
            elementFormDefault="qualified">
     
-<xs:annotation>
-    <xs:documentation>
-    /* ========================================================================
-     * Open eClass 2.8
-     * E-learning and Course Management System
-     * ========================================================================
-     * Copyright 2003-2013  Greek Universities Network - GUnet
-     * A full copyright notice can be read in "/info/copyright.txt".
-     * For a full list of contributors, see "credits.txt".
-     *
-     * Open eClass is an open platform distributed in the hope that it will
-     * be useful (without any warranty), under the terms of the GNU (General
-     * Public License) as published by the Free Software Foundation.
-     * The full license can be read in "/info/license/license_gpl.txt".
-     *
-     * Contact address: GUnet Asynchronous eLearning Group,
-     *                  Network Operations Center, University of Athens,
-     *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-     *                  e-mail: info@openeclass.org
-     * ======================================================================== */
-    </xs:documentation>
-</xs:annotation>
+    <xs:annotation>
+        <xs:documentation>
+            /* ========================================================================
+            * Open eClass 2.8
+            * E-learning and Course Management System
+            * ========================================================================
+            * Copyright 2003-2013  Greek Universities Network - GUnet
+            * A full copyright notice can be read in "/info/copyright.txt".
+            * For a full list of contributors, see "credits.txt".
+            *
+            * Open eClass is an open platform distributed in the hope that it will
+            * be useful (without any warranty), under the terms of the GNU (General
+            * Public License) as published by the Free Software Foundation.
+            * The full license can be read in "/info/license/license_gpl.txt".
+            *
+            * Contact address: GUnet Asynchronous eLearning Group,
+            *                  Network Operations Center, University of Athens,
+            *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+            *                  e-mail: info@openeclass.org
+            * ======================================================================== */
+        </xs:documentation>
+    </xs:annotation>
     
-<!-- definition of primitive types -->
-<xs:simpleType name="t_string">
-    <xs:restriction base="xs:string"/>
-</xs:simpleType>
+    <!-- definition of primitive types -->
+    <xs:simpleType name="t_string">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_integer">
-    <xs:restriction base="xs:integer"/>
-</xs:simpleType>
+    <xs:simpleType name="t_integer">
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_positiveInteger">
-    <xs:restriction base="xs:positiveInteger"/>
-</xs:simpleType>
+    <xs:simpleType name="t_positiveInteger">
+        <xs:restriction base="xs:positiveInteger"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_boolean">
-    <xs:restriction base="xs:boolean"/>
-</xs:simpleType>
+    <xs:simpleType name="t_boolean">
+        <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_url">
-    <xs:restriction base="xs:anyURI"/>
-</xs:simpleType>
+    <xs:simpleType name="t_url">
+        <xs:restriction base="xs:anyURI"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_blob">
-    <xs:restriction base="xs:base64Binary"/>
-</xs:simpleType>
+    <xs:simpleType name="t_blob">
+        <xs:restriction base="xs:base64Binary"/>
+    </xs:simpleType>
 
-<xs:simpleType name="t_dateTime">
-    <xs:restriction base="xs:dateTime"/>
-</xs:simpleType>
+    <xs:simpleType name="t_dateTime">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
 
-<!-- definition of simple types -->
-<xs:simpleType name="t_level">
-    <xs:restriction base="t_string">
-        <xs:enumeration value="undergraduate"/>
-        <xs:enumeration value="graduate"/>
-        <xs:enumeration value="doctoral"/>
-    </xs:restriction>
-</xs:simpleType>
+    <!-- definition of simple types -->
+    <xs:simpleType name="t_level">
+        <xs:restriction base="t_string">
+            <xs:enumeration value="undergraduate"/>
+            <xs:enumeration value="graduate"/>
+            <xs:enumeration value="doctoral"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-<xs:simpleType name="t_yearOfStudy">
-    <xs:restriction base="t_positiveInteger">
-        <xs:enumeration value="1"/>
-        <xs:enumeration value="2"/>
-        <xs:enumeration value="3"/>
-        <xs:enumeration value="4"/>
-        <xs:enumeration value="5"/>
-        <xs:enumeration value="6"/>
-    </xs:restriction>
-</xs:simpleType>
+    <xs:simpleType name="t_yearOfStudy">
+        <xs:restriction base="t_positiveInteger">
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-<xs:simpleType name="t_semester">
-    <xs:restriction base="t_positiveInteger">
-        <xs:enumeration value="1"/>
-        <xs:enumeration value="2"/>
-        <xs:enumeration value="3"/>
-        <xs:enumeration value="4"/>
-        <xs:enumeration value="5"/>
-        <xs:enumeration value="6"/>
-        <xs:enumeration value="7"/>
-        <xs:enumeration value="8"/>
-        <xs:enumeration value="9"/>
-        <xs:enumeration value="10"/>
-        <xs:enumeration value="11"/>
-        <xs:enumeration value="12"/>
-    </xs:restriction>
-</xs:simpleType>
+    <xs:simpleType name="t_semester">
+        <xs:restriction base="t_positiveInteger">
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+            <xs:enumeration value="7"/>
+            <xs:enumeration value="8"/>
+            <xs:enumeration value="9"/>
+            <xs:enumeration value="10"/>
+            <xs:enumeration value="11"/>
+            <xs:enumeration value="12"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-<xs:simpleType name="t_type">
-    <xs:restriction base="t_string">
-        <xs:enumeration value="compulsory"/>
-        <xs:enumeration value="optional"/>
-    </xs:restriction>
-</xs:simpleType>
+    <xs:simpleType name="t_type">
+        <xs:restriction base="t_string">
+            <xs:enumeration value="compulsory"/>
+            <xs:enumeration value="optional"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-<xs:simpleType name="t_format">
-    <xs:restriction base="t_string">
-        <xs:enumeration value="slides"/>
-        <xs:enumeration value="notes"/>
-        <xs:enumeration value="video lectures"/>
-        <xs:enumeration value="podcasts"/>
-        <xs:enumeration value="audio material"/>
-        <xs:enumeration value="multimedia material"/>
-        <xs:enumeration value="interactive exercises"/>
-    </xs:restriction>
-</xs:simpleType>
+    <xs:simpleType name="t_format">
+        <xs:restriction base="t_string">
+            <xs:enumeration value="slides"/>
+            <xs:enumeration value="notes"/>
+            <xs:enumeration value="video lectures"/>
+            <xs:enumeration value="podcasts"/>
+            <xs:enumeration value="audio material"/>
+            <xs:enumeration value="multimedia material"/>
+            <xs:enumeration value="interactive exercises"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-<!-- definition of complex types -->
-<xs:complexType name="t_image">
-    <xs:simpleContent>
-        <xs:extension base="t_blob">
-            <xs:attribute name="mime" type="t_string"/>
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+    <!-- definition of complex types -->
+    <xs:complexType name="t_image">
+        <xs:simpleContent>
+            <xs:extension base="t_blob">
+                <xs:attribute name="mime" type="t_string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-<xs:complexType name="t_langString">
-    <xs:simpleContent>
-        <xs:extension base="t_string">
-            <xs:attribute name="lang" type="t_string" use="required"/>
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+    <xs:complexType name="t_langString">
+        <xs:simpleContent>
+            <xs:extension base="t_string">
+                <xs:attribute name="lang" type="t_string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-<xs:complexType name="t_indexedString">
-    <xs:simpleContent>
-        <xs:extension base="t_string">
-            <xs:attribute name="index" type="t_integer"/>
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+    <xs:complexType name="t_indexedString">
+        <xs:simpleContent>
+            <xs:extension base="t_string">
+                <xs:attribute name="index" type="t_integer"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-<xs:complexType name="t_indexedLangString">
-    <xs:simpleContent>
-        <xs:extension base="t_langString">
-            <xs:attribute name="index" type="t_integer"/>
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+    <xs:complexType name="t_indexedLangString">
+        <xs:simpleContent>
+            <xs:extension base="t_langString">
+                <xs:attribute name="index" type="t_integer"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-<xs:complexType name="t_indexedurl">
-    <xs:simpleContent>
-        <xs:extension base="t_url">
-            <xs:attribute name="index" type="t_integer"/>
-        </xs:extension>
-    </xs:simpleContent>
-</xs:complexType>
+    <xs:complexType name="t_indexedurl">
+        <xs:simpleContent>
+            <xs:extension base="t_url">
+                <xs:attribute name="index" type="t_integer"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-<xs:complexType name="t_instructor">
-    <xs:sequence>
-        <xs:element name="firstName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="middleName" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="lastName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="fullName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="email" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-        <xs:element name="phone" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-        <xs:element name="institution" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-        <xs:element name="department" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-        <xs:element name="language" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-        <xs:element name="moreInformation" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="cv" minOccurs="0" type="t_string"/>
-        <xs:element name="photo" minOccurs="0" type="t_image"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_instructor">
+        <xs:sequence>
+            <xs:element name="firstName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="middleName" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="lastName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="fullName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="email" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+            <xs:element name="phone" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+            <xs:element name="institution" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+            <xs:element name="department" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+            <xs:element name="language" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+            <xs:element name="moreInformation" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="cv" minOccurs="0" type="t_string"/>
+            <xs:element name="photo" minOccurs="0" type="t_image"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<xs:complexType name="t_multimedia">
-    <xs:sequence>
-        <xs:element name="title" type="t_indexedString"/>
-        <xs:element name="speaker" type="t_indexedString"/>
-        <xs:element name="subject" type="t_indexedString"/>
-        <xs:element name="description" type="t_indexedString"/>
-        <xs:element name="keywords" type="t_indexedString"/>
-        <xs:element name="url" minOccurs="0" type="t_indexedurl"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_multimedia">
+        <xs:sequence>
+            <xs:element name="title" type="t_indexedString"/>
+            <xs:element name="speaker" type="t_indexedString"/>
+            <xs:element name="subject" type="t_indexedString"/>
+            <xs:element name="description" type="t_indexedString"/>
+            <xs:element name="keywords" type="t_indexedString"/>
+            <xs:element name="url" minOccurs="0" type="t_indexedurl"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<xs:complexType name="t_digital">
-    <xs:sequence>
-        <xs:element name="url" minOccurs="0" maxOccurs="unbounded" type="t_indexedurl"/>
-        <xs:element name="library" minOccurs="0" maxOccurs="unbounded" type="t_indexedString"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_digital">
+        <xs:sequence>
+            <xs:element name="url" minOccurs="0" maxOccurs="unbounded" type="t_indexedurl"/>
+            <xs:element name="library" minOccurs="0" maxOccurs="unbounded" type="t_indexedString"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<xs:complexType name="t_material">
-    <xs:sequence>
-        <xs:element name="notes" minOccurs="0" type="t_indexedString"/>
-        <xs:element name="slides" type="t_indexedString"/>
-        <xs:element name="exercises" minOccurs="0" type="t_indexedString"/>
-        <xs:element name="multimedia" minOccurs="0" maxOccurs="unbounded" type="t_multimedia"/>
-        <xs:element name="other" minOccurs="0" type="t_indexedString"/>
-        <xs:element name="digital" minOccurs="0" type="t_digital"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_material">
+        <xs:sequence>
+            <xs:element name="notes" minOccurs="0" type="t_indexedString"/>
+            <xs:element name="slides" type="t_indexedString"/>
+            <xs:element name="exercises" minOccurs="0" type="t_indexedString"/>
+            <xs:element name="multimedia" minOccurs="0" maxOccurs="unbounded" type="t_multimedia"/>
+            <xs:element name="other" minOccurs="0" type="t_indexedString"/>
+            <xs:element name="digital" minOccurs="0" type="t_digital"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<xs:complexType name="t_unit">
-    <xs:sequence>
-        <xs:element name="title" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="description" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="keywords" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="material" minOccurs="0" type="t_material"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_unit">
+        <xs:sequence>
+            <xs:element name="title" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="description" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="keywords" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="material" minOccurs="0" type="t_material"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<xs:complexType name="t_course">
-    <xs:sequence>
-        <xs:group ref="g_courseinfo"/>
-        <xs:group ref="g_unit"/>
-        <xs:group ref="g_other"/>
-        <xs:group ref="g_allocation"/>
-    </xs:sequence>
-</xs:complexType>
+    <xs:complexType name="t_course">
+        <xs:sequence>
+            <xs:group ref="g_courseinfo"/>
+            <xs:group ref="g_unit"/>
+            <xs:group ref="g_other"/>
+            <xs:group ref="g_allocation"/>
+        </xs:sequence>
+    </xs:complexType>
 
-<!-- definition of groups -->
-<xs:group name="g_courseinfo">
-    <xs:sequence>
-        <xs:element name="instructor" minOccurs="1" maxOccurs="unbounded" type="t_instructor"/>
-        <xs:element name="title" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="url" maxOccurs="unbounded" type="t_url"/>
-        <xs:element name="code" type="t_langString"/>
-        <xs:element name="level" minOccurs="0" type="t_level"/>
-        <xs:element name="yearOfStudy" minOccurs="0" type="t_yearOfStudy"/>
-        <xs:element name="semester" minOccurs="0" type="t_semester"/>
-        <xs:element name="type" minOccurs="0" type="t_type"/>
-        <xs:element name="credithours" minOccurs="0" type="t_integer"/>
-        <xs:element name="coTeaching" minOccurs="0" type="t_boolean"/>
-        <xs:element name="coTeachingColleagueOpensCourse" minOccurs="0" type="t_boolean"/>
-        <xs:element name="coTeachingAutonomousDepartment" minOccurs="0" type="t_boolean"/>
-        <xs:element name="coTeachingDepartmentCreditHours" minOccurs="0" type="t_integer"/>
-        <xs:element name="language" minOccurs="0" type="t_string"/>
-        <xs:element name="targetGroup" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="credits" minOccurs="0" type="t_integer"/>
-        <xs:element name="description" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="contents" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="objectives" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="keywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="coursePhoto" minOccurs="0" type="t_image"/>
-        <xs:element name="contentDevelopment" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="format" minOccurs="0" type="t_string"/>
-        <xs:element name="featuredBooks" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="structure" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="teachingMethod" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="assessmentMethod" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="prerequisites" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="literature" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="recommendedComponents" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="assignments" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="requirements" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="remarks" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="acknowledgments" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-    </xs:sequence>
-</xs:group>
+    <!-- definition of groups -->
+    <xs:group name="g_courseinfo">
+        <xs:sequence>
+            <xs:element name="instructor" minOccurs="1" maxOccurs="unbounded" type="t_instructor"/>
+            <xs:element name="title" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="url" maxOccurs="unbounded" type="t_url"/>
+            <xs:element name="code" type="t_langString"/>
+            <xs:element name="level" minOccurs="0" type="t_level"/>
+            <xs:element name="yearOfStudy" minOccurs="0" type="t_yearOfStudy"/>
+            <xs:element name="semester" minOccurs="0" type="t_semester"/>
+            <xs:element name="type" minOccurs="0" type="t_type"/>
+            <xs:element name="credithours" minOccurs="0" type="t_integer"/>
+            <xs:element name="coTeaching" minOccurs="0" type="t_boolean"/>
+            <xs:element name="coTeachingColleagueOpensCourse" minOccurs="0" type="t_boolean"/>
+            <xs:element name="coTeachingAutonomousDepartment" minOccurs="0" type="t_boolean"/>
+            <xs:element name="coTeachingDepartmentCreditHours" minOccurs="0" type="t_integer"/>
+            <xs:element name="language" minOccurs="0" type="t_string"/>
+            <xs:element name="targetGroup" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="credits" minOccurs="0" type="t_integer"/>
+            <xs:element name="description" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="contents" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="objectives" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="keywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="coursePhoto" minOccurs="0" type="t_image"/>
+            <xs:element name="contentDevelopment" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="format" minOccurs="0" type="t_string"/>
+            <xs:element name="featuredBooks" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="structure" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="teachingMethod" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="assessmentMethod" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="prerequisites" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="literature" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="recommendedComponents" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="assignments" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="requirements" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="remarks" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="acknowledgments" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
+        </xs:sequence>
+    </xs:group>
 
-<xs:group name="g_unit">
-    <xs:sequence>
-        <xs:element name="numberOfUnits" type="t_integer"/>
-        <xs:element name="unit" minOccurs="0" maxOccurs="unbounded" type="t_unit"/>
-    </xs:sequence>
-</xs:group>
+    <xs:group name="g_unit">
+        <xs:sequence>
+            <xs:element name="numberOfUnits" type="t_integer"/>
+            <xs:element name="unit" minOccurs="0" maxOccurs="unbounded" type="t_unit"/>
+        </xs:sequence>
+    </xs:group>
 
-<xs:group name="g_other">
-    <xs:sequence>
-        <xs:element name="eudoxusCode" minOccurs="0" type="t_string"/>
-        <xs:element name="eudoxusURL" minOccurs="0" maxOccurs="unbounded" type="t_url"/>
-        <xs:element name="kalliposURL" minOccurs="0" maxOccurs="unbounded" type="t_url"/>
-        <xs:element name="thematic" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="license" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
-    </xs:sequence>
-</xs:group>
+    <xs:group name="g_other">
+        <xs:sequence>
+            <xs:element name="eudoxusCode" minOccurs="0" type="t_string"/>
+            <xs:element name="eudoxusURL" minOccurs="0" maxOccurs="unbounded" type="t_url"/>
+            <xs:element name="kalliposURL" minOccurs="0" maxOccurs="unbounded" type="t_url"/>
+            <xs:element name="thematic" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="license" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+        </xs:sequence>
+    </xs:group>
 
-<xs:group name="g_allocation">
-    <xs:sequence>
-        <xs:element name="institution" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="institutionDescription" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="department" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="sector" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="curriculumTitle" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="curriculumDescription" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="outcomes" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="curriculumKeywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="curriculumLevel" type="t_level"/>
-        <xs:element name="curriculumTargetGroup" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-    </xs:sequence>
-</xs:group>
+    <xs:group name="g_allocation">
+        <xs:sequence>
+            <xs:element name="institution" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="institutionDescription" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="department" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="sector" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="curriculumTitle" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="curriculumDescription" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="outcomes" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="curriculumKeywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+            <xs:element name="curriculumLevel" type="t_level"/>
+            <xs:element name="curriculumTargetGroup" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
+        </xs:sequence>
+    </xs:group>
 
-<xs:group name="g_confirmation">
-    <xs:sequence>
-        <xs:element name="confirmCurriculum"     minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmVideolectures"  minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmAMinusLevel"    minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmALevel"         minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmAPlusLevel"     minOccurs="0" type="t_boolean"/>
-        <xs:element name="lastLevelConfirmation" minOccurs="0" type="t_dateTime"/>
-    </xs:sequence>
-</xs:group>
+    <xs:group name="g_confirmation">
+        <xs:sequence>
+            <xs:element name="confirmCurriculum"     minOccurs="0" type="t_boolean"/>
+            <xs:element name="confirmVideolectures"  minOccurs="0" type="t_boolean"/>
+            <xs:element name="confirmAMinusLevel"    minOccurs="0" type="t_boolean"/>
+            <xs:element name="confirmALevel"         minOccurs="0" type="t_boolean"/>
+            <xs:element name="confirmAPlusLevel"     minOccurs="0" type="t_boolean"/>
+            <xs:element name="lastLevelConfirmation" minOccurs="0" type="t_dateTime"/>
+        </xs:sequence>
+    </xs:group>
 
-<!-- ====== root element  ======= -->
-<xs:element name="course" type="t_course"/>
+    <!-- ====== root element  ======= -->
+    <xs:element name="course" type="t_course"/>
 
 </xs:schema>

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.8
  * E-learning and Course Management System

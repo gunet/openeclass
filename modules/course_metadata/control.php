@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.8
  * E-learning and Course Management System
@@ -48,8 +49,8 @@ $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xm
 
 // auto detect level
 $looksAMinus = false;
-if ($hasOpenAccess && $hasMandatoryMetadata && $hasLicense && 
-    $hasTeacherConfirm && ($numDocs > 0) && ($numUnits > 0))
+if ($hasOpenAccess && $hasMandatoryMetadata && $hasLicense &&
+        $hasTeacherConfirm && ($numDocs > 0) && ($numUnits > 0))
     $looksAMinus = true;
 $looksA = false;
 if ($looksAMinus && ($numMedia > 0))
@@ -66,7 +67,7 @@ if (isset($_POST['submit'])) {
         $_POST['course_confirmALevel'] = 'false';
     if (!isset($_POST['course_confirmAPlusLevel']))
         $_POST['course_confirmAPlusLevel'] = 'false';
-    
+
     // validation
     if ($_POST['course_confirmAMinusLevel'] == 'true') {
         if (!$looksAMinus) {
@@ -75,7 +76,7 @@ if (isset($_POST['submit'])) {
             $_POST['course_confirmAPlusLevel'] = 'false';
         }
     }
-    
+
     if ($_POST['course_confirmALevel'] == 'true') {
         if (!$looksA) {
             $_POST['course_confirmALevel'] = 'false';
@@ -84,7 +85,7 @@ if (isset($_POST['submit'])) {
             $_POST['course_confirmAMinusLevel'] = 'true';
         }
     }
-    
+
     if ($_POST['course_confirmAPlusLevel'] == 'true') {
         if (!$looksAPlus) {
             $_POST['course_confirmAPlusLevel'] = 'false';
@@ -93,7 +94,7 @@ if (isset($_POST['submit'])) {
             $_POST['course_confirmALevel'] = 'true';
         }
     }
-    
+
     // success message and values for storage
     $is_certified = 1;
     $level = CourseXMLElement::NO_LEVEL;
@@ -110,7 +111,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
         $is_certified = 0;
     }
-    
+
     $_POST['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP");
     $last_review = date('Y-m-d H:i:s');
     $xml->populate($_POST);
@@ -123,7 +124,7 @@ if (isset($_POST['submit'])) {
         db_query("UPDATE `$mysqlMainDb`.course_review SET "
                 . " is_certified = $is_certified, "
                 . " level = $level, "
-                . " last_review = '" . $last_review ."', "
+                . " last_review = '" . $last_review . "', "
                 . " last_reviewer = $uid "
                 . " WHERE course_id = $cours_id");
     } else {
@@ -134,11 +135,11 @@ if (isset($_POST['submit'])) {
 
 // checkboxes
 $checkedAMinusLevel = ($xmlData['course_confirmAMinusLevel'] == 'true') ? "checked='checked'" : '';
-$checkedALevel      = ($xmlData['course_confirmALevel']      == 'true') ? "checked='checked'" : '';
-$checkedAPlusLevel  = ($xmlData['course_confirmAPlusLevel']  == 'true') ? "checked='checked'" : '';
+$checkedALevel = ($xmlData['course_confirmALevel'] == 'true') ? "checked='checked'" : '';
+$checkedAPlusLevel = ($xmlData['course_confirmAPlusLevel'] == 'true') ? "checked='checked'" : '';
 $disabledAMinusLevel = (!$looksAMinus) ? "disabled='disabled'" : '';
-$disabledALevel      = (!$looksA)      ? "disabled='disabled'" : '';
-$disabledAPlusLevel  = (!$looksAPlus)  ? "disabled='disabled'" : '';
+$disabledALevel = (!$looksA) ? "disabled='disabled'" : '';
+$disabledAPlusLevel = (!$looksAPlus) ? "disabled='disabled'" : '';
 
 // images
 $openAccessImg = ($hasOpenAccess) ? 'tick' : 'delete';
@@ -152,8 +153,8 @@ $teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'tick' : 'delete';
 
 // parse last submission date
 $lastSubmission = '';
-if (isset($xmlData['course_lastLevelConfirmation']) && 
-        strlen($xmlData['course_lastLevelConfirmation']) > 0 && 
+if (isset($xmlData['course_lastLevelConfirmation']) &&
+        strlen($xmlData['course_lastLevelConfirmation']) > 0 &&
         ($ts = strtotime($xmlData['course_lastLevelConfirmation'])) > 0) {
     $lastSubmission = '<p><small>' . $langLastSubmission . ': ' . date('j/n/Y H:i:s', $ts) . '</small></p>';
 }

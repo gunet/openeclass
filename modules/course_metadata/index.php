@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.8
  * E-learning and Course Management System
@@ -91,7 +92,6 @@ $head_content .= <<<EOF
 EOF;
 draw($tool_content, 2, null, $head_content);
 
-
 //--- HELPER FUNCTIONS ---//
 
 function displayForm() {
@@ -102,39 +102,39 @@ function displayForm() {
 
 function submitForm() {
     global $cours_id, $code_cours, $urlServer, $webDir,
-           $langModifDone, $langBack, $langBackCourse, $mysqlMainDb;
-    
+    $langModifDone, $langBack, $langBackCourse, $mysqlMainDb;
+
     // handle uploaded files
     $fileData = array();
     foreach (CourseXMLElement::$binaryFields as $bkey) {
         if (in_array($bkey, CourseXMLElement::$multipleFields)) {
-            if (isset($_FILES[$bkey]) && isset($_FILES[$bkey]['tmp_name']) && isset($_FILES[$bkey]['type']) 
-                    && is_array($_FILES[$bkey]['tmp_name']) ) {
+            if (isset($_FILES[$bkey]) && isset($_FILES[$bkey]['tmp_name']) && isset($_FILES[$bkey]['type'])
+                    && is_array($_FILES[$bkey]['tmp_name'])) {
                 for ($i = 0; $i < count($_FILES[$bkey]['tmp_name']); $i++) {
                     if (is_uploaded_file($_FILES[$bkey]['tmp_name'][$i])
                             && isValidImage($_FILES[$bkey]['type'][$i])) {
                         // convert to resized jpg if possible
                         $uploaded = $_FILES[$bkey]['tmp_name'][$i];
-                        $copied = $_FILES[$bkey]['tmp_name'][$i].'.new';
+                        $copied = $_FILES[$bkey]['tmp_name'][$i] . '.new';
                         $type = $_FILES[$bkey]['type'][$i];
 
                         if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
                             $fileData[$bkey][$i] = base64_encode(file_get_contents($copied));
-                            $fileData[$bkey .'_mime'][$i] = 'image/jpeg'; // copy_resized_image always outputs jpg
+                            $fileData[$bkey . '_mime'][$i] = 'image/jpeg'; // copy_resized_image always outputs jpg
                         } else { // erase possible previous image or failed conversion
                             $fileData[$bkey][$i] = '';
-                            $fileData[$bkey .'_mime'][$i] = '';
+                            $fileData[$bkey . '_mime'][$i] = '';
                         }
                     }
                 }
             }
         } else {
-            if (isset($_FILES[$bkey]) 
+            if (isset($_FILES[$bkey])
                     && is_uploaded_file($_FILES[$bkey]['tmp_name'])
                     && isValidImage($_FILES[$bkey]['type'])) {
                 // convert to resized jpg if possible
                 $uploaded = $_FILES[$bkey]['tmp_name'];
-                $copied = $_FILES[$bkey]['tmp_name'].'.new';
+                $copied = $_FILES[$bkey]['tmp_name'] . '.new';
                 $type = $_FILES[$bkey]['type'];
 
                 if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
@@ -145,27 +145,27 @@ function submitForm() {
                     unset($_POST[$bkey . '_mime']);
                 } else { // erase possible previous image or failed conversion
                     $fileData[$bkey] = '';
-                    $fileData[$bkey .'_mime'] = '';
+                    $fileData[$bkey . '_mime'] = '';
                 }
             }
         }
     }
-    
+
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($cours_id);
     $data = array_merge_recursive($_POST, $extraData, $fileData);
     // course-based adaptation
-    list($dnum)  = mysql_fetch_row(db_query("select count(id) from document where course_id = " . $cours_id, $mysqlMainDb));
-    list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $code_cours));
+    list($dnum) = mysql_fetch_row(db_query("select count(id) from document where course_id = " . $cours_id, $mysqlMainDb));
+    list($vnum) = mysql_fetch_row(db_query("select count(id) from video", $code_cours));
     list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $code_cours));
     if ($dnum + $vnum + $vlnum < 1) {
         $data['course_confirmVideolectures'] = 'false';
     }
-    
+
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
     $xml->adapt($data);
     $xml->populate($data);
-    
+
     CourseXMLElement::save($code_cours, $xml);
 
     return "<p class='success'>$langModifDone</p>";
@@ -184,6 +184,6 @@ function isValidImage($type) {
     } elseif ($type == 'image/bmp') {
         $ret = true;
     }
-    
+
     return $ret;
 }
