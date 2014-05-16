@@ -231,8 +231,8 @@ if ($c) { // users per course
 
 // User statistics
 $countUser = $teachers = $students = $visitors = $other = 0;
-Database::get()->queryArray($count_qry . ' GROUP BY user_type');
-foreach ($sql as $$row) {
+$sql = Database::get()->queryArray($count_qry . ' GROUP BY user_type');
+foreach ($sql as $row) {
     $row = (array) $row;
     $countUser += $row['num'];
 
