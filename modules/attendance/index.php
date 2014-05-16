@@ -827,11 +827,11 @@ if ($is_editor) {
     }
     $k = 0;
 
-    if ($result){
+    if ($result) {
         foreach ($result as $announce) {            
             //check if the user has attend for this activity
             $userAttend = Database::get()->querySingle("SELECT attend FROM attendance_book  "
-                                                     . "WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID)->attend;
+                                                     . "WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);
 
             $content = standard_text_escape($announce->description);
             $d = strtotime($announce->date);
