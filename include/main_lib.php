@@ -623,11 +623,11 @@ function check_guest() {
 function check_editor() {
     global $uid, $course_id;
 
-    if (isset($uid)) {
+    if (isset($uid) and $uid) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
-                                        course_id = ?d", $uid, $course_id);        
-        if ($s->editor == 1) {
+                                        course_id = ?d", $uid, $course_id)->editor;        
+        if ($s == 1) {
             return true;
         } else {
             return false;

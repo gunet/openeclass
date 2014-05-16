@@ -52,14 +52,14 @@ $('input[name=date]').datetimepicker({
 
 //attendance_id for the course: check if there is an attendance module for the course. If not insert it
 $attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester` FROM attendance WHERE course_id = ?d ", $course_id);
-$attendance_id = $attendance->id;
-$attendance_limit = $attendance->limit;
-$showSemesterParticipants = $attendance->students_semester;
-
-if(!$attendance_id){
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;
+if ($attendance) {
+    $attendance_id = $attendance->id;
+    $attendance_limit = $attendance->limit;
+    $showSemesterParticipants = $attendance->students_semester;
+    if(!$attendance_id){
+        $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;
+    }
 }
-
 
 //===================
 //tutor view
@@ -67,38 +67,26 @@ if(!$attendance_id){
 if ($is_editor) {  
 
     // Admin attendance, booking (list of users), Add new attendance activity
-    $tool_content .= "
-
-    <div id='operations_container'>
-      <ul id='opslist'>";
-    if(isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])){
-        $tool_content .= "
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
+    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+    if(isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
     }
-        $tool_content .= "    
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
-    if(!isset($_GET['addActivity'])){
-        $tool_content .= "
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
+    if(!isset($_GET['addActivity'])) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
     }
     if(!isset($_GET['statsAttendance'])){
-        $tool_content .= "    
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStats</a></li>";
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStats</a></li>";
     }
-    $tool_content .= "    
-      </ul>
-    </div>";
+    $tool_content .= "</ul></div>";
 
     //FLAG: flag to show the activities
-    $showAttendanceActivities = 1;
-    
-    
+    $showAttendanceActivities = 1;       
     //EDIT DB: edit users only semester
     if(isset($_POST['submitAttendanceActiveUsers'])) {
         $attendance_users_limit = intval($_POST['usersLimit']);
         if($attendance_users_limit ==1 || $attendance_users_limit == 0){
             Database::get()->querySingle("UPDATE attendance SET `students_semester` = ?d WHERE id = ?d ", $attendance_users_limit, $attendance_id);
-
             $message = "<p class='success'>$langAttendanceEdit</p>";
             $tool_content .= $message . "<br/>";
         }
@@ -157,16 +145,13 @@ if ($is_editor) {
               <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
             </tr>";
         if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism            
-            $tool_content .= "
-                <tr>
-                  <td>$langAttendanceAutoBook: <input type='checkbox' value='1' name='auto' ";
-            if($auto){
+            $tool_content .= "<tr><td>$langAttendanceAutoBook: <input type='checkbox' value='1' name='auto' ";
+            if ($auto) {
                 $tool_content .= " checked";
             }
-            $tool_content .= "
-                /></td>";
+            $tool_content .= " /></td>";
         }    
-        $tool_content .= "                
+        $tool_content .= "
                 <tr>
                   <td class='right'><input type='submit' name='submitAttendanceActivity' value='$langAdd' /></td>
                 </tr>
@@ -235,21 +220,21 @@ if ($is_editor) {
         $actDate = $_POST['date'];
         if (isset($_POST['auto'])) {
             $auto = intval($_POST['auto']);
+        } else {
+            $auto = ' ';
         }
         
         
         if ($_POST['id']) {
             //update
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
-            
+            Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
             $message = "<p class='success'>$langAttendanceEdit</p>";
             $tool_content .= $message . "<br/>";
         }
         else{
             //insert
-            $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s", $attendance_id, $actTitle, $actDate, $actDesc);
-            
+            $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s", $attendance_id, $actTitle, $actDate, $actDesc);            
             $message = "<p class='success'>$langAttendanceSucInsert</p>";
             $tool_content .= $message . "<br/>";
         }

@@ -52,12 +52,13 @@ $('input[name=date]').datetimepicker({
 
 //gradebook_id for the course: check if there is an gradebook module for the course. If not insert it
 $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d ", $course_id);
-$gradebook_id = $gradebook->id;
-$gradebook_range = $gradebook->range;
-$showSemesterParticipants = $gradebook->students_semester;
-
-if(!$gradebook_id){
-    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d ", $course_id)->lastInsertID;
+if ($gradebook) {
+    $gradebook_id = $gradebook->id;
+    $gradebook_range = $gradebook->range;
+    $showSemesterParticipants = $gradebook->students_semester;
+    if(!$gradebook_id){
+       $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d ", $course_id)->lastInsertID;
+    }
 }
 
 //==============================================
@@ -101,7 +102,6 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
             $message = "<p class='success'>$langGradebookEdit</p>";
             $tool_content .= $message . "<br/>";
-
             //update value for the check box and the users query
             $showSemesterParticipants = $gradebook_users_limit;
         }
@@ -131,14 +131,18 @@ if ($is_editor) {
             $id  = filter_var($id , FILTER_VALIDATE_INT);
             
             //All activity data (check if it is in this gradebook)
-            $mofifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
-            $titleToModify = $mofifyActivity->title;
-            $contentToModify = $mofifyActivity->description;
-            $date = $mofifyActivity->date;
-            $module_auto_id = $mofifyActivity->module_auto_id;
-            $auto = $mofifyActivity->auto;
-            $weight = $mofifyActivity->weight;
-            $activity_type = $mofifyActivity->activity_type;
+            $modifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
+            if ($modifyActivity) {
+                $titleToModify = $modifyActivity->title;
+                $contentToModify = $modifyActivity->description;
+                $date = $modifyActivity->date;
+                $module_auto_id = $modifyActivity->module_auto_id;
+                $auto = $modifyActivity->auto;
+                $weight = $modifyActivity->weight;
+                $activity_type = $modifyActivity->activity_type;
+            } else {
+                $activity_type = '';
+            }
             $gradebookActivityToModify = $id;
 
         } else { //new activity 
@@ -146,16 +150,16 @@ if ($is_editor) {
             $activity_type = "";
         }
 
-        $tool_content .= "
+        @$tool_content .= "
             <tr><th>$langGradebookType:</th></tr>
             <tr>
               <td><select name='activity_type'>
-                    <option value=''  " . typeSelected($mofifyActivity->activity_type, '') . " >-</option>
-                    <option value='4' " . typeSelected($mofifyActivity->activity_type, 4) . " >" . $gradebook_exams . "</option>
-                    <option value='2' " . typeSelected($mofifyActivity->activity_type, 2) . " >" . $gradebook_labs . "</option>
-                    <option value='1' " . typeSelected($mofifyActivity->activity_type, 1) . " >" . $gradebook_oral . "</option>
-                    <option value='3' " . typeSelected($mofifyActivity->activity_type, 3) . " >" . $gradebook_progress . "</option>
-                    <option value='5' " . typeSelected($mofifyActivity->activity_type, 5) . " >" . $gradebook_other_type . "</option>
+                    <option value=''  " . typeSelected($activity_type, '') . " >-</option>
+                    <option value='4' " . typeSelected($activity_type, 4) . " >" . $gradebook_exams . "</option>
+                    <option value='2' " . typeSelected($activity_type, 2) . " >" . $gradebook_labs . "</option>
+                    <option value='1' " . typeSelected($activity_type, 1) . " >" . $gradebook_oral . "</option>
+                    <option value='3' " . typeSelected($activity_type, 3) . " >" . $gradebook_progress . "</option>
+                    <option value='5' " . typeSelected($activity_type, 5) . " >" . $gradebook_other_type . "</option>
                   </select>
               </td>
             </tr>
@@ -176,11 +180,9 @@ if ($is_editor) {
             <tr>
               <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
             </tr>";
-        if($module_auto_id){ //accept the auto booking mechanism
-            $tool_content .= "
-                <tr>
-                  <td>$langGradebookInsAut: <input type='checkbox' value='1' name='auto' ";
-            if($auto){
+        if (isset($module_auto_id)) { //accept the auto booking mechanism
+            $tool_content .= "<tr><td>$langGradebookInsAut: <input type='checkbox' value='1' name='auto' ";
+            if ($auto) {
                 $tool_content .= " checked";
             }
             $tool_content .= "
