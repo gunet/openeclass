@@ -513,26 +513,29 @@ function user_groups($course_id, $user_id, $format = 'html') {
     }
 }
 
-// Find secret subdir of group gid
+/**
+ * @brief Find secret subdir of group gid
+ * @param type $gid
+ * @return string
+ */
 function group_secret($gid) {    
 
-    $res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'");
+    $r = Database::get()->querySingle("SELECT secret_directory FROM `group` WHERE id = ?d", $gid);    
     if ($res) {
-        $secret = mysql_fetch_row($res);
-        return $secret[0];
+        return $r->secret;     
     } else {
-        die("Error: group $gid doesn't exist");
+        return '';        
     }
 }
 
-// ------------------------------------------------------------------
-// Often useful function (with so many selection boxes in eClass !!)
-// ------------------------------------------------------------------
-// Show a selection box.
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $default: if it matches one of the values, specifies the default entry
-// Changed by vagpits
+/**
+ * displays a selection box
+ * @param type $entries an array of (value => label)
+ * @param type $name the name of the selection element
+ * @param type $default if it matches one of the values, specifies the default entry
+ * @param type $extra
+ * @return string
+ */
 function selection($entries, $name, $default = '', $extra = '') {
     $retString = "";
     $retString .= "\n<select name='$name' $extra>\n";
@@ -549,10 +552,14 @@ function selection($entries, $name, $default = '', $extra = '') {
     return $retString;
 }
 
-// Show a multi-selection box.
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $defaults: array() if it matches one of the values, specifies the default entry
+/**
+ * displays a multi-selection box.
+ * @param type $entries an array of (value => label)
+ * @param type $name the name of the selection element
+ * @param type $defaults array() if it matches one of the values, specifies the default entry
+ * @param type $extra
+ * @return string
+ */
 function multiselection($entries, $name, $defaults = array(), $extra = '') {
     $retString = "";
     $retString .= "\n<select name='$name' $extra>\n";
@@ -623,11 +630,11 @@ function check_guest() {
 function check_editor() {
     global $uid, $course_id;
 
-    if (isset($uid) and $uid) {
+    if (isset($uid)) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
-                                        course_id = ?d", $uid, $course_id)->editor;        
-        if ($s == 1) {
+                                        course_id = ?d", $uid, $course_id);
+        if ($s and $s->editor == 1) {
             return true;
         } else {
             return false;
@@ -646,30 +653,35 @@ function check_opencourses_reviewer() {
     if (isset($uid)) {
         if ($is_admin) {
             return TRUE;
-        }
-        $res = db_query("SELECT reviewer FROM course_user
-                          WHERE user_id = " . intval($uid) . "
-                            AND course_id = " . intval($course_id));
-        $s = mysql_fetch_array($res);
-        if ($s['reviewer'] == 1)
+        }        
+        $r = Database::get()->querySingle("SELECT reviewer FROM course_user
+                                    WHERE user_id = ?d
+                                    AND course_id = ?d", $uid, $course_id)->reviewer;                        
+        if ($r == 1) {
             return TRUE;
-        else
+        } else {
             return FALSE;
-    } else
+        }
+    } else {
         return FALSE;
+    }
 }
 
-// ---------------------------------------------------
-// just make sure that the $uid variable isn't faked
-// --------------------------------------------------
+/**
+ * @brief just make sure that the $uid variable isn't faked
+ * @global type $urlServer
+ * @global type $require_valid_uid
+ * @global type $uid
+ */
 function check_uid() {
 
     global $urlServer, $require_valid_uid, $uid;
 
-    if (isset($_SESSION['uid']))
+    if (isset($_SESSION['uid'])) {
         $uid = $_SESSION['uid'];
-    else
+    } else {
         unset($uid);
+    }
 
     if ($require_valid_uid and !isset($uid)) {
         header("Location: $urlServer");
@@ -798,23 +810,18 @@ function find_faculty_by_id($id) {
 
 // Returns next available code for a new course in faculty with id $fac
 function new_code($fac) {
-    global $mysqlMainDb;
-
-    mysql_select_db($mysqlMainDb);
+    
     $gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = " . intval($fac)));
-
     do {
         $code = $gencode[0] . $gencode[1];
         $gencode[1] += 1;
         db_query("UPDATE hierarchy SET generator = " . intval($gencode[1]) . " WHERE id = " . intval($fac));
     } while (file_exists("courses/" . $code));
-    mysql_select_db($mysqlMainDb);
-
+    
     // Make sure the code returned isn't empty!
     if (empty($code)) {
         die("Course Code is empty!");
     }
-
     return $code;
 }
 
@@ -1031,15 +1038,19 @@ function display_activation_link($module_id) {
     }
 }
 
-// checks if a module is visible
+/**
+ * @brief checks if a module is visible
+ * @global type $course_id
+ * @param type $module_id
+ * @return boolean
+ */
 function visible_module($module_id) {
     global $course_id;
-
-    $v = mysql_fetch_array(db_query("SELECT visible FROM course_module
-                                WHERE module_id = $module_id AND
-                                course_id = $course_id"));
-
-    if ($v['visible'] == 1) {
+   
+    $v = Database::get()->querySingle("SELECT visible FROM course_module
+                                WHERE module_id = ?d AND
+                                course_id = ?d", $module_id, $course_id)->visible;
+    if ($v == 1) {
         return true;
     } else {
         return false;
@@ -1694,18 +1705,14 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
         $filebrowser = "file_browser_callback : 'openDocsPicker',";
         if (!$is_editor) {
             $cid = course_code_to_id($course_code);
-            $sql = "SELECT * FROM course_module
-                            WHERE course_id = $cid
+            $module = Database::get()->querySingle("SELECT * FROM course_module
+                            WHERE course_id = ?d
                               AND (module_id =" . MODULE_ID_DOCS . " OR module_id =" . MODULE_ID_VIDEO . " OR module_id =" . MODULE_ID_LINKS . ")
-                              AND VISIBLE = 1 ORDER BY module_id";
-
-            $result = db_query($sql);
-            $module = mysql_fetch_assoc($result);
-
-            if ($module === false)
+                              AND VISIBLE = 1 ORDER BY module_id", $cid);
+            if ($module === false) {
                 $filebrowser = '';
-            else {
-                switch ($module['module_id']) {
+            } else {
+                switch ($module->module_id) {
                     case MODULE_ID_LINKS:
                         $activemodule = 'link/index.php';
                         break;
@@ -2018,15 +2025,14 @@ function glossary_expand_callback($matches) {
 }
 
 function get_glossary_terms($course_id) {
-    global $mysqlMainDb;
-
-    list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM `$mysqlMainDb`.course
+    
+    list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM course
                                                          WHERE id = $course_id"));
     if (!$expand) {
         return false;
     }
 
-    $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
+    $q = db_query("SELECT term, definition, url FROM glossary
                               WHERE course_id = $course_id GROUP BY term");
 
     if (mysql_num_rows($q) > intval(get_config('max_glossary_terms'))) {
@@ -2260,13 +2266,16 @@ function read_urandom($len) {
     }
 }
 
-// Get user admin rights from table `admin`
+/**
+ * @brief Get user admin rights from table `admin`
+ * @param type $user_id
+ * @return type
+ */
 function get_admin_rights($user_id) {
-    $r = db_query("SELECT privilege FROM admin
-                          WHERE user_id = $user_id");
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+    
+    $r = Database::get()->querySingle("SELECT privilege FROM admin WHERE user_id = ?d", $user_id);    
+    if ($r) {
+        return $r->privilege;
     } else {
         return -1;
     }
