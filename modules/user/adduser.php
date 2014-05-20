@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,26 +37,24 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langA
 
 if (isset($_GET['add'])) {
     $uid_to_add = intval($_GET['add']);
-    $result = db_query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date) " .
-            "VALUES ($uid_to_add, $course_id, " . USER_STUDENT . ", CURDATE())");
-
+    $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date)
+                                    VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $uid_to_add, $course_id);
+    
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
-        'right' => '+5'));
-    // notify user via email
-    $email = uid_to_email($uid_to_add);
-    if (!empty($email) and email_seems_valid($email)) {
-        $emailsubject = "$langYourReg " . course_id_to_title($course_id);
-        $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
-        send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-    }
-    $tool_content .= "";
-
+                                                               'right' => '+5'));        
     if ($result) {
         $tool_content .= "<p class='success'>$langTheU $langAdded</p>";
+        // notify user via email
+        $email = uid_to_email($uid_to_add);
+        if (!empty($email) and email_seems_valid($email)) {
+            $emailsubject = "$langYourReg " . course_id_to_title($course_id);
+            $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
+            send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+        }    
     } else {
         $tool_content .= "<p class='alert1'>$langAddError</p>";
     }
-    $tool_content .= "<br /><p><a href='adduser.php?course=$course_code'>$langAddBack</a></p><br />\n";
+    $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
 } else {
     $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
     register_posted_variables(array('search_surname' => true,
@@ -92,14 +90,12 @@ if (isset($_GET['add'])) {
     }
     $query = join(' AND ', $search);
     if (!empty($query)) {
-        db_query("CREATE TEMPORARY TABLE lala AS
-                    SELECT user_id FROM course_user WHERE course_id = $course_id");
-        $result = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
-                        user u LEFT JOIN lala c ON u.id = c.user_id WHERE
-                        c.user_id IS NULL AND $query");
-        if (mysql_num_rows($result) == 0) {
-            $tool_content .= "<p class='caution'>$langNoUsersFound</p>\n";
-        } else {
+        Database::get()->query("CREATE TEMPORARY TABLE lala AS
+                    SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
+        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
+                                                user u LEFT JOIN lala c ON u.id = c.user_id WHERE
+                                                c.user_id IS NULL AND $query");                           
+        if ($result) {
             $tool_content .= "<table width=100% class='tbl_alt'>
                                 <tr>
                                   <th width='20'>$langID</th>
@@ -110,21 +106,23 @@ if (isset($_GET['add'])) {
                                   <th width='200'>$langActions</th>
                                 </tr>";
             $i = 1;
-            while ($myrow = mysql_fetch_array($result)) {
+            foreach ($result as $myrow) {
                 if ($i % 2 == 0) {
                     $tool_content .= "<tr class='even'>";
                 } else {
                     $tool_content .= "<tr class='odd'>";
                 }
-                $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow['givenname']) . "</td><td>" .
-                        q($myrow['surname']) . "</td><td>" . q($myrow['username']) . "</td><td>" .
-                        q($myrow['am']) . "</td><td align='center'>" .
-                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[id]'>$langRegister</a></td></tr>\n";
+                $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
+                        q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
+                        q($myrow->am) . "</td><td align='center'>" .
+                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow->id'>$langRegister</a></td></tr>";
                 $i++;
             }
             $tool_content .= "</table>";
+        } else {
+            $tool_content .= "<p class='caution'>$langNoUsersFound</p>";
         }
-        db_query("DROP TABLE lala");
+        Database::get()->query("DROP TABLE lala");
     }
 }
 draw($tool_content, 2);

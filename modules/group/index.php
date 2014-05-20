@@ -116,8 +116,8 @@ if ($is_editor) {
             // avoiding groups entering other groups area
             $secretDirectory = uniqid('');
             mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
-            touch("courses/$code_cours/group/index.htm");
-            touch("courses/$code_cours/group/$secretDirectory/index.htm");
+            touch("courses/$course_code/group/index.htm");
+            touch("courses/$course_code/group/$secretDirectory/index.htm");
 
             db_query("INSERT INTO `group` (max_members, secret_directory)
                                 VALUES ($group_max, '$secretDirectory')");
@@ -209,7 +209,7 @@ if ($is_editor) {
         touch("../../courses/garbage/index.htm");
         rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
         mkdir("../../courses/$course_code/group", 0777);
-        touch("../../courses/$code_cours/group/index.htm");
+        touch("../../courses/$course_code/group/index.htm");
 
         $message = $langGroupsDeleted;
     } elseif (isset($_REQUEST['delete'])) {
