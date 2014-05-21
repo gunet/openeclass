@@ -104,6 +104,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     }
 
     $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
+    // If old $urlAppend didn't end in /, add it
+    if (substr($config_data['urlAppend'], -1) !== '/') {
+        $config_data['urlAppend'] .= '/';
+    }
     $eclass_version = (isset($config_data['version'])) ? $config_data['version'] : null;
     if (file_exists($restoreThis . '/backup.php')) {
         $backupData = parse_backup_php($restoreThis . '/backup.php');
@@ -151,16 +155,16 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $url_prefix_map = array(
         $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
         $urlServer . 'modules/ebook/show.php/' . $new_course_code,
-        $config_data['urlAppend'] . '/modules/ebook/show.php/' . $course_data['code'] =>
-        $urlAppend . '/modules/ebook/show.php/' . $new_course_code,
+        $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+        $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
         $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
         $urlServer . 'modules/document/file.php/' . $new_course_code,
-        $config_data['urlAppend'] . '/modules/document/file.php/' . $course_data['code'] =>
-        $urlAppend . '/modules/document/file.php/' . $new_course_code,
+        $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
+        $urlAppend . 'modules/document/file.php/' . $new_course_code,
         $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
         $urlServer . 'courses/' . $new_course_code,
-        $config_data['urlAppend'] . '/courses/' . $course_data['code'] =>
-        $urlAppend . '/courses/' . $new_course_code,
+        $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>
+        $urlAppend . 'courses/' . $new_course_code,
         $course_data['code'] =>
         $new_course_code);
 
