@@ -736,6 +736,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         }
                     }
                 }
+                
+                if ($oldversion < '2.9.1') {
+                       mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
+                        db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
+                }
 
                 if ($oldversion < '3') {
                     // Check whether new tables already exist and delete them if empty, 

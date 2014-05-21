@@ -630,7 +630,7 @@ function check_guest() {
 function check_editor() {
     global $uid, $course_id;
 
-    if (isset($uid)) {
+    if (isset($uid) and $uid) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
                                         course_id = ?d", $uid, $course_id);
@@ -650,7 +650,7 @@ function check_editor() {
 function check_opencourses_reviewer() {
     global $uid, $course_id, $is_admin;
 
-    if (isset($uid)) {
+    if (isset($uid) and $uid) {
         if ($is_admin) {
             return TRUE;
         }        
