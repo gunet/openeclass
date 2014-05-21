@@ -87,36 +87,29 @@ $professor = $result['titulaires'];
 $fake_code = $result['fake_code'];
 $main_extra = $description = $addon = '';
 $course_license = $result['course_license'];
-$res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                        AND (visibility = 'v' OR res_id < 0)
-                 ORDER BY `order`");
+$res = db_query("SELECT id, title, comments, type FROM course_description
+        WHERE course_id = $cours_id AND visible = 1 ORDER BY `order`");
    
 if ($res and mysql_num_rows($res) > 0) {
     $main_extra .= "<div class = 'course_description' style='width: 520px;'>";
     $tool_content .= "<div style='display: none'>";
     while ($row = mysql_fetch_array($res)) {
-            if ($row['res_id'] == -1) {
-                    $description = standard_text_escape($row['comments']);
-            } elseif ($row['res_id'] == -2) {
-                    $addon = standard_text_escape($row['comments']);
-            } else {                
-                    if (isset($titreBloc[$row['res_id']])) {
-                            $element_id = "class='course_info' id='{$titreBloc[$row['res_id']]}'";                            
-                            $icon_url = "$themeimg/bloc/$row[res_id].png";                            
-                    } else {                        
-                            $element_id = 'class="course_info other"';
-                            $icon_url = "$themeimg/bloc/default.png";
-                    }                           
-                    $hidden_id = "hidden_$row[res_id]";
-                    $tool_content .= "<div id='$hidden_id'><h1>" .
-                            q($row['title']) . "</h1>" .
-                            standard_text_escape($row['comments']) . "</div>\n";
-                    $main_extra .= "<div $element_id>" .
-                            "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
-                            q($row['title']) .
-                            "</a></div>\n";
-            }
+        $desctype = intval($row['type']) - 1;
+        if (isset($titreBloc[$desctype])) {
+            $element_id = "class='course_info' id='{$titreBloc[$desctype]}'";
+            $icon_url = "$themeimg/bloc/" . $desctype . ".png";                            
+        } else {                        
+            $element_id = 'class="course_info other"';
+            $icon_url = "$themeimg/bloc/default.png";
+        }                           
+        $hidden_id = "hidden_" . $row['id'];
+        $tool_content .= "<div id='$hidden_id'><h1>" .
+            q($row['title']) . "</h1>" .
+            standard_text_escape($row['comments']) . "</div>\n";
+        $main_extra .= "<div $element_id>" .
+            "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
+            q($row['title']) .
+            "</a></div>\n";
     }
     $main_extra .= "</div>";    
     $tool_content .= "</div>";

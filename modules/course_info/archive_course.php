@@ -79,7 +79,8 @@ if (extension_loaded('zlib')) {
                        'course_units' => $sql_course,
                        'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                                WHERE course_id = $cours_id)",
-                       'forum_notify' => $sql_course)
+                       'forum_notify' => $sql_course,
+                        'course_description' => $sql_course)
              as $table => $condition) {
                 backup_table($archivedir, $table, $condition);
         }

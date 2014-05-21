@@ -271,6 +271,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_map,
                                                            $ebook_section_map,
                                                            $ebook_subsection_map)));
+                
+                restore_table($restoreThis, 'course_description',
+                        array('set' => array('course_id' => $course_id),
+                              'delete' => array('id')));
         }
         
 	removeDir($restoreThis);

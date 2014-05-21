@@ -1429,7 +1429,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
         }
         list($current) = mysql_fetch_row($sql);
         $sql = db_query("SELECT `$id_field`, `$order_field` FROM `$table`
-                        WHERE `order` $op '$current' $condition
+                        WHERE `$order_field` $op '$current' $condition
                         ORDER BY `$order_field` $desc LIMIT 1");
         if ($sql and mysql_num_rows($sql) > 0) {
                 list($next_id, $next) = mysql_fetch_row($sql);

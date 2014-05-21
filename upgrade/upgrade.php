@@ -684,6 +684,60 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
         }
         
+        if (version_compare($oldversion, '2.10', '<')) {
+            if (!mysql_table_exists($mysqlMainDb, 'course_description_type')) {
+                db_query("CREATE TABLE `course_description_type` (
+                    `id` smallint(6) NOT NULL AUTO_INCREMENT,
+                    `title` mediumtext,
+                    `syllabus` tinyint(1) DEFAULT 0,
+                    `objectives` tinyint(1) DEFAULT 0,
+                    `literature` tinyint(1) DEFAULT 0,
+                    `teaching_method` tinyint(1) DEFAULT 0,
+                    `assessment_method` tinyint(1) DEFAULT 0,
+                    `prerequisites` tinyint(1) DEFAULT 0,
+                    `active` tinyint(1) DEFAULT 1,
+                    `order` int(11) NOT NULL,
+                    PRIMARY KEY (`id`)) $charset_spec");
+
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `syllabus`, `order`) VALUES (1, 'a:2:{s:2:\"el\";s:52:\"Περιεχόμενο μαθήματος (Syllabus)\";s:2:\"en\";s:25:\"Course Content (Syllabus)\";}', 1, 1)");
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `objectives`, `order`) VALUES (2, 'a:2:{s:2:\"el\";s:41:\"Αντικειμενικοί Στόχοι\";s:2:\"en\";s:25:\"Objectives / Overall Aims\";}', 1, 2)");
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `literature`, `order`) VALUES (3, 'a:2:{s:2:\"el\";s:47:\"Συνιστώμενη Βιβλιογραφία\";s:2:\"en\";s:30:\"Study Materials / Reading List\";}', 1, 3)");
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `teaching_method`, `order`) VALUES (4, 'a:2:{s:2:\"el\";s:63:\"Διδακτικές και μαθησιακές μέθοδοι\";s:2:\"en\";s:30:\"Education and Teaching Methods\";}', 1, 4)");
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `assessment_method`, `order`) VALUES (5, 'a:2:{s:2:\"el\";s:62:\"Μέθοδοι αξιολόγησης/βαθμολόγησης\";s:2:\"en\";s:26:\"Assessment Methods / Exams\";}', 1, 5)");
+                db_query("INSERT INTO `course_description_type` (`id`, `title`, `prerequisites`, `order`) VALUES (6, 'a:2:{s:2:\"el\";s:26:\"Προαπαιτήσεις\";s:2:\"en\";s:25:\"Recommended Prerequisites\";}', 1, 6)");
+            }
+            
+            if (!mysql_table_exists($mysqlMainDb, 'course_description')) {
+                db_query("CREATE TABLE IF NOT EXISTS `course_description` (
+                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                    `course_id` int(11) NOT NULL,
+                    `title` varchar(255) NOT NULL,
+                    `comments` mediumtext,
+                    `type` smallint(6),
+                    `visible` tinyint(4) DEFAULT 0,
+                    `order` int(11) NOT NULL,
+                    `update_dt` datetime NOT NULL,
+                    PRIMARY KEY (`id`)) $charset_spec");
+                
+                db_query('CREATE INDEX `cid` ON course_description (course_id)');
+                db_query('CREATE INDEX `cd_type_index` ON course_description (type)');
+                db_query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
+                
+                $res = db_query("SELECT ur.res_id, ur.title, ur.comments, ur.order, ur.visibility, ur.date, cu.course_id
+                        FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) WHERE cu.order = -1");
+                while ($ures = mysql_fetch_array($res)) {
+                    $newvis = ($ures['visibility'] == 'i') ? 0 : 1;
+                    db_query("INSERT INTO course_description SET
+                        course_id = " . intval($ures['course_id']) . ",
+                        title = " . quote($ures['title']) . ",
+                        comments = " . quote(purify($ures['comments'])) . ",
+                        visible = " . intval($newvis) . ",
+                        `order` = " . intval($ures['order']) . ",
+                        update_dt = " . quote($ures['date']));
+                }
+            }
+        }
+        
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
                 db_query("ALTER TABLE `annonces` ADD `preview` TEXT NOT NULL DEFAULT ''");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
@@ -749,6 +803,9 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 }
                 if ($oldversion < '2.9') {
 			upgrade_course_2_9($code[0], $lang, "($i / $total)");
+                }
+                if (version_compare($oldversion, '2.10', '<')) {
+                    upgrade_course_2_10($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;
