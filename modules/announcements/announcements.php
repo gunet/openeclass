@@ -278,7 +278,7 @@ if ($is_editor) {
             db_query("INSERT INTO annonces SET contenu = " . quote($newContent) . ",
                                   title = $antitle, temps = NOW(),
                                   cours_id = $cours_id, ordre = $order,
-                                  visibility = 'v'");
+                                  visibility = 'v', preview = ''");
             $id = mysql_insert_id();
         }
         create_preview($_POST['newContent'], false, $id, $cours_id, $code_cours);
