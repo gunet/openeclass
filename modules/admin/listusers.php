@@ -31,18 +31,55 @@
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-require_once 'admin.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+
+load_js('tools.js');
+load_js('jquery');
+load_js('datatables');
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#search_results_table').DataTable ({
+                'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+                ],
+                'sPaginationType': 'full_numbers',
+                    'aoColumns': [
+                        null,
+                        null,
+                        null,
+                        {'bSortable' : false },
+                        {'bSortable' : false },
+                        {'bSortable' : false },
+                    ],
+                    'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '".$langNoResult."',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '".$langSearch."',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
+            });
+        });
+        </script>";
 
 $tree = new Hierarchy();
 $user = new User();
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 $nameTools = $langListUsersActions;
-
-define('USERS_PER_PAGE', 15);
 
 // get the incoming values
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -57,16 +94,13 @@ $auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
 $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
-$ord = isset($_GET['ord']) ? $_GET['ord'] : '';
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
 $mail_ver_required = get_config('email_verification_required');
 
 // Display Actions Toolbar
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='$_SERVER[SCRIPT_NAME]'>$langAllUsers</a></li>
-      <li><a href='search_user.php'>$langSearchUser</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]'>$langAllUsers</a></li>      
       <li><a href='$_SERVER[SCRIPT_NAME]?search=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
@@ -171,25 +205,6 @@ if (count($criteria)) {
 }
 
 // end filter/criteria
-$ord_param_id = 0;
-if (!empty($ord)) { // if we want to order results
-    switch ($ord) {
-        case 's': $order = 'status, givenname, surname';
-            break;
-        case 'n': $order = 'surname, givenname, status';
-            break;
-        case 'p': $order = 'givenname, surname, status';
-            break;
-        case 'u': $order = 'username, status, givenname';
-            break;
-        default: $order = 'status, givenname, surname';
-            break;
-    }
-    add_param('ord');
-    $ord_param_id = count($params);
-} else {
-    $order = 'status';
-}
 if ($c) { // users per course
     $qry_base = "FROM user AS a
                           LEFT JOIN course_user AS b
@@ -230,12 +245,10 @@ if ($c) { // users per course
 }
 
 // User statistics
-$countUser = $teachers = $students = $visitors = $other = 0;
+$teachers = $students = $visitors = $other = 0;
 $sql = Database::get()->queryArray($count_qry . ' GROUP BY user_type');
 foreach ($sql as $row) {
     $row = (array) $row;
-    $countUser += $row['num'];
-
     switch ($row['user_type']) {
         case USER_TEACHER:
             $teachers += $row['num'];
@@ -252,135 +265,103 @@ foreach ($sql as $row) {
     }
 }
 
-$caption = '';
 $pagination_link = '&amp;' . implode('&amp;', $params);
 
-// Remove 'ord' parameter
-if ($ord_param_id) {
-    unset($params[$ord_param_id - 1]);
-}
-$header_link = '&amp;' . implode('&amp;', $params);
+if ($search == 'inactive') {  // inactive users
+    $caption .= "&nbsp;$langAsInactive<br />";
+    $caption .= "<a href='updatetheinactive.php?activate=1'>" . $langAddSixMonths . "</a><br />";
+}    
+$qry .= " ORDER BY status";
+$sql = Database::get()->queryArray($qry);
 
-if ($countUser > 0) {
-    $caption .= "$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents
-                $langAnd <b>$visitors</b> $langVisitors<br />";
-    $caption .= "$langTotal: <b>$countUser</b> $langUsers<br />";
-    if ($search == 'inactive') {  // inactive users
-        $caption .= "&nbsp;$langAsInactive<br />";
-        $caption .= "<a href='updatetheinactive.php?activate=1'>" . $langAddSixMonths . "</a><br />";
-    }
-    if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
-        $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, $_SERVER['SCRIPT_NAME'], $pagination_link);
-    }
-    $qry .= " ORDER BY $order LIMIT $limit, " . USERS_PER_PAGE;
-    $sql = db_query($qry);
+$tool_content .= "<table id='search_results_table' class='display'>
+            <thead>
+            <tr>
+              <th width='150'>$langSurname</th>
+              <th width='100' class='left'>$langName</th>
+              <th width='170' class='left'>$langUsername</th>
+              <th>$langEmail</th>
+              <th>$langProperty</th>
+              <th width='130' class='center'>$langActions</th>
+            </tr></thead>";
+$tool_content .= "<tbody>";
 
-    $tool_content .= "
-        <table class='tbl_alt' width='100%'>
-        <tr>
-          <th colspan='2' width='150'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=n$header_link'>$langSurname</a></div></th>
-          <th width='100' class='left'><a href='$_SERVER[SCRIPT_NAME]?ord=p$header_link'>$langName</a></th>
-          <th width='170' class='left'><a href='$_SERVER[SCRIPT_NAME]?ord=u$header_link'>$langUsername</a></th>
-          <th scope='col'>$langEmail</th>
-          <th scope='col'><a href='$_SERVER[SCRIPT_NAME]?ord=s$header_link'>$langProperty</a></th>
-          <th scope='col' width='100' class='center'>$langActions</th>
-        </tr>";
-    $k = 0;
-    for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-        while ($logs = mysql_fetch_assoc($sql)) {
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-            $tool_content .= "<td width='1'>
-                        <img src='$themeimg/arrow.png' alt=''></td>
-                        <td>" . q($logs['surname']) . "</td>
-                        <td>" . q($logs['givenname']) . "</td>
-                        <td>" . q($logs['username']) . "</td>
-                        <td width='200'>" . q($logs['email']);
-            if ($mail_ver_required) {
-                switch ($logs['verified_mail']) {
-                    case EMAIL_VERIFICATION_REQUIRED:
-                        $icon = 'pending';
-                        $tip = $langMailVerificationPendingU;
-                        break;
-                    case EMAIL_VERIFIED:
-                        $icon = 'tick_1';
-                        $tip = $langMailVerificationYesU;
-                        break;
-                    default:
-                        $icon = 'not_confirmed';
-                        $tip = $langMailVerificationNoU;
-                        break;
-                }
-                $tool_content .= ' ' . icon($icon, $tip);
-            }
-
-            switch ($logs['status']) {
-                case USER_TEACHER:
-                    $icon = 'teacher';
-                    $tip = $langTeacher;
-                    break;
-                case USER_STUDENT:
-                    $icon = 'student';
-                    $tip = $langStudent;
-                    break;
-                case USER_GUEST:
-                    $icon = 'guest';
-                    $tip = $langVisitor;
-                    break;
-                default:
-                    $icon = false;
-                    $tool_content .= "</td><td class='center'>$langOther (" .
-                            q($logs['status']) . ')</td>';
-                    break;
-            }
-            if ($icon) {
-                $tool_content .= "</td><td class='center'>" .
-                        icon($icon, $tip) . "</td>";
-            }
-            if ($logs['id'] == 1) { // don't display actions for admin user
-                $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
-            } else {
-                $changetip = q("$langChangeUserAs $logs[username]");
-                $width = (!isDepartmentAdmin()) ? 100 : 80;
-                $tool_content .= "<td width='$width'>" .
-                        icon('edit', $langEdit, "edituser.php?u=$logs[id]") . '&nbsp;' .
-                        icon('delete', $langDelete, "deluser.php?u=$logs[id]") . '&nbsp;' .
-                        icon('platform_stats', $langStat, "userstats.php?u=$logs[id]") . '&nbsp;' .
-                        icon('platform_stats', $langActions, "userlogs.php?u=$logs[id]");
-                if (!isDepartmentAdmin()) {
-                    $tool_content .= '&nbsp;' . icon('log_as', $changetip, 'change_user.php?username=' . urlencode($logs['username']));
-                }
-                $tool_content .= "</td>\n";
-            }
-            $tool_content .= "</tr>";
-            $k++;
+foreach ($sql as $logs) {
+    $tool_content .= "<td>" . q($logs->surname) . "</td>
+                    <td>" . q($logs->givenname) . "</td>
+                    <td>" . q($logs->username) . "</td>
+                    <td width='200'>" . q($logs->email);
+    if ($mail_ver_required) {
+        switch ($logs->verified_mail) {
+            case EMAIL_VERIFICATION_REQUIRED:
+                $icon = 'pending';
+                $tip = $langMailVerificationPendingU;
+                break;
+            case EMAIL_VERIFIED:
+                $icon = 'tick_1';
+                $tip = $langMailVerificationYesU;
+                break;
+            default:
+                $icon = 'not_confirmed';
+                $tip = $langMailVerificationNoU;
+                break;
         }
+        $tool_content .= ' ' . icon($icon, $tip);
     }
 
-    // caption
-    $tool_content .= "</table> <br><div class='right smaller'>" . $caption;
-
-    // delete all function
-    $tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
-    // redirect all request vars towards delete all action
-    foreach ($_REQUEST as $key => $value) {
-        $tool_content .= "<input type='hidden' name='$key' value='$value' />";
+    switch ($logs->status) {
+        case USER_TEACHER:
+            $icon = 'teacher';
+            $tip = $langTeacher;
+            break;
+        case USER_STUDENT:
+            $icon = 'student';
+            $tip = $langStudent;
+            break;
+        case USER_GUEST:
+            $icon = 'guest';
+            $tip = $langVisitor;
+            break;
+        default:
+            $icon = false;
+            $tool_content .= "</td><td class='center'>$langOther (" .
+                    q($logs->status) . ')</td>';
+            break;
     }
-    $tool_content .= "<input type='submit' name='dellall_submit' value='$langDelList'></form>";
-    $tool_content .= "</div>";
-
-    if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
-        $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, $_SERVER['SCRIPT_NAME'], $pagination_link);
+    if ($icon) {
+        $tool_content .= "</td><td class='center'>" . icon($icon, $tip) . "</td>";
     }
-} else {
-    $tool_content .= "<p class='caution'>$langNoSuchUsers</p>";
+    if ($logs->id == 1) { // don't display actions for admin user
+        $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
+    } else {
+        $changetip = q("$langChangeUserAs $logs->username");
+        $width = (!isDepartmentAdmin()) ? 100 : 80;
+        $tool_content .= "<td width='$width'>" .
+                icon('edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
+                icon('delete', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
+                icon('platform_stats', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
+                icon('platform_stats', $langActions, "userlogs.php?u=$logs->id");
+        if (!isDepartmentAdmin()) {
+            $tool_content .= '&nbsp;' . icon('log_as', $changetip, 'change_user.php?username=' . urlencode($logs->username));
+        }
+        $tool_content .= "</td>";
+    }
+    $tool_content .= "</tr>";   
 }
+$tool_content .= "</tbody></table>";
+$caption = "<b>$teachers</b> $langTeachers, <b>$students</b> $langStudents
+            $langAnd <b>$visitors</b> $langVisitors<br />";
+$tool_content .= "<br><br><div class='info'>$caption</div>";
+// delete all function
+$tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
+// redirect all request vars towards delete all action
+foreach ($_REQUEST as $key => $value) {
+    $tool_content .= "<input type='hidden' name='$key' value='$value' />";
+}
+$tool_content .= "<input type='submit' name='dellall_submit' value='$langDelList'></form>";
 $tool_content .= "<p align='right'><a href='search_user.php?$pagination_link'>$langBack</a></p>";
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 
 /**
  * make links from one page to another during search results
