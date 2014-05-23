@@ -100,7 +100,7 @@ if ($u) {
         $info->password = $newpass;
     }
     if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {
-        $navigation[] = array('url' => 'edituser.php?u=' . $u, 'name' => $langEditUser);
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?u=$u", 'name' => $langEditUser);
         $nameTools = $langEditAuth;
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
@@ -328,7 +328,7 @@ if ($u) {
         $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
         // trim white spaces in the end and in the beginning of the word
-        $username = isset($_POST['username']) ? autoquote($_POST['username']) : '';
+        $username = isset($_POST['username']) ?$_POST['username'] : '';
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
@@ -403,20 +403,14 @@ if ($u) {
                                     whitelist = ?s
                           WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             if ($qry->affectedRows > 0) {
-                $tool_content .= "$langNoUpdate: $u!";
-            } else {
-                $num_update = mysql_affected_rows();
-                if ($num_update == 1) {
-                    $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
-                } else {
-                    $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
-                }
+                    $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";                
+            } else {                                                
+                    $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";                
             }
             $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
         }
     }
 } else {
-    $tool_content .= "<h1>$langError</h1><p><a href='listcours.php'>$back</p>\n";
+    $tool_content .= "<h1>$langError</h1><p><a href='listcours.php'>$back</p>";
 }
-
 draw($tool_content, 3, null, $head_content);

@@ -115,7 +115,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     // search for inactive users
     if ($search == 'inactive') {
-        $criteria[] = 'expires_at < ' . time() . ' AND id <> 1';
+        $criteria[] = 'expires_at < CURRENT_DATE() AND id <> 1';
         add_param('search', 'inactive');
     }
 
@@ -180,12 +180,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
 
     //$pagination_link = '&amp;' . implode('&amp;', $params);
-
-    if ($search == 'inactive') {  // inactive users
-        $caption .= "&nbsp;$langAsInactive<br />";
-        $caption .= "<a href='updatetheinactive.php?activate=1'>" . $langAddSixMonths . "</a><br />";
-    }
-
+ 
     // internal search
     if (!empty($_GET['sSearch'])) {
         $keyword = quote('%' . $_GET['sSearch'] . '%');
@@ -342,13 +337,16 @@ $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 $nameTools = $langListUsersActions;
 
 // Display Actions Toolbar
-$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='$_SERVER[SCRIPT_NAME]'>$langAllUsers</a></li>
-      <li><a href='$_SERVER[SCRIPT_NAME]?search=inactive'>$langInactiveUsers</a></li>
-    </ul>
-  </div>";
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";    
+$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'>$langAllUsers</a></li>";
+if (isset($_GET['search']) and $_GET['search'] == 'inactive') {  // inactive users
+  $tool_content .= "<li><a href='updatetheinactive.php?activate=1'>" . $langAddSixMonths . "</a></li>";
+} else {
+  $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?search=inactive'>$langInactiveUsers</a></li>";
+}
+$tool_content .= "</ul></div>";
+
+// display search results
 $tool_content .= "<table id='search_results_table' class='display'>
             <thead>
             <tr>
