@@ -36,6 +36,8 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $tree = new Hierarchy();
+    $user = new User();
     // get the incoming values
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $c = isset($_GET['c']) ? intval($_GET['c']) : '';
@@ -115,7 +117,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     // search for inactive users
     if ($search == 'inactive') {
-        $criteria[] = 'expires_at < CURRENT_DATE() AND id <> 1';
+        $criteria[] = 'expires_at < CURRENT_DATE() AND user.id <> 1';
         add_param('search', 'inactive');
     }
 
@@ -159,7 +161,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $qry_base .= ' AND ' . $qry_criteria;
         }    
         $qry = "SELECT DISTINCT a.id, a.surname, a.givenname, a.username, a.email,
-                           a.verified_mail, b.status " . $qry_base;
+                           a.verified_mail, b.status " . $qry_base;        
         add_param('c');
     } elseif ($search == 'no_login') { // users who have never logged in
         $qry_base = "FROM user LEFT JOIN loginout ON user.id = loginout.id_user $depqryadd
@@ -167,7 +169,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
         }   
-        $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail, status " .
+        $qry = "SELECT DISTINCT user.id, surname, givenname, username, email, verified_mail, status " .
                 $qry_base;
         add_param('search', 'no_login');
     } else {
@@ -175,7 +177,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($qry_criteria) {
             $qry_base .= ' WHERE ' . $qry_criteria;
         }    
-        $qry = 'SELECT DISTINCT id, surname, givenname, username, email, status, verified_mail' .
+        $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail' .
                 $qry_base;
     }
 
@@ -184,11 +186,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     // internal search
     if (!empty($_GET['sSearch'])) {
         $keyword = quote('%' . $_GET['sSearch'] . '%');
-        if ($qry_criteria) {
+        if (($qry_criteria) or ($c)) {
             $qry .= ' AND (surname LIKE '.$keyword.' OR givenname LIKE '.$keyword.' OR username LIKE '.$keyword.' OR email LIKE '.$keyword.')';
         } else {
              $qry .= ' WHERE (surname LIKE '.$keyword.' OR givenname LIKE '.$keyword.' OR username LIKE '.$keyword.' OR email LIKE '.$keyword.')';
-        }
+        }        
     } else {
         $keyword = "'%%'";
     }
@@ -208,17 +210,23 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $qry .= ' '.$_GET['sSortDir_0'];
     }   
     //pagination
-    ($limit > 0) ? $qry .= " LIMIT $offset,$limit" : $qry .= "";
-    //die($qry);
+    ($limit > 0) ? $qry .= " LIMIT $offset,$limit" : $qry .= "";    
     $sql = Database::get()->queryArray($qry);
 
-    $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base")->total;
-    $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
+    $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base")->total;        
+    if (($qry_criteria) or ($c)) {
+        $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base
+                                                        AND (surname LIKE $keyword
+                                                        OR givenname LIKE $keyword
+                                                        OR username LIKE $keyword
+                                                        OR email LIKE $keyword)")->total;
+    } else {
+        $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
                                                      WHERE (surname LIKE $keyword
                                                         OR givenname LIKE $keyword
                                                         OR username LIKE $keyword
                                                         OR email LIKE $keyword)")->total;
-
+    }
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
     $data['aaData'] = array();
@@ -328,9 +336,6 @@ $head_content .= "<script type='text/javascript'>
             });
         });
         </script>";
-
-$tree = new Hierarchy();
-$user = new User();
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
