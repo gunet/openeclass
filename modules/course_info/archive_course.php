@@ -133,7 +133,9 @@ $archive_conditions = array(
     'exercise_with_questions' => "question_id IN (SELECT id FROM exercise_question
                                                              WHERE course_id = $course_id) OR
                                       exercise_id IN (SELECT id FROM exercise
-                                                             WHERE course_id = $course_id)");
+                                                             WHERE course_id = $course_id)",
+    'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)"
+    );
 
 foreach ($archive_conditions as $table => $condition) {
     backup_table($archivedir, $table, $condition);

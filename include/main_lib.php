@@ -84,6 +84,7 @@ define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
 define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_BBB', 34);
 
 
 // exercise answer types
