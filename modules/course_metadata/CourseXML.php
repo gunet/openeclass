@@ -832,7 +832,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($exists) {
             $deleted = ($is_certified) ? 0 : 1;
             db_query("UPDATE `$mysqlMainDb`.oai_record SET
-                `oai_identifier` = " . quote($courseId) /* TODO: improve/replace */ . ",
+                `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
                 `datestamp` = NOW(),
                 `deleted` = " . $deleted . ",
                 `dc_title` = " . quote(self::serialize($xml->title)) . ",
@@ -857,8 +857,8 @@ class CourseXMLElement extends SimpleXMLElement {
         } else {
             if ($is_certified) {
                 db_query("INSERT INTO `$mysqlMainDb`.oai_record SET
-                    `course_id` = " . intval($courseId) /* TODO: improve/replace */ . ",
-                    `oai_identifier` = " . quote($courseId) . ",
+                    `course_id` = " . intval($courseId) . ",
+                    `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
                     `datestamp` = NOW(),
                     `deleted` = 0,
                     `dc_title` = " . quote(self::serialize($xml->title)) . ",

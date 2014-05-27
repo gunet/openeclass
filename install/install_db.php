@@ -646,7 +646,8 @@ db_query("CREATE TABLE `course_units` (
     `dc_format` text DEFAULT NULL,
     `dc_rights` text DEFAULT NULL,
     `dc_videolectures` text DEFAULT NULL,
-    PRIMARY KEY (`id`)) $charset_spec");
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
  
 // Create full text indexes
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
@@ -660,3 +661,4 @@ db_query('CREATE INDEX `cid` ON course_description (course_id)');
 db_query('CREATE INDEX `cd_type_index` ON course_description (type)');
 db_query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
 db_query('CREATE INDEX `cid` ON oai_record (course_id)');
+db_query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
