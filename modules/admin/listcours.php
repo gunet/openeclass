@@ -97,12 +97,17 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     $depq = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course " . $depwh : '';            
     $depq .= (empty($depq)) ? "WHERE ": "AND ";
-    
-    $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course $depq $query")->total;
-    $filtered_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course $depq $query
-                                                        AND title LIKE $keyword")->total;    
+        
+    $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
+                                                WHERE course.id = course_department.course 
+                                                AND hierarchy.id = course_department.department AND $query")->total;
+    $filtered_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
+                                                WHERE course.id = course_department.course 
+                                                AND hierarchy.id = course_department.department AND $query AND title LIKE $keyword")->total;                                                    
+                                                        
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
+    
     $data['aaData'] = array();
     
     foreach ($sql as $logs) {                            
