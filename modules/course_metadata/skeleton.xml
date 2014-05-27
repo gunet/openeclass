@@ -24,7 +24,8 @@
     <prerequisites lang="en"></prerequisites>
     <literature lang="en"></literature>
     <url></url>
-    <license></license>
+    <license lang="el"></license>
+    <license lang="en"></license>
     <coursePhoto mime=""></coursePhoto>
     <contentDevelopment lang="el"></contentDevelopment>
     <contentDevelopment lang="en"></contentDevelopment>
@@ -64,7 +65,9 @@
     <confirmALevel>false</confirmALevel>
     <confirmAPlusLevel>false</confirmAPlusLevel>
     <lastLevelConfirmation></lastLevelConfirmation>
+    <firstCreateDate></firstCreateDate>
     <confirmVideolectures></confirmVideolectures>
+    <videolectures>0</videolectures>
     <confirmCurriculum></confirmCurriculum>
 
 
@@ -91,7 +94,8 @@
         
     <sector lang="el"></sector>
     <sector lang="en"></sector>
-    <language></language>
+    <language lang="el"></language>
+    <language lang="en"></language>
     <targetGroup lang="el"></targetGroup>
     <targetGroup lang="en"></targetGroup>
     <curriculumTargetGroup lang="el"></curriculumTargetGroup>

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -56,6 +56,7 @@ db_query("DROP TABLE IF EXISTS monthly_summary");
 db_query("DROP TABLE IF EXISTS user_request");
 db_query("DROP TABLE IF EXISTS prof_request");
 db_query("DROP TABLE IF EXISTS user");
+db_query("DROP TABLE IF EXISTS oai_record");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -618,6 +619,35 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  
+ db_query("CREATE TABLE `oai_record` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL UNIQUE,
+    `oai_identifier` varchar(255) DEFAULT NULL,
+    `oai_metadataprefix` varchar(255) DEFAULT 'oai_dc',
+    `oai_set` varchar(255) DEFAULT 'class:course',
+    `datestamp` datetime DEFAULT NULL,
+    `deleted` tinyint(1) NOT NULL DEFAULT 0,
+    `dc_title` text DEFAULT NULL,
+    `dc_description` text DEFAULT NULL,
+    `dc_syllabus` text DEFAULT NULL,
+    `dc_subject` text DEFAULT NULL,
+    `dc_objectives` text DEFAULT NULL,
+    `dc_level` text DEFAULT NULL,
+    `dc_prerequisites` text DEFAULT NULL,
+    `dc_instructor` text DEFAULT NULL,
+    `dc_department` text DEFAULT NULL,
+    `dc_institution` text DEFAULT NULL,
+    `dc_coursephoto` text DEFAULT NULL,
+    `dc_instructorphoto` text DEFAULT NULL,
+    `dc_url` text DEFAULT NULL,
+    `dc_identifier` text DEFAULT NULL,
+    `dc_language` text DEFAULT NULL,
+    `dc_date` datetime DEFAULT NULL,
+    `dc_format` text DEFAULT NULL,
+    `dc_rights` text DEFAULT NULL,
+    `dc_videolectures` text DEFAULT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+ 
 // Create full text indexes
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu`, `title`)");
 db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
@@ -629,3 +659,4 @@ db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,re
 db_query('CREATE INDEX `cid` ON course_description (course_id)');
 db_query('CREATE INDEX `cd_type_index` ON course_description (type)');
 db_query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
+db_query('CREATE INDEX `cid` ON oai_record (course_id)');

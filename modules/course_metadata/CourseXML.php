@@ -727,6 +727,7 @@ class CourseXMLElement extends SimpleXMLElement {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
         }
+        $data['course_videolectures'] = $vnum + $vlnum;
 
         $skeletonXML = simplexml_load_file($skeleton, 'CourseXMLElement');
         $skeletonXML->adapt($data);
@@ -790,21 +791,157 @@ class CourseXMLElement extends SimpleXMLElement {
     public static function refreshCourse($courseId, $courseCode) {
         if (get_config('course_metadata')) {
             $xml = self::init($courseId, $courseCode);
-            self::save($courseCode, $xml);
+            self::save($courseId, $courseCode, $xml);
         }
     }
 
     /**
      * Save the XML structure for a specific course.
      * 
+     * @param int              $courseId
      * @param string           $courseCode
      * @param CourseXMLElement $xml
      */
-    public static function save($courseCode, $xml) {
+    public static function save($courseId, $courseCode, $xml) {
+        global $mysqlMainDb;
+        
         $doc = new DOMDocument('1.0');
         $doc->loadXML($xml->asXML(), LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         $doc->formatOutput = true;
         $doc->save(self::getCourseXMLPath($courseCode));
+        
+        $is_certified = 1;
+        $level = '';
+        if ($xml->confirmAPlusLevel == 'true') {
+            $level = $GLOBALS['langOpenCoursesAPlusLevel'];
+        } else if ($xml->confirmALevel == 'true') {
+            $level = $GLOBALS['langOpenCoursesALevel'];
+        } else if ($xml->confirmAMinusLevel == 'true') {
+            $level = $GLOBALS['langOpenCoursesAMinusLevel'];
+        } else {
+            $is_certified = 0;
+        }
+        $firstCreateDate = null;
+        $ts = strtotime($xml->firstCreateDate);
+        if ($ts > 0) {
+            $firstCreateDate = date('Y-m-d H:i:s', $ts);
+        }
+        
+        // insert or update oai_record
+        $exists = db_query_get_single_value("SELECT 1 FROM `$mysqlMainDb`.oai_record WHERE course_id = " . $courseId);
+        if ($exists) {
+            $deleted = ($is_certified) ? 0 : 1;
+            db_query("UPDATE `$mysqlMainDb`.oai_record SET
+                `oai_identifier` = " . quote($courseId) /* TODO: improve/replace */ . ",
+                `datestamp` = NOW(),
+                `deleted` = " . $deleted . ",
+                `dc_title` = " . quote(self::serialize($xml->title)) . ",
+                `dc_description` = " . quote(self::serialize($xml->description)) . ",
+                `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
+                `dc_subject` = " . quote(self::serialize($xml->thematic)) . ",
+                `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
+                `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
+                `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
+                `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
+                `dc_department` = " . quote(self::serialize($xml->department)) . ",
+                `dc_institution` = " . quote(self::serialize($xml->institution)) . ",
+                `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
+                `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
+                `dc_url` = " . quote($xml->url) . ",
+                `dc_language` = " . quote(self::serialize($xml->language)) . ",
+                `dc_date` = " . quote($firstCreateDate) . ",
+                `dc_format` = " . quote($level) . ",
+                `dc_rights` = " . quote(self::serialize($xml->license)) . ",
+                `dc_videolectures` = " . quote($xml->videolectures) . "
+                WHERE course_id = " . intval($courseId));
+        } else {
+            if ($is_certified) {
+                db_query("INSERT INTO `$mysqlMainDb`.oai_record SET
+                    `course_id` = " . intval($courseId) /* TODO: improve/replace */ . ",
+                    `oai_identifier` = " . quote($courseId) . ",
+                    `datestamp` = NOW(),
+                    `deleted` = 0,
+                    `dc_title` = " . quote(self::serialize($xml->title)) . ",
+                    `dc_description` = " . quote(self::serialize($xml->description)) . ",
+                    `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
+                    `dc_subject` = " . quote(self::serialize($xml->thematic)) . ",
+                    `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
+                    `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
+                    `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
+                    `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
+                    `dc_department` = " . quote(self::serialize($xml->department)) . ",
+                    `dc_institution` = " . quote(self::serialize($xml->institution)) . ",
+                    `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
+                    `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
+                    `dc_url` = " . quote($xml->url) . ",
+                    `dc_language` = " . quote(self::serialize($xml->language)) . ",
+                    `dc_date` = " . quote($firstCreateDate) . ",
+                    `dc_format` = " . quote($level) . ",
+                    `dc_rights` = " . quote(self::serialize($xml->license)) . ",
+                    `dc_videolectures` = " . quote($xml->videolectures));
+            }
+        }
+    }
+    
+    /**
+     * Serialize a XML element.
+     * 
+     * @param CourseXMLElement $ele
+     * return string
+     */
+    public static function serialize($ele) {
+        if (count($ele) == 1) {
+            return (string) $ele;
+        } else if (count($ele) > 1) {
+            $arr = array();
+            foreach ($ele as $innerele) {
+                $lang = $innerele->getAttribute('lang');
+                if ($lang !== false) {
+                    $arr[(string) $lang] = (string) $innerele;
+                } else {
+                    $arr[] = (string) $innerele;
+                }
+            }
+            return serialize($arr);
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Turn a non-multiLang field into multiLang.
+     * 
+     * @global string $currentCourseLanguage
+     * @global string $webDir
+     * @global string $siteName
+     * @global string $Institution
+     * @global string $InstitutionUrl
+     * @param  CourseXMLElement $ele
+     * @return array
+     */
+    public static function makeMultiLang($ele) {
+        global $currentCourseLanguage, $webDir, $siteName, $Institution, $InstitutionUrl;
+        $clang = langname_to_code($currentCourseLanguage);
+        $arr = array();
+        $arr[$clang] = $GLOBALS['langCMeta'][(string) $ele];
+        $revert = false;
+        if ($clang != 'en') {
+            include("${webDir}modules/lang/english/common.inc.php");
+            include("${webDir}modules/lang/english/messages.inc.php");
+            $arr['en'] = $langCMeta[(string) $ele];
+            $revert = true;
+        }
+        if ($clang != 'el') {
+            include("${webDir}modules/lang/greek/common.inc.php");
+            include("${webDir}modules/lang/greek/messages.inc.php");
+            $arr['en'] = $langCMeta[(string) $ele];
+            $revert = true;
+        }
+        if ($revert) { // revert messages back to current language
+            include("${webDir}modules/lang/" . $currentCourseLanguage . "/common.inc.php");
+            include("${webDir}modules/lang/" . $currentCourseLanguage . "/messages.inc.php");
+        }
+        return serialize($arr);
     }
 
     /**
@@ -815,7 +952,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer, $mysqlMainDb, $license;
+        global $urlServer, $mysqlMainDb, $license, $webDir, $siteName, $Institution, $InstitutionUrl;
         $data = array();
 
         $res1 = db_query("SELECT * FROM `$mysqlMainDb`.cours WHERE cours_id = " . intval($courseId));
@@ -824,16 +961,83 @@ class CourseXMLElement extends SimpleXMLElement {
             return array();
         }
 
+        // course language
         $clang = langname_to_code($course['languageCourse']);
-        $data['course_language'] = $clang;
+        $data['course_language_' . $clang] = $GLOBALS['langNameOfLang'][$course['languageCourse']];
+        if ($clang != 'en') {
+            $data['course_language_en'] = ucfirst($course['languageCourse']);
+        }
+        if ($clang != 'el') {
+            include("${webDir}modules/lang/greek/common.inc.php");
+            include("${webDir}modules/lang/greek/messages.inc.php");
+            $data['course_language_el'] = $GLOBALS['langNameOfLang'][$course['languageCourse']];
+            // revert messages back to current language
+            include("${webDir}modules/lang/" . $course['languageCourse'] . "/common.inc.php");
+            include("${webDir}modules/lang/" . $course['languageCourse'] . "/messages.inc.php");
+        }
+        
         $data['course_url'] = $urlServer . 'courses/' . $course['code'];
-        $data['course_instructor_fullName_' . $clang] = $course['titulaires'];
+        $data['course_instructor_fullName_' . $clang] = $course['titulaires']; // TODO: multiplicity
         $data['course_title_' . $clang] = $course['intitule'];
         $data['course_keywords_' . $clang] = $course['course_keywords'];
+        
+        // course license
         if ($course['course_license']) {
-            $data['course_license'] = $license[$course['course_license']]['title'];
+            $data['course_license_' . $clang] = $license[$course['course_license']]['title'];
+            $revert = false;
+            if ($clang != 'en') {
+                include("${webDir}modules/lang/english/common.inc.php");
+                include("${webDir}modules/lang/english/messages.inc.php");
+                include("${webDir}include/license_info.php");
+                $data['course_license_en'] = $license[$course['course_license']]['title'];
+                $revert = true;
+            }
+            if ($clang != 'el') {
+                include("${webDir}modules/lang/greek/common.inc.php");
+                include("${webDir}modules/lang/greek/messages.inc.php");
+                include("${webDir}include/license_info.php");
+                $data['course_license_el'] = $license[$course['course_license']]['title'];
+                $revert = true;
+            }
+            if ($revert) { // revert messages back to current language
+                include("${webDir}modules/lang/" . $course['languageCourse'] . "/common.inc.php");
+                include("${webDir}modules/lang/" . $course['languageCourse'] . "/messages.inc.php");
+                include("${webDir}include/license_info.php");
+            }
         } else {
-            $data['course_license'] = '';
+            $data['course_license_' . $clang] = '';
+            if ($clang != 'en') {
+                $data['course_license_en'] = '';
+            }
+            if ($clang != 'el') {
+                $data['course_license_el'] = '';
+            }
+        }
+        
+        // first creation date
+        $ts = strtotime($course['first_create']);
+        if ($ts > 0) {
+            $data['course_firstCreateDate'] = date("Y-m-d\TH:i:sP", $ts);
+        }
+        
+        // course review data
+        $res2 = db_query("SELECT * FROM `$mysqlMainDb`.course_review WHERE course_id = " . intval($courseId));
+        $review = mysql_fetch_assoc($res2);
+        if ($review !== false) {
+            $ts = strtotime($review['last_review']);
+            if ($ts > 0) {
+                $data['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP", $ts);
+            }
+            $level = intval($review['level']);
+            if ($level >= self::A_MINUS_LEVEL) {
+                $data['course_confirmAMinusLevel'] = 'true';
+            }
+            if ($level >= self::A_LEVEL) {
+                $data['course_confirmALevel'] = 'true';
+            }
+            if ($level >= self::A_PLUS_LEVEL) {
+                $data['course_confirmAPlusLevel'] = 'true';
+            }
         }
 
         // course description types
@@ -865,12 +1069,12 @@ class CourseXMLElement extends SimpleXMLElement {
         }
 
         // turn visible units to associative array
-        $res2 = db_query("SELECT id, title, comments
+        $res3 = db_query("SELECT id, title, comments
                            FROM `$mysqlMainDb`.course_units
                           WHERE visibility = 'v'
                             AND course_id = " . intval($courseId));
         $unitsCount = 0;
-        while ($row = mysql_fetch_assoc($res2)) {
+        while ($row = mysql_fetch_assoc($res3)) {
             $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
             $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($row['comments']);
             $unitsCount++; // also serves as array index, starting from 0
@@ -998,7 +1202,7 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_unit_material_multimedia_url', 'course_unit_material_other',
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
         'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
-        'course_lastLevelConfirmation'
+        'course_lastLevelConfirmation', 'course_firstCreateDate', 'course_videolectures'
     );
 
     /**

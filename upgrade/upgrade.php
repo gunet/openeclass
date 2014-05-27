@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.9
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -735,6 +735,39 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                         `order` = " . intval($ures['order']) . ",
                         update_dt = " . quote($ures['date']));
                 }
+            }
+            
+            if (!mysql_table_exists($mysqlMainDb, 'oai_record')) {
+                db_query("CREATE TABLE `oai_record` (
+                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                    `course_id` int(11) NOT NULL UNIQUE,
+                    `oai_identifier` varchar(255) DEFAULT NULL,
+                    `oai_metadataprefix` varchar(255) DEFAULT 'oai_dc',
+                    `oai_set` varchar(255) DEFAULT 'class:course',
+                    `datestamp` datetime DEFAULT NULL,
+                    `deleted` tinyint(1) NOT NULL DEFAULT 0,
+                    `dc_title` text DEFAULT NULL,
+                    `dc_description` text DEFAULT NULL,
+                    `dc_syllabus` text DEFAULT NULL,
+                    `dc_subject` text DEFAULT NULL,
+                    `dc_objectives` text DEFAULT NULL,
+                    `dc_level` text DEFAULT NULL,
+                    `dc_prerequisites` text DEFAULT NULL,
+                    `dc_instructor` text DEFAULT NULL,
+                    `dc_department` text DEFAULT NULL,
+                    `dc_institution` text DEFAULT NULL,
+                    `dc_coursephoto` text DEFAULT NULL,
+                    `dc_instructorphoto` text DEFAULT NULL,
+                    `dc_url` text DEFAULT NULL,
+                    `dc_identifier` text DEFAULT NULL,
+                    `dc_language` text DEFAULT NULL,
+                    `dc_date` datetime DEFAULT NULL,
+                    `dc_format` text DEFAULT NULL,
+                    `dc_rights` text DEFAULT NULL,
+                    `dc_videolectures` text DEFAULT NULL,
+                    PRIMARY KEY (`id`)) $charset_spec");
+                
+                db_query('CREATE INDEX `cid` ON oai_record (course_id)');
             }
         }
         
