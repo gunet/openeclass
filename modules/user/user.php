@@ -249,22 +249,6 @@ $head_content .= "
         });
         </script>";
 
-$sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
-	WHERE cours_user.cours_id = $cours_id AND cours_user.user_id = user.user_id";
-$result_numb = db_query($sql, $mysqlMainDb);
-$countUser = mysql_num_rows($result_numb);
-
-$teachers = $students = $visitors = 0;
-
-while ($numrows = mysql_fetch_array($result_numb)) {
-	switch ($numrows['statut']) {
-		case 1:	 $teachers++; break;
-		case 5:	 $students++; break;
-		case 10: $visitors++; break;
-		default: break;
-	}
-}
-
 $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
@@ -334,8 +318,7 @@ $tool_content .= "
 
 // display number of users
 $tool_content .= "
-<div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langUsers &nbsp;($teachers $langTeachers, $students $langStudents, $visitors $langVisitors)</em></span><br />
-  <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$code_cours'>$langcsvenc2</a>
+<div class='info'><b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$code_cours'>$langcsvenc2</a>
        2. <a href='dumpuser.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
   </div>";
 

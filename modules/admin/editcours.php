@@ -61,7 +61,7 @@ if(!isset($c)) {
 // Define $nameTools
 $nameTools = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 
 // Initialize some variables
 $searchurl = '';

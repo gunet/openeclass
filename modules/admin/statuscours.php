@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,30 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-/*===========================================================================
-	statuscours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Edit status of a course
-
- 	This script allows the administrator to edit the status of a selected
- 	course
-
- 	The user can : - Edit the status of a course
-                 - Return to edit course list
-
- 	@Comments: The script is organised in four sections.
-
-  1) Get course status information
-  2) Edit that information
-  3) Update course status
-  4) Display all on an HTML page
-
-==============================================================================*/
+/**
+ * @file statuscours.php
+ * @brief Edit status of a course
+ */
 
 $require_power_user = true;
 include '../../include/baseTheme.php';
@@ -51,7 +31,7 @@ if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseStatus;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
+$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 
 // Update course status

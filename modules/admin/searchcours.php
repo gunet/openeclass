@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,34 +20,9 @@
 
 /**
 *       @file searchcours.php
-*	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-*		       Pitsiougas Vagelis <vagpits@uom.gr>
 *       @brief: This script allows the administrator to perform a search on courses by
 * 	title, code, type and faculte
 */
-
-/*===========================================================================
-	searchcours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: A form to perform search for courses
-
- 	This script allows the administrator to perform a search on courses by
- 	title, code, type and faculte
-
- 	The user can : - Fill the search form
- 	               - Submit the search
-                 - Return to course list
-
- 	@Comments: The script is organised in three sections.
-
-  1) Perform a search
-  2) Start a new search
-  3) Display all on an HTML page
-
-==============================================================================*/
 
 $require_power_user = true;
 // Include baseTheme
@@ -77,7 +52,7 @@ if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
 $reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
 
 // search form
-$tool_content .= "<form action='listcours.php?search=yes' method='post'>
+$tool_content .= "<form action='listcours.php?search=yes' method='get'>
     <fieldset>
       <legend>".$langSearchCriteria." ".@$newsearch."</legend>
       <table width='100%' class='tbl'>
@@ -158,7 +133,7 @@ $tool_content .= "</select></td></tr>";
 $tool_content .= "
       <tr>
         <th>&nbsp;</th>
-        <td class='right'><input type='submit' name='search_submit' value='".q($langSearch)."'></td>
+        <td class='right'><input type='submit' name='search' value='".q($langSearch)."'></td>
       </tr>";
 $tool_content .= "</table></fieldset></form>";
 

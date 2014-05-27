@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,29 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-	infocours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Edit basic information of a course
-
- 	This script allows the administrator to edit the basic information of a
- 	selected course
-
- 	The user can : - Edit the basic information of a course
-                 - Return to edit course list
-
- 	@Comments: The script is organised in four sections.
-
-  1) Gather basic course information
-  2) Edit that information
-  3) Update course
-  4) Display all on an HTML page
-
-==============================================================================*/
+/**
+ * @file infocours.php
+ * @brief Edit basic information of a course
+ */
 
 $require_power_user = true;
 // Include baseTheme
@@ -49,7 +30,7 @@ if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
