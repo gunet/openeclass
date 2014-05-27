@@ -340,7 +340,13 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
     flush();
 
-    db_query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");    
+    db_query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
+    
+    // refresh XML metadata
+    require_once('../modules/course_metadata/CourseXML.php');
+    if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
+        CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
+    }
 }
 
 function upgrade_course_2_9($code, $lang, $extramessage = '') {
