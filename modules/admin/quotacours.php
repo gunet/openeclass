@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,30 +18,11 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-/* ===========================================================================
-  quotacours.php
-  @last update: 31-05-2006 by Pitsiougas Vagelis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Edit quota of a course
-
-  This script allows the administrator to edit the quota of a selected
-  course
-
-  The user can : - Edit the quota of a course
-  - Return to edit course list
-
-  @Comments: The script is organised in four sections.
-
-  1) Get course quota information
-  2) Edit that information
-  3) Update course quota
-  4) Display all on an HTML page
-
-  ============================================================================== */
-
+/**
+ * @file quotacours.php
+ * @brief Edit course quota
+ */
+  
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -65,7 +46,7 @@ validateCourseNodes($cId, isDepartmentAdmin());
 
 $nameTools = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
 // Initialize some variables
@@ -79,8 +60,8 @@ if (isset($_POST['submit'])) {
     $gq = $_POST['gq'] * MB;
     $drq = $_POST['drq'] * MB;
     // Update query
-    $sql = Database::get()->query("UPDATE course SET doc_quota=%f, video_quota=?f, group_quota=?f, dropbox_quota=?f
-			WHERE code = %s", $dq, $vq, $gq, $drq, $_GET['c']);
+    $sql = Database::get()->query("UPDATE course SET doc_quota=?f, video_quota=?f, group_quota=?f, dropbox_quota=?f
+			WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
         $tool_content .= "<p>" . $langQuotaSuccess . "</p>";
@@ -120,11 +101,10 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-    $tool_content .= "<p align=\"right\"><a href='editcours.php?c=" . htmlspecialchars($_GET['c']) . "'>" . $langBack . "</a></p>";
+    $tool_content .= "<p align='right'><a href='editcours.php?c=" . htmlspecialchars($_GET['c']) . "'>" . $langBack . "</a></p>";
 }
 // Else go back to index.php directly
 else {
-    $tool_content .= "<p align=\"right\"><a href=\"index.php\">" . $langBackAdmin . "</a></p>";
+    $tool_content .= "<p align='right'><a href='index.php'>" . $langBackAdmin . "</a></p>";
 }
-
 draw($tool_content, 3);

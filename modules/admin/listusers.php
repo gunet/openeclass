@@ -334,6 +334,7 @@ $head_content .= "<script type='text/javascript'>
                        }
                    }
             });
+            $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
 

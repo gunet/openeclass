@@ -438,8 +438,8 @@ function adminMenu() {
         $arrMenuType['class'] = 'course_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
-        array_push($sideMenuText, $GLOBALS['langListCours']);
-        array_push($sideMenuLink, "../admin/listcours.php");
+        array_push($sideMenuText, $GLOBALS['langSearchCourse']);
+        array_push($sideMenuLink, "../admin/searchcours.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
         array_push($sideMenuLink, "../course_info/restore_course.php");
