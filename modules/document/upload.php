@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,7 +28,8 @@ if (!defined('COMMON_DOCUMENTS')) {
         $require_login = true;
 }
 
-include "../../include/baseTheme.php";
+require_once "../../include/baseTheme.php";
+require_once "doc_init.php";
 
 if (isset($_GET['uploadPath'])) {
         $uploadPath = q($_GET['uploadPath']);
@@ -36,39 +37,8 @@ if (isset($_GET['uploadPath'])) {
         $uploadPath = '';
 }
 
-$can_upload = $is_editor || $is_admin;
-if (defined('GROUP_DOCUMENTS')) {
-        include '../group/group_functions.php';
-        initialize_group_id();
-        initialize_group_info($group_id);
-	$can_upload = $can_upload || $is_member;
-        $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $langGroups);
-        $navigation[] = array ('url' => 'group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id, 'name' => q($group_name));
-	$navigation[] = array ('url' => "document.php?course=$code_cours&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
-} elseif (defined('EBOOK_DOCUMENTS')) {
-	if (isset($_REQUEST['ebook_id'])) {    
-            $ebook_id = intval($_REQUEST['ebook_id']);
-        }
-	$subsystem = EBOOK;
-        $subsystem_id = $ebook_id;
-        $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
-        $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-}elseif (defined('COMMON_DOCUMENTS')) {        
-        $subsystem = COMMON;
-        $subsystem_id = 'NULL';
-        $groupset = '';
-        $group_sql = "course_id = -1 AND subsystem = $subsystem";
-        $group_hidden_input = '';
-        $basedir = $webDir . '/courses/commondocs';                
-        $navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
-        $navigation[] = array ('url' => 'commondocs.php', 'name' => $langCommonDocs);
-        $cours_id = -1;
-        $code_cours = '';        
-} else {
-	$navigation[] = array ('url' => "document.php?course=$code_cours&amp;openDir=$uploadPath", 'name' => $langDoc);
-        $group_hidden_input = '';
-}
+$action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
+$navigation[] = array ('url' => "$action.php?$groupset&amp;openDir=$uploadPath", 'name' => $nameTools);
 
 if ($can_upload) {
     if (isset($_GET['ext'])) {

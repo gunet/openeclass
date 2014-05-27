@@ -795,6 +795,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                                 `description` TEXT NOT NULL,
                                 `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
         }
+        if (!mysql_field_exists($mysqlMainDb, 'document', 'editable')) {
+            db_query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
+                                             ADD lock_user_id INT(11) NOT NULL DEFAULT 0");
+        }
+
 
 	mysql_index_exists('document', 'doc_path_index') or
                 db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');

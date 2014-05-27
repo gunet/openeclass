@@ -496,6 +496,8 @@ $langCleanup = 'Εκκαθάριση';
 
 // common documents
 $langCommonDocs = "Κοινόχρηστα Αρχεία";
+$langCommonDocLink = "Κοινόχρηστο αρχείο";
+$langCommonDocLinkInvisible = "Αόρατο κοινόχρηστο αρχείο";
 $langExplainCommonDocs = "Το αρχείο που θα ανεβάσετε θα είναι προσβάσιμο από όλα τα μαθήματα μέσω του υποσυστήματος 'Εγγραφα'";
 $langExternalFile = "Σύνδεση εξωτερικού αρχείου";
 $langExternalFileInfo = "Διεύθυνση (URL) εξωτερικού αρχείου";
@@ -950,6 +952,8 @@ $langUpload = "Αποστολή αρχείου";
 $langDownloadFile= "Ανέβασμα αρχείου στον εξυπηρέτη";
 $langPathUploadFile= "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir="Δημιουργία καταλόγου";
+$langCreateDoc='Δημιουργία εγγράφου';
+$langEditDoc='Επεξεργασία εγγράφου';
 $langName="Όνομα";
 $langNameDir="Όνομα νέου καταλόγου";
 $langSize="Μέγεθος";

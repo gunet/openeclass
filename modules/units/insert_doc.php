@@ -57,10 +57,12 @@ function list_docs()
 
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                $fullpath = $basedir . $row['path'];
+                $size = file_exists($fullpath)? filesize($fullpath): 0;
                 $fileinfo[] = array(
                         'id' => $row['id'],
-                        'is_dir' => is_dir($basedir . $row['path']),
-                        'size' => filesize($basedir . $row['path']),
+                        'is_dir' => is_dir($fullpath),
+                        'size' => $size,
                         'title' => $row['title'],
                         'name' => htmlspecialchars($row['filename']),
                         'format' => $row['format'],

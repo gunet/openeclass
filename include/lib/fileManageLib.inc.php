@@ -510,7 +510,7 @@ function common_doc_path($extra_path, $full=false)
                 $q = db_query("SELECT visibility FROM document
                                       WHERE path = " . quote($cpath) . " AND
                                             subsystem = " . COMMON);
-                if ($q and list($vis) = mysql_fetch_row($q) and $vis) {
+                if ($q and list($vis) = mysql_fetch_row($q) and ($vis === 'v')) {
                         $common_doc_visible = true;
                 } else {
                         $common_doc_visible = false;

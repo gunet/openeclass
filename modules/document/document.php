@@ -184,12 +184,6 @@ if (isset($_GET['showQuota'])) {
 	exit;
 }
 
-if ($subsystem == EBOOK) {
-	$nameTools = $langFileAdmin;
-	$navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
-        $navigation[] = array('url' => 'edit.php?course='.$code_cours.'&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-}
-
 // ---------------------------
 // download directory or file
 // ---------------------------
@@ -257,6 +251,11 @@ if ($can_upload) {
 	***********************************************************************/
 
 	$action_message = $dialogBox = '';
+    if (isset($_POST['uploadPath'])) {
+        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
+    } else {
+        $uploadPath = '';
+    }
 	if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 	    validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
                 $userFile = $_FILES['userFile']['tmp_name'];
@@ -265,8 +264,6 @@ if ($can_upload) {
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
 			$action_message .= "<p class='caution'>$langNoSpace</p>";
 		} else {
-                        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
-
                         if (unwanted_file($_FILES['userFile']['name'])) {
                                 $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
                                                    q($_FILES['userFile']['name']) . "</p>";
@@ -361,7 +358,6 @@ if ($can_upload) {
                         }
                 }
     } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
-        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
         $extra_path = canonicalize_url($fileURL);
         if (preg_match('/^javascript/', $extra_path)) {
             $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
@@ -394,6 +390,62 @@ if ($can_upload) {
             format = " . autoquote($file_format) . ",
             language = " . autoquote($_POST['file_language']) . ",
             copyrighted = " . intval($_POST['file_copyrighted']));
+    } elseif (isset($_POST['file_content'])) {
+        $q = false;
+        if (isset($_POST['editPath'])) {
+            $fileInfo = db_query_get_single_row("SELECT * FROM document
+                            WHERE $group_sql AND path = " . quote($_POST['editPath']));
+            $file_name = $fileInfo['filename'];
+            $file_path = $fileInfo['path'];
+            if ($fileInfo['editable']) {
+                $q = db_query("UPDATE document
+                                    SET date_modified = NOW(),
+                                        title = " . autoquote($_POST['file_title']) . "
+                                    WHERE $group_sql AND
+                                          path = " . autoquote($_POST['editPath']));
+            }
+        } else {
+            $fileName = $_POST['file_name'];
+            if (!preg_match('/\.html?$/i', $fileName)) {
+                $fileName .= '.html';
+            }
+            $safe_fileName = safe_filename(get_file_extension($fileName));
+            $file_path = $uploadPath . '/' . $safe_fileName;
+            $file_date = date("Y\-m\-d G\:i\:s");
+            $file_format = get_file_extension($fileName);
+            $file_creator = quote("$_SESSION[prenom] $_SESSION[nom]");
+            $q = db_query("INSERT INTO document SET
+                    course_id = $cours_id,
+                    subsystem = $subsystem,
+                    subsystem_id = $subsystem_id,
+                    path = " . quote($file_path) . ",
+                    extra_path = '',
+                    filename = " . autoquote($fileName) . ",
+                    visibility = 'v',
+                    comment = '',
+                    category = 0,
+                    title = " . autoquote($_POST['file_title']) . ",
+                    creator = $file_creator,
+                    date = '$file_date',
+                    date_modified = '$file_date',
+                    subject = '',
+                    description = '',
+                    author = $file_creator,
+                    format = " . quote($file_format) . ",
+                    language = " . quote(langname_to_code($language)) . ",
+                    copyrighted = 0,
+                    editable = 1");
+            $file_name = $_POST['file_name'];
+        }
+        if ($q) {
+            $title = $_POST['file_title']? $_POST['file_title']: $file_name;
+            file_put_contents($basedir . $file_path,
+                '<!DOCTYPE html><head><meta charset="utf-8">' .
+                '<title>' . q($title) . '</title><body>' .
+                purify($_POST['file_content']) .
+                "</body></html>\n");
+        }
+        $curDirPath = dirname($file_path);
     }
 
 
@@ -860,6 +912,7 @@ if ($can_upload) {
 // define current directory
 
 
+if (!isset($curDirPath)) {
 $curDirPath =
         pathvar($_GET['openDir'], false) .
         pathvar($_GET['createDir'], false) .
@@ -879,6 +932,7 @@ $curDirPath =
         pathvar($_POST['replacePath'], true) .
         pathvar($_POST['commentPath'], true) .
         pathvar($_POST['metadataPath'], true);
+}
 
 if ($curDirPath == '/' or $curDirPath == '\\') {
         $curDirPath = '';
@@ -924,8 +978,12 @@ $result = db_query("SELECT * FROM document
 				path NOT LIKE '$curDirPath/%/%' $filter $order");
 
 $fileinfo = array();
-while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         if ($real_path = common_doc_path($row['extra_path'], true)) {
+                // hide links to invisible common docs to non-admins
+                if (!$common_doc_visible and !$is_admin) {
+                        continue;
+                }
                 // common docs
                 $path = $real_path;
         } else {
@@ -935,7 +993,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 // external file
                 $size = 0;
         } else {
-                $size = filesize($path);
+                $size = file_exists($path)? filesize($path): 0;
         }
         $fileinfo[] = array(
                 'is_dir' => ($row['format'] == '.dir'),
@@ -950,7 +1008,8 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
                 'date' => $row['date_modified'],
-                'object' => MediaResourceFactory::initFromDocument($row) );
+                'object' => MediaResourceFactory::initFromDocument($row),
+                'editable' => $row['editable']);
 }
 // end of common to teachers and students
 
@@ -973,7 +1032,8 @@ if($can_upload) {
             $tool_content .= "<div id='operations_container'><ul id='opslist'>";
             $tool_content .= "<li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
             $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
-                       <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
+                <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>
+                <li><a href='new.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langCreateDoc</a></li>\n";
             if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
                     $tool_content .= "<li><a href='../units/insert.php?course=$code_cours&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             }
@@ -1069,9 +1129,15 @@ if ($doc_count == 0) {
                                 if ($entry['extra_path']) {
                                         $cdpath = common_doc_path($entry['extra_path']);
                                         if ($cdpath) {
-                                                if ($is_editor) {
-                                                        $link_title_extra .= '&nbsp;' .
-                                                                $common_doc_visible? 'common': 'common_invisible';
+                                                if ($can_upload) {
+                                                        if ($common_doc_visible) {
+                                                                $link_title_extra .= '&nbsp;' .
+                                                                    icon('common', $langCommonDocLink);
+                                                        } else {
+                                                                $link_title_extra .= '&nbsp;' .
+                                                                    icon('common_invisible', $langCommonDocLinkInvisible);
+                                                                $style = ' class="invisible"';
+                                                        }
                                                 }
                                         } else {
                                                 // External file URL
@@ -1081,6 +1147,12 @@ if ($doc_count == 0) {
                                                         icon('external_link', $langExternalFileLink);
                                                 }
                                         }
+                                }
+                                if ($can_upload and $entry['editable']) {
+                                    $edit_url = "new.php?course=$code_cours&amp;editPath=$entry[path]" .
+                                        ($groupset? "&amp;$groupset": '');
+                                    $link_title_extra .= '&nbsp;' .
+                                        icon('edit', $langEdit, $edit_url);
                                 }
                                 if ($copyid = $entry['copyrighted'] and
                                     $copyicon = $copyright_icons[$copyid]) {
