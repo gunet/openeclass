@@ -692,9 +692,12 @@ if (!class_exists('Exercise')):
          */
         function purge() {
             $id = $this->id;
-
-            $sql = "DELETE FROM exercise_user_record WHERE eid = $id";
-            db_query($sql);
+            $eurids = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d",$id);           
+            $sql_where_in = implode(', ', array_map(function($e) {
+                return $e->eurid;
+            }, $eurids));                    
+            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN (?s)", $sql_where_in);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
 
     }
