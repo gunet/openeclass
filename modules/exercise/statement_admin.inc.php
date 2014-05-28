@@ -194,7 +194,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if ($answerType == 6) {
         $tool_content .= 'checked="checked"';
     }
-    $tool_content .= "> " . 'Ελεύθερου Κειμένου </td></tr>';    
+    $tool_content .= "> " . $langFreeText .'</td></tr>';    
     
     $tool_content .= "
         <tr".(($answerType != 6) ? " style='display:none'": "").">

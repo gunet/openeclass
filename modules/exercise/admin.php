@@ -41,7 +41,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langE
 // picture path
 $picturePath = "courses/$course_code/image";
 // the 4 types of answers
-$aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, 'Ελεύθερου Κειμένου');
+$aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, $langFreeText);
 
 // tables used in the exercise tool
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';

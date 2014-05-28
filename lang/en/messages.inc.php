@@ -2693,6 +2693,7 @@ $langReplaceFile = "Replace %s with";
 $langReplaceOK = "File replaced successfully";
 $langDownloadDir = "Download directory";
 $langTrueFalse = "True / False";
+$langFreeText = "Free Text";
 $langFalse = "False";
 $langInvalidPicture = "Invalide picture type";
 $langImportExercise = "Import Exercise";
