@@ -40,13 +40,13 @@ if ($is_editor) {
 
     foreach ($result as $row) {
         $sid = $row->uid;
-        $surname = uid_to_surname($sid,'surname');
+        $surname = uid_to_name($sid,'surname');
         $name = uid_to_name($sid,'givenname');
 
         $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
 			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
 			total_score, total_weighting
-			FROM `exercise_user_record` WHERE uid = ? AND eid = ?", $sid, $exerciseId);
+			FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
         
         foreach ($result2 as $row2) {
             $output .= csv_escape($surname) . "\t";
