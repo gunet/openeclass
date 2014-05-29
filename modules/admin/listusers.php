@@ -275,30 +275,31 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                 ],
                 'sPaginationType': 'full_numbers',
-                    'aoColumns': [
-                        null,
-                        null,
-                        null,
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                    ],
-                    'oLanguage': {                       
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                       'sInfoFiltered': '',
-                       'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
-                       'sUrl':          '',
-                       'oPaginate': {
-                           'sFirst':    '&laquo;',
-                           'sPrevious': '&lsaquo;',
-                           'sNext':     '&rsaquo;',
-                           'sLast':     '&raquo;'
-                       }
+                'bAutoWidth': false,
+                'aoColumns': [
+                    {'bSortable' : true, 'sWidth': '25%' },
+                    null,
+                    {'bSortable' : true, 'sWidth': '25%' },
+                    {'bSortable' : false, 'sWidth': '30%' },
+                    {'bSortable' : false, 'sClass': 'center' },
+                    {'bSortable' : false, 'sWidth': '30%' },
+                ],
+                'oLanguage': {                       
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '".$langNoResult."',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '".$langSearch."',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
                    }
+               }
             }).fnSetFilteringDelay(1000);
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
