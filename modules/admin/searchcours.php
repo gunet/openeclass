@@ -61,7 +61,7 @@ if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 
 // search form
-$tool_content .= "<form action='listcours.php?search=yes' method='post'>
+$tool_content .= "<form action='listcours.php?search=yes' method='get'>
     <fieldset>
       <legend>" . $langSearchCriteria . " " . @$newsearch . "</legend>
       <table width='100%' class='tbl'>

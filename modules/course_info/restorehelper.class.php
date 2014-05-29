@@ -197,6 +197,9 @@ class RestoreHelper {
                 return 0;
             }
         };
+        $to_int = function($value) {
+            return intval($value);
+        };
         // syntax is: [new table][old field]
         $this->values[self::STYLE_2X]['announcement']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['document']['visibility'] = $visibility;
@@ -205,6 +208,7 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['agenda']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['course_units']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
+        $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
     }
 
 }

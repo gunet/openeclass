@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -53,6 +53,14 @@ if (isset($_REQUEST['edit_submit'])) {
 }
 
 $form = process_actions();
+
+// check if we are trying to access a protected resource directly
+$access = db_query_get_single_value("SELECT public FROM course_units WHERE id = $id");
+if (!resource_access(1, $access)) {
+    $tool_content .= "<p class='caution'>$langForbidden</p>";
+    draw($tool_content, 2, null, $head_content);
+    exit;    
+}
 
 if ($is_editor) {
     $tool_content .= "&nbsp;<div id='operations_container'>
@@ -110,12 +118,20 @@ foreach (array('previous', 'next') as $i) {
         $arrow1 = '';
         $arrow2 = ' »';
     }
-    $q = db_query("SELECT id, title FROM course_units
+    
+    if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+            $access_check = "";
+    } else {
+        $access_check = "AND public = 1";
+    }
+        
+    $q = db_query("SELECT id, title, public FROM course_units
                        WHERE course_id = $course_id
                              AND id <> $id
                              AND `order` $op $info[order]
                              AND `order` >= 0
                              $visibility_check
+                             $access_check
                        ORDER BY `order` $dir
                        LIMIT 1");
     if ($q and mysql_num_rows($q) > 0) {
@@ -144,21 +160,17 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
       <td class="right">' . $link['next'] . "</td>
     </tr>";
 }
-$tool_content .= "
-    <tr>
-      <td colspan='2' class='unit_title'>$nameTools</td>
-    </tr>
-    </table>\n";
+$tool_content .= "<tr><td colspan='2' class='unit_title'>$nameTools</td></tr>
+    </table>";
 
 
 if (!empty($comments)) {
-    $tool_content .= "
-    <table class='tbl' width='99%'>
-    <tr class='even'>
-      <td>$comments</td>
-      $comment_edit_link
-    </tr>
-    </table>";
+    $tool_content .= "<table class='tbl' width='99%'>
+        <tr class='even'>
+          <td>$comments</td>
+          $comment_edit_link
+        </tr>
+        </table>";
 }
 
 show_resources($id);
@@ -173,7 +185,7 @@ $tool_content .="
 $q = db_query("SELECT id, title FROM course_units
                WHERE course_id = $course_id AND `order` > 0
                      $visibility_check
-               ORDER BY `order`", $mysqlMainDb);
+               ORDER BY `order`");
 while ($info = mysql_fetch_array($q)) {
     $selected = ($info['id'] == $id) ? ' selected ' : '';
     $tool_content .= "<option value='$info[id]'$selected>" .

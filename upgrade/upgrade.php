@@ -736,6 +736,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         }
                     }
                 }
+                
+                if ($oldversion < '2.9.1') {
+                       mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
+                        db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
+                }
 
                 if ($oldversion < '3') {
                     // Check whether new tables already exist and delete them if empty, 
@@ -750,7 +755,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department', 'wiki_locks');
+                        'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -1229,11 +1234,43 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
 
+                    // bbb_servers table
+                    db_query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `hostname` varchar(255) DEFAULT NULL,
+                      `ip` varchar(255) NOT NULL,
+                      `enabled` enum("true","false") DEFAULT NULL,
+                      `server_key` varchar(255) DEFAULT NULL,
+                      `api_url` varchar(255) DEFAULT NULL,
+                      `max_rooms` int(11) DEFAULT NULL,
+                      `max_users` int(11) DEFAULT NULL,
+                      `enable_recordings` enum("yes","no") DEFAULT NULL,
+                      PRIMARY KEY (`id`),
+                      KEY `idx_bbb_servers` (`hostname`)');
+
                     db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
                           `course_id` INT(11) NOT NULL,
                           `value` INT(11) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`setting_id`, `course_id`))");
+
+                    // bbb_sessions tables
+                    db_query('CREATE TABLE IF NOT EXISTS `bbb_session` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `course_id` int(11) DEFAULT NULL,
+                      `title` varchar(255) DEFAULT NULL,
+                      `description` text,
+                      `start_date` datetime DEFAULT NULL,
+                      `public` enum("0","1") DEFAULT NULL,
+                      `active` enum("0","1") DEFAULT NULL,
+                      `running_at` int(11) DEFAULT NULL,
+                      `meeting_id` varchar(255) DEFAULT NULL,
+                      `mod_pw` varchar(255) DEFAULT NULL,
+                      `att_pw` varchar(255) DEFAULT NULL,
+                      `unlock_interval` int(11) DEFAULT NULL,
+                      `external_users` varchar(255) DEFAULT NULL
+                      PRIMARY KEY (`id`)
+                    )');
 
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");

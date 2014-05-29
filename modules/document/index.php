@@ -486,7 +486,7 @@ if ($can_upload) {
                         <table class='tbl' width='100%'>
                         <tr>
                                 <th>$langNameDir</th>
-                                <td width='1'><input type='text' name='newDirName' /></td>
+                                <td width='190'><input type='text' name='newDirName' /></td>
                                 <td><input type='submit' value='$langCreateDir' /></td>
                         </tr>
                         </table>

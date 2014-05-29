@@ -355,8 +355,8 @@ $modules = array(
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
-    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance')
-
+    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -445,6 +445,7 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                               course_id = ?d AND
                                 module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                   " . MODULE_ID_ASSIGN . ",
+                                                  " . MODULE_ID_BBB . ",
                                                   " . MODULE_ID_DROPBOX . ",
                                                   " . MODULE_ID_QUESTIONNAIRE . ",
                                                   " . MODULE_ID_FORUM . ",

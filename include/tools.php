@@ -438,8 +438,8 @@ function adminMenu() {
         $arrMenuType['class'] = 'course_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
-        array_push($sideMenuText, $GLOBALS['langListCours']);
-        array_push($sideMenuLink, "../admin/listcours.php");
+        array_push($sideMenuText, $GLOBALS['langSearchCourse']);
+        array_push($sideMenuLink, "../admin/searchcours.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
         array_push($sideMenuLink, "../course_info/restore_course.php");
@@ -522,6 +522,9 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langBBBConfig']);
+        array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langStats']);
         array_push($sideMenuLink, "../admin/stateclass.php");

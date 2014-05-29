@@ -677,6 +677,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     $tool_content .= "</ul><p class='sub_title1'>$langOptionalPHP</p>";
     $tool_content .= "<ul class='installBullet'>";
     warnIfExtNotLoaded("ldap");
+    warnIfExtNotLoaded("curl");
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='caution'>$langWarningInstall1</div>";

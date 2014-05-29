@@ -26,7 +26,7 @@ class CourseXMLElement extends SimpleXMLElement {
     const A_MINUS_LEVEL = 1;
     const A_LEVEL = 2;
     const A_PLUS_LEVEL = 3;
-    
+
     private static $tmpData = array();
 
     /**
@@ -211,7 +211,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldEnd .= "<span class='cmetamandatory'>*</span>";
         }
         $fieldEnd .= "</div>";
-        
+
         // break divs
         if (in_array($fullKey, self::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div>";
@@ -276,10 +276,10 @@ class CourseXMLElement extends SimpleXMLElement {
                 $value = (string) $this;
                 if (!empty($value)) { // image already exists
                     $mime = (string) $this->getAttribute('mime');
-                    $html .= "<img id='" . $fullKey . "_image' src='data:" . q($mime) . ";base64,". q($value) . "'/>
+                    $html .= "<img id='" . $fullKey . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
                               <img id='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
-                              <input id='" . $fullKey . "_hidden' type='hidden' name='". q($fullKey) . $multiplicity . "' value='". q($value) ."'>
-                              <input id='" . $fullKey . "_hidden_mime' type='hidden' name='". q($fullKey) . "_mime" . $multiplicity . "' value='". q($mime) ."'>
+                              <input id='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
+                              <input id='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>
                               </span></div>
                               <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
                 }
@@ -302,18 +302,18 @@ class CourseXMLElement extends SimpleXMLElement {
                                 if ($cnt > 0) {
                                     $html .= "</span></div><div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
                                 }
-                                $html .= "<img id='" . $fullKey . $cnt . "_image' src='data:". q($mime) . ";base64," . q($value) ."'/>
+                                $html .= "<img id='" . $fullKey . $cnt . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
                                           <a id='" . $fullKey . $cnt . "_delete' href='javascript:photoDelete(\"#" . $fullKey . $cnt . "\");'>
                                           <img src='" . $GLOBALS['themeimg'] . "/delete.png'/></a>
-                                          <input id='" . $fullKey . $cnt . "_hidden' type='hidden' name='". q($fullKey) . $multiplicity . "' value='". q($value) ."'>
-                                          <input id='" . $fullKey . $cnt . "_hidden_mime' type='hidden' name='". q($fullKey) . "_mime" . $multiplicity . "' value='". q($mime) ."'>";
+                                          <input id='" . $fullKey . $cnt . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
+                                          <input id='" . $fullKey . $cnt . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>";
                                 $cnt++;
                             }
                         }
                     }
 
                     if ($cnt == 0) {
-                        $html .= "<input type='file' size='30' name='". q($fullKey) . $multiplicity . "'>";
+                        $html .= "<input type='file' size='30' name='" . q($fullKey) . $multiplicity . "'>";
                     }
                     $html .= $fieldEnd;
                     $html .= "</div>"; // close container
@@ -327,10 +327,10 @@ class CourseXMLElement extends SimpleXMLElement {
 
             return $html;
         }
-        
+
         // array fields
         if (in_array($fullKeyNoLang, self::$arrayFields)) {
-            return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."[]' value='". q((string) $this) ."' $readonly>". $fieldEnd;
+            return $fieldStart . "<input type='text' size='55' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
         }
 
         // all others get a typical input type box
@@ -515,7 +515,7 @@ class CourseXMLElement extends SimpleXMLElement {
                             }
                             // mime attribute for mime fields
                             if (in_array($fullKeyNoLang, self::$binaryFields)) {
-                                $parent->{$name}[$i]['mime'] = isset($data[$fullKey .'_mime'][$i]) ? $data[$fullKey .'_mime'][$i] : '';
+                                $parent->{$name}[$i]['mime'] = isset($data[$fullKey . '_mime'][$i]) ? $data[$fullKey . '_mime'][$i] : '';
                             }
                             // store index for locating the proper child at the next iteration
                             $data[$fullKey . '_walked'] = $i;
@@ -554,7 +554,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $ret = array_merge_recursive($data, $extra);
         return $ret;
     }
-    
+
     /**
      * Convert the XML recursively as a flat array (key => value).
      * 
@@ -801,7 +801,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static function save($courseCode, $xml) {
         $doc = new DOMDocument('1.0');
-        $doc->loadXML($xml->asXML(), LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        $doc->loadXML($xml->asXML(), LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         $doc->formatOutput = true;
         $doc->save(self::getCourseXMLPath($courseCode));
     }
@@ -1058,14 +1058,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $valArr = array(
             'course_instructor_photo' => '/n:course/n:instructor'
         );
-        
+
         if (isset($valArr[$field])) {
             return $valArr[$field];
         } else {
             return null;
         }
     }
-    
+
     /**
      * Provide the field name for multiplicity fields. 
      * 
@@ -1076,14 +1076,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $valArr = array(
             'course_instructor_photo' => 'photo'
         );
-        
+
         if (isset($valArr[$field])) {
             return $valArr[$field];
         } else {
             return null;
         }
     }
-    
+
     /**
      * Textarea HTML Form fields.
      * @var array
@@ -1187,7 +1187,7 @@ class CourseXMLElement extends SimpleXMLElement {
     public static $arrayFields = array(
         'course_unit_keywords'
     );
-    
+
     /**
      * Link value for HTML Form labels.
      * 

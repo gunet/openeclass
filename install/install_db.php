@@ -61,6 +61,8 @@ db_query("DROP TABLE IF EXISTS monthly_summary");
 db_query("DROP TABLE IF EXISTS user_request");
 db_query("DROP TABLE IF EXISTS prof_request");
 db_query("DROP TABLE IF EXISTS user");
+db_query("DROP TABLE IF EXISTS bbb_servers");
+db_query("DROP TABLE IF EXISTS bbb_session");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -1113,6 +1115,7 @@ db_query("CREATE TABLE `course_units` (
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
 	`comments` MEDIUMTEXT,
 	`visible` TINYINT(4),
+        `public` TINYINT(4) NOT NULL DEFAULT 1,
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
 
@@ -1161,6 +1164,38 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY (`id`))");
 
+// bbb_servers table
+db_query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hostname` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) NOT NULL,
+  `enabled` enum("true","false") DEFAULT NULL,
+  `server_key` varchar(255) DEFAULT NULL,
+  `api_url` varchar(255) DEFAULT NULL,
+  `max_rooms` int(11) DEFAULT NULL,
+  `max_users` int(11) DEFAULT NULL,
+  `enable_recordings` enum("yes","no") DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_bbb_servers` (`hostname`))');
+    
+// bbb_sessions tables
+db_query('CREATE TABLE IF NOT EXISTS `bbb_session` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text,
+  `start_date` datetime DEFAULT NULL,
+  `public` enum("0","1") DEFAULT NULL,
+  `active` enum("0","1") DEFAULT NULL,
+  `running_at` int(11) DEFAULT NULL,
+  `meeting_id` varchar(255) DEFAULT NULL,
+  `mod_pw` varchar(255) DEFAULT NULL,
+  `att_pw` varchar(255) DEFAULT NULL,
+  `unlock_interval` int(11) DEFAULT NULL,
+  `external_users` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)');
+
 db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
         `setting_id` INT(11) NOT NULL,
         `course_id` INT(11) NOT NULL,
@@ -1192,7 +1227,6 @@ db_query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
         `uid` int(11) NOT NULL DEFAULT 0,
         `grade` FLOAT NOT NULL DEFAULT -1,
         `comments` TEXT NOT NULL) $charset_spec");
-
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');

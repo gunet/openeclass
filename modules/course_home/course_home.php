@@ -142,13 +142,19 @@ if ($is_editor) {
         $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval($_REQUEST['vis']);
-        $sql = db_query("SELECT `visible` FROM course_units WHERE id=$id");
+        $sql = db_query("SELECT `visible` FROM course_units WHERE id = $id");
         list($vis) = mysql_fetch_row($sql);
         $newvis = ($vis == 1) ? 0 : 1;
         db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
         $uidx->store($id, false);
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
+    } elseif (isset($_REQUEST['access'])) {
+        $id = intval($_REQUEST['access']);
+        $sql = db_query("SELECT `public` FROM course_units WHERE id = $id");
+        list($access) = mysql_fetch_row($sql);
+        $newaccess = ($access == '1')? '0': '1';
+        db_query("UPDATE course_units SET public = '$newaccess' WHERE id = $id AND course_id = $course_id");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
         move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
@@ -168,11 +174,11 @@ if ($is_editor) {
     list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $course_id AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1"));
-    $query = "SELECT id, title, comments, visible
+    $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
                   ORDER BY `order`";
 } else {
-    $query = "SELECT id, title, comments, visible
+    $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
@@ -180,39 +186,41 @@ $sql = db_query($query);
 $first = true;
 $count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {
+    // access status
+    $access = $cu['public'];
     // Visibility icon
     $vis = $cu['visible'];
     $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
     $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
     $class_vis = ($vis == 0) ? 'invisible' : '';
-    $cunits_content .= "<table ";
-    if ($is_editor) {
-        $cunits_content .= "class='tbl'";
-    } else {
-        $cunits_content .= "class='tbl'";
-    }
-    $cunits_content .= " width='770'>";
+    $cunits_content .= "<table class='tbl' width='770'>";        
     if ($is_editor) {
         $cunits_content .= "<tr>" .
                 "<th width='25' class='right'>$count_index.</th>" .
                 "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
-    } else {
+    } elseif (resource_access($vis, $access)) {
         $cunits_content .= "<tr>" .
                 "<th width='25' class='right'>$count_index.</th>" .
                 "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
     }
-
     if ($is_editor) { // display actions
-        $cunits_content .= "<th width='70' class='center'>" .
+        $cunits_content .= "<th width='80' class='center'>" .
                 "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu[id]'>" .
                 "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
-                "\n        <a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
+                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
                 "onClick=\"return confirmation('$langConfirmDelete');\">" .
                 "<img src='$themeimg/delete.png' " .
                 "title='$langDelete' alt='$langDelete'></a>" .
-                "\n        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
+                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
                 "<img src='$themeimg/$icon_vis' " .
-                "title='$langVisibility' alt='$langVisibility'></a></th>";
+                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
+        if ($visible == COURSE_OPEN) { // public accessibility actions
+            $icon_access = ($access == 1)? 'access_public.png': 'access_limited.png';
+            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu[id]'>" .
+                            "<img src='$themeimg/$icon_access' " .
+                            "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+            $cunits_content .= "&nbsp;&nbsp;</th>";
+        }
         if ($cu['id'] != $last_id) {
             $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
                     "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
@@ -228,22 +236,26 @@ while ($cu = mysql_fetch_array($sql)) {
     }
     $cunits_content .= "</tr><tr><td ";
     if ($is_editor) {
-        $cunits_content .= "colspan='7' $class1_vis>";
+        $cunits_content .= "colspan='8' $class1_vis>";
     } else {
         $cunits_content .= "colspan='2'>";
     }
-    $cunits_content .= standard_text_escape($cu['comments']) . "\n    </td>\n  </tr>\n" .
-            "\n  </table>\n";
-    $first = false;
-    $count_index++;
+    if (resource_access($vis, $access)) {
+        $cunits_content .= standard_text_escape($cu['comments']);
+        $count_index++;
+    } else {
+        $cunits_content .= "&nbsp;";
+    }
+    $cunits_content .= "</td></tr></table>";
+    $first = false;    
 }
 if ($first and !$is_editor) {
     $cunits_content = '';
 }
 
-$bar_content .= "\n<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
-        "\n<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
-        "\n<li><b>" . $langFaculty . "</b>: ";
+$bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
+        "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
+        "<li><b>" . $langFaculty . "</b>: ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;

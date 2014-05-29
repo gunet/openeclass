@@ -938,12 +938,12 @@ $langAttendanceLimit = "Επιτυχής ενημέρωση αριθμού πα�
 $langAttendanceDel = "Επιτυχής διαγραφή δραστηριότητας";
 $langAttendanceDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
 $langAttendanceNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα παρουσιολογίου για το χρήστη";
-$langAttendanceNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο παρουσίολόγιο<br>Μπορείτε να προσθέσετε μία από";
-$langAttendanceNoActMessage3 = "ή να είσαγετε από τις προτεινόμενες";
+$langAttendanceNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο παρουσιολόγιο.<br>Μπορείτε να προσθέσετε μία από";
+$langAttendanceNoActMessage3 = "ή να εισάγετε από τις προτεινόμενες.";
 $langAttendanceNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη καταχώρηση";
 $langAttendanceNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη καταχώρηση";
 $langAttendanceNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη καταχώρηση";
-$langAttendanceNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο παρουσίολόγιο";
+$langAttendanceNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο παρουσιολόγιο.";
 $langAttendanceActCour = "Δραστηριότητα μαθήματος";
 $langAttendanceInsAut = "αυτόματη καταχώρηση παρουσίας";
 $langAttendanceInsMan = "μη αυτόματη καταχώρηση παρουσίας";
@@ -959,6 +959,9 @@ $langAttendanceStudentFailure = "Δεν έχει γίνει ακόμη κατα�
 $langAttendanceMEANS = "Τιμές";
 $langAttendanceActiveUsers = "Χρήστες παρουσιολογίου";
 $langAttendanceActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
+$langAttendanceActivity = "Δραστηριότητα";
+$langAttendanceSystemEditActivity = "Επεξεργασία δραστηριότητας από το σύστημα";
+$langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
@@ -977,9 +980,9 @@ $langGradebookLimit = "Επιτυχής ενημέρωση βαθμών";
 $langGradebookDel = "Επιτυχής διαγραφή δραστηριότητας";
 $langGradebookDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
 $langGradebookNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα βαθμολογίου για το χρήστη";
-$langGradebookNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο βαθμολόγιο<br>Μπορείτε να προσθέσετε μία από";
+$langGradebookNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο βαθμολόγιο.<br>Μπορείτε να προσθέσετε μία από";
 $langGradebookNoActMessage2 = "εδώ";
-$langGradebookNoActMessage3 = "ή να είσαγετε από τις προτεινόμενες";
+$langGradebookNoActMessage3 = "ή να εισάγετε από τις προτεινόμενες.";
 $langGradebookNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη βαθμολόγηση";
 $langGradebookNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη βαθμολόγηση";
 $langGradebookNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη βαθμολόγηση";
@@ -1016,19 +1019,21 @@ $langGradebookNoTitle = "Δραστηριότητα χωρίς τίτλο";
 $langGradebookUpToDegree = "* γίνεται αναγωγή της αυτόματης βαθμολογίας των ακήσεων με άριστα το ";
 $langGradebookDeleteAlert = "Είστε σίγουροι ότι θέλετε να διαγράψετε τη δραστηριότητα; (θα διαγραφούν και οι βαθμολογίες που έχετε καταχωρήσει για τη δραστηριότητα)";
 $langGradebookOutRange = "Προσοχή: έχετε εισάγει βαθμούς μεγαλύτερους από την κλίμακα";
-$gradebook_exams = "Γραπτές εξατάσεις";
+$gradebook_exams = "Γραπτές εξετάσεις";
 $gradebook_labs = "Βαθμός εργαστηρίου";
 $gradebook_oral = "Προφορικός βαθμός";
 $gradebook_progress = "Βαθμός προόδου";
 $gradebook_other_type = "Άλλη δραστηριότητα";
-$langGradebookAssignSpecific = "Η εργασία αφορά συγεκριμένους μαθητές";
+$langGradebookAssignSpecific = "Η εργασία αφορά συγκεκριμένους μαθητές";
 $langGradebookTotalGrade = "Συνολικός βαθμός";
 $langGradebookTotalGradeNoInput = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
 $langGradebookGrades = "Βαθμοί";
 $langGradebookAlertToChange = "Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν";
 $langGradebookAlertNoInput = "Δεν υπάρχει καταχώρηση";
 $langGradeTotal = "Συνολικό Βαθμολόγιο";
-
+$langMeanValue = "Μέσος όρος";
+$langMinValue = "Ελάχιστη";
+$langMaxValue = "Μέγιστη";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
@@ -2519,7 +2524,7 @@ $langRegYou = "σας έχει εγγράψει στο μάθημα";
 $langTheU = "Ο χρήστης";
 $langAddedU = "έχει προστεθεί. Στάλθηκε ένα email σε αυτόν με το όνομα χρήστη του";
 $langAndP = "και το συνθηματικό του";
-$langDereg = "έχει διαγραφεί από αυτό το μάθημα";
+$langUserDeleted = "Ο χρήστης διαγράφηκε από το μάθημα";
 $langAddAU = "Προσθέστε ένα χρήστη";
 $langAdmR = "Δικαιώματα Διαχειριστή";
 $langAddHereSomeCourses = "<p>Για να εγγραφείτε / απεγγραφείτε σε / από ένα μάθημα,
@@ -3860,4 +3865,53 @@ $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ε�
 $langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
 $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
 
+/* * ******************************************
+  Messages for Big Blue Button
+ * ***************************************** */
 
+$langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
+$langAddBBBServer = "Προσθήκη εξυπηρετητή";
+$langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlueButton";
+$langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
+$langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
+$langBBBConfig = 'Ρυθμίσεις BigBlueButton';
+$langBBBEnabled = 'Διαθέσιμος';
+$langBBBOptions = 'Τροποποίηση';
+$langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
+$langBBBRemoveServer = 'Κατάργηση';
+
+$langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
+
+
+$langBBB = "Τηλεδιάσκεψη";
+$langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
+$langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
+$langNewBBBSessionStart = "Έναρξη τηλεδιάσκεψης";
+$langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεδιάσκεψης";
+$langNewBBBSessionType = "Είδος τηλεδιάσκεψης";
+$langNewBBBSessionPublic = "Δημόσια προς τρίτους";
+$langNewBBBSessionPrivate = "Ιδιωτική";
+$langBBBSessionJoin = "Σύνδεση";
+
+$langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
+$langBBBDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
+
+$langNewBBBSessionStatus = "Κατάσταση";
+$langNewBBBSessionActive = "Ορατή";
+$langNewBBBSessionInActive = "Μη ορατή";
+
+$langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεδιάσκεψης πραγματοποιήθηκε επιτυχώς";
+
+$langBBBNoteEnableJoin = "Ο σύνδεσμος για σύνδεση είναι ενεργός μόνο για όσες τηλεδιασκέψεις είναι σε εξέλιξη";
+$langBBBNoteEnableJoinEditor = "Ο σύνδεσμος για σύνδεση ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
+
+$langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
+
+$langBBBSessionAvailable = "Ενεργοποίηση συμμετοχής";
+$langBBBMinutesBefore = "λεπτά νωρίτερα από την προγραμματισμένη έναρξη";
+
+$langBBBScheduledSession = "Προγραμματισμός τηλεδιάσκεψης";
+$langBBBScheduleSessionInfo = "Η τηλεδιάσκεψη με τίτλο ";
+$langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
+$langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλον του μαθήματος για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
