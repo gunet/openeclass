@@ -1229,6 +1229,7 @@ $native_language_names_init = array(
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
+    'sv' => 'Svenska',
     'xx' => 'Variable Names',
 );
 
@@ -1251,6 +1252,7 @@ $language_codes = array(
     'pl' => 'polish',
     'ru' => 'russian',
     'tr' => 'turkish',
+    'sv' => 'swedish',
     'xx' => 'variables',
 );
 
