@@ -88,7 +88,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langModifyProfile;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/profile/profile.php');
+    $tool->link = $baseurl . urlencode($urlMobile . 'main/profile/profile.php');
     $tool->type = 'myprofile';
     $tool->active = "true";
     $toolsArr[] = $tool;
