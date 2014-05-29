@@ -60,8 +60,7 @@ $user_surname = $user_firstname = $user_username = $user_am = $user_type = $auth
 // Display Actions Toolbar
 $tool_content .= "
   <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='listusers.php?search=yes'>$langAllUsers</a></li>
+    <ul id='opslist'>      
       <li><a href='listusers.php?search=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
@@ -69,7 +68,7 @@ $tool_content .= "
 // display the search form
 $tool_content .= "
 
-<form action='listusers.php?search=$new' method='post' name='user_search'>
+<form action='listusers.php?search=$new' method='get' name='user_search'>
 <fieldset>
   <legend>$langUserData</legend>
   <table class='tbl' width='100%'>

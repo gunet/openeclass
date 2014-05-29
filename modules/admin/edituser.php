@@ -64,7 +64,7 @@ $head_content .= $jscalendar->get_load_files_code();
 
 // Initialise $tool_content
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
+$navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 $nameTools = $langEditUser;
 
 if (isset($_POST['u_submitted'])) {
