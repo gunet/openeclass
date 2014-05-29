@@ -33,8 +33,8 @@
 
 $subsystem = MAIN;
 
-include "../include/lib/textLib.inc.php";
-include "../include/lib/fileDisplayLib.inc.php";
+include "$webDir/include/lib/textLib.inc.php";
+include "$webDir/include/lib/fileDisplayLib.inc.php";
 //include personalised component files (announcemets.php etc.) from /modules/perso
 include "$webDir/main/perso/lessons.php";
 include "$webDir/main/perso/assignments.php";
@@ -42,7 +42,7 @@ include "$webDir/main/perso/announcements.php";
 include "$webDir/main/perso/documents.php";
 include "$webDir/main/perso/agenda.php";
 include "$webDir/main/perso/forumPosts.php";
-include '../include/lib/mediaresource.factory.php';
+include "$webDir/include/lib/mediaresource.factory.php";
 
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
