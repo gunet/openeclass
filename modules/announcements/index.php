@@ -187,6 +187,7 @@ $head_content .= "<script type='text/javascript'>
                 }, 'json');                             
             });
             $('.success').delay(3000).fadeOut(1500);
+            $('.dataTables_filter input').attr('placeholder', '$langTitle');
         });
         </script>";
 }

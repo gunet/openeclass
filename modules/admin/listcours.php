@@ -77,7 +77,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     ///internal search
     if (!empty($_GET['sSearch'])) {
         $keyword = quote('%' . $_GET['sSearch'] . '%');
-        $query .= "AND title LIKE" . quote('%' . $_GET['sSearch'] . '%');
+        $query .= "AND (title LIKE $keyword OR prof_names LIKE $keyword)";        
     } else {
         $query .= "";
         $keyword = "'%%'";
@@ -103,7 +103,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                                 AND hierarchy.id = course_department.department AND $query")->total;
     $filtered_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course 
-                                                AND hierarchy.id = course_department.department AND $query AND title LIKE $keyword")->total;                                                    
+                                                AND hierarchy.id = course_department.department 
+                                                AND $query AND (title LIKE $keyword OR prof_names LIKE $keyword)")->total;
                                                         
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
@@ -164,6 +165,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
+load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#course_results_table').DataTable ({            
@@ -175,30 +177,31 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                 ],                
                 'sPaginationType': 'full_numbers',
-                    'aoColumns': [
-                        null,                        
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                    ],
-                    'oLanguage': {                       
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                       'sInfoFiltered': '',
-                       'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
-                       'sUrl':          '',
-                       'oPaginate': {
-                           'sFirst':    '&laquo;',
-                           'sPrevious': '&lsaquo;',
-                           'sNext':     '&rsaquo;',
-                           'sLast':     '&raquo;'
-                       }
+                'bAutoWidth': false,
+                'aoColumns': [
+                    {'bSortable' : true, 'sWidth': '50%' },
+                    {'bSortable' : false, 'sClass': 'center' },
+                    {'bSortable' : false, 'sWidth': '25%' },
+                    {'bSortable' : false },
+                ],
+                'oLanguage': {                       
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '".$langNoResult."',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '".$langSearch."',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
                    }
-            });
-            $('.dataTables_filter input').attr('placeholder', '$langTitle');
+               }
+            }).fnSetFilteringDelay(1000);
+            $('.dataTables_filter input').attr('placeholder', '$langTitle, $langTeacher');
         });
         </script>";
 

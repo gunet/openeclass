@@ -206,7 +206,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         $qry .= $_GET['sSortDir_0'];
     } else {
-        $qry .= ' ORDER BY status';
+        $qry .= ' ORDER BY status, surname';
         $qry .= ' '.$_GET['sSortDir_0'];
     }   
     //pagination
@@ -231,7 +231,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $data['iTotalDisplayRecords'] = $filtered_results;
     $data['aaData'] = array();
 
-    foreach ($sql as $logs) {            
+    foreach ($sql as $logs) {
+        $email_icon = $logs->email;
         if ($mail_ver_required) {
             switch ($logs->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
@@ -247,8 +248,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     $tip = $langMailVerificationNoU;
                     break;
             }
-            $tool_content .= ' ' . icon($icon, $tip);
+            $email_icon .= ' ' . icon($icon, $tip);            
         }
+        
 
         switch ($logs->status) {
             case USER_TEACHER:
@@ -286,7 +288,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         '0' => $logs->surname,
                         '1' => $logs->givenname,
                         '2' => $logs->username,
-                        '3' => $logs->email,
+                        '3' => $email_icon,
                         '4' => icon($icon, $tip),
                         '5' => $icon_content
                     );
@@ -298,6 +300,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
+load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#search_results_table').DataTable ({            
@@ -309,31 +312,32 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                 ],
                 'sPaginationType': 'full_numbers',
-                    'aoColumns': [
-                        null,
-                        null,
-                        null,
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                        {'bSortable' : false },
-                    ],
-                    'oLanguage': {                       
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                       'sInfoFiltered': '',
-                       'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
-                       'sUrl':          '',
-                       'oPaginate': {
-                           'sFirst':    '&laquo;',
-                           'sPrevious': '&lsaquo;',
-                           'sNext':     '&rsaquo;',
-                           'sLast':     '&raquo;'
-                       }
+                'bAutoWidth': false,
+                'aoColumns': [
+                    {'bSortable' : true, 'sWidth': '20%' },
+                    {'bSortable' : true, 'sWidth': '20%' },
+                    {'bSortable' : true, 'sWidth': '20%' },
+                    {'bSortable' : false, 'sWidth': '20%' },
+                    {'bSortable' : false, 'sClass': 'center' },
+                    {'bSortable' : false, 'sWidth': '30%' },
+                ],
+                'oLanguage': {                       
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '".$langNoResult."',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '".$langSearch."',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
                    }
-            });
+               }
+            }).fnSetFilteringDelay(1000);
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
