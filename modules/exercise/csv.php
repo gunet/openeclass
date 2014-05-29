@@ -36,7 +36,7 @@ if ($is_editor) {
     $output = "$bom$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
     $output .= "$crlf";
 
-    $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?", $exerciseId);
+    $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
 
     foreach ($result as $row) {
         $sid = $row->uid;
