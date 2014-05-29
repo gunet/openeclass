@@ -193,6 +193,7 @@ $head_content .= "<script type='text/javascript'>
                     oTable.fnPageChange(page_number);
                 }, 'json');                             
             });
+            $('.dataTables_filter input').attr('placeholder', '$langTitle');
             $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
