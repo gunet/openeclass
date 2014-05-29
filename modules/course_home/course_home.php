@@ -89,7 +89,7 @@ $main_extra = $description = $addon = '';
 $course_license = $result['course_license'];
 $res = db_query("SELECT id, title, comments, type FROM course_description
         WHERE course_id = $cours_id AND visible = 1 ORDER BY `order`");
-   
+
 if ($res and mysql_num_rows($res) > 0) {
     $main_extra .= "<div class = 'course_description' style='width: 520px;'>";
     $tool_content .= "<div style='display: none'>";
@@ -121,7 +121,15 @@ if ($is_editor) {
 } else {
     $edit_link = '';
 }
+
 $main_content .= "<div class='course_info'>";
+$desccomm = db_query_get_single_value("SELECT comments FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                        AND res_id = -1
+        ORDER BY `order`");
+if ($desccomm !== false) {
+    $description = standard_text_escape($desccomm);
+}
 if (!empty($description)) {
         $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";
 

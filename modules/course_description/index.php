@@ -66,6 +66,15 @@ hCont;
         } else {
             updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
         }
+    } else if (isset($_POST['submit']) && isset($_POST['edIdBloc'])) {
+        // Save results from block edit (save action)
+        $res_id = intval($_POST['edIdBloc']);
+        if ($res_id == -1) {
+            $unit_id = description_unit_id($cours_id);
+            add_unit_resource($unit_id, 'description', $res_id, autounquote($_POST['edTitleBloc']), autounquote($_POST['edContentBloc']));
+            header("Location: {$urlServer}courses/$currentCourseID");
+            exit;
+        }
     }
 }
 
