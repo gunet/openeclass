@@ -724,7 +724,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 db_query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
                 
                 $res = db_query("SELECT ur.res_id, ur.title, ur.comments, ur.order, ur.visibility, ur.date, cu.course_id
-                        FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) WHERE cu.order = -1");
+                        FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) WHERE cu.order = -1 AND ur.res_id <> -1");
                 while ($ures = mysql_fetch_array($res)) {
                     $newvis = ($ures['visibility'] == 'i') ? 0 : 1;
                     db_query("INSERT INTO course_description SET
