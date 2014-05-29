@@ -72,7 +72,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     </td>
                   </tr>";
     }
-
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
+         $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
+    }
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');

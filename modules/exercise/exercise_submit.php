@@ -180,7 +180,7 @@ if (isset($_POST['formSent'])) {
     $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
     $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-    
+            
     //if there are answers in the session (one question per page) get them
     if (isset($_SESSION['exerciseResult'][$exerciseId])) {
         $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];

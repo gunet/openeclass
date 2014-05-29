@@ -600,7 +600,7 @@ if (!class_exists('Exercise')):
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;
-                    if ($is_editor) { 
+                    if (!$is_editor) { 
                         foreach ($exerciseResult as $key => $value) {
                             $this->insert_answer_records($key, $value);
                         }
@@ -652,15 +652,22 @@ if (!class_exists('Exercise')):
                                     
                                 }
                             } elseif ($objQuestionTmp->selectType()==2) {
-                                $objAnswersTmp = new Answer($key);
-                                foreach ($value as $row_key => $row_choice) {
-                                    $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                                if ($value == 0) {
+                                    $row_key = 0;
+                                    $answer_weight = 0;
                                     Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
-                                            VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $answer_weight);
+                                                    VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $answer_weight);    
+                                } else {
+                                    $objAnswersTmp = new Answer($key);
+                                    foreach ($value as $row_key => $row_choice) {
+                                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
+                                                VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $answer_weight);
 
-                                    unset($answer_weight);
+                                        unset($answer_weight);
+                                    }
+                                    unset($objAnswersTmp);                                                                    
                                 }
-                                unset($objAnswersTmp);
                             } elseif ($objQuestionTmp->selectType()==4) {
                                 $objAnswersTmp = new Answer($key);
                                 foreach ($value as $row_key => $row_choice) {
@@ -679,8 +686,12 @@ if (!class_exists('Exercise')):
                                     unset($answer_weight);
                                 }                                
                             } else {
-                                $objAnswersTmp = new Answer($key);
-                                $answer_weight = $objAnswersTmp->selectWeighting($value);
+                                if ($value!=0) {
+                                    $objAnswersTmp = new Answer($key);
+                                    $answer_weight = $objAnswersTmp->selectWeighting($value);
+                                } else {
+                                    $answer_weight = 0;
+                                }
                                 Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
                                         VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $value, $answer_weight);
                             }
