@@ -397,13 +397,16 @@ if (isset($require_editor) and $require_editor) {
 }
 
 // Temporary student view
-if (isset($_SESSION['saved_statut'])) {
-	$statut = 5;
-	$is_course_admin = false;
-	$is_editor = false;
-	if (isset($currentCourse)) {
-		$_SESSION['status'][$currentCourse] = 5;
-	}
+if (isset($_SESSION['student_view'])) {
+    if (isset($code_cours) and $_SESSION['student_view'] === $code_cours) {
+        $statut = 5;
+        $is_course_admin = false;
+        $saved_is_editor = $is_editor;
+        $is_editor = false;
+        $_SESSION['status'][$code_cours] = 5;
+    } else {
+        unset($_SESSION['student_view']);
+    }
 }
 
 //Security check:: Users that do not have Professor access for a course must not
