@@ -179,7 +179,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $temp = $reponse;
                 // blanks will be put into an array
                 $blanks = Array();
-                $i = 0;
+                $i = 1;
                 // the loop will stop at the end of the text
                 while (1) {
                     if (($pos = strpos($temp, '[')) === false) {

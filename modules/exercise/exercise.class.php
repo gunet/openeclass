@@ -632,8 +632,13 @@ if (!class_exists('Exercise')):
                             $question_type = $objQuestionTmp->selectType();
                             $eurid = $_SESSION['exerciseUserRecordID'][$this->id];
                             if ($objQuestionTmp->selectType()==6) {
-                                Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer)
-                                        VALUES (?d, ?d, ?s)", $eurid, $key, $value);
+                                if (!empty($value)) {
+                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id)
+                                            VALUES (?d, ?d, ?s, ?d)", $eurid, $key, $value, -1);
+                                } else {
+                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
+                                            VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 0, 0);                                    
+                                }                              
                             } elseif ($objQuestionTmp->selectType()==3) {
                                 $objAnswersTmp = new Answer($key);
                                 $answer_field = $objAnswersTmp->selectAnswer(1);
@@ -645,8 +650,7 @@ if (!class_exists('Exercise')):
                                 preg_match_all('#\[(.*?)\]#', $answer, $match);
                                 foreach ($value as $row_key => $row_choice) {
                                     //if user's choice is right assign rightAnswerWeight else 0
-                                    
-                                        $weight = ($row_choice == $match[1][$row_key]) ? $rightAnswerWeighting[$row_key] : 0;
+                                        $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
                                         Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
                                                 VALUES (?d, ?d, ?s, ?d, ?f)", $eurid, $key, $row_choice, $row_key, $weight);
                                     
@@ -671,15 +675,14 @@ if (!class_exists('Exercise')):
                             } elseif ($objQuestionTmp->selectType()==4) {
                                 $objAnswersTmp = new Answer($key);
                                 foreach ($value as $row_key => $row_choice) {
-                                    $correct_match = $objAnswersTmp->isCorrect($row_key);
+                                    // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
+                                    $correct_match = $objAnswersTmp->isCorrect($row_key);                              
                                     if ($correct_match == $row_choice) {
                                         $answer_weight = $objAnswersTmp->selectWeighting($row_key);
                                     } else {
                                         $answer_weight = 0;
                                     }
-                                    
-                                    // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
-                                    
+                                                                      
                                     Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
                                             VALUES (?d, ?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $row_choice, $answer_weight);
 
@@ -703,11 +706,10 @@ if (!class_exists('Exercise')):
          */
         function purge() {
             $id = $this->id;
-            $eurids = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d",$id);           
-            $sql_where_in = implode(', ', array_map(function($e) {
-                return $e->eurid;
-            }, $eurids));                    
-            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN (?s)", $sql_where_in);
+            
+            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN ("
+                    . "SELECT eurid FROM exercise_user_record WHERE eid = ?d"
+                    . ")", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
 

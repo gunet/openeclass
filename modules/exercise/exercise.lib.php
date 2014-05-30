@@ -83,7 +83,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape(($answer)));
+            $replace_callback = function () use ($questionId) {
+                    static $id = 0;
+                    $id++;
+                    return "<input type='text' name='choice[$questionId][$id]' size='10'>";
+            };
+            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape(($answer)));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {

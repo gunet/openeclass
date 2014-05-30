@@ -189,7 +189,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     // we save the answer because it will be modified
                     $temp = $answer;
                     $answer = '';
-                    $j = 0;
+                    $j = 1;
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks
@@ -211,9 +211,9 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         // if the word entered is the same as the one defined by the professor
                         if (strtolower(substr($temp, 0, $pos)) == strtolower($choice[$j])) {
                             // gives the related weighting to the student
-                            $questionScore+=$answerWeighting[$j];
+                            $questionScore+=$answerWeighting[$j-1];
                             // increments total score
-                            $totalScore+=$answerWeighting[$j];
+                            $totalScore+=$answerWeighting[$j-1];
                             // adds the word in green at the end of the string
                             $answer.=$choice[$j];
                         }
