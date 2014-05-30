@@ -465,9 +465,7 @@ function unwanted_file($filename)
 // a new safe filename
 function process_extracted_file($p_event, &$p_header) {
 
-        global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
-               $file_title, $file_description, $file_author, $file_language,
-               $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
+        global $uploadPath, $realFileSize, $basedir, $cours_id,
                $subsystem, $subsystem_id, $uploadPath, $group_sql;
 
         $replace = isset($_POST['replace']);
@@ -530,23 +528,23 @@ function process_extracted_file($p_event, &$p_header) {
                 $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  course_id = $cours_id,
-				 subsystem = $subsystem,
+                                 subsystem = $subsystem,
                                  subsystem_id = $subsystem_id,
                                  path = '$path',
                                  filename = " . quote($filename) .",
                                  visibility = 'v',
-                                 comment = " . quote($file_comment) . ",
-                                 category = " . intval($file_category) . ",
-                                 title = " . quote($file_title) . ",
-                                 creator = " . quote($file_creator) . ",
+                                 comment = " . quote($_POST['file_comment']) . ",
+                                 category = " . intval($_POST['file_category']) . ",
+                                 title = '',
+                                 creator = " . quote($_POST['file_creator']) . ",
                                  date = " . quote($file_date) . ",
                                  date_modified = " . quote($file_date) . ",
-                                 subject = " . quote($file_subject) . ",
-                                 description = " . quote($file_description) . ",
-                                 author = " . quote($file_author) . ",
+                                 subject = " . quote($_POST['file_subject']) . ",
+                                 description = " . quote($_POST['file_description']) . ",
+                                 author = " . quote($_POST['file_author']) . ",
                                  format = '$format',
-                                 language = " . quote($file_language) . ",
-                                 copyrighted = " . intval($file_copyrighted));
+                                 language = " . quote($_POST['file_language']) . ",
+                                 copyrighted = " . intval($_POST['file_copyrighted']));
                 // File will be extracted with new encoded filename
                 $p_header['filename'] = $basedir . $path;
                 return 1;
