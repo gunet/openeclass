@@ -96,7 +96,9 @@ class CourseXMLConfig {
             'course_literature_' . $clang => $coursedesc,
             'course_teachingMethod_' . $clang => $coursedesc,
             'course_assessmentMethod_' . $clang => $coursedesc,
-            'course_prerequisites_' . $clang => $coursedesc
+            'course_prerequisites_' . $clang => $coursedesc,
+            'course_featuredBooks_' . $clang => $coursedesc,
+            'course_targetGroup_el' . $clang => $coursedesc
         );
 
         if (isset($valArr[$key])) {
@@ -250,7 +252,7 @@ class CourseXMLConfig {
         'course_numberOfUnits', 'course_license',
         'course_contents', 'course_objectives', 'course_literature',
         'course_teachingMethod', 'course_assessmentMethod',
-        'course_prerequisites'
+        'course_prerequisites', 'course_featuredBooks', 'course_targetGroup'
     );
 
     /**
@@ -302,7 +304,7 @@ class CourseXMLConfig {
         'course_unit_title', 'course_unit_description',
         'course_contents', 'course_objectives', 'course_literature',
         'course_teachingMethod', 'course_assessmentMethod',
-        'course_prerequisites'
+        'course_prerequisites', 'course_featuredBooks', 'course_targetGroup'
     );
 
     /**

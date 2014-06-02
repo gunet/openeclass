@@ -178,20 +178,28 @@ db_query("CREATE TABLE `course_description_type` (
     `title` mediumtext,
     `syllabus` tinyint(1) DEFAULT 0,
     `objectives` tinyint(1) DEFAULT 0,
-    `literature` tinyint(1) DEFAULT 0,
+    `bibliography` tinyint(1) DEFAULT 0,
     `teaching_method` tinyint(1) DEFAULT 0,
     `assessment_method` tinyint(1) DEFAULT 0,
     `prerequisites` tinyint(1) DEFAULT 0,
+    `featured_books` tinyint(1) DEFAULT 0,
+    `instructors` tinyint(1) DEFAULT 0,
+    `target_group` tinyint(1) DEFAULT 0,
     `active` tinyint(1) DEFAULT 1,
     `order` int(11) NOT NULL,
+    `icon` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `syllabus`, `order`) VALUES (1, 'a:2:{s:2:\"el\";s:52:\"Περιεχόμενο μαθήματος (Syllabus)\";s:2:\"en\";s:25:\"Course Content (Syllabus)\";}', 1, 1)");
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `objectives`, `order`) VALUES (2, 'a:2:{s:2:\"el\";s:41:\"Αντικειμενικοί Στόχοι\";s:2:\"en\";s:25:\"Objectives / Overall Aims\";}', 1, 2)");
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `literature`, `order`) VALUES (3, 'a:2:{s:2:\"el\";s:47:\"Συνιστώμενη Βιβλιογραφία\";s:2:\"en\";s:30:\"Study Materials / Reading List\";}', 1, 3)");
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `teaching_method`, `order`) VALUES (4, 'a:2:{s:2:\"el\";s:63:\"Διδακτικές και μαθησιακές μέθοδοι\";s:2:\"en\";s:30:\"Education and Teaching Methods\";}', 1, 4)");
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `assessment_method`, `order`) VALUES (5, 'a:2:{s:2:\"el\";s:62:\"Μέθοδοι αξιολόγησης/βαθμολόγησης\";s:2:\"en\";s:26:\"Assessment Methods / Exams\";}', 1, 5)");
-db_query("INSERT INTO `course_description_type` (`id`, `title`, `prerequisites`, `order`) VALUES (6, 'a:2:{s:2:\"el\";s:26:\"Προαπαιτήσεις\";s:2:\"en\";s:25:\"Recommended Prerequisites\";}', 1, 6)");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `syllabus`, `order`, `icon`) VALUES (1, 'a:2:{s:2:\"el\";s:41:\"Περιεχόμενο μαθήματος\";s:2:\"en\";s:15:\"Course Syllabus\";}', 1, 1, '0.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `objectives`, `order`, `icon`) VALUES (2, 'a:2:{s:2:\"el\";s:33:\"Μαθησιακοί στόχοι\";s:2:\"en\";s:23:\"Course Objectives/Goals\";}', 1, 2, '1.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `bibliography`, `order`, `icon`) VALUES (3, 'a:2:{s:2:\"el\";s:24:\"Βιβλιογραφία\";s:2:\"en\";s:12:\"Bibliography\";}', 1, 3, '2.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `teaching_method`, `order`, `icon`) VALUES (4, 'a:2:{s:2:\"el\";s:37:\"Μέθοδοι διδασκαλίας\";s:2:\"en\";s:21:\"Instructional Methods\";}', 1, 4, '3.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `assessment_method`, `order`, `icon`) VALUES (5, 'a:2:{s:2:\"el\";s:37:\"Μέθοδοι αξιολόγησης\";s:2:\"en\";s:18:\"Assessment Methods\";}', 1, 5, '4.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `prerequisites`, `order`, `icon`) VALUES (6, 'a:2:{s:2:\"el\";s:28:\"Προαπαιτούμενα\";s:2:\"en\";s:29:\"Prerequisites/Prior Knowledge\";}', 1, 6, '5.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `instructors`, `order`, `icon`) VALUES (7, 'a:2:{s:2:\"el\";s:22:\"Διδάσκοντες\";s:2:\"en\";s:11:\"Instructors\";}', 1, 7, '6.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`, `order`, `icon`) VALUES (8, 'a:2:{s:2:\"el\";s:23:\"Ομάδα στόχος\";s:2:\"en\";s:12:\"Target Group\";}', 1, 8, '7.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
+db_query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
 
 //
 // table `course_description`

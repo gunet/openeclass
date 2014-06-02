@@ -575,8 +575,17 @@ $langInfo2Say = "Information to give to ".$langsStudents."";
 $langAddCat = "Category";
 $langBackAndForget = "Cancel changes and return";
 $langBlockDeleted = "Description deleted!";
-$titreBloc = array("Course Content (Syllabus)", "Objectives / Overall Aims", "Study Materials / Reading List", 
-    "Education and Teaching Methods", "Assessment Methods / Exams", "Recommended Prerequisites", "Supplementary Information");
+$titreBloc = array(
+    'Course Syllabus',
+    'Course Objectives/Goals',
+    'Bibliography',
+    'Instructional Methods',
+    'Assessment Methods',
+    'Prerequisites/Prior Knowledge',
+    'Instructors',
+    'Target Group',
+    'Textbooks',
+    'Additional info');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langAdminOnly = "Administrators only";
 $langInLnk = "Deactivated links";
