@@ -29,6 +29,8 @@ $require_course_admin = TRUE;
 $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/work/work_functions.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 load_js('jquery');
 load_js('jquery-ui');
@@ -66,6 +68,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['hideworks'])) {
         $output[] = hide_work();
     }
+    if (isset($_POST['delworkssubs'])) {
+	$output[] = del_work_subs();
+    }            
     if (isset($_POST['purgeexercises'])) {
         $output[] = purge_exercises();
     }
@@ -111,6 +116,11 @@ if (isset($_POST['submit'])) {
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
+	<tr>
+	  <th class='left'>&nbsp</th>
+	  <td><input type='checkbox' name='delworkssubs'></td>
+	  <td>$langDelAllWorkSubs</td>
+	</tr>          
         <tr>
 	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
 	  <td><input type='checkbox' name='purgeexercises'></td>
@@ -206,6 +216,29 @@ function hide_work() {
 
     db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
     return "<p>$langWorksDeleted</p>";
+}
+/**
+ * 
+ * @global type $langAllAssignmentSubsDeleted
+ * @global type $webDir
+ * @global type $course_id
+ * @global type $course_code
+ * @return type
+ */
+function del_work_subs()  {
+	global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
+        
+        $workPath = $webDir."/courses/".$course_code."/work";
+
+        $result = Database::get()->queryArray("SELECT id FROM assignment WHERE course_id = ?d", $course_id);
+        
+        foreach ($result as $row) {  
+            $secret = work_secret($row->id);
+            Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
+            move_dir("$workPath/$secret",
+            "$webDir/courses/garbage/${course_code}_work_".$row->id."_$secret");
+        }
+	return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
 /**

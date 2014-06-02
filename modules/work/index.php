@@ -241,7 +241,12 @@ if ($is_editor) {
                 } else {
                     Session::set_flashdata($langDelF, 'caution');
                 }
-                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');             
+                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
+            } elseif ($choice == 'do_purge') {
+                if (purge_assignment_subs($id)) {
+                    Session::set_flashdata($langAssignmentSubsDeleted, 'success');
+                }
+                redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
                 $nameTools = $m['WorkEdit'];
                 $navigation[] = $works_url;
@@ -856,7 +861,34 @@ function delete_assignment($id) {
     }
     return false;
 }
+/**
+ * @brief delete assignment's submissions
+ * @global type $tool_content
+ * @global string $workPath
+ * @global type $course_code
+ * @global type $webDir
+ * @global type $langBack
+ * @global type $langDeleted
+ * @global type $course_id
+ * @param type $id
+ */
+function purge_assignment_subs($id) {
 
+	global $tool_content, $workPath, $webDir, $langBack, $langDeleted, $langAssignmentSubsDeleted, $course_code, $course_id;
+        
+	$secret = work_secret($id);
+        $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?d
+                                        AND id = ?d", $course_id, $id);        
+        if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
+            if ($row->assign_to_specific) {
+                Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+            }
+            move_dir("$workPath/$secret",
+            "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+            return true;
+        }
+        return false;
+}
 /**
  * @brief delete user assignment
  * @global string $tool_content
@@ -1493,7 +1525,8 @@ function show_student_assignments() {
 // show all the assignments
 function show_assignments() {
     global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
-    $course_code, $themeimg, $course_id, $langConfirmDelete, $langDaysLeft;
+    $course_code, $themeimg, $course_id, $langConfirmDelete, $langDaysLeft, $m,
+    $langWarnForSubmissions, $langDelSure;
     
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -1514,7 +1547,7 @@ function show_assignments() {
                       <th width='60'>$m[subm]</th>
                       <th width='60'>$m[nogr]</th>
                       <th width='130'>$m[deadline]</th>
-                      <th width='60'>$langCommands</th>
+                      <th width='80'>$langCommands</th>
                     </tr>";
         $index = 0;
         foreach ($result as $row) {
@@ -1558,10 +1591,18 @@ function show_assignments() {
                 $tool_content .= " (<span class='expired'>$m[expired]</span>)";
             }                         
            $tool_content .= "</td>
-			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
-			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"$langConfirmDelete\");'>
-			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
+			  <td class='right'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
+                                <img src='$themeimg/edit.png' alt='$m[edit]' />
+                            </a>";
+           if (is_numeric($num_submitted) && $num_submitted>0) {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge' onClick='return confirmation(\"$langWarnForSubmissions. $langDelSure\");'>
+                                <img src='$themeimg/clear.png' alt='".q($m['WorkSubsDelete'])."' title='".q($m['WorkSubsDelete'])."'>
+                            </a>";
+           }
+            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"$langConfirmDelete\");'>
+                                <img src='$themeimg/delete.png' alt='$m[delete]' />
+                            </a>";
             if ($row->active) {
                 $deactivate_temp = q($m['deactivate']);
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
