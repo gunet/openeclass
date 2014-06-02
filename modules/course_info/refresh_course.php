@@ -185,7 +185,7 @@ function hide_work()  {
 
 function del_work_subs()  {
 	global $langAllAssignmentSubsDeleted, $webDir, $currentCourseID;
-
+        
         $workPath = $webDir."courses/".$currentCourseID."/work";
         $result = db_query("SELECT id FROM assignments");
         

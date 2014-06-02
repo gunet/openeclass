@@ -1187,11 +1187,13 @@ function show_assignments($message = null)
 			  <td class='right'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
                                 <img src='$themeimg/edit.png' alt='$m[edit]' />
-                            </a>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_purge' onClick=\"return confirmation('purge');\">
+                            </a>";
+                        if (is_numeric($num_submitted) && $num_submitted>0) {    
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_purge' onClick=\"return confirmation('purge');\">
                                 <img src='$themeimg/clear.png' alt='".q($m['WorkSubsDelete'])."' title='".q($m['WorkSubsDelete'])."'>
-                            </a>                            
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
+                            </a>";
+                        }
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
                                 <img src='$themeimg/delete.png' alt='$m[delete]' />
                             </a>";
 			if ($row['active']) {
