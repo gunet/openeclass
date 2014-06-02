@@ -36,11 +36,17 @@ $head_content = "
 <script type='text/javascript'>
 function confirmation (name)
 {
-
-    if (confirm(\"$langDelWarn1 \"+ name + \". $langWarnForSubmissions. $langDelSure \"))
-        {return true;}
-    else
-        {return false;}
+    if (name == 'purge'){
+        if (confirm(\"$langWarnForSubmissions. $langDelSure\"))
+            {return true;}
+        else
+            {return false;}
+    } else {
+        if (confirm(\"$langDelWarn1 \"+ name + \". $langWarnForSubmissions. $langDelSure \"))
+            {return true;}
+        else
+            {return false;}    
+    }
 }
 
 function confirm_delete_assignment ()
@@ -185,6 +191,10 @@ if ($is_editor) {
                                 $nameTools = $m['WorkDelete'];
                                 $navigation[] = $works_url;
                                 delete_assignment($id);
+                        } elseif ($choice == 'do_purge') {
+                                $nameTools = $m['WorkSubsDelete'];
+                                $navigation[] = $works_url;
+                                purge_assignment_subs($id);                                
                         } elseif ($choice == 'edit') {
                                 $nameTools = $m['WorkEdit'];
                                 $navigation[] = $works_url;
@@ -586,11 +596,22 @@ function delete_assignment($id) {
 	db_query("DELETE FROM assignments WHERE id='$id'");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id='$id'");
 	move_dir("$workPath/$secret",
-	"$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
+	"{$webDir}courses/garbage/${currentCourseID}_work_${id}_$secret");
 
 	$tool_content .="<p class='success'>$langDeleted<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>".$langBack."</a></p>";
 }
 
+function purge_assignment_subs($id) {
+
+	global $tool_content, $workPath, $currentCourseID, $webDir, $langBack, $langDeleted, $langAssignmentSubsDeleted, $code_cours;
+
+	$secret = work_secret($id);
+	db_query("DELETE FROM assignment_submit WHERE assignment_id='$id'");
+	move_dir("$workPath/$secret",
+	"{$webDir}courses/garbage/${currentCourseID}_work_${id}_$secret");
+
+	$tool_content .="<p class='success'>$langAssignmentSubsDeleted<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>".$langBack."</a></p>";
+}
 
 function delete_user_assignment($id) 
 {
@@ -1103,7 +1124,7 @@ function show_student_assignments()
 function show_assignments($message = null)
 {
         global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
-               $code_cours, $themeimg;
+               $code_cours, $themeimg, $m;
 
 	$result = db_query("SELECT * FROM assignments ORDER BY deadline");
 
@@ -1126,7 +1147,7 @@ function show_assignments($message = null)
                       <th width='60'>$m[subm]</th>
                       <th width='60'>$m[nogr]</th>
                       <th width='130'>$m[deadline]</th>
-                      <th width='60'>$langCommands</th>
+                      <th width='80'>$langCommands</th>
                     </tr>";
                 $index = 0;
 		while ($row = mysql_fetch_array($result)) {
@@ -1163,10 +1184,16 @@ function show_assignments($message = null)
 			  <td class='center'>$num_submitted</td>
 			  <td class='center'>$num_ungraded</td>
 			  <td class='center'>".nice_format($row['deadline'], true)."</td>
-			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
-			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
-			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
+			  <td class='right'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
+                                <img src='$themeimg/edit.png' alt='$m[edit]' />
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_purge' onClick=\"return confirmation('purge');\">
+                                <img src='$themeimg/clear.png' alt='".q($m['WorkSubsDelete'])."' title='".q($m['WorkSubsDelete'])."'>
+                            </a>                            
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
+                                <img src='$themeimg/delete.png' alt='$m[delete]' />
+                            </a>";
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);

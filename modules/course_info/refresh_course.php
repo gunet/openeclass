@@ -34,6 +34,8 @@ $require_login = TRUE;
 
 include '../../include/baseTheme.php';
 include '../../include/jscalendar/calendar.php';
+include '../work/work_functions.php';
+include '../../include/lib/fileManageLib.inc.php';
 
 $nameTools = $langRefreshCourse;
 
@@ -58,6 +60,9 @@ if(isset($_POST['submit'])) {
 	if (isset($_POST['hideworks'])) {
 		$output[] = hide_work();
 	}
+	if (isset($_POST['delworkssubs'])) {
+		$output[] = del_work_subs();
+	}        
         if (isset($_POST['purgeexercises'])) {
                 $output[] = purge_exercises();
         }
@@ -108,6 +113,11 @@ if(isset($_POST['submit'])) {
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
+	<tr>
+	  <th class='left'>&nbsp</th>
+	  <td><input type='checkbox' name='delworkssubs'></td>
+	  <td>$langDelAllWorkSubs</td>
+	</tr>        
         <tr>
 	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
 	  <td><input type='checkbox' name='purgeexercises'></td>
@@ -171,6 +181,21 @@ function hide_work()  {
 
 	db_query("UPDATE assignments SET active=0");
 	return "<p>$langWorksDeleted</p>";
+}
+
+function del_work_subs()  {
+	global $langAllAssignmentSubsDeleted, $webDir, $currentCourseID;
+
+        $workPath = $webDir."courses/".$currentCourseID."/work";
+        $result = db_query("SELECT id FROM assignments");
+        
+        while ($row = mysql_fetch_array($result)) {  
+            $secret = work_secret($row['id']);
+            db_query("DELETE FROM assignment_submit WHERE assignment_id='$row[id]'");
+            move_dir("$workPath/$secret",
+            "{$webDir}courses/garbage/${currentCourseID}_work_".$row['id']."_$secret");
+        }
+	return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
 function purge_exercises() {

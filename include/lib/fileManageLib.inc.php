@@ -266,7 +266,7 @@ function move_dir($src, $dest)
 			die("<br>Error! a file named $dest already exists\n");
 		}
 	} else {
-		mkdir ($dest, 0775);
+		mkdir ($dest, 0775, true);
 	}
 
         $handle = opendir($src);
@@ -278,9 +278,13 @@ function move_dir($src, $dest)
                 if ( $element == "." || $element == "..") {
                         continue; // skip the current and parent directories
                 } elseif (is_file($file)) {
+                        if (is_file("$dest/$element")) { 
+                            unlink("$dest/$element");
+                        }
                         copy($file, "$dest/$element") or
 			die ("Error copying $src/$element to $dest");
 			unlink($file);
+                        rmdir($src);
                 } elseif (is_dir($file)) {
                         move_dir($file, "$dest/$element");
 			rmdir($file);
