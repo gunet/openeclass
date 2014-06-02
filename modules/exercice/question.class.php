@@ -67,7 +67,8 @@ class Question
 	function read($id)
 	{
 		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;
-		
+
+        $id = intval($id);    
 		mysql_select_db($currentCourseID);
 		$sql = "SELECT question, description, ponderation, q_position, type 
                         FROM `$TBL_QUESTIONS` WHERE id='$id'";
@@ -352,27 +353,27 @@ class Question
 		
 		mysql_select_db($currentCourseID);
 
-		$id=$this->id;
-		$question=addslashes($this->question);
-		$description=purify($this->description);
-		$weighting=$this->weighting;
-		$position=$this->position;
-		$type=$this->type;
+		$id=intval($this->id);
+		$question=quote($this->question);
+		$description=quote(purify($this->description));
+		$weighting=intval($this->weighting);
+		$position=intval($this->position);
+		$type=intval($this->type);
 
 		// question already exists
 		if($id)
 		{
-			$sql = "UPDATE `$TBL_QUESTIONS` SET question='$question',description='$description',
-					ponderation='$weighting',q_position='$position',
-					type='$type'
-					WHERE id='$id'";
+			$sql = "UPDATE `$TBL_QUESTIONS` SET question = $question, description = $description,
+					ponderation = $weighting, q_position = $position,
+					type = $type
+					WHERE id = $id";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new question
 		else
 		{
 			$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type)
-				VALUES('$question','$description','$weighting','$position','$type')";
+				VALUES($question, $description, $weighting, $position, $type)";
 			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 			$this->id=mysql_insert_id();
 		}
