@@ -334,8 +334,7 @@ class Dropbox_Person {
 		/*
 		* Constructor for recreating the Dropbox_Person object
 		*/
-		global $dropbox_cnf, $currentCourseID, $r_message_id, $s_message_id;
-		
+		global $dropbox_cnf, $currentCourseID, $r_message_id, $s_message_id, $message_id;		
 		/*
 		* Fill in properties
 		*/
@@ -344,49 +343,55 @@ class Dropbox_Person {
 		$this->sentWork = array();
                 $this->allsentWork = array();
 				
-		/*
-		* find all entries where this person is the recipient 
-		*/
-                if (!$displayallrecieved) {
-                    $sql = "SELECT r.fileId FROM 
-				`".$dropbox_cnf["postTbl"]."` r
-				, `".$dropbox_cnf["personTbl"]."` p, dropbox_file f
-				WHERE r.recipientId = '".addslashes($this->userId)."' 
-					AND r.recipientId = p.personId
-					AND r.fileId = p.fileId 
-                                        AND r.fileId = f.id
-                                        AND f.id = $r_message_id";
-                    
+		
+                if (isset($message_id)) { // if we are teacher and choice is `other messages`
+                        $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f				
+				WHERE f.id = $message_id";
                 } else {
-                    $sql = "SELECT r.fileId FROM 
-				`".$dropbox_cnf["postTbl"]."` r
-				, `".$dropbox_cnf["personTbl"]."` p
-				WHERE r.recipientId = '".addslashes($this->userId)."' 
-					AND r.recipientId = p.personId
-					AND r.fileId = p.fileId";
-                }
-        	$result = db_query($sql, $currentCourseID);
-		while ($res = mysql_fetch_array($result)) {
-			$this->receivedWork[] = new Dropbox_Work($res["fileId"]);
-		}
-                /*
-		* find all entries where this person is the sender/uploader
-		*/
-		if (!$displayallsent) {
-                    $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f
-				WHERE f.uploaderId = '".addslashes($this->userId)."'				
-				AND f.id = $s_message_id";
-                } else {        
-                        $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
-				WHERE f.uploaderId = '".addslashes($this->userId)."'
-				AND f.uploaderId = p.personId
-				AND f.id = p.fileId";
+                    /*
+                    * find all entries where this person is the recipient 
+                    */
+                    if (!$displayallrecieved) {                    
+                        $sql = "SELECT r.fileId FROM 
+                                    `".$dropbox_cnf["postTbl"]."` r
+                                    , `".$dropbox_cnf["personTbl"]."` p, dropbox_file f
+                                    WHERE r.recipientId = '".addslashes($this->userId)."' 
+                                            AND r.recipientId = p.personId
+                                            AND r.fileId = p.fileId 
+                                            AND r.fileId = f.id
+                                            AND f.id = $r_message_id";
+
+                    } else {
+                        $sql = "SELECT r.fileId FROM 
+                                    `".$dropbox_cnf["postTbl"]."` r
+                                    , `".$dropbox_cnf["personTbl"]."` p
+                                    WHERE r.recipientId = '".addslashes($this->userId)."' 
+                                            AND r.recipientId = p.personId
+                                            AND r.fileId = p.fileId";
+                    }
+                    $result = db_query($sql, $currentCourseID);
+                    while ($res = mysql_fetch_array($result)) {
+                            $this->receivedWork[] = new Dropbox_Work($res["fileId"]);
+                    }
+                    /*
+                    * find all entries where this person is the sender/uploader
+                    */
+                    if (!$displayallsent) {                    
+                            $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f
+                                    WHERE f.uploaderId = '".addslashes($this->userId)."'				
+                                    AND f.id = $s_message_id";                    
+                    } else {
+                            $sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
+                                    WHERE f.uploaderId = '".addslashes($this->userId)."'
+                                    AND f.uploaderId = p.personId
+                                    AND f.id = p.fileId";
+                    }
                 }
                 $result = db_query($sql, $currentCourseID);
 		while ($res = mysql_fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
-
+                    
                 /*
 		* find all uploader entries 
 		*/                

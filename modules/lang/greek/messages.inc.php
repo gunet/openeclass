@@ -1023,7 +1023,7 @@ $langCategoryNotes="Σημειώσεις";
 $langCategoryOther="Άλλο";
 $langNotRequired = "Η συμπλήρωση των πεδίων είναι προαιρετική";
 $langCommands = "Ενέργειες";
-$langQuotaBar = "Επισκόπηση αποθηκευτικού χώρου";
+$langQuotaBar = "Αποθηκευτικός χώρος";
 $langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
 $langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
 $langQuotaPercentage = "Ποσοστό χρήσης";
@@ -1141,7 +1141,7 @@ $dropbox_lang['title'] = "τον τίτλο";
 $dropbox_lang['size'] = "το μέγεθος του αρχείου";
 $dropbox_lang['author'] = "τον διδάσκοντα";
 $dropbox_lang['sender'] = "τον αποστολέα";
-$dropbox_lang['file'] = "Αρχεία - Μηνύματα";
+$dropbox_lang['file'] = "Μηνύματα";
 $dropbox_lang['fileSize'] = "Μέγεθος";
 $dropbox_lang['col_recipient'] = "Παραλήπτης";
 $dropbox_lang['recipient'] = "τον παραλήπτη";
@@ -1162,6 +1162,7 @@ $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συνημμένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
+$langToHim = "Προς";
 /**********************************************************
 * exercise.php
 **********************************************************/
