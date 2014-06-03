@@ -334,7 +334,7 @@ function upgrade_course($code, $lang)
 
 function upgrade_course_2_10($code, $lang, $extramessage = '') {
 
-    global $langUpgCourse, $global_messages;
+    global $langUpgCourse, $global_messages, $webDir;
 
     mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
@@ -343,7 +343,7 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
     db_query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
     
     // refresh XML metadata
-    require_once('../modules/course_metadata/CourseXML.php');
+    require_once "{$webDir}modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
