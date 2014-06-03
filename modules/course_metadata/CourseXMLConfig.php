@@ -58,7 +58,44 @@ class CourseXMLConfig {
                 'podcasts' => $GLOBALS['langCMeta']['podcasts'],
                 'audio material' => $GLOBALS['langCMeta']['audio material'],
                 'multimedia material' => $GLOBALS['langCMeta']['multimedia material'],
-                'interactive exercises' => $GLOBALS['langCMeta']['interactive exercises'])
+                'interactive exercises' => $GLOBALS['langCMeta']['interactive exercises']),
+            'course_institution' => array('otherinst' => $GLOBALS['langCMeta']['otherinst'],
+                'asfa' => $GLOBALS['langCMeta']['asfa'],
+                'auth' => $GLOBALS['langCMeta']['auth'],
+                'aua' => $GLOBALS['langCMeta']['aua'],
+                'duth' => $GLOBALS['langCMeta']['duth'],
+                'ihu' => $GLOBALS['langCMeta']['ihu'],
+                'uoa' => $GLOBALS['langCMeta']['uoa'],
+                'ntua' => $GLOBALS['langCMeta']['ntua'],
+                'eap' => $GLOBALS['langCMeta']['eap'],
+                'ionio' => $GLOBALS['langCMeta']['ionio'],
+                'aueb' => $GLOBALS['langCMeta']['aueb'],
+                'aegean' => $GLOBALS['langCMeta']['aegean'],
+                'uowm' => $GLOBALS['langCMeta']['uowm'],
+                'uth' => $GLOBALS['langCMeta']['uth'],
+                'uoi' => $GLOBALS['langCMeta']['uoi'],
+                'uoc' => $GLOBALS['langCMeta']['uoc'],
+                'uom' => $GLOBALS['langCMeta']['uom'],
+                'upatras' => $GLOBALS['langCMeta']['upatras'],
+                'unipi' => $GLOBALS['langCMeta']['unipi'],
+                'upelop' => $GLOBALS['langCMeta']['upelop'],
+                'panteion' => $GLOBALS['langCMeta']['panteion'],
+                'tuc' => $GLOBALS['langCMeta']['tuc'],
+                'hua' => $GLOBALS['langCMeta']['hua'],
+                'teiath' => $GLOBALS['langCMeta']['teiath'],
+                'teikoz' => $GLOBALS['langCMeta']['teikoz'],
+                'teiep' => $GLOBALS['langCMeta']['teiep'],
+                'teithe' => $GLOBALS['langCMeta']['teithe'],
+                'teiion' => $GLOBALS['langCMeta']['teiion'],
+                'teikav' => $GLOBALS['langCMeta']['teikav'],
+                'teikal' => $GLOBALS['langCMeta']['teikal'],
+                'teicrete' => $GLOBALS['langCMeta']['teicrete'],
+                'teiste' => $GLOBALS['langCMeta']['teiste'],
+                'teilar' => $GLOBALS['langCMeta']['teilar'],
+                'teiwest' => $GLOBALS['langCMeta']['teiwest'],
+                'teipir' => $GLOBALS['langCMeta']['teipir'],
+                'teiser' => $GLOBALS['langCMeta']['teiser'],
+                'aspete' => $GLOBALS['langCMeta']['aspete'])
         );
 
         if (isset($valArr[$key])) {
@@ -206,7 +243,7 @@ class CourseXMLConfig {
      */
     public static $enumerationFields = array(
         'course_level', 'course_curriculumLevel', 'course_yearOfStudy',
-        'course_semester', 'course_type'
+        'course_semester', 'course_type', 'course_institution'
     );
 
     /**
@@ -271,7 +308,7 @@ class CourseXMLConfig {
         'course_prerequisites_el', 'course_prerequisites_en',
         'course_literature_el', 'course_literature_en',
         'course_thematic_el', 'course_thematic_en',
-        'course_institution_el', 'course_institution_en',
+        'course_institution',
         'course_department_el', 'course_department_en',
         'course_curriculumLevel',
         'course_confirmCurriculum', 'course_confirmVideolectures',

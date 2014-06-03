@@ -853,7 +853,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
                 `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
                 `dc_department` = " . quote(self::serialize($xml->department)) . ",
-                `dc_institution` = " . quote(self::serialize($xml->institution)) . ",
+                `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
                 `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
                 `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
                 `dc_url` = " . quote($xml->url) . ",
@@ -879,7 +879,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
                     `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
                     `dc_department` = " . quote(self::serialize($xml->department)) . ",
-                    `dc_institution` = " . quote(self::serialize($xml->institution)) . ",
+                    `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
                     `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
                     `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
                     `dc_url` = " . quote($xml->url) . ",
@@ -935,18 +935,24 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         $clang = langname_to_code($currentCourseLanguage);
         $arr = array();
-        $arr[$clang] = $GLOBALS['langCMeta'][(string) $ele];
+        $key = (string) $ele;
+        if (!isset($GLOBALS['langCMeta'][$key])) {
+            if ($ele->getName() === 'institution') {
+                $key = 'otherinst';
+            }
+        }
+        $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
             include("${webDir}modules/lang/english/common.inc.php");
             include("${webDir}modules/lang/english/messages.inc.php");
-            $arr['en'] = $langCMeta[(string) $ele];
+            $arr['en'] = $GLOBALS['langCMeta'][$key];
             $revert = true;
         }
         if ($clang != 'el') {
             include("${webDir}modules/lang/greek/common.inc.php");
             include("${webDir}modules/lang/greek/messages.inc.php");
-            $arr['en'] = $langCMeta[(string) $ele];
+            $arr['en'] = $GLOBALS['langCMeta'][$key];
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
