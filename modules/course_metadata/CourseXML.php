@@ -847,7 +847,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_title` = " . quote(self::serialize($xml->title)) . ",
                 `dc_description` = " . quote(self::serialize($xml->description)) . ",
                 `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
-                `dc_subject` = " . quote(self::serialize($xml->thematic)) . ",
+                `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
                 `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                 `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                 `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
@@ -873,7 +873,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_title` = " . quote(self::serialize($xml->title)) . ",
                     `dc_description` = " . quote(self::serialize($xml->description)) . ",
                     `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
-                    `dc_subject` = " . quote(self::serialize($xml->thematic)) . ",
+                    `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
                     `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                     `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                     `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
@@ -939,6 +939,9 @@ class CourseXMLElement extends SimpleXMLElement {
         if (!isset($GLOBALS['langCMeta'][$key])) {
             if ($ele->getName() === 'institution') {
                 $key = 'otherinst';
+            }
+            if ($ele->getName() === 'thematic') {
+                $key = 'othersubj';
             }
         }
         $arr[$clang] = $GLOBALS['langCMeta'][$key];

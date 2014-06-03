@@ -95,7 +95,14 @@ class CourseXMLConfig {
                 'teiwest' => $GLOBALS['langCMeta']['teiwest'],
                 'teipir' => $GLOBALS['langCMeta']['teipir'],
                 'teiser' => $GLOBALS['langCMeta']['teiser'],
-                'aspete' => $GLOBALS['langCMeta']['aspete'])
+                'aspete' => $GLOBALS['langCMeta']['aspete']),
+            'course_thematic' => array('othersubj' => $GLOBALS['langCMeta']['othersubj'],
+                'natural' => $GLOBALS['langCMeta']['natural'],
+                'agricultural' => $GLOBALS['langCMeta']['agricultural'],
+                'engineering' => $GLOBALS['langCMeta']['engineering'],
+                'social' => $GLOBALS['langCMeta']['social'],
+                'medical' => $GLOBALS['langCMeta']['medical'],
+                'humanities' => $GLOBALS['langCMeta']['humanities'])
         );
 
         if (isset($valArr[$key])) {
@@ -243,7 +250,8 @@ class CourseXMLConfig {
      */
     public static $enumerationFields = array(
         'course_level', 'course_curriculumLevel', 'course_yearOfStudy',
-        'course_semester', 'course_type', 'course_institution'
+        'course_semester', 'course_type', 'course_institution',
+        'course_thematic'
     );
 
     /**
@@ -307,8 +315,7 @@ class CourseXMLConfig {
         'course_objectives_el', 'course_objectives_en',
         'course_prerequisites_el', 'course_prerequisites_en',
         'course_literature_el', 'course_literature_en',
-        'course_thematic_el', 'course_thematic_en',
-        'course_institution',
+        'course_thematic', 'course_institution',
         'course_department_el', 'course_department_en',
         'course_curriculumLevel',
         'course_confirmCurriculum', 'course_confirmVideolectures',
@@ -366,7 +373,7 @@ class CourseXMLConfig {
         'course_prerequisites', 'course_literature',
         'course_recommendedComponents', 'course_assignments',
         'course_requirements', 'course_remarks', 'course_acknowledgments',
-        'course_thematic', 'course_institutionDescription',
+        'course_institutionDescription',
         'course_curriculumDescription', 'course_outcomes',
         'course_curriculumTargetGroup'
     );
