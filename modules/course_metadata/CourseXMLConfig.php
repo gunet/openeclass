@@ -102,7 +102,8 @@ class CourseXMLConfig {
                 'engineering' => $GLOBALS['langCMeta']['engineering'],
                 'social' => $GLOBALS['langCMeta']['social'],
                 'medical' => $GLOBALS['langCMeta']['medical'],
-                'humanities' => $GLOBALS['langCMeta']['humanities'])
+                'humanities' => $GLOBALS['langCMeta']['humanities']),
+            'course_subthematic' => array('othersubsubj' => $GLOBALS['langCMeta']['othersubsubj'])
         );
 
         if (isset($valArr[$key])) {
@@ -251,7 +252,7 @@ class CourseXMLConfig {
     public static $enumerationFields = array(
         'course_level', 'course_curriculumLevel', 'course_yearOfStudy',
         'course_semester', 'course_type', 'course_institution',
-        'course_thematic'
+        'course_thematic', 'course_subthematic'
     );
 
     /**
@@ -315,7 +316,8 @@ class CourseXMLConfig {
         'course_objectives_el', 'course_objectives_en',
         'course_prerequisites_el', 'course_prerequisites_en',
         'course_literature_el', 'course_literature_en',
-        'course_thematic', 'course_institution',
+        'course_thematic', 'course_subthematic',
+        'course_institution',
         'course_department_el', 'course_department_en',
         'course_curriculumLevel',
         'course_confirmCurriculum', 'course_confirmVideolectures',

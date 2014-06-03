@@ -14,7 +14,8 @@
     <contents lang="en"></contents>
     <objectives lang="el"></objectives>
     <objectives lang="en"></objectives>
-    <thematic></thematic>
+    <thematic>othersubj</thematic>
+    <subthematic>othersubsubj</subthematic>
     <prerequisites lang="el"></prerequisites>
     <prerequisites lang="en"></prerequisites>
     <literature lang="el"></literature>
@@ -73,7 +74,7 @@
 
 
     <curriculumLevel></curriculumLevel>
-    <institution></institution>
+    <institution>otherinst</institution>
     <department lang="el"></department>
     <department lang="en"></department>
     <language lang="el"></language>
