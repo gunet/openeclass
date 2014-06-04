@@ -81,10 +81,12 @@ function docsHtmlInterface($date)
                 
 		$content = '<table width="100%">';
 		while ($row = mysql_fetch_array($q)) {
+                if (directory_visible($row)) {
                         if (isset($group_courses[$row['course_id']])) {  
                                 array_push($group_courses[$row['course_id']],$row);
                         }
                         else $group_courses[$row['course_id']] = array($row);
+                }
 		}                
 		foreach($group_courses as $group_courses_member) {
 			$first_check = 0;
@@ -114,4 +116,39 @@ function docsHtmlInterface($date)
 	} else {
 		return "\n<p class='alert1'>$langNoDocsExist</p>\n";
 	}
+}
+
+
+/*
+ * Check whether the file described by $row is in a visible directory
+ *
+ * @param array $row
+ * @return boolean
+ */
+function directory_visible($row) {
+    static $dirs = array(); // keep already visited directories in memory
+
+    $parent = substr(dirname($row['path']), 1);
+    if ($parent == '') {
+        return true;
+    }
+    $path = '';
+    foreach (explode('/', $parent) as $part) {
+        $path .= '/' . $part;
+        $key = $row['course_id'] . $path;
+        // if directory hasn't been checked yet, do a db lookup
+        if (!isset($dirs[$key])) {
+            $vis = db_query_get_single_value("SELECT visibility FROM document
+                                                WHERE course_id = $row[course_id] AND
+                                                      subsystem = " . MAIN . " AND
+                                                      path = " . quote($path));
+            // entry is true if file is visible
+            $dirs[$key] = ($vis == 'v');
+        }
+        // return as soon as a part of the path is invisible
+        if (!$dirs[$key]) {
+            return false;
+        }
+    }
+    return true;
 }
