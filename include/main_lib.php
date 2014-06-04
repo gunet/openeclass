@@ -650,10 +650,10 @@ function check_editor() {
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
-    global $uid, $course_id, $is_admin;
+    global $uid, $course_id, $is_power_user;
 
     if (isset($uid) and $uid) {
-        if ($is_admin) {
+        if ($is_power_user) {
             return TRUE;
         }        
         $r = Database::get()->querySingle("SELECT reviewer FROM course_user

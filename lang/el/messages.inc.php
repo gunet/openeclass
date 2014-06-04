@@ -825,6 +825,7 @@ $langAnnouncesDel = "Διαγραφή ανακοινώσεων του μαθήμ
 $langAgendaDel = "Διαγραφή εγγραφών από την ατζέντα του μαθήματος";
 $langHideDocuments = "Απόκρυψη των εγγράφων του μαθήματος";
 $langHideWork = "Απόκρυψη των εργασιών του μαθήματος";
+$langDelAllWorkSubs = "Διαγραφή των υποβολών των εργασιών του μαθήματος";
 $langSubmitActions = "Εκτέλεση ενεργειών";
 $langOptions = "Επιλογές";
 $langRefreshSuccess = "Η ανανέωση του μαθήματος ήταν επιτυχής. Εκτελέστηκαν οι ακόλουθες ενέργειες:";
@@ -3379,6 +3380,7 @@ $m['plainview'] = 'Συνοπτική λίστα εργασιών - βαθμολ
 $m['WorkInfo'] = 'Στοιχεία εργασίας';
 $m['WorkView'] = 'Εργασίες μαθήματος';
 $m['WorkDelete'] = 'Διαγραφή εργασίας';
+$m['WorkSubsDelete']= 'Διαγραφή υποβολών εργασίας';
 $m['WorkDeleteAssignmentFile'] = 'Διαγραφή αρχείου εργασίας';
 $m['WorkDeleteAssignmentFileConfirm'] = 'Επιβεβαίωση διαγραφής αρχείου εργασίας';
 $m['WorkEdit'] = 'Τροποποίηση εργασίας';
@@ -3422,6 +3424,8 @@ $langEditError = "Παρουσιάστηκε πρόβλημα κατά την δ
 $langNewAssign = "Δημιουργία Εργασίας";
 $langNewAssignSuccess = "Η εργασία αποθηκεύτηκε με επιτυχία!";
 $langDeleted = "Η εργασία διαγράφηκε";
+$langAssignmentSubsDeleted = "Οι υποβολές της εργασίας διαγράφηκαν";
+$langAllAssignmentSubsDeleted = "Οι υποβολές όλων των εργασιών διαγράφηκαν";
 $langDelError = "Η εργασία δεν διαγράφηκε. Παρακαλώ προσπαθήστε ξανά.";
 $langDelAssign = "Διαγραφή Εργασίας";
 $langDelWarn1 = "Πρόκειται να διαγράψετε την εργασία με τίτλο";
@@ -3882,7 +3886,7 @@ $langBBBRemoveServer = 'Κατάργηση';
 
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
-
+$langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
 $langBBB = "Τηλεδιάσκεψη";
 $langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
 $langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
