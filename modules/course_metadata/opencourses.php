@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.8
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -73,7 +73,7 @@ foreach ($opencourses as $courseId => $courseCode) {
 $tool_content .= "
   <table width=100% class='tbl_border'>
   <tr>
-    <th><a name='top'></a>$langFaculty:&nbsp;<b>$fac</b></th>
+    <th><a name='top'></a>$langFaculty:&nbsp;<b>".q($fac)."</b></th>
     <th><div align='right'>";
 
 if (count($opencourses) > 0) {
@@ -97,7 +97,7 @@ if (count($opencourses) > 0) {
     }
     $tool_content .= "</div></th>
     </tr>
-    </table>\n\n";
+    </table>";
     // changed this foreach statement a bit
     // this way we sort by the course types
     // then we just select visible
@@ -124,8 +124,7 @@ if (count($opencourses) > 0) {
         if (mysql_num_rows($result) == 0) {
             continue;
         }
-        $tool_content .= "\n\n\n
-           <table width=100% class='tbl_course_type'>
+        $tool_content .= "<table width=100% class='tbl_course_type'>
            <tr>
             <td>";
         // We changed the style a bit here and we output types as the title
@@ -178,15 +177,15 @@ if (count($opencourses) > 0) {
                 <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" .
                     "<img src='${themeimg}/lom.png'/></a>";
 
-            $tool_content .= "</td>\n";
+            $tool_content .= "</td>";
             $tool_content .= "</tr>";
             $k++;
         }
-        $tool_content .= "\n</table>\n";
+        $tool_content .= "</table>";
         $tid++;
     } // end of foreach
 } else {
-    $tool_content .= "&nbsp;</div></th></tr></table>\n\n";
+    $tool_content .= "&nbsp;</div></th></tr></table>";
     $tool_content .= "
     <p class='alert1'>$m[nolessons]</p>";
 }

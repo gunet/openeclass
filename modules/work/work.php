@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -258,18 +258,17 @@ function show_submission($sid)
 
         $nameTools = $langWorks;
         $navigation[] = $works_url;
-
+        
         if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = $sid"))) {
-
                 $tool_content .= "<p>$langSubmissionDescr".
                                  q(uid_to_name($sub['uid'])).
                                  $sub['submission_date'].
                                  "<a href='$GLOBALS[urlServer]$GLOBALS[currentCourseID]".
-                                 "/work/$sub[file_path]'>$sub[file_name]</a>";
+                                 "/work/$sub[file_path]'>".q($sub['file_name'])."</a>";
                 if (!empty($sub['comments'])) {
-                        $tool_content .=  " $langNotice3: $sub[comments]";
+                        $tool_content .=  " $langNotice3: ".q($sub[comments])."";
                 }
-                $tool_content .=  "</p>\n";
+                $tool_content .=  "</p>";
         } else {
                 $tool_content .= "<p class='caution'>error - no such submission with id $sid</p>\n";
         }
@@ -858,7 +857,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
                $nameTools, $langGraphResults, $m, $code_cours, $themeimg, $works_url,
                $navigation;
-
+        
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignments
                                  WHERE id = $id");
@@ -993,7 +992,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 if (trim($row['grade_comments'])) {
                                         $label = $m['gradecomments'] . ':';
                                         $icon = 'edit.png';
-                                        $comments = "<div class='smaller'>".standard_text_escape($row['grade_comments'])."</div>";
+                                        $comments = "<div class='smaller'>".q($row['grade_comments'])."</div>";
                                 } else {
                                         $label = $m['addgradecomments'];
                                         $icon = 'add.png';
@@ -1376,12 +1375,12 @@ function create_zip_index($path, $id, $online = FALSE)
 		if (trim($row['comments'] != '')) {
 			fputs($fp, "
 			<tr><td colspan='6'><b>$m[comments]: ".
-			"</b>$row[comments]</td></tr>");
+			"</b>".q($row['comments'])."</td></tr>");
 		}
 		if (trim($row['grade_comments'] != '')) {
 			fputs($fp, "
 			<tr><td colspan='6'><b>$m[gradecomments]: ".
-			"</b>$row[grade_comments]</td></tr>");
+			"</b>".q($row['grade_comments'])."</td></tr>");
 		}
 		if (!empty($row['group_id'])) {
 			fputs($fp, "<tr><td colspan='6'>$m[groupsubmit] ".

@@ -24,16 +24,16 @@
  */
 
 $require_power_user = true;
+
 // Include baseTheme
 include '../../include/baseTheme.php';
+
 if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
-// Initialise $tool_content
-$tool_content = "";
 
 // Update cours basic information
 if (isset($_POST['submit']))  {
@@ -80,7 +80,7 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<p align='right'><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {

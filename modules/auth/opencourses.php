@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,7 +61,7 @@ $icons = array(2 => "<img src='$themeimg/lock_open.png'   alt='" . $m['legopen']
 $tool_content .= "
   <table width=100% class='tbl_border'>
   <tr>
-    <th><a name='top'></a>$langFaculty:&nbsp;<b>$fac</b></th>
+    <th><a name='top'></a>$langFaculty:&nbsp;<b>".q($fac)."</b></th>
     <th><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = db_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculteid = $fc ORDER BY cours.type");
@@ -85,7 +85,7 @@ if ($numoftypes > 0) {
     }
     $tool_content .= "</div></th>
     </tr>
-    </table>\n\n";
+    </table>";
     // changed this foreach statement a bit
     // this way we sort by the course types
     // then we just select visible
@@ -108,16 +108,14 @@ if ($numoftypes > 0) {
         if (mysql_num_rows($result) == 0) {
             continue;
         }
-        $tool_content .= "\n\n\n
-           <table width=100% class='tbl_course_type'>
-           <tr>
-            <td>";
+        $tool_content .= "<table width=100% class='tbl_course_type'>
+           <tr><td>";
         // We changed the style a bit here and we output types as the title
         $tool_content .= "<a name='$type'></a><b>$message</b></td>\n";
         // output a top href link if necessary
-        $tool_content .= "\n<td align='right'><a href='#top'>$m[begin]</a></td>";
-        $tool_content .= "</tr>\n";
-        $tool_content .= "</table>\n\n";
+        $tool_content .= "<td align='right'><a href='#top'>$m[begin]</a></td>";
+        $tool_content .= "</tr>";
+        $tool_content .= "</table>";
         $tool_content .= "
     
         <script type='text/javascript' src='sorttable.js'></script>
@@ -138,35 +136,31 @@ if ($numoftypes > 0) {
             }
     
             if ($k%2 == 0) {
-                $tool_content .= "\n<tr class='even'>";
+                $tool_content .= "<tr class='even'>";
             } else {
-                $tool_content .= "\n<tr class='odd'>";
+                $tool_content .= "<tr class='odd'>";
             }
-            $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
-            $tool_content .= "\n<td>" . $codelink . "</td>";
-            $tool_content .= "\n<td>$mycours[t]</td>";
-            $tool_content .= "\n<td align='center'>";
+            $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
+            $tool_content .= "<td>" . $codelink . "</td>";
+            $tool_content .= "<td>$mycours[t]</td>";
+            $tool_content .= "<td align='center'>";
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
                 if ($visible == $mycours['visible']) {
                     $tool_content .= $image;
                 }
             }
-            $tool_content .= "</td>\n";
+            $tool_content .= "</td>";
             $tool_content .= "</tr>";
             $k++;
             // that's it!
             // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
         }
-        $tool_content .= "\n</table>\n";
+        $tool_content .= "</table>";
         $tid++;
     } // end of foreach
 } else {
-    $tool_content .= "&nbsp;</div></th></tr></table>\n\n";
-    $tool_content .= "
-    <p class='alert1'>$m[nolessons]</p>";
+    $tool_content .= "&nbsp;</div></th></tr></table>";
+    $tool_content .= "<div class='alert1'>$m[nolessons]</div>";
 }
-
-$tool_content .= "\n<br>";
-
 draw($tool_content, (isset($uid) and $uid)? 1: 0);

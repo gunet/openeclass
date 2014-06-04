@@ -83,7 +83,7 @@ function show_edit_form($id, $sid, $assign)
 			  <td>${sub['submission_date']}</td></tr>
 			<tr>
 			  <th class='left'>${m['filename']}:</th>
-			  <td><a href='work.php?course=$code_cours&amp;get=${sub['id']}'>${sub['file_name']}</a></td>
+			  <td><a href='work.php?course=$code_cours&amp;get=${sub['id']}'>".q($sub['file_name'])."</a></td>
 			</tr>";
 		        $tool_content .= "<tr>
 			  <th class='left'>$m[grade]:</th>

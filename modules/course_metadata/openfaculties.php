@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.8
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,13 +37,13 @@ if (isset($result)) {
     $k = 0;
     while ($fac = mysql_fetch_array($result)) {
         if ($k % 2 == 0)
-            $tool_content .= "\n  <tr class='even'>";
+            $tool_content .= "<tr class='even'>";
         else
-            $tool_content .= "\n  <tr class='odd'>";
+            $tool_content .= "<tr class='odd'>";
 
         $tool_content .= "<th width='16'>
 		<img src='$themeimg/arrow.png' alt='arrow'></th>
-		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
+		<td><a href='opencourses.php?fc=$fac[id]'>".q($fac[name])."</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 
         // count open courses

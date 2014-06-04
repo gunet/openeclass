@@ -24,25 +24,23 @@ $result = db_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 
 if (isset($result))  {
-	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-<table class='tbl_alt' width=\"100%\">
-	";
+            $tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
+                <table class='tbl_alt' width='100%'>";
 	$k = 0;
 	while ($fac = mysql_fetch_array($result)) {
-		if ($k%2 == 0) {
-			$tool_content .= "\n  <tr class='even'>";
-		} else {
-		        $tool_content .= "\n  <tr class='odd'>";
-		}
-		$tool_content .= "<th width='16'>
-		<img src='$themeimg/arrow.png' alt='arrow'></th>
-		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
-		($fac[code])";
-		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id] AND visible != ".COURSE_INACTIVE."");
-		$r = mysql_fetch_array($n);
-		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
-		</tr>";
-		$k++;
+            if ($k%2 == 0) {
+                    $tool_content .= "<tr class='even'>";
+            } else {
+                    $tool_content .= "<tr class='odd'>";
+            }
+            $tool_content .= "<th width='16'>
+            <img src='$themeimg/arrow.png' alt='arrow'></th>
+            <td><a href='opencourses.php?fc=$fac[id]'>".q($fac['name'])."</a>&nbsp;&nbsp;<small>
+            ($fac[code])";
+            $n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id] AND visible != ".COURSE_INACTIVE."");
+            $r = mysql_fetch_array($n);
+            $tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td></tr>";
+            $k++;
 	}
    $tool_content .= "</table>";
 }

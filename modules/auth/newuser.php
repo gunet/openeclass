@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -113,9 +113,9 @@ if (!isset($_POST['submit'])) {
 		<td colspan='2'><select name='department'>";
 	$deps = db_query("SELECT name, id FROM faculte ORDER BY id");
 	while ($dep = mysql_fetch_array($deps)) {
-		$tool_content .= "\n<option value='".$dep[1]."'>".$dep[0]."</option>";
+		$tool_content .= "<option value='".$dep[1]."'>".q($dep[0])."</option>";
 	}
-	$tool_content .= "\n</select>
+	$tool_content .= "</select>
 	</td></tr>
 	<tr>
 	<th class='left'>$langLanguage:</th>
@@ -139,8 +139,7 @@ if (!isset($_POST['submit'])) {
 	</table>
 	</fieldset>
 	</form>
-<div class='right smaller'>$langRequiredFields</div>
-";
+        <div class='right smaller'>$langRequiredFields</div>";
 } else {
 	if (get_config("email_required")) {
 		$email_arr_value = true;

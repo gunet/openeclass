@@ -37,24 +37,12 @@ $head_content .= $jscalendar->get_load_files_code();
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-// Destroy search variables from session
-if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
-	unset($_SESSION['searchtitle']);
-	unset($_SESSION['searchcode']);
-	unset($_SESSION['searchtype']);
-	unset($_SESSION['searchfaculte']);
-	unset($searchtitle);
-	unset($searchcode);
-	unset($searchtype);
-	unset($searchfaculte);
-}
-
 $reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
 
 // search form
 $tool_content .= "<form action='listcours.php?search=yes' method='get'>
     <fieldset>
-      <legend>".$langSearchCriteria." ".@$newsearch."</legend>
+      <legend>$langSearchCriteria</legend>
       <table width='100%' class='tbl'>
       <tr>
         <th class='left' width='150'>$langTitle:</th>
@@ -66,23 +54,23 @@ $tool_content .= "<form action='listcours.php?search=yes' method='get'>
       </tr>";
 
 if (isset($_GET['searchcode'])) {
-        switch ($searchcode) {
-                case "2":
-                        $typeSel[2] = "selected";
-                        break;
-                case "1":
-                        $typeSel[1] = "selected";
-                        break;
-                case "0":
-                        $typeSel[0] = "selected";
-                        break;
-                case "3":
-                        $typeSel[0] = "selected";
-                        break;
-                default:
-                        $typeSel[-1] = "selected";
-                        break;
-        }
+    switch ($searchcode) {
+        case "2":
+                $typeSel[2] = "selected";
+                break;
+        case "1":
+                $typeSel[1] = "selected";
+                break;
+        case "0":
+                $typeSel[0] = "selected";
+                break;
+        case "3":
+                $typeSel[0] = "selected";
+                break;
+        default:
+                $typeSel[-1] = "selected";
+                break;
+    }
 }
 
 $tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></th>
@@ -125,18 +113,17 @@ $tool_content .= "<tr>
 $resultFac = db_query("SELECT id, name FROM faculte ORDER BY number");
 while ($myfac = mysql_fetch_array($resultFac)) {
 	$selected = ($myfac['id'] == @$searchfaculte)? ' selected': '';
-        $tool_content .= "<option value='$myfac[id]'$selected>$myfac[name]</option>";
+        $tool_content .= "<option value='$myfac[id]'$selected>".q($myfac['name'])."</option>";
 }
 
 $tool_content .= "</select></td></tr>";
 
-$tool_content .= "
-      <tr>
+$tool_content .= "<tr>
         <th>&nbsp;</th>
         <td class='right'><input type='submit' name='search' value='".q($langSearch)."'></td>
       </tr>";
 $tool_content .= "</table></fieldset></form>";
 
-$tool_content .= "<p align='right'><a href='index.php'>".$langBack."</a></p>";
+$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3, null, $head_content);

@@ -100,8 +100,7 @@ if (isset($_POST['submit'])) {
 } else {
         $fac = getfacfromfc($fc);
 	if (!$fac) { // if user does not belong to department
-		$tool_content .= "
-		<p align='justify'>$langAddHereSomeCourses</p>";
+		$tool_content .= "<p align='justify'>$langAddHereSomeCourses</p>";
 		$result=db_query("SELECT id, name, code FROM faculte ORDER BY name");
 		$numrows = mysql_num_rows($result);
 		if (isset($result))  {
@@ -110,55 +109,50 @@ if (isset($_POST['submit'])) {
 			<table width='100%' class='sortable' id='t1'>
 			  <tr>
                             <th class='left'>$langFaculty</th>
-                          </tr>\n";
+                          </tr>";
 			$k = 0;
 			while ($fac = mysql_fetch_array($result)) {
-				if ($k%2==0) {
-					$tool_content .= "
-                          <tr class='even'>";
-				} else {
-					$tool_content .= "
-                          <tr class='odd'>";
-				}
-				$tool_content .= "
-                            <td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
-				<a href='$_SERVER[SCRIPT_NAME]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
-				<span class='smaller'>($fac[code])</span>";
-				$n = db_query("SELECT COUNT(*) FROM cours
-					WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
-				$r = mysql_fetch_array($n);
-				$tool_content .= " 
-                                <span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
+                            if ($k%2==0) {
+                                    $tool_content .= "<tr class='even'>";
+                            } else {
+                                    $tool_content .= "<tr class='odd'>";
+                            }
+                            $tool_content .= "<td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
+                            <a href='$_SERVER[SCRIPT_NAME]?fc=$fac[id]'>" . q($fac['name']) . "</a>&nbsp;
+                            <span class='smaller'>($fac[code])</span>";
+                            $n = db_query("SELECT COUNT(*) FROM cours
+                                    WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
+                            $r = mysql_fetch_array($n);
+                            $tool_content .= "<span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
                             </td>
-                          </tr>";
-			$k++;
+                            </tr>";
+                            $k++;
 			}
-			$tool_content .= "
-                          </table>";
+			$tool_content .= "</table>";
 		}
-		$tool_content .= "<br /><br />\n";
-	} else {
+		$tool_content .= "<br /><br />";
+	} else {            
 		// department exists
 		$numofcourses = getdepnumcourses($fc);
 		// display all the facultes collapsed
 		$tool_content .= collapsed_facultes_horiz($fc);
-		$tool_content .= "\n    <form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+		$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "<br />
 				<div align='right'>
                                 <input class='login' type='submit' name='submit' value='".q($langRegistration)."' />&nbsp;&nbsp;</div>";
-		} else {
+		} else {                    
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
 				<tr>
-				<th><a name='top'></a><b>$langFaculty:</b> $fac</th>
+				<th><a name='top'></a><b>$langFaculty:</b> ".q($fac)."</th>
 				</tr></table>";
 				$tool_content .= "<br /><br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
 			}
 		}
-		$tool_content .= "\n    </form>";
+		$tool_content .= "</form>";
 	} // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
