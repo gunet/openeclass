@@ -211,11 +211,13 @@ if (isset($_POST['formSent'])) {
     // if it is a sequnential exercise in the last question OR the time has expired
     if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
         // goes to the script that will show the result of the exercise
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
         unset($_SESSION['exercise_begin_time']);    
-        unset($_SESSION['exercise_end_time']);    
+        unset($_SESSION['exercise_end_time']);  
+        unset($_SESSION['objExercise'][$exerciseId]);
 
-        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&exerciseId='.$exerciseId);
+        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
 } // end of submit
 

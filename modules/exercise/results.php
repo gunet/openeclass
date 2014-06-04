@@ -84,7 +84,7 @@ while ($row = mysql_fetch_array($result)) {
 
     $sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
                 TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
-                AS time_duration, total_score, total_weighting
+                AS time_duration, total_score, total_weighting, eurid
                 FROM `exercise_user_record` WHERE uid = $sid AND eid = $exerciseId";
     $result2 = db_query($sql2);
     if (mysql_num_rows($result2) > 0) { // if users found
@@ -120,7 +120,7 @@ while ($row = mysql_fetch_array($result)) {
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2['time_duration']) . "</td>";
             }
-            $tool_content .= "<td class='center'>" . $row2['total_score'] . "/" . $row2['total_weighting'] . "</td>
+            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2[eurid]'>" . $row2['total_score'] . "/" . $row2['total_weighting'] . "</a></td>
                         </tr>";
             $k++;
         }

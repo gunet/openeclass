@@ -433,7 +433,27 @@ if (!class_exists('Question')):
                 $this->removeFromList($deleteFromEx);
             }
         }
-
+        /**
+         * Getting exercise answers
+         */
+        function get_answers_record($eurid) {
+            $type = $this->type;
+            $question_id = $this->id;
+            $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);    
+            $i = 1;
+            foreach ($answers as $row) {
+                if ($type == 1) {
+                    $choice = $row->answer_id;
+                } elseif ($type == 2) {
+                    $choice[$row->answer_id] = 1;
+                } elseif ($type == 3) {
+                    $choice[$row->question_id][$i] = $row->answer;
+                }
+               
+                $i++;
+            }
+            return $choice;
+        }
         /**
          * duplicates the question
          *

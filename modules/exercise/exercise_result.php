@@ -45,20 +45,38 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-if (isset($_GET['exerciseId'])) {
-    $exerciseId = intval($_GET['exerciseId']);
+if (isset($_GET['eurId'])) {
+    $eurid = $_GET['eurId'];
+    $exercise_user_record = Database::get()->querySingle("SELECT eid, uid FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+
+    if (!$exercise_user_record) {
+        //den yparxei record me auto to id prospathias
+        //maybe a redirect here with session messages is better...
+        $tool_content .= $langExerciseNotFound;
+        draw($tool_content, 2);
+        exit();        
+    }
+    if (!$is_editor && $exercise_user_record->uid != $uid) {
+       die('den einai dika tou ta apotelesmata kane ton redirect');
+    }
+    $objExercise = new Exercise();
+    $objExercise->read($exercise_user_record->eid);
+} else {
+    //kane kapoio redirect
+    die('den dothike id prospathias');
 }
 
-if (isset($_SESSION['objExercise'][$exerciseId])) {
-    $objExercise = $_SESSION['objExercise'][$exerciseId];
-}
-
-// if the above variables are empty or incorrect, stops the script
-if (!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['questionList'][$exerciseId]) || !is_object($objExercise)) {
-    $tool_content .= $langExerciseNotFound;
-    draw($tool_content, 2);
-    exit();
-}
+//if (isset($_SESSION['objExercise'][$exerciseId])) {
+//    $objExercise = $_SESSION['objExercise'][$exerciseId];
+//}
+//
+//// if the above variables are empty or incorrect, stops the script
+//if (!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['questionList'][$exerciseId]) || !is_object($objExercise)) {
+//    $tool_content .= $langExerciseNotFound;
+//    draw($tool_content, 2);
+//    exit();
+//}
 
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
@@ -82,14 +100,15 @@ $i = $totalScore = $totalWeighting = 0;
 
 // for each question
 
-foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
+foreach ($exercise_question_ids as $row) {
     // gets the student choice for this question
-    $choice = @$_SESSION['exerciseResult'][$exerciseId][$questionId];
-
+    //$choice = @$_SESSION['exerciseResult'][$exerciseId][$row->question_id];
+    
     // creates a temporary Question object
     $objQuestionTmp = new Question();
-    $objQuestionTmp->read($questionId);
+    $objQuestionTmp->read($row->question_id);
 
+    $choice = $objQuestionTmp->get_answers_record($eurid);
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = $objQuestionTmp->selectDescription();
     $questionDescription_temp = nl2br(make_clickable($questionDescription));
@@ -122,7 +141,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
             . "<br/><br/>
 	  </td>
 	</tr>";
-    if (file_exists($picturePath . '/quiz-' . $questionId)) {
+    if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
         $tool_content .= "here
                   <tr class='even'>
                     <td class='center' colspan='${colspan}'><img src='../../" . ${'picturePath'} . "/quiz-" . ${'questionId'} . "'></td>
@@ -154,7 +173,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     }
     if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers) 
         // construction of the Answer object
-        $objAnswerTmp = new Answer($questionId);
+        $objAnswerTmp = new Answer($row->question_id);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
