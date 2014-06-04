@@ -103,7 +103,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 	{
 		if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" )
 		{
-			$sWhere .= "`".$aColumns[$i]."` LIKE '%".quote( $_GET['sSearch'] )."%' OR ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE ".quote('%'. $_GET['sSearch'] .'%')." OR ";                        
 		}
 	}
 	$sWhere = substr_replace( $sWhere, "", -3 );
@@ -123,7 +123,7 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
 			$sWhere .= " AND ";
 		}
-		$sWhere .= "`".$aColumns[$i]."` LIKE '%".quote($_GET['sSearch_'.$i])."%' ";
+		$sWhere .= "`".$aColumns[$i]."` LIKE ".quote('%'.$_GET['sSearch_'.$i.'%'])." ";
 	}
 }
 

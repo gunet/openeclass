@@ -53,9 +53,9 @@ $nameTools = $langBBB;
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<p class='caution'>$langNoGuest</p>";
-    draw($tool_content, 2, 'bbb');
+    draw($tool_content, 2);
 }
-
+load_js('tools.js');
 load_js('jquery.js');
 load_js('taginput/jquery.tagsinput.js');
 load_js('taginput/jquery.tagsinput.min.js');
@@ -85,67 +85,88 @@ if ($is_editor) {
     $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&add=1\">$langNewBBBSession</a></li>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1'>$langNewBBBSession</a></li>
           </ul>
         </div>";
 }
-    //print_r($_GET);
-    if (isset($_GET['add'])) {
-        new_bbb_session();
-    }
-    elseif(isset($_POST['update_bbb_session']))
+if (isset($_GET['add'])) {
+    $nameTools = $langNewBBBSession;
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
+    new_bbb_session();
+}
+elseif(isset($_POST['update_bbb_session']))
+{ 
+    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
+}
+elseif(isset($_GET['choice']))
+{
+    switch($_GET['choice'])
     {
-        //print_r($_GET);
-        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
+        case 'edit':
+            edit_bbb_session($_GET['id']);
+            break;
+        case 'do_delete':
+            delete_bbb_session($_GET['id']);
+            break;
+        case 'do_disable':
+            disable_bbb_session($_GET['id']);
+            break;
+        case 'do_enable':
+            enable_bbb_session($_GET['id']);
+            break;
+        case 'do_join':
+            if(bbb_session_running($_GET['meeting_id'])=='false')
+            {
+                create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw']);
+            }
+            if(isset($_GET['mod_pw']))
+            {
+                header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+            }else
+            {
+                header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+            }
+            break;
     }
-    elseif(isset($_GET['choice']))
-    {
-        switch($_GET['choice'])
-        {
-            case 'edit':
-                edit_bbb_session($_GET['id']);
-                break;
-            case 'do_delete':
-                $tool_content .= delete_bbb_session($_GET['id']);
-                break;
-            case 'do_disable':
-                $tool_content .= disable_bbb_session($_GET['id']);
-                break;
-            case 'do_enable':
-                $tool_content.= enable_bbb_session($_GET['id']);
-                break;
-            case 'do_join':
-                if(bbb_session_running($_GET['meeting_id'])=='false')
-                {
-                    create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw']);
-                }
-                if(isset($_GET['mod_pw']))
-                {
-                    header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-                }else
-                {
-                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-                }
-                break;
-        }
-    }elseif(isset($_POST['new_bbb_session']))
-    {
-        //print_r($_POST['notifyUsers']);
-        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
-    }
-    else
-    {
-        bbb_session_details();
-    }
+    bbb_session_details();
+} elseif(isset($_POST['new_bbb_session'])) {  
+    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
+} else {    
+    bbb_session_details();
+}
 
 
-// create form for new session scheduling
+/**
+ * @brief create form for new session scheduling
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langAdd
+ * @global type $course_code
+ * @global type $langNewBBBSessionInfo
+ * @global type $langNewBBBSessionDesc
+ * @global type $langNewBBBSessionStart
+ * @global type $langNewBBBSessionType
+ * @global type $langNewBBBSessionPublic
+ * @global type $langNewBBBSessionPrivate
+ * @global type $langNewBBBSessionActive
+ * @global type $langNewBBBSessionInActive
+ * @global type $langNewBBBSessionStatus
+ * @global type $langBBBSessionAvailable
+ * @global type $langBBBMinutesBefore
+ * @global type $desc
+ * @global type $start_session
+ * @global type $langBack
+ * @global type $langBBBNotifyUsers
+ * @global type $langBBBNotifyExternalUsers
+ * @global type $langBBBScheduleSessionInfo
+ * @global type $langBBBScheduleSessionInfo2
+ */
 function new_bbb_session() {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive, $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore ;
     global $desc;
     global $start_session;
-    global $langBack;
+    global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langBBBScheduleSessionInfo, $langBBBScheduleSessionInfo2 ;
 
@@ -159,7 +180,7 @@ function new_bbb_session() {
         <legend>$langNewBBBSessionInfo</legend>
         <table class='tbl' width='100%'>
         <tr>
-          <th>$m[title]:</th>
+          <th>$langTitle:</th>
           <td><input type='text' name='title' size='55' /></td>
         </tr>
         <tr>
@@ -207,7 +228,7 @@ function new_bbb_session() {
         <tr>
         <th colspan='2' valign='top'>
                 <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
-            </td>
+            </th>
         </tr>        
         <tr>
           <th>&nbsp;</th>
@@ -220,17 +241,34 @@ function new_bbb_session() {
     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
-// insert scheduled session data into database
+/**
+ * @brief insert scheduled session data into database
+ * @global type $tool_content
+ * @global type $langBBBAddSuccessful
+ * @global type $langBBBScheduledSession
+ * @global type $langBBBScheduleSessionInfo
+ * @global type $langBBBScheduleSessionInfo2
+ * @param type $course_id
+ * @param type $title
+ * @param type $desc
+ * @param type $start_session
+ * @param type $type
+ * @param type $status
+ * @param type $notifyUsers
+ * @param type $minutes_before
+ * @param type $external_users
+ */
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users)
 {
     global $tool_content, $langBBBAddSuccessful;
     global $langBBBScheduledSession;
-    global $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2 ;
+    global $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $course_code, $langBack;
 
     $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
             . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','1','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."','".q(trim($external_users))."')");
     
-    $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
+    $tool_content .= "<div class='success'>$langBBBAddSuccessful</div>";
+    $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 
     // if we have to notify users for new session
     if($notifyUsers=="1")
@@ -270,7 +308,24 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
                                              '$course_id','$order','1')");
 }
 
-// update scheduled session data into database
+/**
+ * @brief update scheduled session data into database
+ * @global type $tool_content
+ * @global type $langBBBAddSuccessful
+ * @global type $course_id
+ * @global type $langBBBScheduleSessionInfo
+ * @global type $langBBBScheduledSession
+ * @global type $langBBBScheduleSessionInfo2
+ * @param type $session_id
+ * @param type $title
+ * @param type $desc
+ * @param type $start_session
+ * @param type $type
+ * @param type $status
+ * @param type $notifyUsers
+ * @param type $minutes_before
+ * @param type $external_users
+ */
 function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users)
 {
     global $tool_content, $langBBBAddSuccessful, $course_id;
@@ -319,13 +374,36 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
 
 }
 
-//form to edit session data
+/**
+ * @brief form to edit session data
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langAdd
+ * @global type $course_code
+ * @global type $langNewBBBSessionInfo
+ * @global type $langNewBBBSessionDesc
+ * @global type $langNewBBBSessionStart
+ * @global type $langNewBBBSessionType
+ * @global type $langNewBBBSessionPublic
+ * @global type $langNewBBBSessionPrivate
+ * @global type $langNewBBBSessionStatus
+ * @global type $langNewBBBSessionActive
+ * @global type $langNewBBBSessionInActive
+ * @global type $langBBBSessionAvailable
+ * @global type $langBBBMinutesBefore
+ * @global type $desc
+ * @global type $start_session
+ * @global type $langBack
+ * @global type $langBBBNotifyUsers
+ * @global type $langBBBNotifyExternalUsers
+ * @param type $session_id
+ */
 function edit_bbb_session($session_id) {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive,$langBBBSessionAvailable,$langBBBMinutesBefore;
     global $desc;
     global $start_session;
-    global $langBack;
+    global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
 
     $query = db_query(" SELECT * FROM bbb_session WHERE id='$session_id'");
@@ -345,7 +423,7 @@ function edit_bbb_session($session_id) {
                     <legend>$langNewBBBSessionInfo</legend>
                     <table class='tbl' width='100%'>
                     <tr>
-                      <th>$m[title]:</th>
+                      <th>$langTitle:</th>
                       <td><input type='text' name='title' size='55' value=".$row['title']."></td>
                     </tr>
                     <tr>
@@ -358,16 +436,16 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                     <th valign='top'>$langNewBBBSessionType:</th>
-                        <td><input type='radio' id='user_button' name='type' value='1' "; 
-                        if ($type==1) {
-                            $tool_content .= "checked";
-                        }
-                        $tool_content .= " /><label for='user_button'>$langNewBBBSessionPublic</label><br />
-                        <input type='radio' id='group_button' name='type' value='0' ";
-                        if ($type==0) {
-                            $tool_content .= "checked";
-                        }
-                        $tool_content .=" /><label for='group_button'>$langNewBBBSessionPrivate</label></td>
+                    <td><input type='radio' id='user_button' name='type' value='1' "; 
+                    if ($type==1) {
+                        $tool_content .= "checked";
+                    }
+                    $tool_content .= " /><label for='user_button'>$langNewBBBSessionPublic</label><br />
+                    <input type='radio' id='group_button' name='type' value='0' ";
+                    if ($type==0) {
+                        $tool_content .= "checked";
+                    }
+                    $tool_content .=" /><label for='group_button'>$langNewBBBSessionPrivate</label></td>
                     </td>
                     </tr>
                     <tr>
@@ -408,7 +486,7 @@ function edit_bbb_session($session_id) {
                     <tr>
                     <th colspan='2' valign='top'>
                         <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
-                    </td>
+                    </th>
                     </tr>
                     <tr>
                       <th>&nbsp;</th>
@@ -419,32 +497,55 @@ function edit_bbb_session($session_id) {
                     </fieldset>
                     </form>
                     <br />";
-                        $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+                     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
         }
 
-
-// Print a box with the details of a bbb session
+/**
+ * @brief Print a box with the details of a bbb session
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $m
+ * @global type $is_editor
+ * @global type $langActions
+ * @global type $langNewBBBSessionStart
+ * @global type $langNewBBBSessionType
+ * @global type $langConfirmDelete
+ * @global type $langNewBBBSessionPublic
+ * @global type $langNewBBBSessionPrivate
+ * @global type $langBBBSessionJoin
+ * @global type $langNewBBBSessionDesc
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langNote
+ * @global type $langBBBNoteEnableJoin
+ * @global type $langTitle
+ * @global type $langActivate
+ * @global type $langDeactivate
+ * @global type $langModify
+ * @global type $langDelete
+ */        
 function bbb_session_details() {
     global $course_id, $tool_content, $m, $is_editor, $langActions, $langNewBBBSessionStart, $langNewBBBSessionType;
     global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin, $langNewBBBSessionDesc;
     global $course_code;
     global $themeimg;
-    global $langNote, $langBBBNoteEnableJoin, $langBBBNoteEnableJoinEditor;
-
-    $result = db_query("SELECT *
-                        FROM bbb_session
-                        WHERE course_id = $course_id
-                        ORDER BY id DESC");
+    global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
+    
+        
+    $result = db_query("SELECT * FROM bbb_session WHERE course_id = $course_id ORDER BY id DESC");
 
     if (mysql_num_rows($result)) {
-                $tool_content .= "<table class='tbl_alt' width='100%'>
-                                  <tr>
-                                      <td class='center'>$m[title]</td>
-                                      <td class='center'>$langNewBBBSessionDesc</td>
-                                      <td class='center'>$langNewBBBSessionStart</td>
-                                      <td class='center'>$langNewBBBSessionType</td>
-                                      <th class='center' colspan='3'>$langActions</th>
-                                  </tr>";
+        if (!$is_editor) {
+            $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
+        }    
+        $tool_content .= "<table class='tbl_alt' width='100%'>
+                          <tr>
+                              <th class='center'>$langTitle</th>
+                              <th class='center'>$langNewBBBSessionDesc</th>
+                              <th class='center'>$langNewBBBSessionStart</th>
+                              <th class='center'>$langNewBBBSessionType</th>
+                              <th class='center' colspan='3'>$langActions</th>
+                          </tr>";
         $k = 0;
         while ($row = mysql_fetch_array($result)) {
                 $id = $row['id'];
@@ -459,26 +560,24 @@ function bbb_session_details() {
 
                 if ($is_editor) {
                     $tool_content .= "
-                        <td align='center'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></td>
-                        <td align='center'>".$row['description']."</td>
-                        <td align='center'>$start_date</td>
-                        <td align='center'>$type</td>
-                        <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
-                        <img src='$themeimg/edit.png' alt='$m[edit]' />
-                        </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
-                        <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
+                        <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></td>
+                        <td>".$row['description']."</td>
+                        <td class='center'>$start_date</td>
+                        <td class='center'>$type</td>
+                        <td class='center'>
+                        ".icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
+                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
+                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>";
                         if ($row['active']=='1') {
-                            $deactivate_temp = htmlspecialchars($m['deactivate']);
-                            $activate_temp = htmlspecialchars($m['activate']);
+                            $deactivate_temp = q($langDeactivate);
+                            $activate_temp = q($langActivate);
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
                         } else {
-                            $activate_temp = htmlspecialchars($m['activate']);
+                            $activate_temp = q($langActivate);
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
                         }
-                } else
-                {
-                    $tool_content .= "
-                    <td align='center'>";
+                } else {
+                    $tool_content .= "<td align='center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
                     {
@@ -486,57 +585,77 @@ function bbb_session_details() {
                     } else {
                         $tool_content .= "$title";
                     }
-                    $tool_content .="<td align='center'>".$row['description']."</td>
-                    <td align='center'>$start_date</tdh>
-                    <td align='center'>$type</td>
-                    <td class='center'>";
+                    $tool_content .="<td>".$row['description']."</td>
+                        <td align='center'>$start_date</td>
+                        <td align='center'>$type</td>
+                        <td class='center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
-                        {
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a>";
+                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval']) {
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a></td>";
                     } else {
-                        $tool_content .= "-";
+                        $tool_content .= "-</td>";
                     }
                 }
                 $tool_content .= "</tr>";
-            }
-        }
-
-    $tool_content .= "
-        </table>
-        </fieldset>";
-    
-    if (! $is_editor) {
-        $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
+            }        
+        $tool_content .= "</table>";
+    } else {
+        $tool_content .= "<div class='alert1'>$langNoBBBSesssions</div>";
     }
 }
 
+/**
+ * @brief disable bbb session
+ * @global type $langBBBUpdateSuccessful
+ * @global type $tool_content
+ * @param type $id
+ * @return type
+ */
 function disable_bbb_session($id)
 {
-    global $langBBBUpdateSuccessful;
+    global $langBBBUpdateSuccessful, $tool_content;
+    
     $query = db_query("UPDATE bbb_session SET active='0' WHERE id=$id");
-    return bbb_session_details() . "<p class='success'>$langBBBUpdateSuccessful</p>";
+    $tool_content .= "<div class='success'>$langBBBUpdateSuccessful</div>";
+    
+    return;    
 }
 
+/**
+ * @brief enable bbb session
+ * @global type $langBBBUpdateSuccessful
+ * @global type $tool_content
+ * @param type $id
+ * @return type
+ */
 function enable_bbb_session($id)
 {
-    global $langBBBUpdateSuccessful;
+    global $langBBBUpdateSuccessful, $tool_content;
+    
     $query = db_query("UPDATE bbb_session SET active='1' WHERE id=$id");
-    return  bbb_session_details() . "<p class='success'>$langBBBUpdateSuccessful</p>";
-
+    $tool_content .= "<div class='success'>$langBBBUpdateSuccessful</div>";
+    
+    return;
 }
 
+
+
+/**
+ * @brief delete bbb sessions
+*/
 function delete_bbb_session($id)
 {
-    global $langBBBDeleteSuccessful;
+    global $langBBBDeleteSuccessful, $tool_content;
+    
     $query = db_query("DELETE FROM bbb_session WHERE id=$id");
-    return  bbb_session_details() . "<p class='success'>$langBBBDeleteSuccessful</p>";
-
+    $tool_content .= "<div class='success'>$langBBBDeleteSuccessful</div>";
+    
+    return;
 }
 
+
 function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
-{
-    //global $course_code;
+{    
     global $course_id;
 
     $run_to = -1;

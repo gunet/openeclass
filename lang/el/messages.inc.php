@@ -3885,7 +3885,7 @@ $langBBBRemoveServer = 'Κατάργηση';
 
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
-
+$langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
 $langBBB = "Τηλεδιάσκεψη";
 $langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
 $langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
