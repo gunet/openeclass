@@ -3,11 +3,14 @@
 $path2add = 2;
 include '../include/baseTheme.php';
 include "../modules/auth/auth.inc.php";
+
+// if we are logged in there is no need to access this page
+if (isset($_SESSION['uid'])) {
+    redirect_to_home_page();
+    exit();
+}
 $warning = '';
 $login_user = FALSE;
-
-// do we need this ???
-process_login();
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {

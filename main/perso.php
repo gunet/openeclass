@@ -31,6 +31,11 @@
  *
  */
 
+if (!isset($_SESSION['uid'])) {
+    die("Unauthorized Access!");
+    exit;
+}
+
 $subsystem = MAIN;
 
 include "$webDir/include/lib/textLib.inc.php";

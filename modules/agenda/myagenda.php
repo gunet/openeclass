@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -97,7 +97,7 @@ function get_agendaitems($query, $month, $year) {
 			$time = $agendatime[0].":".$agendatime[1];
 		        $URL = $urlServer."courses/".$mycours['k'];                        
                         $items[$agendaday][$item['hour']] = "<br /><small>($time) 
-                                <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[titre]</small>";                                
+                                <a href='$URL' title='".q($mycours['i'])."' ($mycours[fc])'>".q($mycours['i'])."</a> ".q($item['titre'])."</small>";
                 }
 	}
 	// sorting by hour for every day

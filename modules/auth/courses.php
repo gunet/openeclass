@@ -174,9 +174,9 @@ draw($tool_content, 1, null, $head_content);
 
 
 function getfacfromfc($dep_id) {
-	$dep_id = intval( $dep_id);
+	$dep_id = intval($dep_id);
 
-	$fac = mysql_fetch_row(db_query("SELECT name FROM faculte WHERE id = '$dep_id'"));
+	$fac = mysql_fetch_row(db_query("SELECT name FROM faculte WHERE id = $dep_id"));
 	if (isset($fac[0]))
 		return $fac[0];
 	else
@@ -184,7 +184,7 @@ function getfacfromfc($dep_id) {
 }
 
 function getfcfromuid($uid) {
-	$res = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id = '$uid'"));
+	$res = mysql_fetch_row(db_query("SELECT department FROM user WHERE user_id = $uid"));
 	if (isset($res[0])) {
 		return $res[0];
 	}
@@ -193,8 +193,10 @@ function getfcfromuid($uid) {
 	}
 }
 
-function getdepnumcourses($fac) {
-	$res = mysql_fetch_row(db_query("SELECT count(code) FROM cours WHERE faculteid = $fac"));
+function getdepnumcourses($fac) {        
+        $fac = intval($fac);
+        
+	$res = mysql_fetch_row(db_query("SELECT COUNT(code) FROM cours WHERE faculteid = $fac"));
 	return $res[0];
 }
 
