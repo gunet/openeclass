@@ -1,6 +1,7 @@
 <?php
+
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -39,7 +40,7 @@ $groupsArr[] = $group;
 $tool = new stdClass();
 $tool->id = 0;
 $tool->name = $langCourseProgram;
-$tool->link = $urlMobile .'courses/'. $currentCourse;
+$tool->link = $urlMobile . 'courses/' . $currentCourse;
 $tool->img = 'coursedescription';
 $tool->type = 'coursedescription';
 $tool->active = true;
@@ -52,7 +53,7 @@ list($first_unit_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
 $tool = new stdClass();
 $tool->id = 1;
 $tool->name = $langCourseUnits;
-$tool->link = $urlMobile .'modules/units/index.php?course='. $currentCourse .'&id='. $first_unit_id;
+$tool->link = $urlMobile . 'modules/units/index.php?course=' . $currentCourse . '&id=' . $first_unit_id;
 $tool->img = 'courseunits';
 $tool->type = 'courseunits';
 $tool->active = true;
@@ -62,16 +63,16 @@ $offset = 1;
 
 if (is_array($toolArr)) {
     $numOfToolGroups = count($toolArr);
-    
+
     for ($i = 0; $i < $numOfToolGroups; $i++) {
         $id = $i + $offset;
-        
+
         if ($toolArr[$i][0]['type'] == 'text') {
             $group = new stdClass();
             $group->id = $id;
             $group->name = $toolArr[$i][0]['text'];
             $groupsArr[] = $group;
-            
+
             $numOfTools = count($toolArr[$i][1]);
             for ($j = 0; $j < $numOfTools; $j++) {
                 $tool = new stdClass();
@@ -90,72 +91,85 @@ if (is_array($toolArr)) {
 echo createDom($groupsArr, $toolsArr);
 exit();
 
-
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createDom($groupsArr, $toolsArr) {
-	$dom = new DomDocument('1.0', 'utf-8');
-        
-        $root = $dom->appendChild($dom->createElement('tools'));
-        
-        foreach ($groupsArr as $group) {
-            
-            if (isset($toolsArr[$group->id])) {
-                
-                $g = $root->appendChild($dom->createElement('toolgroup'));
-                $gname = $g->appendChild(new DOMAttr('name', $group->name));
-                
-                foreach($toolsArr[$group->id] as $tool) {
-                    $t = $g->appendChild($dom->createElement('tool'));
-                    
-                    $name = $t->appendChild(new DOMAttr('name', $tool->name));
-                    $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
-                    $type = $t->appendChild(new DOMAttr('type', $tool->type));
-                    $acti = $t->appendChild(new DOMAttr('active', $tool->active));
-                    
-                }
+    $dom = new DomDocument('1.0', 'utf-8');
+
+    $root = $dom->appendChild($dom->createElement('tools'));
+
+    foreach ($groupsArr as $group) {
+
+        if (isset($toolsArr[$group->id])) {
+
+            $g = $root->appendChild($dom->createElement('toolgroup'));
+            $gname = $g->appendChild(new DOMAttr('name', $group->name));
+
+            foreach ($toolsArr[$group->id] as $tool) {
+                $t = $g->appendChild($dom->createElement('tool'));
+
+                $name = $t->appendChild(new DOMAttr('name', $tool->name));
+                $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
+                $redirect = $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
+                $type = $t->appendChild(new DOMAttr('type', $tool->type));
+                $acti = $t->appendChild(new DOMAttr('active', $tool->active));
             }
         }
+    }
 
-	$dom->formatOutput = true;
-        $ret = $dom->saveXML();
-        return $ret;
+    $dom->formatOutput = true;
+    $ret = $dom->saveXML();
+    return $ret;
 }
 
 function correctLink($value) {
     global $urlMobile;
-    
+
     $containsRelPath = (substr($value, 0, strlen("../..")) === "../..") ? true : false;
-    
+
     $ret = $value;
-    if ($containsRelPath)
+    if ($containsRelPath) {
         $ret = $urlMobile . substr($value, strlen("../../"), strlen($value));
-    
-    $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
-    $redirect = 'redirect='. urlencode($ret);
-    
-    $ret = $urlMobile .'modules/mobile/mlogin.php'. $profile . $redirect;
-        
+    }
+
+    $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
+    $redirect = 'redirect=' . urlencode($ret);
+
+    $ret = $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
+
+    return $ret;
+}
+
+function correctRedirect($value) {
+    global $urlServer;
+    $containsRelPath = (substr($value, 0, strlen("../..")) === "../..") ? true : false;
+    $ret = $value;
+    if ($containsRelPath) {
+        $ret = $urlServer . substr($value, strlen("../../"), strlen($value));
+    }
     return $ret;
 }
 
 function getTypeFromImage($value) {
     $ret = $value;
-    
-    if (substr($value, (strlen('_on.png') * -1)) == '_on.png')
+
+    if (substr($value, (strlen('_on.png') * -1)) == '_on.png') {
         $ret = substr($value, 0, (strlen('_on.png') * -1));
-            
-    if (substr($value, (strlen('_off.png') * -1)) == '_off.png')
+    }
+
+    if (substr($value, (strlen('_off.png') * -1)) == '_off.png') {
         $ret = substr($value, 0, (strlen('_off.png') * -1));
-    
+    }
+
     return $ret;
 }
 
 function getActiveFromImage($value) {
     $ret = "true";
-    
-    if (substr($value, (strlen('_off.png') * -1)) === '_off.png')
+
+    if (substr($value, (strlen('_off.png') * -1)) === '_off.png') {
         $ret = "false";
-    
+    }
+
     return $ret;
 }

@@ -1,6 +1,7 @@
 <?php
+
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -32,21 +33,21 @@ $tools = populateTools();
 echo appendToolsDom($coursesDom, $coursesDomRoot, $tools);
 exit();
 
-
 //////////////////////////////////////////////////////////////////////////////////////
 
 function appendToolsDom($dom, $domRoot, $toolsArr) {
 
     if (isset($toolsArr) && count($toolsArr) > 0) {
-        
+
         $root = $domRoot->appendChild($dom->createElement('tools'));
 
-        foreach($toolsArr as $tool) {
+        foreach ($toolsArr as $tool) {
 
             $t = $root->appendChild($dom->createElement('tool'));
 
             $t->appendChild(new DOMAttr('name', $tool->name));
             $t->appendChild(new DOMAttr('link', $tool->link));
+            $t->appendChild(new DOMAttr('redirect', $tool->redirect));
             $t->appendChild(new DOMAttr('type', $tool->type));
             $t->appendChild(new DOMAttr('active', $tool->active));
         }
@@ -59,46 +60,51 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 
 function populateTools() {
     global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses, $langMyAgenda;
-    
-    $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
-    $baseurl = $urlMobile .'modules/mobile/mlogin.php'. $profile .'redirect=';
-    
+
+    $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
+    $baseurl = $urlMobile . 'modules/mobile/mlogin.php' . $profile . 'redirect=';
+
     $toolsArr = array();
-    
+
     $tool = new stdClass();
     $tool->name = $langMyAnnouncements;
-    $tool->link = $baseurl . urlencode($urlMobile .'modules/announcements/myannouncements.php');
+    $tool->redirect = $urlMobile . 'modules/announcements/myannouncements.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myannouncements';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langMyPersoDeadlines;
-    $tool->link = $baseurl . urlencode($urlMobile .'modules/work/mydeadlines.php');
+    $tool->redirect = $urlMobile . 'modules/work/mydeadlines.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'mydeadlines';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langMyAgenda;
-    $tool->link = $baseurl . urlencode($urlMobile .'modules/agenda/myagenda.php');
+    $tool->redirect = $urlMobile . 'modules/agenda/myagenda.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myagenda';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langModifyProfile;
-    $tool->link = $baseurl . urlencode($urlMobile .'main/profile.php');
+    $tool->redirect = $urlMobile . 'main/profile.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myprofile';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langRegCourses;
-    $tool->link = $baseurl . urlencode($urlMobile .'modules/auth/courses.php');
+    $tool->redirect = $urlMobile . 'modules/auth/courses.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'coursesubscribe';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     return $toolsArr;
 }
