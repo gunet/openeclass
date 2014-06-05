@@ -152,7 +152,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 if ($eclass_version < '2.9') {
                         upgrade_course_2_9($new_course_code, $course_lang);
                 }
-                if (version_compare($oldversion, '2.10', '<')) {
+                if (version_compare($eclass_version, '2.10', '<')) {
                         upgrade_course_2_10($new_course_code, $course_lang);
                 }
 	}
@@ -275,9 +275,26 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $ebook_section_map,
                                                            $ebook_subsection_map)));
                 
-                restore_table($restoreThis, 'course_description',
-                        array('set' => array('course_id' => $course_id),
-                              'delete' => array('id')));
+                if (file_exists("$restoreThis/course_description")) {
+                    restore_table($restoreThis, 'course_description',
+                            array('set' => array('course_id' => $course_id),
+                                  'delete' => array('id')));
+                } else {
+                    $res = db_query("SELECT ur.id, ur.res_id, ur.title, ur.comments, ur.order, ur.visibility, ur.date, cu.course_id
+                        FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) 
+                        WHERE cu.order = -1 AND ur.res_id <> -1 AND cu.course_id = " . $course_id);
+                    while ($ures = mysql_fetch_array($res)) {
+                        $newvis = ($ures['visibility'] == 'i') ? 0 : 1;
+                        db_query("INSERT INTO course_description SET
+                            course_id = " . intval($ures['course_id']) . ",
+                            title = " . quote($ures['title']) . ",
+                            comments = " . quote(purify($ures['comments'])) . ",
+                            visible = " . intval($newvis) . ",
+                            `order` = " . intval($ures['order']) . ",
+                            update_dt = " . quote($ures['date']));
+                        db_query("DELETE FROM unit_resources WHERE id = " . intval($ures['id']));
+                    }
+                }
         }
         
 	removeDir($restoreThis);
