@@ -284,13 +284,12 @@ function move_dir($src, $dest)
                         copy($file, "$dest/$element") or
 			die ("Error copying $src/$element to $dest");
 			unlink($file);
-                        removeDir($src);                        
                 } elseif (is_dir($file)) {
                         move_dir($file, "$dest/$element");
-			rmdir($file);
                 }
         }
-        closedir($handle) ;
+        closedir($handle);
+        removeDir($src);
 }
 
 /*
