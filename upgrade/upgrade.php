@@ -780,6 +780,20 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 db_query('CREATE INDEX `cid` ON oai_record (course_id)');
                 db_query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
             }
+            
+            // unique course_id for course_review
+            $crevres = db_query("SELECT DISTINCT course_id FROM course_review");
+            while ($crev = mysql_fetch_array($crevres)) {
+                $crevres2 = db_query("SELECT * FROM course_review WHERE course_id = " . intval($crev['course_id']) . " ORDER BY last_review DESC");
+                $crevcnt = 0;
+                while ($crev2 = mysql_fetch_array($crevres2)) {
+                    if ($crevcnt > 0) {
+                        db_query("DELETE FROM course_review WHERE id = " . intval($crev2['id']));
+                    }
+                    $crevcnt++;
+                }
+            }
+            db_query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
         }
         
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
