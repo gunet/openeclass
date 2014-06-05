@@ -43,7 +43,7 @@ if (isset($result)) {
 
         $tool_content .= "<th width='16'>
 		<img src='$themeimg/arrow.png' alt='arrow'></th>
-		<td><a href='opencourses.php?fc=$fac[id]'>".q($fac[name])."</a>&nbsp;&nbsp;<small>
+		<td><a href='opencourses.php?fc=$fac[id]'>".q($fac['name'])."</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 
         // count open courses

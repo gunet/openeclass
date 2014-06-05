@@ -64,8 +64,9 @@ while ($course = mysql_fetch_assoc($res)) {
 $commaIds = "";
 $i = 0;
 foreach ($opencourses as $courseId => $courseCode) {
-    if ($i != 0)
+    if ($i != 0) {
         $commaIds .= ",";
+    }
     $commaIds .= $courseId;
     $i++;
 }
