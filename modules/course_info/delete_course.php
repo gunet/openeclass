@@ -41,7 +41,7 @@ if(isset($_POST['delete'])) {
     </td>
     </tr>
     <tr>
-    <th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
+    <th rowspan='2' class='left' width='220'>$langCourseDelConfirm:</th>
     <td width='52' align='center'>
     <form method='post' action='delete_course.php?course=$code_cours'>
     <input type='submit' name='delete' value='".q($langDelete)."' /></form></td>

@@ -610,7 +610,6 @@ $langByDel = "Borrando el curso será permanentemente borrados todos los documen
 $langByDel_A = "Quieres realmente borrar el curso: ";
 $langTipLang = "Escoge el lenguaje del curso.";
 $langTipLang2 = "Escoge el lenguaje de la plataforma.";
-$langConfirmDel = "Confirmación del borrado del curso";
 $langUserDel = "Estás en camino de anular el registro de todos los usuarios de este curso (no serán borrados de otros cursos).<p>¿Realmente quieres proceder? <p>Curso en curso:";
 $langRefreshCourse = "Actualizar Curso";
 $langRefreshInfo = "Si quieres crear un cufrso para un nuevo año académico, puedes borrar los datos de los cursos antiguos.";

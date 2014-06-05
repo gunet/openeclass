@@ -589,7 +589,6 @@ $langByDel = "Durch das Löschen des Kurses werden alle Inhalte permanent gelös
 $langByDel_A = "Möchten Sie wirklich diesen Kurs löschen: ";
 $langTipLang = "Bitte wählen Sie die Sprache aus, in der die Nachrichten des Kurses dargestellt werden.";
 $langTipLang2 = "Bitte wählen Sie die Sprache aus, in der die Nachrichten der Plattform dargestellt werden.";
-$langConfirmDel = "Das Löschen des Kurses bestätigen";
 $langUserDel = "Sie befinden sich im Vorgang alle Benutzer von diesem Kurs abzumelden (sie werden nicht von den anderen Kursen abgemeldet).<p>Möchten Sie wirklich fortsetzen? <p>Aktueller Kurs:";
 $langRefreshCourse = "Aktualisierung des Kurses";
 $langRefreshInfo = "Um den Kurs für eine neue Gruppe von ".$langsOfStudents."vorzubereiten, können Sie den alten Inhalt löschen.";

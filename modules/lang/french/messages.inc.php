@@ -656,7 +656,6 @@ $langByDel = "En supprimant le cours, vous allez supprimer définitivement tous 
 $langByDel_A = "Voulez-vous vraiment supprimer le cours :";
 $langTipLang = "Choisissez la langue à utiliser pour les messages du cours.";
 $langTipLang2 = "Choisissez la langue à utiliser pour les messages de la plateforme.";
-$langConfirmDel = "Confirmation de la suppression du cours";
 $langUserDel = "Vous allez supprimer tous les $langsStudents de ce cours (qui ne seront pourtant pas supprimés des autres cours).<p>Voulez-vous vraiment procéder à cette suppression ?"
 ;
 $langRefreshCourse = "Actualiser le cours";

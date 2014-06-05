@@ -609,7 +609,6 @@ $langByDel = "Con l' eliminazione del corso saranno eliminati definitivamente tu
 $langByDel_A = "Vuoi davvero eliminare il corso: ";
 $langTipLang = "Seleziona la lingua in cui i messaggi del corso verranno visualizzati.";
 $langTipLang2 = "Seleziona la lingua in cui i messaggi della piattaforma verranno visualizzati.";
-$langConfirmDel = "Convalidare l' eliminazione del corso";
 $langUserDel = "Stai per eliminare tutti gli ". $langsStudents . " dal corso (non saranno eliminati dagli altri corsi).<p> Vuoi davvero procedere con la loro eliminazione dal corso ?";
 $langRefreshCourse = "Rinnovare corso";
 $langRefreshInfo = "Affinché tu prepari il corso per un nuovo gruppo di". $langsStudents. " puoi eliminare il vecchio contenuto.";

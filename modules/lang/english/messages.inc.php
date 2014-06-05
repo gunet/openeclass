@@ -627,7 +627,6 @@ $langByDel = "Deleting the course will permanently delete all the documents it c
 $langByDel_A = "Do you really want to delete the course: ";
 $langTipLang = "Choose the course language.";
 $langTipLang2 = "Choose the platform (navigation) language.";
-$langConfirmDel = "Confirmation of course deletion";
 $langUserDel = "You are about to unregister all course users (they will not be deleted from other courses).<p>Do you really want to proceed?";
 $langRefreshCourse = "Refresh Course";
 $langRefreshInfo = "If you want to create a course for a new academic year, you can delete the old data courses.";
