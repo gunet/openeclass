@@ -1439,7 +1439,7 @@ $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
-$langExerciseNotFound = "Η απάντηση δεν βρέθηκε";
+$langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 
 // exercise result.php

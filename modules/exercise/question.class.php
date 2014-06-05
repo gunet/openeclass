@@ -442,12 +442,16 @@ if (!class_exists('Question')):
             $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);    
             $i = 1;
             foreach ($answers as $row) {
-                if ($type == 1) {
+                if ($type == 1 || $type == 5) {
                     $choice = $row->answer_id;
                 } elseif ($type == 2) {
                     $choice[$row->answer_id] = 1;
+                } elseif ($type == 6) {
+                    $choice = $row->answer;
                 } elseif ($type == 3) {
-                    $choice[$row->question_id][$i] = $row->answer;
+                    $choice[$row->answer_id] = $row->answer;
+                } elseif ($type == 4) {
+                    $choice[$row->answer] = $row->answer_id;
                 }
                
                 $i++;

@@ -75,8 +75,7 @@ if (isset($_REQUEST['exerciseId'])) {
         // if the specified exercise is disabled (this only applies to students)
         // or doesn't exist redirects and shows error 
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
-            //$langExerciseNotFound??
-            session::set_flashdata('Η άσκηση δεν βρέθηκε', 'alert1');
+            session::set_flashdata($langExerciseNotFound, 'alert1');
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
         }
         // saves the object into the session
@@ -216,6 +215,7 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['exercise_begin_time']);    
         unset($_SESSION['exercise_end_time']);  
         unset($_SESSION['objExercise'][$exerciseId]);
+        unset($_SESSION['exerciseResult'][$exerciseId]);
 
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
@@ -398,7 +398,9 @@ if (!$questionList) {
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
-    $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";
+    if (!$is_editor) {
+        $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
+    }
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>
         </tr>

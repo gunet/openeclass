@@ -51,20 +51,19 @@ if (isset($_GET['eurId'])) {
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 
     if (!$exercise_user_record) {
-        //den yparxei record me auto to id prospathias
-        //maybe a redirect here with session messages is better...
-        $tool_content .= $langExerciseNotFound;
-        draw($tool_content, 2);
-        exit();        
+        //No record matches with thiw exercise user record id
+        Session::set_flashdata($langExerciseNotFound, 'alert1');
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     if (!$is_editor && $exercise_user_record->uid != $uid) {
-       die('den einai dika tou ta apotelesmata kane ton redirect');
+       // user is not allowed to view other people's exercise results
+       redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
 } else {
-    //kane kapoio redirect
-    die('den dothike id prospathias');
+    //exercise user recird id is not set
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 //if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -347,7 +346,7 @@ foreach ($exercise_question_ids as $row) {
         $tool_content .= "
 		<tr class='even'>
 		  <th colspan='$colspan' class='odd'>";
-        if ($answerType == FREE_TEXT) {
+        if ($answerType == FREE_TEXT && !empty(purify($choice))) {
             $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";
         }
         $tool_content .= "<span style='float:right;'>
