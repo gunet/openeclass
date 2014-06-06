@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -74,15 +74,7 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
             <li><a href='../usage/group.php?course=$code_cours'>$langGroupUsage</a></li>
           </ul>
         </div>";                
-} else {
-        $tool_content .= "
-          <div id='operations_container'>
-            <ul id='opslist'>
-              <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a></li>
-              <li><a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a></li>
-            </ul>
-          </div>";
-}
+} 
 
 // check if there are learning paths available
 $l = db_query("SELECT * FROM `$TABLELEARNPATH`", $currentCourseID);
