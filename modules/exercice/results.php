@@ -36,6 +36,10 @@ require_once '../../include/lib/modalboxhelper.class.php';
 require_once '../../include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+if (!$is_editor) {
+    redirect_to_home_page("modules/exercice/exercice.php?course=$code_cours");
+}
+
 $nameTools = $langResults;
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
