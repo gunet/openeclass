@@ -648,6 +648,7 @@ $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
 $langPurgeExerciseResults = "Delete course exercise results";
 $langPurgedExerciseResults = "Exercise results have been deleted";
+$langNotAvailable = "Not available";
 $langBeforeRegDate = "registered before";
 $langContactProf = "Contact $langTeachers";
 $langEmailEmpty = "Your e-mail address is empty. To contact the course $langsTeachers,
