@@ -54,9 +54,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t
                     WHERE eurid = ?d", $record_end_date, $eurid);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+            unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
+            unset($_SESSION['exercise_begin_time']);    
+            unset($_SESSION['exercise_end_time']);  
             unset($_SESSION['objExercise'][$exerciseId]);
-            unset($_SESSION['exercise_begin_time']);
-            unset($_SESSION['exercise_end_time']);
+            unset($_SESSION['exerciseResult'][$exerciseId]); 
             exit();
         }
 }
@@ -91,10 +93,13 @@ if (isset($_POST['buttonCancel'])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t
                 WHERE eurid = ?d", $record_end_date, $eurid);
+        Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 	Session::set_flashdata('Η προσπάθεια ακυρώθηκε', 'alert1');
+        unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
+        unset($_SESSION['exercise_begin_time']);    
+        unset($_SESSION['exercise_end_time']);  
         unset($_SESSION['objExercise'][$exerciseId]);
-        unset($_SESSION['exercise_begin_time']);
-        unset($_SESSION['exercise_end_time']);        
+        unset($_SESSION['exerciseResult'][$exerciseId]);        
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 // if the user has clicked on the "Save & Exit" button
@@ -167,62 +172,6 @@ $nbrQuestions = sizeof($questionList);
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
-
-// if the user has submitted the form
-if (isset($_POST['formSent'])) {
-    $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
-    $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
-    $questionNum = isset($_POST['questionNum']) ? $_POST['questionNum'] : '';
-    $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
-    $exercisetotalweight = isset($_POST['exercisetotalweight']) ? $_POST['exercisetotalweight'] : '';
-    $exerciseTimeConstraint = intval($_POST['exerciseTimeConstraint']);
-    $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
-    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
-    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-            
-    //if there are answers in the session (one question per page) get them
-    if (isset($_SESSION['exerciseResult'][$exerciseId])) {
-        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
-    } else {
-        $exerciseResult = array();
-    }
-    // checking if user's time is more than exercise's time constrain
-    if (!$is_editor && isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
-        $_SESSION['exercise_begin_time'][$exerciseId] = Database::get()->querySingle("SELECT record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid = ?d AND (record_end_date is NULL OR record_end_date = 0)", $exerciseId, $uid)->record_start_date;
-        $nowTime = new DateTime();
-        $startTime = new DateTime($_SESSION['exercise_begin_time'][$exerciseId]);
-        $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));
-        $endTime->add(new DateInterval('PT1M'));
-        if ($endTime < $nowTime) {
-            $time_expired = TRUE;                     
-        }
-
-        unset($_SESSION['exercise_begin_time']);    
-    }
-
-    // records user's answers in the database and adds them in the $exerciseResult array which is returned
-    $exerciseResult = $objExercise->record_answers($choice, $exerciseResult);
-
-    // the script "exercise_result.php" will take the variable $exerciseResult from the session
-    $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
-    
-    // if it is a non-sequential exercice OR
-    // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
-        // goes to the script that will show the result of the exercise
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
-        unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
-        unset($_SESSION['exercise_begin_time']);    
-        unset($_SESSION['exercise_end_time']);  
-        unset($_SESSION['objExercise'][$exerciseId]);
-        unset($_SESSION['exerciseResult'][$exerciseId]);
-
-        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
-    }
-} // end of submit
-
-
-
 if (!$is_editor) {
 	$error = FALSE;
 	// determine begin time: 
@@ -281,6 +230,66 @@ if (!$is_editor) {
     	exit();
     }
 }
+// if the user has submitted the form
+if (isset($_POST['formSent'])) {
+    $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
+    $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
+    $questionNum = isset($_POST['questionNum']) ? $_POST['questionNum'] : '';
+    $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
+    $exercisetotalweight = isset($_POST['exercisetotalweight']) ? $_POST['exercisetotalweight'] : '';
+    $exerciseTimeConstraint = intval($_POST['exerciseTimeConstraint']);
+    $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
+    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
+    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+            
+    //if there are answers in the session (one question per page) get them
+    if (isset($_SESSION['exerciseResult'][$exerciseId])) {
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
+    } else {
+        $exerciseResult = array();
+    }
+    // checking if user's time is more than exercise's time constrain
+    if (!$is_editor && isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
+        $_SESSION['exercise_begin_time'][$exerciseId] = Database::get()->querySingle("SELECT record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid = ?d AND (record_end_date is NULL OR record_end_date = 0)", $exerciseId, $uid)->record_start_date;
+        $nowTime = new DateTime();
+        $startTime = new DateTime($_SESSION['exercise_begin_time'][$exerciseId]);
+        $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));
+        $endTime->add(new DateInterval('PT1M'));
+        if ($endTime < $nowTime) {
+            $time_expired = TRUE;                     
+        }
+
+        unset($_SESSION['exercise_begin_time']);    
+    }
+
+    // records user's answers in the database and adds them in the $exerciseResult array which is returned
+    $exerciseResult = $objExercise->record_answers($choice, $exerciseResult);
+
+    // the script "exercise_result.php" will take the variable $exerciseResult from the session
+    $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
+    
+    // if it is a non-sequential exercice OR
+    // if it is a sequnential exercise in the last question OR the time has expired
+    if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
+        // goes to the script that will show the result of the exercise
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
+        $record_end_date = date('Y-m-d H:i:s', time());
+        $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+        $totalWeighting = $objExercise->selectTotalWeighting();
+        // record results of exercise
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, 
+                                total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $totalWeighting, $eurid);
+        
+        unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
+        unset($_SESSION['exercise_begin_time']);    
+        unset($_SESSION['exercise_end_time']);  
+        unset($_SESSION['objExercise'][$exerciseId]);
+        unset($_SESSION['exerciseResult'][$exerciseId]);
+
+        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+    }
+} // end of submit
+
 
 // if questionNum comes from POST and not from GET
 if (!isset($questionNum) || $_POST['questionNum']) {

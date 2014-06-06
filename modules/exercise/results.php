@@ -75,29 +75,27 @@ $tool_content .= "
     </table>
     <br/>";
 
-$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $course_id)";
-$result = db_query($sql);
-while ($row = mysql_fetch_array($result)) {
-    $sid = $row['uid'];
-    $StudentName = db_query("SELECT surname, givenname, am FROM user WHERE id = $sid");
-    $theStudent = mysql_fetch_array($StudentName);
+$result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = ?d)", $course_id);
 
-    $sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
+foreach ($result as $row) {
+    $sid = $row->uid;
+    $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
+
+    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
                 TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
                 AS time_duration, total_score, total_weighting, eurid
-                FROM `exercise_user_record` WHERE uid = $sid AND eid = $exerciseId";
-    $result2 = db_query($sql2);
-    if (mysql_num_rows($result2) > 0) { // if users found
+                FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
+    if (count($result2) > 0) { // if users found
         $tool_content .= "<table class='tbl_alt' width='100%'>";
         $tool_content .= "<tr><td colspan='3'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
-            if ($theStudent['am'] == '')
+            if ($theStudent->am == '')
                 $studentam = '-';
             else
-                $studentam = $theStudent['am'];
-            $tool_content .= "<b>$langUser:</b> $theStudent[surname] $theStudent[givenname]  <div class='smaller'>($langAm: $studentam)</div>";
+                $studentam = $theStudent->am;
+            $tool_content .= "<b>$langUser:</b> $theStudent->surname $theStudent->givenname  <div class='smaller'>($langAm: $studentam)</div>";
         }
         $tool_content .= "</td>
                 </tr>
@@ -108,19 +106,19 @@ while ($row = mysql_fetch_array($result)) {
                 </tr>";
 
         $k = 0;
-        while ($row2 = mysql_fetch_array($result2)) {
+        foreach ($result2 as $row2) {
             if ($k % 2 == 0) {
                 $tool_content .= "<tr class='even'>";
             } else {
                 $tool_content .= "<tr class='odd'>";
             }
-            $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
-            if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
+            $tool_content .= "<td class='center'>$row2->record_start_date</td>";
+            if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $tool_content .= "<td class='center'>$langNotRecorded</td>";
             } else {
-                $tool_content .= "<td class='center'>" . format_time_duration($row2['time_duration']) . "</td>";
+                $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2[eurid]'>" . $row2['total_score'] . "/" . $row2['total_weighting'] . "</a></td>
+            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a></td>
                         </tr>";
             $k++;
         }
