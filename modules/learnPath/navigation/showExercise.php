@@ -63,8 +63,8 @@ if (isset($_GET['course'])) {
 	$course = intval($_GET['course']);       
 }
 
-if (isset($_GET['exerciseId'])) {
-	$exerciseId = intval($_GET['exerciseId']);
+if (isset($_REQUEST['exerciseId'])) {
+	$exerciseId = intval($_REQUEST['exerciseId']);
 }
 
 // if the user has clicked on the "Cancel" button
@@ -78,11 +78,9 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 	$_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
-
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-	$exerciseType = isset($_POST['exerciseType'])?intval($_POST['exerciseType']):'';
-        $exerciseId = isset($_POST['exerciseId'])?intval($_POST['exerciseId']):'';
+	$exerciseType = isset($_POST['exerciseType'])?intval($_POST['exerciseType']):'';        
 	$questionNum  = isset($_POST['questionNum'])?$_POST['questionNum']:'';
 	$nbrQuestions = isset($_POST['nbrQuestions'])?$_POST['nbrQuestions']:'';
 	$exerciseTimeConstrain = isset($_POST['exerciseTimeConstrain'])?$_POST['exerciseTimeConstrain']:'';
@@ -128,10 +126,10 @@ if (isset($_POST['formSent'])) {
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
         $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
 	// if it is the last question (only for a sequential exercise)
-	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
-		// goes to the script that will show the result of the exercise
-		header("Location: showExerciseResult.php?course=$code_cours&exerciseId=$exerciseId");
-		exit();
+	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {            
+            // goes to the script that will show the result of the exercise
+            header("Location: showExerciseResult.php?course=$code_cours&exerciseId=$exerciseId");
+            exit();
 	}
 } // end of submit
 
