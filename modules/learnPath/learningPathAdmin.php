@@ -546,11 +546,11 @@ $ind=1;
 foreach ($flatElementList as $module)
 {
     //-------------visibility-----------------------------
-    if ( $module['visibility'] == 'HIDE' )
+    if ( $module['visibility'] == 'HIDE')
     {
         if ($is_editor)
         {
-            $style=" class=\"invisible\"";
+            $style=" class='invisible'";
             $image_bullet = "off";
         }
         else

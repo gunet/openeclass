@@ -87,8 +87,7 @@ $nameTools = $langInsertMyExerciseToolName;
 mysql_select_db($currentCourseID);
 
 // see checked exercises to add
-
-$sql = "SELECT * FROM `".$TABLEEXERCISES;
+$sql = "SELECT * FROM ".$TABLEEXERCISES." WHERE active = 1";
 $resultex = db_query($sql);
 
 // for each exercise checked, try to add it to the learning path.

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -271,22 +271,22 @@ $num_results = mysql_num_rows($query_num_results);
 if (!$num_results == 0) {
 
 $tool_content .= "
-    <table width=\"100%\" class=\"tbl_alt\">
+    <table width='100%' class='tbl_alt'>
     <tr>
-      <th colspan=\"2\">".$langLearningObjects."</th>
-      <th width=\"65\">".$langTools."</th>
-    </tr>\n";
+      <th colspan='2'>".$langLearningObjects."</th>
+      <th width='70'>".$langTools."</th>
+    </tr>";
 }
 // Display modules of the pool of this course
 
 $ind=1;
 while ($list = mysql_fetch_array($result))
 {
-                   if ($ind%2 == 0) {
-                       $style = 'class="odd"';
-                   } else {
-                       $style = 'class="even"';
-                   }
+    if ($ind%2 == 0) {
+        $style = 'class="odd"';
+    } else {
+        $style = 'class="even"';
+    }
 
     //DELETE , RENAME, COMMENT
 
@@ -294,7 +294,7 @@ while ($list = mysql_fetch_array($result))
     $contentType_alt = selectAlt($list['contentType']);
     $tool_content .= "
     <tr $style>
-      <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$themeimg.'/'.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
+      <td align=\"left\" width=\"1%\"><img src=\"".$themeimg.'/'.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
       <td align=\"left\"><b>". q($list['name']) ."</b>";
 
     if ( $list['comment'] )
@@ -305,9 +305,9 @@ while ($list = mysql_fetch_array($result))
     $tool_content .= "</td>
               <td><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\">
               <img src='".$themeimg."/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' />
-              </a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\">
+              </a>&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\">
               <img src='".$themeimg."/rename.png' alt='".q($langRename)."' title='".q($langRename)."' />
-              </a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\">
+              </a>&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\">
               <img src='".$themeimg."/comment_edit.png' alt='".q($langComment)."' title='".q($langComment)."' /></a></td>";
     $tool_content .= "    </tr>";
 

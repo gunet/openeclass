@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -191,13 +191,21 @@ $tool_content .= "
     <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
 draw($tool_content, 2, null, $head_content);
 
-
+/**
+ * 
+ * @global type $langName
+ * @global type $langSelection
+ * @global type $langAddModulesButton
+ * @global type $code_cours
+ * @global type $themeimg
+ * @return string
+ */
 function showmedia()
 {
     global $langName, $langSelection, $langAddModulesButton, $code_cours, $themeimg;
 
-    $sqlMedia = "SELECT * FROM video ORDER BY titre";
-    $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY titre";
+    $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY titre";
+    $sqlMediaLinks = "SELECT * FROM videolinks WHERE visible = 1 ORDER BY titre";
     
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);

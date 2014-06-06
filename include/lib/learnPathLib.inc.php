@@ -629,13 +629,12 @@ function get_learnPath_progress($lpid, $lpUid)
 function display_my_exercises($dialogBox, $style)
 {
     $tbl_quiz_test = "exercices";
-
-    global $langAddModule;
+    
     global $langAddModulesButton;
     global $langExercise;
-    global $langNoEx;
-    global $langAddOneModuleButton;
-    global $themeimg, $langComment, $langSelection, $code_cours;
+    global $langNoEx;    
+    global $themeimg, $langSelection, $code_cours;
+    
     $output = "";
 
     $output .= '<!-- display_my_exercises output -->' . "\n\n";
@@ -647,10 +646,10 @@ function display_my_exercises($dialogBox, $style)
     {
         $output .= disp_message_box($dialogBox, $style).'<br />'."\n";
     }
-    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmdglobal=add">'."\n";
-    $output .= '    <table width="99%" class="tbl_alt">'."\n"
-    .    '    <tr>'."\n"
-    .    '      <th><div align="left">'
+    $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmdglobal=add">'."\n";
+    $output .= '<table width="99%" class="tbl_alt">'."\n"
+    .    '<tr>'."\n"
+    .    '<th><div align="left">'
     .    $langExercise
     .    '</div></th>'."\n"
     .    '      <th width="10"><div align="center">'
@@ -662,7 +661,7 @@ function display_my_exercises($dialogBox, $style)
     // Display available modules
     $atleastOne = FALSE;
     $sql = "SELECT `id`, `titre` AS `title`, `description`
-            FROM `" . $tbl_quiz_test . "`
+            FROM `" . $tbl_quiz_test . "` WHERE active = 1
             ORDER BY  `titre`, `id`";
     $exercises = db_query_fetch_all($sql);
 
@@ -677,8 +676,8 @@ function display_my_exercises($dialogBox, $style)
                        $style = 'class="odd"';
                    }  
               
-	        $output .= '    <tr '.$style.'>'."\n"
-	        .    '      <td align="left">'
+	        $output .= '<tr '.$style.'>'."\n"
+	        .    '<td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
 	        .    '<img src="' . $themeimg . '/exercise_on.png" alt="' . q($langExercise) . '" title="' . q($langExercise) . '" />&nbsp;'
 	        .    q($exercise['title'])
@@ -691,8 +690,7 @@ function display_my_exercises($dialogBox, $style)
 	            .    '</td>'."\n"
 	            ;
 	        } else {
-	            $output .= '</td>'."\n"
-	            ;
+	            $output .= '</td>';
             }
 	        $output .= '      <td align="center">'
 	        .    '<input type="checkbox" name="check_' . $exercise['id'] . '" id="check_' . $exercise['id'] . '" value="' . $exercise['id'] . '" />'
@@ -709,12 +707,7 @@ function display_my_exercises($dialogBox, $style)
 
     if( !$atleastOne )
     {
-        $output .= '    <tr>'."\n"
-		.	 '      <td colspan="2" align="center">'
-        .    $langNoEx
-        .    '</td>'."\n"
-		.	 '    </tr>'."\n"
-        ;
+        $output .= '<tr><td colspan="2" align="center">'.$langNoEx.'</td></tr>';
     }
 
     // Display button to add selected modules
@@ -749,19 +742,15 @@ function display_my_exercises($dialogBox, $style)
   */
 
 function display_my_documents($dialogBox, $style)
-{
-    global $is_editor;
-    global $courseDir;
+{     
     global $baseWorkDir;
     global $curDirName;
     global $curDirPath;
     global $parentDir;
-    global $langAddModule;
     global $langUp;
     global $langName;
     global $langSize;
     global $langDate;
-    global $langOk;
     global $langAddModulesButton;
     global $fileList;
     global $themeimg;
@@ -770,21 +759,18 @@ function display_my_documents($dialogBox, $style)
     $output = '';
     /*
      * DISPLAY
-     */
-
-    $output .= '<!-- display_my_documents output -->' . "\n";
+     */    
     $dspCurDirName = htmlspecialchars($curDirName);
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
 
-    $output .= '
-    <form action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'" method="POST">';
+    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'" method="POST">';
 
     /*--------------------------------------
     DIALOG BOX SECTION
     --------------------------------------*/
     $colspan = 5;
-    if( !empty($dialogBox) )
+    if (!empty($dialogBox))
     {
         $output .= disp_message_box($dialogBox, $style)."<br />";
     }
@@ -794,11 +780,9 @@ function display_my_documents($dialogBox, $style)
 
     /* CURRENT DIRECTORY */
     if ($curDirName) {
-        $output .= '
-    <table width="99%" class="tbl">
-    <tr>
-      <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
-      <td>'.$langDirectory.': <b>'.$dspCurDirName.'</b></td>';
+        $output .= '<table width="99%" class="tbl"><tr>
+        <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
+        <td>'.$langDirectory.': <b>'.$dspCurDirName.'</b></td>';
     /* GO TO PARENT DIRECTORY */
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
@@ -808,54 +792,38 @@ function display_my_documents($dialogBox, $style)
                         "hspace='5' alt='".q($langUp)."' title='".q($langUp)."' /></a></td>" .
                    "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
     }
-        $output .= '
-    </tr>
-    </table>';
+        $output .= '</tr></table>';
     }
 
-
-    $output .= '
-    <table width="99%" class="tbl_alt" >';
+    $output .= '<table width="99%" class="tbl_alt" >';
     $output .= "
     <tr>
-      <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langName</div></th>
+      <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
       <th>$langSize</th>
       <th>$langDate</th>
       <th>$langSelection</th>
     </tr>";
 
-
     /*--------------------------------------
     DISPLAY FILE LIST
     --------------------------------------*/
-
     if ( $fileList )
-    {
+    {       
         $iterator = 0;
-        $ind=1;
+        $ind = 1;
         while ( list( $fileKey, $fileName ) = each ( $fileList['name'] ) )
         {
-                   if ($ind%2 == 0) {
-                       $style = 'class="even"';
-                   } else {
-                       $style = 'class="odd"';
-                   }
-
-		$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
-            	$cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
-
-            if ($fileList['visibility'][$fileKey] == "i")
-            {
-                if ($is_editor)
-                {
-                    $style = 'class="invisible"';
-                }
-                else
-                {
-                    $style = "";
-                    continue; // skip the display of this file
-                }
+            if ($fileList['visibility'][$fileKey] == 'i') {
+                continue;
             }
+            if ($ind%2 == 0) {
+                $style = 'class="even"';
+            } else {
+                $style = 'class="odd"';
+            }
+
+            $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
+            $cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
 
             if ($fileList['type'][$fileKey] == A_FILE)
             {                    
@@ -876,29 +844,24 @@ function display_my_documents($dialogBox, $style)
                 $urlFileName = '<a href="'. $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
             }
 
-            $output .= '
-    <tr '.$style.'>
-      <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
-      <td align="left">'. $urlFileName .'</td>
-      <td width="80" class="center">' . $size . '</td>
-      <td width="80" class="center">' . $date . '</td>';
+            $output .= '<tr '.$style.'>
+            <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
+            <td align="left">'. $urlFileName .'</td>
+            <td width="80" class="center">' . $size . '</td>
+            <td width="80" class="center">' . $date . '</td>';
 
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $iterator++;
                 $output .= '
-      <td width="10" class="center">
-        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
-        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />
-      </td>';
+                <td width="10" class="center">
+                  <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
+                  <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />
+                </td>';
+            } else {
+                $output .= '<td>&nbsp;</td>';
             }
-            else
-            {
-                $output .= '
-      <td>&nbsp;</td>';
-            }
-            $output .= '
-    </tr>';
+            $output .= '</tr>';
 
             /* COMMENTS */
 
@@ -908,41 +871,31 @@ function display_my_documents($dialogBox, $style)
                 $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
 
                 $output .= '
-    <tr class="even">
-      <td>&nbsp;</td>
-      <td colspan="'.$colspan.'"><span class="comment">'.$fileList['comment'][$fileKey].'</span></td>
-    </tr>';
+                <tr class="even">
+                  <td>&nbsp;</td>
+                  <td colspan="'.$colspan.'"><span class="comment">'.$fileList['comment'][$fileKey].'</span></td>
+                </tr>';
             }
             $ind++;
         }  // end each ($fileList)
         // form button
 
-
-    $colspan1 = $colspan -1 ;
+        $colspan1 = $colspan -1 ;
         $output .= '
-    <tr>
-      <th colspan="'.$colspan.'"><div class="right">
-        <input type="hidden" name="openDir" value="'.$curDirPath.'" />
-        <input type="hidden" name="maxDocForm" value ="'.$iterator.'" />
-        <input type="submit" name="submitInsertedDocument" value="'.q($langAddModulesButton).'" /></div>
-      </th>
-    </tr>';
+        <tr>
+          <th colspan="'.$colspan.'"><div class="right">
+            <input type="hidden" name="openDir" value="'.$curDirPath.'" />
+            <input type="hidden" name="maxDocForm" value ="'.$iterator.'" />
+            <input type="submit" name="submitInsertedDocument" value="'.q($langAddModulesButton).'" /></div>
+          </th>
+        </tr>';
     } // end if ( $fileList)
 	else
-	{
-		$output .= '
-    <tr>
-      <td colspan="4">&nbsp;</td>
-    </tr>';
+    {
+        $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
-
-	$output .= '
-    </table>
-
-    </form>
-    <!-- end of display_my_documents output -->'."\n";
-
-	return $output;
+    $output .= '</table></form>';
+    return $output;
 }
 
 
