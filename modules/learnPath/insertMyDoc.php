@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -274,7 +274,7 @@ $result = db_query($sql);
 $attribute = array();
 
 while ($row = mysql_fetch_assoc($result)) {
-    $attribute['path'      ][] = $row['path'      ];
+    $attribute['path'      ][] = $row['path'      ];    
     $attribute['visibility'][] = $row['visibility'];
     $attribute['comment'   ][] = $row['comment'   ];
     $attribute['filename'  ][] = $row['filename'  ];
@@ -335,14 +335,14 @@ while ($file = readdir($handle))
 
     if ($keyAttribute !== false)
     {
-        $fileList['comment'   ][] = $attribute['comment'   ][$keyAttribute];
+        $fileList['comment'   ][] = $attribute['comment'   ][$keyAttribute];        
         $fileList['visibility'][] = $attribute['visibility'][$keyAttribute];
         $fileList['filename'  ][] = $attribute['filename'  ][$keyAttribute];
         $fileList['path'      ][] = $attribute['path'      ][$keyAttribute];
     }
     else
     {
-        $fileList['comment'   ][] = false;
+        $fileList['comment'   ][] = false;        
         $fileList['visibility'][] = false;
         $fileList['filename'  ][] = false;
     }
@@ -363,13 +363,10 @@ if ($fileList)
 closedir($handle);
 unset($attribute);
 
-
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style) ;
-
-	$tool_content .= "
-    <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
+$tool_content .= "<br /><p align='right'>
+    <a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 
 //################################## MODULES LIST ####################################\\
 

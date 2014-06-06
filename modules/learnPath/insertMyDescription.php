@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -69,8 +69,8 @@ if ($num == 0)
 	// create new module
 	// TODO: name goes from langWhatever
 	$sql = "INSERT INTO `".$TABLEMODULE."`
-		(`name`, `contentType`)
-		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
+		(`name`, `contentType`, `comment`, `launch_data`)
+		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."', '', '')";
 	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
@@ -98,9 +98,9 @@ if ($num == 0)
 
 	// finally : insert in learning path
 	$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-		(`learnPath_id`, `module_id`, `rank`, `lock`)
+		(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
 		VALUES ('". (int)$_SESSION['path_id']."', '". (int)$insertedModule_id."',
-		" . (int)$order . ", 'OPEN')";
+		" . (int)$order . ", 'OPEN', '')";
 	$query = db_query($sql);
 }
 else
@@ -128,9 +128,9 @@ else
 
 		// finally : insert in learning path
 		$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-			(`learnPath_id`, `module_id`, `rank`, `lock`)
+			(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
 			VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
-			" . (int)$order . ", 'OPEN')";
+			" . (int)$order . ", 'OPEN', '')";
 		$query = db_query($sql);
 
     }
