@@ -126,7 +126,7 @@ if ($is_editor) {
     $result = Database::get()->queryArray("SELECT id, title, description, type, active, public FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
-	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed " .
+	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score " .
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
@@ -278,7 +278,7 @@ if (!$nbrExercises) {
              } 
             elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                         <td class='invisible'>" . q($row['title']) . "&nbsp;&nbsp;";
+                                         <td class='invisible'>" . q($row->title) . "&nbsp;&nbsp;";
             } else { // exercise has expired
                 $tool_content .= "<td width='16'>
                                  <img src='$themeimg/arrow.png' alt='' />
@@ -324,17 +324,20 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td align='center'> - </td>";
             }
-            // user last exercise score
-            $r = Database::get()->querySingle("SELECT total_score, total_weighting
-                                        FROM exercise_user_record WHERE uid = ?d
-                                        AND eid = ?d
-                                        ORDER BY eurid DESC LIMIT 1", $uid, $row->id);
-            if (empty($r->total_score)) {
-                $tool_content .= "<td align='center'>&dash;</td>";
-            } else {
-                $tool_content .= "<td align='center'>$r->total_score/$r->total_weighting</td>";
-            }
+            if ($row->score) {
+                // user last exercise score
+                $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count
+                                            FROM exercise_user_record WHERE uid = ?d
+                                            AND eid = ?d", $uid, $row->id)->count;
+                if ($attempts > 0) {
+                    $tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
+                } else {
+                    $tool_content .= "<td align='center'>&dash;</td>";
+                }
             $tool_content .= "</tr>";
+            } else {
+                $tool_content .= "<td align='center'>$langNotAvailable</td>";
+            }
         }
         // skips the last exercise, that is only used to know if we have or not to create a link "Next page"
         if ($k + 1 == $limitExPage) {

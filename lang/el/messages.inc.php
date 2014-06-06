@@ -837,6 +837,7 @@ $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
 $langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων ασκήσεων του μαθήματος";
 $langPurgedExerciseResults = "Τα αποτελέσματα ασκήσεων διαγράφηκαν";
+$langNotAvailable = "Μη διαθέσιμα";
 
 /* * ***************************************************
  * contact.php

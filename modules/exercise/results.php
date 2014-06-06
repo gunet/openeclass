@@ -54,6 +54,9 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
         draw($tool_content, 2);
         exit();
     }
+    if(!$objExercise->selectScore() &&  !$is_editor) {
+        redirect_to_home_page("modules/exercise/index.php?course=$course_code");
+    }
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -75,7 +78,12 @@ $tool_content .= "
     </table>
     <br/>";
 
-$result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = ?d)", $course_id);
+//This part of the code could be improved
+if ($is_editor) {
+    $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = ?d)", $course_id);
+} else {
+    $result[] = (object) array('uid' => $uid);
+}
 
 foreach ($result as $row) {
     $sid = $row->uid;

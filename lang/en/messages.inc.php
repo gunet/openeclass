@@ -2690,6 +2690,9 @@ $langLastAnnouncements = "My last announcements";
 $langViaCAS = "authentication via CAS Single Sign On";
 $langCASnochange = "Please close your browser in order to change CAS settings";
 $langBeforeRegDate = "registered before";
+$langPurgeExerciseResults = "Delete course exercise results";
+$langPurgedExerciseResults = "Exercise results have been deleted";
+$langNotAvailable = "Not available";
 $langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
 Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
 $langReplace = "File replacement";
