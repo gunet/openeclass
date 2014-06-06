@@ -136,7 +136,7 @@ END;
 	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCICES`");
 } else {
         // only for students
-	$sql = "SELECT id, titre, description, type, active, public, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
+	$sql = "SELECT id, titre, description, type, active, public, StartDate, EndDate, TimeConstrain, AttemptsAllowed, score ".
 		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql);
 	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCICES` WHERE active = 1");
@@ -339,14 +339,18 @@ if(!$nbrExercises) {
                 $tool_content .= "<td align='center'> - </td>";
             }
             // user last exercise score
-            $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
-                                FROM `$TBL_RECORDS` WHERE uid=$uid 
-                                AND eid=$row[id] 
-                                ORDER BY eurid DESC LIMIT 1", $currentCourseID));
-            if (empty($r)) {
-                $tool_content .= "<td align='center'>&dash;</td>";
+            if ($row['score']) {
+                $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
+                                    FROM `$TBL_RECORDS` WHERE uid=$uid 
+                                    AND eid=$row[id] 
+                                    ORDER BY eurid DESC LIMIT 1", $currentCourseID));
+                if (empty($r)) {
+                    $tool_content .= "<td align='center'>&dash;</td>";
+                } else {
+                    $tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
+                }
             } else {
-            	$tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
+                $tool_content .= "<td align='center'>$langNotAvailable</td>";
             }
             $tool_content .= "</tr>";
 		}
