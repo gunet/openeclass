@@ -66,11 +66,12 @@ $num = mysql_num_rows($query);
 
 if ($num == 0)
 {
-	// create new module
+
+        // create new module
 	// TODO: name goes from langWhatever
 	$sql = "INSERT INTO `".$TABLEMODULE."`
 		(`name`, `contentType`, `comment`, `launch_data`)
-		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."', '', '')";
+		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."', '', '')";        
 	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
@@ -104,7 +105,7 @@ if ($num == 0)
 	$query = db_query($sql);
 }
 else
-{
+{   
 	// check if this is this LP that used this course description as a module
 	$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
 		`".$TABLEMODULE."` AS M,

@@ -57,8 +57,9 @@ $unit_id = description_unit_id($cours_id);
 <div id="content">
 
 <?php
+
 $q = db_query("SELECT id, title, comments, res_id, visibility FROM unit_resources WHERE
-                        unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
+                        unit_id = $unit_id");
 
 if ($q and mysql_num_rows($q) > 0) {
 	list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
@@ -73,17 +74,15 @@ if ($q and mysql_num_rows($q) > 0) {
 			<tr>";
 		
 		if ($is_editor) {
-			echo "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+			echo "<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
 		} else {
-			echo "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+			echo "<td>" . standard_text_escape($row['comments']) . "</td>";
 		}
-		echo "</tr></table><br />\n";
+		echo "</tr></table><br />";
 	}
+} else {
+    echo "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
-else {
-	echo "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
-}
-
 ?>
-    </div></body></html>
+</div></body></html>
 
