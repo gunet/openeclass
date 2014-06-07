@@ -22,7 +22,7 @@
 
 define("DB_TYPE", "MYSQL");
 
-require_once 'modules/db/dbhelper.php';
+require_once 'dbhelper.php';
 
 final class DBResult {
 
@@ -50,7 +50,7 @@ final class Database {
     private static $dbs = array();
 
     /**
-     * Get a database on its name: this is a static method
+     * Get a database with a specific name. It might throw an exception, if the database does not exist.
      * @param type $dbase The name of the database. Could be missing (or null) for the default database.
      * @return Database|null The database object
      */
@@ -61,12 +61,8 @@ final class Database {
         if (array_key_exists($dbase, self::$dbs)) {
             $db = self::$dbs[$dbase];
         } else {
-            try {
-                $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);
-                self::$dbs[$dbase] = $db;
-            } catch (Exception $e) {
-                return null;
-            }
+            $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);   // might throw exception
+            self::$dbs[$dbase] = $db;
         }
         return $db;
     }

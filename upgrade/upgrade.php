@@ -26,7 +26,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 
 // set default storage engine
-db_query("SET storage_engine = InnoDB");
+Database::get()->query("SET storage_engine = InnoDB");
 
 require_once 'upgrade/functions.php';
 
@@ -85,15 +85,15 @@ if (!mysql_table_exists($mysqlMainDb, 'config')) {
 
 // Upgrade user table first if needed
 if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
-    db_query("ALTER TABLE user
+    Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
                         ADD registered_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                         ADD expires_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-    db_query("UPDATE user
+    Database::get()->query("UPDATE user
                         SET registered_at = FROM_UNIXTIME(ts_registered_at),
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
-    db_query("ALTER TABLE user
+    Database::get()->query("ALTER TABLE user
                         CHANGE user_id id INT(11) NOT NULL AUTO_INCREMENT,
                         CHANGE nom surname VARCHAR(60) NOT NULL DEFAULT '',
                         CHANGE prenom givenname VARCHAR(60) NOT NULL DEFAULT '',
@@ -109,7 +109,7 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
                         CHANGE description description TEXT NOT NULL,
                         CHANGE whitelist whitelist TEXT NOT NULL,
                         DROP KEY user_username");
-    db_query("ALTER TABLE admin
+    Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
 
@@ -264,18 +264,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                 // Create or upgrade config table
                 if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
-                    db_query("RENAME TABLE config TO old_config");
-                    db_query("CREATE TABLE `config` (
+                    Database::get()->query("RENAME TABLE config TO old_config");
+                    Database::get()->query("CREATE TABLE `config` (
                          `key` VARCHAR(32) NOT NULL,
                          `value` VARCHAR(255) NOT NULL,
                          PRIMARY KEY (`key`)) $charset_spec");
-                    db_query("INSERT INTO config
+                    Database::get()->query("INSERT INTO config
                          SELECT `key`, `value` FROM old_config
                          GROUP BY `key`");
-                    db_query("DROP TABLE old_config");
+                    Database::get()->query("DROP TABLE old_config");
                 }
                 $oldversion = get_config('version');
-                db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                     ('dont_display_login_form', '0'),
                     ('email_required', '0'),
                     ('email_from', '1'),
@@ -302,20 +302,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                     // delete old example test from table announcements
                     $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
-                    db_query('SET NAMES utf8');
-                    db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
+                    Database::get()->query('SET NAMES utf8');
+                    Database::get()->query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
                 }
 
                 if ($oldversion < '2.2') {
                     // course units
-                    db_query("CREATE TABLE IF NOT EXISTS `course_units` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                 `title` VARCHAR(255) NOT NULL DEFAULT '',
                 `comments` MEDIUMTEXT,
                 `visibility` CHAR(1) NOT NULL DEFAULT 'v',
                 `order` INT(11) NOT NULL DEFAULT 0,
                 `course_id` INT(11) NOT NULL) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `unit_resources` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `unit_resources` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                 `unit_id` INT(11) NOT NULL ,
                 `title` VARCHAR(255) NOT NULL DEFAULT '',
@@ -328,11 +328,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if ($oldversion < '2.2.1') {
-                    db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'");
-                    db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
-                    db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'");
-                    db_query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
-                    db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
+                    Database::get()->query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                    Database::get()->query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                    Database::get()->query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                    Database::get()->query("ALTER TABLE `cours` CHANGE `dropbox_quota` `dropbox_quota` FLOAT NOT NULL DEFAULT '104857600'");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_notify` (
                         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                         `user_id` INT NOT NULL DEFAULT '0',
                         `cat_id` INT NULL ,
@@ -342,32 +342,32 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `course_id` INT NOT NULL DEFAULT '0') $charset_spec");
 
                     if (!mysql_field_exists($mysqlMainDb, 'course_user', 'course_id')) {
-                        db_query('ALTER TABLE course_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
-                        db_query('UPDATE course_user SET course_id =
+                        Database::get()->query('ALTER TABLE course_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
+                        Database::get()->query('UPDATE course_user SET course_id =
                                         (SELECT course_id FROM cours WHERE code = course_user.code_cours)
                              WHERE course_id = 0');
-                        db_query('ALTER TABLE course_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
-                        db_query('CREATE INDEX course_user_id ON course_user (user_id, course_id)');
-                        db_query('ALTER TABLE course_user DROP code_cours');
+                        Database::get()->query('ALTER TABLE course_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
+                        Database::get()->query('CREATE INDEX course_user_id ON course_user (user_id, course_id)');
+                        Database::get()->query('ALTER TABLE course_user DROP code_cours');
                     }
 
                     if (!mysql_field_exists($mysqlMainDb, 'annonces', 'course_id')) {
-                        db_query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
-                        db_query('UPDATE annonces SET course_id =
+                        Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+                        Database::get()->query('UPDATE annonces SET course_id =
                                         (SELECT course_id FROM cours WHERE code = annonces.code_cours)
                              WHERE course_id = 0');
-                        db_query('ALTER TABLE annonces DROP code_cours');
+                        Database::get()->query('ALTER TABLE annonces DROP code_cours');
                     }
                 }
                 if ($oldversion < '2.3.1') {
                     if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
-                        db_query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
+                        Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
                     }
                 }
 
-                db_query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
+                Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
                 mysql_field_exists($mysqlMainDb, 'user', 'email_public') or
-                        db_query("ALTER TABLE `user`
+                        Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
                         ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
                         ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
@@ -377,18 +377,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         echo delete_field('cours', 'faculte');
                     }
 
-                    db_query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
+                    Database::get()->query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
                     mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
-                            db_query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
+                            Database::get()->query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
                     mysql_field_exists($mysqlMainDb, 'user', 'description') or
-                            db_query("ALTER TABLE `user` ADD description TEXT,
+                            Database::get()->query("ALTER TABLE `user` ADD description TEXT,
                                          ADD has_icon BOOL NOT NULL DEFAULT 0");
                     mysql_field_exists($mysqlMainDb, 'user', 'verified_mail') or
-                            db_query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
+                            Database::get()->query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
                                          ADD receive_mail BOOL NOT NULL DEFAULT 1");
                     mysql_field_exists($mysqlMainDb, 'course_user', 'receive_mail') or
-                            db_query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
-                    db_query("CREATE TABLE IF NOT EXISTS `document` (
+                            Database::get()->query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                         `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL,
                         `subsystem` TINYINT(4) NOT NULL,
@@ -411,7 +411,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         FULLTEXT KEY `document`
                             (`filename`, `comment`, `title`, `creator`,
                             `subject`, `description`, `author`, `language`)) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
                         `course_id` INT(11) NOT NULL PRIMARY KEY ,
                         `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
                         `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
@@ -421,7 +421,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `documents` TINYINT(4) NOT NULL DEFAULT 1,
                         `wiki` TINYINT(4) NOT NULL DEFAULT 0,
                         `agenda` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `group` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `group` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL DEFAULT 0,
                         `name` varchar(100) NOT NULL DEFAULT '',
@@ -429,13 +429,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `forum_id` INT(11) NULL,
                         `max_members` INT(11) NOT NULL DEFAULT 0,
                         `secret_directory` varchar(30) NOT NULL DEFAULT '0') $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `group_members` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `group_members` (
                         `group_id` INT(11) NOT NULL,
                         `user_id` INT(11) NOT NULL,
                         `is_tutor` INT(11) NOT NULL DEFAULT 0,
                         `description` TEXT,
                         PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `glossary` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary` (
                        `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                        `term` VARCHAR(255) NOT NULL,
                        `definition` text NOT NULL,
@@ -443,7 +443,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                        `order` INT(11) NOT NULL DEFAULT 0,
                        `datestamp` DATETIME NOT NULL,
                        `course_id` INT(11) NOT NULL) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `link` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `link` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT,
                             `course_id` INT(11) NOT NULL,
                             `url` VARCHAR(255),
@@ -453,36 +453,36 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `order` INT(6) DEFAULT 0 NOT NULL,
                             `hits` INT(6) DEFAULT 0 NOT NULL,
                             PRIMARY KEY (`id`, `course_id`)) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `link_category` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `link_category` (
                             `id` INT(6) NOT NULL AUTO_INCREMENT,
                             `course_id` INT(11) NOT NULL,
                             `name` VARCHAR(255) NOT NULL,
                             `description` TEXT,
                             `order` INT(6) NOT NULL DEFAULT 0,
                             PRIMARY KEY (`id`, `course_id`)) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS ebook (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS ebook (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `order` INT(11) NOT NULL,
                             `title` TEXT) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS ebook_section (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS ebook_section (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `ebook_id` INT(11) NOT NULL,
                             `public_id` VARCHAR(11) NOT NULL,
                             `file` VARCHAR(128),
                             `title` TEXT) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS ebook_subsection (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `section_id` VARCHAR(11) NOT NULL,
                             `public_id` VARCHAR(11) NOT NULL,
                             `file_id` INT(11) NOT NULL,
                             `title` TEXT) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `gradebook` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
                             `range` TINYINT(4) NOT NULL DEFAULT 10) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `gradebook_id` MEDIUMINT(11) NOT NULL,
                             `title` VARCHAR(250) DEFAULT NULL,
@@ -493,18 +493,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                             `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                             `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
                             `uid` int(11) NOT NULL DEFAULT 0,
                             `grade` FLOAT NOT NULL DEFAULT -1,
                             `comments` TEXT NOT NULL) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `attendance` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance` (
                                 `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
                                 `limit` TINYINT(4) NOT NULL DEFAULT 0,
                                 `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
                                 `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `attendance_id` MEDIUMINT(11) NOT NULL,
                                 `title` VARCHAR(250) DEFAULT NULL,
@@ -513,7 +513,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                                 `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                                 `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
                                 `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                                 `uid` int(11) NOT NULL DEFAULT 0,
@@ -521,8 +521,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `comments` TEXT NOT NULL) $charset_spec");
 
                     if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
-                        db_query("RENAME TABLE prof_request TO user_request");
-                        db_query("ALTER TABLE user_request
+                        Database::get()->query("RENAME TABLE prof_request TO user_request");
+                        Database::get()->query("ALTER TABLE user_request
                                     CHANGE rid id INT(11) NOT NULL auto_increment,
                                     CHANGE profname name VARCHAR(255) NOT NULL DEFAULT '',
                                     CHANGE profsurname surname VARCHAR(255) NOT NULL DEFAULT '',
@@ -537,8 +537,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     // Upgrade table admin_announcements if needed
                     if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {
-                        db_query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`");
-                        db_query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
+                        Database::get()->query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`");
+                        Database::get()->query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
                                     `id` INT(11) NOT NULL AUTO_INCREMENT,
                                     `title` VARCHAR(255) DEFAULT NULL,
                                     `body` TEXT,
@@ -556,18 +556,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         $adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                      SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
                                      FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");
-                        db_query("DROP TABLE admin_announcements_old");
+                        Database::get()->query("DROP TABLE admin_announcements_old");
                     }
                     mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
-                            db_query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0 AFTER `lang`");
+                            Database::get()->query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0 AFTER `lang`");
                     // not needed anymore
                     if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
-                        db_query("DROP TABLE cours_faculte");
+                        Database::get()->query("DROP TABLE cours_faculte");
                     }
                 }
 
                 if ($oldversion < '2.5') {
-                    db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                    Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                     ('disable_eclass_stud_reg', '0'),
                     ('disable_eclass_prof_reg', '0'),
                     ('email_verification_required', '1'),
@@ -578,64 +578,64 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     // old users have their email verified
                     if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
-                        db_query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT ' . EMAIL_UNVERIFIED);
-                        db_query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);
+                        Database::get()->query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT ' . EMAIL_UNVERIFIED);
+                        Database::get()->query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);
                     }
                     mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
-                            db_query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . " AFTER `email`");
+                            Database::get()->query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . " AFTER `email`");
 
-                    db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
-                    db_query("UPDATE `user` SET `username`=TRIM(`username`)");
+                    Database::get()->query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
+                    Database::get()->query("UPDATE `user` SET `username`=TRIM(`username`)");
                 }
 
                 if ($oldversion < '2.5.2') {
-                    db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
-                    db_query("DROP TABLE IF EXISTS passwd_reset");
+                    Database::get()->query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
+                    Database::get()->query("DROP TABLE IF EXISTS passwd_reset");
                 }
 
                 if ($oldversion < '2.6') {
-                    db_query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
+                    Database::get()->query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
                     $old_close_user_registration = intval(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'close_user_registration'"));
                     if ($old_close_user_registration == 0) {
                         $eclass_stud_reg = 2;
                     } else {
                         $eclass_stud_reg = 1;
                     }
-                    db_query("UPDATE `config`
+                    Database::get()->query("UPDATE `config`
                               SET `key` = 'eclass_stud_reg', 
                                   `value`= $eclass_stud_reg
                               WHERE `key` = 'close_user_registration'");
 
                     $old_disable_eclass_prof_reg = intval(!(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'")));
-                    db_query("UPDATE `config` SET `key` = 'eclass_prof_reg',
+                    Database::get()->query("UPDATE `config` SET `key` = 'eclass_prof_reg',
                                            `value` = $old_disable_eclass_prof_reg
                                       WHERE `key` = 'disable_eclass_prof_reg'");
-                    db_query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");
-                    db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
+                    Database::get()->query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");
+                    Database::get()->query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
                     $old_alt_auth_stud_req = intval(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'alt_auth_student_req'"));
                     if ($old_alt_auth_stud_req == 1) {
                         $alt_auth_stud_req = 1;
                     } else {
                         $alt_auth_stud_req = 2;
                     }
-                    db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                    Database::get()->query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('user_registration', 1),
                                         ('alt_auth_prof_reg', 1),
                                         ('alt_auth_stud_reg', $alt_auth_stud_req)");
 
-                    db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
+                    Database::get()->query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
 
                     if (!mysql_field_exists($mysqlMainDb, 'user', 'whitelist')) {
-                        db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
-                        db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+                        Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
+                        Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
                     }
                     db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', " . quote($_POST['student_upload_whitelist']) . "),
                             ('teacher_upload_whitelist', " . quote($_POST['teacher_upload_whitelist']) . ")");
                     if (!mysql_field_exists($mysqlMainDb, 'user', 'last_passreminder')) {
-                        db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
+                        Database::get()->query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
                     }
-                    db_query("CREATE TABLE IF NOT EXISTS login_failure (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS login_failure (
                 id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 ip varchar(45) NOT NULL,
                 count tinyint(4) unsigned NOT NULL default '0',
@@ -644,7 +644,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if ($oldversion < '2.6.1') {
-                    db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                    Database::get()->query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('login_fail_check', 1),
                                         ('login_fail_threshold', 15),
                                         ('login_fail_deny_interval', 5),
@@ -653,10 +653,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                 if ($oldversion < '2.7') {
                     mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
-                            db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
+                            Database::get()->query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
                     mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
-                            db_query("ALTER TABLE `user` ADD `parent_email` VARCHAR(100) NOT NULL DEFAULT '' AFTER `email`");
-                    db_query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
+                            Database::get()->query("ALTER TABLE `user` ADD `parent_email` VARCHAR(100) NOT NULL DEFAULT '' AFTER `email`");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
                         `id` mediumint(9) NOT NULL auto_increment,
                         `title` varchar(255) default NULL,
                         `content` text,
@@ -668,18 +668,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if ($oldversion < '2.8') {
-                    db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                    Database::get()->query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('course_metadata', 0),
                                         ('opencourses_enable', 0)");
 
                     mysql_field_exists($mysqlMainDb, 'document', 'public') or
-                            db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
+                            Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
                     mysql_field_exists($mysqlMainDb, 'cours_user', 'reviewer') or
-                            db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                            Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
                     mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
-                            db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
+                            Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
 
-                    db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                    Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
 
                     // prevent dir list under video storage
                     if ($handle = opendir($webDir . '/video/')) {
@@ -693,7 +693,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if ($oldversion < '2.8.3') {
-                    db_query("CREATE TABLE course_review (
+                    Database::get()->query("CREATE TABLE course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
                 `is_certified` BOOL NOT NULL DEFAULT 0,
@@ -761,19 +761,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
                                 echo "Warning: Database inconsistent - table '$table_name' already",
                                 " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
-                                db_query("RENAME TABLE `$table_name` TO `old_$table_name`");
+                                Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
                             } else {
-                                db_query("DROP TABLE `$table_name`");
+                                Database::get()->query("DROP TABLE `$table_name`");
                             }
                         }
                     }
 
-                    db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                    Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                                         ('actions_expire_interval', 12),
                                         ('course_metadata', 0)");
 
                     if (!mysql_field_exists($mysqlMainDb, 'user_request', 'state')) {
-                        db_query("ALTER TABLE `user_request`
+                        Database::get()->query("ALTER TABLE `user_request`
                     CHANGE `name` `givenname` VARCHAR(60) NOT NULL DEFAULT '',
                     CHANGE `surname` `surname` VARCHAR(60) NOT NULL DEFAULT '',
                     CHANGE `uname` `username` VARCHAR(50) NOT NULL DEFAULT '',
@@ -782,15 +782,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 1");
                     }
 
-                    db_query("CREATE TABLE `cron_params` (
+                    Database::get()->query("CREATE TABLE `cron_params` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `name` VARCHAR(255) NOT NULL UNIQUE,
                         `last_run` DATETIME NOT NULL)
                         $charset_spec");
 
-                    db_query("DROP TABLE IF EXISTS passwd_reset");
+                    Database::get()->query("DROP TABLE IF EXISTS passwd_reset");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `log` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `log` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT,
                         `user_id` INT(11) NOT NULL DEFAULT 0,
                         `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -803,7 +803,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         $charset_spec");
 
 
-                    db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `log_archive` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT,
                         `user_id` INT(11) NOT NULL DEFAULT 0,
                         `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -816,36 +816,36 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         $charset_spec");
 
                     // add index on `loginout`.`id_user` for performace
-                    db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
+                    Database::get()->query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
 
                     // update table admin_announcement
                     if (!mysql_table_exists($mysqlMainDb, 'admin_announcement')) {
-                        db_query("RENAME TABLE `admin_announcements` TO `admin_announcement`");
-                        db_query("ALTER TABLE admin_announcement CHANGE `ordre` `order` MEDIUMINT(11)");
-                        db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TEXT");
-                        db_query("UPDATE admin_announcement SET visible = '1' WHERE visible = 'V'");
-                        db_query("UPDATE admin_announcement SET visible = '0' WHERE visible = 'I'");
-                        db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TINYINT(4)");
+                        Database::get()->query("RENAME TABLE `admin_announcements` TO `admin_announcement`");
+                        Database::get()->query("ALTER TABLE admin_announcement CHANGE `ordre` `order` MEDIUMINT(11)");
+                        Database::get()->query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TEXT");
+                        Database::get()->query("UPDATE admin_announcement SET visible = '1' WHERE visible = 'V'");
+                        Database::get()->query("UPDATE admin_announcement SET visible = '0' WHERE visible = 'I'");
+                        Database::get()->query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TINYINT(4)");
                     }
 
                     // update table course_units and unit_resources
                     if (!mysql_field_exists($mysqlMainDb, 'course_units', 'visible')) {
-                        db_query("UPDATE `course_units` SET visibility = '1' WHERE visibility = 'v'");
-                        db_query("UPDATE `course_units` SET visibility = '0' WHERE visibility = 'i'");
-                        db_query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
+                        Database::get()->query("UPDATE `course_units` SET visibility = '1' WHERE visibility = 'v'");
+                        Database::get()->query("UPDATE `course_units` SET visibility = '0' WHERE visibility = 'i'");
+                        Database::get()->query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
                     }
 
                     if (!mysql_field_exists($mysqlMainDb, 'unit_resources', 'visible')) {
-                        db_query("UPDATE `unit_resources` SET visibility = '1' WHERE visibility = 'v'");
-                        db_query("UPDATE `unit_resources` SET visibility = '0' WHERE visibility = 'i'");
-                        db_query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
+                        Database::get()->query("UPDATE `unit_resources` SET visibility = '1' WHERE visibility = 'v'");
+                        Database::get()->query("UPDATE `unit_resources` SET visibility = '0' WHERE visibility = 'i'");
+                        Database::get()->query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
                     }
 
                     // update table document
                     if (!mysql_field_exists($mysqlMainDb, 'document', 'visible')) {
-                        db_query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
-                        db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
-                        db_query("ALTER TABLE `document`
+                        Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+                        Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+                        Database::get()->query("ALTER TABLE `document`
                                 CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
                                 ADD `public` TINYINT(4) NOT NULL DEFAULT 1,
                                 DROP INDEX document");
@@ -853,10 +853,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     // Rename table `annonces` to `announcements`
                     if (!mysql_table_exists($mysqlMainDb, 'announcement')) {
-                        db_query("RENAME TABLE annonces TO announcement");
-                        db_query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
-                        db_query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
-                        db_query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
+                        Database::get()->query("RENAME TABLE annonces TO announcement");
+                        Database::get()->query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
+                        Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
+                        Database::get()->query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
                                        CHANGE `temps` `date` DATETIME,
                                        CHANGE `cours_id` `course_id` INT(11),
                                        CHANGE `ordre` `order` MEDIUMINT(11),
@@ -865,7 +865,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     // create forum tables
-                    db_query("CREATE TABLE IF NOT EXISTS `forum` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum` (
                             `id` INT(10) NOT NULL AUTO_INCREMENT,
                             `name` VARCHAR(150) DEFAULT '' NOT NULL,
                             `desc` MEDIUMTEXT NOT NULL,
@@ -877,7 +877,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY (`id`))
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `forum_category` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_category` (
                             `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `cat_title` VARCHAR(100) DEFAULT '' NOT NULL,
                             `cat_order` INT(11) DEFAULT 0 NOT NULL,
@@ -885,7 +885,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             KEY `forum_category_index` (`id`, `course_id`))
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_notify` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                             `user_id` INT(11) DEFAULT 0 NOT NULL,
                             `cat_id` INT(11) DEFAULT 0 NOT NULL ,
@@ -895,7 +895,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) DEFAULT 0 NOT NULL)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_post` (
                             `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `topic_id` INT(10) NOT NULL DEFAULT 0,
                             `post_text` MEDIUMTEXT NOT NULL,
@@ -905,7 +905,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `parent_post_id` INT(10) NOT NULL DEFAULT 0)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
                             `id` int(10) NOT NULL auto_increment,
                             `title` varchar(100) DEFAULT NULL,
                             `poster_id` int(10) DEFAULT NULL,
@@ -918,7 +918,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $charset_spec");
 
                     // create video tables
-                    db_query("CREATE TABLE IF NOT EXISTS video (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS video (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `path` VARCHAR(255),
@@ -931,7 +931,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS videolink (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS videolink (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `url` VARCHAR(200) NOT NULL DEFAULT '',
@@ -943,7 +943,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_msg (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
 				            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `author_id` INT(11) UNSIGNED NOT NULL,
@@ -951,7 +951,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `body` LONGTEXT NOT NULL,                
                             `timestamp` INT(11) NOT NULL) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `msg_id` INT(11) UNSIGNED NOT NULL,
                             `filename` VARCHAR(250) NOT NULL,
@@ -959,7 +959,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `filesize` INT(11) UNSIGNED NOT NULL,
                             KEY `msg` (`msg_id`)) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS dropbox_index (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                             `msg_id` INT(11) UNSIGNED NOT NULL,
                             `recipient_id` INT(11) UNSIGNED NOT NULL,
                             `thread_id` INT(11) UNSIGNED NOT NULL,
@@ -969,7 +969,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             KEY `list` (`recipient_id`,`is_read`),
                             KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_module` (
                             `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
@@ -980,7 +980,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `launch_data` TEXT NOT NULL)
                             $charset_spec");
                     //COMMENT='List of available modules used in learning paths';
-                    db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                             `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
@@ -990,7 +990,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `rank` INT(11) NOT NULL DEFAULT 0)
                             $charset_spec");
                     //COMMENT='List of learning Paths';
-                    db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
                             `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `learnPath_id` INT(11) NOT NULL DEFAULT 0,
                             `module_id` INT(11) NOT NULL DEFAULT 0,
@@ -1002,14 +1002,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')
                             $charset_spec");
                     //COMMENT='This table links module to the learning path using them';
-                    db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_asset` (
                             `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `module_id` INT(11) NOT NULL DEFAULT '0',
                             `path` VARCHAR(255) NOT NULL DEFAULT '',
                             `comment` VARCHAR(255) default NULL)
                             $charset_spec");
                     //COMMENT='List of resources of module of learning paths';
-                    db_query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
                             `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                             `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
@@ -1027,22 +1027,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $charset_spec");
                     //COMMENT='Record the last known status of the user in the course';
                     mysql_index_exists('lp_user_module_progress', 'optimize') or
-                            db_query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
+                            Database::get()->query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
 
-                    db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(255) NOT NULL DEFAULT '',
                             `description` TEXT NULL,
                             `group_id` INT(11) NOT NULL DEFAULT 0 )
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
                             `value` ENUM('false','true') NOT NULL DEFAULT 'false',
                             PRIMARY KEY (wiki_id, flag))
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -1051,14 +1051,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
                             `content` TEXT NOT NULL,
                             `changelog` VARCHAR(200) )  $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
                             `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -1066,7 +1066,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                             PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `poll` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -1077,7 +1077,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `active` INT(11) NOT NULL DEFAULT 0,
                             `anonymized` INT(1) NOT NULL DEFAULT 0)
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                             `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pid` INT(11) NOT NULL DEFAULT 0,
                             `qid` INT(11) NOT NULL DEFAULT 0,
@@ -1086,19 +1086,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `poll_question` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_question` (
                             `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pid` INT(11) NOT NULL DEFAULT 0,
                             `question_text` VARCHAR(250) NOT NULL DEFAULT '',
                             `qtype` ENUM('multiple', 'fill') NOT NULL)
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                             `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pqid` INT(11) NOT NULL DEFAULT 0,
                             `answer_text` TEXT NOT NULL)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `assignment` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(200) NOT NULL DEFAULT '',
@@ -1114,7 +1114,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             file_path VARCHAR(200) NOT NULL,
                             file_name VARCHAR(200) NOT NULL)
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `assignment_id` INT(11) NOT NULL DEFAULT 0,
@@ -1129,15 +1129,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                             `group_id` INT( 11 ) DEFAULT NULL )
                             $charset_spec");                    
-                    db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
 
-                    db_query("DROP TABLE IF EXISTS agenda");
-                    db_query("CREATE TABLE IF NOT EXISTS `agenda` (
+                    Database::get()->query("DROP TABLE IF EXISTS agenda");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(200) NOT NULL,
@@ -1147,7 +1147,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `visible` TINYINT(4))
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `exercise` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(250) DEFAULT NULL,
@@ -1163,7 +1163,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `score` TINYINT(1) NOT NULL DEFAULT 1)
                             $charset_spec");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
@@ -1173,7 +1173,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0' )
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `question` TEXT,
@@ -1182,7 +1182,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `q_position` INT(11) DEFAULT 1,
                             `type` INT(11) DEFAULT 1 )
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                             `id` INT(11) NOT NULL DEFAULT '0',
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `answer` TEXT,
@@ -1192,12 +1192,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `r_position` INT(11) DEFAULT NULL,
                             PRIMARY KEY (id, question_id) )
                             $charset_spec");
-                    db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `exercise_id` INT(11) NOT NULL DEFAULT '0',
                             PRIMARY KEY (question_id, exercise_id) )");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `course_module` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `course_module` (
                             `id` int(11) NOT NULL auto_increment,
                             `module_id` int(11) NOT NULL,
                             `visible` tinyint(4) NOT NULL,
@@ -1205,7 +1205,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY  (`id`),
                             UNIQUE KEY `module_course` (`module_id`,`course_id`))");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `actions` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `actions` (
                           `id` int(11) NOT NULL auto_increment,
                           `user_id` int(11) NOT NULL,
                           `module_id` int(11) NOT NULL,
@@ -1216,7 +1216,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           PRIMARY KEY  (`id`),
                           KEY `actionsindex` (`module_id`,`date_time`))");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `actions_summary` (
                           `id` int(11) NOT NULL auto_increment,
                           `module_id` int(11) NOT NULL,
                           `visits` int(11) NOT NULL,
@@ -1226,7 +1226,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
 
-                    db_query("CREATE TABLE IF NOT EXISTS `logins` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `logins` (
                           `id` int(11) NOT NULL auto_increment,
                           `user_id` int(11) NOT NULL,
                           `ip` char(45) NOT NULL default '0.0.0.0',
@@ -1248,7 +1248,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       PRIMARY KEY (`id`),
                       KEY `idx_bbb_servers` (`hostname`)');
 
-                    db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
                           `course_id` INT(11) NOT NULL,
                           `value` INT(11) NOT NULL DEFAULT 0,
@@ -1280,12 +1280,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     // Everything else can be executed several times.
 
                     if ($rebuildHierarchy) {
-                        db_query("DROP TABLE IF EXISTS `hierarchy`");
-                        db_query("DROP TABLE IF EXISTS `course_department`");
-                        db_query("DROP TABLE IF EXISTS `user_department`");
+                        Database::get()->query("DROP TABLE IF EXISTS `hierarchy`");
+                        Database::get()->query("DROP TABLE IF EXISTS `course_department`");
+                        Database::get()->query("DROP TABLE IF EXISTS `user_department`");
                     }
 
-                    db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                              `id` INT(11) NOT NULL auto_increment PRIMARY KEY,
                              `code` VARCHAR(20),
                              `name` TEXT NOT NULL,
@@ -1309,7 +1309,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         while ($r = mysql_fetch_assoc($n)) {
                             $lft = 2 + 8 * $i;
                             $rgt = $lft + 7;
-                            db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
                         VALUES ($r[id],
                             " . quote($r['code']) . ",
                             " . quote($r['name']) . ",
@@ -1334,7 +1334,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         $root_node = mysql_insert_id();
                     }
 
-                    db_query("CREATE TABLE IF NOT EXISTS `course_department` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `course_department` (
                              `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                              `course` int(11) NOT NULL references course(id),
                              `department` int(11) NOT NULL references hierarchy(id) )");
@@ -1365,7 +1365,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         }
                     }
 
-                    db_query("CREATE TABLE IF NOT EXISTS `user_department` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
                              `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                              `user` mediumint(8) unsigned NOT NULL references user(user_id),
                              `department` int(11) NOT NULL references hierarchy(id) )");
@@ -1380,14 +1380,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     if ($rebuildHierarchy) {
                         // drop old way of referencing course type and course faculty
-                        db_query("ALTER TABLE `user` DROP COLUMN department");
-                        db_query("DROP TABLE IF EXISTS `faculte`");
+                        Database::get()->query("ALTER TABLE `user` DROP COLUMN department");
+                        Database::get()->query("DROP TABLE IF EXISTS `faculte`");
                     }
 
                     // hierarchy stored procedures
                     if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
-                        db_query("DROP VIEW IF EXISTS `hierarchy_depth`");
-                        db_query("CREATE VIEW `hierarchy_depth` AS
+                        Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
+                        Database::get()->query("CREATE VIEW `hierarchy_depth` AS
                                     SELECT node.id, node.code, node.name, node.number, node.generator,
                                            node.lft, node.rgt, node.allow_course, node.allow_user,
                                            node.order_priority, COUNT(parent.id) - 1 AS depth
@@ -1397,8 +1397,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                     GROUP BY node.id
                                     ORDER BY node.lft");
 
-                        db_query("DROP PROCEDURE IF EXISTS `add_node`");
-                        db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
+                        Database::get()->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
                                         IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
                                         IN p_order_priority INT(11))
                                     LANGUAGE SQL
@@ -1413,8 +1413,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-                        db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+                        Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
                                         IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
                                         IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                                     LANGUAGE SQL
@@ -1429,8 +1429,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `update_node`");
-                        db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
+                        Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
                                         IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
                                         IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                                     LANGUAGE SQL
@@ -1444,8 +1444,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         END IF;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `delete_node`");
-                        db_query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
+                        Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         DECLARE p_lft, p_rgt INT(11);
@@ -1456,8 +1456,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         CALL delete_nodes(p_lft, p_rgt);
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `shift_right`");
-                        db_query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_right`");
+                        Database::get()->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         IF maxrgt > 0 THEN
@@ -1473,8 +1473,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         END IF;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `shift_left`");
-                        db_query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_left`");
+                        Database::get()->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         IF maxrgt > 0 THEN
@@ -1490,8 +1490,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         END IF;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `shift_end`");
-                        db_query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_end`");
+                        Database::get()->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         UPDATE `hierarchy`
@@ -1499,22 +1499,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                             rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
-                        db_query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+                        Database::get()->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `get_parent`");
-                        db_query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `get_parent`");
+                        Database::get()->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `delete_nodes`");
-                        db_query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+                        Database::get()->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         DECLARE node_width INT(11);
@@ -1525,8 +1525,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
                                     END");
 
-                        db_query("DROP PROCEDURE IF EXISTS `move_nodes`");
-                        db_query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+                        Database::get()->query("DROP PROCEDURE IF EXISTS `move_nodes`");
+                        Database::get()->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
                                     LANGUAGE SQL
                                     BEGIN
                                         DECLARE node_width, maxrgt INT(11);
@@ -1554,29 +1554,29 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     // Update ip-containing fields to support IPv6 addresses
-                    db_query("ALTER TABLE `log` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `login_failure` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(45) NOT NULL DEFAULT '0.0.0.0'");
-                    db_query("ALTER TABLE `log_archive` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `assignment_submit`
+                    Database::get()->query("ALTER TABLE `log` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                    Database::get()->query("ALTER TABLE `login_failure` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                    Database::get()->query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(45) NOT NULL DEFAULT '0.0.0.0'");
+                    Database::get()->query("ALTER TABLE `log_archive` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                    Database::get()->query("ALTER TABLE `assignment_submit`
                             CHANGE COLUMN `submission_ip` `submission_ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `assignment_submit`
+                    Database::get()->query("ALTER TABLE `assignment_submit`
                             CHANGE COLUMN `grade_submission_ip` `grade_submission_ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `forum_post`
+                    Database::get()->query("ALTER TABLE `forum_post`
                             CHANGE COLUMN `poster_ip` `poster_ip` VARCHAR(45)");
-                    db_query("ALTER TABLE `logins` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                    Database::get()->query("ALTER TABLE `logins` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
 
                     // There is a special case with user_request storing its IP in numeric format
                     $fields_user_request = mysql_list_fields($mysqlMainDb, 'user_request');
                     $columns_user_request = mysql_num_fields($fields_user_request);
                     for ($i = 0; $i < $columns_user_request; $i++) {
                         if (mysql_field_name($fields_user_request, $i) == "ip_address") {
-                            db_query("ALTER TABLE `user_request` ADD `request_ip` varchar(45) NOT NULL DEFAULT ''");
+                            Database::get()->query("ALTER TABLE `user_request` ADD `request_ip` varchar(45) NOT NULL DEFAULT ''");
                             $result = db_query("SELECT id,INET_NTOA(ip_address) FROM user_request");
                             while ($row = mysql_fetch_array($result)) {
                                 db_query("UPDATE `user_request` SET `request_ip` = '" . $row[1] . "' WHERE `id` = " . $row[0]);
                             }
-                            db_query("ALTER TABLE `user_request` DROP `ip_address`");
+                            Database::get()->query("ALTER TABLE `user_request` DROP `ip_address`");
                             break;
                         }
                     }
@@ -1585,18 +1585,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 // Rename table `cours` to `course` and `cours_user` to `course_user`
                 if (!mysql_table_exists($mysqlMainDb, 'course')) {
                     mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
-                            db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
+                            Database::get()->query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
                     mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
-                            db_query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
-                    db_query("RENAME TABLE `cours` TO `course`");
-                    db_query("UPDATE course SET description = '' WHERE description IS NULL");
-                    db_query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
+                            Database::get()->query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
+                    Database::get()->query("RENAME TABLE `cours` TO `course`");
+                    Database::get()->query("UPDATE course SET description = '' WHERE description IS NULL");
+                    Database::get()->query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
                     if (mysql_field_exists($mysqlMainDb, 'course', 'course_objectives')) {
-                        db_query("ALTER TABLE course DROP COLUMN `course_objectives`,
+                        Database::get()->query("ALTER TABLE course DROP COLUMN `course_objectives`,
                     DROP COLUMN `course_prerequisites`,
                     DROP COLUMN `course_references`");
                     }
-                    db_query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
+                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
                                              CHANGE `description` `description` MEDIUMTEXT NOT NULL,
@@ -1619,27 +1619,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         $new_lang = langname_to_code($old_lang);
                         db_query("UPDATE course SET lang = '$new_lang' WHERE lang = '$old_lang'");
                     }
-                    db_query("RENAME TABLE `cours_user` TO `course_user`");
-                    db_query('ALTER TABLE `course_user`
+                    Database::get()->query("RENAME TABLE `cours_user` TO `course_user`");
+                    Database::get()->query('ALTER TABLE `course_user`
                                 CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 0,
                                 CHANGE `cours_id` `course_id` INT(11) NOT NULL DEFAULT 0');
                     if (mysql_field_exists($mysqlMainDb, 'course_user', 'code_cours')) {
-                        db_query('ALTER TABLE `course_user`
+                        Database::get()->query('ALTER TABLE `course_user`
                                         DROP COLUMN `code_cours`');
                     }
                 }
 
                 mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
-                        db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
+                        Database::get()->query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
                 mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
-                        db_query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
+                        Database::get()->query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
                 mysql_field_exists($mysqlMainDb, 'course_user', 'editor') or
-                        db_query("ALTER TABLE `course_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
+                        Database::get()->query("ALTER TABLE `course_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
                 if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
-                    db_query("ALTER TABLE glossary
+                    Database::get()->query("ALTER TABLE glossary
                                 ADD category_id INT(11) DEFAULT NULL,
                                 ADD notes TEXT NOT NULL");
-                    db_query("CREATE TABLE IF NOT EXISTS `glossary_category` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
                                 `name` VARCHAR(255) NOT NULL,
@@ -1651,21 +1651,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 // creation of indexes
                 // ----------------------------------
                 mysql_index_exists('document', 'doc_path_index') or
-                        db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
+                        Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
                 mysql_index_exists('course_units', 'course_units_index') or
-                        db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
+                        Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
                 mysql_index_exists('unit_resources', 'unit_res_index') or
-                        db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
+                        Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
                 mysql_index_exists('course_module', 'visible_cid') or
-                        db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
+                        Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
                 mysql_index_exists('video', 'cid') or
-                        db_query('CREATE INDEX `cid` ON video (course_id)');
+                        Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
                 mysql_index_exists('videolink', 'cid') or
-                        db_query('CREATE INDEX `cid` ON videolink (course_id)');
+                        Database::get()->query('CREATE INDEX `cid` ON videolink (course_id)');
                 mysql_index_exists('log', 'cmid') or
-                        db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+                        Database::get()->query('CREATE INDEX `cmid` ON log (course_id, module_id)');
 
-                db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
+                Database::get()->query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,
                         `user_id` int(11) NOT NULL,
                         `module_id` int(11) NOT NULL,
@@ -1719,7 +1719,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 if ($oldversion < '3.0') { // special procedure, must execute after course upgrades
                     mysql_select_db($mysqlMainDb);
 
-                    db_query("CREATE VIEW `actions_daily_tmpview` AS
+                    Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
                         SELECT
                         `user_id`,
                         `module_id`,
@@ -1738,8 +1738,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             (NULL, " . $row['user_id'] . ", " . $row['module_id'] . ", " . $row['course_id'] . ", " . $row['hits'] . ", " . $row['duration'] . ", '" . $row['day'] . "', NOW())");
                     }
 
-                    db_query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
-                    db_query("DROP TABLE IF EXISTS `actions`");
+                    Database::get()->query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
+                    Database::get()->query("DROP TABLE IF EXISTS `actions`");
                 }
                 // convert tables to InnoDB storage engine
                 if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
@@ -1751,11 +1751,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 } else {
                     $result = db_query("SHOW TABLES");
                     while ($table = mysql_fetch_array($result)) {
-                        db_query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
+                        Database::get()->query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
                     }
                 }
                 // update eclass version
-                db_query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'", $mysqlMainDb);
+                Database::get($mysqlMainD)->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
                 echo "<hr><p class='success'>$langUpgradeSuccess
                 <br><b>$langUpgReady</b></p>

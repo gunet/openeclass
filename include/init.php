@@ -61,7 +61,9 @@ require_once 'modules/admin/debug.php';
 // Connect to database
 require_once 'modules/db/database.php';
 
-if (!Database::get()) {
+try {
+    Database::get();
+} catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
 
@@ -87,8 +89,7 @@ if (isset($language)) {
     $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;     
-    
+    $language = $session->language;
 }
 
 // HTML Purifier
@@ -162,7 +163,7 @@ if (!isset($_SESSION['theme'])) {
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
-if (isset($require_login) and $require_login and !$uid) {
+if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
     $errorMessagePath = "../../";
 }
@@ -295,7 +296,7 @@ if (isset($require_current_course) and $require_current_course) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
                 $errorMessagePath = "../../";
-            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
+            } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
                 $toolContent_ErrorExists = $langLoginRequired;
                 $errorMessagePath = "../../";
             } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
@@ -434,8 +435,8 @@ if (isset($_SESSION['saved_status'])) {
 $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
-if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
+if (isset($course_id) and ! $is_editor and ! defined('STATIC_MODULE')) {
+    if (isset($_SESSION['uid']) and $_SESSION['uid'] and ! check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
                                              course_id = ?d", $course_id);
