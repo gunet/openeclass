@@ -27,7 +27,12 @@
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  */
 
-//require_once 'include/redirector.php';
+
+if (!isset($_SESSION['uid'])) {
+    die("Unauthorized Access!");
+    exit;
+}
+
 $sql = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id

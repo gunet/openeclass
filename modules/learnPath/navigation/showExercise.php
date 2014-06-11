@@ -69,7 +69,7 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
     $_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
-
+die('here');
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
     $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';

@@ -114,6 +114,7 @@ function createDom($groupsArr, $toolsArr) {
 
                 $name = $t->appendChild(new DOMAttr('name', $tool->name));
                 $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
+                $redirect = $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
                 $type = $t->appendChild(new DOMAttr('type', $tool->type));
                 $acti = $t->appendChild(new DOMAttr('active', $tool->active));
             }
@@ -126,30 +127,30 @@ function createDom($groupsArr, $toolsArr) {
 }
 
 function correctLink($value) {
-    global $urlMobile;
-
-    $containsRelPath = (substr($value, 0, strlen("../..")) === "../..") ? true : false;
-
-    $ret = $value;
-    if ($containsRelPath)
-        $ret = $urlMobile . substr($value, strlen("../../"), strlen($value));
-
+    global $urlMobile, $urlAppend;
+    $ret = str_replace($urlAppend, '', $urlMobile) . $value;
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
     $redirect = 'redirect=' . urlencode($ret);
-
     $ret = $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
+    return $ret;
+}
 
+function correctRedirect($value) {
+    global $urlServer, $urlAppend;
+    $ret = str_replace($urlAppend, '', $urlServer) . $value;
     return $ret;
 }
 
 function getTypeFromImage($value) {
     $ret = $value;
 
-    if (substr($value, (strlen('_on.png') * -1)) == '_on.png')
+    if (substr($value, (strlen('_on.png') * -1)) == '_on.png') {
         $ret = substr($value, 0, (strlen('_on.png') * -1));
+    }
 
-    if (substr($value, (strlen('_off.png') * -1)) == '_off.png')
+    if (substr($value, (strlen('_off.png') * -1)) == '_off.png') {
         $ret = substr($value, 0, (strlen('_off.png') * -1));
+    }
 
     return $ret;
 }
@@ -157,8 +158,9 @@ function getTypeFromImage($value) {
 function getActiveFromImage($value) {
     $ret = "true";
 
-    if (substr($value, (strlen('_off.png') * -1)) === '_off.png')
+    if (substr($value, (strlen('_off.png') * -1)) === '_off.png') {
         $ret = "false";
+    }
 
     return $ret;
 }
