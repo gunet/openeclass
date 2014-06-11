@@ -95,7 +95,7 @@ function printPolls() {
         global $tool_content, $currentCourse, $code_cours, $langCreatePoll,
                $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
                $langPollStart, $langPollEnd, $langPollNone, $is_editor,
-               $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
+               $mysqlMainDb, $langEdit, $langDelete, $langActions,
                $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, 
                $langParticipate, $langVisible, $user_id, $langHasParticipated,
                $langHasNotParticipated, $uid, $langConfirmDelete;
@@ -181,11 +181,11 @@ function printPolls() {
                                 }
                                 if ($is_editor) {
                                         $tool_content .= "
-                        <td width='16'><img src='$themeimg/$arrow_png.png' alt='' /></td>
+                        <td width='16'>" . icon($arrow_png) . "</td>
                         <td><a href='pollresults.php?course=$code_cours&amp;pid=$pid'>$thepoll[name]</a>";
                                 } else {
                                         $tool_content .= "
-                        <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
+                        <td>" . icon('arrow') . "</td>
                         <td>";
                                         if (($has_participated[0] == 0) and $poll_ended == 0) {
                                                 $tool_content .= "<a href='pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";
@@ -202,15 +202,16 @@ function printPolls() {
                                 $tool_content .= "
                         <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true)."</td>";
                                 if ($is_editor)  {
-                                        $tool_content .= "
-                                        <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid'>
-                                        <img src='$themeimg/edit.png' title='".q($langEdit)."' />
-                                                </a>&nbsp
-                                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\">
-                                                        <img src='$themeimg/delete.png' title='".q($langDelete)."' />
-                                                                </a>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}'>
-                                                                        <img src='$themeimg/".$visibility_gif.".png' title='".q($langVisible)."' /></a></td>
-                      </tr>";
+                                        $tool_content .= "<td class='center'>" .
+                                            icon('edit', $langEdit, "addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid") .
+                                            "&nbsp;" . 
+                                            icon('delete', $langDelete,
+                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid",
+                                                "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") .
+                                            "&nbsp;" .
+                                            icon($visibility_gif, $langVisible,
+                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}") .
+                                            "</td></tr>";
                                 } else {
                                         $tool_content .= "
                         <td class='center'>";

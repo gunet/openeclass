@@ -2285,6 +2285,7 @@ $langThereAreParticipants = "<p class='caution'>Στο Ερωτηματολόγ�
 $langPollEmpty = "<p class='caution'>Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!</p>";
 $langPollEmptyAnswers = "<p class='caution'>Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση</p>";
 $langEmptyPollTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του Ερωτηματολογίου";
+$langPollFullResults = 'Αναλυτικά αποτελέσματα';
 
 /************************************************************
 * registration.php

@@ -35,23 +35,28 @@ $answer_total = 0;
 if (!$is_editor) {
     $tool_content .= "<p class='alert1'>".$langPollResultsAccess."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
     draw($tool_content, 2, null, $head_content);
-    exit();  
+    exit();
 }
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
-        header("Location: $urlServer");        
+    redirect_to_home_page();
 }
 $pid = intval($_GET['pid']);
-$current_poll = db_query("SELECT * FROM poll WHERE pid='$pid' ORDER BY pid", $currentCourse);
+$current_poll = db_query("SELECT * FROM poll WHERE pid = $pid", $currentCourse);
+if (!$current_poll or !mysql_num_rows($current_poll)) {
+    redirect_to_home_page();
+}
 $thePoll = mysql_fetch_array($current_poll);
 
 $tool_content .= "
 <div class='info'>
-<b>$langDumpUserDurationToFile: </b>1. <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid'>$langcsvenc2</a>
- 2. <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a>          
+<b>$langDumpUserDurationToFile:</b> 1. <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid'>$langcsvenc2</a>
+ 2. <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
+<b>$langPollFullResults:</b> 1. <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>
+ 2. <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
 </div>";
 
-$tool_content .= "        
+$tool_content .= "
 <table class='tbl_border'>
 <tr>
         <th width='150'>$langTitle:</th>
@@ -74,11 +79,12 @@ $tool_content .= "<p class='sub_title1'>$langAnswers</p>";
 $tool_content .= "<table class='tbl'>";
 
 $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY qtype");
-while ($theQuestion = mysql_fetch_array($questions)) {        
+while ($theQuestion = mysql_fetch_array($questions)) {
+        $fullResultsUrl = "fullresults.php?course=$code_cours&amp;pid=$pid&amp;qid=$theQuestion[pqid]";
         if ($theQuestion['qtype'] == 'multiple') {
             $tool_content .= "
             <tr>
-            <th>$theQuestion[question_text]</th>
+            <th rowspan=2>$theQuestion[question_text]</th>
             <td>";
             $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                     FROM poll_answer_record LEFT JOIN poll_question_answer
@@ -94,33 +100,32 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                     } else {
                             $answer_text[] = $theAnswer['answer'];
                     }
-            }            
-            $chart = new PieChart(500, 300);            
-            $dataSet = new XYDataSet();                        
+            }
+            $chart = new PieChart(500, 300);
+            $dataSet = new XYDataSet();
             $chart->setTitle('');
             foreach ($answer_counts as $i => $count) {
                     $percentage = 100 * ($count / $answer_total);
-                    $label = $answer_text[$i];                                
+                    $label = $answer_text[$i];
                     $dataSet->addPoint(new Point($label, $percentage));
             }
             $chart->setDataSet($dataSet);
             $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
             $chart->render($webDir.$chart_path);
             $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-            $tool_content .= "</td></tr>";            
+            $tool_content .= "</td></tr>
+                <tr><td class=right><a href='$fullResultsUrl'>$langPollFullResults</a></tr>
+                <tr><td colspan='2'>&nbsp;</td></tr>\n";
         } else {
                 $tool_content .= "<tr><th colspan='2'>$theQuestion[question_text]</th></tr>";
-                $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
-                                WHERE qid = $theQuestion[pqid]", $currentCourseID);                
-                while ($theAnswer = mysql_fetch_array($answers)) {
-                        $tool_content .= "<tr><td>" . display_user($theAnswer['user_id']) . "</td>"
-                                      . "<td class='center'>$theAnswer[answer_text]</td>";
-                }
-                $tool_content .= "</td></tr>";
-                $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
+                $answers = db_query_get_single_value("SELECT COUNT(*) FROM poll_answer_record
+                                WHERE qid = $theQuestion[pqid] AND answer_text <> ''", $currentCourseID);
+                $tool_content .= "<tr><td>$langPollTotalAnswers: $answers</td>
+                                      <td class=right><a href='$fullResultsUrl'>$langPollFullResults</a></td></tr>
+                                  <tr><td colspan='2'>&nbsp;</td></tr>\n";
         }
-        
 }
+
 $total = mysql_num_rows(db_query("SELECT DISTINCT user_id FROM poll_answer_record WHERE pid = $pid", $currentCourseID));
 $tool_content .= "
 <tr>

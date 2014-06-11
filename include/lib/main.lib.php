@@ -293,10 +293,10 @@ function load_js($file, $init = '')
             $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/colorbox/colorbox.css'>";
             $file = 'colorbox/jquery.colorbox-min.js';
         } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/slick-master/slick/slick.css' />";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/slick-master/slick/slick.css'>";
             $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/datatables/media/css/jquery.dataTables.css' />";            
+            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/datatables/media/css/jquery.dataTables.css'>";
             $file = 'datatables/media/js/jquery.dataTables.min.js';
         } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
@@ -2429,7 +2429,7 @@ function token_validate($info, $token, $ts_valid_time=0)
 
 /**
  * This is a class for cutting a string to be no more than $maxlen characters long, respecting the html tags
- * Based on code provided by prajwala 
+ * Based on code provided by prajwala
  * http://code.google.com/p/cut-html-string/	
  */
 class HtmlCutString {
