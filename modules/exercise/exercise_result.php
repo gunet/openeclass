@@ -135,7 +135,7 @@ if (count($exercise_question_ids)>0){
         }
         $questionScore = 0;
 
-        if ($displayResults == 1) {
+        if ($displayResults == 1 || $is_editor) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 $tool_content .= "
                             <tr class='even'>
@@ -255,7 +255,7 @@ if (count($exercise_question_ids)>0){
                         }
                         break;
                 } // end switch()
-                if ($displayResults == 1) {
+                if ($displayResults == 1 || $is_editor) {
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "
@@ -318,25 +318,22 @@ if (count($exercise_question_ids)>0){
                                  <td>" . purify($choice) . "</td>
                               </tr>";
         }
-        if ($displayScore == 1) {
+        $tool_content .= "<tr class='even'>
+                            <th colspan='$colspan' class='odd'>";
+        if ($answerType == FREE_TEXT && !empty(purify($choice))) {
+            $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";
+        }        
+        if ($displayScore == 1 || $is_editor) {
             if (intval($questionScore) == $questionScore) {
                 $questionScore = intval($questionScore);
             }
             if (intval($questionWeighting) == $questionWeighting) {
                 $questionWeighting = intval($questionWeighting);
             }
-            $tool_content .= "
-                    <tr class='even'>
-                      <th colspan='$colspan' class='odd'>";
-            if ($answerType == FREE_TEXT && !empty(purify($choice))) {
-                $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";
-            }
             $tool_content .= "<span style='float:right;'>
-                                $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>
-                      </th>
-                    </tr>";
+                                $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</th></tr></table>";
         // destruction of Answer
         unset($objAnswerTmp);
         $i++;
@@ -345,7 +342,7 @@ if (count($exercise_question_ids)>0){
     $tool_content .= "<p class='alert1'>Η προσπάθεια αυτή έχει ακυρωθεί από τον μαθητευόμενο</p>";
 }
 
-if ($displayScore == 1) {
+if ($displayScore == 1 || $is_editor) {
     $tool_content .= "
     <br/>
     <table width='100%' class='tbl_alt'>

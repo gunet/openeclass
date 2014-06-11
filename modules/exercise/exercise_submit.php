@@ -46,7 +46,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 //Identifying ajax request
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && !$is_editor) {
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if ($_POST['action'] == 'endExerciseNoSubmit') {
             $exerciseId = $_POST['value'];
             $record_end_date = date('Y-m-d H:i:s', time());
@@ -110,10 +110,7 @@ if (isset($_POST['buttonSave'])) {
 }
 load_js('tools.js');
 load_js('jquery');
-$head_content .= "<script type='text/javascript'>";
-	// If not editor, enable countdown mechanism
-	if (!$is_editor) {            
-	    $head_content .= "            
+$head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
                     return 'ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Παρακαλώ ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση';
                 });
@@ -135,11 +132,9 @@ $head_content .= "<script type='text/javascript'>";
                     timer.time = timer.text();                        
                     timer.text(secondsToHms(timer.time--));
     		    countdown(timer, function() {
-    		        alert('$langExerciseEndTime');
     		        $('.exercise').submit();
     		    });
     		});";
-	}
 $head_content .="$(exercise_enter_handler);</script>";
 
 
@@ -172,7 +167,7 @@ $nbrQuestions = sizeof($questionList);
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
-if (!$is_editor) {
+
 	$error = FALSE;
 	// determine begin time: 
 	// either from a previews attempt meaning that user hasn't sumbited his answers    
@@ -211,25 +206,6 @@ if (!$is_editor) {
 	}
 	// Checking everything is between correct boundaries:
 	
-	// Number of Attempts
-    if ($exerciseAllowedAttempts > 0 && $attempt > $exerciseAllowedAttempts) {
-    	$error = 'langExerciseMaxAttemptsReached';
-    }
-    // Remaining Time
-    if ($exerciseTimeConstraint!=0 && ($recordStartDate + ($exerciseTimeConstraint*60) < $temp_CurrentDate)) {
-    	$error = 'langExerciseExpiredTime';
-    }
-    // Exercise's Expiration
-    if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise_EndDate)) { 
-		$error = 'langExerciseExpired';
-    }
-    if ($error) {
-    	unset($_SESSION['exercise_begin_time']);
-    	unset($_SESSION['exercise_end_time']);
-    	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
-    	exit();
-    }
-}
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
     $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
@@ -249,17 +225,17 @@ if (isset($_POST['formSent'])) {
         $exerciseResult = array();
     }
     // checking if user's time is more than exercise's time constrain
-    if (!$is_editor && isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
-        $_SESSION['exercise_begin_time'][$exerciseId] = Database::get()->querySingle("SELECT record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid = ?d AND (record_end_date is NULL OR record_end_date = 0)", $exerciseId, $uid)->record_start_date;
+    if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
+        $record_start_date = Database::get()->querySingle("SELECT record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid = ?d AND (record_end_date is NULL OR record_end_date = 0)", $exerciseId, $uid)->record_start_date;
+        $_SESSION['exercise_begin_time'][$exerciseId] = $record_start_date;
         $nowTime = new DateTime();
         $startTime = new DateTime($_SESSION['exercise_begin_time'][$exerciseId]);
         $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));
-        $endTime->add(new DateInterval('PT1M'));
+        $interval = 'PT'.$exerciseTimeConstraint.'M';
+        $endTime->add(new DateInterval($interval)); // THIS MUST CHANGE TO WORK WITH OTHER THAN 1 MINUTE CONSTRAINTS
         if ($endTime < $nowTime) {
             $time_expired = TRUE;                     
         }
-
-        unset($_SESSION['exercise_begin_time']);    
     }
 
     // records user's answers in the database and adds them in the $exerciseResult array which is returned
@@ -276,20 +252,43 @@ if (isset($_POST['formSent'])) {
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         $totalWeighting = $objExercise->selectTotalWeighting();
+        //If time expired in sequential exercise we must add to the DB the non-given answers
+        // to the questions the student didn't had the time to answer
+        if ($time_expired && $exerciseType == 2) {
+            $objExercise->finalize_answers();
+        }
         // record results of exercise
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, 
                                 total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $totalWeighting, $eurid);
         
+        unset($objExercise);
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
         unset($_SESSION['exercise_begin_time']);    
         unset($_SESSION['exercise_end_time']);  
         unset($_SESSION['objExercise'][$exerciseId]);
         unset($_SESSION['exerciseResult'][$exerciseId]);
-
+        // Remaining Time
+        if ($exerciseTimeConstraint!=0 && ($recordStartDate + ($exerciseTimeConstraint*60) < $temp_CurrentDate)) {
+            Session::set_flashdata($langExerciseExpiredTime, 'alert1');
+        }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
 } // end of submit
 
+    // Number of Attempts
+    if ($exerciseAllowedAttempts > 0 && $attempt > $exerciseAllowedAttempts) {
+    	$error = 'langExerciseMaxAttemptsReached';
+    }
+    // Exercise's Expiration
+    if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise_EndDate)) { 
+		$error = 'langExerciseExpired';
+    }
+    if ($error) {
+    	unset($_SESSION['exercise_begin_time']);
+    	unset($_SESSION['exercise_end_time']);
+    	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
+    	exit();
+    }
 
 // if questionNum comes from POST and not from GET
 if (!isset($questionNum) || $_POST['questionNum']) {
@@ -310,7 +309,7 @@ $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
     <th colspan='2'>";
-        if (!$is_editor && isset($timeleft) && $timeleft>0) {
+        if (isset($timeleft) && $timeleft>0) {
             $tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
         }
         $tool_content .= q($exerciseTitle). "</th></tr>
@@ -407,9 +406,9 @@ if (!$questionList) {
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
-    if (!$is_editor) {
-        $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
-    }
+
+    //$tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
+
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>
         </tr>
