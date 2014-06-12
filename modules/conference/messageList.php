@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,11 +62,15 @@ if (!file_exists($fileChatName)) {
 }
 
 // chat commands
-
 // reset command
 if (isset($_GET['reset']) && $is_editor) {
 	$fchat = fopen($fileChatName,'w');
-	fwrite($fchat, $timeNow." ---- ".$langWashFrom." ---- ".$nick." --------\n");
+        if (flock($fchat, LOCK_EX)) {
+            ftruncate($fchat, 0);
+            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
+            fflush($fchat);
+            flock($fchat, LOCK_UN);
+        }
 	fclose($fchat);
 	@unlink($tmpArchiveFile);
 }
