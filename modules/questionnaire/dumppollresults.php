@@ -46,10 +46,10 @@ if ($full) {
     $qlist = array();
     while ($q = mysql_fetch_assoc($questions)) {
         if ($begin) {
-            echo csv_escape($langUser), ',user_id,';
+            echo csv_escape($langUser), ';user_id;';
             $begin = false;
         } else {
-            echo ',';
+            echo ';';
         }
         echo csv_escape($q['question_text']);
         $pqid = $q['pqid'];
@@ -76,8 +76,8 @@ if ($full) {
     }
     echo $crlf;
     foreach ($qlist as $user_id => $answers) {
-        echo csv_escape(uid_to_name($user_id)), ',', $user_id, ',',
-            implode(',', array_map('csv_escape', $answers)), $crlf;
+        echo csv_escape(uid_to_name($user_id)), ';', $user_id, ';',
+            implode(';', array_map('csv_escape', $answers)), $crlf;
     }
 } else {
     echo csv_escape($langQuestions), $crlf, $crlf;

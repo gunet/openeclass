@@ -1933,6 +1933,7 @@ $langHasNotParticipated = "Have not participated";
 $langThereAreParticipants = "<p class='caution'>There are already participants. <br />Editing is not allowed!</p>";
 $langPollEmpty = "<p class='caution'>Please add more Questionnaire questions!</p>";
 $langPollEmptyAnswers = "<p class='caution'>Error! There are no answers in question</p>";
+$langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
 $langSee = "Preview";
 $langNoSee = "Registration required";

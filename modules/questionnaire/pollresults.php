@@ -50,10 +50,11 @@ $thePoll = mysql_fetch_array($current_poll);
 
 $tool_content .= "
 <div class='info'>
-<b>$langDumpUserDurationToFile:</b> 1. <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid'>$langcsvenc2</a>
- 2. <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
-<b>$langPollFullResults:</b> 1. <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>
- 2. <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
+<b>$langDumpUserDurationToFile:</b><br>
+<b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid'>$langcsvenc2</a>,
+   <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
+<b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
+   <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
 </div>";
 
 $tool_content .= "
