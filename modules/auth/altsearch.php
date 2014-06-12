@@ -281,7 +281,7 @@ if ($is_valid) {
                              "$langEmail: $emailhelpdesk";
 
                               if (!empty($email)) {
-                                        send_mail('', $emailhelpdesk, '', $email, $emailsubject, $emailbody, $charset);
+                                        send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset, "Reply-To: $emailhelpdesk");
                               }
 
                 $result = db_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id = $last_id");
@@ -364,7 +364,7 @@ if ($is_valid) {
                                 \n$langComments: $usercomment\n"
                                 . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 
-                                if (!send_mail('', $email, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
+                                if (!send_mail($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset, "Reply-To: $email")) {
                                         $tool_content .= "<p class='alert1'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></p>";
                                         draw($tool_content,0);
                                         exit();
@@ -379,7 +379,7 @@ if ($is_valid) {
 
                                 $subject = $langMailVerificationSubject;
                                 $MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&rid='.$request_id);
-                                if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
+                                if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
                                         $mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$email,$urlServer."modules/auth/registration.php",
                                                 "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
                                         $tool_content .= $mail_ver_error;

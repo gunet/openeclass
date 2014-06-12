@@ -93,7 +93,7 @@ if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 						"$langProfUname: $username\n$langProfEmail : $usermail\n" .
 						"$contactphone: $userphone\n\n\n$logo\n\n";
 
-					if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset))  {
+					if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail"))  {
 						$user_msg = $langMailErrorMessage;
 					}
 					else {

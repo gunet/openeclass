@@ -39,7 +39,7 @@ function send_mail($from, $from_address, $to, $to_address,
 		"MIME-Version: 1.0" . PHP_EOL .
 		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
 		"Content-Transfer-Encoding: 8bit" .
-                reply_to($from, $from_address);
+                reply_to($from, $from_address, $extra_headers);
 	if ($extra_headers) {
 		$headers .= PHP_EOL . preg_replace('/\n+/', PHP_EOL, $extra_headers);
 	}
@@ -133,9 +133,14 @@ function from($from, $from_address)
 
 
 // Determine the correct Reply-To: header if needed
-function reply_to($from, $from_address)
+function reply_to($from, $from_address, $extra_headers='')
 {
         global $siteName, $emailAdministrator, $emailAnnounce, $charset;
+
+        // Don't include reply-to if it has been provided by caller
+        if (strpos(strtolower($extra_headers), 'reply-to') !== false) {
+            return '';
+        }
 
         if (!get_config('email_from') and $emailAdministrator <> $from_address) {
                 if (empty($from)) {
