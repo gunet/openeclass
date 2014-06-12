@@ -79,7 +79,7 @@ $tool_content .= "
 $tool_content .= "<p class='sub_title1'>$langAnswers</p>";
 $tool_content .= "<table class='tbl'>";
 
-$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY qtype");
+$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY pqid");
 while ($theQuestion = mysql_fetch_array($questions)) {
         $fullResultsUrl = "fullresults.php?course=$code_cours&amp;pid=$pid&amp;qid=$theQuestion[pqid]";
         if ($theQuestion['qtype'] == 'multiple') {
