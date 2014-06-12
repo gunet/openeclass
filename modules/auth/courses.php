@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
                 if ($course_info) {
                         $row = mysql_fetch_array($course_info);                       
                         if (($row['visible'] == 1 or $row['visible'] == 2) 
-                                and !empty($row['password']) and $row['password'] != autounquote($_POST['pass' . $cid])) {
+                                and !empty($row['password']) and $row['password'] !== autounquote($_POST['pass' . $cid])) {
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['fake_code'];
                                 continue;
@@ -217,10 +217,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
 	 	$myCourses[$row['cours_id']] = $row;
 	}
 
-	$retString .= "
-           <table width='100%' class='tbl_border'>
-           <tr>
-             <th><a name='top'> </a>$langFaculty: <b>$fac_name</b></th>";
+	$retString .= "<table width='100%' class='tbl_border'>
+                    <tr>
+                    <th><a name='top'> </a>$langFaculty: <b>".q($fac_name)."</b></th>";
 
 	// get the different course types available for this faculte
 	$typesresult = db_query("SELECT DISTINCT type FROM cours

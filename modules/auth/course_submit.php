@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.10
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,7 +40,7 @@ if ($q and mysql_num_rows($q)) {
         list($visible, $course_password) = mysql_fetch_row($q);
         if ($state == 'true') {
             if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
-                    $password == $course_password) {               
+                    $password === $course_password) {
                         db_query("INSERT IGNORE INTO `cours_user` (`cours_id`, `user_id`, `statut`, `reg_date`)
                                          VALUES ($cid, $uid, 5, CURDATE())");
                         die('registered');
