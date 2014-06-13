@@ -180,7 +180,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
-        $help = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? $GLOBALS['langCMeta']['help_' . $fullKey] : '';
+        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? "title='" . $GLOBALS['langCMeta']['help_' . $fullKey] . "'" : '';
         $fullKeyNoLang = $fullKey;
         $sameAsCourseLang = false;
         $lang = '';
@@ -190,7 +190,7 @@ class CourseXMLElement extends SimpleXMLElement {
             if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage)) {
                 $sameAsCourseLang = true;
             } else {
-                $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
+                $helptitle = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
             }
         }
 
@@ -199,8 +199,8 @@ class CourseXMLElement extends SimpleXMLElement {
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
         }
-        $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div title='$help' class='cmetarow'><span class='$cmetalabel'>";
+        $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
+        $fieldStart .= "<div $helptitle class='cmetarow'><span class='$cmetalabel'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank'>" . q($keyLbl . $lang) . "</a>";
         } else {
@@ -218,12 +218,19 @@ class CourseXMLElement extends SimpleXMLElement {
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div>";
         }
+        
+        // inject
+        if (in_array($fullKey, CourseXMLConfig::$injectFields)) {
+            $fieldEnd .= CourseXMLConfig::getInjectValue($fullKey);
+        }
+        
+        // break tabs
         if (array_key_exists($fullKey, CourseXMLConfig::$breakFields)) {
             $fieldEnd .= "</div><div id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
         }
-
-        // hidden/auto-generated fields
-        if (in_array($fullKeyNoLang, CourseXMLConfig::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
+        
+        // hidden/auto-generated fields. NOTE: if we need to uncomment the following, introduce hiddenMultiLangFields
+        if (in_array($fullKeyNoLang, CourseXMLConfig::$hiddenFields) /*&& (!$this->getAttribute('lang') || $sameAsCourseLang)*/) {
             return;
         }
 
@@ -273,20 +280,26 @@ class CourseXMLElement extends SimpleXMLElement {
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$binaryFields)) {
             $html = '';
-            $is_multiple = (in_array($fullKey, CourseXMLConfig::$multipleFields)) ? true : false;
-            $multiplicity = ($is_multiple) ? '[]' : '';
+            $is_multiple = in_array($fullKey, CourseXMLConfig::$multipleFields);
+            $is_arrayField = in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields);
+            $multiplicity = ($is_multiple || $is_arrayField) ? '[]' : '';
 
             if (!$is_multiple) {
                 $html .= $fieldStart;
                 $value = (string) $this;
+                $idorclass = ($is_arrayField) ? 'class' : 'id';
                 if (!empty($value)) { // image already exists
                     $mime = (string) $this->getAttribute('mime');
-                    $html .= "<img id='" . $fullKey . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
-                              <img id='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
-                              <input id='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
-                              <input id='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>
+                    $html .= "<img " . $idorclass . "='" . $fullKey . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
+                              <img " . $idorclass . "='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
+                              <input " . $idorclass . "='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
+                              <input " . $idorclass . "='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>
                               </span></div>
                               <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
+                } else {
+                    // add as empty array, in order to keep correspondence
+                    $html .= "<input " . $idorclass . "='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "'>
+                              <input " . $idorclass . "='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "'>";
                 }
                 $html .= "<input type='file' size='30' name='" . q($fullKey) . $multiplicity . "'>";
                 $html .= $fieldEnd;
@@ -334,7 +347,7 @@ class CourseXMLElement extends SimpleXMLElement {
         }
 
         // array fields
-        if (in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields)) {
+        if (in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields) || in_array($fullKeyNoLang, CourseXMLConfig::$unitFields)) {
             return $fieldStart . "<input type='text' size='55' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
         }
 
@@ -531,6 +544,31 @@ class CourseXMLElement extends SimpleXMLElement {
                             $data[$fullKey . '_walked'] = $i;
                         }
                     }
+                } else if (in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields)) {
+                    if ($parent !== null) {
+                        $name = $this->getName();
+                        // calc index to locate the proper child
+                        $j = 0;
+                        if (isset($data[$fullKey . '_walked'])) {
+                            $j = intval($data[$fullKey . '_walked']) + 1;
+                        }
+                        // this part is walked n independent times, where n = count($data[$fullKey])
+                        // for each walking, we have to remember which was the previous index
+                        // and assign the next array value to the (next) proper parent element
+                        if ($j < count($data[$fullKey])) {
+                            if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
+                                $this->{0} = intval($data[$fullKey][$j]);
+                            } else {
+                                $this->{0} = $data[$fullKey][$j];
+                            }
+                            // mime attribute for mime fields 
+                            if (in_array($fullKeyNoLang, CourseXMLConfig::$binaryFields)) {
+                                $this['mime'] = isset($data[$fullKey . '_mime']) ? $data[$fullKey . '_mime'][$j] : '';
+                            }
+                            // store index for locating the proper child at the next iteration
+                            $data[$fullKey . '_walked'] = $j;
+                        }
+                    }
                 } else { // units
                     $index = intval($this->getAttribute('index')) - 1;
                     if ($index >= 0 && isset($data[$fullKey][$index])) {
@@ -632,6 +670,30 @@ class CourseXMLElement extends SimpleXMLElement {
                 for ($i = 0; $i < $dataCount - $xmlCount; $i++) {
                     $parents[0]->addChild($fieldName, '');
                 }
+            }
+        }
+        
+        // adapt for instructors
+        $xmlInstCnt = count($this->instructor);
+        $datInstCnt = 0;
+        // count filled data
+        if (isset($data['course_instructor_lastName_el']) && is_array($data['course_instructor_lastName_el'])) {
+            foreach($data['course_instructor_lastName_el'] as $sampleLast) {
+                if (!empty($sampleLast)) {
+                    $datInstCnt++;
+                }
+            }
+        }
+        if ($datInstCnt > $xmlInstCnt) {
+            $diff = $datInstCnt - $xmlInstCnt;
+            $dom = dom_import_simplexml($this)->ownerDocument;
+            $xpath = new DOMXPath($dom);
+            $xpath->registerNamespace('n', self::DEFAULT_NS);
+            $domCoTeach = $xpath->query('/n:course/n:coTeaching')->item(0);
+            $domI = $xpath->query('/n:course/n:instructor')->item(0);
+            
+            for ($i = 1; $i <= $diff; $i++) {
+                $domCoTeach->parentNode->insertBefore($domI->cloneNode(true), $domCoTeach);
             }
         }
 
@@ -818,6 +880,24 @@ class CourseXMLElement extends SimpleXMLElement {
     public static function save($courseId, $courseCode, $xml) {
         global $mysqlMainDb;
         
+        // pre-save operations
+        foreach ($xml->instructor as $instructor) {
+            $instrFirst = array();
+            $instrLast = array();
+            foreach ($instructor->firstName as $fname) {
+                $fnameLang = (string) $fname->getAttribute('lang');
+                $instrFirst[$fnameLang] = (string) $fname;
+            }
+            foreach ($instructor->lastName as $lname) {
+                $lnameLang = (string) $lname->getAttribute('lang');
+                $instrLast[$lnameLang] = (string) $lname;
+            }
+            foreach ($instructor->fullName as $name) {
+                $nameLang = (string) $name->getAttribute('lang');
+                $name->{0} = $instrFirst[$nameLang] . " " . $instrLast[$nameLang];
+            }
+        }
+        
         $doc = new DOMDocument('1.0');
         $doc->loadXML($xml->asXML(), LIBXML_NONET | LIBXML_DTDLOAD | LIBXML_DTDATTR);
         $doc->formatOutput = true;
@@ -858,11 +938,13 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                 `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                 `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
-                `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
+                `dc_instructor` = " . quote(self::serializeMulti($xml->instructor, "fullName")) . ",
                 `dc_department` = " . quote(self::serialize($xml->department)) . ",
                 `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
                 `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
-                `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
+                `dc_coursephotomime` = " . quote($xml->coursePhoto['mime']) . ",
+                `dc_instructorphoto` = " . quote(self::serializeMulti($xml->instructor, "photo")) . ",
+                `dc_instructorphotomime` = " . quote(self::serializeAttr($xml->instructor, "photo", "mime")) . ",
                 `dc_url` = " . quote($xml->url) . ",
                 `dc_language` = " . quote(self::serialize($xml->language)) . ",
                 `dc_date` = " . $firstCreateDate . ",
@@ -885,11 +967,13 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                     `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                     `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
-                    `dc_instructor` = " . quote(self::serialize($xml->instructor->fullName)) /* TODO: multiplicity */ . ",
+                    `dc_instructor` = " . quote(self::serializeMulti($xml->instructor, "fullName")) . ",
                     `dc_department` = " . quote(self::serialize($xml->department)) . ",
                     `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
                     `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
-                    `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
+                    `dc_coursephotomime` = " . quote($xml->coursePhoto['mime']) . ",
+                    `dc_instructorphoto` = " . quote(self::serializeMulti($xml->instructor, "photo")) . ",
+                    `dc_instructorphotomime` = " . quote(self::serializeAttr($xml->instructor, "photo", "mime")) . ",
                     `dc_url` = " . quote($xml->url) . ",
                     `dc_language` = " . quote(self::serialize($xml->language)) . ",
                     `dc_date` = " . $firstCreateDate . ",
@@ -901,22 +985,78 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Prepare a XML element as an array for serialization, handle multi-lang and multiplicity as needed.
+     * 
+     * @param  CourseXMLElement $ele
+     * @return array
+     */
+    private static function prepareArrayForSerialization($ele) {
+        $arr = array();
+        foreach ($ele as $innerele) {
+            $lang = $innerele->getAttribute('lang');
+            if ($lang !== false) {
+                $arr[(string) $lang] = (string) $innerele;
+            } else {
+                $arr[] = (string) $innerele;
+            }
+        }
+        return $arr;
+    }
+    
+    /**
      * Serialize a XML element.
      * 
      * @param CourseXMLElement $ele
      * return string
      */
-    public static function serialize($ele) {
+    private static function serialize($ele) {
         if (count($ele) == 1) {
             return (string) $ele;
         } else if (count($ele) > 1) {
+            return base64_encode(serialize(self::prepareArrayForSerialization($ele)));
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Serialize a multiple XML element
+     * 
+     * @param  CourseXMLElement $parent
+     * @param  string           $childName
+     * @return string
+     */
+    private static function serializeMulti($parent, $childName) {
+        if (count($parent) == 1) {
+            return self::serialize($parent->{$childName});
+        } else if (count($parent) > 1) {
             $arr = array();
-            foreach ($ele as $innerele) {
-                $lang = $innerele->getAttribute('lang');
-                if ($lang !== false) {
-                    $arr[(string) $lang] = (string) $innerele;
-                } else {
-                    $arr[] = (string) $innerele;
+            foreach ($parent as $child) {
+                if (!empty($child->{$childName})) {
+                    $arr[] = self::prepareArrayForSerialization($child->{$childName});
+                }
+            }
+            return base64_encode(serialize($arr));
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Serialize a multiple XML element attribute
+     * 
+     * @param  CourseXMLElement $parent
+     * @param  string           $childName
+     * @return string
+     */
+    private static function serializeAttr($parent, $childName, $attrName) {
+        if (count($parent) == 1) {
+            return self::serialize((string) $parent->{$childName}[$attrName]);
+        } else if (count($parent) > 1) {
+            $arr = array();
+            foreach ($parent as $child) {
+                if (!empty($child->{$childName})) {
+                    $arr[] = (string) $child->{$childName}[$attrName];
                 }
             }
             return base64_encode(serialize($arr));
@@ -936,7 +1076,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param  CourseXMLElement $ele
      * @return array
      */
-    public static function makeMultiLang($ele) {
+    private static function makeMultiLang($ele) {
         global $currentCourseLanguage, $webDir, $siteName, $Institution, $InstitutionUrl;
         if (empty($currentCourseLanguage)) {
             $currentCourseLanguage = 'greek';
@@ -1009,7 +1149,6 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         
         $data['course_url'] = $urlServer . 'courses/' . $course['code'];
-        $data['course_instructor_fullName_' . $clang] = $course['titulaires']; // TODO: multiplicity
         $data['course_title_' . $clang] = $course['intitule'];
         $data['course_keywords_' . $clang] = $course['course_keywords'];
         

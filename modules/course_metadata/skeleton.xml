@@ -53,9 +53,9 @@
     
     <instructor>
         <firstName lang="el"></firstName>
-        <firstName lang="en"></firstName>
-        
         <lastName lang="el"></lastName>
+        
+        <firstName lang="en"></firstName>
         <lastName lang="en"></lastName>
         
         <fullName lang="el"></fullName>

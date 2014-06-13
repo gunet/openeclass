@@ -112,6 +112,24 @@ class CourseXMLConfig {
             return array();
         }
     }
+    
+    /**
+     * Intected code for HTML Form labels.
+     * 
+     * @param  string $key
+     * @return string
+     */
+    public static function getInjectValue($key) {
+        $valArr = array(
+            'course_instructor_photo' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a></div></div>"
+        );
+        
+        if (isset($valArr[$key])) {
+            return $valArr[$key];
+        } else {
+            return array();
+        }
+    }
 
     /**
      * Link value for HTML Form labels.
@@ -129,7 +147,6 @@ class CourseXMLConfig {
 
         $valArr = array(
             'course_title_' . $clang => $infocours,
-            'course_instructor_fullName_' . $clang => $infocours,
             'course_language' => $infocours,
             'course_keywords_' . $clang => $infocours,
             'course_unit_title_' . $clang => $coursehome,
@@ -194,7 +211,9 @@ class CourseXMLConfig {
      * @var array
      */
     public static $arrayFields = array(
-        'course_unit_keywords'
+        'course_instructor_firstName',
+        'course_instructor_lastName',
+        'course_instructor_photo'
     );
 
     /**
@@ -231,7 +250,7 @@ class CourseXMLConfig {
      */
     public static $breakAccordionStartFields = array(
         'course_code_el',
-        'course_instructor_moreInformation_el',
+        'course_coTeaching',
         'course_yearOfStudy'
     );
 
@@ -267,7 +286,8 @@ class CourseXMLConfig {
         'course_unit_material_multimedia_url', 'course_unit_material_other',
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
         'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
-        'course_lastLevelConfirmation', 'course_firstCreateDate', 'course_videolectures'
+        'course_lastLevelConfirmation', 'course_firstCreateDate', 'course_videolectures',
+        'course_instructor_fullName', 'course_instructor_moreInformation', 'course_instructor_cv'
     );
 
     /**
@@ -276,6 +296,14 @@ class CourseXMLConfig {
      */
     public static $hiddenFromAnonymousFields = array(
         'course_credits', 'course_structure', 'course_assessmentMethod', 'course_assignments'
+    );
+    
+    /**
+     * Fields that allow custom html code to be injected after them.
+     * @var array
+     */
+    public static $injectFields = array(
+        'course_instructor_photo'
     );
 
     /**
@@ -292,8 +320,7 @@ class CourseXMLConfig {
      * @var array 
      */
     public static $linkedFields = array(
-        'course_title', 'course_instructor_fullName',
-        'course_language', 'course_keywords',
+        'course_title', 'course_language', 'course_keywords',
         'course_unit_title', 'course_unit_description',
         'course_numberOfUnits', 'course_license',
         'course_contents', 'course_objectives', 'course_literature',
@@ -308,7 +335,6 @@ class CourseXMLConfig {
     public static $mandatoryFields = array(
         'course_instructor_firstName_el', 'course_instructor_firstName_en',
         'course_instructor_lastName_el', 'course_instructor_lastName_en',
-        'course_instructor_fullName_el', 'course_instructor_fullName_en',
         'course_title_el', 'course_title_en',
         'course_level', 'course_url', 'course_license_el', 'course_license_en',
         'course_description_el', 'course_description_en',
@@ -337,6 +363,14 @@ class CourseXMLConfig {
      * @var array
      */
     public static $multipleFields = array(
+        /*'course_instructor_photo'*/
+    );
+    
+    /**
+     * Fields with overriden css class.
+     * @var array
+     */
+    public static $overrideClass = array(
         'course_instructor_photo'
     );
 
@@ -345,8 +379,7 @@ class CourseXMLConfig {
      * @var array
      */
     public static $readOnlyFields = array(
-        'course_instructor_fullName', 'course_title',
-        'course_url', 'course_keywords', 'course_numberOfUnits',
+        'course_title', 'course_url', 'course_keywords', 'course_numberOfUnits',
         'course_unit_title', 'course_unit_description',
         'course_contents', 'course_objectives', 'course_literature',
         'course_teachingMethod', 'course_assessmentMethod',
@@ -378,6 +411,14 @@ class CourseXMLConfig {
         'course_institutionDescription',
         'course_curriculumDescription', 'course_outcomes',
         'course_curriculumTargetGroup'
+    );
+    
+    /**
+     * Unit Form fields.
+     * @var array
+     */
+    public static $unitFields = array(
+        'course_unit_keywords'
     );
 
 }
