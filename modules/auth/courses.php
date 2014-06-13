@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
                             <a href='$_SERVER[SCRIPT_NAME]?fc=$fac[id]'>" . q($fac['name']) . "</a>&nbsp;
                             <span class='smaller'>($fac[code])</span>";
                             $n = db_query("SELECT COUNT(*) FROM cours
-                                    WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
+                                    WHERE faculteid = $fac[id] AND visible != ".COURSE_INACTIVE."");
                             $r = mysql_fetch_array($n);
                             $tool_content .= "<span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
                             </td>
