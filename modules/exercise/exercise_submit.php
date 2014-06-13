@@ -51,8 +51,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $exerciseId = $_POST['value'];
             $record_end_date = date('Y-m-d H:i:s', time());
             $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
-            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t
-                    WHERE eurid = ?d", $record_end_date, $eurid);
+            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
+                    WHERE eurid = ?d", $record_end_date, 4, $eurid);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
             unset($_SESSION['exercise_begin_time']);    
@@ -91,8 +91,8 @@ if (isset($_REQUEST['exerciseId'])) {
 if (isset($_POST['buttonCancel'])) {
         $record_end_date = date('Y-m-d H:i:s', time());
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t
-                WHERE eurid = ?d", $record_end_date, $eurid);
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
+                WHERE eurid = ?d", $record_end_date, 4, $eurid);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 	Session::set_flashdata('Η προσπάθεια ακυρώθηκε', 'alert1');
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
@@ -254,12 +254,14 @@ if (isset($_POST['formSent'])) {
         $totalWeighting = $objExercise->selectTotalWeighting();
         //If time expired in sequential exercise we must add to the DB the non-given answers
         // to the questions the student didn't had the time to answer
-        if ($time_expired && $exerciseType == 2) {
+        if (isset($time_expired) && $time_expired && $exerciseType == 2) {
             $objExercise->finalize_answers();
         }
+        $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
+        $attempt_status = ($unmarked_free_text_nbr > 0) ? 2 : 1;
         // record results of exercise
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, 
-                                total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $totalWeighting, $eurid);
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
+                                total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         
         unset($objExercise);
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
