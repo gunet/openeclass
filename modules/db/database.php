@@ -360,6 +360,27 @@ final class Database {
         return $result;
     }
 
+    public function transaction($function) {
+        if (is_callable($function)) {
+            $needsTransaction = !$this->dbh->inTransaction();
+            if ($needsTransaction)
+                $this->dbh->beginTransaction();
+            try {
+                $function();
+            } catch (Exception $ex) {
+                if ($needsTransaction)
+                    $this->dbh->rollBack();
+                throw $ex;
+            }
+            if ($needsTransaction)
+                $this->dbh->commit();
+        } else {
+            $backtrace_entry = debug_backtrace();
+            $backtrace_info = $backtrace_entry[1];
+            Debug::message("Transaction needs a function as parameter", $backtrace_info['file'], $backtrace_info['line']);
+        }
+    }
+
     private function errorFound($callback_error, $isTransactional, $error_msg, $pdo_error, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
