@@ -264,7 +264,7 @@ final class Database {
         $variable_size = count($statement_parts) - 1;   // Do not take into account first part
         $variable_types = array($variable_size);
         if ($variable_size < count($variables)) {
-            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::INFO);
+            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::ERROR);
         } else if ($variable_size > count($variables)) {
             Database::dbg("Provided variables are <b>less</b> than the required statement fields", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
             die();

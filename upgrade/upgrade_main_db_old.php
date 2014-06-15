@@ -190,7 +190,7 @@ if (!isset($encryptedPasswd)) {
             if (!in_array($pass, $auth_methods)) {
                 $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
                 // do the update
-                db_query("UPDATE user SET password = '$newpass'
+                Database::get()->query("UPDATE user SET password = '$newpass'
                                                         WHERE user_id = $row[user_id]");
             }
         }
@@ -210,7 +210,7 @@ $res = db_query("SELECT user_id,registered_at,expires_at FROM user
 while ($row = mysql_fetch_array($res)) {
     $registered_at = $row["registered_at"];
     $regtime = 126144000 + time();
-    db_query("UPDATE user SET registered_at=" . time() . ",expires_at=" . $regtime);
+    Database::get()->query("UPDATE user SET registered_at=" . time() . ",expires_at=" . $regtime);
 }
 
 
