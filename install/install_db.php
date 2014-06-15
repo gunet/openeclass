@@ -62,8 +62,8 @@ Database::get()->query("DROP TABLE IF EXISTS monthly_summary");
 Database::get()->query("DROP TABLE IF EXISTS user_request");
 Database::get()->query("DROP TABLE IF EXISTS prof_request");
 Database::get()->query("DROP TABLE IF EXISTS user");
-db_query("DROP TABLE IF EXISTS bbb_servers");
-db_query("DROP TABLE IF EXISTS bbb_session");
+Database::get()->query("DROP TABLE IF EXISTS bbb_servers");
+Database::get()->query("DROP TABLE IF EXISTS bbb_session");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -964,14 +964,14 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
-db_query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
+Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
                  VALUES (" . quote($nameForm) . ", '', " .
                              quote($loginForm) . ", '$password_encrypted', " .
                              quote($emailForm) . ", 1, " . DBHelper::timeAfter() .", ". DBHelper::timeAfter(5*365*24*60*60).", 1, '*,,', 'Administrator')");
 $admin_uid = mysql_insert_id();
-db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                  VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-db_query("INSERT INTO admin VALUES ($admin_uid, 0)");
+Database::get()->query("INSERT INTO admin VALUES ($admin_uid, 0)");
 
 #
 # Table structure for table `user_request`
@@ -1166,7 +1166,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `logins` (
         PRIMARY KEY (`id`))");
 
 // bbb_servers table
-db_query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
+Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hostname` varchar(255) DEFAULT NULL,
   `ip` varchar(255) NOT NULL,
@@ -1180,7 +1180,7 @@ db_query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
   KEY `idx_bbb_servers` (`hostname`))');
     
 // bbb_sessions tables
-db_query('CREATE TABLE IF NOT EXISTS `bbb_session` (
+Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `course_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
