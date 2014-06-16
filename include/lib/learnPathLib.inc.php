@@ -686,19 +686,16 @@ function display_my_exercises($dialogBox, $style) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 
-function display_my_documents($dialogBox, $style) {
-    global $is_editor;
+function display_my_documents($dialogBox, $style) {   
     global $courseDir;
     global $baseWorkDir;
     global $curDirName;
     global $curDirPath;
-    global $parentDir;
-    global $langAddModule;
+    global $parentDir;    
     global $langUp;
     global $langName;
     global $langSize;
-    global $langDate;
-    global $langOk;
+    global $langDate;    
     global $langAddModulesButton;
     global $fileList;
     global $themeimg;
@@ -708,14 +705,12 @@ function display_my_documents($dialogBox, $style) {
     /*
      * DISPLAY
      */
-
-    $output .= '<!-- display_my_documents output -->' . "\n";
+    
     $dspCurDirName = htmlspecialchars($curDirName);
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir = rawurlencode($parentDir);
 
-    $output .= '
-    <form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
+    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
 
     /* --------------------------------------
       DIALOG BOX SECTION
@@ -731,10 +726,10 @@ function display_my_documents($dialogBox, $style) {
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
-    <table width="99%" class="tbl">
-    <tr>
-      <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
-      <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
+        <table width="99%" class="tbl">
+        <tr>
+          <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
+          <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
         /* GO TO PARENT DIRECTORY */
         if ($curDirName) /* if the $curDirName is empty, we're in the root point
           and we can't go to a parent dir */ {
@@ -743,9 +738,7 @@ function display_my_documents($dialogBox, $style) {
                     "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
                     "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
         }
-        $output .= '
-    </tr>
-    </table>';
+        $output .= '</tr></table>';
     }
 
 
@@ -753,7 +746,7 @@ function display_my_documents($dialogBox, $style) {
     <table width="99%" class="tbl_alt" >';
     $output .= "
     <tr>
-      <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langName</div></th>
+      <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
       <th>$langSize</th>
       <th>$langDate</th>
       <th>$langSelection</th>
@@ -777,13 +770,8 @@ function display_my_documents($dialogBox, $style) {
             $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
 
-            if ($fileList['visible'][$fileKey] == 0) {
-                if ($is_editor) {
-                    $style = 'class="invisible"';
-                } else {
-                    $style = "";
-                    continue; // skip the display of this file
-                }
+            if ($fileList['visible'][$fileKey] == 0) {                
+                continue; // skip the display of this file                
             }
 
             if ($fileList['type'][$fileKey] == A_FILE) {

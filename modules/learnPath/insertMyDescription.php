@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -68,8 +68,8 @@ if ($num == 0) {
     // create new module
     // TODO: name goes from langWhatever
     $sql = "INSERT INTO `" . $TABLEMODULE . "`
-		(`course_id`, `name`, `contentType`)
-		VALUES ($course_id, '" . $langCourseDescription . "', '" . CTCOURSE_DESCRIPTION_ . "' )";
+		(`course_id`, `name`, `contentType`, `comment`, `launch_data`)
+		VALUES ($course_id, '" . $langCourseDescription . "', '" . CTCOURSE_DESCRIPTION_ . "', '', '')";
     $query = db_query($sql);
 
     $insertedModule_id = mysql_insert_id();
