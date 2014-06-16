@@ -368,12 +368,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $videoid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.video")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM video ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
-                $oldid = intval($row['id']);
+            Database::get()->queryFunc("SELECT id FROM video ORDER by id", function ($row) use($videoid_offset, &$video_map) {
+                $oldid = intval($row->id);
                 $newid = $oldid + $videoid_offset;
                 $video_map[$oldid] = $newid;
-            }
+            });
         }
 
         $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video
@@ -395,12 +394,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $linkid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM videolinks ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
-                $oldid = intval($row['id']);
+            Database::get()->queryFunc("SELECT id FROM videolinks ORDER by id", function ($row) use ($linkid_offset, &$videolink_map) {
+                $oldid = intval($row->id);
                 $newid = $oldid + $linkid_offset;
                 $videolink_map[$oldid] = $newid;
-            }
+            });
         }
 
         $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
@@ -479,12 +477,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $lpid_offset = Database::get()->querySingle("SELECT MAX(learnPath_id) as max FROM `$mysqlMainDb`.lp_learnPath")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM lp_learnPath ORDER by learnPath_id");
-            while ($row = mysql_fetch_array($result)) {
-                $oldid = intval($row['learnPath_id']);
+            Database::get()->queryFunc("SELECT learnPath_id FROM lp_learnPath ORDER by learnPath_id", function ($row) use($lpid_offset, &$lp_map) {
+                $oldid = intval($row->learnPath_id);
                 $newid = $oldid + $lpid_offset;
                 $lp_map[$oldid] = $newid;
-            }
+            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE lp_map AS
@@ -513,13 +510,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         // ----- lp_asset DB Table ----- //
         $assetid_offset = Database::get()->querySingle("SELECT max(asset_id) as max FROM `$mysqlMainDb`.lp_asset")->max;
 
-        $result = db_query("SELECT * FROM lp_asset ORDER by asset_id");
-
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['asset_id']);
+        Database::get()->queryFunc("SELECT asset_id FROM lp_asset ORDER by asset_id", function ($row) use($assetid_offset, &$asset_map) {
+            $oldid = intval($row->asset_id);
             $newid = $oldid + $assetid_offset;
             $asset_map[$oldid] = $newid;
-        }
+        });
 
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_asset
                          (`asset_id`, `module_id`, `path`, `comment`)
@@ -537,13 +532,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         // ----- lp_rel_learnPath_module DB Table ----- //
         $relid_offset = Database::get()->querySingle("SELECT max(learnPath_module_id) as max FROM `$mysqlMainDb`.lp_rel_learnPath_module")->max;
 
-        $result = db_query("SELECT * FROM lp_rel_learnPath_module ORDER by learnPath_module_id");
-
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['learnPath_module_id']);
+        Database::get()->queryFunc("SELECT learnPath_module_id FROM lp_rel_learnPath_module ORDER by learnPath_module_id", function ($row) use($relid_offset, &$rel_map) {
+            $oldid = intval($row->learnPath_module_id);
             $newid = $oldid + $relid_offset;
             $rel_map[$oldid] = $newid;
-        }
+        });
 
         Database::get()->query("CREATE TEMPORARY TABLE rel_map AS
                    SELECT old.learnPath_module_id AS old_id, old.learnPath_module_id + $relid_offset AS new_id
@@ -636,12 +629,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $wikiid_offset = Database::get()->querySingle("SELECT max(id) as max FROM `$mysqlMainDb`.wiki_properties")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM wiki_properties ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
-                $oldid = intval($row['id']);
+            Database::get()->queryFunc("SELECT id FROM wiki_properties ORDER by id", function ($row) use($wikiid_offset, &$wiki_map) {
+                $oldid = intval($row->id);
                 $newid = $oldid + $wikiid_offset;
                 $wiki_map[$oldid] = $newid;
-            }
+            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE wiki_map AS
@@ -663,13 +655,12 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         // ----- wiki_pages DB Table ----- //
         $wikipageid_offset = Database::get()->querySingle("SELECT max(id) as max FROM `$mysqlMainDb`.wiki_pages")->max;
 
-        $result = db_query("SELECT * FROM wiki_pages ORDER by id");
         $wiki_page_map = array();
-        while ($row = mysql_fetch_array($result)) {
-            $oldid = intval($row['id']);
+        Database::get()->queryFunc("SELECT id FROM wiki_pages ORDER by id", function ($row) use($wikipageid_offset, &$wiki_page_map) {
+            $oldid = intval($row->id);
             $newid = $oldid + $wikipageid_offset;
             $wiki_page_map[$oldid] = $newid;
-        }
+        });
 
         Database::get()->query("CREATE TEMPORARY TABLE wikipage_map AS
                    SELECT old.id AS old_id, old.id + $wikipageid_offset AS new_id
@@ -796,12 +787,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $assignmentid_offset = Database::get()->querySingle("SELECT max(id) as max FROM `$mysqlMainDb`.assignment")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM assignments ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
+            Database::get()->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
                 $oldid = intval($row['id']);
                 $newid = $oldid + $assignmentid_offset;
                 $assignments_map[$oldid] = $newid;
-            }
+            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE assignments_map AS
@@ -879,12 +869,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         $exerciseid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.exercise")->max;
 
         if ($return_mapping) {
-            $result = db_query("SELECT * FROM exercices ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
+            Database::get()->queryFunc("SELECT id FROM exercices ORDER by id", function ($row) use($exerciseid_offset, &$exercise_map) {
                 $oldid = intval($row['id']);
                 $newid = $oldid + $exerciseid_offset;
                 $exercise_map[$oldid] = $newid;
-            }
+            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE exercise_map AS
@@ -967,17 +956,16 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 
     // move table `actions`, `actions_summary`, `login` in main DB
-    $result = db_query("SELECT `user_id`, `module_id`, $course_id AS `course_id`,
+    Database::get()->queryFunc("SELECT `user_id`, `module_id`, $course_id AS `course_id`,
                                COUNT(`id`) AS `hits`, SUM(`duration`) AS `duration`,
                                DATE(`date_time`) AS `day`
                             FROM `actions`
-                            GROUP BY DATE(`date_time`), `user_id`, `module_id`");
-    while ($row = mysql_fetch_assoc($result)) {
+                            GROUP BY DATE(`date_time`), `user_id`, `module_id`", function ($row) use ($mysqlMainDb) {
         Database::get()->query("INSERT INTO `$mysqlMainDb`.`actions_daily`
                         (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
                         VALUES 
-                        (NULL, $row[user_id], $row[module_id], $row[course_id], $row[hits], $row[duration], '$row[day]', NOW())");
-    }
+                        (NULL, $row->user_id, $row->module_id, $row->course_id, $row->hits, $row->duration, '$row->day', NOW())");
+    });
 
     Database::get($code)->query("INSERT INTO `$mysqlMainDb`.actions_summary
                 (module_id, visits, start_date, end_date, duration, course_id)
@@ -1324,10 +1312,9 @@ function upgrade_course_2_1_3($code, $extramessage = '') {
 
     // upgrade dropbox
     echo "$langEncodeDropBoxDocuments<br>";
-    $d = db_query("SELECT id, filename, title FROM dropbox_file", $code);
-    while ($dbox = mysql_fetch_array($d)) {
-        encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
-    }
+    Database::get($code)->queryFunc("SELECT id, filename, title FROM dropbox_file", function ($dbox) use ($code) {
+        encode_dropbox_documents($code, $dbox->id, $dbox->filename, $dbox->title);
+    });
 
     // upgrade lp_module me to kainourio content type
     Database::get($code)->query("ALTER TABLE `lp_module`
@@ -1363,10 +1350,9 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
 
     // upgrade dropbox
     echo "$langEncodeDropBoxDocuments<br>";
-    $d = db_query("SELECT id, filename, title FROM dropbox_file", $code);
-    while ($dbox = mysql_fetch_array($d)) {
-        encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
-    }
+    Database::get($code)->queryFunc("SELECT id, filename, title FROM dropbox_file", function ($dbox) use ($code) {
+        encode_dropbox_documents($code, $dbox->id, $dbox->filename, $dbox->title);
+    });
 
     $course_base_dir = "$webDir/courses/$code";
     if (!is_writable($course_base_dir)) {
@@ -1391,16 +1377,15 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
         echo add_field('exercices', 'random', "SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
     if (!mysql_field_exists('$code', 'reponses', 'ponderation'))
         echo add_field('reponses', 'ponderation', "SMALLINT( 5 ) NOT NULL AFTER `comment`");
-    $s = db_query("SELECT type FROM questions", $code);
-    while ($f = mysql_fetch_row($s)) {
-        if (empty($f[0])) {
+    Database::get($code)->queryFunc("SELECT type FROM questions", function ($f) use ($code, $langTable, $OK, $BAD) {
+        if (empty($f->type)) {
             if (Database::get($code)->query("UPDATE `questions` SET type=1")) {
                 echo "$langTable questions: $OK<br>";
             } else {
                 echo "$langTable questions: $BAD<br>";
             }
         }
-    } // while
+    });
 
     if (!mysql_table_exists($code, 'assignments')) {
         Database::get($code)->query("CREATE TABLE `assignments` (
@@ -1459,12 +1444,11 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     }
 
     // correct link entries to correctly appear in a blank window
-    $sql = db_query("SELECT url FROM `liens` WHERE url REGEXP '\"target=_blank$'");
-    while ($u = mysql_fetch_row($sql)) {
-        $temp = $u[0];
+    Database::get()->queryFunc("SELECT url FROM `liens` WHERE url REGEXP '\"target=_blank$'", function ($u) {
+        $temp = $u->url;
         $newurl = preg_replace('#\s*"target=_blank#', '', $temp);
-        Database::get()->query("UPDATE liens SET url='$newurl' WHERE url='$temp'");
-    }
+        Database::get()->query("UPDATE liens SET url=?s WHERE url=?s, $newurl, $temp");
+    });
 
     // for dropbox
     if (!mysql_table_exists($code, 'dropbox_file')) {
@@ -1517,18 +1501,17 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                 AND DATE_FORMAT(day,\'%Y %m %d\') >= \'' . date("Y m d") . '\'';
 
     //  Get all agenda events from each table & parse them to arrays
-    $mysql_query_result = db_query($sql, $code);
     $event_counter = 0;
-    while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-        $lesson_agenda[$event_counter]['id'] = $myAgenda[0];
-        $lesson_agenda[$event_counter]['title'] = $myAgenda[1];
-        $lesson_agenda[$event_counter]['content'] = $myAgenda[2];
-        $lesson_agenda[$event_counter]['date'] = $myAgenda[3];
-        $lesson_agenda[$event_counter]['time'] = $myAgenda[4];
-        $lesson_agenda[$event_counter]['duree'] = $myAgenda[5];
+    Database::get($code)->queryFunc($sql, function ($myAgenda) use (&$event_counter, &$lesson_agenda, $code) {
+        $lesson_agenda[$event_counter]['id'] = $myAgenda->id;
+        $lesson_agenda[$event_counter]['title'] = $myAgenda->titre;
+        $lesson_agenda[$event_counter]['content'] = $myAgenda->contenu;
+        $lesson_agenda[$event_counter]['date'] = $myAgenda->day;
+        $lesson_agenda[$event_counter]['time'] = $myAgenda->hour;
+        $lesson_agenda[$event_counter]['duree'] = $myAgenda->lasting;
         $lesson_agenda[$event_counter]['lesson_code'] = $code;
         $event_counter++;
-    }
+    });
 
     for ($j = 0; $j < $event_counter; $j++) {
         Database::get()->query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
@@ -1887,19 +1870,17 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     echo "$langEncodeGroupDocuments<br>";
     flush();
     // find group secret directory
-    $s = db_query("SELECT id, secretDirectory FROM student_group");
-    while ($group = mysql_fetch_array($s)) {
-        encode_group_documents($code, $group['id'], $group['secretDirectory']);
-    }
+    Database::get()->queryFunc("SELECT id, secretDirectory FROM student_group", function ($group) use ($code) {
+        encode_group_documents($code, $group->id, $group->secretDirectory);
+    });
     fix_multiple_document_entries('group_documents');
 
     // ----------------- dropbox document upgrade ----------
     echo "$langEncodeDropBoxDocuments<br>";
     flush();
-    $d = db_query("SELECT id, filename, title FROM dropbox_file");
-    while ($dbox = mysql_fetch_array($d)) {
-        encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
-    }
+    Database::get()->queryFunc("SELECT id, filename, title FROM dropbox_file", function ($dbox) use ($code) {
+        encode_dropbox_documents($code, $dbox->id, $dbox->filename, $dbox->title);
+    });
 
     // -------------- move video files to new directory ----
     $course_video = "$webDir/courses/$code/video";
@@ -1911,10 +1892,9 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     // upgrade video
     if (!mysql_field_exists("$code", 'video', 'path')) {
         echo add_field_after_field('video', 'path', 'id', "VARCHAR(255)");
-        $r = db_query("SELECT * FROM video", $code);
-        while ($row = mysql_fetch_array($r)) {
-            upgrade_video($row['url'], $row['id'], $code);
-        }
+        Database::get($code)->queryFunc("SELECT url, id FROM video", function ($row) use ($code) {
+            upgrade_video($row->url, $row->id, $code);
+        });
     }
     if (!mysql_field_exists($code, 'video', 'creator'))
         echo add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
@@ -2038,17 +2018,16 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     update_field("accueil", "define_var", "MODULE_ID_CHAT", "id", 19);
     update_field("accueil", "define_var", "MODULE_ID_DESCRIPTION", "id", 20);
 
-    $sql = db_query("SELECT id,lien,image,address FROM accueil");
-    while ($u = mysql_fetch_row($sql)) {
-        $oldlink_lien = $u[1];
+    Database::get()->queryFunc("SELECT id,lien,image,address FROM accueil", function ($u) {
+        $oldlink_lien = $u->lien;
         $newlink_lien = preg_replace(
                 array('#../claroline/#',
             '#../../modules/import/import_page.php\?link=(\S+) "target=_blank#'), array('../../modules/',
             '../../courses/' . $code . '/page/$1'), $oldlink_lien);
-        $oldlink_image = $u[2];
+        $oldlink_image = $u->image;
         $newlink_image = str_replace(
                 '../claroline/image/', '../../images/', $oldlink_image);
-        $oldlink_address = $u[3];
+        $oldlink_address = $u->address;
         $newlink_address = str_replace(
                 '../claroline/image/', '../../images/', $oldlink_address);
         if ($oldlink_lien != $newlink_lien or
@@ -2058,9 +2037,9 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                                          lien = " . quote($newlink_lien) . ",
                                          image = " . quote($newlink_image) . ",
                                          address = " . quote($newlink_address) . "
-                                  WHERE id='$u[0]'");
+                                  WHERE id='$u->id'");
         }
-    }
+    });
 
     //set the new images for the icons of lesson modules
     update_field("accueil", "image", "calendar", "id", 1);
@@ -2078,18 +2057,17 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     update_field("accueil", "image", "conference", "id", 19);
     update_field("accueil", "image", "description", "id", 20);
 
-    $sql = db_query("SELECT image FROM accueil");
-    while ($u = mysql_fetch_row($sql)) {
-        if ($u[0] == '../../../images/npage.gif') {
+    Database::get()->queryFunc("SELECT image FROM accueil", function ($u) {
+        if ($u->image == '../../../images/npage.gif') {
             update_field("accueil", "image", "external_link", "image", "../../../images/npage.gif");
         }
-        if ($u[0] == '../../../images/page.gif') {
+        if ($u->image == '../../../images/page.gif') {
             update_field("accueil", "image", "external_link", "image", "../../../images/page.gif");
         }
-        if ($u[0] == 'travaux.png') {
+        if ($u->image == 'travaux.png') {
             update_field("accueil", "image", "external_link", "image", "travaux.png");
         }
-    }
+    });
 
     // update menu entries with new messages
     update_field('accueil', 'rubrique', $langWork[$lang], 'id', '5');
@@ -2103,15 +2081,13 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
     // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass maindb
     // after that drop table introduction
     if (mysql_table_exists($code, 'introduction')) {
-        $sql = db_query("SELECT texte_intro FROM introduction", $code);
-        while ($text = mysql_fetch_array($sql)) {
-            $description = quote($text[0]);
-            if (db_query("UPDATE cours SET description=$description WHERE code='$code'", $mysqlMainDb)) {
+        Database::get($code)->queryFunc("SELECT texte_intro FROM introduction", function ($text) use($code, $langMoveIntroText, $BAD) {
+            if (Database::get()->query("UPDATE cours SET description=?s WHERE code=?s", $text->texte_intro, $code)) {
                 Database::get($code)->query("DROP TABLE IF EXISTS introduction");
             } else {
                 echo "$langMoveIntroText <b>cours</b>: $BAD<br>";
             }
-        }
+        });
     } // end of table introduction
 
     $tool_content .= "<br><br></td></tr>";
@@ -2171,28 +2147,27 @@ function document_upgrade_file($path, $data) {
     $new_filename = safe_filename(get_file_extension($old_filename));
     $new_path = preg_replace('|/[^/]*$|', "/$new_filename", $db_path);
     $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
-    $r = db_query("SELECT * FROM $table WHERE path = " . quote($db_path));
-    if (mysql_num_rows($r) > 0) {
-        $current_filename = mysql_fetch_array($r);
-        if (empty($current_filename['filename']) or
-                preg_match('/[^\040-\177]/', $current_filename['path'])) {
-            if (!empty($current_filename['filename'])) {
-                $old_filename = $current_filename['filename'];
-            }
-            // File exists in database, hasn't been upgraded
-            $format = quote(get_file_extension($old_filename));
-            Database::get()->query("UPDATE $table
-                                        SET filename = " . quote($old_filename) . ",
-                                        path = " . quote($new_path) . ",
+    $rows = Database::get()->queryFunc("SELECT * FROM $table WHERE path = ?s", function ($current_filename) use($table, $file_date, $new_path, $db_path, $path, $data) {
+                if (empty($current_filename->filename) or
+                        preg_match('/[^\040-\177]/', $current_filename->path)) {
+                    if (!empty($current_filename->filename)) {
+                        $old_filename = $current_filename->filename;
+                    }
+                    // File exists in database, hasn't been upgraded
+                    $format = quote(get_file_extension($old_filename));
+                    Database::get()->query("UPDATE $table
+                                        SET filename = ?s,
+                                        path = ?s,
                                         date = $file_date, date_modified = $file_date,
-                                        format = $format
-                                        WHERE path= " . quote($db_path));
-            rename($path, $data . $new_path);
-        } else {
-            // File wasn't renamed
-            $new_path = false;
-        }
-    } else {
+                                        format = ?s
+                                        WHERE path=?s ", $old_filename, $new_path, $format, $db_path);
+                    rename($path, $data . $new_path);
+                } else {
+                    // File wasn't renamed
+                    $new_path = false;
+                }
+            }, $db_path)->affectedRows;
+    if ($rows < 1) {
         // File doesn't exist in database
         if ($table == 'document') {
             $format = quote(get_file_extension($old_filename));
@@ -2264,41 +2239,35 @@ function fix_document_date_and_format($code) {
     global $webDir;
     $base = "$webDir/courses/$code/document";
 
-    $q = db_query("SELECT * FROM document WHERE date = '0000-00-00 00:00:00' OR date IS NULL");
-    while ($file = mysql_fetch_array($q)) {
-        $path = $base . $file['path'];
+    Database::get()->queryFunc("SELECT id, path FROM document WHERE date = '0000-00-00 00:00:00' OR date IS NULL", function ($file) use ($base) {
+        $path = $base . $file->path;
         if (!file_exists($path)) {
-            Database::get()->query("DELETE FROM document WHERE id = $file[id]");
+            Database::get()->query("DELETE FROM document WHERE id = $file->id");
         } else {
             $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
             Database::get()->query("UPDATE document
                                   SET date = $file_date, date_modified = $file_date
-                                  WHERE id = $file[id]");
+                                  WHERE id = $file->id");
         }
-    }
-    $q = db_query("SELECT * FROM document
-                       WHERE format='' OR format IS NULL");
-    while ($file = mysql_fetch_array($q)) {
-        $path = $base . $file['path'];
+    });
+
+    Database::get()->queryFunc("SELECT path, filename FROM document WHERE format='' OR format IS NULL", function ($file) use ($base) {
+        $path = $base . $file->path;
         if (is_dir($path)) {
             $format = '.dir';
         } else {
-            $format = get_file_extension($file['filename']);
+            $format = get_file_extension($file->filename);
         }
         Database::get()->query("UPDATE document SET format = '$format' WHERE id = $file[id]");
-    }
+    });
 }
 
 // Delete multiple entries for the same file in the document or
 // group_documents tables
 function fix_multiple_document_entries($table) {
-    $q = db_query("SELECT path, count(path) as c FROM $table
-                        GROUP BY path HAVING c > 1");
-    while ($file = mysql_fetch_array($q)) {
-        Database::get()->query("DELETE FROM document WHERE path = " .
-                quote($file['path']) .
-                " LIMIT " . ($file['c'] - 1));
-    }
+    Database::get()->queryFunc("SELECT path, count(path) as c FROM $table GROUP BY path HAVING c > 1", function ($file) {
+        Database::get()->query("DELETE FROM document WHERE path = %s LIMIT " . ($file->c - 1), $file->path);
+    });
 }
 
 // Upgrades 'document' table and encodes all filenames to be pure ASCII
@@ -2347,8 +2316,7 @@ function upgrade_video($file, $id, $code) {
     $safe_filename = date("YmdGis") . "_" . randomkeys('3') . "." . get_file_extension($fileName);
     $path_to_video = $webDir . '/video/' . $code . '/';
     if (rename($path_to_video . $file, $path_to_video . $safe_filename)) {
-        Database::get($code)->query("UPDATE video SET path = '$safe_filename'
-	        	WHERE id = '$id'");
+        Database::get($code)->query("UPDATE video SET path = '$safe_filename' WHERE id = '$id'");
     } else {
         echo "$langWarnVideoFile $path_to_video.$file $langGroupNone!<br>";
         Database::get($code)->query("DELETE FROM video WHERE id = '$id'");
@@ -2421,8 +2389,7 @@ function move_group_documents_to_main_db($code, $course_id) {
     global $mysqlMainDb, $webDir, $group_document_upgrade_ok, $group_document_dir;
 
     $group_document_upgrade_ok = true;
-    $q = db_query("SELECT id, secretDirectory FROM student_group");
-    if (!$q) {
+    if (!Database::get()->query("SELECT id, secretDirectory FROM student_group")) {
         // Group table doesn't exist in course database
         return false;
     }
@@ -2456,12 +2423,12 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
 
     $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
     $internal_path = quote(str_replace($group_document_dir, '', $path));
-    list($filename) = mysql_fetch_row(db_query("SELECT `filename` FROM group_documents WHERE `path` = " . $internal_path));
-    if (!db_query("INSERT INTO `$mysqlMainDb`.document SET
-                              course_id = $course_id, subsystem = 1, subsystem_id = $group_id,
-                              path = $internal_path, filename = " . quote($filename) . ",
-                              format = '$type', visibility = 'v',
-                              date = $file_date, date_modified = $file_date")) {
+    $filename = Database::get()->querySingle("SELECT `filename` FROM group_documents WHERE `path` = ?s", $internal_path)->filename;
+    if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
+                              course_id = ?d, subsystem = 1, subsystem_id = ?d,
+                              path = ?s, filename = ?s,
+                              format = ?s, visibility = 'v',
+                              date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
         $group_document_upgrade_ok = false;
     }
 }

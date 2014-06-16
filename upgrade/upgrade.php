@@ -32,7 +32,7 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {
+if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {
     $command_line = false;
@@ -68,7 +68,7 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
-if (!isset($_POST['submit2']) and !$command_line) {
+if (!isset($_POST['submit2']) and ! $command_line) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
         $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
             <center><a href=\"index.php\">$langBack</a></center>";
@@ -138,7 +138,7 @@ touch_or_error($webDir . '/video/index.htm');
 $default_student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
 $default_teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 
-if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ($_SESSION['is_admin'] == true) and !$command_line) {
+if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['is_admin'] == true) and ! $command_line) {
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
     }
@@ -550,10 +550,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                     `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0,
                                     PRIMARY KEY (`id`))");
 
-                        $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+                        Database::get()->query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                     SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
                                     FROM admin_announcements_old WHERE gr_title <> '' OR gr_body <> ''");
-                        $adm = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
+                        Database::get()->query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                      SELECT en_title AS title, CONCAT_WS('  ', en_body, en_comment) AS body, `date`, visible, 'en'
                                      FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");
                         Database::get()->query("DROP TABLE admin_announcements_old");
@@ -595,7 +595,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                 if ($oldversion < '2.6') {
                     Database::get()->query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
-                    $old_close_user_registration = intval(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'close_user_registration'"));
+                    $old_close_user_registration = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = 'close_user_registration'")->value;
                     if ($old_close_user_registration == 0) {
                         $eclass_stud_reg = 2;
                     } else {
@@ -606,13 +606,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                   `value`= $eclass_stud_reg
                               WHERE `key` = 'close_user_registration'");
 
-                    $old_disable_eclass_prof_reg = intval(!(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'")));
+                    $old_disable_eclass_prof_reg = !Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'")->value;
                     Database::get()->query("UPDATE `config` SET `key` = 'eclass_prof_reg',
                                            `value` = $old_disable_eclass_prof_reg
                                       WHERE `key` = 'disable_eclass_prof_reg'");
                     Database::get()->query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");
                     Database::get()->query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
-                    $old_alt_auth_stud_req = intval(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'alt_auth_student_req'"));
+                    $old_alt_auth_stud_req = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = 'alt_auth_student_req'")->value;
                     if ($old_alt_auth_stud_req == 1) {
                         $alt_auth_stud_req = 1;
                     } else {
@@ -703,9 +703,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 PRIMARY KEY (id)) $charset_spec");
 
                     require_once 'modules/course_metadata/CourseXML.php';
-                    $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
-                    while ($course = mysql_fetch_assoc($res)) {
-                        $xml = CourseXMLElement::initFromFile($course['code']);
+                    Database::get()->queryFunc("SELECT cours_id, code FROM cours", function ($course) {
+                        $xml = CourseXMLElement::initFromFile($course->code);
                         if ($xml !== false) {
                             $xmlData = $xml->asFlatArray();
 
@@ -732,14 +731,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             }
 
                             Database::get()->query("INSERT INTO course_review (course_id, is_certified, level, last_review, last_reviewer) 
-                                VALUES (" . $course['cours_id'] . ", $is_certified, $level, '$last_review', $uid)");
+                                VALUES (" . $course->cours_id . ", $is_certified, $level, '$last_review', $uid)");
                         }
-                    }
+                    });
                 }
-                
+
                 if ($oldversion < '2.9.1') {
-                       mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
-                        Database::get()->query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
+                    mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
+                            Database::get()->query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
                 }
 
                 if ($oldversion < '3') {
@@ -758,7 +757,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
-                            if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
+                            if (Database::get()->query("SELECT COUNT(*) as value FROM `$table_name`")->value > 0) {
                                 echo "Warning: Database inconsistent - table '$table_name' already",
                                 " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
                                 Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
@@ -1128,7 +1127,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                             `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                             `group_id` INT( 11 ) DEFAULT NULL )
-                            $charset_spec");                    
+                            $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
@@ -1273,9 +1272,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     )');
 
                     // hierarchy tables
-                    $n = db_query("SHOW TABLES LIKE 'faculte'");
+                    $n = Database::get()->queryArray("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;
-                    $rebuildHierarchy = (mysql_num_rows($n) == 1) ? true : false;
+                    $rebuildHierarchy = (count($n) == 1) ? true : false;
                     // Whatever code $rebuildHierarchy wraps, can only be executed once.
                     // Everything else can be executed several times.
 
@@ -1301,34 +1300,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     if ($rebuildHierarchy) {
                         // copy faculties into the tree
-                        $res = db_query("SELECT MAX(id) FROM `faculte`");
-                        $max = mysql_fetch_array($res);
+                        $max = Database::get()->querySingle("SELECT MAX(id) as max FROM `faculte`")->max;
 
-                        $n = db_query("SELECT * FROM `faculte`");
                         $i = 0;
-                        while ($r = mysql_fetch_assoc($n)) {
+                        Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i) {
                             $lft = 2 + 8 * $i;
                             $rgt = $lft + 7;
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
-                        VALUES ($r[id],
-                            " . quote($r['code']) . ",
-                            " . quote($r['name']) . ",
-                            $r[number], $r[generator],
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) VALUES ($r->id,
+                            " . quote($r->code) . ",
+                            " . quote($r->name) . ",
+                            $r->number, $r->generator,
                             $lft, $rgt, true, true)");
 
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                        VALUES (" . ( ++$max[0]) . ", " . quote($r['code']) . ", " . quote($langpre) . ", " . ($lft + 1) . ", " . ($lft + 2) . ", true, true)");
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                        VALUES (" . ( ++$max[0]) . ", " . quote($r['code']) . ", " . quote($langpost) . ", " . ($lft + 3) . ", " . ($lft + 4) . ", true, true)");
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                        VALUES (" . ( ++$max[0]) . ", " . quote($r['code']) . ", " . quote($langother) . ", " . ($lft + 5) . ", " . ($lft + 6) . ", true, true)");
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpre) . ", " . ($lft + 1) . ", " . ($lft + 2) . ", true, true)");
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpost) . ", " . ($lft + 3) . ", " . ($lft + 4) . ", true, true)");
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langother) . ", " . ($lft + 5) . ", " . ($lft + 6) . ", true, true)");
 
                             $i++;
-                        }
+                        });
 
-                        $n = db_query("SELECT COUNT(*) FROM `faculte`");
-                        $r = mysql_fetch_array($n);
-                        $root_rgt = 2 + 8 * intval($r[0]);
+                        $root_rgt = 2 + 8 * intval(Database::get()->querySingle("SELECT COUNT(*) as value FROM `faculte`")->value);
                         Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
                     VALUES ('', " . quote($_POST['Institution']) . ", 1, $root_rgt)");
                         $root_node = mysql_insert_id();
@@ -1340,29 +1331,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                              `department` int(11) NOT NULL references hierarchy(id) )");
 
                     if ($rebuildHierarchy) {
-                        $n = db_query("SELECT cours_id, faculteid, type FROM `cours`");
-                        while ($r = mysql_fetch_assoc($n)) {
+                        Database::get()->queryFunc("SELECT cours_id, faculteid, type FROM `cours`", function ($r) {
                             // take care of courses with not type
-                            if (!empty($r['type']) && strlen($r['type']) > 0)
-                                $qlike = 'lang' . $r['type'];
+                            if (!empty($r->type) && strlen($r->type) > 0)
+                                $qlike = 'lang' . $r->type;
                             else
                                 $qlike = 'langother';
 
                             // take care of courses with no parent
-                            if (!empty($r['faculteid']))
-                                $qfaculteid = $r['faculteid'];
+                            if (!empty($r->faculteid))
+                                $qfaculteid = $r->faculteid;
                             else
                                 $qfaculteid = $root_node;
 
-                            $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
-                                            WHERE node.name LIKE " . quote($$qlike) . " AND
-                                                  parent.id = " . $qfaculteid . " AND
-                                                  node.lft BETWEEN parent.lft AND parent.rgt");
-                            $node = mysql_fetch_assoc($res);
-
-                            Database::get()->query("INSERT INTO `course_department` (course, department)
-                                     VALUES ($r[cours_id], $node[id])");
-                        }
+                            $node = Database::get()->querySingle("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
+                                            WHERE node.name LIKE ?s AND
+                                                  parent.id = ?s AND
+                                                  node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);
+                            Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?s, ?s)", $r->cours_id, $node->id);
+                        });
                     }
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
@@ -1371,11 +1358,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                              `department` int(11) NOT NULL references hierarchy(id) )");
 
                     if ($rebuildHierarchy) {
-                        $n = db_query("SELECT id, department FROM `user` WHERE department IS NOT NULL");
-                        while ($r = mysql_fetch_assoc($n)) {
-                            Database::get()->query("INSERT INTO `user_department` (user, department)
-                                     VALUES($r[id], $r[department])");
-                        }
+                        Database::get()->queryFunc("SELECT id, department FROM `user` WHERE department IS NOT NULL", function ($r) {
+                            Database::get()->query("INSERT INTO `user_department` (user, department) VALUES(?d, ?d)", $r->id, $r->department);
+                        });
                     }
 
                     if ($rebuildHierarchy) {
@@ -1572,10 +1557,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     for ($i = 0; $i < $columns_user_request; $i++) {
                         if (mysql_field_name($fields_user_request, $i) == "ip_address") {
                             Database::get()->query("ALTER TABLE `user_request` ADD `request_ip` varchar(45) NOT NULL DEFAULT ''");
-                            $result = db_query("SELECT id,INET_NTOA(ip_address) FROM user_request");
-                            while ($row = mysql_fetch_array($result)) {
-                                Database::get()->query("UPDATE `user_request` SET `request_ip` = '" . $row[1] . "' WHERE `id` = " . $row[0]);
-                            }
+                            Database::get()->queryFunc("SELECT id,INET_NTOA(ip_address) as ip_addr FROM user_request", function ($row) {
+                                Database::get()->query("UPDATE `user_request` SET `request_ip` = ?s WHERE `id` = ?s", $row->ip_addr, $row->id);
+                            });
                             Database::get()->query("ALTER TABLE `user_request` DROP `ip_address`");
                             break;
                         }
@@ -1614,11 +1598,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                              CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
                                              CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0,
                                              DROP INDEX cours");
-                    $lang_q = db_query('SELECT DISTINCT lang from course');
-                    while (list($old_lang) = mysql_fetch_row($lang_q)) {
-                        $new_lang = langname_to_code($old_lang);
-                        Database::get()->query("UPDATE course SET lang = '$new_lang' WHERE lang = '$old_lang'");
-                    }
+                    Database::get()->queryFunc("SELECT DISTINCT lang from course", function ($old_lang) {
+                        Database::get()->query("UPDATE course SET lang = ?s WHERE lang = ?s", langname_to_code($old_lang->lang), $old_lang->lang);
+                    });
                     Database::get()->query("RENAME TABLE `cours_user` TO `course_user`");
                     Database::get()->query('ALTER TABLE `course_user`
                                 CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 0,
@@ -1685,26 +1667,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 // **********************************************
                 // upgrade courses databases
                 // **********************************************
-                $res = db_query("SELECT id, code, lang FROM course ORDER BY code");
-                $total = mysql_num_rows($res);
+                $res = Database::get()->queryArray("SELECT id, code, lang FROM course ORDER BY code");
+                $total = count($res);
                 $i = 1;
-                while (list($id, $code, $lang) = mysql_fetch_row($res)) {
+                foreach ($res as $row) {
                     if ($oldversion <= '2.2') {
-                        upgrade_course_2_2($code, $lang, "($i / $total)");
+                        upgrade_course_2_2($row->code, $row->lang, "($i / $total)");
                     }
                     if ($oldversion < '2.3') {
-                        upgrade_course_2_3($code, "($i / $total)");
+                        upgrade_course_2_3($row->code, "($i / $total)");
                     }
                     if ($oldversion < '2.4') {
-                        convert_description_to_units($code, $id);
-                        upgrade_course_index_php($code);
-                        upgrade_course_2_4($code, $lang, "($i / $total)");
+                        convert_description_to_units($row->code, $row->id);
+                        upgrade_course_index_php($row->code);
+                        upgrade_course_2_4($row->code, $row->lang, "($i / $total)");
                     }
                     if ($oldversion < '2.5') {
-                        upgrade_course_2_5($code, $lang, "($i / $total)");
+                        upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
                     }
                     if ($oldversion < '3.0') {
-                        upgrade_course_3_0($code, "($i / $total)");
+                        upgrade_course_3_0($row->code, "($i / $total)");
                     }
                     echo "</p>\n";
                     $i++;
@@ -1730,13 +1712,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         FROM `actions`
                         GROUP BY DATE(`date_time`), `user_id`, `module_id`, `course_id`");
 
-                    $result = db_query("SELECT * FROM `actions_daily_tmpview`");
-                    while ($row = mysql_fetch_assoc($result)) {
+                    Database::get()->queryFunc("SELECT * FROM `actions_daily_tmpview`", function ($row) {
                         Database::get()->query("INSERT INTO `actions_daily` 
                             (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
                             VALUES 
-                            (NULL, " . $row['user_id'] . ", " . $row['module_id'] . ", " . $row['course_id'] . ", " . $row['hits'] . ", " . $row['duration'] . ", '" . $row['day'] . "', NOW())");
-                    }
+                            (NULL, " . $row->user_id . ", " . $row->module_id . ", " . $row->course_id . ", " . $row->hits . ", " . $row->duration . ", '" . $row->day . "', NOW())");
+                    });
 
                     Database::get()->query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
                     Database::get()->query("DROP TABLE IF EXISTS `actions`");
@@ -1767,4 +1748,5 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             } // end of if not submit
 
             draw($tool_content, 0);
+
             

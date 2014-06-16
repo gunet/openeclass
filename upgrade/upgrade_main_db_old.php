@@ -59,9 +59,9 @@ if (!mysql_field_exists($mysqlMainDb, 'course_user', 'reg_date')) {
     echo add_field('course_user', 'reg_date', "DATE NOT NULL");
     Database::get()->query("UPDATE course_user SET reg_date=NOW()");
 } else {
-    $min_reg_date_res = mysql_fetch_row(db_query("SELECT MIN(reg_date)
-				FROM course_user WHERE reg_date <> '0000-00-00'"));
-    $min_reg_date = $min_reg_date_res[0] ? ("'" . $min_reg_date_res[0] . "'") : 'NOW()';
+    $min_reg_date_res = Database::get()->query("SELECT MIN(reg_date) as min
+				FROM course_user WHERE reg_date <> '0000-00-00'")->min;
+    $min_reg_date = $min_reg_date_res ? ("'" . $min_reg_date_res . "'") : 'NOW()';
     Database::get()->query("UPDATE course_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");
 }
 
@@ -184,34 +184,29 @@ if (!mysql_field_exists("$mysqlMainDb", 'user', 'lang'))
 if (!isset($encryptedPasswd)) {
     echo "<p>$langEncryptPass</p>";
     flush();
-    if ($res = db_query("SELECT user_id, password FROM user")) {
-        while ($row = mysql_fetch_array($res)) {
-            $pass = $row["password"];
-            if (!in_array($pass, $auth_methods)) {
-                $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
-                // do the update
-                Database::get()->query("UPDATE user SET password = '$newpass'
-                                                        WHERE user_id = $row[user_id]");
-            }
+    Database::get()->queryFunc("SELECT user_id, password FROM user", function ($row) use($pass, $auth_methods) {
+        if (!in_array($pass, $auth_methods)) {
+            $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
+            // do the update
+            Database::get()->query("UPDATE user SET password = '$newpass'
+                                                        WHERE user_id = $row->user_id");
         }
-    } else {
+    }, function() use($langNotEncrypted) {
         die("$langNotEncrypted");
-    }
+    });
 }
 
 // update users with no registration date
-$res = db_query("SELECT user_id,registered_at,expires_at FROM user
+Database::get()->queryFunc("SELECT user_id,registered_at,expires_at FROM user
                         WHERE registered_at='0'
                         OR registered_at='NULL' OR registered_at=NULL
                         OR registered_at='null' OR registered_at=null
                         OR registered_at='\N' OR registered_at=\N
-                        OR registered_at=''");
-
-while ($row = mysql_fetch_array($res)) {
-    $registered_at = $row["registered_at"];
+                        OR registered_at=''", function ($row) use(&$registered_at) {
+    $registered_at = $row->registered_at;
     $regtime = 126144000 + time();
     Database::get()->query("UPDATE user SET registered_at=" . time() . ",expires_at=" . $regtime);
-}
+});
 
 
 //Empty table 'agenda' in the main database so that we do not have multiple entries

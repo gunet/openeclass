@@ -348,10 +348,14 @@ final class Database {
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
+            $func_affected_rows = 0;
             if ($callback_fetch)
                 while (TRUE)
-                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
+                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res)) {
+                        $result = new DBResult(0, $func_affected_rows);
                         break;
+                    } else
+                        $func_affected_rows++;
         }
         /* Close transaction, if required */
         if ($isTransactional)
