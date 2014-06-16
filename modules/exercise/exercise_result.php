@@ -357,14 +357,17 @@ if (count($exercise_question_ids)>0){
                               </tr>";
         }
         $tool_content .= "<tr class='even'>
-                            <th colspan='$colspan' class='odd'>";
-        if ($answerType == FREE_TEXT && !empty(purify($choice))) {
-            $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
-            $question_graded = is_null($question_weight) ? FALSE : TRUE; 
-            if (!$question_graded) {
-                $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";   
-            } else {
-                $questionScore = $question_weight;
+                            <th colspan='$colspan' class='odd'>";        
+        if ($answerType == FREE_TEXT) {
+            $choice = purify($choice);
+            if (!empty($choice)) {
+                $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+                $question_graded = is_null($question_weight) ? FALSE : TRUE; 
+                if (!$question_graded) {
+                    $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";   
+                } else {
+                    $questionScore = $question_weight;
+                }
             }
         }        
         if ($displayScore == 1 || $is_editor) {

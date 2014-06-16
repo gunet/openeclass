@@ -677,7 +677,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
  				`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				`eurid` int(11) NOT NULL,
 				`question_id` int(11) NOT NULL,
-				`answer` text NOT NULL,
+				`answer` text,
   				`answer_id` int(11) NOT NULL,
   				`weight` float(5,2) DEFAULT NULL) $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
