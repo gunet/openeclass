@@ -46,6 +46,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $question_id = $_POST['question_id'];
     $eurid = $_GET['eurId'];
     Database::get()->query("UPDATE exercise_answer_record SET weight = ?d WHERE eurid = ?d AND question_id = ?d", $grade, $eurid, $question_id);
+    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL", $eurid)->count;
+    if ($ungraded == 0) {
+        Database::get()->query("UPDATE exercise_user_record SET attempt_status = ?d, total_score = total_score + ?d WHERE eurid = ?d", ATTEMPT_COMPLETED, $grade, $eurid);
+    }
     exit();
 }
 require_once 'include/lib/modalboxhelper.class.php';
@@ -68,8 +72,12 @@ $head_content .= "<script type='text/javascript'>
                                   type: 'POST',
                                   url: '',
                                   data: {question_grade: grade, question_id: questionId},
-                                });                            
+                                });
+                                $(this).parent().prev().hide();
                                 $(this).prop('disabled', true);
+                                prev_grade = parseInt($('span#total_score').html());
+                                updated_grade = prev_grade + grade;
+                                $('span#total_score').html(updated_grade);
                             }
                         }
                     });
@@ -392,7 +400,7 @@ if ($displayScore == 1 || $is_editor) {
     <br/>
     <table width='100%' class='tbl_alt'>
     <tr class='odd'>
-	<td class='right'><b>$langYourTotalScore: $exercise_user_record->total_score / $exercise_user_record->total_weighting</b>
+	<td class='right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
       </td>
     </tr>
     </table>";
