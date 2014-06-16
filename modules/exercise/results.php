@@ -91,11 +91,11 @@ foreach ($result as $row) {
 
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
                 TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
-                AS time_duration, total_score, total_weighting, eurid
+                AS time_duration, total_score, total_weighting, eurid, attempt_status
                 FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<table class='tbl_alt' width='100%'>";
-        $tool_content .= "<tr><td colspan='3'>";
+        $tool_content .= "<tr><td colspan='4'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
@@ -111,6 +111,7 @@ foreach ($result as $row) {
                   <th width='150' class='center'>" . $langExerciseStart . "</td>
                   <th width='150' class='center'>" . $langExerciseDuration . "</td>
                   <th width='150' class='center'>" . $langYourTotalScore2 . "</td>
+                  <th class='center'>Κατάσταση</th>
                 </tr>";
 
         $k = 0;
@@ -126,8 +127,15 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a></td>
-                        </tr>";
+            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a></td>";
+            if ($row2->attempt_status == 1) {
+                $status = 'Ολοκληρωμένη';
+            } elseif ($row2->attempt_status == 2) {
+                $status = 'Προς Βαθμολόγηση';
+            } elseif ($row2->attempt_status == 4) {
+                $status = 'Ακυρώθηκε';
+            }
+            $tool_content .= "<td class='center'>$status</td></tr>";            
             $k++;
         }
         $tool_content .= "</table><br/>";
