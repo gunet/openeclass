@@ -52,7 +52,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $record_end_date = date('Y-m-d H:i:s', time());
             $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
             Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
-                    WHERE eurid = ?d", $record_end_date, 4, $eurid);
+                    WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, $eurid);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
             unset($_SESSION['exercise_begin_time']);    
@@ -92,7 +92,7 @@ if (isset($_POST['buttonCancel'])) {
         $record_end_date = date('Y-m-d H:i:s', time());
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
-                WHERE eurid = ?d", $record_end_date, 4, $eurid);
+                WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, $eurid);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 	Session::set_flashdata('Η προσπάθεια ακυρώθηκε', 'alert1');
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
@@ -258,7 +258,7 @@ if (isset($_POST['formSent'])) {
             $objExercise->finalize_answers();
         }
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
-        $attempt_status = ($unmarked_free_text_nbr > 0) ? 2 : 1;
+        $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                                 total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);

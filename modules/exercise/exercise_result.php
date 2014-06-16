@@ -40,10 +40,41 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langE
 
 // picture path
 $picturePath = "courses/$course_code/image";
-
+//Identifying ajax request
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
+    $grade = $_POST['question_grade'];
+    $question_id = $_POST['question_id'];
+    $eurid = $_GET['eurId'];
+    Database::get()->query("UPDATE exercise_answer_record SET weight = ?d WHERE eurid = ?d AND question_id = ?d", $grade, $eurid, $question_id);
+    exit();
+}
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
+
+load_js('tools.js');
+load_js('jquery');
+$head_content .= "<script type='text/javascript'>                             
+    		$(document).ready(function(){
+                    $('.questionGradeBox').keyup(function (e) {
+                        if (e.keyCode == 13) {
+                            grade = parseInt($(this).val());
+                            questionId = parseInt($(this).next().val());
+                            questionMaxGrade = parseInt($(this).next().next().val());
+                            if (grade > questionMaxGrade) {
+                                alert('Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης');
+                            } else {
+                                $.ajax({
+                                  type: 'POST',
+                                  url: '',
+                                  data: {question_grade: grade, question_id: questionId},
+                                });                            
+                                $(this).prop('disabled', true);
+                            }
+                        }
+                    });
+    		});
+                </script>";
 
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
@@ -82,7 +113,6 @@ $tool_content .= "
   </tr>
   </table>";
 
-$tool_content .= "<form method='GET' action='index.php'><input type='hidden' name='course' value='$course_code'/>";
 
 $i = 0;
 
@@ -101,7 +131,6 @@ if (count($exercise_question_ids)>0){
         $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
-
         // destruction of the Question object
         unset($objQuestionTmp);
 
@@ -167,6 +196,7 @@ if (count($exercise_question_ids)>0){
                 $answerComment = $objAnswerTmp->selectComment($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
+
                 // support for math symbols
                 $answer = mathfilter($answer, 12, "../../courses/mathimg/");
                 $answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
@@ -313,7 +343,7 @@ if (count($exercise_question_ids)>0){
                     }
                 } // end of if
             } // end for()
-        } else { // If FREE TEXT type
+        } else { // If FREE TEXT type           
             $tool_content .= "<tr class='even'>
                                  <td>" . purify($choice) . "</td>
                               </tr>";
@@ -321,7 +351,13 @@ if (count($exercise_question_ids)>0){
         $tool_content .= "<tr class='even'>
                             <th colspan='$colspan' class='odd'>";
         if ($answerType == FREE_TEXT && !empty(purify($choice))) {
-            $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";
+            $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+            $question_graded = is_null($question_weight) ? FALSE : TRUE; 
+            if (!$question_graded) {
+                $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";   
+            } else {
+                $questionScore = $question_weight;
+            }
         }        
         if ($displayScore == 1 || $is_editor) {
             if (intval($questionScore) == $questionScore) {
@@ -330,8 +366,17 @@ if (count($exercise_question_ids)>0){
             if (intval($questionWeighting) == $questionWeighting) {
                 $questionWeighting = intval($questionWeighting);
             }
+            if ($is_editor && isset($question_graded) && !$question_graded) {
+             //show input field
+             $tool_content .= "<span style='float:right;'>
+                               $langQuestionScore: <input type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore'>
+                               <input type='hidden' name='questionId' value='$row->question_id'>
+                               <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>    
+                               <b>/$questionWeighting</b></span>";               
+            } else {
             $tool_content .= "<span style='float:right;'>
                                 $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
+            }
         }
         $tool_content .= "</th></tr></table>";
         // destruction of Answer
@@ -354,6 +399,7 @@ if ($displayScore == 1 || $is_editor) {
 }
 $tool_content .= "
   <br/>
+  <form method='GET' action='index.php'><input type='hidden' name='course' value='$course_code'/>
   <div align='center'><input type='submit' value='$langFinish' /></div>
   <br />
   </form><br />";
