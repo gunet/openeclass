@@ -1357,7 +1357,11 @@ $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
 $langPurgeExercises = "Διαγραφή αποτελεσμάτων";
 $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
-
+$langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
+$langAttemptCompleted = "Oλοκληρώθηκε";
+$langAttemptPending = "Προς Βαθμολόγηση";
+$langAttemptCanceled = "Ακυρώθηκε";
+$langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";

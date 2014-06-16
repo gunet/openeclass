@@ -63,10 +63,11 @@ $head_content .= "<script type='text/javascript'>
                     $('.questionGradeBox').keyup(function (e) {
                         if (e.keyCode == 13) {
                             grade = parseInt($(this).val());
-                            questionId = parseInt($(this).next().val());
-                            questionMaxGrade = parseInt($(this).next().next().val());
+                            var element_name = $(this).attr('name');
+                            var questionId = parseInt(element_name.substring(14,element_name.length - 1));
+                            questionMaxGrade = parseInt($(this).next().val());
                             if (grade > questionMaxGrade) {
-                                alert('Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης');
+                                alert('$langGradeTooBig');
                             } else {
                                 $.ajax({
                                   type: 'POST',
@@ -364,7 +365,7 @@ if (count($exercise_question_ids)>0){
                 $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
                 $question_graded = is_null($question_weight) ? FALSE : TRUE; 
                 if (!$question_graded) {
-                    $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";   
+                    $tool_content .= "<span style='color:red;'>$langAnswerUngraded</span>";   
                 } else {
                     $questionScore = $question_weight;
                 }
@@ -380,8 +381,7 @@ if (count($exercise_question_ids)>0){
             if ($is_editor && isset($question_graded) && !$question_graded) {
              //show input field
              $tool_content .= "<span style='float:right;'>
-                               $langQuestionScore: <input type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore'>
-                               <input type='hidden' name='questionId' value='$row->question_id'>
+                               $langQuestionScore: <input type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
                                <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>    
                                <b>/$questionWeighting</b></span>";               
             } else {
@@ -395,7 +395,7 @@ if (count($exercise_question_ids)>0){
         $i++;
     } // end foreach()
 } else {
-    $tool_content .= "<p class='alert1'>Η προσπάθεια αυτή έχει ακυρωθεί από τον μαθητευόμενο</p>";
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 if ($displayScore == 1 || $is_editor) {
@@ -411,7 +411,7 @@ if ($displayScore == 1 || $is_editor) {
 $tool_content .= "
   <br/>
   <form method='GET' action='index.php'><input type='hidden' name='course' value='$course_code'/>
-  <div align='center'><input type='submit' value='$langFinish' /></div>
+  <div align='center'><input type='submit' value='$langReturn' /></div>
   <br />
   </form><br />";
 

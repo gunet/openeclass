@@ -111,7 +111,7 @@ foreach ($result as $row) {
                   <th width='150' class='center'>" . $langExerciseStart . "</td>
                   <th width='150' class='center'>" . $langExerciseDuration . "</td>
                   <th width='150' class='center'>" . $langYourTotalScore2 . "</td>
-                  <th class='center'>Κατάσταση</th>
+                  <th class='center'>" . $langCurrentStatus. "</th>
                 </tr>";
 
         $k = 0;
@@ -134,12 +134,12 @@ foreach ($result as $row) {
                 $results_link = $row2->total_score . "/" . $row2->total_weighting;
             }
             $tool_content .= "<td class='center'>$results_link</td>";
-            if ($row2->attempt_status == 1) {
-                $status = 'Ολοκληρωμένη';
-            } elseif ($row2->attempt_status == 2) {
-                $status = 'Προς Βαθμολόγηση';
-            } elseif ($row2->attempt_status == 4) {
-                $status = 'Ακυρώθηκε';
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
+                $status = $langAttemptCompleted;
+            } elseif ($row2->attempt_status == ATTEMPT_PENDING) {
+                $status = $langAttemptPending;
+            } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
+                $status = $langAttemptCanceled;
             }
             $tool_content .= "<td class='center'>$status</td></tr>";            
             $k++;
