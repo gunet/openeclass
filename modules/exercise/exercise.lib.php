@@ -72,7 +72,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     </td>
                   </tr>";
     }
-
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
+         $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
+    }
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
@@ -179,8 +181,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
                           </tr>";
         }
     } // end for()
-
-    if (!$nbrAnswers) {
+    if ($answerType == FREE_TEXT) {
+            $tool_content .= "
+                          <tr class='even'>
+                            <td align='center'>".  rich_text_editor('choice['.$questionId.']', 14, 90, '', '')."</td></tr>";            
+    }   
+    if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "
                   <tr>
                     <td colspan='2'><p class='caution'>$langNoAnswer</td>

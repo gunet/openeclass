@@ -13,3 +13,5 @@ syntax: regexp
 ^\.project$
 ^\.settings$
 ^\.htaccess$
+syntax: glob
+include\main_lib.php.orig

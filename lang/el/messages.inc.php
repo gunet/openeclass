@@ -837,6 +837,7 @@ $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
 $langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων ασκήσεων του μαθήματος";
 $langPurgedExerciseResults = "Τα αποτελέσματα ασκήσεων διαγράφηκαν";
+$langNotAvailable = "Μη διαθέσιμα";
 
 /* * ***************************************************
  * contact.php
@@ -1383,6 +1384,7 @@ $langMultipleSelect = "Πολλαπλής Επιλογής (Πολλαπλές �
 $langFillBlanks = "Συμπλήρωμα Κενών";
 $langMatching = "Ταίριασμα";
 $langTrueFalse = "Σωστό / Λάθος";
+$langFreeText = "Ελεύθερου Κειμένου";
 $langFalse = "Λάθος";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
@@ -1438,7 +1440,7 @@ $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
-$langExerciseNotFound = "Η απάντηση δεν βρέθηκε";
+$langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 
 // exercise result.php
