@@ -127,7 +127,13 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td class='center'><a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a></td>";
+            $nbr_answer_records = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_answer_record WHERE eurid = ?d",$row2->eurid)->count;
+            if ($nbr_answer_records > 0) {
+                $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a>";
+            } else {
+                $results_link = $row2->total_score . "/" . $row2->total_weighting;
+            }
+            $tool_content .= "<td class='center'>$results_link</td>";
             if ($row2->attempt_status == 1) {
                 $status = 'Ολοκληρωμένη';
             } elseif ($row2->attempt_status == 2) {
