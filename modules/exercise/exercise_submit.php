@@ -105,6 +105,9 @@ if (isset($_POST['buttonCancel'])) {
 // if the user has clicked on the "Save & Exit" button
 // keeps the exercise in a pending/uncompleted state and returns to the exercise list
 if (isset($_POST['buttonSave'])) {
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
+                WHERE eurid = ?d", $record_end_date, ATTEMPT_PAUSED, $eurid);    
 	Session::set_flashdata('Η προσπάθεια αποθηκεύτηκε προσωρινά. Ξαναμπείτε στην άσκηση για να συνεχίσετε.', 'alert1');        
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
@@ -119,7 +122,7 @@ $head_content .= "<script type='text/javascript'>
                       type: 'POST',
                       url: '',
                       data: { action: 'endExerciseNoSubmit', value: $exerciseId},
-                      async:false
+                      async: false
                     });
                 });                  
     		$(document).ready(function(){
@@ -144,7 +147,6 @@ $randomQuestions = $objExercise->isRandom();
 $exerciseType = $objExercise->selectType();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
-$eid_temp = $objExercise->selectId(); //is this needed?
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
 $temp_CurrentDate = $recordStartDate = time();
@@ -162,68 +164,61 @@ if (isset($_SESSION['questionList'][$exerciseId])) {
     $_SESSION['questionList'][$exerciseId] = $questionList;
 }
 
-$nbrQuestions = sizeof($questionList);
+$nbrQuestions = count($questionList);
 
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
 
-	$error = FALSE;
-	// determine begin time: 
-	// either from a previews attempt meaning that user hasn't sumbited his answers    
-	// 		and exerciseTimeConstrain hasn't yet passed,
-	// either start a new attempt and count now() as begin time.
-	$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND (record_end_date is NULL OR record_end_date = 0)";
-	$tmp = mysql_fetch_row(db_query($sql));
-	if ($tmp[0] > 0) {
-		$recordStartDate = strtotime($tmp[1]);
-		// if exerciseTimeConstrain has not passed yet calculate the remaining time               
-		if ($recordStartDate + ($exerciseTimeConstraint*60) >= $temp_CurrentDate) {
-                        $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate;
-			$timeleft = ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
-		}
-		// what # of attempt is this?
-		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
-		$tmp = mysql_fetch_row(db_query($sql));
-		$attempt = $tmp[0];
-	}
-	if (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
-		$_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
-		// save begin time in db
-		$start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
-		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
-		$tmp = mysql_fetch_row(db_query($sql));
-		$attempt = $tmp[0] + 1;
-		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
-		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
-                    $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt)
-                        VALUES (?d, ?d, ?t, 0, 0, ?d)", $exerciseId, $uid, $start, $attempt)->lastInsertID;
-                    
-                    $_SESSION['exerciseUserRecordID'][$exerciseId] = $eurid;
-                    
-                    $timeleft = $exerciseTimeConstraint*60;
-		}
-	}
-	// Checking everything is between correct boundaries:
-	
-// if the user has submitted the form
-if (isset($_POST['formSent'])) {
-    $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
-    $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
-    $questionNum = isset($_POST['questionNum']) ? $_POST['questionNum'] : '';
-    $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
-    $exercisetotalweight = isset($_POST['exercisetotalweight']) ? $_POST['exercisetotalweight'] : '';
-    $exerciseTimeConstraint = intval($_POST['exerciseTimeConstraint']);
-    $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
-    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
-    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
-            
-    //if there are answers in the session (one question per page) get them
+$error = FALSE;
+// determine begin time: 
+// either from a previews attempt meaning that user hasn't sumbited his answers    
+// 		and exerciseTimeConstrain hasn't yet passed,
+// either start a new attempt and count now() as begin time.
+$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND (record_end_date is NULL OR record_end_date = 0)";
+$tmp = mysql_fetch_row(db_query($sql));
+if ($tmp[0] > 0) {
+    $recordStartDate = strtotime($tmp[1]);
+    // if exerciseTimeConstrain has not passed yet calculate the remaining time               
+    if ($recordStartDate + ($exerciseTimeConstraint*60) >= $temp_CurrentDate) {
+        $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate;
+        $timeleft = ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
+    }
+    // what # of attempt is this?
+    $sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
+    $tmp = mysql_fetch_row(db_query($sql));
+    $attempt = $tmp[0];
+}
+if (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
+    $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
+    // save begin time in db
+    $start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
+    $sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
+    $tmp = mysql_fetch_row(db_query($sql));
+    $attempt = $tmp[0] + 1;
+    // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
+    if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
+        $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
+                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt)->lastInsertID;            
+        $_SESSION['exerciseUserRecordID'][$exerciseId] = $eurid;
+        $timeleft = $exerciseTimeConstraint*60;
+    }
+}
+// Checking everything is between correct boundaries:
+
+    //if there are answers in the session get them
     if (isset($_SESSION['exerciseResult'][$exerciseId])) {
         $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
     } else {
         $exerciseResult = array();
     }
+    $questionNum = count($exerciseResult)+1;
+// if the user has submitted the form
+if (isset($_POST['formSent'])) {
+    $exercisetotalweight = isset($_POST['exercisetotalweight']) ? $_POST['exercisetotalweight'] : '';
+    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
+    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+            
     // checking if user's time is more than exercise's time constrain
     if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
         $record_start_date = Database::get()->querySingle("SELECT record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid = ?d AND (record_end_date is NULL OR record_end_date = 0)", $exerciseId, $uid)->record_start_date;
@@ -275,6 +270,7 @@ if (isset($_POST['formSent'])) {
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
+    redirect_to_home_page('modules/exercise/exercise_submit.php?course='.$course_code.'&exerciseId='.$exerciseId);
 } // end of submit
 
     // Number of Attempts
@@ -291,20 +287,6 @@ if (isset($_POST['formSent'])) {
     	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
     	exit();
     }
-
-// if questionNum comes from POST and not from GET
-if (!isset($questionNum) || $_POST['questionNum']) {
-    // only used for sequential exercises (see $exerciseType)
-    if (!isset($questionNum)) {
-        $questionNum = 1;
-    } else {
-        $questionNum++;
-    }
-}
-
-if (isset($_POST['questionNum'])) {
-    $QUERY_STRING = "questionNum = $questionNum";
-}
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
@@ -324,12 +306,7 @@ $tool_content .= "
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId' class='exercise' >
   <input type='hidden' name='formSent' value='1' />
-  <input type='hidden' name='exerciseId' value='$exerciseId' />
-  <input type='hidden' name='exerciseType' value='$exerciseType' />
-  <input type='hidden' name='questionNum' value='$questionNum' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
-  <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
-  <input type='hidden' name='eid_temp' value='$eid_temp' />
   <input type='hidden' name='exercisetotalweight' value='$exercisetotalweight' />
   <input type='hidden' name='record_start_date' value='$recordStartDate' />";
 
@@ -339,7 +316,12 @@ foreach ($questionList as $questionId) {
     // for sequential exercises
     if ($exerciseType == 2) {
         // if it is not the right question, goes to the next loop iteration
-        if ($questionNum != $i) {
+        if (isset($exerciseResult)) {
+            $answered_question_ids = array_keys($exerciseResult);
+        } else {
+            $answered_question_ids = array();
+        }      
+        if (in_array($questionId, $answered_question_ids)) {
             continue;
         } else {
             // if the user has already answered this question
@@ -409,7 +391,7 @@ if (!$questionList) {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
 
-    //$tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
+    $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
 
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>

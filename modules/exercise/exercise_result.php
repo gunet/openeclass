@@ -378,7 +378,7 @@ if (count($exercise_question_ids)>0){
             if (intval($questionWeighting) == $questionWeighting) {
                 $questionWeighting = intval($questionWeighting);
             }
-            if ($is_editor && isset($question_graded) && !$question_graded) {
+            if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
              //show input field
              $tool_content .= "<span style='float:right;'>
                                $langQuestionScore: <input type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
