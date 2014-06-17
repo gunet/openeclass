@@ -530,7 +530,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
 function group_secret($gid) {    
 
     $r = Database::get()->querySingle("SELECT secret_directory FROM `group` WHERE id = ?d", $gid);    
-    if ($res) {
+    if ($r) {
         return $r->secret;     
     } else {
         return '';        
@@ -783,37 +783,25 @@ function mysql_version() {
         return false;
 }
 
-// --------------------------------------
-// Useful functions for creating courses
-// -------------------------------------
-// Returns the code of a faculty given its name
-function find_faculty_by_name($name) {
 
-    $code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =" . quote($name)));
-
-    if (!$code) {
-        return false;
-    } else {
-        return $code[0];
-    }
-}
-
-// Returns the name of a faculty given its code or its name
+/**
+ * @brief returns the name of a faculty given its code or its name
+ * @param type $id
+ * @return boolean
+ */
 function find_faculty_by_id($id) {
-
-    $req = db_query("SELECT name FROM hierarchy WHERE id = " . intval($id));
-
-    if ($req and mysql_num_rows($req)) {
-        $fac = mysql_fetch_row($req);
-        return $fac[0];
-    } else {
-        $req = db_query("SELECT name FROM hierarchy WHERE name = '" . addslashes($id) . "'");
-        if ($req and mysql_num_rows($req)) {
-            $fac = mysql_fetch_row($req);
-            return $fac[0];
+    
+    $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $id);
+    if ($req) {        
+        $fac = $req->name;
+        return $fac;
+    } else {        
+        $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE name = ?s" , $id);        
+        if ($req) {
+            $fac = $req->name;
+            return $fac;
         }
     }
-
     return false;
 }
 
