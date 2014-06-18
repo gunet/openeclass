@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -98,7 +98,7 @@ if ($is_editor) {
     if (isset($_POST['submit_config'])) {
         $expand_glossary = isset($_POST['expand']) ? 1 : 0;
         db_query("UPDATE course SET glossary_expand = $expand_glossary,
-                                           glossary_index = " . (isset($_POST['index']) ? 1 : 0));
+                                           glossary_index = " . (isset($_POST['index']) ? 1 : 0) . " WHERE id = $course_id");
         invalidate_glossary_cache();
         $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
     }

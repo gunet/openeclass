@@ -805,18 +805,23 @@ function find_faculty_by_id($id) {
     return false;
 }
 
-// Returns next available code for a new course in faculty with id $fac
+
+/**
+ * @brief Returns next available code for a new course in faculty with id $fac
+ * @param type $fac
+ * @return string
+ */
 function new_code($fac) {
-    
-    $gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = " . intval($fac)));
-    do {
-        $code = $gencode[0] . $gencode[1];
-        $gencode[1] += 1;
-        db_query("UPDATE hierarchy SET generator = " . intval($gencode[1]) . " WHERE id = " . intval($fac));
-    } while (file_exists("courses/" . $code));
-    
+        
+    $gencode = Database::get()->querySingle("SELECT code, generator FROM hierarchy WHERE id = ?d", $fac);
+    if ($gencode) {
+        do {
+            $code = $gencode->code . $gencode->generator;
+            $gencode->generator += 1;            
+            Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);    
+        } while (file_exists("courses/" . $code));    
     // Make sure the code returned isn't empty!
-    if (empty($code)) {
+    } else {
         die("Course Code is empty!");
     }
     return $code;
@@ -902,21 +907,17 @@ function urlenc($string) {
     return $out;
 }
 
-/*
- * Get user data
- * @param $user_id integer
- * @return array(`id`, `surname`, `givenname`, `username`, `email`, `phone`, `status`) with user data
- * @author Mathieu Laurent <laurent@cerdecam.be>
+/**
+ * get user data
+ * @param type $user_id
+ * @return object
  */
-
 function user_get_data($user_id) {
-    $sql = 'SELECT id, surname, givenname, username, email, phone, status
-                   FROM user
-                   WHERE id = ' . (int) $user_id;
-    $result = db_query($sql);
+    
+    $data = Database::get()->querySingle("SELECT id, surname, givenname, username, email, phone, status
+                                            FROM user WHERE id = ?d", $user_id);
 
-    if (mysql_num_rows($result)) {
-        $data = mysql_fetch_array($result);
+    if ($data) {
         return $data;
     } else {
         return null;
@@ -1325,6 +1326,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
         $op = '<';
         $desc = 'DESC';
     }
+    
     $sql = db_query("SELECT `$order_field` FROM `$table`
                          WHERE `$id_field` = '$id'");
     if (!$sql or mysql_num_rows($sql) == 0) {
@@ -1346,7 +1348,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 }
 
 // Add a link to the appropriate course unit if the page was requested
-// with a unit=ID parametre. This happens if the user got to the module
+// with a unit=ID parametere. This happens if the user got to the module
 // page from a unit resource link. If entry_page == true this is the initial page of module
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = false) {
@@ -1366,11 +1368,11 @@ function add_units_navigation($entry_page = false) {
         } elseif (isset($_SESSION['unit'])) {
             $unit_id = intval($_SESSION['unit']);
         }
-        $q = db_query("SELECT title FROM course_units
-                       WHERE id = $unit_id AND course_id = $course_id " .
-                $visibility_check);
-        if ($q and mysql_num_rows($q) > 0) {
-            list($unit_name) = mysql_fetch_row($q);
+        
+        $q = Database::get()->querySingle("SELECT title FROM course_units
+                       WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
+        if ($q) {
+            $unit_name = $q->title;            
             $navigation[] = array("url" => "../units/index.php?course=$course_code&amp;id=$unit_id", "name" => htmlspecialchars($unit_name));
         }
         return true;
@@ -1616,23 +1618,31 @@ function csv_escape($string, $force = false) {
     }
 }
 
-// Return the value of a key from the config table, or a default value (or null) if not found
+/**
+ * @brief Return the value of a key from the config table, or a default value (or null) if not found
+ * @param type $key
+ * @param type $default
+ * @return type
+ */
 function get_config($key, $default = null) {
-    $r = db_query("SELECT `value` FROM config WHERE `key` = '$key'");
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+       
+    $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
+    if ($r) {
+        $row = $r->value;
+        return $row;
     } else {
         return $default;
     }
 }
 
-// Set the value of a key in the config table
+/**
+ * @brief Set the value of a key in the config table
+ * @param type $key
+ * @param type $value
+ */
 function set_config($key, $value) {
-    global $mysqlMainDb;
-
-    db_query("REPLACE INTO `$mysqlMainDb`.config (`key`, `value`)
-                          VALUES ('$key', " . quote($value) . ")");
+   
+    Database::get()->query("REPLACE INTO config (`key`, `value`) VALUES (?s, ?s)", $key, $value);
 }
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
@@ -1824,46 +1834,71 @@ function text_area($name, $rows, $cols, $text, $extra = '') {
             "</textarea>\n";
 }
 
-// Does the special course unit with course descriptions exist?
-// If so, return its id, else create it first
+// 
+/**
+ * @brief  Does the special course unit with course descriptions exist?
+ *       If so, return its id, else create it first
+ * @global type $langCourseDescription
+ * @param type $course_id
+ * @return type
+ */
 function description_unit_id($course_id) {
     global $langCourseDescription;
-
-    $q = db_query("SELECT id FROM course_units
-                       WHERE course_id = $course_id AND `order` = -1");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($id) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT id FROM course_units
+                                       WHERE course_id = ?d AND `order` = -1", $course_id);
+    if ($q) {
+        $id = $q->id;
         return $id;
     } else {
-        db_query('INSERT INTO course_units SET `order` = -1,
-                                `title` = ' . quote($langCourseDescription) . ',
-                                `visible` = 0,
-                                `course_id` = ' . $course_id);
-        return mysql_insert_id();
+        $sql = Database::get()->query("INSERT INTO course_units SET `order` = -1, `title` = ?s, `visible` = 0, `course_id` = ?d", $langCourseDescription, $course_id);
+        return $sql->lastInsertID;        
     }
 }
 
+/**
+ * 
+ * @param type $unit_id
+ * @return int
+ */
 function add_unit_resource_max_order($unit_id) {
-    $q = db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $unit_id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($order) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $unit_id);   
+    if ($q) {
+        $order = $q->maxorder;
         return max(0, $order) + 1;
     } else {
         return 1;
     }
 }
 
+/**
+ * 
+ * @param type $unit_id
+ * @return type
+ */
 function new_description_res_id($unit_id) {
-    $q = db_query("SELECT MAX(res_id) FROM unit_resources WHERE unit_id = $unit_id");
-    list($max_res_id) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT MAX(res_id) AS maxresid FROM unit_resources WHERE unit_id = ?d", $unit_id);    
+    $max_res_id = $q->maxresid;
     return 1 + max(count($GLOBALS['titreBloc']), $max_res_id);
 }
 
+/**
+ * @brief add resource to course units
+ * @param type $unit_id
+ * @param type $type
+ * @param type $res_id
+ * @param type $title
+ * @param type $content
+ * @param type $visibility
+ * @param type $date
+ * @return type
+ */
 function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 0, $date = false) {
+    
     if (!$date) {
-        $date = 'NOW()';
-    } else {
-        $date = quote($date);
+        $date = "NOW()";
     }
     if ($res_id === false) {
         $res_id = new_description_res_id($unit_id);
@@ -1873,59 +1908,81 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
     } else {
         $order = add_unit_resource_max_order($unit_id);
     }
-    $q = db_query("SELECT id FROM unit_resources WHERE
-                                `unit_id` = $unit_id AND
-                                `type` = '$type' AND
-                                `res_id` = $res_id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($id) = mysql_fetch_row($q);
-        return db_query("UPDATE unit_resources SET
-                                        `title` = " . quote($title) . ",
-                                        `comments` = " . quote($content) . ",
+    $q = Database::get()->querySingle("SELECT id FROM unit_resources WHERE
+                                `unit_id` = ?d AND
+                                `type` = ?s AND
+                                `res_id` = ?d", $unit_id, $type, $res_id);    
+    if ($q) {
+        $id = $q->id;
+        Database::get()->query("UPDATE unit_resources SET
+                                        `title` = ?s,
+                                        `comments` = ?s,
                                         `date` = $date
-                                 WHERE id = $id");
+                                 WHERE id = ?d", $title, $content, $id);
+        return;
     }
-    return db_query("INSERT INTO unit_resources SET
-                                `unit_id` = $unit_id,
-                                `title` = " . quote($title) . ",
-                                `comments` = " . quote($content) . ",
+    Database::get()->query("INSERT INTO unit_resources SET
+                                `unit_id` = ?d,
+                                `title` = ?s,
+                                `comments` = ?s,
                                 `date` = $date,
-                                `type` = '$type',
-                                `visible` = $visibility,
-                                `res_id` = $res_id,
-                                `order` = $order");
+                                `type` = ?s,
+                                `visible` = ?d,
+                                `res_id` = ?d,
+                                `order` = ?d", $unit_id, $title, $content, $type, $visibility, $res_id, $order);
+    return;
 }
 
+/**
+ * 
+ * @global null $maxorder
+ * @global type $course_id
+ */
 function units_set_maxorder() {
+    
     global $maxorder, $course_id;
-    $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $course_id");
-    list($maxorder) = mysql_fetch_row($result);
+    
+    $q = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id);
+    
+    $maxorder = $q->max_order;
+    
     if ($maxorder <= 0) {
         $maxorder = null;
-    }
+    }    
 }
 
+/**
+ * 
+ * @global type $langCourseUnitModified
+ * @global type $langCourseUnitAdded
+ * @global null $maxorder
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @return type
+ */
 function handle_unit_info_edit() {
+    
     global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
-    $title = autoquote($_REQUEST['unittitle']);
-    $descr = autoquote($_REQUEST['unitdescr']);
+    
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
     if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = intval($_REQUEST['unit_id']);
-        $result = db_query("UPDATE course_units SET
-                                           title = $title,
-                                           comments = $descr
-                                    WHERE id = $unit_id AND course_id = $course_id");
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);        
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
-        $order = $maxorder + 1;
-        db_query("INSERT INTO course_units SET
-                                 title = $title, comments =  $descr, visible = 1,
-                                 `order` = $order, course_id = $course_id");
+        $order = $maxorder + 1;        
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s, comments = ?s, visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
         $successmsg = $langCourseUnitAdded;
-        $unit_id = mysql_insert_id();
+        $unit_id = $q->lastInsertID;
     }
-    // update index
-    global $webDir;
+    // update index    
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/search/courseindexer.class.php';
     require_once 'modules/search/unitindexer.class.php';
@@ -2025,8 +2082,9 @@ function glossary_expand_callback($matches) {
 
 function get_glossary_terms($course_id) {
     
-    list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM course
-                                                         WHERE id = $course_id"));
+    
+    $expand = Database::get()->querySingle("SELECT glossary_expand FROM course
+                                                         WHERE id = ?d", $course_id)->glossary_expand;    
     if (!$expand) {
         return false;
     }
@@ -2286,8 +2344,9 @@ function get_admin_rights($user_id) {
  * @return course status
  */
 function course_status($course_id) {
-    $status = db_query_get_single_value("SELECT visible FROM course WHERE id = $course_id");
-
+    
+    $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
+      
     return $status;
 }
 
@@ -2297,9 +2356,10 @@ function course_status($course_id) {
  * @return verified mail or no
  */
 function get_mail_ver_status($uid) {
-    $res = db_query("SELECT verified_mail FROM user WHERE id = $uid");
-    $g = mysql_fetch_row($res);
-    return $g[0];
+    
+    $q = Database::get()->querySingle("SELECT verified_mail FROM user WHERE id = ?d", $uid)->verified_mail;
+    
+    return $q;
 }
 
 // check if username match for both case sensitive/insensitive
@@ -2347,12 +2407,12 @@ function get_user_email_notification($user_id, $course_id = null) {
     }
     if (isset($course_id)) {
         // finally checks if user has choosen not to be notified from a specific course
-        $r = db_query("SELECT receive_mail FROM course_user
-                                WHERE user_id = $user_id
-                                AND course_id = $course_id");
-        if ($r and mysql_num_rows($r) > 0) {
-            $row = mysql_fetch_row($r);
-            return $row[0];
+        $r = Database::get()->querySingle("SELECT receive_mail FROM course_user
+                                            WHERE user_id = ?d
+                                            AND course_id = ?d", $user_id, $course_id);
+        if ($r) {
+            $row = $r->receive_mail;
+            return $row;
         } else {
             return false;
         }
@@ -2360,10 +2420,15 @@ function get_user_email_notification($user_id, $course_id = null) {
     return true;
 }
 
-// checks if user is notified via email from courses
+/**
+ * @brief checks if user is notified via email from courses
+ * @param type $user_id
+ * @return boolean
+ */
 function get_user_email_notification_from_courses($user_id) {
-    $r = db_query("SELECT receive_mail FROM user WHERE id = $user_id");
-    list($result) = mysql_fetch_row($r);
+        
+    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id)->receive_mail;
+    
     if ($result == 1) {
         return true;
     } else {
@@ -2575,8 +2640,8 @@ function copyright_info($cid) {
     global $language, $license, $themeimg;
 
     $lang = langname_to_code($language);
-
-    $lic = db_query_get_single_value("SELECT course_license FROM course WHERE id = $cid");
+    
+    $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $cid)->course_license;
     if (($lic == 0) or ($lic >= 10)) {
         $link_suffix = '';
     } else {
@@ -2623,6 +2688,10 @@ function crypto_rand_secure($min = null, $max = null) {
     return $min + $rnd;
 }
 
+/**
+ * @brief returns HTTP 403 status code 
+ * @param type $path
+ */
 function forbidden($path) {
     header("HTTP/1.0 403 Forbidden");
     echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
