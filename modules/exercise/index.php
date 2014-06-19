@@ -66,6 +66,8 @@ if (isset($_SESSION['questionList'])) {
 if (isset($_SESSION['exerciseResult'])) {
     unset($_SESSION['exerciseResult']);
 }
+//Unsetting the redirect cookie which is set in case of exercise page unload event
+//More info in exercise_submit.php comments
 if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
 }

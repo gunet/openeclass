@@ -2693,6 +2693,10 @@ $langBeforeRegDate = "registered before";
 $langPurgeExerciseResults = "Delete course exercise results";
 $langPurgedExerciseResults = "Exercise results have been deleted";
 $langNotAvailable = "Not available";
+$langLeaveExerciseWarning = "BEWARE! Leaving this exercise your attempt will be recorded as you haven't given any answers. To avoid this consider finishing the exercise or temporary save it (if this is allowed)";
+$langTemporarySave = "Save Temporary";
+$langTemporarySaveSuccess = "Your exercise has been temporary saved. Please re-enter the execise to continue.";
+$landAttemptCanceled = "The attempt has been canceled.";
 $langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
 Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
 $langReplace = "File replacement";

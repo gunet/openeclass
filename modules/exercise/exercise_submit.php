@@ -98,7 +98,7 @@ if (isset($_POST['buttonCancel'])) {
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
                 WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, $eurid);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-	Session::set_flashdata('Η προσπάθεια ακυρώθηκε', 'alert1');
+	Session::set_flashdata($landAttemptCanceled, 'alert1');
         unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
         unset($_SESSION['exercise_begin_time'][$exerciseId]);    
         unset($_SESSION['exercise_begin_time'][$exerciseId]); 
@@ -112,13 +112,18 @@ if (isset($_POST['buttonSave'])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
                 WHERE eurid = ?d", $record_end_date, ATTEMPT_PAUSED, $eurid);    
-	Session::set_flashdata('Η προσπάθεια αποθηκεύτηκε προσωρινά. Ξαναμπείτε στην άσκηση για να συνεχίσετε.', 'alert1');        
+	Session::set_flashdata($langTemporarySaveSuccess, 'alert1');        
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
-//Temporary fix for the onunload problem where on unload event is triggered after page load
+// setting a cookie in OnBeforeUnload event in order to redirect user to the exercises page in case of refresh
+// as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh 
+// (It is executed after page load in Chrome and Mozilla and before page load in IE).  
+// In current functionality if user leaves the exercise for another module the cookie will expire anyway in 30 seconds
+// or it will be unset by the exercises page (index.php). If user who left an exercise for another module 
+// visits through a direct link a specific execise page before the 30 seconds time frame
+// he will be redirected to the exercises page (index.php)
 if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
-    unset_exercise_var($exerciseId);
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 load_js('tools.js');
@@ -367,7 +372,7 @@ if (!$questionList) {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
 
-    $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='Προσωρινή Αποθήκευση' />";   
+    $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='$langTemporarySave' />";   
 
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>
@@ -386,7 +391,7 @@ $head_content .= "<script type='text/javascript'>
                     date.setTime(date.getTime()+(30*1000));
                     var expires = '; expires='+date.toGMTString();                
                     document.cookie = 'inExercise=$exerciseId'+expires;
-                    return 'ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Παρακαλώ ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση';
+                    return '$langLeaveExerciseWarning';
                 });
                 $(window).bind('unload', function(){ 
                     $.ajax({
