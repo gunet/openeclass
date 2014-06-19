@@ -71,6 +71,7 @@ final class Database {
      * @var PDO
      */
     private $dbh;
+    private $attribute;
 
     /**
      * @param string $server
@@ -385,6 +386,17 @@ final class Database {
         }
     }
 
+    /**
+     * Return an object with server information
+     * @return DatabaseAttributes attributes object
+     */
+    public function attributes() {
+        if (!$this->attribute) {
+            $this->attribute = new DatabaseAttributes($this->dbh);
+        }
+        return $this->attribute;
+    }
+
     private function errorFound($callback_error, $isTransactional, $error_msg, $pdo_error, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
@@ -403,6 +415,64 @@ final class Database {
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
         Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+    }
+
+}
+
+class DatabaseAttributes {
+
+    private $dbh;
+
+    function __construct($dbh) {
+        $this->dbh = $dbh;
+    }
+
+    function autocommit() {
+        return $this->dbh->getAttribute(PDO::ATTR_AUTOCOMMIT);
+    }
+
+    function textCase() {
+        return $this->dbh->getAttribute(PDO::ATTR_CASE);
+    }
+
+    function clientVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    }
+
+    function connectionStatus() {
+        return $this->dbh->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+    }
+
+    function driverName() {
+        return $this->dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
+
+    function errorMode() {
+        return $this->dbh->getAttribute(PDO::ATTR_ERRMODE);
+    }
+
+    function oracleNulls() {
+        return $this->dbh->getAttribute(PDO::ATTR_ORACLE_NULLS);
+    }
+
+    function persistent() {
+        return $this->dbh->getAttribute(PDO::ATTR_PERSISTENT);
+    }
+
+    function prefech() {
+        return $this->dbh->getAttribute(PDO::ATTR_PREFETCH);
+    }
+
+    function serverInfo() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_INFO);
+    }
+
+    function serverVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_VERSION);
+    }
+
+    function timeout() {
+        return $this->dbh->getAttribute(PDO::ATTR_TIMEOUT);
     }
 
 }
