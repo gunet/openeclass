@@ -66,7 +66,9 @@ if (isset($_SESSION['questionList'])) {
 if (isset($_SESSION['exerciseResult'])) {
     unset($_SESSION['exerciseResult']);
 }
-
+if (isset($_COOKIE['inExercise'])) {
+    setcookie("inExercise", "", time() - 3600);
+}
 
 // maximum number of exercises on a same page
 $limitExPage = 15;

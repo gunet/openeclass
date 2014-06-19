@@ -117,8 +117,9 @@ if (isset($_POST['buttonSave'])) {
 }
 //Temporary fix for the onunload problem where on unload event is triggered after page load
 if (isset($_COOKIE['inExercise'])) {
-    unset($_SESSION['exerciseResult'][$exerciseId]);
     setcookie("inExercise", "", time() - 3600);
+    unset_exercise_var($exerciseId);
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 load_js('tools.js');
 load_js('jquery');
@@ -169,7 +170,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId])) {
         $timeleft = ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
-    var_dump('mpika');
     $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
     $start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
     //duplicate line
@@ -382,7 +382,10 @@ $tool_content .= "</form>";
 $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
 $head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
-                    document.cookie = 'inExercise=$exerciseId';
+                    var date = new Date();
+                    date.setTime(date.getTime()+(30*1000));
+                    var expires = '; expires='+date.toGMTString();                
+                    document.cookie = 'inExercise=$exerciseId'+expires;
                     return 'ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Παρακαλώ ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση';
                 });
                 $(window).bind('unload', function(){ 
