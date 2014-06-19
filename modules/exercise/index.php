@@ -98,20 +98,22 @@ if ($is_editor) {
                 case 'delete': // deletes an exercise
                     $objExerciseTmp->delete();
                     $eidx->remove($exerciseId);
-                    break;
+                    Session::set_flashdata($langPurgeExerciseSuccess, 'alert1');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'purge': // purge exercise results
                     $objExerciseTmp->purge();
-                    break;
+                    Session::set_flashdata($langPurgeExerciseResultsSuccess, 'alert1');
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
                     $eidx->store($exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'disable': // disables an exercise
                     $objExerciseTmp->disable();
                     $objExerciseTmp->save();
                     $eidx->store($exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
@@ -230,11 +232,11 @@ if (!$nbrExercises) {
                                    <a href='admin.php?course=$course_code&amp;exerciseId=$row->id'>
                                          <img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
                                    </a>
-                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmDelete');\">
-                                         <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
+                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmPurgeExercise');\">
+                                         <img src='$themeimg/delete.png' alt='$langPurgeExercise' title='$langPurgeExercise' />
                                   </a>
-                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmPurgeExercises');\">
-                                         <img src='$themeimg/clear.png' alt='" . q($langPurgeExercises) . "' title='" . q($langPurgeExercises) . "' />
+                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmPurgeExerciseResults');\">
+                                         <img src='$themeimg/clear.png' alt='" . q($langPurgeExerciseResults) . "' title='" . q($langPurgeExerciseResults) . "' />
                                    </a>";
 
             // if active

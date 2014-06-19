@@ -163,12 +163,11 @@ $error = FALSE;
 // either from a previews attempt meaning that user hasn't sumbited his answers    
 // 		and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
+$attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId])) {
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
     $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
-    $recordStartDate = strtotime($recordStartDate);
-    //duplicate line
-    $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
+    $recordStartDate = strtotime($recordStartDate); 
     $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate;
     // if exerciseTimeConstrain has not passed yet calculate the remaining time               
     if ($exerciseTimeConstraint>0) {
@@ -177,8 +176,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId])) {
 } elseif (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
     $_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
     $start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
-    //duplicate line
-    $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
     $attempt++;
     // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
     if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
@@ -225,7 +222,6 @@ if (isset($_POST['formSent'])) {
     // if it is a sequnential exercise in the last question OR the time has expired
     if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
         // goes to the script that will show the result of the exercise
-        var_dump('mpika2');
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
