@@ -672,7 +672,8 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `record_end_date` DATETIME DEFAULT NULL,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
-                `attempt` INT(11) NOT NULL DEFAULT 0) $charset_spec");
+                `attempt` INT(11) NOT NULL DEFAULT 0),
+                `attempt_status` tinyint(4) NOT NULL DEFAULT 1) $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
  				`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				`eurid` int(11) NOT NULL,

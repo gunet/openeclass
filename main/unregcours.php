@@ -26,8 +26,6 @@ require_once 'include/log.php';
 
 $nameTools = $langUnregCourse;
 
-$local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
-
 if (isset($_GET['cid'])) {
     $cid = q($_GET['cid']);
     $_SESSION['cid_tmp'] = $cid;
@@ -55,10 +53,10 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
           </table>";
 } else {
     if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
-        db_query("DELETE from course_user
-                        WHERE course_id = $cid 
-                        AND user_id='$_GET[u]'");
-        if (mysql_affected_rows() > 0) {
+        $q = Database::get()->query("DELETE from course_user
+                                    WHERE course_id = ?d
+                                    AND user_id = ?d", $cid, $_GET['u']);
+        if ($q->affectedRows > 0) {
             Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $_GET['u'],
                                                                  'right' => 0));
             $code = course_id_to_code($cid);

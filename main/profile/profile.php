@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -51,13 +51,12 @@ check_uid();
 $nameTools = $langModifyProfile;
 check_guest();
 
-$result = db_query("SELECT surname, givenname, username, email, am, phone,
-                           lang, status, has_icon, description,
-                           email_public, phone_public, am_public, password
-                        FROM user WHERE id = $uid");
-$myrow = mysql_fetch_assoc($result);
+ $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
+                                            lang, status, has_icon, description,
+                                            email_public, phone_public, am_public, password
+                                        FROM user WHERE id = ?d", $uid);
 
-$password = $myrow['password'];
+$password = $myrow->password;
 $auth = array_search($password, $auth_ids);
 if (!$auth) {
     $auth = 1;
@@ -106,7 +105,7 @@ if (isset($_POST['submit'])) {
     db_query("UPDATE user SET lang = " . quote($langcode) . " WHERE id = $uid");
 
     $all_ok = register_posted_variables(array(
-        'am_form' => get_config('am_required') and $myrow['status'] != 1,
+        'am_form' => get_config('am_required') and $myrow->status != 1,
         'desc_form' => false,
         'phone_form' => false,
         'email_form' => get_config('email_required'),
@@ -247,15 +246,15 @@ if (isset($_GET['msg'])) {
     $tool_content .= "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$surname_form = q($myrow['surname']);
-$givenname_form = q($myrow['givenname']);
-$username_form = q($myrow['username']);
-$email_form = q($myrow['email']);
-$am_form = q($myrow['am']);
-$phone_form = q($myrow['phone']);
-$desc_form = $myrow['description'];
-$userLang = $myrow['lang'];
-$icon = $myrow['has_icon'];
+$surname_form = q($myrow->surname);
+$givenname_form = q($myrow->givenname);
+$username_form = q($myrow->username);
+$email_form = q($myrow->email);
+$am_form = q($myrow->am);
+$phone_form = q($myrow->phone);
+$desc_form = $myrow->description;
+$userLang = $myrow->lang;
+$icon = $myrow->has_icon;
 
 $sec = $urlSecure . 'main/profile/profile.php';
 $passurl = $urlSecure . 'main/profile/password.php';
@@ -328,14 +327,14 @@ $tool_content .= "<td><input type='text' size='40' name='email_form' value='$ema
 //           <td><b>$email_form</b> [$auth_text]
 //               <input type='hidden' name='email_form' value='$email_form' /> ";
 //}
-$tool_content .= selection($access_options, 'email_public', $myrow['email_public']) . "</td>
+$tool_content .= selection($access_options, 'email_public', $myrow->email_public) . "</td>
         </tr>
         <tr><th>$langAm</th>
             <td><input type='text' size='40' name='am_form' value='$am_form' /> " .
-        selection($access_options, 'am_public', $myrow['am_public']) . "</td></tr>
+        selection($access_options, 'am_public', $myrow->am_public) . "</td></tr>
         <tr><th>$langPhone</th>
             <td><input type='text' size='40' name='phone_form' value='$phone_form' /> " .
-        selection($access_options, 'phone_public', $myrow['phone_public']) . "</td></tr>";
+        selection($access_options, 'phone_public', $myrow->phone_public) . "</td></tr>";
 
 if (get_user_email_notification_from_courses($uid)) {
     $selectedyes = 'checked';
@@ -375,9 +374,7 @@ if (!get_config('restrict_owndep')) {
     $tool_content .= "</td></tr>";
 }
 
-$tool_content .= "
-        <tr>
-          <th>$langLanguage:</th>
+$tool_content .= "<tr><th>$langLanguage:</th>
           <td>" . lang_select_options('userLanguage') . "</td>
         </tr>";
 if ($icon) {
@@ -388,22 +385,21 @@ if ($icon) {
     $picture = $delete = '';
     $message_pic = $langAddPicture;
 }
-$tool_content .= "
-        <tr>
-          <th>$message_pic</th>
-          <td><span>$picture$delete</span><input type='file' name='userimage' size='30'></td>
-        </tr>
-        <tr>
-          <th>$langDescription:</th>
-          <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
-        </tr>
-        </table>
-        </fieldset>
-        </form>";
+$tool_content .= "<tr>
+        <th>$message_pic</th>
+        <td><span>$picture$delete</span><input type='file' name='userimage' size='30'></td>
+      </tr>
+      <tr>
+        <th>$langDescription:</th>
+        <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
+      </tr>
+      </table>
+      </fieldset>
+      </form>";
 
 draw($tool_content, 1, null, $head_content);
 

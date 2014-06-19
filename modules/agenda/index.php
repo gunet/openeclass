@@ -42,7 +42,6 @@ $action = new action();
 $action->record(MODULE_ID_AGENDA);
 
 $dateNow = date("j-n-Y / H:i", time());
-$datetoday = date("Y-n-j H:i", time());
 
 $nameTools = $langAgenda;
 

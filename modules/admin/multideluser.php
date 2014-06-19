@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) {
             // for real uids not equal to admin
             if ($u !== false && $u > 1) {
                 // full deletion
-                $success = deleteUser($u);
+                $success = deleteUser($u, true);
                 // progress report
                 if ($success === true)
                     $tool_content .= "<p>$langUserWithId $line $langWasDeleted.</p>\n";

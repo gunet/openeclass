@@ -1507,8 +1507,9 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
-    if ($guest_user)
-        deleteUser($guest_user->user_id);
+    if ($guest_user) {
+        deleteUser($guest_user->user_id, true);
+    }
     Database::get()->query("DELETE FROM course_user WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_department WHERE course = ?d", $cid);
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
@@ -1558,7 +1559,7 @@ function delete_course($cid) {
  * @param  integer $id - the id of the user.
  * @return boolean     - returns true if deletion was successful, false otherwise.
  */
-function deleteUser($id) {
+function deleteUser($id, $log) {
 
     $u = intval($id);
 
@@ -1583,7 +1584,9 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
+            if ($log) {
+                Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
+            }
             Database::get()->query("DELETE FROM loginout WHERE id_user = ?d", $u);
             Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);

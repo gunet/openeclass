@@ -33,19 +33,21 @@ if (!isset($_SESSION['uid'])) {
     exit;
 }
 
-$sql = "SELECT course.id cid, course.code code, course.public_code,
+if ($_SESSION['status'] == USER_TEACHER) {
+    $extra = "AND course.visible != " . COURSE_INACTIVE;
+} else {
+    $extra = '';
+}
+
+$result2 = Database::get()->queryArray("SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
-                WHERE course_user.user_id = $uid " .
-        ($_SESSION['status'] == USER_TEACHER ? ("AND course.visible != " . COURSE_INACTIVE) : '') . "
-                ORDER BY status, course.title, course.prof_names";
-
-$result2 = db_query($sql);
+                WHERE course_user.user_id = ?d $extra ORDER BY status, course.title, course.prof_names", $uid);
 
 $courses = array();
-if ($result2 and mysql_num_rows($result2) > 0) {
-    while ($mycours = mysql_fetch_array($result2)) {
-        $courses[$mycours['code']] = $mycours['status'];
+if (count($result2) > 0) {    
+        foreach ($result2 as $mycours) {
+        $courses[$mycours->code] = $mycours->status;
     }
 }
 $_SESSION['courses'] = $courses;
