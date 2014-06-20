@@ -295,17 +295,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_owndep', '0'),
                     ('restrict_teacher_owndep', '0')");
 
-                if ($oldversion < '2.1.3') {
-                    // delete useless field
-                    if (mysql_field_exists($mysqlMainDb, 'cours', 'scoreShow')) {
-                        echo delete_field('cours', 'scoreShow');
-                    }
-                    // delete old example test from table announcements
-                    $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
-                    Database::get()->query('SET NAMES utf8');
-                    Database::get()->query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
+                if ($oldversion < '2.1.3' or (!isset($oldversion))) {                    
+                    echo "<hr><p class='alert1'>$langUpgTooOld</p>
+                        <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
+                    echo '</div></body></html>';
+                    exit;
+                    draw($tool_content, 0);
                 }
 
+                die;
                 if ($oldversion < '2.2') {
                     // course units
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (

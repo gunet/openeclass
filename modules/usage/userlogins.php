@@ -99,48 +99,39 @@ $date_where = ' (date_time BETWEEN ' . quote("$u_date_start") .
 $date_what = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
 if ($u_user_id != -1) {
-    $user_where = ' (a.id = ' . intval($u_user_id) . ') ';
+    $user_where = ' (user_id = ' . intval($u_user_id) . ') ';
 } else {
     $user_where = ' (1) ';
 }
-
-$sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
-                 WHERE " . $date_where . "
-                 AND " . $user_where . "
-                 AND course_id = $course_id
-                 ORDER BY date_time DESC";
-
-$sql_2 = "SELECT a.id, a.surname, a.givenname, a.username
+// get data from logins
+$result_2 = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username
                  FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                 WHERE b.course_id = $course_id AND " . $user_where;
-
-// Take data from logins
-$result_2 = db_query($sql_2);
-
+                 WHERE b.course_id = ?d AND $user_where", $course_id);
 $users = array();
-while ($row = mysql_fetch_assoc($result_2)) {
-    $users[$row['id']] = $row['surname'] . ' ' . $row['givenname'];
+foreach ($result_2 as $row) {
+    $users[$row->id] = $row->surname . ' ' . $row->givenname;
 }
-
-$result = db_query($sql_1);
 $table_cont = '';
 $unknown_users = array();
-
+$result = Database::get()->queryArray("SELECT user_id, ip, date_time FROM logins 
+                 WHERE $date_where 
+                 AND $user_where
+                 AND course_id = ?d
+                 ORDER BY date_time DESC", $course_id);
 $k = 0;
-while ($row = mysql_fetch_assoc($result)) {
+foreach ($result as $row) {    
     $known = false;
-    if (isset($users[$row['user_id']])) {
-        $user = $users[$row['user_id']];
+    if (isset($users[$row->user_id])) {
+        $user = $users[$row->user_id];
         $known = true;
-    } elseif (isset($unknown_users[$row['user_id']])) {
-        $user = $unknown_users[$row['user_id']];        
+    } elseif (isset($unknown_users[$row->user_id])) {
+        $user = $unknown_users[$row->user_id];        
     } else {
-        $user = uid_to_name($row['user_id']);
-        if ($user === false) {
-            echo "here";
+        $user = uid_to_name($row->user_id);
+        if ($user === false) {            
             $user = $langAnonymous;
         }
-        $unknown_users[$row['user_id']] = $user;
+        $unknown_users[$row->user_id] = $user;
     }
     if ($k % 2 == 0) {
         $table_cont .= "<tr class='even'>";
@@ -155,8 +146,8 @@ while ($row = mysql_fetch_assoc($result)) {
         $table_cont .= "<span class='red'>" . q($user) . "</span>";
     }
     $table_cont .= "</td>
-                <td align='center'>" . $row['ip'] . "</td>
-                <td align='center'>" . $row['date_time'] . "</td>
+                <td align='center'>" . $row->ip . "</td>
+                <td align='center'>" . $row->date_time . "</td>
                 </tr>";
     $k++;
 }
@@ -178,46 +169,42 @@ if ($table_cont) {
         <th>" . $langLoginDate . "</th>
         </tr>";
     $tool_content .= "" . $table_cont . "";
-    $tool_content .= "
-        </table>";
+    $tool_content .= "</table>";
 }
 
 if (!($table_cont)) {
     $tool_content .= "<p class='alert1'>$langNoLogins</p>";
 }
 
-$qry = "SELECT LEFT(a.surname, 1) AS first_letter
+$result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = $course_id
-        GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
+        WHERE b.course_id = ?d
+        GROUP BY first_letter ORDER BY first_letter", $course_id);
 
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+foreach ($result as $row) {
+    $first_letter = $row->first_letter;
     $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . urlencode($first_letter) . '">' . $first_letter . '</a> ';
 }
 
 if (isset($_GET['first'])) {
-    $firstletter = mysql_real_escape_string($_GET['first']);
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $firstletter = $_GET['first'];
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = $course_id AND LEFT(a.surname,1) = '$firstletter'";
+            WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);    
 } else {
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = $course_id";
+            WHERE b.course_id = ?d", $course_id);    
 }
-
-$user_opts = '<option value="-1">' . $langAllUsers . "</option>\n";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    if ($u_user_id == $row['id']) {
+$user_opts = '<option value="-1">' . $langAllUsers . "</option>";
+foreach ($result as $row) {
+    if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' . q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
+    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>";
 }
 
 $tool_content .= '
