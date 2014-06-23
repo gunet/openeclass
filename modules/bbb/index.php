@@ -530,7 +530,7 @@ function bbb_session_details() {
     global $course_code;
     global $themeimg;
     global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
-    
+    global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
         
     $result = db_query("SELECT * FROM bbb_session WHERE course_id = $course_id ORDER BY id DESC");
 
@@ -559,9 +559,17 @@ function bbb_session_details() {
                 $tool_content .= "<tr>";
 
                 if ($is_editor) {
-                    $tool_content .= "
-                        <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></td>
-                        <td>".$row['description']."</td>
+                    // If there no available bbb servers, disable join link. Otherwise, enable    
+                    if(get_total_bbb_servers()=='0')
+                        {
+                            $tool_content .= "
+                            <td>$title</td>";
+                        }else
+                        {
+                            $tool_content .= "
+                            <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></td>";
+                        }
+                        $tool_content.="<td>".$row['description']."</td>
                         <td class='center'>$start_date</td>
                         <td class='center'>$type</td>
                         <td class='center'>
@@ -579,7 +587,7 @@ function bbb_session_details() {
                 } else {
                     $tool_content .= "<td align='center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
+                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] && get_total_bbb_servers()<>'0' )
                     {
                         $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$title</a>";
                     } else {
@@ -590,7 +598,7 @@ function bbb_session_details() {
                         <td align='center'>$type</td>
                         <td class='center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval']) {
+                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] && get_total_bbb_servers()<>'0' ) {
                         $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a></td>";
                     } else {
                         $tool_content .= "-</td>";
@@ -599,6 +607,12 @@ function bbb_session_details() {
                 $tool_content .= "</tr>";
             }        
         $tool_content .= "</table>";
+        if(get_total_bbb_servers()=='0')
+        {
+            if($is_editor) {$tool_content .= "<p class='alert1'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";}
+            else {$tool_content .= "<p class='alert1'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";}
+        }
+        
     } else {
         $tool_content .= "<div class='alert1'>$langNoBBBSesssions</div>";
     }
@@ -952,6 +966,15 @@ function get_active_rooms($salt,$bbb_url)
     }
     
     return $sum;
+}
+
+function get_total_bbb_servers()
+{
+    $total = 0;
+    
+    $total = db_query_get_single_value("SELECT count(*) FROM bbb_servers WHERE enabled='true';");
+    
+    return $total;
 }
 
 add_units_navigation(TRUE);
