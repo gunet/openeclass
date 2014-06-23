@@ -844,8 +844,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `document`
                                 CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1,
-                                DROP INDEX document");
+                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
                     }
 
                     // Rename table `annonces` to `announcements`
@@ -1257,7 +1256,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `max_users` int(11) DEFAULT NULL,
                       `enable_recordings` enum("yes","no") DEFAULT NULL,
                       PRIMARY KEY (`id`),
-                      KEY `idx_bbb_servers` (`hostname`)');
+                      KEY `idx_bbb_servers` (`hostname`))');
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
@@ -1279,7 +1278,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `mod_pw` varchar(255) DEFAULT NULL,
                       `att_pw` varchar(255) DEFAULT NULL,
                       `unlock_interval` int(11) DEFAULT NULL,
-                      `external_users` varchar(255) DEFAULT NULL
+                      `external_users` varchar(255) DEFAULT "",
                       PRIMARY KEY (`id`)
                     )');
 

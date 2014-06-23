@@ -330,7 +330,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     // move forum tables to central db
     if (mysql_table_exists($code, 'forums')) {
         $forumcatid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.forum_category")->max;
-        Database::get()->query("UPDATE catagories SET cat_order = 0 WHERE cat_order IS NULL OR cat_order = ''");
+        Database::get($code)->query("UPDATE catagories SET cat_order = 0 WHERE cat_order IS NULL OR cat_order = ''");
         $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.`forum_category`
                         (`id`, `cat_title`, `cat_order`, `course_id`)
                         SELECT `cat_id` + $forumcatid_offset, `cat_title`,
@@ -432,34 +432,34 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
         $fileid_offset = Database::get()->querySingle("SELECT max(id) as max FROM `$mysqlMainDb`.dropbox_msg")->max;
 
-        Database::get()->query("CREATE TEMPORARY TABLE dropbox_map AS
+        Database::get($code)->query("CREATE TEMPORARY TABLE dropbox_map AS
                    SELECT old.id AS old_id, old.id + $fileid_offset AS new_id
                      FROM dropbox_file AS old ORDER by id");
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_msg
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_msg
                         (`id`, `course_id`, `author_id`, `subject`,
                          `body`, `timestamp`)
                         SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `title`, `description`, UNIX_TIMESTAMP(`uploadDate`)
                                FROM dropbox_file ORDER BY id") != null) && $ok;
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_attachment
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_attachment
                         (`msg_id`, `filename`, `real_filename`, `filesize`)
                         SELECT `id` + $fileid_offset, `filename`, `real_filename`, `filesize`
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_index
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
                          (`msg_id`, `recipient_id`, `thread_id`, `is_read`, `deleted`)
                          SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, dropbox_map.new_id, 1, 0
                            FROM dropbox_person, dropbox_map
                           WHERE dropbox_person.fileId = dropbox_map.old_id
                           ORDER BY dropbox_person.fileId") != null) && $ok;
 
-        Database::get()->query("DROP TEMPORARY TABLE dropbox_map");
+        Database::get($code)->query("DROP TEMPORARY TABLE dropbox_map");
 
         if (false !== $ok) {
-            Database::get()->query("DROP TABLE dropbox_file");
-            Database::get()->query("DROP TABLE dropbox_person");
-            Database::get()->query("DROP TABLE dropbox_post");
+            Database::get($code)->query("DROP TABLE dropbox_file");
+            Database::get($code)->query("DROP TABLE dropbox_person");
+            Database::get($code)->query("DROP TABLE dropbox_post");
         }
     }
 
@@ -470,16 +470,16 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             mysql_table_exists($code, 'lp_user_module_progress')) {
 
         // first change `visibility` field name and type to lp_learnPath table
-        Database::get()->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
-        Database::get()->query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
-        Database::get()->query("UPDATE lp_learnPath SET visibility = '0' WHERE visibility = 'HIDE'");
-        Database::get()->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
+        Database::get($code)->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
+        Database::get($code)->query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
+        Database::get($code)->query("UPDATE lp_learnPath SET visibility = '0' WHERE visibility = 'HIDE'");
+        Database::get($code)->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
 
         // first change `visibility` field name and type to lp_rel_learnPath_module table
-        Database::get()->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` VARCHAR(5)");
-        Database::get()->query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
-        Database::get()->query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
-        Database::get()->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
+        Database::get($code)->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` VARCHAR(5)");
+        Database::get($code)->query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
+        Database::get($code)->query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
+        Database::get($code)->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
 
         $asset_map = array();
         $rel_map = array();
