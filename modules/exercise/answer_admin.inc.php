@@ -618,11 +618,12 @@ if (isset($_GET['modifyAnswers'])) {
 					<fieldset>
 					<legend>$langWeightingForEachBlank</legend>
 					<table class='tbl' width='99%'>";
+                    
                     foreach ($blanks as $i => $blank) {
                         $tool_content .= "
 						<tr>
 						  <td class='right'><b>[" . q($blank) . "] :</b></td>" . "
-						  <td><input type='text' name='weighting[$i]' size='5' value='" . intval($weighting[$i]) . "' /></td>
+						  <td><input type='text' name='weighting[".($i-1)."]' size='5' value='" . intval($weighting[$i-1]) . "' /></td>
 						</tr>";
                     }
                     $tool_content .= "

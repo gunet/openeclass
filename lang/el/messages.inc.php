@@ -1365,6 +1365,7 @@ $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύν
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langAttemptCompleted = "Oλοκληρώθηκε";
 $langAttemptPending = "Προς Βαθμολόγηση";
+$langAttemptPaused = "Προσωρινά Αποθηκευμένη";
 $langAttemptCanceled = "Ακυρώθηκε";
 $langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
 // admin.php

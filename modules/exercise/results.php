@@ -138,6 +138,8 @@ foreach ($result as $row) {
                 $status = $langAttemptCompleted;
             } elseif ($row2->attempt_status == ATTEMPT_PENDING) {
                 $status = $langAttemptPending;
+            } elseif ($row2->attempt_status == ATTEMPT_PAUSED) {
+                $status = $langAttemptPaused;
             } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $status = $langAttemptCanceled;
             }

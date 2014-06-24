@@ -2969,6 +2969,7 @@ $langFromRandomQuestions = "random questions from";
 $langAnswerUngraded = "The answer haven't been graded yet.";
 $langAttemptCompleted = "Copleted";
 $langAttemptPending = "Pending Grading";
+$langAttemptPaused = "Temporarly Saved";
 $langAttemptCanceled = "Canceled";
 $langGradeTooBig = "The grade you submitted surpasses the maximum allowed grade if this question";
 $lang_email_verification_required = "Email verification of $langOfUser is required";
