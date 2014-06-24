@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,15 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Init
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This file is included each and every time by baseTheme.php
- * It initialises variables, includes security checks and serves language switching
- *
+/**
+ * @file init.php
+ * @brief initialisation of variables, includes security checks and serves language switching.
+ *        It is included in every file via baseTheme.php
  */
 
 if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
@@ -67,12 +62,14 @@ try {
     require_once 'include/not_installed.php';
 }
 
-if (isset($language)) {
+if (isset($language)) {    
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);
+    $language = langname_to_code($language);    
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
     }
+    $session = new Session();
+    $uid = $session->user_id;    
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
     }
@@ -85,13 +82,16 @@ if (isset($language)) {
     $urlSecure = get_config('secure_url');
     if (empty($urlSecure)) {
         $urlSecure = $urlServer;
-    }
-    $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
+    }    
     $session = new Session();
     $uid = $session->user_id;
     $language = $session->language;
 }
 
+$session = new Session();
+$uid = $session->user_id;
+// construct $urlAppend from $urlServer
+$urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
 require_once 'include/htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once 'include/HTMLPurifier_Filter_MyIframe.php';
@@ -115,14 +115,14 @@ if (!isset($urlMobile)) {
 }
 
 // include_messages
-require "$webDir/lang/{$session->language}/common.inc.php";
-$extra_messages = "config/{$language_codes[$session->language]}.inc.php";
+require "$webDir/lang/$language/common.inc.php";
+$extra_messages = "config/{$language_codes[$language]}.inc.php";
 if (file_exists($extra_messages)) {
     include $extra_messages;
 } else {
     $extra_messages = false;
 }
-require "$webDir/lang/{$session->language}/messages.inc.php";
+require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
 }
