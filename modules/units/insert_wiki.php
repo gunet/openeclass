@@ -20,12 +20,12 @@
  * ======================================================================== */
 
 function list_wikis() {
-    global $id, $course_id, $mysqlMainDb, $tool_content, $urlServer,
+    global $id, $course_id, $tool_content, $urlServer,
     $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki,
     $langWikiDescriptionForm, $course_code, $themeimg;
 
 
-    $result = db_query("SELECT * FROM wiki_properties WHERE course_id = $course_id", $mysqlMainDb);
+    $result = db_query("SELECT * FROM wiki_properties WHERE group_id = 0 AND course_id = $course_id");
     $wikiinfo = array();
     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         $wikiinfo[] = array(

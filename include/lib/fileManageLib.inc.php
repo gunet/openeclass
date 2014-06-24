@@ -212,9 +212,13 @@ function move_dir($src, $dest) {
         if ($element == "." || $element == "..") {
             continue; // skip the current and parent directories
         } elseif (is_file($file)) {
+            if (is_file("$dest/$element")) { 
+                unlink("$dest/$element");
+            }            
             copy($file, "$dest/$element") or
                     die("Error copying $src/$element to $dest");
             unlink($file);
+            rmdir($src);            
         } elseif (is_dir($file)) {
             move_dir($file, "$dest/$element");
             rmdir($file);
@@ -338,10 +342,12 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         die("error: " . $zipfile->errorInfo(true));
     }
     $real_paths = array();
-    foreach ($GLOBALS['common_docs'] as $path => $real_path) {
-        $filename = $GLOBALS['map_filenames'][$path];
-        $GLOBALS['common_filenames'][$real_path] = $filename;
-        $real_paths[] = $real_path;
+    if (isset($GLOBALS['common_docs'])) {
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+            $filename = $GLOBALS['map_filenames'][$path];
+            $GLOBALS['common_filenames'][$real_path] = $filename;
+            $real_paths[] = $real_path;
+        }
     }
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
     if (!$v) {

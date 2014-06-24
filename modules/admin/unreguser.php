@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,22 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
-
-/* * ===========================================================================
-  unreguser.php
-  @last update: 27-06-2006 by Karatzidis Stratos
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Delete user from platform and from courses (eclass version)
-
-  This script allows the admin to :
-  - delete a user from participating into a course
-
-  ==============================================================================
- */
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
@@ -55,10 +39,10 @@ $doit = isset($_GET['doit']);
 if (isDepartmentAdmin())
     validateUserNodes(intval($u), true);
 
-$u_account = $u ? q(uid_to_username($u)) : '';
+$u_account = $u ? q(uid_to_name($u, 'username')) : '';
 $u_realname = $u ? q(uid_to_name($u)) : '';
 $userdata = user_get_data($u);
-$u_status = $userdata['status'];
+$u_status = $userdata->status;
 
 
 if (!$doit) {
@@ -75,11 +59,11 @@ if (!$doit) {
     $tool_content .= "<div class='right'><a href='edituser.php?u=$u'>$langBack</a></div><br/>";
 } else {
     if ($c and $u) {
-        $q = db_query("DELETE from course_user WHERE user_id = $u AND course_id = $c");
-        if (mysql_affected_rows() > 0) {
-            db_query("DELETE FROM group_members
-                            WHERE user_id = $u AND
-                            group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
+        $q = Database::get()->query("DELETE from course_user WHERE user_id = ?d AND course_id = ?d", $u, $c);
+        if ($q->affectedRows>0) {
+            Database::get()->query("DELETE FROM group_members
+                            WHERE user_id = ?d AND
+                            group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
             $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></p>\n";
             $m = 1;
         }

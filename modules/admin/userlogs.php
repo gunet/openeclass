@@ -90,14 +90,12 @@ if (isset($_GET['submit'])) {
 }
 
 //possible courses
-$qry = "SELECT LEFT(title, 1) AS first_letter FROM course
-                GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+Database::get()->queryFunc("SELECT LEFT(title, 1) AS first_letter FROM course
+                GROUP BY first_letter ORDER BY first_letter", function ($row) use(&$letterlinks) {
+    $first_letter = $row->first_letter;
     $letterlinks .= "<a href='$_SERVER[SCRIPT_NAME]?first=" . urlencode($first_letter) . "'>" . q($first_letter) . '</a> ';
-}
+});
 
 if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
@@ -108,10 +106,10 @@ if (isset($_GET['first'])) {
 }
 
 $cours_opts[-1] = $langAllCourses;
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    $cours_opts[$row['id']] = $row['title'];
-}
+Database::get()->queryFunc($qry
+        , function ($row) use(&$cours_opts) {
+    $cours_opts[$row->id] = $row->title;
+});
 
 // --------------------------------------
 // display form

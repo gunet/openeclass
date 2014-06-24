@@ -35,6 +35,10 @@ $helpTopic = 'Group';
 require_once '../../include/baseTheme.php';
 require_once 'group_functions.php';
 require_once 'include/log.php';
+/*****Required classes for wiki creation****/
+require_once 'modules/wiki/lib/class.wiki.php';
+require_once 'modules/wiki/lib/class.wikipage.php';
+require_once 'modules/wiki/lib/class.wikistore.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -112,6 +116,8 @@ if ($is_editor) {
             // avoiding groups entering other groups area
             $secretDirectory = uniqid('');
             mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+            touch("courses/$course_code/group/index.htm");
+            touch("courses/$course_code/group/$secretDirectory/index.htm");
 
             db_query("INSERT INTO `group` (max_members, secret_directory)
                                 VALUES ($group_max, '$secretDirectory')");
@@ -123,6 +129,32 @@ if ($is_editor) {
                                          max_members = $group_max,
                                          secret_directory = '$secretDirectory'");
             $id = mysql_insert_id();
+            
+            /**********Create Group Wiki************/
+            //Set ACL
+            $wikiACL = array();
+            $wikiACL['course_read'] = true;
+            $wikiACL['course_edit'] = false;
+            $wikiACL['course_create'] = false;
+            $wikiACL['group_read'] = true;
+            $wikiACL['group_edit'] = true;
+            $wikiACL['group_create'] = true;
+            $wikiACL['other_read'] = false;
+            $wikiACL['other_edit'] = false;
+            $wikiACL['other_create'] = false;
+            
+            $wiki = new Wiki();
+            $wiki->setTitle($langGroup." ".$group_num." - Wiki");
+            $wiki->setDescription('');
+            $wiki->setACL($wikiACL);
+            $wiki->setGroupId($id);
+            $wikiId = $wiki->save();
+            
+            $mainPageContent = $langWikiMainPageContent;
+            
+            $wikiPage = new WikiPage($wikiId);
+            $wikiPage->create($uid, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
+            /***************************************/
 
             Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
                 'name' => "$langGroup $group_num",
@@ -140,15 +172,32 @@ if ($is_editor) {
             'multi_reg' => true,
             'private_forum' => true,
             'has_forum' => true,
-            'documents' => true), 'all', 'intval');
+            'documents' => true,
+            'wiki' => true), 'all', 'intval');
         db_query("UPDATE group_properties SET
                                  self_registration = $self_reg,
                                  multiple_registration = $multi_reg,
                                  private_forum = $private_forum,
                                  forum = $has_forum,
-                                 documents = $documents WHERE course_id = $course_id");
+                                 documents = $documents,
+                                 wiki = $wiki WHERE course_id = $course_id");
         $message = $langGroupPropertiesModified;
     } elseif (isset($_REQUEST['delete_all'])) {
+        /**************Delete All Group Wikis***********/
+        $sql = "SELECT id "
+        		."FROM wiki_properties "
+        		."WHERE group_id "
+        		."IN (SELECT id FROM `group` WHERE course_id = ?)";
+        
+        $results = Database::get()->queryArray($sql, $course_id);
+        if (is_array($results)) {
+        	foreach ($results as $result) {
+        		$wikiStore = new WikiStore();
+        		$wikiStore->deleteWiki($result->id);
+        	}
+        }
+        /***********************************************/
+        
         db_query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)");
         db_query("DELETE FROM `group` WHERE course_id = $course_id");
         db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1");
@@ -157,8 +206,10 @@ if ($is_editor) {
         $groupGarbage = uniqid(20);
 
         @mkdir("../../courses/garbage");
+        touch("../../courses/garbage/index.htm");
         rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
         mkdir("../../courses/$course_code/group", 0777);
+        touch("../../courses/$course_code/group/index.htm");
 
         $message = $langGroupsDeleted;
     } elseif (isset($_REQUEST['delete'])) {
@@ -174,6 +225,18 @@ if ($is_editor) {
         db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1 AND subsystem_id = $id");
         db_query("DELETE FROM group_members WHERE group_id = $id");
         db_query("DELETE FROM `group` WHERE id = $id");
+        
+        /**********Delete Group Wiki************/
+        $sql = "SELECT id "
+               ."FROM wiki_properties "
+               ."WHERE group_id = ?";
+                     
+        $result = Database::get()->querySingle($sql, $id);
+        if (is_object($result)) {
+            $wikiStore = new WikiStore();
+            $wikiStore->deleteWiki($result->id);
+        }
+        /**************************************/
 
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
             'name' => $myDir['name']));
@@ -340,6 +403,17 @@ if ($is_editor) {
     } else {
         $tool_content .= "$langDoc</td>
                     <td align='right'><font color='red'>$langNo</font>";
+    }
+    $tool_content .= "</td>
+    </tr>
+    <tr>
+    <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
+    if ($wiki) {
+    	$tool_content .= "$langWiki</td>
+    	<td align='right'><font color='green'>$langYes</font>";
+    } else {
+    	$tool_content .= "$langWiki</td>
+    	<td align='right'><font color='red'>$langNo</font>";
     }
     $tool_content .= "</td></tr>";
     $tool_content .= "</table>";

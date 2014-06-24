@@ -104,6 +104,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     }
 
     $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
+    // If old $urlAppend didn't end in /, add it
+    if (substr($config_data['urlAppend'], -1) !== '/') {
+        $config_data['urlAppend'] .= '/';
+    }
     $eclass_version = (isset($config_data['version'])) ? $config_data['version'] : null;
     if (file_exists($restoreThis . '/backup.php')) {
         $backupData = parse_backup_php($restoreThis . '/backup.php');
@@ -151,16 +155,16 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $url_prefix_map = array(
         $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
         $urlServer . 'modules/ebook/show.php/' . $new_course_code,
-        $config_data['urlAppend'] . '/modules/ebook/show.php/' . $course_data['code'] =>
-        $urlAppend . '/modules/ebook/show.php/' . $new_course_code,
+        $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+        $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
         $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
         $urlServer . 'modules/document/file.php/' . $new_course_code,
-        $config_data['urlAppend'] . '/modules/document/file.php/' . $course_data['code'] =>
-        $urlAppend . '/modules/document/file.php/' . $new_course_code,
+        $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
+        $urlAppend . 'modules/document/file.php/' . $new_course_code,
         $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
         $urlServer . 'courses/' . $new_course_code,
-        $config_data['urlAppend'] . '/courses/' . $course_data['code'] =>
-        $urlAppend . '/courses/' . $new_course_code,
+        $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>
+        $urlAppend . 'courses/' . $new_course_code,
         $course_data['code'] =>
         $new_course_code);
 
@@ -169,7 +173,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
         create_modules($course_id);
     }
-    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id), 'delete' => array('id')));
+    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id), 'delete' => array('id', 'preview')));
     restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $course_id)));
     $group_map = restore_table($restoreThis, 'group', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'));
     restore_table($restoreThis, 'group_members', array('map' => array('group_id' => $group_map, 'user_id' => $userid_map)));
@@ -190,6 +194,16 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $course_id),
         'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
+    if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
+            && isset($backupData) && is_array($backupData) 
+            && isset($backupData['query']) && is_array($backupData['query'])) {
+        $postsText = get_tabledata_from_parsed('posts_text');
+        foreach ($postsText as $ptData) {
+            if (array_key_exists($ptData['post_id'], $forum_post_map)) {
+                Database::get()->query("UPDATE forum_post SET post_text = ?s WHERE id = ?d", $ptData['post_text'], intval($forum_post_map[$ptData['post_id']]));
+            }
+        }
+    }
 
     $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ?d ", intval($course_id));
     if (is_array($forumLastPosts) && count($forumLastPosts) > 0) {
@@ -255,10 +269,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $videolink_map = restore_table($restoreThis, 'videolink', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'));
     
     // Dropbox
-    $dropbox_map = restore_table($restoreThis, 'dropbox_file', array('set' => array('course_id' => $course_id),
-            'map' => array('uploader_id' => $userid_map), 'return_mapping' => 'id'));
-    restore_table($restoreThis, 'dropbox_person', array('map' => array('fileId' => $dropbox_map, 'personId' => $userid_map)));
-    restore_table($restoreThis, 'dropbox_post', array('map' => array('fileId' => $dropbox_map, 'recipientId' => $userid_map)));
+    $dropbox_map = restore_table($restoreThis, 'dropbox_msg', array('set' => array('course_id' => $course_id),
+            'map' => array('author_id' => $userid_map), 'return_mapping' => 'id'));
+    restore_table($restoreThis, 'dropbox_attachment', array('map' => array('msg_id' => $dropbox_map), 'return_mapping' => 'id'));
+    restore_table($restoreThis, 'dropbox_index', array('map' => array('msg_id' => $dropbox_map, 'thread_id' => $dropbox_map, 'recipient_id' => $userid_map)));
     
     // Learning Path
     $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', array('set' => array('course_id' => $course_id),

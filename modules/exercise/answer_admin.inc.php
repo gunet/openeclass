@@ -697,7 +697,7 @@ if (isset($_GET['modifyAnswers'])) {
 		  <td class=\"right\"><b>" . $j . "</b></td>
 		  <td><input type=\"text\" name=\"match[" . $i . "]\" size=\"58\" value=\"";
                 if (!isset($formSent) && !isset($match[$i]))
-                    $tool_content .= "${langDefaultMakeCorrespond . $j}";
+                    $tool_content .= "${'langDefaultMakeCorrespond' . $j}";
                 else
                     @$tool_content .= str_replace('{', '&#123;', htmlspecialchars($match[$i]));
 
@@ -846,6 +846,8 @@ if (isset($_GET['modifyAnswers'])) {
 		</table>
 	       </fieldset>
 	       </form>";
+        } elseif($answerType == FREE_TEXT) {
+            redirect_to_home_page('modules/exercise/admin.php?course='.$course_code);//to be developed
         }
     }
 }

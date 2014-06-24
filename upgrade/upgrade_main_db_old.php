@@ -7,7 +7,7 @@
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
     echo add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
-    db_query("DROP TABLE `todo`");
+    Database::get()->query("DROP TABLE `todo`");
 // upgrade queries to 1.4
 if (!mysql_field_exists("$mysqlMainDb", 'cours', 'type'))
     echo add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
@@ -33,7 +33,7 @@ if (!mysql_field_exists("$mysqlMainDb", 'prof_request', 'statut'))
 // ***********************************************
 // delete deprecated tables
 if (mysql_table_exists($mysqlMainDb, 'institution'))
-    db_query("DROP TABLE `institution`");
+    Database::get()->query("DROP TABLE `institution`");
 
 if (!mysql_field_exists("$mysqlMainDb", 'cours', 'course_keywords'))
     echo add_field('cours', 'course_keywords', "TEXT");
@@ -57,12 +57,12 @@ if (mysql_field_exists("$mysqlMainDb", 'course_user', 'role'))
 // add field to course_user to keep track course user registration date
 if (!mysql_field_exists($mysqlMainDb, 'course_user', 'reg_date')) {
     echo add_field('course_user', 'reg_date', "DATE NOT NULL");
-    db_query("UPDATE course_user SET reg_date=NOW()");
+    Database::get()->query("UPDATE course_user SET reg_date=NOW()");
 } else {
-    $min_reg_date_res = mysql_fetch_row(db_query("SELECT MIN(reg_date)
-				FROM course_user WHERE reg_date <> '0000-00-00'"));
-    $min_reg_date = $min_reg_date_res[0] ? ("'" . $min_reg_date_res[0] . "'") : 'NOW()';
-    db_query("UPDATE course_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");
+    $min_reg_date_res = Database::get()->query("SELECT MIN(reg_date) as min
+				FROM course_user WHERE reg_date <> '0000-00-00'")->min;
+    $min_reg_date = $min_reg_date_res ? ("'" . $min_reg_date_res . "'") : 'NOW()';
+    Database::get()->query("UPDATE course_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");
 }
 
 // kstratos - UOM
@@ -120,7 +120,7 @@ if (!mysql_table_exists($mysqlMainDb, 'monthly_summary')) {
 }
 // new table 'auth' with auth methods
 if (!mysql_table_exists($mysqlMainDb, 'auth')) {
-    db_query("CREATE TABLE `auth` (
+    Database::get()->query("CREATE TABLE `auth` (
                         `auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
                         `auth_name` varchar( 20 ) NOT NULL default '',
                         `auth_settings` text NOT NULL default '',
@@ -128,16 +128,16 @@ if (!mysql_table_exists($mysqlMainDb, 'auth')) {
                         `auth_default` tinyint( 1 ) NOT NULL default '0',
                         PRIMARY KEY ( `auth_id` )) ", $mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
     // Insert the default values into the new table 'auth'
-    db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
-    db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
-    db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
-    db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
-    db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
+    Database::get()->query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+    Database::get()->query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+    Database::get()->query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+    Database::get()->query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+    Database::get()->query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 }
 
 //Table agenda (stores events from all lessons)
 if (!mysql_table_exists($mysqlMainDb, 'agenda')) {
-    db_query("CREATE TABLE `agenda` (
+    Database::get()->query("CREATE TABLE `agenda` (
                         `id` int(11) NOT NULL auto_increment,
                         `lesson_event_id` int(11) NOT NULL default '0',
                         `titre` varchar(200) NOT NULL default '',
@@ -151,7 +151,7 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda')) {
 
 // table admin_announcemets (stores administrator  announcements)
 if (!mysql_table_exists($mysqlMainDb, 'admin_announcements')) {
-    db_query("CREATE TABLE `admin_announcements` (
+    Database::get()->query("CREATE TABLE `admin_announcements` (
                         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                         `gr_title` VARCHAR( 255 ) NULL ,
                         `gr_body` TEXT NULL ,
@@ -184,41 +184,35 @@ if (!mysql_field_exists("$mysqlMainDb", 'user', 'lang'))
 if (!isset($encryptedPasswd)) {
     echo "<p>$langEncryptPass</p>";
     flush();
-    if ($res = db_query("SELECT user_id, password FROM user")) {
-        while ($row = mysql_fetch_array($res)) {
-            $pass = $row["password"];
-            if (!in_array($pass, $auth_methods)) {
-                $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
-                // do the update
-                db_query("UPDATE user SET password = '$newpass'
-                                                        WHERE user_id = $row[user_id]");
-            }
+    Database::get()->queryFunc("SELECT user_id, password FROM user", function ($row) use($pass, $auth_methods) {
+        if (!in_array($pass, $auth_methods)) {
+            $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
+            // do the update
+            Database::get()->query("UPDATE user SET password = '$newpass'
+                                                        WHERE user_id = $row->user_id");
         }
-    } else {
+    }, function() use($langNotEncrypted) {
         die("$langNotEncrypted");
-    }
+    });
 }
 
 // update users with no registration date
-$res = db_query("SELECT user_id,registered_at,expires_at FROM user
+Database::get()->queryFunc("SELECT user_id,registered_at,expires_at FROM user
                         WHERE registered_at='0'
                         OR registered_at='NULL' OR registered_at=NULL
                         OR registered_at='null' OR registered_at=null
                         OR registered_at='\N' OR registered_at=\N
-                        OR registered_at=''");
-
-while ($row = mysql_fetch_array($res)) {
-    $registered_at = $row["registered_at"];
+                        OR registered_at=''", function ($row) use(&$registered_at) {
+    $registered_at = $row->registered_at;
     $regtime = 126144000 + time();
-    db_query("UPDATE user SET registered_at=" . time() . ",expires_at=" . $regtime);
-}
+    Database::get()->query("UPDATE user SET registered_at=" . time() . ",expires_at=" . $regtime);
+});
 
 
 //Empty table 'agenda' in the main database so that we do not have multiple entries
 //in case we run the upgrade script twice. This has to be done at this point and NOT
 //in the while loop. Otherwise it will be emptying the table for each iteration
-$sql = 'TRUNCATE TABLE `agenda`';
-db_query($sql);
+Database::get()->query('TRUNCATE TABLE `agenda`');
 
 // add indexes
 add_index('i_cours', 'cours', 'code');

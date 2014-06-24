@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,37 +37,32 @@ $totalHits = 0;
 $totalDuration = 0;
 require_once 'modules/graphics/plotter.php';
 
-$sql = "SELECT a.code code, a.title title
-                FROM course AS a LEFT JOIN course_user AS b
-                     ON a.id = b.course_id
-                WHERE b.user_id = $uid
-                AND a.visible != " . COURSE_INACTIVE . "
-                ORDER BY a.title";
-$result = db_query($sql);
-if (mysql_num_rows($result) > 0) {  // found courses ?
-    while ($row = mysql_fetch_assoc($result)) {
-        $course_codes[] = $row['code'];
-        $course_names[$row['code']] = $row['title'];
-    }
-    mysql_free_result($result);
-    foreach ($course_codes as $code) {
-        $cid = course_code_to_id($code);
-        $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
-                                WHERE user_id = $uid
-                                AND course_id = $cid";
-        $result = db_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $totalHits += $row['cnt'];
-            $hits[$code] = $row['cnt'];
+$result = Database::get()->queryArray("SELECT a.code code, a.title title
+                                        FROM course AS a LEFT JOIN course_user AS b
+                                             ON a.id = b.course_id
+                                        WHERE b.user_id = ?d
+                                        AND a.visible != " . COURSE_INACTIVE . "
+                                        ORDER BY a.title", $uid);
+
+if (count($result) > 0) {  // found courses ?    
+    foreach ($result as $row) {
+        $course_codes[] = $row->code;
+        $course_names[$row->code] = $row->title;
+    }  
+    foreach ($course_codes as $code) {                        
+        $cid = course_code_to_id($code);                
+        $row = Database::get()->querySingle("SELECT SUM(hits) AS cnt FROM actions_daily
+                                WHERE user_id = ?d
+                                AND course_id =?d", $uid, $cid);
+        if ($row) {
+            $totalHits += $row->cnt;
+            $hits[$code] = $row->cnt;
         }
-        mysql_free_result($result);
-        $sql = "SELECT SUM(duration) FROM actions_daily
-                                        WHERE user_id = $uid
-                                        AND course_id = $cid";
-        $result = db_query($sql);
-        list($duration[$code]) = mysql_fetch_row($result);
-        $totalDuration += $duration[$code];
-        mysql_free_result($result);
+        $result = Database::get()->querySingle("SELECT SUM(duration) AS duration FROM actions_daily
+                                        WHERE user_id = ?d
+                                        AND course_id = ?d", $uid, $cid);
+        $duration[$code] = $result->duration;
+        $totalDuration += $duration[$code];        
     }
 
     $chart = new Plotter(600, 300);
@@ -108,7 +103,7 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
         } else {
             $tool_content .= "<tr class='odd'>";
         }
-        $i++;
+        $i++;        
         $tool_content .= "
                 <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
                 <td>" . q(course_code_to_title($code)) . "</td>
@@ -119,22 +114,21 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
 }
 // End of chart display; chart unlinked at end of script.
 
-$sql = "SELECT * FROM loginout
-    WHERE id_user = '" . $_SESSION["uid"] . "' ORDER by idLog DESC LIMIT 10";
-
-$leResultat = db_query($sql);
 $tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
 $tool_content .= "<table class='tbl_alt' width='550'>
             <tr>
               <th colspan='2'>$langDate</th>
               <th width='140'>$langAction</th>
             </tr>";
-$nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
-$nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
+$act["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
+$act["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
+$q = Database::get()->queryArray("SELECT * FROM loginout
+                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 10", $uid);
+
 $i = 0;
-while ($leRecord = mysql_fetch_array($leResultat)) {
-    $when = $leRecord["when"];
-    $action = $leRecord["action"];
+foreach ($q as $result) {
+    $when = $result->when;
+    $action = $result->action;
     if ($i % 2 == 0) {
         $tool_content .= "<tr class='even'>";
     } else {
@@ -143,7 +137,7 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
     $tool_content .= "
         <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
         <td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
-        <td>" . $nomAction[$action] . "</td>
+        <td>" . $act[$action] . "</td>
         </tr>";
     $i++;
 }

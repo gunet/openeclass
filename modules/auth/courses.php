@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -60,32 +60,32 @@ if (isset($_POST['submit'])) {
     foreach ($changeCourse as $key => $value) {
         $cid = intval($value);
         if (!in_array($cid, $selectCourse)) {
-            db_query("DELETE FROM course_user
-					WHERE status <> " . USER_TEACHER . " AND status <> " . USER_GUEST . "
-					AND user_id = $uid AND course_id = $cid");
+            Database::get()->query("DELETE FROM course_user "
+                    . " WHERE status <> ?d AND stats <> ?d AND user_id = ?d "
+                    . " AND course_id = ?d", USER_TEACHER, USER_GUEST, intval($uid), intval($cid));
             // logging
-            Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid,
-                'right' => 0));
+            Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
         }
     }
 
     $errorExists = false;
     foreach ($selectCourse as $key => $value) {
         $cid = intval($value);
-        $course_info = db_query("SELECT public_code, password, visible FROM course WHERE id = $cid");
+        $course_info = Database::get()->querySingle("SELECT public_code, password, visible FROM course WHERE id = ?d", $cid);
         if ($course_info) {
-            $row = mysql_fetch_array($course_info);
-            if (($row['visible'] == COURSE_REGISTRATION or $row['visible'] == COURSE_OPEN) and !empty($row['password']) and $row['password'] != autounquote($_POST['pass' . $cid])) {
+            if (($course_info->visible == COURSE_REGISTRATION or 
+                    $course_info->visible == COURSE_OPEN) and !empty($course_info->password) and 
+                    $course_info->password !== autounquote($_POST['pass' . $cid])) {
                 $errorExists = true;
-                $restrictedCourses[] = $row['public_code'];
+                $restrictedCourses[] = $course_info->public_code;
                 continue;
             }
             if (is_restricted($cid) and !in_array($cid, $selectCourse)) { // do not allow registration to restricted course
                 $errorExists = true;
-                $restrictedCourses[] = $row['public_code'];
+                $restrictedCourses[] = $course_info->public_code;
             } else {
-                db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                                VALUES ($cid, $uid, " . USER_STUDENT . ", CURDATE())");
+                Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
+                                        VALUES (?d, ?d, ?d, CURDATE())", $cid, intval($uid), USER_STUDENT);
             }
         }
     }
@@ -124,11 +124,14 @@ if (isset($_POST['submit'])) {
                                   </th></tr></table><br />";
 
         if ($numofcourses > 0) {
-            $tool_content .= expanded_faculte($fac, $fc, $uid);
+            $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
         } else {
             $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-            $tool_content .= "<br /><div class=alert1>$langNoCoursesAvailable</div>\n";
+            $subTrees = $tree->buildSubtrees(array($fc));
+            if (count($subTrees) <= 1) { // is leaf
+                $tool_content .= "<br /><div class=alert1>$langNoCoursesAvailable</div>\n";
+            }
         }
         $tool_content .= "</form>";
     } // end of else (department exists)
@@ -151,28 +154,26 @@ load_js('tools.js');
 draw($tool_content, 1, null, $head_content);
 
 function getfacfromfc($dep_id) {
-    $dep_id = intval($dep_id);
-
-    $fac = mysql_fetch_row(db_query("SELECT name FROM hierarchy WHERE id = '$dep_id'"));
-    if (isset($fac[0]))
-        return $fac[0];
-    else
+    $fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", intval($dep_id));
+    if ($fac) {
+        return $fac->name;
+    } else {
         return 0;
+    }
 }
 
 function getfcfromuid($uid) {
-    $res = mysql_fetch_row(db_query("SELECT department FROM user_department WHERE user = '$uid'"));
-    if (isset($res[0])) {
-        return $res[0];
+    $res = Database::get()->querySingle("SELECT department FROM user_department WHERE user = ?d LIMIT 1", intval($uid));
+    if ($res) {
+        return $res->department;
     } else {
         return 0;
     }
 }
 
 function getdepnumcourses($fac) {
-    $res = mysql_fetch_row(db_query("SELECT COUNT(code) FROM course, course_department
-                WHERE course.id = course_department.course AND course_department.department = $fac"));
-    return $res[0];
+    return Database::get()->querySingle("SELECT COUNT(code) as count FROM course, course_department
+                WHERE course.id = course_department.course AND course_department.department = ?d", intval($fac))->count;
 }
 
 /**
@@ -193,12 +194,11 @@ function getdepnumcourses($fac) {
  * @global type $langothers
  * @global type $themeimg
  * @global Hierarchy $tree
- * @param type $fac_name
  * @param type $facid
  * @param type $uid
  * @return string
  */
-function expanded_faculte($fac_name, $facid, $uid) {
+function expanded_faculte($facid, $uid) {
     global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
     $langpres, $langposts, $langothers, $themeimg, $tree;
@@ -206,32 +206,16 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString = "";
 
     // build a list of course followed by user.
-    $usercourses = db_query("SELECT course.code course_code, course.public_code public_code,
-                                    course.id course_id, status
-                                FROM course_user, course
-                                WHERE course_user.course_id = course.id
-                                AND user_id = " . $uid);
-
-    while ($row = mysql_fetch_array($usercourses)) {
-        $myCourses[$row['course_id']] = $row;
-    }
+    $myCourses = array();
+    Database::get()->queryFunc("SELECT course.code course_code, course.public_code public_code,
+                                       course.id course_id, status
+                                  FROM course_user, course
+                                 WHERE course_user.course_id = course.id
+                                   AND user_id = ?d", function ($course) use (&$myCourses) {
+        $myCourses[$course->course_id] = $course;
+    }, intval($uid));
 
     $retString .= $tree->buildDepartmentChildrenNavigationHtml($facid, 'courses');
-
-
-    $result = db_query("SELECT
-                            course.id cid,
-                            course.code k,
-                            course.public_code public_code,
-                            course.title i,
-                            course.visible visible,
-                            course.prof_names t,
-                            course.password password
-                       FROM course, course_department
-                      WHERE course.id = course_department.course
-                        AND course_department.department = $facid
-                        AND course.visible != " . COURSE_INACTIVE . "
-                   ORDER BY course.title, course.prof_names");
 
     $retString .= "\n    <table class='tbl_alt' width='100%'>";
     $retString .= "\n    <tr>";
@@ -241,19 +225,31 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString .= "\n      <th width='30' align='center'>$langType</th>";
     $retString .= "\n    </tr>";
     $k = 0;
-    while ($mycours = mysql_fetch_array($result)) {
-        $cid = $mycours['cid'];
-        $course_title = q($mycours['i']);
-        $password = q($mycours['password']);                
+    
+    Database::get()->queryFunc("SELECT
+                            course.id cid,
+                            course.code k,
+                            course.public_code public_code,
+                            course.title i,
+                            course.visible visible,
+                            course.prof_names t,
+                            course.password password
+                       FROM course, course_department
+                      WHERE course.id = course_department.course
+                        AND course_department.department = ?d
+                        AND course.visible != ?d
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $k, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
+        $cid = $mycours->cid;
+        $course_title = q($mycours->i);
+        $password = q($mycours->password);
         // link creation
-        if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course                
-            $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
-        } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
+        if ($mycours->visible == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course                
+            $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
+        } elseif ($mycours->visible == COURSE_CLOSED) { //closed course
             $codelink = "<a href='../contact/index.php?from_reg=true&course_id=$cid'>$course_title</a>";
         } else {
             $codelink = $course_title;
         }
-
 
         if ($k % 2 == 0) {
             $retString .= "<tr class='even'>";
@@ -263,47 +259,45 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
         $retString .= "<td align='center'>";
         $requirepassword = '';
-        $vis_class = ($mycours['visible'] == 0) ? 'class="reg_closed"' : '';
+        $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {
-            if ($myCourses[$cid]['status'] != 1) { // display registered courses
+            if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
                 if (!empty($password)) {
-                    $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='" . q($password) . "' />";
+                    $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
                 } else {
                     $requirepassword = '';
                 }
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
-                //if ($mycours['visible'] == 0) {
-                $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
-                //}
+                $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
             } else {
                 $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
             }
         } else { // display unregistered courses
-            if (!empty($password) and ($mycours['visible'] == COURSE_REGISTRATION or $mycours['visible'] == COURSE_OPEN)) {
-                $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' />";
+            if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {
+                $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' autocomplete='off' />";
             } else {
                 $requirepassword = '';
             }
 
-            $disabled = ($mycours['visible'] == 0) ? 'disabled' : '';
+            $disabled = ($mycours->visible == 0) ? 'disabled' : '';
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
-                   <td>$codelink (" . q($mycours['public_code']) . ")$requirepassword</td>
-                   <td>" . q($mycours['t']) . "</td>
+                   <td>$codelink (" . q($mycours->public_code) . ")$requirepassword</td>
+                   <td>" . q($mycours->t) . "</td>
                    <td align='center'>";
 
         // show the necessary access icon
         foreach ($icons as $visible => $image) {
-            if ($visible == $mycours['visible']) {
+            if ($visible == $mycours->visible) {
                 $retString .= $image;
             }
         }
 
         $retString .= "</td></tr>";
         $k++;
-    } // END of while
+    }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table>";
 
     return $retString;
@@ -315,8 +309,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
  * @return boolean
  */
 function is_restricted($course_id) {
-    $res = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = $course_id"));
-    if ($res[0] == 0) {
+    $res = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", intval($course_id));
+    if ($res && $res->visible == 0) {
         return true;
     } else {
         return false;

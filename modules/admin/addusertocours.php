@@ -57,12 +57,12 @@ if (isset($_POST['submit'])) {
     // Remove unneded users - guest user (status == 10) is never removed
     if ($reglist) {
         $reglist = "AND user_id NOT IN ($reglist)";
-        db_query("DELETE FROM group_members
+        Database::get()->query("DELETE FROM group_members
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cid)
                                $reglist");
     }
-    db_query("DELETE FROM course_user
-                     WHERE course_id = $cid AND status <> 10 $reglist");
+    Database::get()->query("DELETE FROM course_user
+                     WHERE course_id = ?d AND status <> 10 $reglist", $cid);
 
     function regusers($cid, $users, $status) {
         foreach ($users as $uid) {
@@ -122,36 +122,34 @@ else {
         <select id='regstuds_box' name='regstuds[]' size='8' multiple class='auth_input'>";
 
     // Students registered in the selected course
-    $resultStud = db_query("SELECT DISTINCT u.id , u.surname, u.givenname
-                                FROM user u, course_user cu
-                                WHERE cu.course_id = $cid
-                                AND cu.user_id = u.id
-                                AND cu.status=5 ORDER BY surname");
-
     $a = 0;
-    while ($myStud = mysql_fetch_assoc($resultStud)) {
-        $tool_content .= "<option value='" . q($myStud['id']) . "'>" .
-                q("$myStud[surname] $myStud[givenname]") . '</option>';
+    $resultStud = Database::get()->queryFunc("SELECT DISTINCT u.id , u.surname, u.givenname
+                                FROM user u, course_user cu
+                                WHERE cu.course_id = ?d
+                                AND cu.user_id = u.id
+                                AND cu.status=5 ORDER BY surname", function ($myStud) use (&$tool_content, &$a) {
+        $tool_content .= "<option value='" . q($myStud->id) . "'>" .
+                q("$myStud->surname $myStud->givenname") . '</option>';
         $a++;
-    }
+    }, $cid);
 
     $tool_content .= "</select>
         <p>&nbsp;</p>
         $langListRegisteredProfessors<br />
         <select id='regprofs_box' name='regprofs[]' size='8' multiple class='auth_input'>";
     // Professors registered in the selected course
-    $resultProf = db_query("SELECT DISTINCT u.id , u.surname, u.givenname
+    $a = 0;
+    Database::get()->queryFunc("SELECT DISTINCT u.id , u.surname, u.givenname
                                 FROM user u, course_user cu
-                                WHERE cu.course_id = $cid
+                                WHERE cu.course_id = ?d
                                 AND cu.user_id = u.id
                                 AND cu.status = 1
-                                ORDER BY nom, givenname");
-    $a = 0;
-    while ($myProf = mysql_fetch_assoc($resultProf)) {
-        $tool_content .= "<option value='" . q($myProf['id']) . "'>" .
-                q("$myProf[surname] $myProf[givenname]") . "</option>";
+                                ORDER BY nom, givenname",
+    function ($myProf) use(&$a, &$tool_content){
+        $tool_content .= "<option value='" . q($myProf->id) . "'>" .
+                q("$myProf->surname $myProf->givenname") . "</option>";
         $a++;
-    }
+    }, $cid);
     $tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
                 <td><input type=submit value='$langAcceptChanges' name='submit' onClick=\"selectAll('regstuds_box',true);selectAll('regprofs_box',true)\"></td>
                 <td>&nbsp;</td>

@@ -179,8 +179,8 @@ draw($tool_content, 2, null, $head_content);
 function showmedia() {
     global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
 
-    $sqlMedia = "SELECT * FROM video ORDER BY title";
-    $sqlMediaLinks = "SELECT * FROM videolink ORDER BY title";
+    $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY title";
+    $sqlMediaLinks = "SELECT * FROM videolink WHERE visible = 1 ORDER BY title";
 
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);

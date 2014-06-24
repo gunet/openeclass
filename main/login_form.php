@@ -1,10 +1,15 @@
 <?php
 require_once '../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+
+// if we are logged in there is no need to access this page
+if (isset($_SESSION['uid'])) {
+    redirect_to_home_page();
+    exit();
+}
+
 $warning = '';
 $login_user = FALSE;
-
-process_login();
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {
@@ -34,9 +39,9 @@ $tool_content .= "<form action='$urlSecure' method='post'>
   <td class='LoginData'><img src='$themeimg/login.png'></td>
     <td class='LoginData'>
         $langUsername <br />
-        <input class='Login' name='uname' size='20' /><br />
+        <input class='Login' name='uname' size='20' autocomplete='off' /><br />
         $langPass <br />
-        <input class='Login' name='pass' type='password' size='20' /><br /><br />
+        <input class='Login' name='pass' type='password' size='20' autocomplete='off' /><br /><br />
         <input class='Login' name='submit' type='submit' size='20' value='$langEnter' />
 	$warning</td></tr>
 	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />

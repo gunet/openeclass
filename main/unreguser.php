@@ -35,11 +35,11 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
         draw($tool_content, 1);
         exit;
     } else {
-        $q = db_query("SELECT code, visible FROM course, course_user
+        $q = Database::get()->querySingle("SELECT code, visible FROM course, course_user
 			WHERE course.id = course_user.course_id
                         AND course.visible != " . COURSE_INACTIVE . "
-			AND user_id = $uid LIMIT 1");
-        if (mysql_num_rows($q) == 0) {
+			AND user_id = ?d LIMIT 1", $uid);        
+        if (!$q) {
             $tool_content .= "<p><b>$langConfirm</b></p>";
             $tool_content .= "<ul class='listBullet'>";
             $tool_content .= "<li>$langYes: ";
@@ -58,27 +58,15 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     if (isset($uid)) {
         $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);
-        // unregister user from inactive courses (if any)
-        db_query("DELETE from course_user WHERE user_id = $uid");
-        db_query("DELETE FROM group_members WHERE user_id = $uid");
-        // finally delete user
-        db_query("DELETE from user WHERE id = $uid");
-
-        if (mysql_affected_rows() > 0) {
-            db_query("DELETE FROM user_department WHERE user = $uid");
-            $tool_content .= "<div class='success'><b>$langDelSuccess</b><br />";
-            $tool_content .= "$langThanks";
-            $tool_content .= "<br /><a href='../index.php?logout=yes'>$langLogout</a></div>";
-            // action logging
-            Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
-                                                     'username' => $un,
-                                                     'name' => $n));
-            unset($_SESSION['uid']);
-        } else {
-            $tool_content .= "<p>$langError</p>";
-            $tool_content .= "<p class='right'><a href='profile/profile.php'>$langBack</a></p><br />";
-            $tool_content .= "</div>";
-        }
+        deleteUser($id, false);
+        // action logging
+        Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
+                                                 'username' => $un,
+                                                 'name' => $n));
+        unset($_SESSION['uid']);
+        $tool_content .= "<div class='success'><b>$langDelSuccess</b><br />";
+        $tool_content .= "$langThanks";
+        $tool_content .= "<br /><a href='../index.php?logout=yes'>$langLogout</a></div>";
     }
 }
 if (isset($_SESSION['uid'])) {

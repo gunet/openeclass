@@ -615,6 +615,12 @@ $langEmailUnsubSuccess = "Δεν θα λαμβάνετε πλέον e-mails απ
 $langEmailFromCourses = "Λήψη e-mails από τα μαθήματά μου";
 $langEmailUnsubscribeWarning = "Έχετε απενεργοποιήσει τη λήψη μηνυμάτων από την πλατφόρμα.
 Δεν μπορείτε να ρυθμίσετε τη λήψη από συγκεκριμένα μαθήματα πριν την επανενεργοποιήσετε.";
+$langDisplay = "Εμφάνισε";
+$langLast = "Τελευταία";
+$langFirst = "Πρώτη";
+$langTotalResults = "συνολικά αποτελέσματα";
+$langDisplayed = "Εμφανίζονται";
+$langTill = "έως";
 
 /* * *****************************************
  * archive_course.php
@@ -819,6 +825,7 @@ $langAnnouncesDel = "Διαγραφή ανακοινώσεων του μαθήμ
 $langAgendaDel = "Διαγραφή εγγραφών από την ατζέντα του μαθήματος";
 $langHideDocuments = "Απόκρυψη των εγγράφων του μαθήματος";
 $langHideWork = "Απόκρυψη των εργασιών του μαθήματος";
+$langDelAllWorkSubs = "Διαγραφή των υποβολών των εργασιών του μαθήματος";
 $langSubmitActions = "Εκτέλεση ενεργειών";
 $langOptions = "Επιλογές";
 $langRefreshSuccess = "Η ανανέωση του μαθήματος ήταν επιτυχής. Εκτελέστηκαν οι ακόλουθες ενέργειες:";
@@ -828,9 +835,17 @@ $langAgendaDeleted = "Οι εγγραφές της ατζέντας διαγρά
 $langWorksDeleted = "Οι εργασίες απενεργοποιήθηκαν";
 $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
-$langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων ασκήσεων του μαθήματος";
-$langPurgedExerciseResults = "Τα αποτελέσματα ασκήσεων διαγράφηκαν";
-
+$langPurgeExercise = "Διαγραφή ασκήσης";
+$langPurgeExerciseSuccess = "Η Άσκηση διαγράφηκε.";
+$langConfirmPurgeExercise = "Επιβεβαίωση διαγραφής άσκησης";
+$langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων ασκήσης";
+$langPurgeExerciseResultsSuccess = "Τα αποτελέσματα της ασκήσης διαγράφηκαν";
+$langConfirmPurgeExerciseResults = "Επιβεβαίωση διαγραφής αποτελεσμάτων άσκησης";
+$langNotAvailable = "Μη διαθέσιμα";
+$langLeaveExerciseWarning = "ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Για μην συμβεί αυτό ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση (αν αυτό επιτρέπεται).";
+$langTemporarySave = "Προσωρινή Αποθήκευση";
+$langTemporarySaveSuccess = "Η προσπάθεια αποθηκεύτηκε προσωρινά. Ξαναμπείτε στην άσκηση για να συνεχίσετε.";
+$landAttemptCanceled = "Η προσπάθεια ακυρώθηκε.";
 /* * ***************************************************
  * contact.php
  * **************************************************** */
@@ -897,7 +912,7 @@ $langExercices = "Ασκήσεις";
 $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
 $langLinkSite = "Προσθήκη συνδέσμου στην αρχική σελίδα";
 $langModifyInfo = "Διαχείριση Μαθήματος";
-$langDropBox = "Ανταλλαγή Μηνυμάτων";
+$langDropBox = "Μηνύματα";
 $langLearnPath = "Γραμμή Μάθησης";
 $langWiki = "Σύστημα Wiki";
 $langToolManagement = "Ενεργοποίηση Εργαλείων";
@@ -910,6 +925,125 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
+
+$langAttendance = "Παρουσιολόγιο";
+$langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
+$langAttendanceΑbsences = "Παρουσίες";
+$langAttendanceΑbsencesYes = "Παρουσία";
+$langAttendanceΑbsencesΝο = "Απουσία";
+$langAttendanceΑbsences = "Παρουσίες";
+$langAttendanceΑbsencesFrom = "παρουσίες από τις";
+$langAttendanceΑbsencesFrom2 = "υποχρεωτικές του μαθήματος";
+$langAttendanceΑbsencesYesNo = "Παρουσία/απουσία";
+$langAttendanceAddActivity = "Προσθήκη υποχρεωτικής δραστηριότητας";
+$langAttendanceActivityDate = "Ημερομηνία διεξαγωγής";
+$langAttendanceActivityDate2 = "Ημερομηνία";
+$langAttendanceBook = "Καταχώρηση παρουσιών";
+$langAttendanceBooking = "Καταχώρηση";
+$langAttendanceUpdate = "Ενημέρωση";
+$langAttendanceEdit = "Επιτυχής αλλαγή";
+$langAttendanceSucInsert = "Επιτυχής εισαγωγή δραστηριότητας";
+$langAttendanceLimit = "Επιτυχής ενημέρωση αριθμού παρουσιών";
+$langAttendanceDel = "Επιτυχής διαγραφή δραστηριότητας";
+$langAttendanceDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
+$langAttendanceNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα παρουσιολογίου για το χρήστη";
+$langAttendanceNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο παρουσιολόγιο.<br>Μπορείτε να προσθέσετε μία από";
+$langAttendanceNoActMessage3 = "ή να εισάγετε από τις προτεινόμενες.";
+$langAttendanceNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη καταχώρηση";
+$langAttendanceNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη καταχώρηση";
+$langAttendanceNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη καταχώρηση";
+$langAttendanceNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο παρουσιολόγιο.";
+$langAttendanceActCour = "Δραστηριότητα μαθήματος";
+$langAttendanceInsAut = "αυτόματη καταχώρηση παρουσίας";
+$langAttendanceInsMan = "μη αυτόματη καταχώρηση παρουσίας";
+$langAttendanceActAttend = "Δραστηριότητα παρουσιολογίου";
+$langAttendanceType = "Τύπος";
+$langAttendanceActList = "Δραστηριότητες του παρουσιολογίου";
+$langAttendanceActToAdd = "Δραστηριότητες προς εισαγωγή στο παρουσιολόγιο";
+$langAttendanceActToAddAss = "Εργασίες προς εισαγωγή στο παρουσιολόγιο";
+$langAttendanceActToAddExe = "Ασκήσεις προς εισαγωγή στο παρουσιολόγιο";
+$langAttendanceLimitTitle = "Υποχρεωτικές παρουσιές";
+$langAttendanceLimitNumber = "Αριθμός υποχρεωτικών παρουσιών";
+$langAttendanceStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση παρουσιών";
+$langAttendanceMEANS = "Τιμές";
+$langAttendanceActiveUsers = "Χρήστες παρουσιολογίου";
+$langAttendanceActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
+$langAttendanceActivity = "Δραστηριότητα";
+$langAttendanceSystemEditActivity = "Επεξεργασία δραστηριότητας από το σύστημα";
+$langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
+
+$langGradebook = "Βαθμολόγιο";
+$langGradebookManagement = "Διαχείριση Βαθμολογίου";
+$langGradebookAddActivity = "Προσθήκη νέας δραστηριότητας";
+$langGradebookActivityDescription = "Περιγραφή";
+$langGradebookActivityDate = "Ημερομηνία διεξαγωγής";
+$langGradebookActivityDate2 = "Ημερομηνία";
+$langGradebookActivityWeight = "Ποσοστό συμμετοχής στη βαθμολογία";
+$langGradebookActivityWeightLeft = "διαθέσιμο";
+$langGradebookBook = "Καταχώρηση βαθμών";
+$langGradebookBooking = "Καταχώρηση";
+$langGradebookUpdate = "Ενημέρωση";
+$langGradebookEdit = "Επιτυχής αλλαγή";
+$langGradebookSucInsert = "Επιτυχής εισαγωγή δραστηριότητας";
+$langGradebookLimit = "Επιτυχής ενημέρωση βαθμών";
+$langGradebookDel = "Επιτυχής διαγραφή δραστηριότητας";
+$langGradebookDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
+$langGradebookNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα βαθμολογίου για το χρήστη";
+$langGradebookNoActMessage1 = "Δεν υπάρχουν δραστηριότητες στο βαθμολόγιο.<br>Μπορείτε να προσθέσετε μία από";
+$langGradebookNoActMessage2 = "εδώ";
+$langGradebookNoActMessage3 = "ή να εισάγετε από τις προτεινόμενες.";
+$langGradebookNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη βαθμολόγηση";
+$langGradebookNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη βαθμολόγηση";
+$langGradebookNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη βαθμολόγηση";
+$langGradebookNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο βαθμολόγιο";
+$langGradebookActCour = "Δραστηριότητα μαθήματος";
+$langGradebookInsAut = "αυτόματη καταχώρηση βαθμού";
+$langGradebookInsMan = "μη αυτόματη καταχώρηση βαθμού";
+$langGradebookActAttend = "Δραστηριότητα βαθμολογίου";
+$langGradebookDesc = "Περιγραφή";
+$langGradebookType = "Τύπος";
+$langGradebookActList = "Δραστηριότητες του βαθμολογίου";
+$langGradebookActToAdd = "Δραστηριότητες προς εισαγωγή στο βαθμολόγιο";
+$langGradebookActToAddAss = "Εργασίες προς εισαγωγή στο βαθμολόγιο";
+$langGradebookActToAddExe = "Ασκήσεις προς εισαγωγή στο βαθμολόγιο";
+$langGradebookStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
+$langGradebookStats = "Στατιστικά";
+$langGradebookMEANS = "Τιμές";
+$langGradebookActiveUsers = "Χρήστες βαθμολογίου";
+$langGradebookActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
+$langGradebookRange = "Κλίμακα βαθμολογίου";
+$langGradebookWeightAlert = "Προσοχή έχετε δηλώσει βαρύτητα στη δραστηριότητα μεγαλύτερη από το επιτρεπτό";
+$langGradeNoBookAlert = "Δεν μπορείτε να εισάγετε βαθμολογία. Βαρύτητα που δεν έχετε δηλώσει σε δραστηριότητα";
+$langGradebookNewUser = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα βαθμολογίου για το χρήστη";
+$langGradebookWeight = "Ποσοστό συμμετοχής";
+$langGradebookAutoGrade = "αυτόματη καταχώρηση βαθμού";
+$langGradebookNoAutoGrade = "μη αυτόματη καταχώρηση βαθμού";
+$langGradebookGrade = "Βαθμός";
+$langGradebookGradeAlert = "Προσοχή στο υπόλοιπο βαρύτητας";
+$langGradebookAss = "Εργασία";
+$langGradebookActivityAct = "Δραστηριότητα γραμμής μάθησης";
+$langGradebookActivityLpExe = "Άσκηση γραμμής μάθησης";
+$langGradebookActToAddLp = "Δραστηριότητες γραμμής μάθησης προς εισαγωγή στο βαθμολόγιο";
+$langGradebookNoTitle = "Δραστηριότητα χωρίς τίτλο";
+$langGradebookUpToDegree = "* γίνεται αναγωγή της αυτόματης βαθμολογίας των ακήσεων με άριστα το ";
+$langGradebookDeleteAlert = "Είστε σίγουροι ότι θέλετε να διαγράψετε τη δραστηριότητα; (θα διαγραφούν και οι βαθμολογίες που έχετε καταχωρήσει για τη δραστηριότητα)";
+$langGradebookOutRange = "Προσοχή: έχετε εισάγει βαθμούς μεγαλύτερους από την κλίμακα";
+$gradebook_exams = "Γραπτές εξετάσεις";
+$gradebook_labs = "Βαθμός εργαστηρίου";
+$gradebook_oral = "Προφορικός βαθμός";
+$gradebook_progress = "Βαθμός προόδου";
+$gradebook_other_type = "Άλλη δραστηριότητα";
+$langGradebookAssignSpecific = "Η εργασία αφορά συγκεκριμένους μαθητές";
+$langGradebookTotalGrade = "Συνολικός βαθμός";
+$langGradebookTotalGradeNoInput = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
+$langGradebookGrades = "Βαθμοί";
+$langGradebookAlertToChange = "Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν";
+$langGradebookAlertNoInput = "Δεν υπάρχει καταχώρηση";
+$langGradeTotal = "Συνολικό Βαθμολόγιο";
+$langMeanValue = "Μέσος όρος";
+$langMinValue = "Ελάχιστη";
+$langMaxValue = "Μέγιστη";
+
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
 $langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
@@ -923,6 +1057,7 @@ $langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρό
 $langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
 $langCommercialUse = "Εμπορική χρήση";
 $langAllowModification = "Επιτρέψτε διασκευή";
+
 
 // Groups
 $langCreateCourseGroups = "Ομάδες Χρηστών";
@@ -1137,7 +1272,8 @@ $langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
 /* * ***********************************************
  * dropbox.php
  * *********************************************** */
-$langNewMessage = "Νέο μήνυμα";
+$langNewPersoMessage = "Νέο προσωπικό μήνυμα";
+$langNewCourseMessage = "Νέο μήνυμα μαθήματος";
 $langBadFormData = "Η αποστολή του αρχείου απέτυχε";
 $langSendTo = "Αποστολή στον/στην";
 $langReceivedFiles = "Εισερχόμενα";
@@ -1157,9 +1293,12 @@ $langDropBoxIncompatible = "Προσοχή! Το υποσύστημα 'Αντα�
 $langPurgeFile = "Προσοχή! Το μήνυμα θα διαγραφεί από όλους τους χρήστες";
 $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
+$langRecipients = "Παραλήπτες";
 $langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συννημένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
+$langParticipants = "Συμμετέχοντες";
+$langLoading = "Φόρτωση...";
 
 /* * ********************************************************
  * exercise
@@ -1223,9 +1362,11 @@ $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλο
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
-$langPurgeExercises = "Διαγραφή αποτελεσμάτων";
-$langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
-
+$langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
+$langAttemptCompleted = "Oλοκληρώθηκε";
+$langAttemptPending = "Προς Βαθμολόγηση";
+$langAttemptCanceled = "Ακυρώθηκε";
+$langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
@@ -1252,6 +1393,7 @@ $langMultipleSelect = "Πολλαπλής Επιλογής (Πολλαπλές �
 $langFillBlanks = "Συμπλήρωμα Κενών";
 $langMatching = "Ταίριασμα";
 $langTrueFalse = "Σωστό / Λάθος";
+$langFreeText = "Ελεύθερου Κειμένου";
 $langFalse = "Λάθος";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
@@ -1307,7 +1449,7 @@ $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
-$langExerciseNotFound = "Η απάντηση δεν βρέθηκε";
+$langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 
 // exercise result.php
@@ -1328,6 +1470,7 @@ $langExerciseLis = "Λίστα ασκήσεων";
 $langExerciseEndTime = "Τέλος χρόνου";
 $langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults = "Αποτελέσματα";
+$langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langYourTotalScore2 = "Συνολική βαθμολογία";
 $langExerciseScores1 = "HTML";
@@ -2097,6 +2240,7 @@ $m['restricted'] = 'Ανοικτά μαθήματα με εγγραφή (Απα�
 $m['closed'] = 'Κλειστά μαθήματα';
 $m['title'] = 'Τίτλος';
 $m['description'] = 'Περιγραφή';
+$m['max_grade'] = 'Μέγιστη βαθμολογία';
 $m['professor'] = $langTeacher;
 $m['legend'] = 'Υπόμνημα';
 $m['legopen'] = 'Ανοικτό Μάθημα';
@@ -2391,7 +2535,7 @@ $langRegYou = "σας έχει εγγράψει στο μάθημα";
 $langTheU = "Ο χρήστης";
 $langAddedU = "έχει προστεθεί. Στάλθηκε ένα email σε αυτόν με το όνομα χρήστη του";
 $langAndP = "και το συνθηματικό του";
-$langDereg = "έχει διαγραφεί από αυτό το μάθημα";
+$langUserDeleted = "Ο χρήστης διαγράφηκε από το μάθημα";
 $langAddAU = "Προσθέστε ένα χρήστη";
 $langAdmR = "Δικαιώματα Διαχειριστή";
 $langAddHereSomeCourses = "<p>Για να εγγραφείτε / απεγγραφείτε σε / από ένα μάθημα,
@@ -2770,8 +2914,8 @@ $langUpgToSee = "Για να δείτε τις αλλαγές-βελτιώσει
 $langUpgRead = "Αν δεν το έχετε κάνει ήδη, παρακαλούμε διαβάστε και ακολουθήστε τις";
 $langUpgTooOld = 'Η έκδοση του Open eClass από την οποία γίνεται αναβάθμιση
    είναι πολύ παλιά. Αναβάθμιση στην έκδοση 3.x υποστηρίζεται από την
-   έκδοση 2.2 και μετά. Παρακαλούμε αναβαθμίστε την εγκατάστασή σας πρώτα
-   στην έκδοση 2.2 και στη συνέχεια στην τελευταία έκδοση.';
+   έκδοση 2.1.3 και μετά. Παρακαλούμε αναβαθμίστε την εγκατάστασή σας πρώτα
+   στην έκδοση 2.1.3 και στη συνέχεια στην τελευταία έκδοση.';
 $langSuccessOk = "Επιτυχία";
 $langSuccessBad = "Σφάλμα ή δεν χρειάζεται τροποποίηση";
 $langUpgAdminError = "Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.";
@@ -3087,18 +3231,18 @@ $langWikiAccessControl = "Διαχείριση ελέγχου πρόσβασης
 $langWikiAccessControlText = "Μπορείτε να θέσετε τα δικαιώματα πρόσβασης για τους χρήστες χρησιμοποιώντας το ακόλουθο πλέγμα: ";
 $langWikiAllPages = "Όλες οι σελίδες";
 $langWikiBackToPage = "Πίσω στη σελίδα";
-$langWikiConflictHowTo = "<p>Η σελίδα που θέλετε να αλλάξετε φαίνετε ότι έχει τροποποιηθεί από την τελευταία φορά που την τροποποίησατε.<br /><br />
-Τι θέλετε να γίνει;<ul>
-<li>Μπορείτε να αντιγράψετε/επικολλήσετε τις αλλαγές σας σε ένα κειμενογράφο και κάντε κλίκ 
-στο 'Αλλαγή τελευταίας έκδοσης' για να προσπαθήσετε να προσθέσετε τις αλλαγές σας στην καινούργια έκδοση της σελίδας.</li>
-<li>Μπορείτε επίσης να πατήσετε στο άκυρο για να ακυρώσετε τις αλλαγές σας.</li>
-</ul></p>";
+$langWikiLockInfo = "<p>Η σελίδα που θέλετε να αλλάξετε έχει κλειδωθεί, γίνεται επεξεργασία της από κάποιον άλλο χρήστη. Δοκιμάστε ξανά σε λίγο.</p>";
+$langWikiLockTimeRemaining = "Χρόνος κλειδώματος επεξεργασίας: ";
+$langWikiLockTimeEnd = "Η Wiki σελίδα έπαψε να είναι κλειδωμένη για επεξεργασία. Μπορείτε να συνεχίσετε να την επεξεργάζεστε, αλλά ενδέχεται να μην μπορέσετε να αποθηκεύσετε άμεσα τις αλλαγές σας";
 $langWikiContentEmpty = "Αυτή η σελίδα είναι κενή, κάνε κλικ στο 'Αλλαγή της σελίδας' για να προσθέσετε περιεχόμενο";
 $langWikiCourseMembers = "Μέλη μαθήματος ";
 $langWikiCreateNewWiki = "Δημιουργήστε ένα νέο Wiki";
 $langWikiCreatePrivilege = "Δημιουργήστε σελίδες ";
 $langWikiCreationSucceed = "Η δημιουργία του Wiki ήταν επιτυχημένη";
 $langWikiDeleteWiki = "Διαγραφή Wiki";
+$langWikiDeletePage = "Διαγραφή της Σελίδας";
+$langWikiDeletePageError = "Σφάλμα κατά τη διαγραφή της σελίδας";
+$langWikiDeletePageWarning = "Είστε σίγουροι ότι θέλετε να διαγράψετε τη Wiki σελίδα;";
 $langWikiDeleteWikiWarning = "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: πρόκειται να διαγράψετε αυτό το wiki και όλες τις σελίδες του. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;";
 $langWikiDeletionSucceed = "Η διαγραφή του Wiki ήταν επιτυχημένη";
 $langWikiDescription = "Περιγραφή του Wiki";
@@ -3111,12 +3255,13 @@ $langWikiDiffUnchangedLine = "Αμετάβλητη γραμμή ";
 $langWikiDifferenceKeys = "Κλειδιά:";
 $langWikiDifferencePattern = "διαφορές μεταξύ της έκδοσης %1\$s τροποποιημένης από %2\$s και της έκδοσης %3\$s τροποποιημένης από %4\$s";
 $langWikiDifferenceTitle = "Διαφορές:";
-$langWikiEditConflict = "Προειδοποίηση διένεξης";
+$langWikiEditLock = "Προειδοποίηση κλειδώματος";
 $langWikiEditLastVersion = "Αλλαγή τελευταίας έκδοσης";
 $langWikiEditPage = "Αλλαγή της σελίδας";
 $langWikiEditPrivilege = "Αλλαγή σελίδων";
 $langWikiEditProperties = "Αλλαγή ιδιοτήτων";
 $langWikiEditionSucceed = "Οι αλλαγές πραγματοποιηθήκαν";
+$langWikiExport = "Εξαγωγή του Wiki";
 $langWikiGroupMembers = "Μέλη ομάδας";
 $langWikiIdenticalContent = " Ίδιο περιεχόμενο <br />καμιά αλλαγή δεν αποθηκεύθηκε";
 $langWikiInvalidWikiId = "Μη έγκυρο Wiki";
@@ -3130,7 +3275,13 @@ $langWikiNotAllowedToRead = "Δεν επιτρέπεται να διαβάσετ
 $langWikiNumberOfPages = "Αριθμός σελίδων";
 $langWikiOtherUsers = "Άλλοι χρήστες (*)";
 $langWikiOtherUsersText = "(*) ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";
+$langWikiPageMakeCurrent = "(τρέχουσα)";
+$langSureToMakeWikiPageCurrent = "Είστε σίγουροι ότι θέλετε να κάνετε αυτή την έκδοση τρέχουσα;";
+$langWikiPageRevertedVersion = "Επαναφορά παλαιότερης έκδοσης";
+$langWikiPageDeleted = "Η σελίδα Wiki διαγράφηκε επιτυχώς";
 $langWikiPageHistory = "Ιστορικό σελίδας";
+$langWikiPageNotLoaded = "Η σελίδα %s δεν ήταν δυνατό να φορτωθεί";
+$langWikiPagePrintable = "Εκτυπώσιμη έκδοση";
 $langWikiPageSaved = "Η σελίδα αποθηκεύτηκε";
 $langWikiPreviewTitle = "Προεπισκόπηση: ";
 $langWikiPreviewWarning = " ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Αυτή η σελίδα είναι προεπισκόπηση!  Οι τροποποιήσεις σας στο wiki δεν έχουν αποθηκευτεί ακόμα! Για να τις αποθηκεύσετε κάντε κλικ στο 'Αποθήκευση'.";
@@ -3139,6 +3290,9 @@ $langWikiReadPrivilege = "Διάβασε τις σελίδες";
 $langWikiRecentChanges = "Πρόσφατες αλλαγές";
 $langWikiRecentChangesPattern = "%1\$s τροποποιήθηκε στις %2\$s από %3\$s";
 $langWikiShowDifferences = "Δείξε τις διαφορές";
+$langWikiSearchInPages = "Αναζήτηση στις σελίδες";
+$langWikiSearchResults = "Αποτελέσματα αναζήτησης";
+$langWikiSearchMissingKeywords = "Δεν εισήχθησαν λέξεις κλειδιά";
 $langWikiTitle = "Τίτλος του wiki";
 $langWikiTitleEdit = "Wiki : Αλλάξτε τις ιδιότητες";
 $langWikiTitleNew = "Wiki : Δημιουργήστε καινούργιο Wiki";
@@ -3166,6 +3320,11 @@ $wiki_toolbar['Unorderedlist'] = "Μη διατεταγμένη λίστα";
 $wiki_toolbar['Orderedlist'] = "Διατεταγμένη λίστα";
 $wiki_toolbar['Externalimage'] = "Εξωτερική εικόνα";
 $wiki_toolbar['Link'] = "Σύνδεσμος";
+$wiki_toolbar['Hr'] = "Οριζόντια Γραμμή";
+$wiki_toolbar['H1'] = "Επικεφαλίδα 1";
+$wiki_toolbar['H2'] = "Επικεφαλίδα 2";
+$wiki_toolbar['H3'] = "Επικεφαλίδα 3";
+$wiki_toolbar['H4'] = "Επικεφαλίδα 4";
 
 /* * ***********************************************************
  * work.php
@@ -3174,6 +3333,8 @@ $langBackAssignment = "Επιστροφή στη σελίδα της εργασ�
 $m['activate'] = "Ενεργοποίηση";
 $m['deactivate'] = "Απενεργοποίηση";
 $m['deadline'] = "Προθεσμία υποβολής";
+$m['deadline_notif'] = "(Kενό για εργασία χωρίς προθεσμία υποβολής)";
+$m['no_deadline'] = "Χωρίς Προθεσμία";
 $m['username'] = "Όνομα " . $langsOfStudent . " ";
 $m['filename'] = "Όνομα αρχείου";
 $m['sub_date'] = "Ημ/νία αποστολής";
@@ -3222,12 +3383,27 @@ $m['group_assignment_no_groups'] = 'Θα πρέπει <a href="%s">να εγγρ
         ομάδα</a> πριν μπορέσετε να υποβάλετε κάποιο αρχείο.';
 $m['noguest'] = 'Για να αποστείλετε εργασία πρέπει να συνδεθείτε ως κανονικός χρήστης.';
 $m['one_submission'] = 'Έχει υποβληθεί μία εργασία';
+$m['one_non_submission'] = 'Δεν έχει υποβληθεί μία εργασία';
 $m['more_submissions'] = 'Έχουν υποβληθεί %d εργασίες';
+$m['more_non_submissions'] = 'Δεν έχουν υποβληθεί %d εργασίες';
 $m['plainview'] = 'Συνοπτική λίστα εργασιών - βαθμολογίας';
 $m['WorkInfo'] = 'Στοιχεία εργασίας';
 $m['WorkView'] = 'Εργασίες μαθήματος';
 $m['WorkDelete'] = 'Διαγραφή εργασίας';
+$m['WorkSubsDelete']= 'Διαγραφή υποβολών εργασίας';
+$m['WorkDeleteAssignmentFile'] = 'Διαγραφή αρχείου εργασίας';
+$m['WorkDeleteAssignmentFileConfirm'] = 'Επιβεβαίωση διαγραφής αρχείου εργασίας';
 $m['WorkEdit'] = 'Τροποποίηση εργασίας';
+$m['WorkToUser'] = 'Συγκεκριμένους Εκπαιδευόμενους';
+$m['WorkToGroup'] = 'Συγκεκριμένες '.$langGroups;
+$m['WorkAssignTo'] = 'Ανάθεση σε';
+$m['WorkNoSubmission'] = 'Η υποβεβλημένη εργασία που ψάχνετε δεν υπάρχει.';
+$m['WorkUserGroupNoSubmission'] = 'Χρήστες/ομάδες χωρίς υποβολή';
+$m['WorkGroupNoSubmission'] = 'Ομάδες χρηστών που δεν έχουν υποβάλει εργασία';
+$m['NoneWorkGroupNoSubmission'] = 'Δεν υπάρχουν ομάδες χρηστών που δεν έχουν υποβάλει εργασία';
+$m['WorkUserNoSubmission'] = 'Χρήστες που δεν έχουν υποβάλει εργασία';
+$m['NoneWorkUserNoSubmission'] = 'Δεν υπάρχουν χρήστες που δεν έχουν υποβάλει εργασία';
+$m['WorkTitleValidation'] = 'Παρακαλώ εισάγετε Τίτλο Εργασίας';
 $m['SubmissionWorkInfo'] = 'Στοιχεία υποβολής εργασίας';
 $m['SubmissionStatusWorkInfo'] = 'Κατάσταση υποβολής εργασίας';
 $m['subm'] = 'Υποβλ.';
@@ -3256,7 +3432,11 @@ $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της ε
 $langEditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
 $langEditError = "Παρουσιάστηκε πρόβλημα κατά την διόρθωση των στοιχείων !";
 $langNewAssign = "Δημιουργία Εργασίας";
+$langNewAssignSuccess = "Η εργασία αποθηκεύτηκε με επιτυχία!";
 $langDeleted = "Η εργασία διαγράφηκε";
+$langAssignmentSubsDeleted = "Οι υποβολές της εργασίας διαγράφηκαν";
+$langAllAssignmentSubsDeleted = "Οι υποβολές όλων των εργασιών διαγράφηκαν";
+$langDelError = "Η εργασία δεν διαγράφηκε. Παρακαλώ προσπαθήστε ξανά.";
 $langDelAssign = "Διαγραφή Εργασίας";
 $langDelWarn1 = "Πρόκειται να διαγράψετε την εργασία με τίτλο";
 $langDelSure = "Είστε σίγουρος;";
@@ -3698,6 +3878,60 @@ $langCMeta['course_unit_description'] = "Αναλυτική περιγραφή �
 $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ενότητα";
 $langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
 $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
+
+/* * ******************************************
+  Messages for Big Blue Button
+ * ***************************************** */
+
+$langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
+$langAddBBBServer = "Προσθήκη εξυπηρετητή";
+$langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlueButton";
+$langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
+$langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
+$langBBBConfig = 'Ρυθμίσεις BigBlueButton';
+$langBBBEnabled = 'Διαθέσιμος';
+$langBBBOptions = 'Τροποποίηση';
+$langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
+$langBBBRemoveServer = 'Κατάργηση';
+
+$langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
+
+$langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
+$langBBB = "Τηλεδιάσκεψη";
+$langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
+$langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
+$langNewBBBSessionStart = "Έναρξη τηλεδιάσκεψης";
+$langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεδιάσκεψης";
+$langNewBBBSessionType = "Είδος τηλεδιάσκεψης";
+$langNewBBBSessionPublic = "Δημόσια προς τρίτους";
+$langNewBBBSessionPrivate = "Ιδιωτική";
+$langBBBSessionJoin = "Σύνδεση";
+
+$langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
+$langBBBDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
+
+$langNewBBBSessionStatus = "Κατάσταση";
+$langNewBBBSessionActive = "Ορατή";
+$langNewBBBSessionInActive = "Μη ορατή";
+
+$langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεδιάσκεψης πραγματοποιήθηκε επιτυχώς";
+
+$langBBBNoteEnableJoin = "Ο σύνδεσμος για σύνδεση είναι ενεργός μόνο για όσες τηλεδιασκέψεις είναι σε εξέλιξη";
+$langBBBNoteEnableJoinEditor = "Ο σύνδεσμος για σύνδεση ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
+
+$langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
+
+$langBBBSessionAvailable = "Ενεργοποίηση συμμετοχής";
+$langBBBMinutesBefore = "λεπτά νωρίτερα από την προγραμματισμένη έναρξη";
+
+$langBBBScheduledSession = "Προγραμματισμός τηλεδιάσκεψης";
+$langBBBScheduleSessionInfo = "Η τηλεδιάσκεψη με τίτλο ";
+$langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
+$langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλον του μαθήματος για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
+
+$langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του μαθήματος.";
+$langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 
 /* * ***********************************************************
  * blog.php

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,10 +21,9 @@
 
 $qry = "SELECT LEFT(surname, 1) AS first_letter FROM user
             GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+foreach (Database::get()->queryArray($qry) as $row) {
+    $first_letter = $row->first_letter;
     $letterlinks .= '<a href="?first=' . $first_letter . '">' . q($first_letter) . '</a> ';
 }
 
@@ -36,14 +36,13 @@ if (isset($_GET['first'])) {
 }
 
 $user_opts = '<option value="-1">' . $langAllUsers . "</option>\n";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    if ($u_user_id == $row['id']) {
+foreach (Database::get()->queryArray($qry) as $row) {
+    if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' . q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
+    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>\n";
 }
 
 $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ? ('selected') : ('')) . ' >' . $langDaily . "</option>\n" .

@@ -92,9 +92,7 @@ if ($submit) {
             isset($rid) ? ('?id=' . intval($rid)) : '';
 
     // check if user name exists
-    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user
-                        WHERE username=" . autoquote($uname));
-    $user_exist = (mysql_num_rows($username_check) > 0);
+    $user_exist = Database::get()->querySingle("SELECT username FROM user WHERE username=?s", $uname);
 
     // check if there are empty fields
     if (!$all_set) {
@@ -110,24 +108,18 @@ if ($submit) {
         validateNode(intval($depid), isDepartmentAdmin());
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
-        $inscr_user = db_query("INSERT INTO user
+        Database::get()->query("INSERT INTO user
                                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
-                                VALUES (" .
-                autoquote($surname_form) . ', ' .
-                autoquote($givenname_form) . ', ' .
-                autoquote($uname) . ", '$password_encrypted', " .
-                autoquote($email_form) .
-                ", $pstatus, " . autoquote($phone) . ", " . autoquote($am) . "
-                 , ".DBHelper::timeAfter()."
-                 , ".DBHelper::timeAfter(get_config('account_duration'))."
-                 , '$proflanguage', '', $verified_mail, '')");
+                                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s , " . DBHelper::timeAfter() . "
+                 , " . DBHelper::timeAfter(get_config('account_duration')) . "
+                 , ?s, '', ?s, '')", $surname_form, $givenname_form, $uname, $password_encrypted, $email_form, $pstatus, $phone, $am, $proflanguage, $verified_mail);
         $uid = mysql_insert_id();
         $user->refresh($uid, array(intval($depid)));
 
         // close request if needed
         if (!empty($rid)) {
             $rid = intval($rid);
-            db_query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = $rid");
+            Database::get()->query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = ?d", $rid);
         }
 
         if ($pstatus == 1) {
@@ -165,20 +157,20 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
     if (isset($_GET['id'])) { // if we come from prof request
         $id = intval($_GET['id']);
 
-        $res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email, faculty_id, phone, am,
-                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id = $id"));
-        $ps = $res['surname'];
-        $pn = $res['givenname'];
-        $pu = $res['username'];
-        $pe = $res['email'];
-        $pv = intval($res['verified_mail']);
-        $pt = intval($res['faculty_id']);
-        $pam = $res['am'];
-        $pphone = $res['phone'];
-        $pcom = $res['comment'];
-        $language = $res['lang'];
-        $pstatus = intval($res['status']);
-        $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
+        $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
+                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id =?d", $id);
+        $ps = $res->surname;
+        $pn = $res->givenname;
+        $pu = $res->username;
+        $pe = $res->email;
+        $pv = intval($res->verified_mail);
+        $pt = intval($res->faculty_id);
+        $pam = $res->am;
+        $pphone = $res->phone;
+        $pcom = $res->comment;
+        $language = $res->lang;
+        $pstatus = intval($res->status);
+        $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
 
         // faculty id validation
         validateNode($pt, isDepartmentAdmin());
@@ -214,9 +206,9 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
           <tr><th class='left'><b>$langSurname:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='surname_form' value='" . q($ps) . "' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langUsername:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='" . q($pu) . "' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langPass:</b></th>
-              <td><input class='FormData_InputText' type='text' name='password' value='" . genPass() . "' id='password' />&nbsp;<span id='result'></span></td></tr>
+              <td><input class='FormData_InputText' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  />&nbsp;<span id='result'></span></td></tr>
           <tr><th class='left'><b>$langEmail:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='" . q($pe) . "' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langEmailVerified:</b></th>

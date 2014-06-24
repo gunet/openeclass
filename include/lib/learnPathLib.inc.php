@@ -686,19 +686,16 @@ function display_my_exercises($dialogBox, $style) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 
-function display_my_documents($dialogBox, $style) {
-    global $is_editor;
+function display_my_documents($dialogBox, $style) {   
     global $courseDir;
     global $baseWorkDir;
     global $curDirName;
     global $curDirPath;
-    global $parentDir;
-    global $langAddModule;
+    global $parentDir;    
     global $langUp;
     global $langName;
     global $langSize;
-    global $langDate;
-    global $langOk;
+    global $langDate;    
     global $langAddModulesButton;
     global $fileList;
     global $themeimg;
@@ -708,14 +705,12 @@ function display_my_documents($dialogBox, $style) {
     /*
      * DISPLAY
      */
-
-    $output .= '<!-- display_my_documents output -->' . "\n";
+    
     $dspCurDirName = htmlspecialchars($curDirName);
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir = rawurlencode($parentDir);
 
-    $output .= '
-    <form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
+    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
 
     /* --------------------------------------
       DIALOG BOX SECTION
@@ -731,10 +726,10 @@ function display_my_documents($dialogBox, $style) {
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
-    <table width="99%" class="tbl">
-    <tr>
-      <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
-      <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
+        <table width="99%" class="tbl">
+        <tr>
+          <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
+          <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
         /* GO TO PARENT DIRECTORY */
         if ($curDirName) /* if the $curDirName is empty, we're in the root point
           and we can't go to a parent dir */ {
@@ -743,9 +738,7 @@ function display_my_documents($dialogBox, $style) {
                     "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
                     "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
         }
-        $output .= '
-    </tr>
-    </table>';
+        $output .= '</tr></table>';
     }
 
 
@@ -753,7 +746,7 @@ function display_my_documents($dialogBox, $style) {
     <table width="99%" class="tbl_alt" >';
     $output .= "
     <tr>
-      <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langName</div></th>
+      <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
       <th>$langSize</th>
       <th>$langDate</th>
       <th>$langSelection</th>
@@ -777,13 +770,8 @@ function display_my_documents($dialogBox, $style) {
             $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
 
-            if ($fileList['visible'][$fileKey] == 0) {
-                if ($is_editor) {
-                    $style = 'class="invisible"';
-                } else {
-                    $style = "";
-                    continue; // skip the display of this file
-                }
+            if ($fileList['visible'][$fileKey] == 0) {                
+                continue; // skip the display of this file                
             }
 
             if ($fileList['type'][$fileKey] == A_FILE) {
@@ -1688,16 +1676,19 @@ function get_limited_list($sql, $limiter) {
  */
 
 function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extraDepth = false) {
+    
     global $course_id;
+    
     $depth = ($extraDepth) ? "../" : "./";
 
-    if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id'])) {
+    if (!isset($_SESSION['path_id']) or !isset($_SESSION['lp_module_id']) 
+                        or empty($_SESSION['path_id']) or empty($_SESSION['lp_module_id'])) {
         header("Location: " . $depth . "index.php?course=$course_code");
         exit();
     }
 
     if ($extraQuery) {
-        $q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '" . (int) $_SESSION['path_id'] . "' AND `course_id` = $course_id");
+        $q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '" . $_SESSION['path_id'] . "' AND `course_id` = $course_id");
         $lp = mysql_fetch_array($q);
 
         if (!$is_editor && $lp['visible'] == 0) {
@@ -1707,26 +1698,23 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
         }
 
         if (!$is_editor) {
-            $lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`");
-            if ($lps != false) {
-                $block_met = false;
-                foreach ($lps as $lp) {
-                    if ($lp['learnPath_id'] == $_SESSION['path_id']) {
-                        if ($block_met) {
-                            // if a previous learning path was blocked, don't allow users in it
-                            header("Location: " . $depth . "index.php?course=$course_code");
-                            exit();
-                        } else
-                            break; // our lp is surely not in the block list
-                    }
-                    if ($lp['lock'] == "CLOSE")
-                        $block_met = true;
-                }
+            // check for blocked learning path
+                $lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
+                                    WHERE learnPath_id = $_SESSION[path_id] AND `course_id` = $course_id ORDER BY `rank`");
+                 $q = db_query("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id AND `rank` < $lps[rank]");
+                while ($lp = mysql_fetch_array($q)) {
+                    if ($lp['lock'] == 'CLOSE') {
+                        $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                                
+                        if ($prog < 100) {                                
+                            header("Location: ./index.php?course=$course_code");
+                        }
+                 }
             }
         }
     }
 
-    $q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '" . (int) $_SESSION['path_id'] . "' AND module_id = '" . (int) $_SESSION['lp_module_id'] . "'");
+    $q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '" . $_SESSION['path_id'] . "' 
+                                AND module_id = '" . $_SESSION['lp_module_id'] . "'");
     $lpm = mysql_fetch_array($q2);
     if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
         // if the combination path/module is invalid, don't allow users in it
@@ -1736,8 +1724,8 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
     if (!$is_editor) { // check if we try to overwrite a blocked module
             $lpm_id = db_query_get_single_row("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
-                                    WHERE `learnPath_id` = ".intval($_SESSION['path_id'])."
-                                    AND module_id = " .intval($_SESSION['lp_module_id'])."");
+                                    WHERE `learnPath_id` = ". $_SESSION['path_id']."
+                                    AND module_id = " . $_SESSION['lp_module_id']."");
                     $q = db_query("SELECT learnPath_module_id FROM lp_rel_learnPath_module WHERE learnPath_id = " . $_SESSION['path_id'] . " 
                                                     AND `rank` < " . $lpm_id['rank'] . "");
                 while ($m = mysql_fetch_array($q)) {

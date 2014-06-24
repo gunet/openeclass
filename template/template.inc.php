@@ -318,7 +318,11 @@ class Template {
         $reg = "/[ \t]*<!--\s+BEGIN $varname\s+-->\s*?\n?(\s*.*?\n?)\s*<!--\s+END $varname\s+-->\s*?\n?/sm";
         preg_match_all($reg, $str, $m);
         $str = preg_replace($reg, "{%" . "$name%}", $str);
-        $this->set_var($varname, $m[1][0]);
+        if (isset($m[1][0])) {
+            $this->set_var($varname, $m[1][0]);
+        } else {
+            $this->halt("set_block: unable to load $varname from $parent.");
+        }
         $this->set_var($parent, $str);
         return true;
     }

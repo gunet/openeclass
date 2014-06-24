@@ -1,14 +1,17 @@
 syntax: regexp
+
+^\.htaccess$
+
 ^courses/
 ^video/
 ^config/.*\.php
 ^html/
-^nbproject/private/
-^\.htaccess
 
-syntax: regexp
+^nbproject/private/
+
 ^\.buildpath$
-syntax: regexp
 ^\.project$
-syntax: regexp
 ^\.settings$
+^\.htaccess$
+syntax: glob
+include\main_lib.php.orig

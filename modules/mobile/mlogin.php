@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+header('Content-Type: application/xml; charset=utf-8');
 
 if (isset($_POST['token'])) {
     $require_mlogin = true;
@@ -75,7 +76,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $pass = autounquote($_POST['pass']);
 
     foreach (array_keys($_SESSION) as $key)
-        unset($_SESSION[$key]);    
+        unset($_SESSION[$key]);
 
     $sqlLogin = "SELECT *
                    FROM user
@@ -85,20 +86,18 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     } else {
         $sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
     }
-    $result = db_query($sqlLogin);
-
-    while ($myrow = mysql_fetch_assoc($result)) {
-        if (in_array($myrow['password'], $auth_ids)) {
-            $ok = alt_login($myrow, $uname, $pass);
-        } else {
-            $ok = login($myrow, $uname, $pass);
-        }
+    $myrow = Database::get()->querySingle($sqlLogin);
+    $myrow = (array) $myrow;
+    if (in_array($myrow['password'], $auth_ids)) {
+        $ok = alt_login($myrow, $uname, $pass);
+    } else {
+        $ok = login($myrow, $uname, $pass);
     }
 
     if (isset($_SESSION['uid']) && $ok == 1) {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                               VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
-
+        session_regenerate_id();
         set_session_mvars();
         echo session_id();
     } else
@@ -116,7 +115,7 @@ function set_session_mvars() {
               WHERE course_user.user_id = ?d ";
     $visible = " AND course.visible != ?d ";
     $order = " ORDER BY status, course.title, course.prof_names";
-    
+
     $callback = function($course) use (&$status) {
         $status[$course->code] = $course->status;
     };
@@ -134,5 +133,4 @@ function set_session_mvars() {
 
     $_SESSION['courses'] = $status;
     $_SESSION['mobile'] = true;
-    
 }

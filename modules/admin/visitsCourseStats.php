@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -23,7 +24,6 @@
  * @description Shows statistics conserning the number of visits on courses for a time period.
   Statistics can be shown for a specific course or for all courses.
  */
-
 $require_admin = true;
 
 require_once '../../include/baseTheme.php';
@@ -123,69 +123,65 @@ switch ($u_interval) {
 
 if ($u_course_id == -1) {
     //show chart for all courses
-    $qry1 = "SELECT id FROM course";
-    $res1 = db_query($qry1);
-
+    $res1 = Database::get()->queryArray("SELECT id FROM course");
     $point = array();
-    while ($row1 = mysql_fetch_assoc($res1)) {
-        $cid = $row1['id'];
-        $query = "SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
+    foreach ($res1 as $row1) {
+        $cid = $row1->id;
+
+        $result = Database::get()->queryArray("SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
                         WHERE course_id = $cid AND $date_where $date_group
-                        ORDER BY day ASC";
-        $result = db_query($query);
+                        ORDER BY day ASC");
 
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {
+                foreach ($result as $$row) {
                     if (array_key_exists($langSummary, $point)) {
-                        $point[$langSummary] += $row['cnt'];
+                        $point[$langSummary] += $row->cnt;
                     } else {
-                        $point[$langSummary] = $row['cnt'];
+                        $point[$langSummary] = $row->cnt;
                     }
                 }
                 break;
             case "daily":
-                while ($row = mysql_fetch_assoc($result)) {
-                    if (array_key_exists($row['date'], $point)) {
-                        $point[$row['date']] += $row['cnt'];
+                foreach ($result as $$row) {
+                    if (array_key_exists($row->date, $point)) {
+                        $point[$row->date] += $row->cnt;
                     } else {
-                        $point[$row['date']] = $row['cnt'];
+                        $point[$row->date] = $row->cnt;
                     }
                 }
                 break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $week = $row['week_start'] . ' - ' . $row['week_end'];
+                foreach ($result as $$row) {
+                    $week = $row->week_start . ' - ' . $row->week_end;
                     if (array_key_exists($week, $point)) {
-                        $point[$week] += $row['cnt'];
+                        $point[$week] += $row->cnt;
                     } else {
-                        $point[$week] = $row['cnt'];
+                        $point[$week] = $row->cnt;
                     }
                 }
                 break;
             case "monthly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $month = $langMonths[$row['month']];
+                foreach ($result as $$row) {
+                    $month = $langMonths[$row->month];
                     if (array_key_exists($month, $point)) {
-                        $point[$month] += $row['cnt'];
+                        $point[$month] += $row->cnt;
                     } else {
-                        $point[$month] = $row['cnt'];
+                        $point[$month] = $row->cnt;
                     }
                 }
                 break;
             case "yearly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $year = $row['year'];
+                foreach ($result as $$row) {
+                    $year = $row->year;
                     if (array_key_exists($year, $point)) {
-                        $point[$year] += $row['cnt'];
+                        $point[$year] += $row->cnt;
                     } else {
-                        $point[$year] = $row['cnt'];
+                        $point[$year] = $row->cnt;
                     }
                 }
                 break;
         }
-        if ($result !== false)
-            mysql_free_result($result);
     }
 
     if ($u_interval != "monthly") {
@@ -199,47 +195,42 @@ if ($u_course_id == -1) {
         $chart->growWithPoint(key($point), $newp);
         next($point);
     }
-    if ($res1 !== false) {
-        mysql_free_result($res1);
-    }
 } else {    //show chart for a specific course
     $cid = course_code_to_id($u_course_id);
-    $query = "SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
-                WHERE course_id = $cid AND $date_where $date_group ORDER BY day ASC";
-    $result = db_query($query);
+
+    $result = Database::get()->queryArray("SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
+                WHERE course_id = $cid AND $date_where $date_group ORDER BY day ASC");
 
     $chart = new Plotter();
     $chart->setTitle($langVisits);
 
     switch ($u_interval) {
         case "summary":
-            while ($row = mysql_fetch_assoc($result)) {
-                $chart->growWithPoint($langSummary, $row['cnt']);
+            foreach ($result as $$row) {
+                $chart->growWithPoint($langSummary, $row->cnt);
             }
             break;
         case "daily":
-            while ($row = mysql_fetch_assoc($result)) {
-                $chart->growWithPoint($row['date'], $row['cnt']);
+            foreach ($result as $$row) {
+                $chart->growWithPoint($row->date, $row->cnt);
             }
             break;
         case "weekly":
-            while ($row = mysql_fetch_assoc($result)) {
-                $chart->growWithPoint($row['week_start'] . ' - ' . $row['week_end'], $row['cnt']);
+            foreach ($result as $$row) {
+                $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
             }
             break;
         case "monthly":
-            while ($row = mysql_fetch_assoc($result)) {
-                $chart->growWithPoint($langMonths[$row['month']], $row['cnt']);
+            foreach ($result as $$row) {
+                $chart->growWithPoint($langMonths[$row->month], $row->cnt);
             }
             break;
         case "yearly":
-            while ($row = mysql_fetch_assoc($result)) {
-                $chart->growWithPoint($row['year'], $row['cnt']);
+            foreach ($result as $$row) {
+                $chart->growWithPoint($row->year, $row->cnt);
             }
             break;
     }
-    if ($result !== false)
-        mysql_free_result($result);
 }
 
 $tool_content .= $chart->plot($langNoStatistics);
@@ -249,14 +240,12 @@ $tool_content .= $chart->plot($langNoStatistics);
  * ************************************************************************* */
 
 //possible courses
-$qry = "SELECT LEFT(title, 1) AS first_letter FROM course
-            GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+Database::get()->queryFunc("SELECT LEFT(title, 1) AS first_letter FROM course GROUP BY first_letter ORDER BY first_letter"
+        , function ($row) use(&$letterlinks) {
+    $first_letter = $row->first_letter;
     $letterlinks .= '<a href="?first=' . $first_letter . '">' . $first_letter . '</a> ';
-}
+});
 
 if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
@@ -267,14 +256,14 @@ if (isset($_GET['first'])) {
 }
 
 $cours_opts = '<option value="-1">' . $langAllCourses . "</option>\n";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    if ($u_course_id == $row['code']) {
+$result = Database::get()->queryArray($qry);
+foreach ($result as $row) {
+    if ($u_course_id == $row->code) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $cours_opts .= '<option ' . $selected . ' value="' . $row["code"] . '">' . $row['title'] . "</option>\n";
+    $cours_opts .= '<option ' . $selected . ' value="' . $row->code . '">' . $row->title . "</option>\n";
 }
 
 //possible time intervals

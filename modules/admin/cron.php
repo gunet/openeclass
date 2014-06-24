@@ -155,7 +155,6 @@ function summarizeMonthlyData() {
         $sql = "INSERT INTO monthly_summary SET month = ?s, profesNum = ?d, studNum = ?d,
             visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
         Database::get()->query($sql, $last_month, $prof_sum, $stud_sum, $vis_sum, $cours_sum, $login_sum, $mtext);
-        db_query($sql);
     }
 }
 

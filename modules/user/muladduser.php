@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -101,14 +101,20 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
 
 draw($tool_content, 2);
 
+/**
+ * @brief find if user exists according to criteria
+ * @param type $user
+ * @param type $field
+ * @return boolean
+ */
 function finduser($user, $field) {
 
-    $result = db_query("SELECT user_id FROM user WHERE $field=" . autoquote($user));
-    if (!mysql_num_rows($result)) {
+    $result = Database::get()->querySingle("SELECT id FROM user WHERE $field=" . autoquote($user));
+    if ($result) {
+        $userid = $result->id;
+    } else {
         return false;
     }
-    list($userid) = mysql_fetch_array($result);
-
     return $userid;
 }
 
@@ -120,16 +126,16 @@ function finduser($user, $field) {
  */
 function adduser($userid, $cid) {
 
-    $result = db_query("SELECT * FROM course_user WHERE user_id = $userid AND course_id = $cid");
-    if (mysql_num_rows($result) > 0) {
+    $result = Database::get()->querySingle("SELECT * FROM course_user WHERE user_id = ?d AND course_id = ?d", $userid, $cid);
+    if ($result) {
         return false;
+    } else {
+        Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date)
+                                   VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $userid, $cid);
+
+        Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,
+                                                             'right' => '+5'));
+        return true;
     }
-
-    db_query("INSERT INTO course_user (user_id, course_id, status, reg_date)
-                                   VALUES ($userid, $cid, " . USER_STUDENT . ", CURDATE())");
-
-    Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,
-        'right' => '+5'));
-
-    return true;
+    
 }

@@ -62,8 +62,9 @@ $icons = array(
     0 => "<img src='$themeimg/lock_closed.png'       alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
 );
 
-if (count($tree->buildRootsArray()) > 1)
+if (count($tree->buildRootsArray()) > 1) {
     $tool_content .= $tree->buildRootsSelectForm($fc);
+}
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>
@@ -194,8 +195,12 @@ if (count($courses) > 0) {
     }
 
     $tool_content .= "</table>";
-} else
-    $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
+} else {
+    $subTrees = $tree->buildSubtrees(array($fc));
+    if (count($subTrees) <= 1) { // is leaf
+        $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
+    }
+}
 
 $head_content = '';
 

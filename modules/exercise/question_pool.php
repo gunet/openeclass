@@ -200,6 +200,8 @@ if ($is_editor) {
                 $answerType = $langMatching;
             } elseif ($row['type'] == 5) {
                 $answerType = $langTrueFalse;
+            } elseif ($row['type'] == 6) {
+                $answerType = $langFreeText;
             }
             if ($i % 2 == 0) {
                 $tool_content .= "\n    <tr class='even'>";

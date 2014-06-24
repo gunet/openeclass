@@ -72,7 +72,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     </td>
                   </tr>";
     }
-
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
+         $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
+    }
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
@@ -81,7 +83,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape(($answer)));
+            $replace_callback = function () use ($questionId) {
+                    static $id = 0;
+                    $id++;
+                    return "<input type='text' name='choice[$questionId][$id]' size='10'>";
+            };
+            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape(($answer)));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
@@ -174,8 +181,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
                           </tr>";
         }
     } // end for()
-
-    if (!$nbrAnswers) {
+    if ($answerType == FREE_TEXT) {
+            $tool_content .= "
+                          <tr class='even'>
+                            <td align='center'>".  rich_text_editor('choice['.$questionId.']', 14, 90, '', '')."</td></tr>";            
+    }   
+    if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "
                   <tr>
                     <td colspan='2'><p class='caution'>$langNoAnswer</td>

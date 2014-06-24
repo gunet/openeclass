@@ -218,7 +218,6 @@ function showlinks() {
                       <tbody>";
     $i = 1;
     while ($myrow = mysql_fetch_array($result)) {
-        $myrow[3] = parse_tex($myrow[3]);
         $output .= "
                 <tr>
                 <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>

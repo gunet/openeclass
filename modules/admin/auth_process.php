@@ -101,7 +101,7 @@ if (!empty($_SESSION['cas_warn']) and $auth == 7) {
     $tool_content .= "<p class='alert1'>$langCASnochange</p>";
 }
 
-if ($submit or !empty($_SESSION['cas_do'])) {
+if ($submit or ! empty($_SESSION['cas_do'])) {
     if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
         // test new CAS settings
         $cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
@@ -124,7 +124,7 @@ if ($submit or !empty($_SESSION['cas_do'])) {
     // if form is submitted
     if (isset($_POST['submit']) or $cas_valid == true) {
         $tool_content .= "<br /><p>$langConnTest</p>";
-        if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
+        if (($auth == 6) or ( isset($cas_valid) and $cas_valid == true)) {
             $test_username = $test_password = " ";
         }
         // when we come back from CAS
@@ -157,7 +157,7 @@ if ($submit or !empty($_SESSION['cas_do'])) {
                     'dbtable' => $dbtable,
                     'dbfielduser' => $dbfielduser,
                     'dbfieldpass' => $dbfieldpass,
-					'dbpassencr' => $dbpassencr);
+                    'dbpassencr' => $dbpassencr);
                 break;
             case '6':
                 if ($checkseparator) {
@@ -224,22 +224,24 @@ if ($submit or !empty($_SESSION['cas_do'])) {
             if ($auth != 6) {
                 $auth_settings = pack_settings($settings);
             }
-            $qry = "UPDATE auth
-            			SET auth_settings = '" . mysql_real_escape_string($auth_settings) . "',
-                            auth_instructions = " . autoquote($auth_instructions) . ",
+            $result = Database::get()->query("UPDATE auth
+            			SET auth_settings = ?s,
+                            auth_instructions = ?s,
                             auth_default = 1,
-                            auth_name = '$auth_ids[$auth]'
+                            auth_name = ?s
                         WHERE
-                        	auth_id = ".$auth;
-            $sql2 = db_query($qry); // do the update as the default method
-            if ($sql2) {
-                if (mysql_affected_rows() == 1) {
+                        	auth_id = ?d"
+                    , function ($error) use(&$tool_content, $langErrActiv) {
+                $tool_content .= "<p class='alert1'>$langErrActiv</p>";
+            }, $auth_settings, $auth_instructions, $auth_ids[$auth], $auth);
+            if ($result) {
+                if ($result->affectedRows == 1) {
                     $tool_content .= "<p class='success'>$langHasActivate</p>";
                 } else {
                     $tool_content .= "<p class='alert1'>$langAlreadyActiv</p>";
                 }
             } else {
-                $tool_content .= "<p class='alert1'>$langErrActiv</p>";
+                
             }
         }
     }
@@ -288,9 +290,9 @@ if ($submit or !empty($_SESSION['cas_do'])) {
     if ($auth != 6 && $auth != 7) {
         $tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
-		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='" . q(canonicalize_whitespace($test_username)) . "'></td></tr>
+		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'></td></tr>
 		<tr><th class='left'>$langPass: </th>
-		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='" . q($test_password) . "'></td></tr>";
+		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='" . q($test_password) . "' autocomplete='off'></td></tr>";
     }
     $tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
     $tool_content .= "</table></fieldset></form>";

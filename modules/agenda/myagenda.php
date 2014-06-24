@@ -40,15 +40,7 @@ require_once 'include/lib/textLib.inc.php';
 $nameTools = $langMyAgenda;
 $year = '';
 $month = '';
-$query = db_query("SELECT course.code k, course.public_code fc,
-                         course.title i, course.prof_names t, course.id id
-                            FROM course, course_user, course_module
-                            WHERE course.id = course_user.course_id
-                            AND course.visible != " . COURSE_INACTIVE . "
-                            AND course_user.user_id = $uid
-                            AND course_module.module_id  = " . MODULE_ID_AGENDA . "
-                            AND course_module.visible = 1
-                            AND course_module.course_id = course.id");
+
 $today = getdate();
 if (isset($_GET['year'])) {
     $year = intval($_GET['year']);
@@ -61,7 +53,7 @@ if (isset($_GET['month'])) {
     $month = $today['mon'];
 }
 
-$agendaitems = get_agendaitems($query, $month, $year);
+$agendaitems = get_agendaitems($month, $year);
 $monthName = $langMonthNames['long'][$month - 1];
 display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName, $langToday);
 
@@ -74,21 +66,35 @@ display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long']
  * @param string $year
  * @return array of agenda items
  */
-function get_agendaitems($query, $month, $year) {
-    global $urlServer;
+function get_agendaitems($month, $year) {
+    global $urlServer, $uid;
 
+    if ($month < 10) {
+        $month = '0'.$month;
+    }
+    
+    $query = Database::get()->queryArray("SELECT course.code k, course.public_code fc,
+                                course.title i, course.prof_names t, course.id id
+                            FROM course, course_user, course_module
+                            WHERE course.id = course_user.course_id
+                            AND course.visible != " . COURSE_INACTIVE . "
+                            AND course_user.user_id = $uid
+                            AND course_module.module_id  = " . MODULE_ID_AGENDA . "
+                            AND course_module.visible = 1
+                            AND course_module.course_id = course.id");
+    
     $items = array();    
-    while ($mycours = mysql_fetch_array($query)) {
-        $result = db_query("SELECT * FROM agenda WHERE course_id = " . $mycours['id'] . "
-                                        AND DATE_FORMAT(start, '%m') = '$month'
-                                        AND DATE_FORMAT(start, '%Y') = '$year'
-                                        AND visible = 1");
+    foreach ($query as $mycours) {
+        $result = Database::get()->queryArray("SELECT * FROM agenda WHERE course_id = ?d
+                                        AND DATE_FORMAT(start, '%m') = ?s
+                                        AND DATE_FORMAT(start, '%Y') = ?s
+                                        AND visible = 1", $mycours->id, $month, $year);
 
-        while ($item = mysql_fetch_array($result)) {
-            $URL = $urlServer . "modules/agenda/index.php?course=" . $mycours['k'];
-            $agendadate = date('d', strtotime($item['start']));
-            $time = date('H:i', strtotime($item['start']));
-            $items[$agendadate][$time] = "<br /><small>($time) <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[title]</small>";
+        foreach ($result as $item) {
+            $URL = $urlServer . "modules/agenda/index.php?course=" . $mycours->k;
+            $agendadate = date('d', strtotime($item->start));
+            $time = date('H:i', strtotime($item->start));
+            $items[$agendadate][$time] = "<br /><small>($time) <a href='$URL' title='$mycours->i ($mycours->fc)'>$mycours->i</a> $item->title</small>";
         }
     }
 

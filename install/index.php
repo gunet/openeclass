@@ -640,10 +640,15 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
 
     // create config, courses directories etc.
     mkdir_or_error('config');
+    touch_or_error('config/index.htm');
     mkdir_or_error('courses');
+    touch_or_error('courses/index.htm');
     mkdir_or_error('courses/temp');
+    touch_or_error('courses/temp/index.htm');
     mkdir_or_error('courses/userimg');
+    touch_or_error('courses/userimg/index.htm');
     mkdir_or_error('courses/commondocs');
+    touch_or_error('courses/commondocs/index.htm');
     mkdir_or_error('video');
     touch_or_error('video/index.htm');
 
@@ -672,6 +677,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     $tool_content .= "</ul><p class='sub_title1'>$langOptionalPHP</p>";
     $tool_content .= "<ul class='installBullet'>";
     warnIfExtNotLoaded("ldap");
+    warnIfExtNotLoaded("curl");
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='caution'>$langWarningInstall1</div>";

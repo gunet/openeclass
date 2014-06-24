@@ -88,11 +88,11 @@ if (!isset($_POST['changePass'])) {
   <table class='tbl' width='100%'>
   <tr>
     <th class='left' width='160'>$langNewPass1:</th>
-    <td><input type='password' size='40' name='password_form' value='' id='password' />&nbsp;<span id='result'></span></td>
+    <td><input type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span></td>
   </tr>
   <tr>
     <th class='left'>$langNewPass2:</th>
-    <td><input type='password' size='40' name='password_form1' value='' /></td>
+    <td><input type='password' size='40' name='password_form1' value='' autocomplete='off' /></td>
   </tr>
   <tr>
     <th class='left'>&nbsp;</th>
@@ -116,8 +116,7 @@ if (!isset($_POST['changePass'])) {
     // All checks ok. Change password!
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_POST['password_form']);
-    $sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `id` = $userid";
-    db_query($sql, $mysqlMainDb);
+    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
     $tool_content .= mes($langPassChanged, $langHome, 'success');
     draw($tool_content, 3);
     exit();

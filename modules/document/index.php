@@ -486,7 +486,7 @@ if ($can_upload) {
                         <table class='tbl' width='100%'>
                         <tr>
                                 <th>$langNameDir</th>
-                                <td width='1'><input type='text' name='newDirName' /></td>
+                                <td width='190'><input type='text' name='newDirName' /></td>
                                 <td><input type='submit' value='$langCreateDir' /></td>
                         </tr>
                         </table>
@@ -1276,11 +1276,11 @@ if (defined('SAVED_COURSE_CODE')) {
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);
 
-function select_proper_filters() {
+function select_proper_filters($requestDocsFilter) {
     $filter = '';
     $compatiblePlugin = true;
 
-    switch ($_REQUEST['docsfilter']) {
+    switch ($requestDocsFilter) {
         case 'image':
             $ors = '';
             foreach (MultimediaHelper::getSupportedImages() as $imgfmt)

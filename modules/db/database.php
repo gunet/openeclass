@@ -22,7 +22,7 @@
 
 define("DB_TYPE", "MYSQL");
 
-require_once 'modules/db/dbhelper.php';
+require_once 'dbhelper.php';
 
 final class DBResult {
 
@@ -50,7 +50,7 @@ final class Database {
     private static $dbs = array();
 
     /**
-     * Get a database on its name: this is a static method
+     * Get a database with a specific name. It might throw an exception, if the database does not exist.
      * @param type $dbase The name of the database. Could be missing (or null) for the default database.
      * @return Database|null The database object
      */
@@ -61,12 +61,8 @@ final class Database {
         if (array_key_exists($dbase, self::$dbs)) {
             $db = self::$dbs[$dbase];
         } else {
-            try {
-                $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);
-                self::$dbs[$dbase] = $db;
-            } catch (Exception $e) {
-                return null;
-            }
+            $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);   // might throw exception
+            self::$dbs[$dbase] = $db;
         }
         return $db;
     }
@@ -75,6 +71,7 @@ final class Database {
      * @var PDO
      */
     private $dbh;
+    private $attribute;
 
     /**
      * @param string $server
@@ -245,15 +242,15 @@ final class Database {
         $backtrace_entry = debug_backtrace();
         $backtrace_info = $backtrace_entry[2];
 
-        $isTransactional &= !$this->dbh->inTransaction();
+        $isTransactional &=!$this->dbh->inTransaction();
         if (is_null($statement) || !is_string($statement) || empty($statement))
-            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), null, $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))
-            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), null, $statement, $init_time, $backtrace_info);
 
         /* Start transaction, if required */
         if ($isTransactional && !$this->dbh->beginTransaction())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", null, $statement, $init_time, $backtrace_info);
 
         /* flatten parameter array */
         $flatten = array();
@@ -268,7 +265,7 @@ final class Database {
         $variable_size = count($statement_parts) - 1;   // Do not take into account first part
         $variable_types = array($variable_size);
         if ($variable_size < count($variables)) {
-            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::INFO);
+            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::ERROR);
         } else if ($variable_size > count($variables)) {
             Database::dbg("Provided variables are <b>less</b> than the required statement fields", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
             die();
@@ -327,35 +324,39 @@ final class Database {
         /* Prepare statement */
         $stm = $this->dbh->prepare($statement);
         if (!$stm)
-            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $this->dbh->errorInfo(), $statement, $init_time, $backtrace_info);
 
         /* Bind values - with type safety and '?' notation  */
         for ($i = 0; $i < $variable_size; $i++) {
             if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
-                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, $backtrace_info, false);
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $stm->errorInfo(), $statement, $init_time, $backtrace_info, false);
         }
 
         /* Execute statement */
         if (!$stm->execute())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time, $backtrace_info);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
 
         /* fetch results */
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
             if ($result != false && !is_object($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time, $backtrace_info);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
+            $func_affected_rows = 0;
             if ($callback_fetch)
                 while (TRUE)
-                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
+                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res)) {
+                        $result = new DBResult(0, $func_affected_rows);
                         break;
+                    } else
+                        $func_affected_rows++;
         }
         /* Close transaction, if required */
         if ($isTransactional)
@@ -364,12 +365,48 @@ final class Database {
         return $result;
     }
 
-    private function errorFound($callback_error, $isTransactional, $error_msg, $statement, $init_time, $backtrace_info, $close_transaction = true) {
+    public function transaction($function) {
+        if (is_callable($function)) {
+            $needsTransaction = !$this->dbh->inTransaction();
+            if ($needsTransaction)
+                $this->dbh->beginTransaction();
+            try {
+                $function();
+            } catch (Exception $ex) {
+                if ($needsTransaction)
+                    $this->dbh->rollBack();
+                throw $ex;
+            }
+            if ($needsTransaction)
+                $this->dbh->commit();
+        } else {
+            $backtrace_entry = debug_backtrace();
+            $backtrace_info = $backtrace_entry[1];
+            Debug::message("Transaction needs a function as parameter", $backtrace_info['file'], $backtrace_info['line']);
+        }
+    }
+
+    /**
+     * Return an object with server information
+     * @return DatabaseAttributes attributes object
+     */
+    public function attributes() {
+        if (!$this->attribute) {
+            $this->attribute = new DatabaseAttributes($this->dbh);
+        }
+        return $this->attribute;
+    }
+
+    private function errorFound($callback_error, $isTransactional, $error_msg, $pdo_error, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
         if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-        Database::dbg("Error: " . $error_msg, $statement, $init_time, $backtrace_info);
+        if ($pdo_error)
+            $pdo_error_text = " with error: \"" . $pdo_error[2] . "\" (SQLSTATE=" . $pdo_error[1] . " ERROR=" . $pdo_error[0] . ")";
+        else
+            $pdo_error_text = "";
+        Database::dbg("Error: " . $error_msg . $pdo_error_text, $statement, $init_time, $backtrace_info);
         return null;
     }
 
@@ -377,7 +414,65 @@ final class Database {
      * Private function to call master Debug object
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+        Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+    }
+
+}
+
+class DatabaseAttributes {
+
+    private $dbh;
+
+    function __construct($dbh) {
+        $this->dbh = $dbh;
+    }
+
+    function autocommit() {
+        return $this->dbh->getAttribute(PDO::ATTR_AUTOCOMMIT);
+    }
+
+    function textCase() {
+        return $this->dbh->getAttribute(PDO::ATTR_CASE);
+    }
+
+    function clientVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    }
+
+    function connectionStatus() {
+        return $this->dbh->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+    }
+
+    function driverName() {
+        return $this->dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
+
+    function errorMode() {
+        return $this->dbh->getAttribute(PDO::ATTR_ERRMODE);
+    }
+
+    function oracleNulls() {
+        return $this->dbh->getAttribute(PDO::ATTR_ORACLE_NULLS);
+    }
+
+    function persistent() {
+        return $this->dbh->getAttribute(PDO::ATTR_PERSISTENT);
+    }
+
+    function prefech() {
+        return $this->dbh->getAttribute(PDO::ATTR_PREFETCH);
+    }
+
+    function serverInfo() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_INFO);
+    }
+
+    function serverVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_VERSION);
+    }
+
+    function timeout() {
+        return $this->dbh->getAttribute(PDO::ATTR_TIMEOUT);
     }
 
 }
