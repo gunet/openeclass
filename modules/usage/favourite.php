@@ -91,7 +91,7 @@ $date_where = " (day BETWEEN " . quote("$u_date_start") .
         ' AND ' . quote("$u_date_end") . ") ";
 
 if ($u_user_id != -1) {
-    $user_where = "AND id = " . intval($u_user_id) . "";
+    $user_where = "AND user_id = " . intval($u_user_id) . "";
 } else {
     $user_where = '';
 }
@@ -99,95 +99,85 @@ if ($u_user_id != -1) {
 $chart_error = "";
 switch ($u_stats_value) {
     case "visits":
-        $query = "SELECT module_id, SUM(hits) AS cnt FROM actions_daily
-                        WHERE $date_where AND
-                              course_id = $course_id
-                              $user_where
-                        GROUP BY module_id";
-
-        $result = db_query($query);
         $chart = new Plotter(400, 300);
-        $chart->setTitle("$langFavourite");
-        while ($row = mysql_fetch_assoc($result)) {
-            $mid = $row['module_id'];
+        $chart->setTitle("$langFavourite");        
+        $result = Database::get()->queryArray("SELECT module_id, SUM(hits) AS cnt FROM actions_daily
+                        WHERE $date_where AND
+                              course_id = ?d
+                              $user_where
+                        GROUP BY module_id", $course_id);        
+        foreach ($result as $row) {
+            $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course units
-                $chart->growWithPoint($langCourseUnits, $row['cnt']);
+                $chart->growWithPoint($langCourseUnits, $row->cnt);
             } else { // other modules
-                $chart->growWithPoint($modules[$mid]['title'], $row['cnt']);
+                $chart->growWithPoint($modules[$mid]['title'], $row->cnt);
             }
         }
-
         $chart_error = $langNoStatistics;
         break;
 
-    case "duration":
-        $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
-                        WHERE $date_where
-                        AND course_id = $course_id
-                        $user_where GROUP BY module_id";
-
-        $result = db_query($query);
-
+    case "duration":        
         $chart = new Plotter(400, 300);
         $chart->setTitle("$langFavourite");
-        while ($row = mysql_fetch_assoc($result)) {
-            $mid = $row['module_id'];
+        $result = Database::get()->queryArray("SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
+                        WHERE $date_where
+                        AND course_id = ?d
+                        $user_where GROUP BY module_id", $course_id);
+                
+        foreach ($result as $row) {
+            $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course inits
-                $chart->growWithPoint($langCourseUnits, $row['tot_dur']);
+                $chart->growWithPoint($langCourseUnits, $row->tot_dur);
             } else { // other modules
-                $chart->growWithPoint($modules[$mid]['title'], $row['tot_dur']);
+                $chart->growWithPoint($modules[$mid]['title'], $row->tot_dur);
             }
         }
         $chart_error = $langDurationExpl;
         break;
 }
-mysql_free_result($result);
 
 if (isset($_POST['btnUsage'])) {
     $chart->normalize();
     $tool_content .= $chart->plot($chart_error);
 }
 
-$qry = "SELECT LEFT(a.surname, 1) AS first_letter
-        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = $course_id
-        GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
-
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+$result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
+        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
+        WHERE b.course_id = ?d
+        GROUP BY first_letter ORDER BY first_letter", $course_id);
+foreach ($result as $row) {
+    $first_letter = $row->first_letter;
     $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . urlencode($first_letter) . '">' . q($first_letter) . '</a> ';
-}
-
-if (isset($_GET['first'])) {
-    $firstletter = mysql_real_escape_string($_GET['first']);
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
-            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = $course_id AND LEFT(a.surname,1) = " . quote($firstletter);
-} else {
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
-            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = $course_id";
 }
 
 $user_opts = '<option value="-1">' . $langAllUsers . "</option>";
 $user_opts .= '<option value="0">' . $langAnonymous . "</option>";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    if ($u_user_id == $row['id']) {
+
+if (isset($_GET['first'])) {
+    $firstletter = $_GET['first'];
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
+            WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $first_letter);
+} else {
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
+            WHERE b.course_id = ?d", $course_id);    
+}
+  foreach ($result as $row) {  
+    if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' . q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
+    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>";
 }
 
-$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
-        '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
+$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>" .
+        '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>";
 
-$tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
      <legend>$langFavourite</legend>
      <table class='tbl'>

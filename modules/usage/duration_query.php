@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -71,16 +71,16 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     }
 
 
-    return db_query("SELECT SUM(actions_daily.duration) AS duration,
+    return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
                                    user.surname AS surname,
                                    user.givenname AS givenname,
                                    user.id AS id,
                                    user.am AS am
                             FROM $from
                             LEFT JOIN actions_daily ON user.id = actions_daily.user_id
-                            WHERE (actions_daily.course_id = $course_id  $or )
+                            WHERE (actions_daily.course_id = ?d  $or )
                             $and
                             $date_where
                             GROUP BY user.id
-                            ORDER BY surname, givenname");
+                            ORDER BY surname, givenname",  $course_id);
 }

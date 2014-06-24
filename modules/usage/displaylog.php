@@ -77,39 +77,37 @@ if (isset($_REQUEST['submit'])) {
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
 }
 
-$qry = "SELECT LEFT(a.surname, 1) AS first_letter
-        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = $course_id
-        GROUP BY first_letter ORDER BY first_letter";
-$result = db_query($qry);
-
 $letterlinks = '';
-while ($row = mysql_fetch_assoc($result)) {
-    $first_letter = $row['first_letter'];
+$result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
+        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
+        WHERE b.course_id = ?d
+        GROUP BY first_letter ORDER BY first_letter", $course_id);
+
+foreach ($result as $row) {
+    $first_letter = $row->first_letter;
     $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . $first_letter . '">' . $first_letter . '</a> ';
 }
 
+$user_opts = "<option value='-1'>$langAllUsers</option>";
 if (isset($_GET['first'])) {
-    $firstletter = mysql_real_escape_string($_GET['first']);
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $firstletter = $_GET['first'];
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
                 FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                WHERE b.course_id = $course_id AND LEFT(a.surname,1) = " . quote($firstletter);
+                WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);
 } else {
-    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = $course_id";
+        WHERE b.course_id = ?d", $course_id);              
 }
 
-$user_opts = "<option value='-1'>$langAllUsers</option>";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    if ($u_user_id == $row['id']) {
+foreach ($result as $row) {
+    if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' .
-            q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
+    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' .
+            q($row->givenname . ' ' . $row->surname) . "</option>";
 }
 $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>

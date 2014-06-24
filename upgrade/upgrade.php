@@ -295,17 +295,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_owndep', '0'),
                     ('restrict_teacher_owndep', '0')");
 
-                if ($oldversion < '2.1.3') {
-                    // delete useless field
-                    if (mysql_field_exists($mysqlMainDb, 'cours', 'scoreShow')) {
-                        echo delete_field('cours', 'scoreShow');
-                    }
-                    // delete old example test from table announcements
-                    $langAnnounceExample = 'Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις.';
-                    Database::get()->query('SET NAMES utf8');
-                    Database::get()->query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
+                if ($oldversion < '2.1.3' or (!isset($oldversion))) {                    
+                    echo "<hr><p class='alert1'>$langUpgTooOld</p>
+                        <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
+                    echo '</div></body></html>';
+                    exit;
+                    draw($tool_content, 0);
                 }
 
+                die;
                 if ($oldversion < '2.2') {
                     // course units
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
@@ -846,8 +844,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `document`
                                 CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1,
-                                DROP INDEX document");
+                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
                     }
 
                     // Rename table `annonces` to `announcements`
@@ -1259,7 +1256,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `max_users` int(11) DEFAULT NULL,
                       `enable_recordings` enum("yes","no") DEFAULT NULL,
                       PRIMARY KEY (`id`),
-                      KEY `idx_bbb_servers` (`hostname`)');
+                      KEY `idx_bbb_servers` (`hostname`))');
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
@@ -1281,7 +1278,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `mod_pw` varchar(255) DEFAULT NULL,
                       `att_pw` varchar(255) DEFAULT NULL,
                       `unlock_interval` int(11) DEFAULT NULL,
-                      `external_users` varchar(255) DEFAULT NULL
+                      `external_users` varchar(255) DEFAULT "",
                       PRIMARY KEY (`id`)
                     )');
 

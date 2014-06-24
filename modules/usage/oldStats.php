@@ -33,7 +33,28 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/action.php';
-require_once 'include/jscalendar/calendar.php';
+
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $tool_content .= "
   <div id='operations_container'>
@@ -43,42 +64,33 @@ $tool_content .= "
       <li><a href='userlogins.php?course=$course_code&amp;first='>" . $langUserLogins . "</a></li>
     </ul>
   </div>";
-$query = "SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = $course_id";
-$result = db_query($query);
-while ($row = mysql_fetch_assoc($result)) {
-    if (!empty($row['min_time'])) {
-        $min_time = strtotime($row['min_time']);
+
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+$nameTools = $langOldStats;
+
+$result = Database::get()->queryArray("SELECT MIN(day) AS min_time FROM actions_daily WHERE course_id = ?d", $course_id);
+foreach ($result as $row) {
+    if (!empty($row->min_time)) {
+        $min_time = strtotime($row->min_time);
     } else
         break;
 }
 
-mysql_free_result($result);
 if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) { // actions more than X months old
     $action = new action();
     $action->summarize();     // move data to action_summary
 }
 
-$query = "SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = $course_id";
-$result = db_query($query);
-while ($row = mysql_fetch_assoc($result)) {
-    if (!empty($row['min_time'])) {
-        $min_time = strtotime($row['min_time']);
+$result = Database::get()->queryArray("SELECT MIN(day) AS min_time FROM actions_daily WHERE course_id = ?d", $course_id);
+foreach ($result as $row) {
+    if (!empty($row->min_time)) {
+        $min_time = strtotime($row->min_time);
     } else
         break;
 }
-mysql_free_result($result);
 
 $min_t = date("d-m-Y", $min_time);
-
 $dateNow = date("d-m-Y / H:i:s", time());
-$nameTools = $langUsage;
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
-
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
 
 $made_chart = true;
 //make chart
@@ -111,83 +123,61 @@ if ($u_module_id != -1) {
 $chart = new Plotter(600, 300);
 $chart->setTitle("$langOldStats");
 switch ($u_stats_value) {
-    case "visits":
-        $query = "SELECT module_id, MONTH(start_date) AS month,
+    case "visits":               
+        $result = Database::get()->queryArray("SELECT module_id, MONTH(start_date) AS month,
                         YEAR(start_date) AS year,
                         SUM(visits) AS visits
                         FROM actions_summary
                         WHERE $date_where
                         AND $mod_where
-                        AND course_id = $course_id
-                        GROUP BY MONTH(start_date)";
-
-        $result = db_query($query);
-        while ($row = mysql_fetch_assoc($result)) {
-            $mont = $langMonths[$row['month']];
-            $chart->growWithPoint($mont . " - " . $row['year'], $row['visits']);
+                        AND course_id = ?d
+                        GROUP BY MONTH(start_date)", $course_id);
+                     
+        foreach ($result as $row) {
+            $mont = $langMonths[$row->month];
+            $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
         }
         break;
 
-    case "duration":
-        $query = "SELECT module_id, MONTH(start_date) AS month,
+    case "duration":        
+        $result = Database::get()->queryArray("SELECT module_id, MONTH(start_date) AS month,
                         YEAR(start_date) AS year,
                         SUM(duration) AS tot_dur FROM actions_summary
-		    WHERE $date_where
-                    AND $mod_where
-                    AND course_id = $course_id
-                    GROUP BY MONTH(start_date)";
-
-        $result = db_query($query);
-        while ($row = mysql_fetch_assoc($result)) {
-            $mont = $langMonths[$row['month']];
-            $chart->growWithPoint($mont . " - " . $row['year'], $row['tot_dur']);
+                        WHERE $date_where
+                        AND $mod_where
+                        AND course_id = ?d
+                        GROUP BY MONTH(start_date)", $course_id);
+        
+        foreach ($result as $row) {
+            $mont = $langMonths[$row->month];
+            $chart->growWithPoint($mont . " - " . $row->year, $row->tot_dur);
         }
         $tool_content .= "<p>$langDurationExpl</p>";
         break;
 }
-mysql_free_result($result);
+
 $chart_path = 'courses/' . $course_code . '/temp/chart_' . md5(serialize($chart)) . '.png';
 
 if (!$chart->isEmpty()) {
     $tool_content .= "<p>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</p>";
     $tool_content .= $chart->plot($langNoStatistics);
 }
-// make form
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
 
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d',
-    'timeFormat' => '24'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
-
-$qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = $course_id";
-
-$mod_opts = '<option value="-1">' . $langAllModules . "</option>\n";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    $mid = $row['module_id'];
+$mod_opts = '<option value="-1">' . $langAllModules . "</option>";
+$result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
+foreach ($result as $row) {
+    $mid = $row->module_id;
     $extra = '';
     if ($u_module_id == $mid) {
         $extra = 'selected';
     }
     $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
-mysql_free_result($result);
 
 $statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
         '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
 
-$tool_content .= '
-       <form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
+$tool_content .= '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
        <fieldset>
 	 <legend>' . $langOldStats . '</legend>
 	 <table class="tbl">
@@ -200,13 +190,13 @@ $tool_content .= '
 	   <td><select name="u_stats_value">' . $statsValueOptions . '</select></td>
 	 </tr>
 	 <tr>
-	   <th>' . $langStartDate . '</th>
-	   <td>' . "$start_cal" . '</td>
-	 </tr>
-	 <tr>
-	    <th>' . $langEndDate . '</th>
-	    <td>' . "$end_cal" . '</td>
-	 </tr>
+        <th>' . $langStartDate . ':</th>
+        <td><input type="text" name="u_date_start" value="' . $u_date_start .'"></td>
+        </tr>
+        <tr>
+        <th>' . $langEndDate . ':</th>
+        <td><input type="text" name="u_date_end" value="' . $u_date_end .'"></td>    
+        </tr>
 	 <tr>
 	   <th>' . $langModule . '</th>
 	   <td><select name="u_module_id">' . $mod_opts . '</select></td>
