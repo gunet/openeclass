@@ -70,13 +70,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             unset_exercise_var($exerciseId);
             exit();
         }
-        if ($_POST['action'] == 'saveTime') { 
-            $eurid = $_POST['eurid'];
-            $secs_remaining = $_POST['secs_remaining'];
-            Database::get()->query("UPDATE exercise_user_record SET secs_remaining = ?d
-                    WHERE eurid = ?d", $secs_remaining, $eurid);
-            exit();          
-        }
 }
 
 //Checks if an exercise ID exists in the URL
@@ -121,18 +114,7 @@ if (isset($_POST['buttonCancel'])) {
 // if the user has clicked on the "Save & Exit" button
 // keeps the exercise in a pending/uncompleted state and returns to the exercise list
 if (isset($_POST['buttonSave'])) {
-    $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
-    $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    $totalWeighting = $objExercise->selectTotalWeighting();
-    //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
-    if (!$paused_attempt) {
-        $objExercise->save_unanswered(0); //passing 0 to save like unanswered
-    }
-    Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d
-            WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $eurid);  
-    unset_exercise_var($exerciseId);
-    Session::set_flashdata($langTemporarySaveSuccess, 'alert1');        
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+
 }
 // setting a cookie in OnBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh 
@@ -278,12 +260,11 @@ if (isset($_POST['formSent'])) {
     $action = ($paused_attempt) ? 'update' : 'insert';
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
 
-    // the script "exercise_result.php" will take the variable $exerciseResult from the session
     $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
     
     // if it is a non-sequential exercice OR
     // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
+    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
         // goes to the script that will show the result of the exercise
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
@@ -308,7 +289,23 @@ if (isset($_POST['formSent'])) {
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
-    redirect_to_home_page('modules/exercise/exercise_submit.php?course='.$course_code.'&exerciseId='.$exerciseId);
+    if (isset($_POST['buttonSave'])) {
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
+        $secs_remaining = $_POST['secsRemaining'];
+        $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+        $totalWeighting = $objExercise->selectTotalWeighting();
+        //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
+        if (!$paused_attempt) {
+            $objExercise->save_unanswered(0); //passing 0 to save like unanswered
+        }
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
+                WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);  
+        unset_exercise_var($exerciseId);
+        Session::set_flashdata($langTemporarySaveSuccess, 'alert1');        
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);        
+    } else {
+        redirect_to_home_page('modules/exercise/exercise_submit.php?course='.$course_code.'&exerciseId='.$exerciseId);
+    }
 } // end of submit
 
 
@@ -331,7 +328,10 @@ $tool_content .= "
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId' class='exercise' >
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />";
-
+        
+if (isset($timeleft) && $timeleft>0) {        
+  $tool_content .= "<input type='hidden' name='secsRemaining' id='secsRemaining' value='$timeleft' />";
+}
 $i = 0;
 foreach ($questionList as $questionId) {
     $i++;
@@ -368,7 +368,7 @@ foreach ($questionList as $questionId) {
     }
     $tool_content .= "</td></tr>";
     unset($question);
-    showQuestion($questionId);
+    showQuestion($questionId, false, $exerciseResult);
 
     $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr></table>";
     // for sequential exercises
@@ -430,24 +430,23 @@ $head_content .= "<script type='text/javascript'>
                     timer = $('#progresstime');                        
                     timer.time = timer.text();                        
                     timer.text(secondsToHms(timer.time--));
+                    hidden_timer = $('#secsRemaining');
+                    hidden_timer.time = timer.time;                    
+                    setInterval(function() {
+                        hidden_timer.val(hidden_timer.time--);
+                        if (hidden_timer.time + 1 == 0) {
+                            clearInterval();
+                        }
+                    }, 1000);
     		    countdown(timer, function() {
     		        $('.exercise').submit();
-    		    });
-                    
+    		    });               
                     $('.exercise').submit(function(){
                             $(window).unbind('beforeunload');
                             $(window).unbind('unload');
                             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';                            
                     });
                     
-                    $('input[name = \"buttonSave\"]').click(function(){ 
-                        $.ajax({
-                          type: 'POST',
-                          url: '',
-                          data: { action: 'saveTime', secs_remaining: timer.time, eurid: $eurid},
-                          async: false
-                        });
-                    });
     		});
                 $(exercise_enter_handler);</script>";
 draw($tool_content, 2, null, $head_content);
