@@ -69,7 +69,12 @@ if (isset($language)) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
     }
     $session = new Session();
-    $uid = $session->user_id;    
+    $uid = $session->user_id;
+    if (isset($active_ui_languages)) {
+        $active_ui_languages = explode(' ', $active_ui_languages);
+    } else {
+        $active_ui_languages = 'el';
+    }
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
     }

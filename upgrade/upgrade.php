@@ -227,7 +227,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                         set_config('email_announce', $emailAnnounce);
                     }
                     set_config('base_url', $urlServer);
-                    set_config('default_language', $language);
+                    set_config('default_language', $language);                    
                     set_config('active_ui_languages', implode(' ', $active_ui_languages));
                     if ($urlSecure != $urlServer) {
                         set_config('secure_url', $urlSecure);
@@ -302,8 +302,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     exit;
                     draw($tool_content, 0);
                 }
-
-                die;
+                
                 if ($oldversion < '2.2') {
                     // course units
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
@@ -843,8 +842,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
                         Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `document`
-                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1");
                     }
 
                     // Rename table `annonces` to `announcements`
@@ -924,6 +922,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
                             `date` DATETIME,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 1,
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
@@ -936,6 +935,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creator` VARCHAR(200) NOT NULL DEFAULT '',
                             `publisher` VARCHAR(200) NOT NULL DEFAULT '',
                             `date` DATETIME,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 1,
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
@@ -1309,14 +1309,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                              `allow_user` BOOLEAN NOT NULL DEFAULT FALSE,
                              `order_priority` INT(11) DEFAULT NULL,
                              KEY `lftindex` (`lft`),
-                             KEY `rgtindex` (`rgt`) )");
+                             KEY `rgtindex` (`rgt`) ) $charset_spec");
 
                     if ($rebuildHierarchy) {
                         // copy faculties into the tree
                         $max = Database::get()->querySingle("SELECT MAX(id) as max FROM `faculte`")->max;
-
                         $i = 0;
-                        Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i) {
+                        Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i, &$max, $langpre, $langpost, $langother) {
                             $lft = 2 + 8 * $i;
                             $rgt = $lft + 7;
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) VALUES ($r->id,
@@ -1328,14 +1327,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpre) . ", " . ($lft + 1) . ", " . ($lft + 2) . ", true, true)");
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpost) . ", " . ($lft + 3) . ", " . ($lft + 4) . ", true, true)");
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langother) . ", " . ($lft + 5) . ", " . ($lft + 6) . ", true, true)");
-
                             $i++;
                         });
 
                         $root_rgt = 2 + 8 * intval(Database::get()->querySingle("SELECT COUNT(*) as value FROM `faculte`")->value);
-                        Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
+                        $rnode = Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
                     VALUES ('', " . quote($_POST['Institution']) . ", 1, $root_rgt)");
-                        $root_node = mysql_insert_id();
+                        $root_node = $rnode->lastInsertID;
                     }
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_department` (
@@ -1361,7 +1359,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                             WHERE node.name LIKE ?s AND
                                                   parent.id = ?s AND
                                                   node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);
-                            Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?s, ?s)", $r->cours_id, $node->id);
+                            if ($node) {
+                                Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?s, ?s)", $r->cours_id, $node->node);
+                            }
                         });
                     }
 
