@@ -1340,15 +1340,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                              `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                              `course` int(11) NOT NULL references course(id),
                              `department` int(11) NOT NULL references hierarchy(id) )");
-
+                    
                     if ($rebuildHierarchy) {
-                        Database::get()->queryFunc("SELECT cours_id, faculteid, type FROM `cours`", function ($r) {
+                        Database::get()->queryFunc("SELECT cours_id, faculteid, type FROM `cours`", function ($r) use($langpre, $langpost, $langother)  {                            
                             // take care of courses with not type
-                            if (!empty($r->type) && strlen($r->type) > 0)
-                                $qlike = 'lang' . $r->type;
-                            else
-                                $qlike = 'langother';
-
+                            if (!empty($r->type) && strlen($r->type) > 0) {
+                                $qlike = ${'lang'.$r->type};
+                            } else {
+                                $qlike = $langother;
+                            }                                
                             // take care of courses with no parent
                             if (!empty($r->faculteid))
                                 $qfaculteid = $r->faculteid;
@@ -1357,10 +1357,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                             $node = Database::get()->querySingle("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
                                             WHERE node.name LIKE ?s AND
-                                                  parent.id = ?s AND
-                                                  node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);
+                                                  parent.id = ?d AND
+                                                  node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);                            
                             if ($node) {
-                                Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?s, ?s)", $r->cours_id, $node->node);
+                                Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?d, ?d)", $r->cours_id, $node->id);
                             }
                         });
                     }

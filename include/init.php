@@ -274,8 +274,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
                 , $dbname);
-
-
+                
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
             $errorMessagePath = "../../";
