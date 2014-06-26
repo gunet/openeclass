@@ -88,6 +88,7 @@ define('MODULE_ID_BLOG', 35);
 define('MODULE_ID_COMMENTS', 36);
 define('MODULE_ID_RATING', 37);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_SHARING', 38);
 
 
 // exercise answer types

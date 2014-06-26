@@ -379,7 +379,8 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'search' => MODULE_ID_SEARCH,
     'contact' => MODULE_ID_CONTACT,
     'comments' => MODULE_ID_COMMENTS,
-    'rating' => MODULE_ID_RATING);
+    'rating' => MODULE_ID_RATING,
+    'sharing' => MODULE_ID_SHARING);
 
 // the system admin adn power users has rights to all courses
 if ($is_admin or $is_power_user) {
