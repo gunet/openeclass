@@ -73,7 +73,7 @@ if (isset($language)) {
     if (isset($active_ui_languages)) {
         $active_ui_languages = explode(' ', $active_ui_languages);
     } else {
-        $active_ui_languages = 'el';
+        $active_ui_languages = array('el');
     }
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');

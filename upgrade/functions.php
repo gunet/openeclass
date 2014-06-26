@@ -380,7 +380,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                        WHERE course_id = $course_id") != null) && $ok;
         if ($ok) {
             foreach (array('posts', 'topics', 'forums', 'catagories') as $table) {
-                Database::get()->query('DROP TABLE ' . $table);
+                Database::get($code)->query('DROP TABLE ' . $table);
             }
         }
     }
@@ -558,7 +558,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $asset_map[$oldid] = $newid;
         });
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_asset
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_asset
                          (`asset_id`, `module_id`, `path`, `comment`)
                          SELECT DISTINCT lp_asset.asset_id + $assetid_offset, module_map.new_id,
                                 lp_asset.path, lp_asset.comment
@@ -675,7 +675,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
         // ----- wiki_properties and wiki_acls DB Tables ----- //
         $wikiid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.wiki_properties")->max;
-        if (isset($wikiid_offset)) {
+        if (is_null($wikiid_offset)) {
             $wikiid_offset = 0;
         }
 
@@ -893,7 +893,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
                                 assignment_submit.comments,
-                                CAST(assignment_submit.grade, DECIMAL(10,2)), assignment_submit.grade_comments,
+                                CAST(assignment_submit.grade AS DECIMAL(10,2)), assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
                            FROM assignment_submit, assignments_map

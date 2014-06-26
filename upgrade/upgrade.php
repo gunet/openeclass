@@ -253,7 +253,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     fwrite($fp, $new_conf);
                     fclose($fp);
                 }
-
                 // ****************************************************
                 // 		upgrade eclass main database
                 // ****************************************************
@@ -1155,17 +1154,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `attempts_allowed` INT(11) DEFAULT 0,
                             `random` SMALLINT(6) NOT NULL DEFAULT 0,
                             `active` TINYINT(4) NOT NULL DEFAULT 1,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1,
                             `results` TINYINT(1) NOT NULL DEFAULT 1,
                             `score` TINYINT(1) NOT NULL DEFAULT 1)
                             $charset_spec");
-					Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
-			                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            			    `course_id` INT(11) NOT NULL,
-           				 	`question` TEXT,
-                			`description` TEXT,
-			                `weight` FLOAT(11,2) DEFAULT NULL,
-	            		    `q_position` INT(11) DEFAULT 1,
-    			            `type` INT(11) DEFAULT 1) $charset_spec");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `question` TEXT,
+                            `description` TEXT,
+                            `weight` FLOAT(11,2) DEFAULT NULL,
+                            `q_position` INT(11) DEFAULT 1,
+                            `type` INT(11) DEFAULT 1) $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
@@ -1178,13 +1178,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `secs_remaining` INT(11) NOT NULL DEFAULT '0')
                             $charset_spec");
       	           Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
- 							`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-							`eurid` int(11) NOT NULL,
-							`question_id` int(11) NOT NULL,
-							`answer` text,
-  							`answer_id` int(11) NOT NULL,
-			  				`weight` float(5,2) DEFAULT NULL,
-                                                        `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
+                            `answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `eurid` int(11) NOT NULL,
+                            `question_id` int(11) NOT NULL,
+                            `answer` text,
+                            `answer_id` int(11) NOT NULL,
+                            `weight` float(5,2) DEFAULT NULL,
+                            `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -1749,7 +1749,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                 }
                 // update eclass version
-                Database::get($mysqlMainD)->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
+                Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
                 echo "<hr><p class='success'>$langUpgradeSuccess
                 <br><b>$langUpgReady</b></p>
