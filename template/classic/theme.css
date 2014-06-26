@@ -1839,3 +1839,19 @@ div.tagsinput div { display:block; float: left; }
 .rating {
 	margin-bottom: 10px;
 }
+
+.sharingcontainer {
+	margin-bottom: 10px;
+}
+
+.sharinglist {
+	display: inline;
+	padding-left: 10px;
+}
+
+.sharinglist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 10px;
+}
+

@@ -3128,3 +3128,7 @@ $langRating = "Rating";
 $langRatingEn = "Rating enabled";
 $langRatingDis = "Rating disabled";
 $langUserHasRated = "You have rated the resource";
+$langSharing = "Social sharing";
+$langSharingEn = "Social sharing enabled";
+$langSharingDis = "Social sharing disabled";
+$langShare = "Share it";
