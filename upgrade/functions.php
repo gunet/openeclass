@@ -223,14 +223,15 @@ function is_admin($username, $password) {
             $_SESSION['uid'] = $user->user_id;
             $_SESSION['givenname'] = $user->prenom;
             $_SESSION['surname'] = $user->nom;
+            $_SESSION['status'] = $user->statut;
         } else {
             $_SESSION['uid'] = $user->id;
             $_SESSION['givenname'] = $user->givenname;
             $_SESSION['surname'] = $user->surname;
+            $_SESSION['status'] = $user->status;
         }
         $_SESSION['email'] = $user->email;
-        $_SESSION['uname'] = $username;
-        $_SESSION['status'] = $user->status;
+        $_SESSION['uname'] = $username;        
         $_SESSION['is_admin'] = true;
 
         return true;

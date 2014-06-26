@@ -1165,7 +1165,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `description` TEXT,
                             `weight` FLOAT(11,2) DEFAULT NULL,
                             `q_position` INT(11) DEFAULT 1,
-                            `type` INT(11) DEFAULT 1) $charset_spec");
+                            `type` INT(11) DEFAULT 1) 
+                            $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
@@ -1175,6 +1176,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0',
+                            `attempt_status` TINYINT(4) NOT NULL DEFAULT '1',                            
                             `secs_remaining` INT(11) NOT NULL DEFAULT '0')
                             $charset_spec");
       	           Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
@@ -1184,7 +1186,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `answer` text,
                             `answer_id` int(11) NOT NULL,
                             `weight` float(5,2) DEFAULT NULL,
-                            `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
+                            `is_answered` TINYINT NOT NULL DEFAULT '1') 
+                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
