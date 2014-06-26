@@ -300,8 +300,7 @@ if (isset($_POST['formSent'])) {
         }
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
                 WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);  
-        unset_exercise_var($exerciseId);
-        Session::set_flashdata($langTemporarySaveSuccess, 'alert1');        
+        unset_exercise_var($exerciseId);      
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);        
     } else {
         redirect_to_home_page('modules/exercise/exercise_submit.php?course='.$course_code.'&exerciseId='.$exerciseId);
