@@ -61,7 +61,7 @@ function print_sharing_links ($url, $text) {
  * @return boolean
  */
 function is_sharing_allowed($course_id) {
-    if (course_status($course_id) == COURSE_OPEN) { //sharing is allowed only for open courses
+    if (get_config('enable_social_sharing_links') && course_status($course_id) == COURSE_OPEN) { //sharing is allowed only for open courses
         return true;
     }
     else {

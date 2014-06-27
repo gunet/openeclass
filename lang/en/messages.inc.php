@@ -3134,4 +3134,6 @@ $langSharing = "Social sharing";
 $langSharingEn = "Social sharing enabled";
 $langSharingDis = "Social sharing disabled";
 $langShare = "Share it";
-$langSharingDisAdmin = "Social sharing is globally disabled by the platform's administrator";
+$langSharingDisAdmin = "Social sharing is globally disabled by the platform's administrator.";
+$langSharingDisCourse = "Social sharing is disabled for non-open courses.";
+$langEnableSocialSharingLiks = "Enable social sharing links";

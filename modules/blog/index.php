@@ -149,7 +149,14 @@ if ($is_editor) {
 		
 		if (!$sharing_allowed) {
 		    $radio_dis = " disabled";
-		    $sharing_dis_label = "<tr><td><em>$langSharingDisAdmin</em></td></tr>";
+		    $sharing_dis_label = "<tr><td><em>";
+		    if (!get_config('enable_social_sharing_links')) {
+		        $sharing_dis_label .= $langSharingDisAdmin;
+		    }
+		    if (course_status($course_id) != COURSE_OPEN) {
+		        $sharing_dis_label .= " ".$langSharingDisCourse;
+		    }
+		    $sharing_dis_label .= "</em></td></tr>";
 		} else {
 		    $radio_dis = "";
 		    $sharing_dis_label = "";

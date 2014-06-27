@@ -161,6 +161,7 @@ if (isset($_POST['submit'])) {
         'alt_auth_prof_reg' => true,
         'enable_search' => true,
         'enable_common_docs' => true,
+        'enable_social_sharing_links' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -382,6 +383,7 @@ else {
     $max_glossary_terms = get_config('max_glossary_terms');
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
+    $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
 
     $tool_content .= "<fieldset>
@@ -425,6 +427,9 @@ else {
         </tr>
         <tr>
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
+        </tr>
+        <tr>
+                <td><input type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links />&nbsp;$langEnableSocialSharingLiks</td>
         </tr>
         <tr>
                 <td>$langActionsExpireInterval&nbsp;<input type='text' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "' size='5' />&nbsp;($langMonthsUnit)</td>
