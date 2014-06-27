@@ -54,3 +54,17 @@ function print_sharing_links ($url, $text) {
 
     return $out;
 }
+
+/**
+ * functions that check if sharing is allowed for a course
+ * @param int $course_id
+ * @return boolean
+ */
+function is_sharing_allowed($course_id) {
+    if (course_status($course_id) == COURSE_OPEN) { //sharing is allowed only for open courses
+        return true;
+    }
+    else {
+        return false;
+    }
+}
