@@ -68,6 +68,11 @@ final class Database {
         return $db;
     }
 
+    /**
+     * Get a Database object which does not point to a specific database. 
+     * This is useful to perform DBMS queries, such as creating/destroying a database.
+     * @return Database|null The database object
+     */
     public static function core() {
         return Database::get(Database::$CORE_DB_TAG);
     }
