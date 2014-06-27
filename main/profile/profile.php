@@ -86,9 +86,9 @@ function redirect_to_message($id) {
 if (isset($_POST['delimage'])) {
     @unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
     @unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
-    db_query("UPDATE user SET has_icon = 0 WHERE id = $uid");
+    Database::get()->query("UPDATE user SET has_icon = 0 WHERE id = ?d", $uid);
     Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-        'deleteimage' => 1));
+                                         'deleteimage' => 1));
     exit;
 }
 
@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
-    db_query("UPDATE user SET lang = " . quote($langcode) . " WHERE id = $uid");
+    Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);    
 
     $all_ok = register_posted_variables(array(
         'am_form' => get_config('am_required') and $myrow->status != 1,
@@ -142,10 +142,10 @@ if (isset($_POST['submit'])) {
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
             redirect_to_message(7);
         }
-        db_query("UPDATE user SET has_icon = 1 WHERE id = $_SESSION[uid]");
+        Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);        
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-            'addimage' => 1,
-            'imagetype' => $type));
+                                             'addimage' => 1,
+                                             'imagetype' => $type));
     }
 
     // check if email is valid
@@ -163,11 +163,10 @@ if (isset($_POST['submit'])) {
     }
 
     $username_form = canonicalize_whitespace($username_form);
-    // If changing username check if the new one is free
-    if ($username_form != $_SESSION['uname']) {
-        // check if username exists
-        $username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
-        if (mysql_num_rows($username_check) > 0) {
+        // check if username exists        
+    if ($username_form != $_SESSION['uname']) {        
+        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);        
+        if ($username_check) {
             redirect_to_message(5);
         }
     }
@@ -181,32 +180,33 @@ if (isset($_POST['submit'])) {
     // everything is ok
     $email_form = mb_strtolower(trim($email_form));
 
-    if (db_query("UPDATE user SET surname = " . quote($surname_form) . ",
-                             givenname = " . quote($givenname_form) . ",
-                             username = " . quote($username_form) . ",
-                             email = " . quote($email_form) . ",
-                             am = " . quote($am_form) . ",
-                             phone = " . quote($phone_form) . ",
-                             description = " . quote(purify($desc_form)) . ",
-                             email_public = " . quote($email_public) . ",
-                             phone_public = " . quote($phone_public) . ",
-                             receive_mail = " . quote($subscribe) . ",
-                             am_public = " . quote($am_public) . "
+    $q = Database::get()->query("UPDATE user SET surname = ?s,
+                             givenname = ?s,
+                             username = ?s,
+                             email = ?s,
+                             am = ?s,
+                             phone = ?s,
+                             description = ?s,
+                             email_public = ?s,
+                             phone_public = ?s,
+                             receive_mail = ?d,
+                             am_public = ?d
                              $verified_mail_sql
-                         WHERE id = " . intval($_SESSION['uid']))) {
-        $userObj->refresh($uid, $departments);
-        Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-            'modifyprofile' => 1,
-            'username' => $username_form,
-            'email' => $email_form,
-            'am' => $am_form));
-        $_SESSION['uname'] = $username_form;
-        $_SESSION['surname'] = $surname_form;
-        $_SESSION['givenname'] = $givenname_form;
-        $_SESSION['email'] = $email_form;
-
-        redirect_to_message(1);
-    }
+                         WHERE id = ?d", 
+                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+        if ($q->affectedRows > 0) {
+            $userObj->refresh($uid, $departments);
+            Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                                 'modifyprofile' => 1,
+                                                 'username' => $username_form,
+                                                 'email' => $email_form,
+                                                 'am' => $am_form));
+            $_SESSION['uname'] = $username_form;
+            $_SESSION['surname'] = $surname_form;
+            $_SESSION['givenname'] = $givenname_form;
+            $_SESSION['email'] = $email_form;
+            redirect_to_message(1);
+        }
     if ($old_language != $language) {
         redirect_to_message(1);
     }
