@@ -42,6 +42,7 @@ final class Database {
     private static $REQ_OBJECT = 2;
     private static $REQ_ARRAY = 3;
     private static $REQ_FUNCTION = 4;
+    private static $CORE_DB_TAG = "::CORE DB::";
 
     /**
      *
@@ -67,6 +68,10 @@ final class Database {
         return $db;
     }
 
+    public static function core() {
+        return Database::get(Database::$CORE_DB_TAG);
+    }
+
     /**
      * @var PDO
      */
@@ -82,12 +87,13 @@ final class Database {
     public function __construct($server, $dbase, $user, $password) {
         try {
             $params = null;
+            $databasename = $dbase == Database::$CORE_DB_TAG ? "" : (";dbname=" . $dbase);
             switch (DB_TYPE) {
                 case "POSTGRES":
-                    $dsn = "pgsql:host=" . $server . ';dbname=' . $dbase;
+                    $dsn = "pgsql:host=" . $server . $databasename;
                     break;
                 case "MYSQL":
-                    $dsn = 'mysql:host=' . $server . ';dbname=' . $dbase . ';charset=utf8';
+                    $dsn = 'mysql:host=' . $server . ';charset=utf8' . $databasename;
                     $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
                     break;
                 default :

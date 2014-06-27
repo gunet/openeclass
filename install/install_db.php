@@ -31,15 +31,12 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-Database::get()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
-Database::get()->query("SET NAMES utf8");
+Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::core()->query("SET storage_engine = InnoDB");
 // create eclass database
-Database::get()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
-
-mysql_select_db($mysqlMainDb);
+Database::core()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
 // drop old tables if they exist
 Database::get()->query("DROP TABLE IF EXISTS admin");
