@@ -2699,7 +2699,8 @@ $langConfirmPurgeExerciseResults = "Execise results delete confirmation";
 $langNotAvailable = "Not available";
 $langLeaveExerciseWarning = "BEWARE! Leaving this exercise your attempt will be recorded as you haven't given any answers. To avoid this consider finishing the exercise or temporary save it (if this is allowed)";
 $langTemporarySave = "Save Temporary";
-$langTemporarySaveSuccess = "Your exercise has been temporary saved. Please re-enter the execise to continue.";
+$langTemporarySaveNotice = "You have temporarily saved an attempt of exercise";
+$langPendingExercise = "There are attempts that need to be graded in exercise";
 $landAttemptCanceled = "The attempt has been canceled.";
 $langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
 Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
@@ -2969,6 +2970,7 @@ $langFromRandomQuestions = "random questions from";
 $langAnswerUngraded = "The answer haven't been graded yet.";
 $langAttemptCompleted = "Copleted";
 $langAttemptPending = "Pending Grading";
+$langAttemptPaused = "Temporarly Saved";
 $langAttemptCanceled = "Canceled";
 $langGradeTooBig = "The grade you submitted surpasses the maximum allowed grade if this question";
 $lang_email_verification_required = "Email verification of $langOfUser is required";

@@ -590,9 +590,9 @@ if (!class_exists('Exercise')):
         /**
          * keeps record of user answers
          */
-        function record_answers($choice, $exerciseResult) {
+        function record_answers($choice, $exerciseResult, $record_type = 'insert') {
             global $is_editor;
-       
+            $action = $record_type.'_answer_records'; 
             // if the user has answered at least one question
             if (is_array($choice)) {
                 //if all questions on the same page
@@ -600,11 +600,9 @@ if (!class_exists('Exercise')):
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;
-                     
                     foreach ($exerciseResult as $key => $value) {
-                        $this->insert_answer_records($key, $value);
+                        $this->$action($key, $value);
                     }
-                    
                 //else if one question per page
                 } else {
                     // gets the question ID from $choice. It is the key of the array
@@ -613,23 +611,53 @@ if (!class_exists('Exercise')):
                     if (!isset($exerciseResult[$key])) {
                         // stores the user answer into the array
                         $value = $exerciseResult[$key] = $choice[$key];                       
-                        $this->insert_answer_records($key, $value);                    
+                        $this->$action($key, $value);                    
                     }
                 }
             }
             return $exerciseResult;
         }
         /**
-         * Finalize User Unanswered Questions (Used for sequential exercises with time expiration 
-         * where not all answers are submitted and therefore you need to save them to DB before
-         * sending the user to results page)
+         * keeps record of user answers
          */
-        function finalize_answers() {
+        function get_attempt_results_array($eurid) {
+            $exerciseResult = array();
+            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1", $eurid);
+            foreach ($results as $row) {
+                $objQuestionTmp = new Question();
+                // reads question informations
+                $objQuestionTmp->read($row->question_id);               
+                $question_type = $objQuestionTmp->selectType();
+                if ($question_type == FREE_TEXT) {
+                    $exerciseResult[$row->question_id] = $row->answer;
+                } elseif ($question_type == MATCHING){
+                    $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
+                } elseif ($question_type == FILL_IN_BLANKS){
+                    $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                } elseif ($question_type == MULTIPLE_ANSWER){
+                    $exerciseResult[$row->question_id][$row->answer_id] = 1;                    
+                } else {
+                    $exerciseResult[$row->question_id] = $row->answer_id;
+                }
+            }
+            return $exerciseResult;
+        }        
+        /**
+         * Save User Unanswered Questions either as answered (default behaviour)
+         * or as unanswered by passing parameter 0 to the function
+         * (Used for sequential exercises on time expiration 
+         * and when student wants to temporary save his answers)
+         */
+        function save_unanswered($as_answered = 1) {
             $id = $this->id;
             $eurid = $_SESSION['exerciseUserRecordID'][$id];
-            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d', $eurid);
-            foreach ($question_ids as $row) {
-                $answered_question_ids[] = $row->question_id;
+            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1', $eurid);
+            if (count($question_ids) > 0) {
+                foreach ($question_ids as $row) {
+                    $answered_question_ids[] = $row->question_id;
+                }
+            } else {
+                $answered_question_ids = array();
             }
             $questionList = $_SESSION['questionList'][$id];
             $unanswered_questions = array_diff($questionList, $answered_question_ids);
@@ -663,94 +691,179 @@ if (!class_exists('Exercise')):
                     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                         $value[$answerId] = '';
                     }
-                }elseif ($question_type == FREE_TEXT) {
+                } elseif ($question_type == FREE_TEXT) {
                     $value = '';
                 } else {
                     $value = 0;
                 }
-                $this->insert_answer_records($question_id, $value);
+                $this->insert_answer_records($question_id, $value, $as_answered);
                 unset($value);
             }
         }        
         /**
          * Insert user answers
          */
-        private function insert_answer_records($key, $value) {
-                             // construction of the Question object
-                            $objQuestionTmp = new Question(); 
-                            // reads question informations
-                            $objQuestionTmp->read($key);
-                            $question_type = $objQuestionTmp->selectType();
-                            $eurid = $_SESSION['exerciseUserRecordID'][$this->id];
-                            if ($objQuestionTmp->selectType() == 6) {
-                                if (!empty($value)) {
-                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id)
-                                            VALUES (?d, ?d, ?s, ?d)", $eurid, $key, $value, -1);
-                                } else {
-                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
-                                            VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 0, 0);                                    
-                                }                              
-                            } elseif ($objQuestionTmp->selectType() == 3) {
-                                $objAnswersTmp = new Answer($key);
-                                $answer_field = $objAnswersTmp->selectAnswer(1);
-                                //splits answer string from weighting string
-                                list($answer, $answerWeighting) = explode('::', $answer_field);
-                                // splits weightings that are joined with a comma
-                                $rightAnswerWeighting = explode(',', $answerWeighting);
-                                //getting all matched strings between [ and ] delimeters
-                                preg_match_all('#\[(.*?)\]#', $answer, $match);
-                                foreach ($value as $row_key => $row_choice) {
-                                    //if user's choice is right assign rightAnswerWeight else 0
-                                        $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
-                                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
-                                                VALUES (?d, ?d, ?s, ?d, ?f)", $eurid, $key, $row_choice, $row_key, $weight);
-                                    
-                                }
-                            } elseif ($objQuestionTmp->selectType() == 2) {
-                                if ($value == 0) {
-                                    $row_key = 0;
-                                    $answer_weight = 0;
-                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
-                                                    VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $answer_weight);    
-                                } else {
-                                    $objAnswersTmp = new Answer($key);
-                                    foreach ($value as $row_key => $row_choice) {
-                                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
-                                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
-                                                VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $answer_weight);
+        private function insert_answer_records($key, $value, $as_answered = 1) {
+            // construction of the Question object
+           $objQuestionTmp = new Question(); 
+           // reads question informations
+           $objQuestionTmp->read($key);
+           $question_type = $objQuestionTmp->selectType();
+           $id = $this->id;
+           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           if ($objQuestionTmp->selectType() == FREE_TEXT) {
+               if (!empty($value)) {
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, is_answered)
+                           VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 1, $as_answered);
+               } else {
+                   $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unswered give 0 weight else give NULL
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                           VALUES (?d, ?d, ?s, ?d, ?d, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);                                    
+               }                              
+           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS) {
+               $objAnswersTmp = new Answer($key);
+               $answer_field = $objAnswersTmp->selectAnswer(1);
+               //splits answer string from weighting string
+               list($answer, $answerWeighting) = explode('::', $answer_field);
+               // splits weightings that are joined with a comma
+               $rightAnswerWeighting = explode(',', $answerWeighting);
+               //getting all matched strings between [ and ] delimeters
+               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               foreach ($value as $row_key => $row_choice) {
+                   //if user's choice is right assign rightAnswerWeight else 0
+                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                               VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $row_choice, $row_key, $weight, $as_answered);
 
-                                        unset($answer_weight);
-                                    }
-                                    unset($objAnswersTmp);                                                                    
-                                }
-                            } elseif ($objQuestionTmp->selectType() == 4) {
-                                $objAnswersTmp = new Answer($key);
-                                foreach ($value as $row_key => $row_choice) {
-                                    // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
-                                    $correct_match = $objAnswersTmp->isCorrect($row_key);                              
-                                    if ($correct_match == $row_choice) {
-                                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
-                                    } else {
-                                        $answer_weight = 0;
-                                    }
-                                                                      
-                                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight)
-                                            VALUES (?d, ?d, ?d, ?d, ?f)", $eurid, $key, $row_key, $row_choice, $answer_weight);
-                                    unset($answer_weight);
-                                }                                
-                            } else {
-                                if ($value!=0) {
-                                    $objAnswersTmp = new Answer($key);
-                                    $answer_weight = $objAnswersTmp->selectWeighting($value);
-                                } else {
-                                    $answer_weight = 0;
-                                }
-                                Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight)
-                                        VALUES (?d, ?d, ?d, ?f)", $eurid, $key, $value, $answer_weight);
-                            }
-                            unset($objQuestionTmp);           
+               }
+           } elseif ($objQuestionTmp->selectType() == MULTIPLE_ANSWER) {
+               if ($value == 0) {
+                   $row_key = 0;
+                   $answer_weight = 0;
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                                   VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);    
+               } else {
+                   $objAnswersTmp = new Answer($key);
+                   foreach ($value as $row_key => $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                       Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                               VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);
+
+                       unset($answer_weight);
+                   }
+                   unset($objAnswersTmp);                                                                    
+               }
+           } elseif ($objQuestionTmp->selectType() == MATCHING) {
+               $objAnswersTmp = new Answer($key);
+               foreach ($value as $row_key => $row_choice) {
+                   // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
+                   $correct_match = $objAnswersTmp->isCorrect($row_key);                              
+                   if ($correct_match == $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                   } else {
+                       $answer_weight = 0;
+                   }
+
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                           VALUES (?d, ?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered);
+                   unset($answer_weight);
+               }                                
+           } else {
+               if ($value!=0) {
+                   $objAnswersTmp = new Answer($key);
+                   $answer_weight = $objAnswersTmp->selectWeighting($value);
+               } else {
+                   $answer_weight = 0;
+               }
+               Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                       VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $value, $answer_weight, $as_answered);
+           }
+           unset($objQuestionTmp);           
         }        
-        
+        /**
+         * Update user answers
+         */
+        private function update_answer_records($key, $value) {
+            
+            // construction of the Question object
+           $objQuestionTmp = new Question(); 
+           // reads question informations
+           $objQuestionTmp->read($key);
+           $question_type = $objQuestionTmp->selectType();
+           $id = $this->id;
+           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           if ($question_type == FREE_TEXT) {
+               if (!empty($value)) {                 
+                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, 
+                                          is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
+               } else {
+                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, 
+                                          answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);                                           
+               }                              
+           } elseif ($question_type == FILL_IN_BLANKS) {
+               $objAnswersTmp = new Answer($key);
+               $answer_field = $objAnswersTmp->selectAnswer(1);
+               //splits answer string from weighting string
+               list($answer, $answerWeighting) = explode('::', $answer_field);
+               // splits weightings that are joined with a comma
+               $rightAnswerWeighting = explode(',', $answerWeighting);
+               //getting all matched strings between [ and ] delimeters
+               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               foreach ($value as $row_key => $row_choice) {
+                   //if user's choice is right assign rightAnswerWeight else 0
+                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1 
+                                              WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $row_choice, $weight, $eurid, $key, $row_key);
+               }
+           } elseif ($question_type == MULTIPLE_ANSWER) {
+               if ($value == 0) {
+                   $row_key = 0;
+                   $answer_weight = 0;
+                   Database::get()->query("UPDATE exercise_answer_record SET is_answered= 1 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+               } else {
+                   $objAnswersTmp = new Answer($key);
+                   $i=1;
+                   // the first time in the loop we should update in order to keep question position in the DB
+                   // and then insert a new record if there are more than one answers
+                   foreach ($value as $row_key => $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                       if ($i==1) {
+                           Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $row_key, $answer_weight, $eurid, $key);
+                       } else {
+                           Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                                    VALUES (?d, ?d, ?d, ?f, 1)", $eurid, $key, $row_key, $answer_weight);
+                       }
+                       unset($answer_weight);
+                       $i++;
+                   }
+                   unset($objAnswersTmp);                                                                    
+               }
+           } elseif ($question_type == MATCHING) {
+               $objAnswersTmp = new Answer($key);
+               foreach ($value as $row_key => $row_choice) {
+                   // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
+                   $correct_match = $objAnswersTmp->isCorrect($row_key);                              
+                   if ($correct_match == $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                   } else {
+                       $answer_weight = 0;
+                   }
+                   Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1
+                                        WHERE eurid = ?d AND question_id = ?d AND answer = ?d", $row_choice, $answer_weight, $eurid, $key, $row_key);
+                   unset($answer_weight);
+               }                                
+           } else {
+               if ($value!=0) {
+                   $objAnswersTmp = new Answer($key);
+                   $answer_weight = $objAnswersTmp->selectWeighting($value);
+               } else {
+                   $answer_weight = 0;
+               }
+               Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1
+                                        WHERE eurid = ?d AND question_id = ?d", $value, $answer_weight, $eurid, $key);
+           }
+           unset($objQuestionTmp);           
+        }                
         /**
          * Purge exercise user results
          */

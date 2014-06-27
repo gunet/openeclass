@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,16 +20,14 @@
  * ======================================================================== */
 
 /**
- *       @file searchcours.php
+ *      @file searchcours.php
  * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
  * 		       Pitsiougas Vagelis <vagpits@uom.gr>
- *       @brief: This script allows the administrator to perform a search on courses by
- * 	title, code, type and faculte
+ *      @brief: search on courses by title, code, type and faculty 	
  */
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
@@ -40,23 +38,20 @@ $user = new User();
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content .= $jscalendar->get_load_files_code();
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=date]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
-// Destroy search variables from session
-if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
-    unset($_SESSION['searchtitle']);
-    unset($_SESSION['searchcode']);
-    unset($_SESSION['searchtype']);
-    unset($_SESSION['searchfaculte']);
-    unset($searchtitle);
-    unset($searchcode);
-    unset($searchtype);
-    unset($searchfaculte);
-}
 
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 
@@ -112,18 +107,9 @@ $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;
 $tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
-$start_cal = $jscalendar->make_input_field(
-        array('showOthers' => true,
-    'showsTime' => true,
-    'align' => 'Tl',
-    'ifFormat' => '%Y-%m-%d %H:%M',
-    'timeFormat' => '24'), array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
-    'name' => 'date',
-    'value' => ''));
-
-$tool_content .= $start_cal;
+@$tool_content .= "<input type='text' name='date' value='" . $date . "'>";
 $tool_content .= "</td></tr>";
-$tool_content .= "<tr><th class='left'><b>" . $langFaculty . ":</b></th><td>";
+$tool_content .= "<tr><th class='left'>" . $langFaculty . ":</th><td>";
 
 if (isDepartmentAdmin())
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));

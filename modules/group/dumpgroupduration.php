@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,13 +43,11 @@ if ($is_editor) {
 
     header("Content-Type: text/csv; charset=$charset");
     header("Content-Disposition: attachment; filename=groupuserduration.csv");
-    if (isset($_REQUEST['u_date_start']) and
-            isset($_REQUEST['u_date_end'])) {
+    if (isset($_REQUEST['u_date_start']) and isset($_REQUEST['u_date_end'])) {
         $u_date_start = autounquote($_REQUEST['u_date_start']);
         $u_date_end = autounquote($_REQUEST['u_date_end']);
     } else {
-        list($min_date) = mysql_fetch_row(db_query(
-                        'SELECT MIN(day) FROM actions_daily', $course_code));
+        $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;        
         $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
         $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
     }
@@ -65,14 +63,14 @@ if ($is_editor) {
     $totalDuration = 0;
 
     $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
-
-    while ($row = mysql_fetch_assoc($result)) {
-        echo csv_escape($row['surname']) . ";" .
-        csv_escape($row['givenname']) . ";" .
-        csv_escape($row['am']) . ";" .
+    
+    foreach ($result as $row) {
+        echo csv_escape($row->surname) . ";" .
+        csv_escape($row->givenname) . ";" .
+        csv_escape($row->am) . ";" .
         csv_escape($group_name) . ";" .
-        csv_escape(format_time_duration(0 + $row['duration'])) . ";" .
-        csv_escape(round($row['duration'] / 3600));
+        csv_escape(format_time_duration(0 + $row->duration)) . ";" .
+        csv_escape(round($row->duration / 3600));
         echo $crlf;
     }
 }

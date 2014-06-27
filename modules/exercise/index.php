@@ -136,11 +136,26 @@ if ($is_editor) {
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-
+$paused_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
+        . "JOIN exercise b ON a.eid = b.id WHERE a.uid = ?d "
+        . "AND a.attempt_status = ?d AND b.course_id = ?d", $uid, ATTEMPT_PAUSED, $course_id);
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
 $nbrExercises = count($result); //Getting number of limited (offset and limit) exercises of the course (active and inactive)
-
+if (count($paused_exercises) > 0) {
+    foreach ($paused_exercises as $row) {
+        $tool_content .="<div class='info'>$langTemporarySaveNotice $row->title. <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
+    }
+}
 if ($is_editor) {
+    $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
+            . "JOIN exercise b ON a.eid = b.id WHERE a.uid = ?d "
+            . "AND a.attempt_status = ?d AND b.course_id = ?d", $uid, ATTEMPT_PENDING, $course_id);
+    if (count($pending_exercises) > 0) {
+        foreach ($pending_exercises as $row) {
+
+            $tool_content .="<div class='info'>Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση $row->title. (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>Εμφάνιση</a>)</div>";
+        }
+    }    
     $tool_content .= "<div align='left' id='operations_container'>
         <ul id='opslist'>
 	<li><a href='admin.php?course=$course_code&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
@@ -294,33 +309,7 @@ if (!$nbrExercises) {
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";          														  
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td align='center'>";
-                // if there is an active attempt
-//                $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$row->id' AND uid='$uid' AND record_end_date is NULL";
-//               	$tmp = mysql_fetch_row(db_query($sql));
-//                //$tmp = Database::get()->querySingle("SELECT COUNT(*) as count, record_start_date FROM exercise_user_record WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $row->id, $uid)
-//                if ($tmp[0] > 0) {
-//                    $recordStartDate = strtotime($tmp[1]);
-//                    $temp_CurrentDate = time();
-//                    // if exerciseTimeConstraint has not passed yet calculate the remaining time
-//                    if ($recordStartDate + ($row->time_constraint*60) >= $temp_CurrentDate) {
-//                        $_SESSION['exercise_begin_time'][$row->id] = $recordStartDate;
-//                        $timeleft = ($row->time_constraint*60) - ($temp_CurrentDate - $recordStartDate);
-//                        $passed = false;
-//                       
-//                    } else {
-//                        $timeleft = "{$row->time_constraint} $langExerciseConstrainUnit";
-//                        $passed = true;
-//                    }
-//                    $tool_content .= "<span id=\"progresstime\">$timeleft</span></td>";
-//                    $xId = $row->id;
-//                    if($passed){
-//                        unset($timeleft);
-//                    }
-//                } else {
-//                        $tool_content .= "{$row->time_constraint} $langExerciseConstrainUnit</td>";
-//                }
-                $tool_content .= "{$row->time_constraint} $langExerciseConstrainUnit</td>";
+                $tool_content .= "<td align='center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
             } else {
                 $tool_content .= "<td align='center'> - </td>";
             }

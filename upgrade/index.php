@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,10 +31,10 @@ $nameTools = $langUpgrade;
 
 if ($language == 'el') {
     $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';
-    $link_changes_file = 'CHANGES_el.txt';
+    $link_changes_file = 'http://wiki.openeclass.org/el:changes';
 } else {
     $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
-    $link_changes_file = 'CHANGES_en.txt';
+    $link_changes_file = 'http://wiki.openeclass.org/en:changes';
 }
 
 // Main body
@@ -43,7 +43,7 @@ $tool_content .= "
 <p> &nbsp; </p>
 <p class='red'>$langExpl2Upgrade</p>";
 set_time_limit(0);
-$tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
+$tool_content .= "<p>&nbsp;</p><p>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>. $langUpgRead <a href='$upgrade_info_file' target=_blank>$langUpgMan</a>
    $langUpgLastStep</p>
 <p>$langUpgradeCont</p></div>
 <form method='post' action='upgrade.php'>

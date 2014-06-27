@@ -77,13 +77,21 @@ $tool_content .= "
     </tr>
     </table>
     <br/>";
-
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
+$tool_content .= "<select style='margin:0 0 12px 0;' id='status_filtering'>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId' ".(($status == 0)? 'selected' : '').">--- $langCurrentStatus ---</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status == 1)? 'selected' : '').">$langAttemptCompleted</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status == 2)? 'selected' : '').">$langAttemptPending</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status == 3)? 'selected' : '').">$langAttemptPaused</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status == 4)? 'selected' : '').">$langAttemptCanceled</option>
+        </select>";
 //This part of the code could be improved
 if ($is_editor) {
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = ?d)", $course_id);
 } else {
     $result[] = (object) array('uid' => $uid);
 }
+$extra_sql = ($status != 0 ) ? 'AND attempt_status = '.$status : '';
 
 foreach ($result as $row) {
     $sid = $row->uid;
@@ -92,7 +100,7 @@ foreach ($result as $row) {
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
                 TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
                 AS time_duration, total_score, total_weighting, eurid, attempt_status
-                FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
+                FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d $extra_sql", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<table class='tbl_alt' width='100%'>";
         $tool_content .= "<tr><td colspan='4'>";
@@ -117,27 +125,36 @@ foreach ($result as $row) {
         $k = 0;
         foreach ($result2 as $row2) {
             if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
+                $class = 'even';
             } else {
-                $tool_content .= "<tr class='odd'>";
+                $class = 'odd';
             }
+            if ($is_editor && $row2->attempt_status == ATTEMPT_PENDING) {
+                $class .= ' highlight_row'; 
+            }
+            $tool_content .= "<tr class='$class'>";
             $tool_content .= "<td class='center'>$row2->record_start_date</td>";
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $tool_content .= "<td class='center'>$langNotRecorded</td>";
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $nbr_answer_records = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_answer_record WHERE eurid = ?d",$row2->eurid)->count;
-            if ($nbr_answer_records > 0) {
+            if ($row2->attempt_status == ATTEMPT_COMPLETED || $row2->attempt_status == ATTEMPT_PAUSED && $is_editor) {
                 $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a>";
             } else {
-                $results_link = $row2->total_score . "/" . $row2->total_weighting;
+                if ($row2->attempt_status == ATTEMPT_PAUSED) {
+                    $results_link = "-/-";
+                } else {
+                    $results_link = $row2->total_score . "/" . $row2->total_weighting;
+                }
             }
             $tool_content .= "<td class='center'>$results_link</td>";
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $status = $langAttemptCompleted;
             } elseif ($row2->attempt_status == ATTEMPT_PENDING) {
-                $status = $langAttemptPending;
+                $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" .$langAttemptPending. "</a>";
+            } elseif ($row2->attempt_status == ATTEMPT_PAUSED) {
+                $status = $langAttemptPaused;
             } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $status = $langAttemptCanceled;
             }
@@ -147,4 +164,18 @@ foreach ($result as $row) {
         $tool_content .= "</table><br/>";
     }
 }
+$head_content .= "
+    <script type='text/javascript'>
+            $(function(){
+              // bind change event to select
+              $('#status_filtering').bind('change', function () {
+                  var url = $(this).val(); // get selected value
+                  if (url) { // require a URL
+                      window.location = url; // redirect
+                  }
+                  return false;
+              });
+            });
+    </script>        
+        ";
 draw($tool_content, 2, null, $head_content);

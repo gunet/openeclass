@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,20 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
-  ===========================================================================
-  usage/userlogins.php
- * @version $Id$
-  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
-  Ophelia Neofytou ophelia@ucnet.uoc.gr
-  ==============================================================================
-  @Description: Shows logins made by a user or all users of a course, during a specific period.
-  Takes data from table 'logins'
-
-  ==============================================================================
+/**
+ * @file userduration.php
+ * @brief Shows logins made by a user or all users of a course, during a specific period.
+ * Takes data from table 'logins'
  */
+
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -74,7 +66,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
             <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
             <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
-        </div>\n";
+        </div>";
 
     // display number of users
     $tool_content .= "
@@ -82,12 +74,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
            <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
                 2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
           </div>";
-
-    $local_style = '
-            .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-             padding-left: 15px; padding-right : 15px; }
-            .content {position: relative; left: 25px; }';
-
+    
     $tool_content .= "
         <table class='tbl_alt' width='99%'>
         <tr>
@@ -95,31 +82,31 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
-        </tr>\n";
+        </tr>";
 }
 
 $result = user_duration_query($course_id);
-if ($result) {
+if (count($result) > 0) {
     $i = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    foreach ($result as $row) {
         $i++;
-        $grp_name = user_groups($course_id, $row['id'], $format);
+        $grp_name = user_groups($course_id, $row->id, $format);
         if ($format == 'html') {
             if ($i % 2 == 0) {
-                $tool_content .= "\n<tr class='even'>";
+                $tool_content .= "<tr class='even'>";
             } else {
-                $tool_content .= "\n<tr class='odd'>";
+                $tool_content .= "<tr class='odd'>";
             }
-            $tool_content .= "<td class='bullet'>" . display_user($row['id']) . "</td>
-                                <td class='center'>$row[am]</td>
+            $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
+                                <td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
-                                <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
-                                </tr>\n";
+                                <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
+                                </tr>";
         } else {
-            echo csv_escape($row['surname'] . ' ' . $row['givenname']), ';',
-            csv_escape($row['am']), ';',
+            echo csv_escape($row->surname . ' ' . $row->givenname), ';',
+            csv_escape($row->am), ';',
             csv_escape($grp_name), ';',
-            csv_escape(format_time_duration(0 + $row['duration'])), $crlf;
+            csv_escape(format_time_duration(0 + $row->duration)), $crlf;
         }
     }
     if ($format == 'html') {

@@ -227,7 +227,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                         set_config('email_announce', $emailAnnounce);
                     }
                     set_config('base_url', $urlServer);
-                    set_config('default_language', $language);
+                    set_config('default_language', $language);                    
                     set_config('active_ui_languages', implode(' ', $active_ui_languages));
                     if ($urlSecure != $urlServer) {
                         set_config('secure_url', $urlSecure);
@@ -253,7 +253,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     fwrite($fp, $new_conf);
                     fclose($fp);
                 }
-
                 // ****************************************************
                 // 		upgrade eclass main database
                 // ****************************************************
@@ -302,8 +301,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     exit;
                     draw($tool_content, 0);
                 }
-
-                die;
+                
                 if ($oldversion < '2.2') {
                     // course units
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
@@ -844,8 +842,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
                         Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `document`
-                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1");
                     }
 
                     // Rename table `annonces` to `announcements`
@@ -925,6 +922,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
                             `date` DATETIME,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 1,
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
@@ -937,6 +935,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `creator` VARCHAR(200) NOT NULL DEFAULT '',
                             `publisher` VARCHAR(200) NOT NULL DEFAULT '',
                             `date` DATETIME,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 1,
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
 
@@ -1192,17 +1191,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `attempts_allowed` INT(11) DEFAULT 0,
                             `random` SMALLINT(6) NOT NULL DEFAULT 0,
                             `active` TINYINT(4) NOT NULL DEFAULT 1,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1,
                             `results` TINYINT(1) NOT NULL DEFAULT 1,
                             `score` TINYINT(1) NOT NULL DEFAULT 1)
                             $charset_spec");
-					Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
-			                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            			    `course_id` INT(11) NOT NULL,
-           				 	`question` TEXT,
-                			`description` TEXT,
-			                `weight` FLOAT(11,2) DEFAULT NULL,
-	            		    `q_position` INT(11) DEFAULT 1,
-    			            `type` INT(11) DEFAULT 1) $charset_spec");
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `question` TEXT,
+                            `description` TEXT,
+                            `weight` FLOAT(11,2) DEFAULT NULL,
+                            `q_position` INT(11) DEFAULT 1,
+                            `type` INT(11) DEFAULT 1) 
+                            $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
@@ -1211,15 +1212,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `record_end_date` DATETIME DEFAULT NULL,
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
-                            `attempt` INT(11) NOT NULL DEFAULT '0' )
+                            `attempt` INT(11) NOT NULL DEFAULT '0',
+                            `attempt_status` TINYINT(4) NOT NULL DEFAULT '1',                            
+                            `secs_remaining` INT(11) NOT NULL DEFAULT '0')
                             $charset_spec");
       	           Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
- 							`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-							`eurid` int(11) NOT NULL,
-							`question_id` int(11) NOT NULL,
-							`answer` text,
-  							`answer_id` int(11) NOT NULL,
-			  				`weight` float(5,2) DEFAULT NULL) $charset_spec");
+                            `answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `eurid` int(11) NOT NULL,
+                            `question_id` int(11) NOT NULL,
+                            `answer` text,
+                            `answer_id` int(11) NOT NULL,
+                            `weight` float(5,2) DEFAULT NULL,
+                            `is_answered` TINYINT NOT NULL DEFAULT '1') 
+                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -1344,14 +1349,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                              `allow_user` BOOLEAN NOT NULL DEFAULT FALSE,
                              `order_priority` INT(11) DEFAULT NULL,
                              KEY `lftindex` (`lft`),
-                             KEY `rgtindex` (`rgt`) )");
+                             KEY `rgtindex` (`rgt`) ) $charset_spec");
 
                     if ($rebuildHierarchy) {
                         // copy faculties into the tree
                         $max = Database::get()->querySingle("SELECT MAX(id) as max FROM `faculte`")->max;
-
                         $i = 0;
-                        Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i) {
+                        Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i, &$max, $langpre, $langpost, $langother) {
                             $lft = 2 + 8 * $i;
                             $rgt = $lft + 7;
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) VALUES ($r->id,
@@ -1363,29 +1367,28 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpre) . ", " . ($lft + 1) . ", " . ($lft + 2) . ", true, true)");
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpost) . ", " . ($lft + 3) . ", " . ($lft + 4) . ", true, true)");
                             Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langother) . ", " . ($lft + 5) . ", " . ($lft + 6) . ", true, true)");
-
                             $i++;
                         });
 
                         $root_rgt = 2 + 8 * intval(Database::get()->querySingle("SELECT COUNT(*) as value FROM `faculte`")->value);
-                        Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
+                        $rnode = Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
                     VALUES ('', " . quote($_POST['Institution']) . ", 1, $root_rgt)");
-                        $root_node = mysql_insert_id();
+                        $root_node = $rnode->lastInsertID;
                     }
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_department` (
                              `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                              `course` int(11) NOT NULL references course(id),
                              `department` int(11) NOT NULL references hierarchy(id) )");
-
+                    
                     if ($rebuildHierarchy) {
-                        Database::get()->queryFunc("SELECT cours_id, faculteid, type FROM `cours`", function ($r) {
+                        Database::get()->queryFunc("SELECT cours_id, faculteid, type FROM `cours`", function ($r) use($langpre, $langpost, $langother)  {                            
                             // take care of courses with not type
-                            if (!empty($r->type) && strlen($r->type) > 0)
-                                $qlike = 'lang' . $r->type;
-                            else
-                                $qlike = 'langother';
-
+                            if (!empty($r->type) && strlen($r->type) > 0) {
+                                $qlike = ${'lang'.$r->type};
+                            } else {
+                                $qlike = $langother;
+                            }                                
                             // take care of courses with no parent
                             if (!empty($r->faculteid))
                                 $qfaculteid = $r->faculteid;
@@ -1394,9 +1397,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                             $node = Database::get()->querySingle("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
                                             WHERE node.name LIKE ?s AND
-                                                  parent.id = ?s AND
-                                                  node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);
-                            Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?s, ?s)", $r->cours_id, $node->id);
+                                                  parent.id = ?d AND
+                                                  node.lft BETWEEN parent.lft AND parent.rgt", $qlike, $qfaculteid);                            
+                            if ($node) {
+                                Database::get()->query("INSERT INTO `course_department` (course, department) VALUES (?d, ?d)", $r->cours_id, $node->id);
+                            }
                         });
                     }
 
@@ -1417,174 +1422,172 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("DROP TABLE IF EXISTS `faculte`");
                     }
 
-                    // hierarchy stored procedures
-                    if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
-                        Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
-                        Database::get()->query("CREATE VIEW `hierarchy_depth` AS
-                                    SELECT node.id, node.code, node.name, node.number, node.generator,
-                                           node.lft, node.rgt, node.allow_course, node.allow_user,
-                                           node.order_priority, COUNT(parent.id) - 1 AS depth
-                                    FROM hierarchy AS node,
-                                         hierarchy AS parent
-                                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                                    GROUP BY node.id
-                                    ORDER BY node.lft");
+                    // hierarchy stored procedures                    
+                    Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
+                    Database::get()->query("CREATE VIEW `hierarchy_depth` AS
+                                SELECT node.id, node.code, node.name, node.number, node.generator,
+                                       node.lft, node.rgt, node.allow_course, node.allow_user,
+                                       node.order_priority, COUNT(parent.id) - 1 AS depth
+                                FROM hierarchy AS node,
+                                     hierarchy AS parent
+                                WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                                GROUP BY node.id
+                                ORDER BY node.lft");
 
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-                        Database::get()->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
-                                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                                        IN p_order_priority INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        DECLARE lft, rgt INT(11);
-    
-                                        SET lft = parentlft + 1;
-                                        SET rgt = parentlft + 2;
-    
-                                        CALL shift_right(parentlft, 2, 0);
-    
-                                        INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
-                                    END");
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
+                    Database::get()->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                                    IN p_order_priority INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE lft, rgt INT(11);
 
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-                        Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
-                                        IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
-                                        IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        DECLARE lft, rgt INT(11);
-    
-                                        SET lft = parentlft + 1;
-                                        SET rgt = parentlft + 2;
-    
-                                        CALL shift_right(parentlft, 2, 0);
-    
-                                        INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
-                                    END");
+                                    SET lft = parentlft + 1;
+                                    SET rgt = parentlft + 2;
 
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-                        Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
-                                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
-                                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                                            order_priority = p_order_priority WHERE id = p_id;
-    
-                                        IF nodelft <> parentlft THEN
-                                            CALL move_nodes(nodelft, p_lft, p_rgt);
+                                    CALL shift_right(parentlft, 2, 0);
+
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+                    Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
+                                    IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
+                                    IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE lft, rgt INT(11);
+
+                                    SET lft = parentlft + 1;
+                                    SET rgt = parentlft + 2;
+
+                                    CALL shift_right(parentlft, 2, 0);
+
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
+                    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+                                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
+                                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                                        order_priority = p_order_priority WHERE id = p_id;
+
+                                    IF nodelft <> parentlft THEN
+                                        CALL move_nodes(nodelft, p_lft, p_rgt);
+                                    END IF;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
+                    Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE p_lft, p_rgt INT(11);
+
+                                    SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
+                                    DELETE FROM `hierarchy` WHERE id = p_id;
+
+                                    CALL delete_nodes(p_lft, p_rgt);
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_right`");
+                    Database::get()->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
+                                    END IF;
+
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
+                                    END IF;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_left`");
+                    Database::get()->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
+                                    END IF;
+
+                                    IF maxrgt > 0 THEN
+                                        UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
+                                    ELSE
+                                        UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
+                                    END IF;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_end`");
+                    Database::get()->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    UPDATE `hierarchy`
+                                    SET lft = (lft - (p_lft - 1)) + maxrgt,
+                                        rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+                    Database::get()->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `get_parent`");
+                    Database::get()->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+                    Database::get()->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE node_width INT(11);
+                                    SET node_width = p_rgt - p_lft + 1;
+
+                                    DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
+                                    UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
+                                    UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
+                                END");
+
+                    Database::get()->query("DROP PROCEDURE IF EXISTS `move_nodes`");
+                    Database::get()->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+                                LANGUAGE SQL
+                                BEGIN
+                                    DECLARE node_width, maxrgt INT(11);
+
+                                    SET node_width = p_rgt - p_lft + 1;
+                                    CALL get_maxrgt(maxrgt);
+
+                                    CALL shift_end(p_lft, p_rgt, maxrgt);
+
+                                    IF nodelft = 0 THEN
+                                        CALL shift_left(p_rgt, node_width, 0);
+                                    ELSE
+                                        CALL shift_left(p_rgt, node_width, maxrgt);
+
+                                        IF p_lft < nodelft THEN
+                                            SET nodelft = nodelft - node_width;
                                         END IF;
-                                    END");
 
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
-                        Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        DECLARE p_lft, p_rgt INT(11);
-    
-                                        SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
-                                        DELETE FROM `hierarchy` WHERE id = p_id;
-    
-                                        CALL delete_nodes(p_lft, p_rgt);
-                                    END");
+                                        CALL shift_right(nodelft, node_width, maxrgt);
 
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_right`");
-                        Database::get()->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        IF maxrgt > 0 THEN
-                                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
-                                        ELSE
-                                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
-                                        END IF;
-    
-                                        IF maxrgt > 0 THEN
-                                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
-                                        ELSE
-                                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
-                                        END IF;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_left`");
-                        Database::get()->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        IF maxrgt > 0 THEN
-                                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
-                                        ELSE
-                                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
-                                        END IF;
-    
-                                        IF maxrgt > 0 THEN
-                                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
-                                        ELSE
-                                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
-                                        END IF;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `shift_end`");
-                        Database::get()->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        UPDATE `hierarchy`
-                                        SET lft = (lft - (p_lft - 1)) + maxrgt,
-                                            rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
-                        Database::get()->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `get_parent`");
-                        Database::get()->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
-                        Database::get()->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        DECLARE node_width INT(11);
-                                        SET node_width = p_rgt - p_lft + 1;
-    
-                                        DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
-                                        UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
-                                        UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
-                                    END");
-
-                        Database::get()->query("DROP PROCEDURE IF EXISTS `move_nodes`");
-                        Database::get()->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
-                                    LANGUAGE SQL
-                                    BEGIN
-                                        DECLARE node_width, maxrgt INT(11);
-    
-                                        SET node_width = p_rgt - p_lft + 1;
-                                        CALL get_maxrgt(maxrgt);
-    
-                                        CALL shift_end(p_lft, p_rgt, maxrgt);
-    
-                                        IF nodelft = 0 THEN
-                                            CALL shift_left(p_rgt, node_width, 0);
-                                        ELSE
-                                            CALL shift_left(p_rgt, node_width, maxrgt);
-    
-                                            IF p_lft < nodelft THEN
-                                                SET nodelft = nodelft - node_width;
-                                            END IF;
-    
-                                            CALL shift_right(nodelft, node_width, maxrgt);
-    
-                                            UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
-                                            UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
-                                        END IF;
-                                    END");
-                    }
+                                        UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
+                                        UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
+                                    END IF;
+                                END");                    
 
                     // Update ip-containing fields to support IPv6 addresses
                     Database::get()->query("ALTER TABLE `log` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
@@ -1770,21 +1773,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
                     Database::get()->query("DROP TABLE IF EXISTS `actions`");
                 }
-                // convert tables to InnoDB storage engine
-                if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
-                    $result = db_query("SHOW FULL TABLES");
-                    while ($table = mysql_fetch_array($result)) {
-                        if ($table['Table_type'] === 'BASE TABLE')
-                            Database::get()->query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
-                    }
-                } else {
-                    $result = db_query("SHOW TABLES");
-                    while ($table = mysql_fetch_array($result)) {
+                // convert tables to InnoDB storage engine                
+                $result = db_query("SHOW FULL TABLES");
+                while ($table = mysql_fetch_array($result)) {
+                    if ($table['Table_type'] === 'BASE TABLE')
                         Database::get()->query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
-                    }
-                }
+                }                
                 // update eclass version
-                Database::get($mysqlMainD)->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
+                Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
                 echo "<hr><p class='success'>$langUpgradeSuccess
                 <br><b>$langUpgReady</b></p>

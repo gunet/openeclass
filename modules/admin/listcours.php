@@ -213,7 +213,7 @@ $nameTools = $langListCours;
 // Display Actions Toolbar
 $tool_content .= "<div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='listcours.php'>$langAllCourses</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch'>$langAllCourses</a></li>
     </ul>
     </div>";
 

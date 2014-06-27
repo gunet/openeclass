@@ -774,19 +774,6 @@ function imap_literal($s) {
     return "{" . strlen($s) . "}\r\n$s";
 }
 
-// -----------------------------------------------------------------------------------
-// checking the mysql version
-// note version_compare() is used for checking the php version but works for mysql too
-// ------------------------------------------------------------------------------------
-
-function mysql_version() {
-    $ver = mysql_get_server_info();
-    if (version_compare("4.1", $ver) <= 0)
-        return true;
-    else
-        return false;
-}
-
 
 /**
  * @brief returns the name of a faculty given its code or its name

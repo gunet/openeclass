@@ -844,7 +844,8 @@ $langConfirmPurgeExerciseResults = "Επιβεβαίωση διαγραφής α
 $langNotAvailable = "Μη διαθέσιμα";
 $langLeaveExerciseWarning = "ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Για μην συμβεί αυτό ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση (αν αυτό επιτρέπεται).";
 $langTemporarySave = "Προσωρινή Αποθήκευση";
-$langTemporarySaveSuccess = "Η προσπάθεια αποθηκεύτηκε προσωρινά. Ξαναμπείτε στην άσκηση για να συνεχίσετε.";
+$langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά μια προσπάθεια της άσκησης";
+$langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
 $landAttemptCanceled = "Η προσπάθεια ακυρώθηκε.";
 /* * ***************************************************
  * contact.php
@@ -1365,6 +1366,7 @@ $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύν
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langAttemptCompleted = "Oλοκληρώθηκε";
 $langAttemptPending = "Προς Βαθμολόγηση";
+$langAttemptPaused = "Προσωρινά Αποθηκευμένη";
 $langAttemptCanceled = "Ακυρώθηκε";
 $langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
 // admin.php

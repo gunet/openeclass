@@ -31,19 +31,15 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
-if (mysql_version()) db_query("SET NAMES utf8");
+Database::get()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
+Database::get()->query("SET NAMES utf8");
 
 // set default storage engine
-mysql_query("SET storage_engine = InnoDB");
+Database::get()->query("SET storage_engine = InnoDB");
+// create eclass database
+Database::get()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
-if (mysql_version()) {
-        $cdb=db_query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
-
-} else {
-        $cdb=db_query("CREATE DATABASE `$mysqlMainDb`");
-}
-mysql_select_db ($mysqlMainDb);
+mysql_select_db($mysqlMainDb);
 
 // drop old tables if they exist
 Database::get()->query("DROP TABLE IF EXISTS admin");
@@ -709,14 +705,16 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
                 `attempt` INT(11) NOT NULL DEFAULT 0),
-                `attempt_status` tinyint(4) NOT NULL DEFAULT 1) $charset_spec");
+                `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
+                `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
  				`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				`eurid` int(11) NOT NULL,
 				`question_id` int(11) NOT NULL,
 				`answer` text,
   				`answer_id` int(11) NOT NULL,
-  				`weight` float(5,2) DEFAULT NULL) $charset_spec");
+  				`weight` float(5,2) DEFAULT NULL,
+                                `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
@@ -838,7 +836,6 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
                 `department` int(11) NOT NULL references hierarchy(id) )");
 
 // hierarchy stored procedures
-if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
     Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
     Database::get()->query("CREATE VIEW `hierarchy_depth` AS
                     SELECT node.id, node.code, node.name, node.number, node.generator,
@@ -1003,7 +1000,6 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
                             UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
                         END IF;
                     END");
-}
 
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
