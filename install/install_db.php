@@ -31,19 +31,15 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
-if (mysql_version()) db_query("SET NAMES utf8");
+Database::get()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
+Database::get()->query("SET NAMES utf8");
 
 // set default storage engine
-mysql_query("SET storage_engine = InnoDB");
+Database::get()->query("SET storage_engine = InnoDB");
+// create eclass database
+Database::get()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
-if (mysql_version()) {
-        $cdb=db_query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
-
-} else {
-        $cdb=db_query("CREATE DATABASE `$mysqlMainDb`");
-}
-mysql_select_db ($mysqlMainDb);
+mysql_select_db($mysqlMainDb);
 
 // drop old tables if they exist
 Database::get()->query("DROP TABLE IF EXISTS admin");
@@ -804,7 +800,6 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
                 `department` int(11) NOT NULL references hierarchy(id) )");
 
 // hierarchy stored procedures
-if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
     Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
     Database::get()->query("CREATE VIEW `hierarchy_depth` AS
                     SELECT node.id, node.code, node.name, node.number, node.generator,
@@ -969,7 +964,6 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
                             UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
                         END IF;
                     END");
-}
 
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
