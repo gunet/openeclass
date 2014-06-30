@@ -2700,6 +2700,7 @@ $langNotAvailable = "Not available";
 $langLeaveExerciseWarning = "BEWARE! Leaving this exercise your attempt will be recorded as you haven't given any answers. To avoid this consider finishing the exercise or temporary save it (if this is allowed)";
 $langTemporarySave = "Save Temporary";
 $langTemporarySaveNotice = "You have temporarily saved an attempt of exercise";
+$langTemporarySaveNotice2 = "There is a temporarily saved attempt that needs to be finished and that will be loaded if you continue. Do you want to continuew?";
 $langPendingExercise = "There are attempts that need to be graded in exercise";
 $landAttemptCanceled = "The attempt has been canceled.";
 $langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
