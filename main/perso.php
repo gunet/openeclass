@@ -67,81 +67,25 @@ require_once 'main/forumPosts.php';
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
-//	BEGIN Get user's lesson info]=====================================================
+//  Get user's course info
 $user_lesson_info = getUserLessonInfo($uid, "html");
-//	END Get user's lesson info]=====================================================
 //if user is registered to at least one lesson
 if ($user_lesson_info[0][0] > 0) {
-    // BEGIN - Get user assignments
-    $param = array(
-        'uid' => $uid,
-        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
-        'lesson_titles' => $user_lesson_info[0][1],
-        'lesson_code' => $user_lesson_info[0][2],
-        'lesson_professor' => $user_lesson_info[0][3],
-        'lesson_status' => $user_lesson_info[0][4],
-        'lesson_id' => $user_lesson_info[0][8]
-    );
-    $user_assignments = getUserAssignments($param, "html");
-    //END - Get user assignments
-    // BEGIN - Get user announcements
-    $param = array(
-        'uid' => $uid,
-        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
-        'lesson_titles' => $user_lesson_info[0][1],
-        'lesson_code' => $user_lesson_info[0][2],
-        'lesson_professor' => $user_lesson_info[0][3],
-        'lesson_status' => $user_lesson_info[0][4],
-        'usr_lst_login' => $_user["lastLogin"],
-        'usr_memory' => $user_lesson_info[0][5],
-        'lesson_id' => $user_lesson_info[0][8]
-    );
-
-    $user_announcements = getUserAnnouncements($param, 'html');
-    // END - Get user announcements
-    // BEGIN - Get user documents
-
-    $param = array(
-        'uid' => $uid,
-        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
-        'lesson_titles' => $user_lesson_info[0][1],
-        'lesson_code' => $user_lesson_info[0][2],
-        'lesson_professor' => $user_lesson_info[0][3],
-        'lesson_status' => $user_lesson_info[0][4],
-        'usr_lst_login' => $_user["lastLogin"],
-        'usr_memory' => $user_lesson_info[0][6]
-    );
-
-    $user_documents = getUserDocuments($param, "html");
-
-    // END - Get user documents
-    //BEGIN - Get user agenda
-    $param = array(
-        'uid' => $uid,
-        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
-        'lesson_titles' => $user_lesson_info[0][1],
-        'lesson_code' => $user_lesson_info[0][2],
-        'lesson_professor' => $user_lesson_info[0][3],
-        'lesson_status' => $user_lesson_info[0][4],
-        'usr_lst_login' => $_user["lastLogin"],
-        'lesson_id' => $user_lesson_info[0][8]
-    );
-    $user_agenda = getUserAgenda($param, "html");
-
-    //END - Get user agenda
-    //BEGIN - Get user forum posts
-    $param = array(
-        'uid' => $uid,
-        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
-        'lesson_titles' => $user_lesson_info[0][1],
-        'lesson_code' => $user_lesson_info[0][2],
-        'lesson_professor' => $user_lesson_info[0][3],
-        'lesson_status' => $user_lesson_info[0][4],
-        'usr_lst_login' => $_user['lastLogin'],
-        'usr_memory' => $user_lesson_info[0][7] //forum memory
-    );
-    $user_forumPosts = getUserForumPosts($param, "html");
-    //END - Get user forum posts
+    // get user assignments
+    $param = array('lesson_id' => $user_lesson_info[0][8]);
+    $user_assignments = getUserAssignments($param);    
+    // get user announcements
+    $param = array('lesson_id' => $user_lesson_info[0][8]);
+    $user_announcements = getUserAnnouncements($param);
+    // get user documents
+    $param = array('lesson_id' => $user_lesson_info[0][8]);    
+    $user_documents = getUserDocuments($param);    
+    // get user agenda
+    $param = array('lesson_id' => $user_lesson_info[0][8]);
+    $user_agenda = getUserAgenda($param);
+    // get user forum posts
+    $param = array('lesson_id' => $user_lesson_info[0][8]);
+    $user_forumPosts = getUserForumPosts($param);
 } else {
     //show a "-" in all blocks if the user is not enrolled to any lessons
     // (except of the lessons block which is handled before)
@@ -152,7 +96,7 @@ if ($user_lesson_info[0][0] > 0) {
     $user_forumPosts = "<p>-</p>";
 }
 
-// ==  BEGIN create array with personalised content
+// create array with content
 $perso_tool_content = array(
     'lessons_content' => $user_lesson_info[1],
     'assigns_content' => $user_assignments,
@@ -161,5 +105,3 @@ $perso_tool_content = array(
     'agenda_content' => $user_agenda,
     'forum_content' => $user_forumPosts
 );
-
-// == END create array with personalised content

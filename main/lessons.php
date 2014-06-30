@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,16 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Personalised Lessons Component, eClass Personalised
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- * @package eClass Personalised
- *
- * @abstract This component populates the lessons block on the user's personalised
- * interface. It is based on the diploma thesis of Evelthon Prodromou.
- *
+
+/**
+ * @file lessons.php
+ * @brief display user courses
  */
 
 /*
@@ -46,10 +40,9 @@
 function getUserLessonInfo($uid, $type) {
     global $session;
 
-    //	TODO: add the new fields for memory in the db  
     $myCourses = array();
-    if ($session->status == USER_TEACHER) {            
-        $user_courses = "SELECT course.id course_id,
+    if ($session->status == USER_TEACHER) {                    
+        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
 	                        course.title title,
@@ -63,10 +56,9 @@ function getUserLessonInfo($uid, $type) {
                           WHERE course.id = course_user.course_id AND
 	                        course_user.user_id = ?d AND
 	                        user.id = ?d
-                       ORDER BY course.title, course.prof_names";
-        $myCourses = Database::get()->queryArray($user_courses, intval($uid), intval($uid));
-    } else {
-        $user_courses = "SELECT course.id course_id,
+                       ORDER BY course.title, course.prof_names", $uid, $uid);
+    } else {        
+        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
                                 course.title title,
@@ -81,8 +73,7 @@ function getUserLessonInfo($uid, $type) {
                                 course_user.user_id = ?d AND
                                 user.id = ?d AND
                                 course.visible != ?d
-                       ORDER BY course.title, course.prof_names";
-        $myCourses = Database::get()->queryArray($user_courses, intval($uid), intval($uid), COURSE_INACTIVE);
+                       ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
     }
 
     $lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code = $lesson_professor = $lesson_status = array();

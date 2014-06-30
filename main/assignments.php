@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,169 +19,68 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
 /**
- * Personalised Assignments Component, eClass Personalised
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- * @package eClass Personalised
- *
- * @abstract This component populates the assignments block on the user's personalised
- * interface. It is based on the diploma thesis of Evelthon Prodromou.
- *
+ * @brief get course user assingment
+ * @file assignment.php
  */
 
 /**
- * Function getUserAssignments
- *
- * Populates an array with data regarding the user's personalised assignments
- *
- * @param array $param
- * @param string $type (data, html)
- * @return array
+ * @brief display course user assingment
+ * @global type $langNoAssignmentsExist
+ * @global type $langGroupWorkSubmitted
+ * @global type $langGroupWorkNotSubmitted
+ * @global type $langGroupWorkDeadline_of_Submission
+ * @global type $langGroupWorkSubmitted
+ * @global type $urlServer
+ * @param type $param
+ * @param type $type
+ * @return string
  */
-function getUserAssignments($param, $type) {
-    global $mysqlMainDb;
+function getUserAssignments($param) {
+           
+    global $langNoAssignmentsExist, $langGroupWorkSubmitted, $langDays, $langDaysLeft,
+            $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted,$urlServer, $uid;
+      
+    $lesson_id = $param['lesson_id'];    
 
-    $uid = $param['uid'];
-    $lesson_code = $param['lesson_code'];
-    $lesson_id = $param['lesson_id'];
-    $max_repeat_val = $param['max_repeat_val'];
-    $lesson_titles = $param['lesson_titles'];
-    $lesson_professor = $param['lesson_professor'];
-
-    for ($i = 0; $i < $max_repeat_val; $i++) {
-        $assignments_query[$i] = "SELECT DISTINCT assignment.id, assignment.title,
-                        assignment.description, assignment.deadline,
-                        course.title,(TO_DAYS(assignment.deadline) - TO_DAYS(NOW())) AS days_left
-                        FROM assignment, course, course_module
-                        WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-                        AND assignment.active = 1
-                        AND assignment.course_id = $lesson_id[$i]
-                        AND course.id = $lesson_id[$i]
-                        AND course_module.course_id = course.id
-                        AND course_module.visible = 1 AND course_module.module_id = " . MODULE_ID_ASSIGN . "
-                        ORDER BY assignment.deadline";
-    }
-
-    //initialise array to store all assignments from all lessons
-    $assignSubGroup = array();
-    for ($i = 0; $i < $max_repeat_val; $i++) {//each iteration refers to one lesson
-        $mysql_query_result = db_query($assignments_query[$i], $mysqlMainDb);
-        if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
-            $assignmentLessonData = array();
-            $assignmentData = array();
-            array_push($assignmentLessonData, $lesson_titles[$i]);
-            array_push($assignmentLessonData, $lesson_code[$i]);
-        }
-
-        $assignments_repeat_val = 0;
-        while ($myAssignments = mysql_fetch_row($mysql_query_result)) {
-            if ($myAssignments) {
-                if (submitted($uid, $myAssignments[0], $lesson_id[$i])) {
-                    $lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1; //delivered
-                    array_push($myAssignments, 1);
+    $found = false;
+    $assign_content = '<table width="100%">';
+    foreach ($lesson_id as $lid) {
+        $q = Database::get()->queryArray("SELECT DISTINCT assignment.id, assignment.title, assignment.deadline,
+                                        (TO_DAYS(assignment.deadline) - TO_DAYS(NOW())) AS days_left
+                                    FROM assignment, course, course_module
+                                        WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
+                                        AND assignment.active = 1
+                                        AND assignment.course_id = ?d
+                                        AND course.id = ?d
+                                        AND course_module.course_id = course.id
+                                        AND course_module.visible = 1 AND course_module.module_id = " . MODULE_ID_ASSIGN . "
+                                    ORDER BY assignment.deadline", $lid, $lid);
+    
+        if ($q) {
+            $found = true;
+            $assign_content .= "<tr><td class='sub_title1'>" . q(ellipsize(course_id_to_title($lid), 70)) . "</td></tr>";
+            foreach ($q as $data) {
+                $url = $urlServer . "modules/work/index.php?course=" . course_id_to_code($lid) . "&amp;i=" . $data->id;
+                if (submitted($uid, $data->id, $lid)) {
+                    $submit_status = $langGroupWorkSubmitted;
                 } else {
-                    $lesson_assign[$i][$assignments_repeat_val]['delivered'] = 0; //not delivered
-                    array_push($myAssignments, 0);
+                    $submit_status = "($langDaysLeft $data->days_left $langDays)";
                 }
-                array_push($assignmentData, $myAssignments);
-            }
-        }
-
-        if ($num_rows > 0) {
-            array_push($assignmentLessonData, $assignmentData);
-            array_push($assignSubGroup, $assignmentLessonData);
-        }
-    }
-
-    // order assignments according to lesson code
-    //$assignGroup = columnSort($assignmentLessonData, 1);
-
-    if ($type == "html") {
-        return assignHtmlInterface($assignSubGroup);
-    } elseif ($type == "data") {
-        return $assignSubGroup;
-    }
-}
-
-/**
- * Function assignHtmlInterface
- *
- * Generates html content for the assignments block of eClass personalised.
- *
- * @param array $data
- * @return string HTML content for the assignments block
- * @see getUserAssignments()
- */
-function assignHtmlInterface($data) {
-    global $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer, $urlAppend;
-
-    $assign_content = '';
-    $assignmentsExist = false;
-    $max_repeat_val = count($data);
-    for ($i = 0; $i < $max_repeat_val; $i++) {
-        if ($i == 0) {
-            $assign_content = "<table width='100%'>";
-        }
-        $iterator = count($data[$i][2]);
-        $assign_content .= "<tr><td class='sub_title1'>" . q($data[$i][0]) . "</td></tr>";
-        if ($iterator > 0) {
-            $assignmentsExist = true;
-            for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "modules/work/index.php?course=" .
-                        $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
-
-                if ($data[$i][2][$j][6] == 1) {
-                    $submit_status = "" . $langGroupWorkSubmitted . "";
-                } elseif ($data[$i][2][$j][6] == 0) {
-                    $submit_status = "$langGroupWorkSubmitted1";
-                } else {
-                    $submit_status = "";
-                }
-                $assign_content .= "";
                 $assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url'><b>" .
-                        q($data[$i][2][$j][1]) .
+                        q($data->title) .
                         "</b></a><div class='smaller'>$langGroupWorkDeadline_of_Submission: <b>" .
-                        nice_format($data[$i][2][$j][3], true) . "</b><div class='grey'>" .
-                        $submit_status . "</div></div></li></ul></td></tr>";
+                        nice_format($data->deadline, true) . "</b><div class='grey'>" .
+                        $submit_status . "</div></div></li></ul></td></tr>";                
             }
         }
-        if ($i + 1 == $max_repeat_val) {
-            $assign_content .= "</table>";
-        }
     }
-
-    if (!$assignmentsExist) {
-        $assign_content .= "<p class='alert1'>$langNoAssignmentsExist</p>";
+    $assign_content .= "</table>";
+    if ($found) {
+        return $assign_content;
+    } else {
+        return "<p class='alert1'>$langNoAssignmentsExist</p>";
     }
-
-    return $assign_content;
-}
-
-/**
- * Function columnSort
- *
- * Sorts an array by one of it's columns specified by $column
- *
- * @param array $unsorted
- * @param mixed $column (array dimension to sort)
- * @return array sorted $unsorted
- */
-function columnSort($unsorted, $column) {
-    //bubbleSort
-    $sorted = $unsorted;
-    for ($i = 0; $i < sizeof($sorted) - 1; $i++) {
-        for ($j = 0; $j < sizeof($sorted) - 1 - $i; $j++)
-            if ($sorted[$j][$column] > $sorted[$j + 1][$column]) {
-                $tmp = $sorted[$j];
-                $sorted[$j] = $sorted[$j + 1];
-                $sorted[$j + 1] = $tmp;
-            }
-    }
-    return $sorted;
 }
 
 /**
@@ -204,28 +103,4 @@ function submitted($uid, $assignment_id, $lesson_id) {
         return true;
     else
         return false;
-}
-
-/**
- * Function isGroupAssignment
- *
- * Checks if an assignments is a group assignment
- * Returns true if it is.
- *
- * @param int $id
- * @param string $lesson_db
- * @return boolean
- */
-function isGroupAssignment($id) {
-    $res = db_query("SELECT group_submissions FROM assignments WHERE id = $id");
-    if ($res) {
-        $row = mysql_fetch_row($res);
-        if ($row[0] == 0) {
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    } else {
-        die("Error: assignment $id doesn't exist");
-    }
 }

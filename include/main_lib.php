@@ -1151,11 +1151,6 @@ function get_file_extension($filename) {
     }
 }
 
-// Wrap each $item with single quote
-function wrap_each(&$item) {
-    $item = "'$item'";
-}
-
 // Remove whitespace from start and end of string, convert
 // sequences of whitespace characters to single spaces
 // and remove non-printable characters, while preserving new lines

@@ -19,137 +19,84 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /**
- * Personalised Documents Component, eClass Personalised
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- * @package eClass Personalised
- *
- * @abstract This component populates the agenda block on the user's personalised
- * interface. It is based on the diploma thesis of Evelthon Prodromou.
- *
+ * @file agenda.php
+ * @brief get user course agenda events
  */
 
 /**
- * Function getUserAgenda
- *
- * Populates an array with data regarding the user's personalised agenda.
- *
- * @param array $param
- * @param string $type (data, html)
- * @return array
+ * @brief displays last 5 course user agenda items
+ * @global type $langNoEventsExist
+ * @global type $langUnknown
+ * @global type $langDuration
+ * @global type $langMore
+ * @global type $langHours
+ * @global type $langHour
+ * @global type $langExerciseStart
+ * @global type $urlServer
+ * @global type $dateFormatLong
+ * @param type $param
+ * @param type $type
+ * @return string
  */
-function getUserAgenda($param, $type) {
-    global $uid;
-
-    //number of unique dates to collect data for
-    $uniqueDates = 5;
-    $uid = $param['uid'];
-    $lesson_code = $param['lesson_code'];
-    $course_id = $param['lesson_id'];
-
-    $max_repeat_val = $param['max_repeat_val'];
-    $tbl_course_ids = array();
-
-    // exclude courses with disabled agenda modules
-    for ($i = 0; $i < $max_repeat_val; $i++) {
-        $row = mysql_fetch_array(db_query("SELECT visible FROM course_module WHERE
-                                                      module_id = " . MODULE_ID_AGENDA . " AND
-                                                      course_id = " . $course_id[$i]));
-        if ($row['visible'] == 1) {
-            array_push($tbl_course_ids, $course_id[$i]);
-        }
-    }
-    array_walk($tbl_course_ids, 'wrap_each');
-    $tbl_course_ids = implode(",", $tbl_course_ids);
-    if (empty($tbl_course_ids)) // in case there aren't any enabled agenda modules
-        return;
-       
-    $sql = "SELECT agenda.title, agenda.content, agenda.start,
-		agenda.duration, course.code, course.title
-		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids)
-		AND agenda.course_id = course.id
-		AND agenda.visible = 1
-		HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
-		ORDER BY start DESC
-		LIMIT $uniqueDates";
+function getUserAgenda($param) {
     
-    $mysql_query_result = db_query($sql);
-    $agendaDateData = array();
-    $previousDate = "0000-00-00";
-    $firstRun = true;
-    while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
-        //allow certain html tags that do not cause errors in the
-        //personalised interface
-        $myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
-        if ($myAgenda[2] != $previousDate) {
-            if (!$firstRun) {
-                @array_push($agendaDateData, $agendaData);
-            }
-        }
-
-        if ($firstRun)
-            $firstRun = false;
-
-        if ($myAgenda[2] == $previousDate) {
-            array_push($agendaData, $myAgenda);
-        } else {
-            $agendaData = array();
-            $previousDate = $myAgenda[2];
-            array_push($agendaData, $myAgenda);
-        }
-    }
-
-    if (!$firstRun) {
-        array_push($agendaDateData, $agendaData);
-    }
-    if ($type == "html") {
-        return agendaHtmlInterface($agendaDateData);
-    } elseif ($type == "data") {
-        return $agendaDateData;
-    }
-}
-
-/*
- * Function agendaHtmlInterface
- *
- * @param array $data
- * @return string HTML content for the documents block
- * @see function getUserAgenda()
- */
-
-function agendaHtmlInterface($data) {
     global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $langHours, $langHour;
     global $langExerciseStart, $urlServer, $dateFormatLong;
-
-    $numOfDays = count($data);
-    if ($numOfDays > 0) {
-        $agenda_content = "<table width='100%'>";
-        for ($i = 0; $i < $numOfDays; $i++) {
-            $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2])) . "</td></tr>";
-            $iterator = count($data[$i]);
-            for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "modules/agenda/index.php?course=" . $data[$i][$j][4];
-                if (strlen($data[$i][$j][3]) == 0) {
-                    $data[$i][$j][3] = "$langUnknown";
-                } elseif ($data[$i][$j][3] == 1) {
-                    $data[$i][$j][3] = $data[$i][$j][3] . " $langHour";
-                } else {
-                    $data[$i][$j][3] = $data[$i][$j][3] . " $langHours";
-                }                
-                $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-                $data[$i][$j][1] = ellipsize_html($data[$i][$j][1], 150, "... <a href='$url'>[$langMore]</a>");                
-                $agenda_content .= "<tr><td><ul class='custom_list'>
-                                <li><a href=\"$url\"><b>" . q($data[$i][$j][0]) . "</b></a><br /><b>" . q($data[$i][$j][5]) . "</b>
-                                <div class='smaller'>" . $langExerciseStart . ": <b>" . date('H:i', strtotime($data[$i][$j][2])) . "</b> | $langDuration: <b>" . $data[$i][$j][3] . "</b>
-                                <br />" . standard_text_escape($data[$i][$j][1]) . "</div></li></ul></td></tr>";
+            
+    $course_id = $param['lesson_id'];
+    $found = false;
+    $course_ids = array();
+    // exclude courses with disabled agenda modules    
+    foreach ($course_id as $cid) {
+        $q = Database::get()->queryArray("SELECT visible FROM course_module WHERE
+                                                      module_id = " . MODULE_ID_AGENDA . " AND
+                                                      course_id = ?d", $cid);
+        foreach ($q as $row) {
+            if ($row->visible == 1) {
+                array_push($course_ids, $cid);
             }
         }
-        $agenda_content .= "</table>";
-    } else {
-        $agenda_content = "<p class='alert1'>$langNoEventsExist</p>";
+    }    
+    $course_ids = implode(",", $course_ids);
+    if (empty($course_ids)) {// in case there aren't any enabled agenda modules
+        return "<p class='alert1'>$langNoEventsExist</p>";
     }
-    return $agenda_content;
+               
+    $mysql_query_result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
+                                                        agenda.duration, course.code, course.title AS course_title
+                                                        FROM agenda, course WHERE agenda.course_id IN ($course_ids)
+                                                        AND agenda.course_id = course.id
+                                                        AND agenda.visible = 1
+                                                        HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
+                                                    ORDER BY start ASC
+                                                    LIMIT 5");
+          
+    $agenda_content = "<table width='100%'>";
+    if ($mysql_query_result > 0) {        
+        foreach ($mysql_query_result as $data) {
+            $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data->start)) . "</td></tr>";                        
+            $url = $urlServer . "modules/agenda/index.php?course=" . $data->code;
+            if (strlen($data->duration) == 0) {
+                $data->duration = "$langUnknown";
+            } elseif ($data->duration == 1) {
+                $data->duration = $data->duration . " $langHour";
+            } else {
+                $data->duration = $data->duration . " $langHours";
+            }                                
+            $agenda_content .= "<tr><td><ul class='custom_list'>
+                            <li><a href='$url'><b>" . q($data->title) . "</b></a><br /><b>" . q(ellipsize($data->course_title, 80)) . "</b>
+                            <div class='smaller'>" . $langExerciseStart . ": <b>" . date('H:i', strtotime($data->start)) . "</b> | $langDuration: <b>" . $data->duration . "</b>
+                            <br />" . standard_text_escape(ellipsize_html($data->content, 150, "... <a href='$url'>[$langMore]</a>")) . "</div></li></ul></td></tr>";
+            $found = true;
+        }
+        
+    }
+    $agenda_content .= "</table>";
+    if ($found) {
+        return $agenda_content;
+    } else {
+        return "<p class='alert1'>$langNoEventsExist</p>";
+    }
+            
 }
