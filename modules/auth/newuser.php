@@ -236,7 +236,7 @@ if (!isset($_POST['submit'])) {
 
         $q1 = "INSERT INTO user (surname, givenname, username, password, email,
                                  status, am, phone, registered_at, expires_at,
-                                 lang, verified_mail, whitelist)
+                                 lang, verified_mail, whitelist, description)
                       VALUES (" . quote($surname_form) . ",
                               " . quote($givenname_form) . ",
                               " . quote($uname) . ",
@@ -249,7 +249,7 @@ if (!isset($_POST['submit'])) {
                               DATE_ADD(NOW(), INTERVAL $account_duration SECOND),
                               " . quote($language) . ",
                               $verified_mail,
-                              '')";
+                              '', '')";
         $inscr_user = db_query($q1);
         $last_id = mysql_insert_id();
         $userObj->refresh($last_id, $departments);
