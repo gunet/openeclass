@@ -794,7 +794,7 @@ if (!class_exists('Exercise')):
            $eurid = $_SESSION['exerciseUserRecordID'][$id];
            if ($question_type == FREE_TEXT) {
                if (!empty($value)) {                 
-                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, 
+                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                           is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
                } else {
                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, 

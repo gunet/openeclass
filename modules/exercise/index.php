@@ -153,7 +153,7 @@ if ($is_editor) {
     if (count($pending_exercises) > 0) {
         foreach ($pending_exercises as $row) {
 
-            $tool_content .="<div class='info'>Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση $row->title. (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>Εμφάνιση</a>)</div>";
+            $tool_content .="<div class='info'>$langPendingExercise $row->title. (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }    
     $tool_content .= "<div align='left' id='operations_container'>
