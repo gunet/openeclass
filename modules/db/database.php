@@ -42,6 +42,7 @@ final class Database {
     private static $REQ_OBJECT = 2;
     private static $REQ_ARRAY = 3;
     private static $REQ_FUNCTION = 4;
+    private static $CORE_DB_TAG = "::CORE DB::";
 
     /**
      *
@@ -68,6 +69,15 @@ final class Database {
     }
 
     /**
+     * Get a Database object which does not point to a specific database. 
+     * This is useful to perform DBMS queries, such as creating/destroying a database.
+     * @return Database|null The database object
+     */
+    public static function core() {
+        return Database::get(Database::$CORE_DB_TAG);
+    }
+
+    /**
      * @var PDO
      */
     private $dbh;
@@ -82,12 +92,13 @@ final class Database {
     public function __construct($server, $dbase, $user, $password) {
         try {
             $params = null;
+            $databasename = $dbase == Database::$CORE_DB_TAG ? "" : (";dbname=" . $dbase);
             switch (DB_TYPE) {
                 case "POSTGRES":
-                    $dsn = "pgsql:host=" . $server . ';dbname=' . $dbase;
+                    $dsn = "pgsql:host=" . $server . $databasename;
                     break;
                 case "MYSQL":
-                    $dsn = 'mysql:host=' . $server . ';dbname=' . $dbase . ';charset=utf8';
+                    $dsn = 'mysql:host=' . $server . ';charset=utf8' . $databasename;
                     $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
                     break;
                 default :
@@ -120,7 +131,7 @@ final class Database {
      * @deprecated
      * @return int Last inserted ID
      */
-    public function queryNT($statement) {
+    private function queryNT($statement) {
         return $this->queryI(func_get_args(), false);
     }
 
@@ -152,7 +163,7 @@ final class Database {
      * @deprecated
      * @param anytype $argument... A variable argument list of each binded argument
      */
-    public function queryFuncNT($statement, $callback_function) {
+    private function queryFuncNT($statement, $callback_function) {
         return $this->queryFuncI(func_get_args(), false);
     }
 
@@ -185,7 +196,7 @@ final class Database {
      * @deprecated
      * @return array An array of all objects as a result of this statement
      */
-    public function queryArrayNT($statement) {
+    private function queryArrayNT($statement) {
         return $this->queryArrayI(func_get_args(), false);
     }
 
@@ -217,7 +228,7 @@ final class Database {
      * @deprecated
      * @return array A single object as a result of this statement
      */
-    public function querySingleNT($statement) {
+    private function querySingleNT($statement) {
         return $this->querySingleI(func_get_args(), false);
     }
 

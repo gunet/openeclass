@@ -85,14 +85,14 @@ require_once '../../include/baseTheme.php';
         buffer(implode('', file($fileChatName)), $tmpArchiveFile);
         if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
             $alert_div = "<div class='info'>$langSaveMessage</div>";
-            db_query("INSERT INTO document SET
-                                course_id = $course_id,
-                                subsystem = $subsystem,
-                                path = '$chat_filename',
-                                filename = '$saveIn',
+            Database::get()->query("INSERT INTO document SET
+                                course_id = ?d,
+                                subsystem = ?d,
+                                path = ?s,
+                                filename = ?s,
                                 format='txt',
                                 date = NOW(),
-                                date_modified = NOW()");
+                                date_modified = NOW()", $course_id, $subsystem, $chat_filename, $saveIn);
         } else {
             $alert_div = $langSaveErrorMessage;
         }

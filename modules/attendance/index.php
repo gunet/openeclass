@@ -881,7 +881,7 @@ function attendForExersice($userID, $exeID, $exeType){
 //Function to get the total attend number for a user in a course attendance
 function userAttendTotal ($attendance_id, $userID){
 
-    $userAttendTotal = Database::get()->querySingleNT("SELECT SUM(attend) as count FROM attendance_book, attendance_activities WHERE attendance_book.uid = ?d AND  attendance_book.attendance_activity_id = attendance_activities.id AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
+    $userAttendTotal = Database::get()->querySingle("SELECT SUM(attend) as count FROM attendance_book, attendance_activities WHERE attendance_book.uid = ?d AND  attendance_book.attendance_activity_id = attendance_activities.id AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
 
     if($userAttendTotal){
         return $userAttendTotal;
@@ -897,13 +897,13 @@ function userAttendTotalActivityStats ($activityID, $participantsNumber, $showSe
         $sumAtt = "";
         $userAttTotalActivity = Database::get()->queryArray("SELECT attend, uid FROM attendance_book WHERE attendance_activity_id = ?d ", $activityID);
         foreach ($userAttTotalActivity as $module) {
-            $check = Database::get()->querySingleNT("SELECT id FROM actions_daily WHERE actions_daily.day > ?t AND actions_daily.`course_id` = ?d AND actions_daily.user_id =?d ", $limitDate, $courseID, $module->uid);
+            $check = Database::get()->querySingle("SELECT id FROM actions_daily WHERE actions_daily.day > ?t AND actions_daily.`course_id` = ?d AND actions_daily.user_id =?d ", $limitDate, $courseID, $module->uid);
             if ($check) {
                 $sumAtt += $module->attend;
             }
         }
     }else{
-        $sumAtt = Database::get()->querySingleNT("SELECT SUM(attend) as count FROM attendance_book WHERE attendance_activity_id = ?d ", $activityID)->count;
+        $sumAtt = Database::get()->querySingle("SELECT SUM(attend) as count FROM attendance_book WHERE attendance_activity_id = ?d ", $activityID)->count;
     }
 
     //check if participantsNumber is zero

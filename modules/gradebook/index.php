@@ -1110,9 +1110,9 @@ function typeSelected($type, $optionType){
 //function to calculate the weight left
 function weightleft($gradebook_id, $currentActivity){
     if($currentActivity){
-        $left = Database::get()->querySingleNT("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d AND id != ?d", $gradebook_id, $currentActivity)->count;
+        $left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d AND id != ?d", $gradebook_id, $currentActivity)->count;
     }else{
-        $left = Database::get()->querySingleNT("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id)->count;
+        $left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id)->count;
     }
     if($left > 0 ){
         return 100-$left;
@@ -1185,7 +1185,7 @@ function attendForAutoGrades($userID, $exeID, $exeType, $range) {
 //function to get the total grade for a user in a course gradebook
 function userGradeTotal ($gradebook_id, $userID){
 
-    $userGradeTotal = Database::get()->querySingleNT("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
+    $userGradeTotal = Database::get()->querySingle("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
 
     if ($userGradeTotal) {
         return round($userGradeTotal/100, 2);
@@ -1205,13 +1205,13 @@ function userGradebookTotalActivityStats ($activityID, $participantsNumber, $sho
         $sumGrade = "";
         $userGradebookTotalActivity = Database::get()->queryArray("SELECT grade, uid FROM gradebook_book WHERE gradebook_activity_id = ?d ", $activityID);
         foreach ($userGradebookTotalActivity as $module) {
-            $check = Database::get()->querySingleNT("SELECT id FROM actions_daily WHERE actions_daily.day > ?t AND actions_daily.`course_id` = ?d AND actions_daily.user_id =?d ", $limitDate, $courseID, $module->uid);
+            $check = Database::get()->querySingle("SELECT id FROM actions_daily WHERE actions_daily.day > ?t AND actions_daily.`course_id` = ?d AND actions_daily.user_id =?d ", $limitDate, $courseID, $module->uid);
             if($check){
                 $sumGrade += $module->grade;
             }
         }
         
-        $userGradebookTotalActivityMin = Database::get()->querySingleNT("SELECT grade
+        $userGradebookTotalActivityMin = Database::get()->querySingle("SELECT grade
                 FROM gradebook_book,course_user, user, actions_daily
                 WHERE uid = `user`.id 
                 AND `user`.id = `course_user`.`user_id`
@@ -1220,7 +1220,7 @@ function userGradebookTotalActivityStats ($activityID, $participantsNumber, $sho
                 AND `course_user`.`course_id` = ?d
                 AND gradebook_activity_id = ?d 
                 GROUP BY actions_daily.user_id ORDER BY grade ASC limit 1 ", $limitDate, $courseID, $activityID)->grade;
-        $userGradebookTotalActivityMax = Database::get()->querySingleNT("SELECT grade
+        $userGradebookTotalActivityMax = Database::get()->querySingle("SELECT grade
                 FROM gradebook_book,course_user, user, actions_daily
                 WHERE uid = `user`.id 
                 AND `user`.id = `course_user`.`user_id`
@@ -1230,9 +1230,9 @@ function userGradebookTotalActivityStats ($activityID, $participantsNumber, $sho
                 AND gradebook_activity_id = ?d 
                 GROUP BY actions_daily.user_id ORDER BY grade DESC limit 1", $limitDate, $courseID, $activityID)->grade;
     } else {
-        $sumGrade = Database::get()->querySingleNT("SELECT SUM(grade) as count FROM gradebook_book WHERE gradebook_activity_id = ?d ", $activityID)->count;
-        $userGradebookTotalActivityMin = Database::get()->querySingleNT("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade ASC limit 1", $activityID)->grade;
-        $userGradebookTotalActivityMax = Database::get()->querySingleNT("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade DESC limit 1", $activityID)->grade;
+        $sumGrade = Database::get()->querySingle("SELECT SUM(grade) as count FROM gradebook_book WHERE gradebook_activity_id = ?d ", $activityID)->count;
+        $userGradebookTotalActivityMin = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade ASC limit 1", $activityID)->grade;
+        $userGradebookTotalActivityMax = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade DESC limit 1", $activityID)->grade;
     }
     
 //check if participantsNumber is zero

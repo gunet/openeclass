@@ -57,7 +57,7 @@ $tool_content .= "</table><br><br>";
 //Function to get the total attend number for a user in a course gradebook
 function userGradeTotal ($gradebook_id, $userID){
 
-    $userGradeTotal = Database::get()->querySingleNT("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
+    $userGradeTotal = Database::get()->querySingle("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
 
     if($userGradeTotal){
         return round($userGradeTotal/100, 2);

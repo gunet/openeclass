@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,11 +20,10 @@
  * ======================================================================== */
 
 /**
- *       @file searchcours.php
+ *      @file searchcours.php
  * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
  * 		       Pitsiougas Vagelis <vagpits@uom.gr>
- *       @brief: This script allows the administrator to perform a search on courses by
- * 	title, code, type and faculte
+ *      @brief: search on courses by title, code, type and faculty 	
  */
 $require_departmentmanage_user = true;
 
@@ -53,18 +52,6 @@ $('input[name=date]').datetimepicker({
 
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
-// Destroy search variables from session
-if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
-    unset($_SESSION['searchtitle']);
-    unset($_SESSION['searchcode']);
-    unset($_SESSION['searchtype']);
-    unset($_SESSION['searchfaculte']);
-    unset($searchtitle);
-    unset($searchcode);
-    unset($searchtype);
-    unset($searchfaculte);
-}
 
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 

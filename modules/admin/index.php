@@ -49,11 +49,9 @@ $tool_content .= "
     <tr>
       <th>Data Base Server:</th>
       <td>";
-$tool_content .= "$langMySqlVersion<b>" . mysql_get_server_info() . "</b>";
-$tool_content .= "</td>
-    </tr>
-    </table>
-  </fieldset>
+$tool_content .= "$langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>";
+$tool_content .= "</td></tr>
+    </table></fieldset>
   <br />";
 
 

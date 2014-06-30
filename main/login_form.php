@@ -11,15 +11,15 @@ if (isset($_SESSION['uid'])) {
 $warning = '';
 $login_user = FALSE;
 
-$shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
-if ($shibactive['auth_default'] == 1) {
+$shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
+if ($shibactive->auth_default == 1) {
     $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
 } else {
     $shibboleth_link = "";
 }
 
-$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
-if ($casactive['auth_default'] == 1) {
+$casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
+if ($casactive->auth_default == 1) {
     $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
 } else {
     $cas_link = "";
