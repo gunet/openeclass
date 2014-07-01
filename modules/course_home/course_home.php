@@ -32,6 +32,8 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -111,6 +113,14 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+
+if (is_sharing_allowed($course_id)) {
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
+    }
+}
+
+
 $main_content .= $main_extra;
 
 units_set_maxorder();

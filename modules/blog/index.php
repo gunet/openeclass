@@ -24,11 +24,11 @@ $helpTopic = 'Blog';
 require_once '../comments/class.comment.php';
 require_once '../comments/class.commenting.php';
 require_once '../rating/class.rating.php';
-require_once '../sharing/sharing.php';
-require_once 'include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'class.blog.php';
 require_once 'class.blogpost.php';
 require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
 
 define ('RSS', 'modules/blog/rss.php?course='.$course_code);
 load_js('tools.js');
@@ -175,7 +175,7 @@ if ($is_editor) {
         $tool_content .= "<tbody>";
         $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"4_radio\" $checkEn $radio_dis/>$langSharingEn</td></tr>";
         $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"4_radio\" $checkDis $radio_dis/>$langSharingDis</td></tr>";
-        $tool_content .= $sharing_dis_label;
+        $tool_content .= "<tr><td>$sharing_dis_label</tr></td>";
         $tool_content .= "</tbody>";
         $tool_content .= "</table>";
         $tool_content .= "</fieldset>";

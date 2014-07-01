@@ -18,8 +18,6 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-require_once '../../include/baseTheme.php';
-
 /**
  * 
  * @param string $url

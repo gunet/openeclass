@@ -34,6 +34,8 @@ require_once 'include/log.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
 
 $user = new User();
 $course = new Course();
@@ -195,6 +197,10 @@ if (isset($_POST['submit'])) {
                             <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
                             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
+        
+        if (isset($_POST['s_radio'])) {
+            setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
+        }
     }
 } else {
     $tool_content .= "
@@ -333,8 +339,41 @@ if (isset($_POST['submit'])) {
 	        <td class='smaller'>$langTipLang</td>
 	    </tr>
 	</table>
-	</fieldset>
-	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+	</fieldset>";
+    
+    if (!is_sharing_allowed($course_id)) {
+        $radio_dis = " disabled";
+        $sharing_dis_label = "<tr><td><em>";
+        if (!get_config('enable_social_sharing_links')) {
+            $sharing_dis_label .= $langSharingDisAdmin;
+        }
+        if (course_status($course_id) != COURSE_OPEN) {
+            $sharing_dis_label .= " ".$langSharingDisCourse;
+        }
+        $sharing_dis_label .= "</em></td></tr>";
+    } else {
+        $radio_dis = "";
+        $sharing_dis_label = "";
+    }
+    
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked";
+    } else {
+        $checkDis = "checked";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<fieldset>
+        <legend>$langSharing</legend>
+            <table class='tbl' width='100%'>
+                <tr><td colspan='2'><input type='radio' value='1' name='s_radio' $checkEn $radio_dis/>$langSharingEn</td></td></tr>
+                <tr><td colspan='2'><input type='radio' value='0' name='s_radio' $checkDis $radio_dis/>$langSharingDis</td></tr>
+                <tr><td colspan='2'>$sharing_dis_label</tr></td>
+            </table>
+    </fieldset>";
+    
+	$tool_content .= "<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
 
