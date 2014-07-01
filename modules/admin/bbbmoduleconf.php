@@ -83,6 +83,12 @@ if (isset($_GET['add_server']))
             <input type='radio' id='recorings_on' name='enable_recordings' value='yes' />
             <label for='recorings_on'>" . $m['yes'] . "</label></td>
         </th>";
+    $tool_content .= "<tr><th class='left' width='100'><b>$langActivate</b></th>
+            <td><input type='radio' id='enabled_false' name='enabled' checked='false' value='false' />
+            <label for='enabled_false'>" . $m['no'] . "</label><br />
+            <input type='radio' id='enabled_true' name='enabled' checked='true' value='true' />
+            <label for='enabled_true'>" . $m['yes'] . "</label></td>
+        </th>";
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
     $tool_content .= '</fieldset></form>';    
@@ -106,6 +112,7 @@ else if (isset($_POST['submit'])) {
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings =  $_POST['enable_recordings'] ;
+    $enabled =  $_POST['enabled'] ;
 
     if(isset($_POST['id_form'])) {
         $id = $_POST['id_form'] ;
@@ -115,13 +122,14 @@ else if (isset($_POST['submit'])) {
                 api_url = ?s,
                 max_rooms =?s,
                 max_users =?s,
-                enable_recordings =?s
-                WHERE id =?d",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$id);
+                enable_recordings =?s,
+                enabled = ?s
+                WHERE id =?d",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled,$id);
     }
     else
     {
-        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings) VALUES
-        (?s,?s,?s,?s,?s,?s,?s)",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings);
+        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings,enabled) VALUES
+        (?s,?s,?s,?s,?s,?s,?s,?s)",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled);
         
     }
     
@@ -181,7 +189,8 @@ if (isset($_GET['edit_server'])) {
             $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
             <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="'.$server->max_users.'" />&nbsp;(*)</td></tr>';
             $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
-                <td><input type='radio' id='recorings_off' name='enable_recordings' ";
+            <td><input type='radio' id='recorings_off' name='enable_recordings' ";
+            
             if($server->enable_recordings=="no")
             {
                 $tool_content .= " checked='true' ";
@@ -196,6 +205,26 @@ if (isset($_GET['edit_server'])) {
             $tool_content .= " value='yes' />
                 <label for='recorings_on'>" . $m['yes'] . "</label></td>
             </th>";
+            
+            $tool_content .= "<tr><th class='left' width='100'><b>$langActivate</b></th>
+            <td><input type='radio' id='enabled_false' name='enabled' ";
+            
+            if($server->enabled=="false")
+            {
+                $tool_content .= " checked='false' ";
+            }
+            $tool_content .=" value='false'/>
+                <label for='enabled_false'>" . $m['no'] . "</label><br />
+                <input type='radio' id='enabled_true' name='enabled' ";
+                        if($server->enabled=="true")
+            {
+                $tool_content .= " checked='true' ";
+            }
+            $tool_content .= " value='true' />
+                <label for='recorings_on'>" . $m['yes'] . "</label></td>
+            </th>";
+            
+            
             $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
             $tool_content .= '</fieldset></form>';    

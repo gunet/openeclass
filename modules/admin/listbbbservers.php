@@ -191,7 +191,7 @@ while ( $aRow = mysql_fetch_array( $rResult ) )
         unset($row[4]);
         unset($row[5]);
         unset($row[6]);
-        
+
         array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
         array_push($row, "$connected_users");
         array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>Remove server</a>");
