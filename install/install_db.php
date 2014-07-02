@@ -209,10 +209,7 @@ Database::get()->query("CREATE TABLE user (
       am VARCHAR(20) NOT NULL DEFAULT '',
       registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
       expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
-      lang VARCHAR(16) NOT NULL DEFAULT 'el',
-      announce_flag date NOT NULL DEFAULT '1000-01-01',
-      doc_flag DATE NOT NULL DEFAULT '1000-01-01',
-      forum_flag DATE NOT NULL DEFAULT '1000-01-01',
+      lang VARCHAR(16) NOT NULL DEFAULT 'el',      
       description TEXT NOT NULL,
       has_icon TINYINT(1) NOT NULL DEFAULT 0,
       verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
@@ -665,7 +662,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `record_end_date` DATETIME DEFAULT NULL,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
-                `attempt` INT(11) NOT NULL DEFAULT 0),
+                `attempt` INT(11) NOT NULL DEFAULT 0,
                 `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
                 `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (

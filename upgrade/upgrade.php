@@ -108,6 +108,9 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
                         DROP perso,
                         CHANGE description description TEXT NOT NULL,
                         CHANGE whitelist whitelist TEXT NOT NULL,
+                        DROP forum_flag,
+                        DROP announce_flag,
+                        DROP doc_flag,                      
                         DROP KEY user_username");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
