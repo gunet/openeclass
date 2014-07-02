@@ -382,7 +382,6 @@ if ($can_upload) {
                                         WHERE $group_sql AND path=?s", $delete);
         $delete_ok = true;
         if ($r) {
-            $fileName = $r->filename;
             // remove from index if relevant (except non-main sysbsystems and metadata)
             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0 
                                             AND format <> \".meta\" AND path LIKE " . quote($delete . '%')
@@ -395,10 +394,10 @@ if ($can_upload) {
                     if (hasMetaData($delete, $basedir, $group_sql)) {
                         $delete_ok = my_delete($basedir . $delete . ".xml") && $delete_ok;
                     }
-                    update_db_info('document', 'delete', $delete, $filename);
+                    update_db_info('document', 'delete', $delete, $r->filename);
                 }
             } else {
-                update_db_info('document', 'delete', $delete, $filename);
+                update_db_info('document', 'delete', $delete, $r->filename);
             }
             if ($delete_ok) {
                 $action_message = "<p class='success'>$langDocDeleted</p><br />";
@@ -1232,7 +1231,8 @@ if ($doc_count == 0) {
                         $tool_content .= icon('invisible', $langVisible, "{$base_url}mkVisibl=$cmdDirName");
                     }
                     $tool_content .= "&nbsp;";
-                    if (course_status($course_id) == COURSE_OPEN) {
+                    // For common docs, $course_id = -1 - disable public icon there
+                    if ($course_id > 0 and course_status($course_id) == COURSE_OPEN) {
                         if ($entry['public']) {
                             $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
                         } else {

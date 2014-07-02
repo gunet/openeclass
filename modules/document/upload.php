@@ -28,45 +28,12 @@ if (!defined('COMMON_DOCUMENTS')) {
     $require_login = true;
 }
 require_once '../../include/baseTheme.php';
+require_once 'modules/document/doc_init.php';
 
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
 } else {
     $uploadPath = '';
-}
-
-$can_upload = $is_editor || $is_admin;
-if (defined('GROUP_DOCUMENTS')) {
-    require_once 'modules/group/group_functions.php';
-    initialize_group_id();
-    initialize_group_info($group_id);
-    $can_upload = $can_upload || $is_member;
-    $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
-    $navigation[] = array('url' => 'group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
-    $navigation[] = array('url' => "index.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
-} elseif (defined('EBOOK_DOCUMENTS')) {
-    if (isset($_REQUEST['ebook_id'])) {
-        $ebook_id = intval($_REQUEST['ebook_id']);
-    }
-    $subsystem = EBOOK;
-    $subsystem_id = $ebook_id;
-    $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
-    $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-} elseif (defined('COMMON_DOCUMENTS')) {
-    $subsystem = COMMON;
-    $subsystem_id = 'NULL';
-    $groupset = '';
-    $group_sql = "course_id = -1 AND subsystem = $subsystem";
-    $group_hidden_input = '';
-    $basedir = $webDir . '/courses/commondocs';
-    $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-    $navigation[] = array('url' => 'commondocs.php', 'name' => $langCommonDocs);
-    $course_id = -1;
-    $course_code = '';
-} else {
-    $navigation[] = array('url' => "index.php?course=$course_code&amp;openDir=$uploadPath", 'name' => $langDoc);
-    $group_hidden_input = '';
 }
 
 if ($can_upload) {
@@ -80,12 +47,8 @@ if ($can_upload) {
         $fileinput = "<th width='200'>$langPathUploadFile:</th>
                               <td><input type='file' name='userFile' size='35' /></td>";
     }
-    if (defined('COMMON_DOCUMENTS')) {
-        $tool_content .= "<form action='commondocs.php?course=$course_code' method='post' enctype='multipart/form-data'>";
-    } else {
-        $tool_content .= "<form action='index.php?course=$course_code' method='post' enctype='multipart/form-data'>";
-    }
-    $tool_content .= "<fieldset>
+    $tool_content .= "<form action='$upload_target_url' method='post' enctype='multipart/form-data'>
+      <fieldset>
         <legend>$langUpload</legend>
         <input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input
