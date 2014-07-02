@@ -30,10 +30,8 @@ $nameTools = $langMediaTypeDesc;
 if (isset($_GET['id'])) {
     $id = q($_GET['id']);
 
-    $res = db_query("SELECT * FROM videolink WHERE course_id = $course_id AND url = " . quote($id));
-    $row = mysql_fetch_array($res);
-
-    if (!empty($row)) {
+    $row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?d AND url = ?s", $course_id, $id);
+    if ($row) {
         $vObj = MediaResourceFactory::initFromVideoLink($row);
         echo MultimediaHelper::medialinkIframeObject($vObj);
     }

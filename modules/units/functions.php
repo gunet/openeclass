@@ -112,7 +112,7 @@ function show_resources($unit_id) {
 function show_resource($info) {
     global $tool_content, $langUnknownResType, $is_editor;
 
-    if ($info['visible'] == 0 and !$is_editor) {
+    if ($info['visible'] == 0 and ! $is_editor) {
         return;
     }
     switch ($info['type']) {
@@ -183,7 +183,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     } else {
         $file = mysql_fetch_array($r, MYSQL_ASSOC);
         $status = $file['visible'];
-        if (!$is_editor and (!resource_access($file['visible'], $file['public']))) {
+        if (!$is_editor and ( !resource_access($file['visible'], $file['public']))) {
             return '';
         }
         if ($file['format'] == '.dir') {
@@ -242,7 +242,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
     $langWasDeleted, $course_code, $themeimg, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
@@ -269,7 +269,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $imagelink = "<img src='$themeimg/lp_" .
                 ($status == '0' ? 'off' : 'on') . ".png' />";
     }
-    if ($status != '1' and !$is_editor) {
+    if ($status != '1' and ! $is_editor) {
         return '';
     }
 
@@ -305,20 +305,19 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     global $is_editor, $course_id, $tool_content, $themeimg, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
 
-    $result = db_query("SELECT * FROM $table WHERE course_id = $course_id AND id = $video_id");
-    if ($result and mysql_num_rows($result) > 0) {
-        $row = mysql_fetch_array($result, MYSQL_ASSOC);
-        if (!$is_editor and (!resource_access(1, $row['public']))) {
+    $row = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = $course_id AND id = ?d", $video_id);
+    if ($row) {
+        if (!$is_editor and ( !resource_access(1, $row->public))) {
             return '';
         }
-        $status = $row['public'];
+        $status = $row->public;
         if ($table == 'video') {
             $vObj = MediaResourceFactory::initFromVideo($row);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
@@ -345,7 +344,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     } else {
         $comment_box = "";
     }
-    $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="invisible"' : ' class="even"';
+    $class_vis = ($visibility == 0 or ! $module_visible or $status == 'del') ? ' class="invisible"' : ' class="even"';
     $tool_content .= "
         <tr$class_vis>
           <td width='1'>$imagelink</td>
@@ -375,11 +374,11 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
 
     $title = htmlspecialchars($title);
@@ -439,7 +438,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
@@ -456,7 +455,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     } else {
         $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
         $status = $exercise['active'];
-        if (!$is_editor and (!resource_access($exercise['active'], $exercise['public']))) {
+        if (!$is_editor and ( !resource_access($exercise['active'], $exercise['public']))) {
             return '';
         }
         $link = "<a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id&amp;unit=$id'>";
@@ -503,7 +502,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     global $id, $urlServer, $is_editor, $course_id, $course_code, $themeimg;
 
     $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = '';
@@ -564,12 +563,12 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
 
     $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
 
     $comment_box = $imagelink = $link = $class_vis = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
     $title = htmlspecialchars($title);
     $r = db_query("SELECT * FROM wiki_properties WHERE course_id = $course_id AND id = $wiki_id", $mysqlMainDb);
@@ -631,11 +630,11 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
 
     $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
     $title = htmlspecialchars($title);
     $r = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $course_id AND id = $link_id");
@@ -702,11 +701,11 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
     $content = $linkcontent = '';
     $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
     $title = htmlspecialchars($title);
     $sql = db_query("SELECT * FROM `$mysqlMainDb`.link_category WHERE course_id = $course_id AND id = $linkcat_id");
@@ -754,11 +753,11 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
 
     $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
     $title = htmlspecialchars($title);
     $r = db_query("SELECT * FROM ebook WHERE id = $ebook_id", $mysqlMainDb);
@@ -845,11 +844,11 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
 
     $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and ! $is_editor) {
         return '';
     }
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or !$module_visible) ?
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="invisible"' : ' class="even"';
     if ($deleted) {
         if (!$is_editor) {

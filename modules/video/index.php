@@ -116,8 +116,7 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 
-    $d = mysql_fetch_array(db_query("SELECT video_quota FROM course WHERE code='$course_code'"));
-    $diskQuotaVideo = $d['video_quota'];
+    $diskQuotaVideo = Database::get()->querySingle("SELECT video_quota FROM course WHERE code=?s", $course_code)->video_quota;
     $updir = "$webDir/video/$course_code"; //path to upload directory
     $diskUsed = dir_total_space($updir);
     $idx = new Indexer();
@@ -136,14 +135,14 @@ hContent;
     if (isset($_GET['vis'])) {
         $new_vis_status = intval($_GET['vis']);
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = " . intval($_GET['vid']) . " AND course_id = " . $course_id);
+        Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d AND course_id = ?d", $new_vis_status, $_GET['vid'], $course_id);
         $action_message = "<p class='success'>$langViMod</p>";
     }
 // Public accessibility commands
     if (isset($_GET['public']) or isset($_GET['limited'])) {
         $new_public_status = intval(isset($_GET['public'])) ? 1 : 0;
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET public = $new_public_status WHERE id = " . intval($_GET['vid']) . " AND course_id = " . $course_id);
+        Database::get()->query("UPDATE $table SET public = ?d WHERE id = ?d AND course_id = ?d", $new_public_status, $_GET['vid'], $course_id);
         $action_message = "<p class='success'>$langViMod</p>";
     }
 
@@ -154,20 +153,20 @@ hContent;
                 $table = select_table($_POST['table']);
             }
             if ($table == 'video') {
-                $sql = "UPDATE video SET title = " . quote($_POST['title']) . ",
-                                                 description = " . quote($_POST['description']) . ",
-                                                 creator = " . quote($_POST['creator']) . ",
-                                                 publisher = " . quote($_POST['publisher']) . "
-                                             WHERE id = $id";
+                Database::get()->query("UPDATE video SET title = ?s,
+                                                 description = ?s,
+                                                 creator = ?s,
+                                                 publisher = ?s
+                                             WHERE id = ?d"
+                        , $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
             } elseif ($table == 'videolink') {
-                $sql = "UPDATE videolink SET url = " . quote(canonicalize_url($_POST['url'])) . ",
+                Database::get()->query("UPDATE videolink SET url = " . quote(canonicalize_url($_POST['url'])) . ",
                                                       title = " . quote($_POST['title']) . ",
                                                       description = " . quote($_POST['description']) . ",
                                                       creator = " . quote($_POST['creator']) . ",
                                                       publisher = " . quote($_POST['publisher']) . "
-                                                  WHERE id = $id";
+                                                  WHERE id = $id");
             }
-            $result = db_query($sql);
             if ($table == 'video')
                 $vdx->store($id);
             else
@@ -189,16 +188,9 @@ hContent;
             } else {
                 $title = $_POST['title'];
             }
-            $sql = 'INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
-                                VALUES (' . quote($course_id) . ',
-                                        ' . quote(canonicalize_url($url)) . ',
-                                        ' . quote($title) . ',
-                                        ' . quote($_POST['description']) . ',
-                                        ' . quote($_POST['creator']) . ',
-                                        ' . quote($_POST['publisher']) . ',
-                                        ' . quote($_POST['date']) . ')';
-            $result = db_query($sql);
-            $id = mysql_insert_id();
+            $id = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
+                                VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s)'
+                    , $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
             $vldx->store($id);
             $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
             Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
@@ -241,19 +233,12 @@ hContent;
                     }
                     $path = '/' . $safe_filename;
                     $url = $file_name;
-                    $sql = 'INSERT INTO video
+                    $id = Database::get()->query('INSERT INTO video
                                                        (course_id, path, url, title, description, creator, publisher, date)
-                                                       VALUES (' . quote($course_id) . ', ' .
-                            quote($path) . ', ' .
-                            quote($url) . ', ' .
-                            quote($_POST['title']) . ', ' .
-                            quote($_POST['description']) . ', ' .
-                            quote($_POST['creator']) . ', ' .
-                            quote($_POST['publisher']) . ', ' .
-                            quote($_POST['date']) . ')';
+                                                       VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s)'
+                                    , $course_id, $path, $url, $_POST['title'], $_POST['description']
+                                    , $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
                 }
-                $result = db_query($sql);
-                $id = mysql_insert_id();
                 $vdx->store($id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
@@ -268,19 +253,16 @@ hContent;
     if (isset($_GET['delete'])) { // delete
         $id = intval($_GET['id']);
         $table = select_table($_GET['table']);
-        $sql_select = "SELECT * FROM $table WHERE course_id = $course_id AND id = $id";
-        $result = db_query($sql_select);
-        $myrow = mysql_fetch_array($result);
+        $myrow = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
         if ($table == 'video') {
-            unlink("$webDir/video/$course_code/" . $myrow['path']);
+            unlink("$webDir/video/$course_code/" . $myrow->path);
         }
-        $sql = "DELETE FROM $table WHERE course_id = $course_id AND id = $id";
-        $result = db_query($sql);
+        Database::get()->querySingle("DELETE FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
         if ($table == 'video')
             $vdx->remove($id);
         else
             $vldx->remove($id);
-        Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow['title']));
+        Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow->title));
         $tool_content .= "<p class='success'>$langDelF</p><br />";
         $id = "";
     } elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
@@ -375,16 +357,14 @@ hContent;
         $id = intval($_GET['id']);
         $table_edit = select_table($_GET['table_edit']);
         if ($id) {
-            $sql = "SELECT * FROM $table_edit WHERE course_id = $course_id AND id = $id ORDER BY title";
-            $result = db_query($sql);
-            $myrow = mysql_fetch_array($result);
+            $myrow = Database::get()->querySingle("SELECT * FROM $table_edit WHERE course_id = ?d AND id = ?d ORDER BY title", $course_id, $id);
 
-            $id = $myrow['id'];
-            $url = $myrow['url'];
-            $title = $myrow['title'];
-            $description = $myrow['description'];
-            $creator = $myrow['creator'];
-            $publisher = $myrow['publisher'];
+            $id = $myrow->id;
+            $url = $myrow->url;
+            $title = $myrow->title;
+            $description = $myrow->description;
+            $creator = $myrow->creator;
+            $publisher = $myrow->publisher;
 
             $nameTools = $langModify;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
@@ -445,14 +425,13 @@ hContent;
     }
 
 
-    $count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title"));
-    $count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolink WHERE course_id = $course_id $filterl
-                                ORDER BY title"));
+    $count_video = Database::get()->querySingle("SELECT COUNT(*) as count FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id)->count;
+    $count_video_links = Database::get()->querySingle("SELECT count(*) as count FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id)->count;
 
     if ($count_video[0] <> 0 || $count_video_links[0] <> 0) {
         // print the list if there is no editing
-        $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title");
-        $results['videolink'] = db_query("SELECT * FROM videolink WHERE course_id = $course_id $filterl ORDER BY title");
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id);
         $i = 0;
         $count_video_presented_for_admin = 1;
         $tool_content .= "
@@ -470,7 +449,7 @@ hContent;
         }
         $tool_content .= "</tr>";
         foreach ($results as $table => $result) {
-            while ($myrow = mysql_fetch_array($result)) {
+            foreach ($result as $myrow) {
                 switch ($table) {
                     case 'video':
                         $vObj = MediaResourceFactory::initFromVideo($myrow);
@@ -478,24 +457,24 @@ hContent;
                             $vObj->setPlayURL($vObj->getAccessURL());
 
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
-                        $link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow['description']) . "</small>" : '';
+                        $link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow->description) . "</small>" : '';
                         $link_to_add = "<td>" . $link_href . "</td>";
-                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>" : '';
-                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
+                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow->creator) . "</td><td>" . q($myrow->publisher) . "</td>" : '';
+                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
                         $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp";
                         break;
                     case 'videolink':
                         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
                         $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
-                        $link_to_add = "<td>" . $link_href . "<br/>" . q($myrow['description']) . "</td>";
-                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>" : '';
-                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
+                        $link_to_add = "<td>" . $link_href . "<br/>" . q($myrow->description) . "</td>";
+                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow->creator) . "</td><td>" . q($myrow->publisher) . "</td>" : '';
+                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
                         $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
                         break;
                     default:
                         exit;
                 }
-                if ($is_editor and $myrow['visible'] == '1') {
+                if ($is_editor and $myrow->visible == '1') {
                     $visibility = 0;
                     $vis_icon = 'visible';
                     if ($i % 2) {
@@ -515,15 +494,15 @@ hContent;
                                    $link_to_add";
                 if (!$is_in_tinymce) {
                     $tool_content .= "<td>
-                                      $link_to_save" . icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow[id]&amp;table_edit=$table") . "
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . $myrow['id'] . "&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('" . js_escape($langConfirmDelete . " " . $myrow['title']) . "');\">
+                                      $link_to_save" . icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table") . "
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . $myrow->id . "&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('" . js_escape($langConfirmDelete . " " . $myrow->title) . "');\">
                                         <img src='$themeimg/delete.png' title='$langDelete'></a>&nbsp;";
-                    $tool_content .= icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow[id]&amp;vis=$visibility&amp;table=$table") . "&nbsp;";
+                    $tool_content .= icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;vis=$visibility&amp;table=$table") . "&nbsp;";
                     if (course_status($course_id) == COURSE_OPEN) {
-                        if ($myrow['public']) {
-                            $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow[id]&amp;limited=1&amp;table=$table");
+                        if ($myrow->public) {
+                            $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;limited=1&amp;table=$table");
                         } else {
-                            $tool_content .= icon('access_limited', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow[id]&amp;public=1&amp;table=$table");
+                            $tool_content .= icon('access_limited', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;public=1&amp;table=$table");
                         }
                     }
                 }
@@ -542,10 +521,10 @@ else {
 
     ModalBoxHelper::loadModalBox(true);
 
-    $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title");
-    $results['videolink'] = db_query("SELECT * FROM videolink WHERE course_id = $course_id $filterl ORDER BY title");
-    $count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video WHERE course_id = $course_id $filterv"));
-    $count_video_links = mysql_fetch_array(db_query("SELECT COUNT(*) FROM videolink WHERE course_id = $course_id $filterl"));
+    $results['video'] = Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id);
+    $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id);
+    $count_video = Database::get()->querySingle("SELECT COUNT(*) as count FROM video WHERE course_id = ?d $filterv", $course_id)->count;
+    $count_video_links = Database::get()->querySingle("SELECT COUNT(*) as count FROM videolink WHERE course_id = ?d $filterl", $course_id)->count;
 
     if ($count_video[0] <> 0 || $count_video_links[0] <> 0) {
         $tool_content .= "
@@ -559,7 +538,7 @@ else {
         $i = 0;
         $count_video_presented = 1;
         foreach ($results as $table => $result) {
-            while ($myrow = mysql_fetch_array($result)) {
+            foreach ($result as $myrow) {
                 switch ($table) {
                     case 'video':
                         $vObj = MediaResourceFactory::initFromVideo($myrow);
@@ -567,14 +546,14 @@ else {
                             $vObj->setPlayURL($vObj->getAccessURL());
 
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
-                        $link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow['description']) . "</small>" : '';
+                        $link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow->description) . "</small>" : '';
                         $link_to_add = "<td>" . $link_href . "</td>";
                         $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
                         break;
                     case 'videolink':
                         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
                         $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
-                        $link_to_add = "<td>" . $link_href . "<br/>" . q($myrow['description']) . "</td>";
+                        $link_to_add = "<td>" . $link_href . "<br/>" . q($myrow->description) . "</td>";
                         $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
                         break;
                     default:
@@ -585,7 +564,7 @@ else {
                 } else {
                     $rowClass = "class='even'";
                 }
-                if (resource_access($myrow['visible'], $myrow['public'])) {
+                if (resource_access($myrow->visible, $myrow->public)) {
                     $tool_content .= "<tr $rowClass>";
                     $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
                     $tool_content .= $link_to_add;

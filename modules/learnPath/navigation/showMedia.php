@@ -30,10 +30,8 @@ $nameTools = $langMediaTypeDesc;
 if (isset($_GET['id'])) {
     $id = q($_GET['id']);
 
-    $res = db_query("SELECT * FROM video WHERE course_id = $course_id AND path = " . quote($id));
-    $row = mysql_fetch_array($res);
-
-    if (!empty($row)) {
+    $row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND path = ?s", $course_id, $id);
+    if ($row) {
         $vObj = MediaResourceFactory::initFromVideo($row);
         echo MultimediaHelper::mediaHtmlObject($vObj);
     }
