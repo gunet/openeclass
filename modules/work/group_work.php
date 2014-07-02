@@ -58,10 +58,9 @@ function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
     $langWorks, $course_id, $course_code, $themeimg;
 
-    $res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		 FROM assignment WHERE course_id = $course_id");
-
-    if (mysql_num_rows($res) == 0) {
+    $res = Database::get()->queryArray("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
+		 FROM assignment WHERE course_id = ?d", $course_id);
+    if (count($res) == 0) {
         $tool_content .= $langNoAssign;
         return;
     }
@@ -85,27 +84,27 @@ function show_assignments() {
 		<th align='center' width='10%'>$m[select]</th>
 		</tr>";
 
-    while ($row = mysql_fetch_array($res)) {
-        if (!$row['active']) {
+    foreach ($res as $row) {
+        if (!$row->active) {
             continue;
         }
 
         $tool_content .= "<tr><td width=\"1%\">
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
-			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row[id]'>" . q($row['title']) . "</a></td>
-			<td align='center'>" . nice_format($row['deadline']);
-        if ($row['days'] > 1) {
-            $tool_content .= " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
-        } elseif ($row['days'] < 0) {
+			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
+			<td align='center'>" . nice_format($row->deadline);
+        if ($row->days > 1) {
+            $tool_content .= " ($m[in]&nbsp;$row->days&nbsp;$langDays";
+        } elseif ($row->days < 0) {
             $tool_content .= " ($m[expired])";
-        } elseif ($row['days'] == 1) {
+        } elseif ($row->days == 1) {
             $tool_content .= " ($m[tomorrow])";
         } else {
             $tool_content .= " ($m[today])";
         }
 
         $tool_content .= "</div></td>\n      <td align=\"center\">";
-        $subm = was_submitted($uid, $group_id, $row['id']);
+        $subm = was_submitted($uid, $group_id, $row->id);
         if ($subm == 'user') {
             $tool_content .= $m['yes'];
         } elseif ($subm == 'group') {
@@ -114,8 +113,8 @@ function show_assignments() {
             $tool_content .= $m['no'];
         }
         $tool_content .= "</td><td align=\"center\">";
-        if ($row['days'] >= 0 and !was_graded($uid, $row['id']) and is_group_assignment($row['id'])) {
-            $tool_content .= "<input type='radio' name='assign' value='$row[id]'>";
+        if ($row->days >= 0 and !was_graded($uid, $row->id) and is_group_assignment($row->id)) {
+            $tool_content .= "<input type='radio' name='assign' value='$row->id'>";
         } else {
             $tool_content .= '-';
         }
@@ -144,10 +143,7 @@ function submit_work($uid, $group_id, $id, $file) {
 
     $ext = get_file_extension($file);
     $local_name = greek_to_latin('Group ' . $group_id . (empty($ext) ? '' : '.' . $ext));
-
-    list($original_filename) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                WHERE $group_sql AND
-                                                                      path = " . autoquote($file)));
+    $original_filename = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $file)->filename;
     $source = $groupPath . $file;
     $destination = work_secret($id) . "/$local_name";
 
@@ -160,11 +156,9 @@ function submit_work($uid, $group_id, $id, $file) {
         $source = $zip_filename;
     }
     if (copy($source, "$workPath/$destination")) {
-        db_query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
-                                     submission_ip, file_path, file_name, comments, group_id, grade_comments)
-                                 VALUES ('$uid','$id', NOW(), '$_SERVER[REMOTE_ADDR]', '$destination'," .
-                quote($original_filename) . ', ' .
-                autoquote($_POST['comments']) . ", $group_id, '')");
+        Database::get()->query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
+                                submission_ip, file_path, file_name, comments, group_id, grade_comments) 
+                                VALUES (?d, ?d, NOW(), '$_SERVER[REMOTE_ADDR]', ?s, ?s, ?s, ?d, ''", $uid, $id, $destination, $original_filename, $_POST['comments'], $group_id);
 
         $tool_content .="<p class='success'>$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
