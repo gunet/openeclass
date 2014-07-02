@@ -86,9 +86,9 @@ if ($can_upload) {
         $tool_content .= "<form action='index.php?course=$course_code' method='post' enctype='multipart/form-data'>";
     }
     $tool_content .= "<fieldset>
+        <legend>$langUpload</legend>
         <input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input
-        <legend>$langUpload</legend>
         <table class='tbl' width='100%'>
         <tr>
           $fileinput
