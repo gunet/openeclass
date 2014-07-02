@@ -83,12 +83,12 @@ if (!class_exists('Exercise')):
         function read($id) {
             global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $course_id;
 
-            $sql = "SELECT title, description, type, start_date, end_date, time_constraint,
+            $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, time_constraint,
 			attempts_allowed, random, active, results, score
-			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = $id";
-            $result = db_query($sql);
+			FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+
             // if the exercise has been found
-            if ($object = mysql_fetch_object($result)) {
+            if ($object) {
                 $this->id = $id;
                 $this->exercise = $object->title;
                 $this->description = $object->description;
@@ -102,18 +102,17 @@ if (!class_exists('Exercise')):
                 $this->results = $object->results;
                 $this->score = $object->score;
 
-                $sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
-				WHERE course_id = $course_id AND question_id = id AND exercise_id = $id ORDER BY q_position";
-                $result = db_query($sql);
-
+                $result = Database::get()->queryArray("SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
+                
                 // fills the array with the question ID for this exercise
                 // the key of the array is the question position
-                while ($object = mysql_fetch_object($result)) {
+                foreach ($result as $row) {
                     // makes sure that the question position is unique
-                    while (isset($this->questionList[$object->q_position])) {
-                        $object->q_position++;
+                    while (isset($this->questionList[$row->q_position])) {
+                        $row->q_position++;
                     }
-                    $this->questionList[$object->q_position] = $object->question_id;
+                    $this->questionList[$row->q_position] = $row->question_id;
                 }
                 // find the total weighting of an exercise
                 $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
@@ -438,26 +437,24 @@ if (!class_exists('Exercise')):
 
             // exercise already exists
             if ($id) {
-                $sql = "UPDATE `$TBL_EXERCISE`
-				SET title = " . quote($exercise) . ", description = " . quote($description) . ", type = '$type'," .
-                        "start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint'," .
-                        "attempts_allowed = '$attemptsAllowed', random = '$random',
-				active = $active, public = $public, results = '$results', score = '$score' 
-                                WHERE course_id = $course_id AND id = $id";
-                db_query($sql);
-
-                Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
-                    'title' => $exercise,
-                    'description' => $description));
+                $affected_rows = Database::get()->query("UPDATE `$TBL_EXERCISE`
+				SET title = ?s, description = ?s, type = ?d," .
+                        "start_date = ?t, end_date = ?t, time_constraint = ?d," .
+                        "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d
+                        WHERE course_id = ?d AND id = ?d", 
+                        $exercise, $description, $type, $startDate, $endDate, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $course_id, $id)->affectedRows;
+                if ($affected_rows > 0) {
+                    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
+                        'title' => $exercise,
+                        'description' => $description));
+                }
             }
             // creates a new exercise
             else {
-                $sql = "INSERT INTO `$TBL_EXERCISE` (course_id, title, description, `type`, start_date, 
+                $this->id = Database::get()->query("INSERT INTO `$TBL_EXERCISE` (course_id, title, description, type, start_date, 
                                         end_date, time_constraint, attempts_allowed, random, active, results, score) 
-				VALUES ($course_id, " . quote($exercise) . ", " . quote($description) . ", $type, '$startDate', '$endDate',
-					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
-                db_query($sql);
-                $this->id = mysql_insert_id();
+				VALUES (?d, ?s, ?s, ?d, ?t, ?t,
+					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)", $course_id, $exercise, $description, $type, $startDate, $endDate)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,
@@ -465,9 +462,8 @@ if (!class_exists('Exercise')):
             }
             // updates the question position
             foreach ($this->questionList as $position => $questionId) {
-                $sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' 
-                                WHERE course_id = $course_id AND id='$questionId'";
-                db_query($sql);
+                Database::get()->query("UPDATE `$TBL_QUESTION` SET q_position = ?d 
+                                WHERE course_id = ?d AND id = ?d", $position, $course_id, $questionId);
             }
         }
 
@@ -480,9 +476,8 @@ if (!class_exists('Exercise')):
         function moveUp($id) {
             global $TBL_QUESTION, $course_id;
 
-            list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'"));
-
+            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos > 1) {
                 $temp = $this->questionList[$pos - 1];
                 $this->questionList[$pos - 1] = $this->questionList[$pos];
@@ -500,9 +495,8 @@ if (!class_exists('Exercise')):
         function moveDown($id) {
             global $TBL_QUESTION, $course_id;
 
-            list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'"));
-
+            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos < count($this->questionList)) {
                 $temp = $this->questionList[$pos + 1];
                 $this->questionList[$pos + 1] = $this->questionList[$pos];
@@ -568,16 +562,13 @@ if (!class_exists('Exercise')):
             global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $course_id;
 
             $id = $this->id;
-
-            $sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = '$id'";
-            db_query($sql);
-
-            $title = db_query_get_single_value("SELECT title FROM `$TBL_EXERCISE` 
-                                                WHERE course_id = $course_id AND id = '$id'");
-
-            $sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
-            db_query($sql);
-            Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
+            Database::get()->query("DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = ?d", $id);
+            $title = Database::get()->querySingle("SELECT title FROM `$TBL_EXERCISE` 
+                                                WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $deleted_rows = Database::get()->query("DELETE FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
+            if ($deleted_rows > 0) {
+                Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
+            }
         }
          /**
          * checks if exercise time has expired
