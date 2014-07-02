@@ -948,7 +948,7 @@ if ($parentDir == '\\') {
     $parentDir = '/';
 }
 
-if (strpos($curDirName, '/../') !== false or !is_dir(realpath($basedir . $curDirPath))) {
+if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
     $tool_content .= $langInvalidDir;
     draw($tool_content, $menuTypeID);
     exit;
@@ -1082,14 +1082,14 @@ if ($doc_count == 0) {
             $this_reverse = $reverse;
             $indicator = '';
         }
-        return '<a href = "' . $base_url . 'openDir=' . $path .
+        return '<a href="' . $base_url . 'openDir=' . $path .
                 '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
                 '">' . $label . $indicator . '</a>';
     }
 
     /*     * * go to parent directory ** */
     if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-        $parentlink = $base_url . 'openDir = ' . $cmdParentDir;
+        $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content .= "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='$langUp'/></a>";
     }
     $tool_content .= "</div></td>
@@ -1113,18 +1113,18 @@ if ($doc_count == 0) {
     foreach (array(true, false) as $is_dir) {
         foreach ($fileinfo as $entry) {
             $link_title_extra = '';
-            if (($entry['is_dir'] != $is_dir) or (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {
+            if (($entry['is_dir'] != $is_dir) or ( !$can_upload and ( !resource_access($entry['visible'], $entry['public'])))) {
                 continue;
             }
             $cmdDirName = $entry['path'];
             if ($entry['visible']) {
                 if ($counter % 2 == 0) {
-                    $style = 'class = "even"';
+                    $style = 'class="even"';
                 } else {
-                    $style = 'class = "odd"';
+                    $style = 'class="odd"';
                 }
             } else {
-                $style = ' class = "invisible"';
+                $style = ' class="invisible"';
             }
             if ($is_dir) {
                 $img_href = icon('folder');
@@ -1153,7 +1153,7 @@ if ($doc_count == 0) {
                 if ($copyid = $entry['copyrighted'] and
                         $copyicon = $copyright_icons[$copyid]) {
                     $link_title_extra .= "&nbsp;" .
-                            icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target = "_blank"');
+                            icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
                 }
                 $dload_msg = $langSave;
 
