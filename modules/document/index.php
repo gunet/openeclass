@@ -949,7 +949,7 @@ if ($parentDir == '\\') {
     $parentDir = '/';
 }
 
-if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
+if (strpos($curDirName, '/../') !== false or !is_dir(realpath($basedir . $curDirPath))) {
     $tool_content .= $langInvalidDir;
     draw($tool_content, $menuTypeID);
     exit;
@@ -1027,27 +1027,13 @@ if ($can_upload) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
         $tool_content .= "<div id='operations_container'>
                     <ul id='opslist'>
-                       <li><a href='upload.php?course = $course_code & amp;
-        {
-            $groupset
-        }uploadPath = $curDirPath'>$langDownloadFile</a></li>  
-                       <li><a href=' {
-            $base_url
-        }createDir = $cmdCurDirPath'>$langCreateDir</a></li>
-                       <li><a href='upload.php?course = $course_code & amp;
-        {
-            $groupset
-        }uploadPath = $curDirPath & amp;
-        ext = true'>$langExternalFile</a></li>";
+                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>  
+                       <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
+                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
         if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
-            $tool_content .= "<li><a href='../units/insert.php?course = $course_code & amp;
-        dir = $curDirPath & amp;
-        type = doc & amp;
-        id = -1'>$langCommonDocs</a>";
+            $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
         }
-        $tool_content .= "<li><a href=' {
-            $base_url
-        }showQuota = true'>$langQuotaBar</a></li>
+        $tool_content .= "<li><a href='{$base_url}showQuota = true'>$langQuotaBar</a></li>
             </ul></div>\n";
     }
 
@@ -1073,9 +1059,7 @@ if ($doc_count == 0) {
     }
 
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
-    $download_dir = ($is_in_tinymce) ? '' : "<a href=' {
-            $base_url
-        }download = $download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
+    $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
     $tool_content .= "<tr>
         <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
             "&nbsp;$download_dir<br></div></td>
@@ -1130,7 +1114,7 @@ if ($doc_count == 0) {
     foreach (array(true, false) as $is_dir) {
         foreach ($fileinfo as $entry) {
             $link_title_extra = '';
-            if (($entry['is_dir'] != $is_dir) or ( !$can_upload and ( !resource_access($entry['visible'], $entry['public'])))) {
+            if (($entry['is_dir'] != $is_dir) or (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {
                 continue;
             }
             $cmdDirName = $entry['path'];
@@ -1156,16 +1140,14 @@ if ($doc_count == 0) {
                     $cdpath = common_doc_path($entry['extra_path']);
                     if ($cdpath) {
                         if ($is_editor) {
-                            $link_title_extra .= ' & nbsp;
-        ' .
+                            $link_title_extra .= '&nbsp;' .
                                     $common_doc_visible ? 'common' : 'common_invisible';
                         }
                     } else {
                         // External file URL
                         $file_url = $entry['extra_path'];
                         if ($is_editor) {
-                            $link_title_extra .= ' & nbsp;
-        external';
+                            $link_title_extra .= '&nbsp;external';
                         }
                     }
                 }
@@ -1203,60 +1185,30 @@ if ($doc_count == 0) {
                         "</span>";
             }
             $tool_content .= "</td>";
-            $padding = ' & nbsp;
-        ';
+            $padding = '&nbsp;';
             $padding2 = '';
             $date = nice_format($entry['date'], true, true);
             $date_with_time = nice_format($entry['date'], true);
             if ($is_dir) {
                 $tool_content .= "\n<td>&nbsp;</td>\n<td class='center'>$date</td>";
-                $padding = '&nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        ';
+                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             } else if ($entry['format'] == ".meta") {
                 $size = format_file_size($entry['size']);
                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
-                $padding = '&nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        ';
-                $padding2 = '&nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        ';
+                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             } else {
                 $size = format_file_size($entry['size']);
                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
             }
             if (!$is_in_tinymce) {
                 if ($can_upload) {
-                    $tool_content .= "\n<td class='right toolbox' valign='top'><form action='$_SERVER[SCRIPT_NAME]?course = $course_code' method='post'>" . $group_hidden_input .
+                    $tool_content .= "\n<td class='right toolbox' valign='top'><form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>" . $group_hidden_input .
                             "<input type='hidden' name='filePath' value='$cmdDirName' />" .
                             $download_icon . $padding;
                     if (!$is_dir && $entry['format'] != ".meta") {
                         /*                         * * replace/overwrite command, only applies to files ** */
-                        $tool_content .= "<a href=' {
-            $base_url
-        }replace = $cmdDirName'>" .
+                        $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
                                 "<img src='$themeimg/replace.png' " .
                                 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
                     }
@@ -1289,12 +1241,8 @@ if ($doc_count == 0) {
                         $tool_content .= "&nbsp;";
                     }
                     if ($subsystem == GROUP and isset($is_member) and ( $is_member)) {
-                        $tool_content .= "<a href=' {
-            $urlAppend
-        }modules/work/group_work.php?course = $course_code" .
-                                " & amp;
-        group_id = $group_id & amp;
-        submit = $cmdDirName'>" .
+                        $tool_content .= "<a href='{$urlAppend}modules/work/group_work.php?course=$course_code" .
+                                "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
                                 "<img src='$themeimg/book.png' " .
                                 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";
                     }
