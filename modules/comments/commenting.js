@@ -58,6 +58,7 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        			addedDiv.className = 'comment';
 	        			addedDiv.innerHTML = response[1]+response[3];
 	        			document.getElementById('comments-'+rid).appendChild(addedDiv);
+	        			setTimeout(function(){fade(document.getElementById('comment-'+response[2]).childNodes[0])}, 3000);
 	        		} else if (response[0] == 'ERROR') {
 	        			
 	        		}
@@ -66,8 +67,10 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        		if (response[0] == 'OK') {
 	        			document.getElementById('comment-'+cid).innerHTML = response[1];
 	        			document.getElementById('commentsNum-'+rid).textContent = parseInt(document.getElementById('commentsNum-'+rid).textContent)-1;
+	        			setTimeout(function(){fade(document.getElementById('comment-'+cid).childNodes[0])}, 3000);
 	        		} else if (response[0] == 'ERROR') {
 	        			document.getElementById('comment-'+cid).innerHTML += response[1];
+	        			setTimeout(function(){fade(document.getElementById('comment-'+cid).childNodes[0])}, 3000);
 	        		}
 	        	} else if (action == 'editLoad') {
 	        		response = JSON.parse(xmlHttpReq.responseText);
@@ -75,13 +78,16 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        			document.getElementById('comment_content-'+cid).innerHTML = response[2];
 	        		} else if (response[0] == 'ERROR') {
 	        			document.getElementById('comment-'+cid).innerHTML += response[1];
+	        			setTimeout(function(){fade(document.getElementById('comment-'+cid).childNodes[0])}, 3000);
 	        		}
 	        	} else if (action == 'editSave') {
 	        		response = JSON.parse(xmlHttpReq.responseText);
 	        		if (response[0] == 'OK') {
 	        			document.getElementById('comment_content-'+cid).innerHTML = response[1]+response[2];
+	        			setTimeout(function(){fade(document.getElementById('comment_content-'+cid).childNodes[0])}, 3000);
 	        		} else if (response[0] == 'ERROR') {
 	        			document.getElementById('comment-'+cid).innerHTML += response[1];
+	        			setTimeout(function(){fade(document.getElementById('comment-'+cid).childNodes[0])}, 3000);
 	        		}
 	        	}
 	        } 
@@ -100,4 +106,17 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	    xmlHttpReq.send(params);
     
 	}
+}
+
+function fade(element) {
+    var op = 1;  // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 50);
 }
