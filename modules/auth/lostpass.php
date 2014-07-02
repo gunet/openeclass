@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -79,14 +79,11 @@ function password_is_editable($password) {
 }
 
 if (isset($_REQUEST['u']) and
-        isset($_REQUEST['h'])) {
+    isset($_REQUEST['h'])) {
     $change_ok = false;
     $userUID = intval($_REQUEST['u']);
     $valid = token_validate('password' . $userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
-    $res = db_query("SELECT id FROM user
-                                WHERE id = $userUID AND
-                                      password NOT IN ('" .
-            implode("', '", $auth_ids) . "')");
+    $res = db_query("SELECT id FROM user WHERE id = $userUID AND password NOT IN ('" . implode("', '", $auth_ids) . "')");
     $error_messages = array();
     if ($valid and mysql_num_rows($res) == 1) {
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
@@ -105,27 +102,27 @@ if (isset($_REQUEST['u']) and
         }
         if (!$change_ok) {
             $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <input type='hidden' name='u' value='$userUID'>
-        <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
-        <fieldset>
-        <legend>$langPassword</legend>
-        <table class='tbl'>
-        <tr>
-           <th>$langNewPass1</th>
-           <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
-        </tr>
-        <tr>
-           <th>$langNewPass2</th>
-           <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
-        </tr>
-        <tr>
-           <th>&nbsp;</th>
-           <td><input type='submit' name='submit' value='$langModify'></td>
-        </tr>
-        </table>
-        </fieldset>
-        </form>";
+            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+            <input type='hidden' name='u' value='$userUID'>
+            <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
+            <fieldset>
+            <legend>$langPassword</legend>
+            <table class='tbl'>
+            <tr>
+               <th>$langNewPass1</th>
+               <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
+            </tr>
+            <tr>
+               <th>$langNewPass2</th>
+               <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
+            </tr>
+            <tr>
+               <th>&nbsp;</th>
+               <td><input type='submit' name='submit' value='$langModify'></td>
+            </tr>
+            </table>
+            </fieldset>
+            </form>";
         }
     } else {
         $tool_content = "<div class='caution'>$langAccountResetInvalidLink</div>

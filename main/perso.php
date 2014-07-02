@@ -404,7 +404,7 @@ function getUserDocuments($lesson_id) {
             foreach ($q as $course_file) {
                     $group_sql = "course_id = " . $lid . " AND subsystem = " . MAIN;                    
                     $url = file_url($course_file->path, $course_file->filename, course_id_to_code($lid));
-                    $dObj = MediaResourceFactory::initFromDocument($course_file, true);
+                    $dObj = MediaResourceFactory::initFromDocument($course_file);
                     $dObj->setAccessURL($url);
                     $dObj->setPlayURL(file_playurl($course_file->path, $course_file->filename, course_id_to_code($lid)));
                     $href = MultimediaHelper::chooseMediaAhref($dObj);

@@ -178,9 +178,9 @@ function public_file_path($disk_path, $filename = null) {
             foreach ($components as $c) {
                 $partial_path .= '/' . $c;
                 if (!isset($seen_paths[$partial_path])) {
-                    $name = Database::get()->query("SELECT filename FROM document
+                    $name = Database::get()->querySingle("SELECT filename FROM document
                                                                        WHERE $group_sql AND
-                                                                             path = ?s", $partial_path);
+                                                                             path = ?s", $partial_path)->filename;                    
                     $dirname .= '/' . file_url_escape($name);
                     $seen_paths[$partial_path] = $dirname;
                 } else {
@@ -192,9 +192,9 @@ function public_file_path($disk_path, $filename = null) {
         }
     }
     if (!isset($filename)) {
-        $filename = Database::get()->query("SELECT filename FROM document
+        $filename = Database::get()->querySingle("SELECT filename FROM document
                                                WHERE $group_sql AND
-                                                     path = ?s", $disk_path);
+                                                     path = ?s", $disk_path)->filename;
     }
     return $dirname . '/' . file_url_escape($filename);
 }

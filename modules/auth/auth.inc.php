@@ -47,38 +47,20 @@ $auth_ids = array(1 => 'eclass',
 
 
 /* * **************************************************************
-  find/return the id of the default authentication method
-  return $auth_id (a value between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas)
- * ************************************************************** */
-
-function get_auth_id() {
-    $auth_method = db_query("SELECT auth_id FROM auth WHERE auth_default = 1");
-    if ($auth_method) {
-        $authrow = mysql_fetch_row($auth_method);
-        if (mysql_num_rows($auth_method) == 1) {
-            $auth_id = $authrow[0];
-            return $auth_id;
-        } else {
-            return 0;
-        }
-    } else {
-        return 0;
-    }
-}
-
-/* * **************************************************************
   find/return the ids of the default authentication methods
   return $auth_methods (array with all the values of the defined/active methods)
+ * Array elements are values between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas
  * ************************************************************** */
 
 function get_auth_active_methods() {
-    $auth_methods = array();
-    $q = db_query("SELECT auth_id, auth_settings FROM auth WHERE auth_default = 1");
+    
+    $auth_methods = array();    
+    $q = Database::get()->queryArray("SELECT auth_id, auth_settings FROM auth WHERE auth_default = 1");
     if ($q) {
-        while ($row = mysql_fetch_row($q)) {
+        foreach ($q as $row) {
             // get only those with valid, not empty settings
-            if ($row[0] == 1 or !empty($row[1])) {
-                $auth_methods[] = $row[0];
+            if ($row->auth_id == 1 or !empty($row->auth_settings)) {
+                $auth_methods[] = $row->auth_id;
             }
         }
     }
@@ -88,17 +70,18 @@ function get_auth_active_methods() {
 /* * **************************************************************
   check if method $auth is active
  * ************************************************************** */
-
 function check_auth_active($auth) {
-    $active_auth = db_query("SELECT auth_default, auth_settings FROM auth WHERE auth_id = $auth");
+    
+    $active_auth = Database::get()->queryArray("SELECT auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth);    
     if ($active_auth) {
-        $authrow = mysql_fetch_row($active_auth);
-        // return true only if method is valid,not empty settings
-        if (($authrow[0] == 1) && !empty($authrow[1])) {
-            return true;
+        foreach ($active_auth as $authrow) {
+            // return true only if method is valid,not empty settings
+            if (($authrow->auth_default == 1) && !empty($authrow->auth_settings)) {
+                return true;
+            }
         }
-    }
     return false;
+    }
 }
 
 /* * **************************************************************
@@ -108,17 +91,17 @@ function check_auth_active($auth) {
 
 function is_eclass_unique() {
     $is_eclass_unique = 0;
-    $sql = "SELECT auth_id, auth_settings FROM auth WHERE auth_default=1";
-    $auth_method = db_query($sql);
+    
+    $auth_method = Database::get()->queryArray("SELECT auth_id, auth_settings FROM auth WHERE auth_default=1");     
     if ($auth_method) {
         $count_methods = 0;
         $is_eclass = 0;
-        while ($authrow = mysql_fetch_row($auth_method)) {
-            if ($authrow[0] == 1) {
+        foreach ($auth_method as $authrow) {
+            if ($authrow->auth_id == 1) {
                 $is_eclass = 1;
                 $count_methods++;
             } else {
-                if (empty($authrow[1])) {
+                if (empty($authrow->auth_settings)) {
                     continue;
                 } else {
                     $count_methods++;
@@ -146,17 +129,16 @@ function count_auth_users($auth) {
     global $auth_ids;
     $auth = intval($auth);
 
-    if ($auth === 1) {
-        $qry = "SELECT COUNT(*) FROM user WHERE password != '{$auth_ids[1]}'";
+    if ($auth === 1) {        
         for ($i = 2; $i <= count($auth_ids); $i++) {
-            $qry .= " and password != '{$auth_ids[$i]}'";
+            $extra = " AND password != '{$auth_ids[$i]}'";
         }
-    } else {
-        $qry = "SELECT COUNT(*) FROM user WHERE password = '" . $auth_ids[$auth] . "'";
-    }
-    $result = db_query($qry);
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password != '{$auth_ids[1]}' $extra");
+    } else {        
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
+    }    
     if ($result) {
-        return(intval(mysql_result($result, 0)));
+        return $result->total;
     }
     return 0;
 }

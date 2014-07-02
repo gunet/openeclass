@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -196,16 +196,15 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         // check if the username is already in use
-        $q2 = "SELECT username FROM user WHERE username = " . autoquote($uname);
-        $username_check = db_query($q2);
-        if ($myusername = mysql_fetch_array($username_check)) {
+        //$q2 = "SELECT username FROM user WHERE username = " . autoquote($uname);
+        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $uname);
+        if ($username_check) {
             $registration_errors[] = $langUserFree;
         }
         if (get_config('display_captcha')) {
             // captcha check
             require_once 'include/securimage/securimage.php';
             $securimage = new Securimage();
-
             if ($securimage->check($_POST['captcha_code']) == false) {
                 $registration_errors[] = $langCaptchaWrong;
             }
@@ -233,25 +232,14 @@ if (!isset($_POST['submit'])) {
         $password = unescapeSimple($password);
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
-
-        $q1 = "INSERT INTO user (surname, givenname, username, password, email,
+        
+        $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                  status, am, phone, registered_at, expires_at,
                                  lang, verified_mail, whitelist, description)
-                      VALUES (" . quote($surname_form) . ",
-                              " . quote($givenname_form) . ",
-                              " . quote($uname) . ",
-                              '$password_encrypted',
-                              " . quote($email) . ",
-                              " . USER_STUDENT . ",
-                              " . quote($am) . ",
-                              " . quote($phone) . ",
-                              NOW(),
-                              DATE_ADD(NOW(), INTERVAL $account_duration SECOND),
-                              " . quote($language) . ",
-                              $verified_mail,
-                              '', '')";
-        $inscr_user = db_query($q1);
-        $last_id = mysql_insert_id();
+                      VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, NOW(),
+                              DATE_ADD(NOW(), INTERVAL $account_duration SECOND), ?s, $verified_mail, '', '')", 
+                            $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
+        $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
 
         if ($vmail) {
@@ -286,15 +274,15 @@ if (!isset($_POST['submit'])) {
             $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
         }
         // login user
-        else {
-            $result = db_query("SELECT id, surname, givenname FROM user WHERE id = $last_id");
-            while ($myrow = mysql_fetch_array($result)) {
-                $uid = $myrow[0];
-                $surname = $myrow[1];
-                $givenname = $myrow[2];
-            }
-            db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                             VALUES ($uid, " . quote($_SERVER['REMOTE_ADDR']) . ", NOW(), 'LOGIN')");
+        else {            
+            $results = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
+            foreach ($results as $myrow) {
+                $uid = $myrow->id;
+                $surname = $myrow->surname;
+                $givenname = $myrow->givenname;
+            }            
+            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                             VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;
@@ -303,10 +291,7 @@ if (!isset($_POST['submit'])) {
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg
-        $tool_content .=
-                "<div class='success'>" .
-                "<p>$user_msg</p>" .
-                "</div>";
+        $tool_content .= "<div class='success'><p>$user_msg</p></div>";
 
         // footer msg
         if (!$vmail) {
