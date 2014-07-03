@@ -33,10 +33,9 @@ $action->record(MODULE_ID_VIDEO);
 // ----------------------
 // play videolink
 // ----------------------
-$res = db_query("SELECT * FROM videolink WHERE course_id = $course_id AND id = " . intval($_GET['id']));
-$row = mysql_fetch_array($res);
+$row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
-if (!empty($row)) {
+if ($row) {
     $vObj = MediaResourceFactory::initFromVideoLink($row);
     echo MultimediaHelper::medialinkIframeObject($vObj);
 } else

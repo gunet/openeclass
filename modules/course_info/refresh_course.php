@@ -29,6 +29,8 @@ $require_course_admin = TRUE;
 $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/work/work_functions.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 load_js('jquery');
 load_js('jquery-ui');
@@ -58,14 +60,16 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['delannounces'])) {
         $output[] = delete_announcements();
     }
-
-    mysql_select_db($course_code);
+    
     if (isset($_POST['delagenda'])) {
         $output[] = delete_agenda();
     }
     if (isset($_POST['hideworks'])) {
         $output[] = hide_work();
     }
+    if (isset($_POST['delworkssubs'])) {
+	$output[] = del_work_subs();
+    }            
     if (isset($_POST['purgeexercises'])) {
         $output[] = purge_exercises();
     }
@@ -111,6 +115,11 @@ if (isset($_POST['submit'])) {
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
+	<tr>
+	  <th class='left'>&nbsp</th>
+	  <td><input type='checkbox' name='delworkssubs'></td>
+	  <td>$langDelAllWorkSubs</td>
+	</tr>          
         <tr>
 	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
 	  <td><input type='checkbox' name='purgeexercises'></td>
@@ -144,15 +153,15 @@ function delete_users($date = '') {
     global $course_id, $langUsersDeleted;
 
     if (isset($date)) {
-        db_query("DELETE FROM course_user WHERE course_id = $course_id AND
+        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND
                                 status != ". USER_TEACHER ." AND
-                                reg_date < '$date'");
+                                reg_date < ?t", $course_id, $date);
     } else {
-        db_query("DELETE FROM course_user WHERE course_id = $course_id AND status != " . USER_TEACHER);
+        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND status != " . USER_TEACHER . "", $course_id);
     }
-    db_query("DELETE FROM group_members
-                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
-                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)");
+    Database::get()->query("DELETE FROM group_members
+                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d) AND
+                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = ?d)", $course_id, $course_id);
     return "<p>$langUsersDeleted</p>";
 }
 
@@ -165,7 +174,7 @@ function delete_users($date = '') {
 function delete_announcements() {
     global $course_id, $langAnnDeleted;
 
-    db_query("DELETE FROM announcement WHERE course_id = $course_id");
+    Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $course_id);
     return "<p>$langAnnDeleted</p>";
 }
 
@@ -178,7 +187,7 @@ function delete_announcements() {
 function delete_agenda() {
     global $langAgendaDeleted, $course_id;
 
-    db_query("DELETE FROM agenda WHERE course_id = $course_id");
+    Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $course_id);
     return "<p>$langAgendaDeleted</p>";
 }
 
@@ -191,7 +200,7 @@ function delete_agenda() {
 function hide_doc() {
     global $langDocsDeleted, $course_id;
 
-    db_query("UPDATE document SET visible=0, public=0 WHERE course_id = $course_id");
+    Database::get()->query("UPDATE document SET visible=0, public=0 WHERE course_id = ?d", $course_id);
     return "<p>$langDocsDeleted</p>";
 }
 
@@ -204,8 +213,31 @@ function hide_doc() {
 function hide_work() {
     global $langWorksDeleted, $course_id;
 
-    db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
+    Database::get()->query("UPDATE assignment SET active=0 WHERE course_id = ?d", $course_id);
     return "<p>$langWorksDeleted</p>";
+}
+/**
+ * 
+ * @global type $langAllAssignmentSubsDeleted
+ * @global type $webDir
+ * @global type $course_id
+ * @global type $course_code
+ * @return type
+ */
+function del_work_subs()  {
+	global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
+        
+        $workPath = $webDir."/courses/".$course_code."/work";
+
+        $result = Database::get()->queryArray("SELECT id FROM assignment WHERE course_id = ?d", $course_id);
+        
+        foreach ($result as $row) {  
+            $secret = work_secret($row->id);
+            Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
+            move_dir("$workPath/$secret",
+            "$webDir/courses/garbage/${course_code}_work_".$row->id."_$secret");
+        }
+	return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
 /**
@@ -216,7 +248,7 @@ function hide_work() {
 function purge_exercises() {
     global $langPurgedExerciseResults;
 
-    db_query("TRUNCATE exercise_user_record");
+    Database::get()->query("TRUNCATE exercise_user_record");
     return "<p>$langPurgedExerciseResults</p>";
 }
 

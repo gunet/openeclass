@@ -84,6 +84,7 @@ define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
 define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_BBB', 34);
 
 
 // exercise answer types
@@ -92,6 +93,14 @@ define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
+define('FREE_TEXT', 6);
+
+// exercise attempt types
+define('ATTEMPT_COMPLETED', 1);
+define('ATTEMPT_PENDING', 2);
+define('ATTEMPT_PAUSED', 3);
+define('ATTEMPT_CANCELED', 4);
+
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
@@ -302,7 +311,7 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     } elseif ($file == 'datatables') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/datatables/media/css/jquery.dataTables.css' />";            
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
         $file = 'datatables/media/js/jquery.dataTables.min.js';                
     } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
@@ -513,26 +522,29 @@ function user_groups($course_id, $user_id, $format = 'html') {
     }
 }
 
-// Find secret subdir of group gid
+/**
+ * @brief Find secret subdir of group gid
+ * @param type $gid
+ * @return string
+ */
 function group_secret($gid) {    
 
-    $res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'");
-    if ($res) {
-        $secret = mysql_fetch_row($res);
-        return $secret[0];
+    $r = Database::get()->querySingle("SELECT secret_directory FROM `group` WHERE id = ?d", $gid);    
+    if ($r) {
+        return $r->secret;     
     } else {
-        die("Error: group $gid doesn't exist");
+        return '';        
     }
 }
 
-// ------------------------------------------------------------------
-// Often useful function (with so many selection boxes in eClass !!)
-// ------------------------------------------------------------------
-// Show a selection box.
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $default: if it matches one of the values, specifies the default entry
-// Changed by vagpits
+/**
+ * displays a selection box
+ * @param type $entries an array of (value => label)
+ * @param type $name the name of the selection element
+ * @param type $default if it matches one of the values, specifies the default entry
+ * @param type $extra
+ * @return string
+ */
 function selection($entries, $name, $default = '', $extra = '') {
     $retString = "";
     $retString .= "\n<select name='$name' $extra>\n";
@@ -549,10 +561,14 @@ function selection($entries, $name, $default = '', $extra = '') {
     return $retString;
 }
 
-// Show a multi-selection box.
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $defaults: array() if it matches one of the values, specifies the default entry
+/**
+ * displays a multi-selection box.
+ * @param type $entries an array of (value => label)
+ * @param type $name the name of the selection element
+ * @param type $defaults array() if it matches one of the values, specifies the default entry
+ * @param type $extra
+ * @return string
+ */
 function multiselection($entries, $name, $defaults = array(), $extra = '') {
     $retString = "";
     $retString .= "\n<select name='$name' $extra>\n";
@@ -623,11 +639,11 @@ function check_guest() {
 function check_editor() {
     global $uid, $course_id;
 
-    if (isset($uid)) {
+    if (isset($uid) and $uid) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
-                                        course_id = ?d", $uid, $course_id);        
-        if ($s->editor == 1) {
+                                        course_id = ?d", $uid, $course_id);
+        if ($s and $s->editor == 1) {
             return true;
         } else {
             return false;
@@ -641,35 +657,40 @@ function check_editor() {
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
-    global $uid, $course_id, $is_admin;
+    global $uid, $course_id, $is_power_user;
 
-    if (isset($uid)) {
-        if ($is_admin) {
+    if (isset($uid) and $uid) {
+        if ($is_power_user) {
             return TRUE;
-        }
-        $res = db_query("SELECT reviewer FROM course_user
-                          WHERE user_id = " . intval($uid) . "
-                            AND course_id = " . intval($course_id));
-        $s = mysql_fetch_array($res);
-        if ($s['reviewer'] == 1)
+        }        
+        $r = Database::get()->querySingle("SELECT reviewer FROM course_user
+                                    WHERE user_id = ?d
+                                    AND course_id = ?d", $uid, $course_id)->reviewer;                        
+        if ($r == 1) {
             return TRUE;
-        else
+        } else {
             return FALSE;
-    } else
+        }
+    } else {
         return FALSE;
+    }
 }
 
-// ---------------------------------------------------
-// just make sure that the $uid variable isn't faked
-// --------------------------------------------------
+/**
+ * @brief just make sure that the $uid variable isn't faked
+ * @global type $urlServer
+ * @global type $require_valid_uid
+ * @global type $uid
+ */
 function check_uid() {
 
     global $urlServer, $require_valid_uid, $uid;
 
-    if (isset($_SESSION['uid']))
+    if (isset($_SESSION['uid'])) {
         $uid = $_SESSION['uid'];
-    else
+    } else {
         unset($uid);
+    }
 
     if ($require_valid_uid and !isset($uid)) {
         header("Location: $urlServer");
@@ -749,72 +770,47 @@ function imap_literal($s) {
     return "{" . strlen($s) . "}\r\n$s";
 }
 
-// -----------------------------------------------------------------------------------
-// checking the mysql version
-// note version_compare() is used for checking the php version but works for mysql too
-// ------------------------------------------------------------------------------------
 
-function mysql_version() {
-    $ver = mysql_get_server_info();
-    if (version_compare("4.1", $ver) <= 0)
-        return true;
-    else
-        return false;
-}
-
-// --------------------------------------
-// Useful functions for creating courses
-// -------------------------------------
-// Returns the code of a faculty given its name
-function find_faculty_by_name($name) {
-
-    $code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =" . quote($name)));
-
-    if (!$code) {
-        return false;
-    } else {
-        return $code[0];
-    }
-}
-
-// Returns the name of a faculty given its code or its name
+/**
+ * @brief returns the name of a faculty given its code or its name
+ * @param type $id
+ * @return boolean
+ */
 function find_faculty_by_id($id) {
-
-    $req = db_query("SELECT name FROM hierarchy WHERE id = " . intval($id));
-
-    if ($req and mysql_num_rows($req)) {
-        $fac = mysql_fetch_row($req);
-        return $fac[0];
-    } else {
-        $req = db_query("SELECT name FROM hierarchy WHERE name = '" . addslashes($id) . "'");
-        if ($req and mysql_num_rows($req)) {
-            $fac = mysql_fetch_row($req);
-            return $fac[0];
+    
+    $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $id);
+    if ($req) {        
+        $fac = $req->name;
+        return $fac;
+    } else {        
+        $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE name = ?s" , $id);        
+        if ($req) {
+            $fac = $req->name;
+            return $fac;
         }
     }
-
     return false;
 }
 
-// Returns next available code for a new course in faculty with id $fac
+
+/**
+ * @brief Returns next available code for a new course in faculty with id $fac
+ * @param type $fac
+ * @return string
+ */
 function new_code($fac) {
-    global $mysqlMainDb;
-
-    mysql_select_db($mysqlMainDb);
-    $gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = " . intval($fac)));
-
-    do {
-        $code = $gencode[0] . $gencode[1];
-        $gencode[1] += 1;
-        db_query("UPDATE hierarchy SET generator = " . intval($gencode[1]) . " WHERE id = " . intval($fac));
-    } while (file_exists("courses/" . $code));
-    mysql_select_db($mysqlMainDb);
-
+        
+    $gencode = Database::get()->querySingle("SELECT code, generator FROM hierarchy WHERE id = ?d", $fac);
+    if ($gencode) {
+        do {
+            $code = $gencode->code . $gencode->generator;
+            $gencode->generator += 1;            
+            Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);    
+        } while (file_exists("courses/" . $code));    
     // Make sure the code returned isn't empty!
-    if (empty($code)) {
+    } else {
         die("Course Code is empty!");
     }
-
     return $code;
 }
 
@@ -898,21 +894,17 @@ function urlenc($string) {
     return $out;
 }
 
-/*
- * Get user data
- * @param $user_id integer
- * @return array(`id`, `surname`, `givenname`, `username`, `email`, `phone`, `status`) with user data
- * @author Mathieu Laurent <laurent@cerdecam.be>
+/**
+ * get user data
+ * @param type $user_id
+ * @return object
  */
-
 function user_get_data($user_id) {
-    $sql = 'SELECT id, surname, givenname, username, email, phone, status
-                   FROM user
-                   WHERE id = ' . (int) $user_id;
-    $result = db_query($sql);
+    
+    $data = Database::get()->querySingle("SELECT id, surname, givenname, username, email, phone, status
+                                            FROM user WHERE id = ?d", $user_id);
 
-    if (mysql_num_rows($result)) {
-        $data = mysql_fetch_array($result);
+    if ($data) {
         return $data;
     } else {
         return null;
@@ -1031,15 +1023,19 @@ function display_activation_link($module_id) {
     }
 }
 
-// checks if a module is visible
+/**
+ * @brief checks if a module is visible
+ * @global type $course_id
+ * @param type $module_id
+ * @return boolean
+ */
 function visible_module($module_id) {
     global $course_id;
-
-    $v = mysql_fetch_array(db_query("SELECT visible FROM course_module
-                                WHERE module_id = $module_id AND
-                                course_id = $course_id"));
-
-    if ($v['visible'] == 1) {
+   
+    $v = Database::get()->querySingle("SELECT visible FROM course_module
+                                WHERE module_id = ?d AND
+                                course_id = ?d", $module_id, $course_id)->visible;
+    if ($v == 1) {
         return true;
     } else {
         return false;
@@ -1095,38 +1091,38 @@ function cp737_to_utf8($s) {
         return $cp737;
     } else {
         // ... if it fails, fall back to manual conversion
-        return strtr($s, array("\x80" => 'Ξ', "\x81" => 'Ξ', "\x82" => 'Ξ', "\x83" => 'Ξ',
-            "\x84" => 'Ξ', "\x85" => 'Ξ', "\x86" => 'Ξ', "\x87" => 'Ξ',
-            "\x88" => 'Ξ', "\x89" => 'Ξ', "\x8a" => 'Ξ', "\x8b" => 'Ξ',
-            "\x8c" => 'Ξ', "\x8d" => 'Ξ', "\x8e" => 'Ξ', "\x8f" => 'Ξ ',
-            "\x90" => 'Ξ‘', "\x91" => 'Ξ£', "\x92" => 'Ξ�', "\x93" => 'Ξ�',
-            "\x94" => 'Ξ¦', "\x95" => 'Ξ§', "\x96" => 'Ξ¨', "\x97" => 'Ξ©',
-            "\x98" => 'Ξ±', "\x99" => 'Ξ²', "\x9a" => 'Ξ³', "\x9b" => 'Ξ΄',
-            "\x9c" => 'Ξ΅', "\x9d" => 'ΞΆ', "\x9e" => 'Ξ·', "\x9f" => 'ΞΈ',
-            "\xa0" => 'ΞΉ', "\xa1" => 'ΞΊ', "\xa2" => 'Ξ»', "\xa3" => 'ΞΌ',
-            "\xa4" => 'Ξ½', "\xa5" => 'ΞΎ', "\xa6" => 'ΞΏ', "\xa7" => 'Ο',
-            "\xa8" => 'Ο', "\xa9" => 'Ο', "\xaa" => 'Ο', "\xab" => 'Ο',
-            "\xac" => 'Ο', "\xad" => 'Ο', "\xae" => 'Ο', "\xaf" => 'Ο',
-            "\xb0" => 'β', "\xb1" => 'β', "\xb2" => 'β', "\xb3" => 'β',
-            "\xb4" => 'β�', "\xb5" => 'β‘', "\xb6" => 'β’', "\xb7" => 'β',
-            "\xb8" => 'β', "\xb9" => 'β£', "\xba" => 'β', "\xbb" => 'β',
-            "\xbc" => 'β', "\xbd" => 'β', "\xbe" => 'β', "\xbf" => 'β',
-            "\xc0" => 'β', "\xc1" => 'β΄', "\xc2" => 'β¬', "\xc3" => 'β',
-            "\xc4" => 'β', "\xc5" => 'βΌ', "\xc6" => 'β', "\xc7" => 'β',
-            "\xc8" => 'β', "\xc9" => 'β', "\xca" => 'β©', "\xcb" => 'β¦',
-            "\xcc" => 'β ', "\xcd" => 'β', "\xce" => 'β¬', "\xcf" => 'β§',
-            "\xd0" => 'β¨', "\xd1" => 'β�', "\xd2" => 'β�', "\xd3" => 'β',
-            "\xd4" => 'β', "\xd5" => 'β', "\xd6" => 'β', "\xd7" => 'β«',
-            "\xd8" => 'β�', "\xd9" => 'β', "\xda" => 'β', "\xdb" => 'β',
-            "\xdc" => 'β', "\xdd" => 'β', "\xde" => 'β', "\xdf" => 'β',
-            "\xe0" => 'Ο', "\xe1" => 'Ξ¬', "\xe2" => 'Ξ­', "\xe3" => 'Ξ�',
-            "\xe4" => 'Ο', "\xe5" => 'Ξ―', "\xe6" => 'Ο', "\xe7" => 'Ο',
-            "\xe8" => 'Ο', "\xe9" => 'Ο', "\xea" => 'Ξ', "\xeb" => 'Ξ',
-            "\xec" => 'Ξ', "\xed" => 'Ξ', "\xee" => 'Ξ', "\xef" => 'Ξ',
-            "\xf0" => 'Ξ', "\xf1" => 'Β±', "\xf2" => 'β�', "\xf3" => 'β�',
-            "\xf4" => 'Ξ�', "\xf5" => 'Ξ«', "\xf6" => 'Γ·', "\xf7" => 'β',
-            "\xf8" => 'Β°', "\xf9" => 'β', "\xfa" => 'Β·', "\xfb" => 'β',
-            "\xfc" => 'βΏ', "\xfd" => 'Β²', "\xfe" => 'β ', "\xff" => 'Β '));
+        return strtr($s, array("\x80" => 'Α', "\x81" => 'Β', "\x82" => 'Γ', "\x83" => 'Δ',
+                               "\x84" => 'Ε', "\x85" => 'Ζ', "\x86" => 'Η', "\x87" => 'Θ',
+                               "\x88" => 'Ι', "\x89" => 'Κ', "\x8a" => 'Λ', "\x8b" => 'Μ',
+                               "\x8c" => 'Ν', "\x8d" => 'Ξ', "\x8e" => 'Ο', "\x8f" => 'Π',
+                               "\x90" => 'Ρ', "\x91" => 'Σ', "\x92" => 'Τ', "\x93" => 'Υ',
+                               "\x94" => 'Φ', "\x95" => 'Χ', "\x96" => 'Ψ', "\x97" => 'Ω',
+                               "\x98" => 'α', "\x99" => 'β', "\x9a" => 'γ', "\x9b" => 'δ',
+                               "\x9c" => 'ε', "\x9d" => 'ζ', "\x9e" => 'η', "\x9f" => 'θ',
+                               "\xa0" => 'ι', "\xa1" => 'κ', "\xa2" => 'λ', "\xa3" => 'μ',
+                               "\xa4" => 'ν', "\xa5" => 'ξ', "\xa6" => 'ο', "\xa7" => 'π',
+                               "\xa8" => 'ρ', "\xa9" => 'σ', "\xaa" => 'ς', "\xab" => 'τ',
+                               "\xac" => 'υ', "\xad" => 'φ', "\xae" => 'χ', "\xaf" => 'ψ',
+                               "\xb0" => '░', "\xb1" => '▒', "\xb2" => '▓', "\xb3" => '│',
+                               "\xb4" => '┤', "\xb5" => '╡', "\xb6" => '╢', "\xb7" => '╖',
+                               "\xb8" => '╕', "\xb9" => '╣', "\xba" => '║', "\xbb" => '╗',
+                               "\xbc" => '╝', "\xbd" => '╜', "\xbe" => '╛', "\xbf" => '┐',
+                               "\xc0" => '└', "\xc1" => '┴', "\xc2" => '┬', "\xc3" => '├',
+                               "\xc4" => '─', "\xc5" => '┼', "\xc6" => '╞', "\xc7" => '╟',
+                               "\xc8" => '╚', "\xc9" => '╔', "\xca" => '╩', "\xcb" => '╦',
+                               "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
+                               "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
+                               "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
+                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
+                               "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
+                               "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
+                               "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
+                               "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
+                               "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
+                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
+                               "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
 }
 
@@ -1153,11 +1149,6 @@ function get_file_extension($filename) {
     } else {
         return '';
     }
-}
-
-// Wrap each $item with single quote
-function wrap_each(&$item) {
-    $item = "'$item'";
 }
 
 // Remove whitespace from start and end of string, convert
@@ -1217,6 +1208,7 @@ $native_language_names_init = array(
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
+    'sv' => 'Svenska',
     'xx' => 'Variable Names',
 );
 
@@ -1239,6 +1231,7 @@ $language_codes = array(
     'pl' => 'polish',
     'ru' => 'russian',
     'tr' => 'turkish',
+    'sv' => 'swedish',
     'xx' => 'variables',
 );
 
@@ -1315,6 +1308,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
         $op = '<';
         $desc = 'DESC';
     }
+    
     $sql = db_query("SELECT `$order_field` FROM `$table`
                          WHERE `$id_field` = '$id'");
     if (!$sql or mysql_num_rows($sql) == 0) {
@@ -1336,7 +1330,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 }
 
 // Add a link to the appropriate course unit if the page was requested
-// with a unit=ID parametre. This happens if the user got to the module
+// with a unit=ID parametere. This happens if the user got to the module
 // page from a unit resource link. If entry_page == true this is the initial page of module
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = false) {
@@ -1356,11 +1350,11 @@ function add_units_navigation($entry_page = false) {
         } elseif (isset($_SESSION['unit'])) {
             $unit_id = intval($_SESSION['unit']);
         }
-        $q = db_query("SELECT title FROM course_units
-                       WHERE id = $unit_id AND course_id = $course_id " .
-                $visibility_check);
-        if ($q and mysql_num_rows($q) > 0) {
-            list($unit_name) = mysql_fetch_row($q);
+        
+        $q = Database::get()->querySingle("SELECT title FROM course_units
+                       WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
+        if ($q) {
+            $unit_name = $q->title;            
             $navigation[] = array("url" => "../units/index.php?course=$course_code&amp;id=$unit_id", "name" => htmlspecialchars($unit_name));
         }
         return true;
@@ -1495,8 +1489,9 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
-    if ($guest_user)
-        deleteUser($guest_user->user_id);
+    if ($guest_user) {
+        deleteUser($guest_user->user_id, true);
+    }
     Database::get()->query("DELETE FROM course_user WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_department WHERE course = ?d", $cid);
     Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
@@ -1546,7 +1541,7 @@ function delete_course($cid) {
  * @param  integer $id - the id of the user.
  * @return boolean     - returns true if deletion was successful, false otherwise.
  */
-function deleteUser($id) {
+function deleteUser($id, $log) {
 
     $u = intval($id);
 
@@ -1571,7 +1566,9 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
+            if ($log) {
+                Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
+            }
             Database::get()->query("DELETE FROM loginout WHERE id_user = ?d", $u);
             Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);
@@ -1606,23 +1603,31 @@ function csv_escape($string, $force = false) {
     }
 }
 
-// Return the value of a key from the config table, or a default value (or null) if not found
+/**
+ * @brief Return the value of a key from the config table, or a default value (or null) if not found
+ * @param type $key
+ * @param type $default
+ * @return type
+ */
 function get_config($key, $default = null) {
-    $r = db_query("SELECT `value` FROM config WHERE `key` = '$key'");
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+       
+    $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", $key);
+    if ($r) {
+        $row = $r->value;
+        return $row;
     } else {
         return $default;
     }
 }
 
-// Set the value of a key in the config table
+/**
+ * @brief Set the value of a key in the config table
+ * @param type $key
+ * @param type $value
+ */
 function set_config($key, $value) {
-    global $mysqlMainDb;
-
-    db_query("REPLACE INTO `$mysqlMainDb`.config (`key`, `value`)
-                          VALUES ('$key', " . quote($value) . ")");
+   
+    Database::get()->query("REPLACE INTO config (`key`, `value`) VALUES (?s, ?s)", $key, $value);
 }
 
 // Copy variables from $_POST[] to $GLOBALS[], trimming and canonicalizing whitespace
@@ -1694,18 +1699,14 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
         $filebrowser = "file_browser_callback : 'openDocsPicker',";
         if (!$is_editor) {
             $cid = course_code_to_id($course_code);
-            $sql = "SELECT * FROM course_module
-                            WHERE course_id = $cid
+            $module = Database::get()->querySingle("SELECT * FROM course_module
+                            WHERE course_id = ?d
                               AND (module_id =" . MODULE_ID_DOCS . " OR module_id =" . MODULE_ID_VIDEO . " OR module_id =" . MODULE_ID_LINKS . ")
-                              AND VISIBLE = 1 ORDER BY module_id";
-
-            $result = db_query($sql);
-            $module = mysql_fetch_assoc($result);
-
-            if ($module === false)
+                              AND VISIBLE = 1 ORDER BY module_id", $cid);
+            if ($module === false) {
                 $filebrowser = '';
-            else {
-                switch ($module['module_id']) {
+            } else {
+                switch ($module->module_id) {
                     case MODULE_ID_LINKS:
                         $activemodule = 'link/index.php';
                         break;
@@ -1818,46 +1819,71 @@ function text_area($name, $rows, $cols, $text, $extra = '') {
             "</textarea>\n";
 }
 
-// Does the special course unit with course descriptions exist?
-// If so, return its id, else create it first
+// 
+/**
+ * @brief  Does the special course unit with course descriptions exist?
+ *       If so, return its id, else create it first
+ * @global type $langCourseDescription
+ * @param type $course_id
+ * @return type
+ */
 function description_unit_id($course_id) {
     global $langCourseDescription;
-
-    $q = db_query("SELECT id FROM course_units
-                       WHERE course_id = $course_id AND `order` = -1");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($id) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT id FROM course_units
+                                       WHERE course_id = ?d AND `order` = -1", $course_id);
+    if ($q) {
+        $id = $q->id;
         return $id;
     } else {
-        db_query('INSERT INTO course_units SET `order` = -1,
-                                `title` = ' . quote($langCourseDescription) . ',
-                                `visible` = 0,
-                                `course_id` = ' . $course_id);
-        return mysql_insert_id();
+        $sql = Database::get()->query("INSERT INTO course_units SET `order` = -1, `title` = ?s, `visible` = 0, `course_id` = ?d", $langCourseDescription, $course_id);
+        return $sql->lastInsertID;        
     }
 }
 
+/**
+ * 
+ * @param type $unit_id
+ * @return int
+ */
 function add_unit_resource_max_order($unit_id) {
-    $q = db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $unit_id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($order) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $unit_id);   
+    if ($q) {
+        $order = $q->maxorder;
         return max(0, $order) + 1;
     } else {
         return 1;
     }
 }
 
+/**
+ * 
+ * @param type $unit_id
+ * @return type
+ */
 function new_description_res_id($unit_id) {
-    $q = db_query("SELECT MAX(res_id) FROM unit_resources WHERE unit_id = $unit_id");
-    list($max_res_id) = mysql_fetch_row($q);
+    
+    $q = Database::get()->querySingle("SELECT MAX(res_id) AS maxresid FROM unit_resources WHERE unit_id = ?d", $unit_id);    
+    $max_res_id = $q->maxresid;
     return 1 + max(count($GLOBALS['titreBloc']), $max_res_id);
 }
 
+/**
+ * @brief add resource to course units
+ * @param type $unit_id
+ * @param type $type
+ * @param type $res_id
+ * @param type $title
+ * @param type $content
+ * @param type $visibility
+ * @param type $date
+ * @return type
+ */
 function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 0, $date = false) {
+    
     if (!$date) {
-        $date = 'NOW()';
-    } else {
-        $date = quote($date);
+        $date = "NOW()";
     }
     if ($res_id === false) {
         $res_id = new_description_res_id($unit_id);
@@ -1867,59 +1893,81 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
     } else {
         $order = add_unit_resource_max_order($unit_id);
     }
-    $q = db_query("SELECT id FROM unit_resources WHERE
-                                `unit_id` = $unit_id AND
-                                `type` = '$type' AND
-                                `res_id` = $res_id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($id) = mysql_fetch_row($q);
-        return db_query("UPDATE unit_resources SET
-                                        `title` = " . quote($title) . ",
-                                        `comments` = " . quote($content) . ",
+    $q = Database::get()->querySingle("SELECT id FROM unit_resources WHERE
+                                `unit_id` = ?d AND
+                                `type` = ?s AND
+                                `res_id` = ?d", $unit_id, $type, $res_id);    
+    if ($q) {
+        $id = $q->id;
+        Database::get()->query("UPDATE unit_resources SET
+                                        `title` = ?s,
+                                        `comments` = ?s,
                                         `date` = $date
-                                 WHERE id = $id");
+                                 WHERE id = ?d", $title, $content, $id);
+        return;
     }
-    return db_query("INSERT INTO unit_resources SET
-                                `unit_id` = $unit_id,
-                                `title` = " . quote($title) . ",
-                                `comments` = " . quote($content) . ",
+    Database::get()->query("INSERT INTO unit_resources SET
+                                `unit_id` = ?d,
+                                `title` = ?s,
+                                `comments` = ?s,
                                 `date` = $date,
-                                `type` = '$type',
-                                `visible` = $visibility,
-                                `res_id` = $res_id,
-                                `order` = $order");
+                                `type` = ?s,
+                                `visible` = ?d,
+                                `res_id` = ?d,
+                                `order` = ?d", $unit_id, $title, $content, $type, $visibility, $res_id, $order);
+    return;
 }
 
+/**
+ * 
+ * @global null $maxorder
+ * @global type $course_id
+ */
 function units_set_maxorder() {
+    
     global $maxorder, $course_id;
-    $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $course_id");
-    list($maxorder) = mysql_fetch_row($result);
+    
+    $q = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id);
+    
+    $maxorder = $q->max_order;
+    
     if ($maxorder <= 0) {
         $maxorder = null;
-    }
+    }    
 }
 
+/**
+ * 
+ * @global type $langCourseUnitModified
+ * @global type $langCourseUnitAdded
+ * @global null $maxorder
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @return type
+ */
 function handle_unit_info_edit() {
+    
     global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
-    $title = autoquote($_REQUEST['unittitle']);
-    $descr = autoquote($_REQUEST['unitdescr']);
+    
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
     if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = intval($_REQUEST['unit_id']);
-        $result = db_query("UPDATE course_units SET
-                                           title = $title,
-                                           comments = $descr
-                                    WHERE id = $unit_id AND course_id = $course_id");
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);        
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
-        $order = $maxorder + 1;
-        db_query("INSERT INTO course_units SET
-                                 title = $title, comments =  $descr, visible = 1,
-                                 `order` = $order, course_id = $course_id");
+        $order = $maxorder + 1;        
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s, comments = ?s, visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
         $successmsg = $langCourseUnitAdded;
-        $unit_id = mysql_insert_id();
+        $unit_id = $q->lastInsertID;
     }
-    // update index
-    global $webDir;
+    // update index    
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/search/courseindexer.class.php';
     require_once 'modules/search/unitindexer.class.php';
@@ -2018,15 +2066,15 @@ function glossary_expand_callback($matches) {
 }
 
 function get_glossary_terms($course_id) {
-    global $mysqlMainDb;
-
-    list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM `$mysqlMainDb`.course
-                                                         WHERE id = $course_id"));
+    
+    
+    $expand = Database::get()->querySingle("SELECT glossary_expand FROM course
+                                                         WHERE id = ?d", $course_id)->glossary_expand;    
     if (!$expand) {
         return false;
     }
 
-    $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
+    $q = db_query("SELECT term, definition, url FROM glossary
                               WHERE course_id = $course_id GROUP BY term");
 
     if (mysql_num_rows($q) > intval(get_config('max_glossary_terms'))) {
@@ -2108,7 +2156,7 @@ function greek_to_latin($string) {
         'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
         'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
         'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-        'ΐ', 'ϋ', 'ΰ', 'Ϊ', 'Ϋ', '–'), array(
+        'ΐ', 'ϋ', 'ΰ', '�', 'Ϋ', '–'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
@@ -2120,7 +2168,7 @@ function greek_to_latin($string) {
 // Limited coverage for now
 function remove_accents($string) {
     return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
@@ -2260,13 +2308,16 @@ function read_urandom($len) {
     }
 }
 
-// Get user admin rights from table `admin`
+/**
+ * @brief Get user admin rights from table `admin`
+ * @param type $user_id
+ * @return type
+ */
 function get_admin_rights($user_id) {
-    $r = db_query("SELECT privilege FROM admin
-                          WHERE user_id = $user_id");
-    if ($r and mysql_num_rows($r) > 0) {
-        $row = mysql_fetch_row($r);
-        return $row[0];
+    
+    $r = Database::get()->querySingle("SELECT privilege FROM admin WHERE user_id = ?d", $user_id);    
+    if ($r) {
+        return $r->privilege;
     } else {
         return -1;
     }
@@ -2278,8 +2329,9 @@ function get_admin_rights($user_id) {
  * @return course status
  */
 function course_status($course_id) {
-    $status = db_query_get_single_value("SELECT visible FROM course WHERE id = $course_id");
-
+    
+    $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
+      
     return $status;
 }
 
@@ -2289,9 +2341,10 @@ function course_status($course_id) {
  * @return verified mail or no
  */
 function get_mail_ver_status($uid) {
-    $res = db_query("SELECT verified_mail FROM user WHERE id = $uid");
-    $g = mysql_fetch_row($res);
-    return $g[0];
+    
+    $q = Database::get()->querySingle("SELECT verified_mail FROM user WHERE id = ?d", $uid)->verified_mail;
+    
+    return $q;
 }
 
 // check if username match for both case sensitive/insensitive
@@ -2339,12 +2392,12 @@ function get_user_email_notification($user_id, $course_id = null) {
     }
     if (isset($course_id)) {
         // finally checks if user has choosen not to be notified from a specific course
-        $r = db_query("SELECT receive_mail FROM course_user
-                                WHERE user_id = $user_id
-                                AND course_id = $course_id");
-        if ($r and mysql_num_rows($r) > 0) {
-            $row = mysql_fetch_row($r);
-            return $row[0];
+        $r = Database::get()->querySingle("SELECT receive_mail FROM course_user
+                                            WHERE user_id = ?d
+                                            AND course_id = ?d", $user_id, $course_id);
+        if ($r) {
+            $row = $r->receive_mail;
+            return $row;
         } else {
             return false;
         }
@@ -2352,10 +2405,15 @@ function get_user_email_notification($user_id, $course_id = null) {
     return true;
 }
 
-// checks if user is notified via email from courses
+/**
+ * @brief checks if user is notified via email from courses
+ * @param type $user_id
+ * @return boolean
+ */
 function get_user_email_notification_from_courses($user_id) {
-    $r = db_query("SELECT receive_mail FROM user WHERE id = $user_id");
-    list($result) = mysql_fetch_row($r);
+        
+    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id)->receive_mail;
+    
     if ($result == 1) {
         return true;
     } else {
@@ -2567,8 +2625,8 @@ function copyright_info($cid) {
     global $language, $license, $themeimg;
 
     $lang = langname_to_code($language);
-
-    $lic = db_query_get_single_value("SELECT course_license FROM course WHERE id = $cid");
+    
+    $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $cid)->course_license;
     if (($lic == 0) or ($lic >= 10)) {
         $link_suffix = '';
     } else {
@@ -2615,6 +2673,10 @@ function crypto_rand_secure($min = null, $max = null) {
     return $min + $rnd;
 }
 
+/**
+ * @brief returns HTTP 403 status code 
+ * @param type $path
+ */
 function forbidden($path) {
     header("HTTP/1.0 403 Forbidden");
     echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',

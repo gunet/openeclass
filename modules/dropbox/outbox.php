@@ -82,7 +82,24 @@ if (empty($out_msgs)) {
     $out .= "<script>
                $(document).ready(function() {
                  $('div.loading').hide();
-                 $('#outbox_table').dataTable();
+                 $('#outbox_table').dataTable({
+                    'oLanguage': {
+                            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                            'sZeroRecords':  '".$langNoResult."',
+                            'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                            'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                            'sInfoFiltered': '',
+                            'sInfoPostFix':  '',
+                            'sSearch':       '".$langSearch."',
+                            'sUrl':          '',
+                            'oPaginate': {
+                                 'sFirst':    '&laquo;',
+                                 'sPrevious': '$langPrevious',
+                                 'sNext':     '$langNext',
+                                 'sLast':     '&raquo;'
+                            }
+                        } 
+                    });
                });
              </script>";
     

@@ -88,17 +88,16 @@ if ($is_editor) {
     // get the number of available question (used for pagination)
     if (isset($exerciseId) and $exerciseId != 0) {
         if ($exerciseId > 0) {
-            $sql = "SELECT * FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
-				WHERE course_id = $course_id AND question_id = id AND exercise_id = '$exerciseId'";
+            $result = Database::get()->queryArray("SELECT * FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d", $course_id, $exerciseId);
         } elseif ($exerciseId == -1) {
-            $sql = "SELECT * FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
-				ON question_id = id WHERE course_id = $course_id AND exercise_id IS NULL";
+            $result = Database::get()->queryArray("SELECT * FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+				ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL", $course_id);            
         }
     } else {
-        $sql = "SELECT * from`$TBL_QUESTION` WHERE course_id = $course_id";
+        $result = Database::get()->queryArray("SELECT * FROM `$TBL_QUESTION` WHERE course_id = ?d", $course_id);
     }
-    $result = db_query($sql);
-    $num_of_questions = mysql_num_rows($result);
+    $num_of_questions = count($result);
 
     $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
     if (isset($fromExercise)) {
@@ -130,22 +129,20 @@ if ($is_editor) {
     }
     $tool_content .= ">-- " . $langOrphanQuestions . " --</option>\n";
 
-    mysql_select_db($mysqlMainDb);
     if (isset($fromExercise)) {
-        $sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id <> '$fromExercise' ORDER BY id";
+        $result = Database::get()->queryArray("SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
-        $sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id";
+        $result = Database::get()->queryArray("SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = ?d ORDER BY id", $course_id);
     }
-    $result = db_query($sql);
 
     // shows a list-box allowing to filter questions
-    while ($row = mysql_fetch_array($result)) {
+    foreach ($result as $row) {
         $tool_content .= "
-             <option value=\"" . $row['id'] . "\"";
-        if (isset($exerciseId) && $exerciseId == $row['id']) {
+             <option value=\"" . $row->id . "\"";
+        if (isset($exerciseId) && $exerciseId == $row->id) {
             $tool_content .= "selected=\"selected\"";
         }
-        $tool_content .= ">" . q($row['title']) . "</option>\n";
+        $tool_content .= ">" . q($row->title) . "</option>\n";
     }
     $tool_content .= "</select></div></td></tr>\n";
 
@@ -153,28 +150,31 @@ if ($is_editor) {
 
     // if we have selected an exercise in the list-box 'Filter'
     if (isset($exerciseId) && $exerciseId > 0) {
-        $sql = "SELECT id, question, type FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
-			WHERE course_id = $course_id AND question_id = id AND exercise_id = '$exerciseId'
-			ORDER BY q_position LIMIT $from," . (QUESTIONS_PER_PAGE + 1);
-        $result = db_query($sql);
+        $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+			WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+			ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE + 1);
     }
     // if we have selected the option 'Orphan questions' in the list-box 'Filter'
     elseif (isset($exerciseId) && $exerciseId == -1) {
-        $sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
-			ON question_id = id WHERE course_id = $course_id AND exercise_id IS NULL ORDER BY question
-			LIMIT $from," . (QUESTIONS_PER_PAGE + 1);
-        $result = db_query($sql);
+        $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL ORDER BY question
+			LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);
     }
     // if we have not selected any option in the list-box 'Filter'
     else {
-        @$sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
-			ON question_id = id WHERE course_id = $course_id AND (exercise_id IS NULL OR exercise_id <> '$fromExercise')
-			GROUP BY id ORDER BY question LIMIT $from," . (QUESTIONS_PER_PAGE + 1);
-        $result = db_query($sql);
+        if (isset($fromExercise)) {
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+                            ON question_id = id WHERE course_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d)
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
+        } else {
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
+        }
         // forces the value to 0
         $exerciseId = 0;
     }
-    $nbrQuestions = mysql_num_rows($result);
+    $nbrQuestions = count($result);
 
     $tool_content .= "
 	<tr>
@@ -188,18 +188,20 @@ if ($is_editor) {
     }
     $tool_content .= "</tr>";
     $i = 1;
-    while ($row = mysql_fetch_array($result)) {
-        if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id'])) {
-            if ($row['type'] == 1) {
+    foreach ($result as $row) {
+        if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
+            if ($row->type == 1) {
                 $answerType = $langUniqueSelect;
-            } elseif ($row['type'] == 2) {
+            } elseif ($row->type == 2) {
                 $answerType = $langMultipleSelect;
-            } elseif ($row['type'] == 3) {
+            } elseif ($row->type == 3) {
                 $answerType = $langFillBlanks;
-            } elseif ($row['type'] == 4) {
+            } elseif ($row->type == 4) {
                 $answerType = $langMatching;
-            } elseif ($row['type'] == 5) {
+            } elseif ($row->type == 5) {
                 $answerType = $langTrueFalse;
+            } elseif ($row->type == 6) {
+                $answerType = $langFreeText;
             }
             if ($i % 2 == 0) {
                 $tool_content .= "\n    <tr class='even'>";
@@ -213,9 +215,9 @@ if ($is_editor) {
 				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
-				  <a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row['id'] . "&amp;fromExercise=\">" . q($row['question']) . "</a><br/>" . $answerType . "
+				  <a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
 				</td>
-				<td width='3'><div align='center'><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row['id'] . "\">
+				<td width='3'><div align='center'><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
 				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
 				</td>";
             } else {
@@ -223,9 +225,9 @@ if ($is_editor) {
 				<td width='1'><div style='padding-top:4px;'>
 				  <img src='$themeimg/arrow.png'></div>
 				</td>
-				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row['id'] . "&amp;fromExercise=" . $fromExercise . "\">" . q($row['question']) . "</a><br/>" . $answerType . "</td>
+				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>
 				<td class='center'><div align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;recup=" . $row['id'] .
+				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;recup=" . $row->id .
                         "&amp;fromExercise=" . $fromExercise . "\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
 				</td>";
             }
@@ -233,7 +235,7 @@ if ($is_editor) {
             if (!isset($fromExercise)) {
                 $tool_content .= "
 				<td width='3' align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId . "&amp;delete=" . $row['id'] . "\"" .
+				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId . "&amp;delete=" . $row->id . "\"" .
                         " onclick=\"javascript:if(!confirm('" . addslashes(htmlspecialchars($langConfirmYourChoice)) .
                         "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
 				</td>";

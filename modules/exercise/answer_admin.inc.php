@@ -618,11 +618,12 @@ if (isset($_GET['modifyAnswers'])) {
 					<fieldset>
 					<legend>$langWeightingForEachBlank</legend>
 					<table class='tbl' width='99%'>";
+                    
                     foreach ($blanks as $i => $blank) {
                         $tool_content .= "
 						<tr>
 						  <td class='right'><b>[" . q($blank) . "] :</b></td>" . "
-						  <td><input type='text' name='weighting[$i]' size='5' value='" . intval($weighting[$i]) . "' /></td>
+						  <td><input type='text' name='weighting[".($i-1)."]' size='5' value='" . intval($weighting[$i-1]) . "' /></td>
 						</tr>";
                     }
                     $tool_content .= "
@@ -697,7 +698,7 @@ if (isset($_GET['modifyAnswers'])) {
 		  <td class=\"right\"><b>" . $j . "</b></td>
 		  <td><input type=\"text\" name=\"match[" . $i . "]\" size=\"58\" value=\"";
                 if (!isset($formSent) && !isset($match[$i]))
-                    $tool_content .= "${langDefaultMakeCorrespond . $j}";
+                    $tool_content .= "${'langDefaultMakeCorrespond' . $j}";
                 else
                     @$tool_content .= str_replace('{', '&#123;', htmlspecialchars($match[$i]));
 
@@ -846,6 +847,8 @@ if (isset($_GET['modifyAnswers'])) {
 		</table>
 	       </fieldset>
 	       </form>";
+        } elseif($answerType == FREE_TEXT) {
+            redirect_to_home_page('modules/exercise/admin.php?course='.$course_code);//to be developed
         }
     }
 }

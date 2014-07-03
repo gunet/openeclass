@@ -49,8 +49,7 @@ ModalBoxHelper::loadModalBox();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 // For statistics: record login
-$sql_log = "INSERT INTO logins SET user_id = $uid, course_id = $course_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
-db_query($sql_log);
+Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()", $uid, $course_id);
 
 require_once 'include/action.php';
 $action = new action();
@@ -60,36 +59,33 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT keywords, visible, prof_names, public_code, course_license
-                  FROM course WHERE id = $course_id");
-$result = mysql_fetch_array($res);
+$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license
+                  FROM course WHERE id = ?d", $course_id);
 
-$keywords = q(trim($result['keywords']));
-$visible = $result['visible'];
-$professor = $result['prof_names'];
-$public_code = $result['public_code'];
-$course_license = $result['course_license'];
+$keywords = q(trim($result->keywords));
+$visible = $result->visible;
+$professor = $result->prof_names;
+$public_code = $result->public_code;
+$course_license = $result->course_license;
 $main_extra = $description = $addon = '';
 
-$res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = $course_id AND `order` = -1)
+$res = Database::get()->queryArray("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
                         AND (visible = 1 OR res_id < 0)
-                 ORDER BY `order`");
-if ($res and mysql_num_rows($res) > 0) {
-    while ($row = mysql_fetch_array($res)) {
-        if ($row['res_id'] == -1) {
-            $description = standard_text_escape($row['comments']);
-        } elseif ($row['res_id'] == -2) {
-            $addon = standard_text_escape($row['comments']);
+                 ORDER BY `order`", $course_id);
+foreach ($res as $row) {
+    if ($row->res_id == -1) {
+        $description = standard_text_escape($row->comments);
+    } elseif ($row->res_id == -2) {
+        $addon = standard_text_escape($row->comments);
+    } else {
+        if (isset($idBloc[$row->res_id]) and ! empty($idBloc[$row->res_id])) {
+            $element_id = "class='course_info' id='{$idBloc[$row->res_id]}'";
         } else {
-            if (isset($idBloc[$row['res_id']]) and !empty($idBloc[$row['res_id']])) {
-                $element_id = "class='course_info' id='{$idBloc[$row['res_id']]}'";
-            } else {
-                $element_id = 'class="course_info other"';
-            }
-            $main_extra .= "<div $element_id><h1>" . q($row['title']) . "</h1>" .
-                    standard_text_escape($row['comments']) . "</div>\n";
+            $element_id = 'class="course_info other"';
         }
+        $main_extra .= "<div $element_id><h1>" . q($row->title) . "</h1>" .
+                standard_text_escape($row->comments) . "</div>\n";
     }
 }
 if ($is_editor) {
@@ -133,8 +129,8 @@ if ($is_editor) {
         $main_content .= handle_unit_info_edit();
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
-        db_query("DELETE FROM course_units WHERE id = '$id'");
-        db_query("DELETE FROM unit_resources WHERE unit_id = '$id'");
+        Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
+        Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
         $uidx->remove($id, false);
         $urdx->removeByUnit($id, false);
         $cidx->store($course_id, true);
@@ -142,13 +138,17 @@ if ($is_editor) {
         $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval($_REQUEST['vis']);
-        $sql = db_query("SELECT `visible` FROM course_units WHERE id=$id");
-        list($vis) = mysql_fetch_row($sql);
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
-        db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
+        Database::get()->query("UPDATE course_units SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
         $uidx->store($id, false);
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
+    } elseif (isset($_REQUEST['access'])) {
+        $id = intval($_REQUEST['access']);
+        $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
+        $newaccess = ($access == '1') ? '0' : '1';
+        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
         move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
@@ -164,63 +164,68 @@ if ($is_editor) {
 } else {
     $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
-if ($is_editor) {
-    list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
-                                                   WHERE course_id = $course_id AND `order` >= 0
-                                                   ORDER BY `order` DESC LIMIT 1"));
-    $query = "SELECT id, title, comments, visible
+if ($is_editor) {    
+    $last_id = Database::get()->querySingle("SELECT id FROM course_units
+                                                   WHERE course_id = ?d AND `order` >= 0
+                                                   ORDER BY `order` DESC LIMIT 1", $course_id);
+    if ($last_id) {
+        $last_id = $last_id->id;
+    }
+    $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
                   ORDER BY `order`";
 } else {
-    $query = "SELECT id, title, comments, visible
+    $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
-$sql = db_query($query);
+$sql = Database::get()->queryArray($query);
 $first = true;
 $count_index = 1;
-while ($cu = mysql_fetch_array($sql)) {
+foreach ($sql as $cu) {
+    // access status
+    $access = $cu->public;
     // Visibility icon
-    $vis = $cu['visible'];
+    $vis = $cu->visible;
     $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
     $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
     $class_vis = ($vis == 0) ? 'invisible' : '';
-    $cunits_content .= "<table ";
-    if ($is_editor) {
-        $cunits_content .= "class='tbl'";
-    } else {
-        $cunits_content .= "class='tbl'";
-    }
-    $cunits_content .= " width='770'>";
+    $cunits_content .= "<table class='tbl' width='770'>";
     if ($is_editor) {
         $cunits_content .= "<tr>" .
                 "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
-    } else {
+                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
+    } elseif (resource_access($vis, $access)) {
         $cunits_content .= "<tr>" .
                 "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
     }
-
     if ($is_editor) { // display actions
-        $cunits_content .= "<th width='70' class='center'>" .
-                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu[id]'>" .
+        $cunits_content .= "<th width='80' class='center'>" .
+                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
                 "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
-                "\n        <a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
+                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
                 "onClick=\"return confirmation('$langConfirmDelete');\">" .
                 "<img src='$themeimg/delete.png' " .
                 "title='$langDelete' alt='$langDelete'></a>" .
-                "\n        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
+                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
                 "<img src='$themeimg/$icon_vis' " .
-                "title='$langVisibility' alt='$langVisibility'></a></th>";
-        if ($cu['id'] != $last_id) {
-            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
+                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
+        if ($visible == COURSE_OPEN) { // public accessibility actions
+            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
+            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
+                    "<img src='$themeimg/$icon_access' " .
+                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
+            $cunits_content .= "&nbsp;&nbsp;</th>";
+        }
+        if ($cu->id != $last_id) {
+            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
                     "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
         } else {
             $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
         }
         if (!$first) {
-            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'>" .
+            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
                     "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
         } else {
             $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
@@ -228,22 +233,26 @@ while ($cu = mysql_fetch_array($sql)) {
     }
     $cunits_content .= "</tr><tr><td ";
     if ($is_editor) {
-        $cunits_content .= "colspan='7' $class1_vis>";
+        $cunits_content .= "colspan='8' $class1_vis>";
     } else {
         $cunits_content .= "colspan='2'>";
     }
-    $cunits_content .= standard_text_escape($cu['comments']) . "\n    </td>\n  </tr>\n" .
-            "\n  </table>\n";
+    if (resource_access($vis, $access)) {
+        $cunits_content .= standard_text_escape($cu->comments);
+        $count_index++;
+    } else {
+        $cunits_content .= "&nbsp;";
+    }
+    $cunits_content .= "</td></tr></table>";
     $first = false;
-    $count_index++;
 }
-if ($first and !$is_editor) {
+if ($first and ! $is_editor) {
     $cunits_content = '';
 }
 
-$bar_content .= "\n<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
-        "\n<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
-        "\n<li><b>" . $langFaculty . "</b>: ";
+$bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
+        "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
+        "<li><b>" . $langFaculty . "</b>: ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -255,13 +264,10 @@ foreach ($departments as $dep) {
 
 $bar_content .= "</li>\n";
 
-$sql = "SELECT COUNT(user_id) AS numUsers
+$numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
-                WHERE course_id = $course_id";
-$res = db_query($sql);
-while ($result = mysql_fetch_row($res)) {
-    $numUsers = $result[0];
-}
+                WHERE course_id = ?d", $course_id)->numUsers;
+
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
@@ -294,7 +300,7 @@ if ($course_license) {
     $license_info_box = "<table class='tbl_courseid' width='200'>
         <tr class='title1'>
             <td class='title1'>${langOpenCoursesLicense}</td></tr>
-        <tr><td><div align='center'><small>".copyright_info($course_id)."</small></div></td></tr>
+        <tr><td><div align='center'><small>" . copyright_info($course_id) . "</small></div></td></tr>
         </table>
         <br/>";
 } else {
@@ -319,7 +325,7 @@ if (isset($level) && !empty($level)) {
 }
 
 
-if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) or (isset($_SESSION['saved_status']) and $_SESSION['saved_status'] == 1)) {
+if ($is_editor or ( isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) or ( isset($_SESSION['saved_status']) and $_SESSION['saved_status'] == 1)) {
     if (isset($_SESSION['saved_status'])) {
         $button_message = $langStudentViewDisable;
         $button_image = "switch_t";
@@ -335,17 +341,17 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 }
 
 $emailnotification = '';
-if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $course_id)) {
     $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
         (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course
 $receive_mail = FALSE;
 $rec_mail = array();
-$q = db_query("SELECT user_id FROM course_user WHERE course_id = $course_id 
-                                AND status = " . USER_TEACHER . "");
-while ($p = mysql_fetch_array($q)) {
-    $prof_uid = $p['user_id'];
+$q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d 
+                                AND status = ?d", $course_id, USER_TEACHER);
+foreach ($q as $p) {
+    $prof_uid = $p->user_id;
     if (get_user_email_notification_from_courses($prof_uid) and get_user_email_notification($prof_uid, $course_id)) {
         $rec_mail[$prof_uid] = 1;
     }

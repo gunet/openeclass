@@ -187,7 +187,7 @@ if (isset($_GET['stats'])) {
                     Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt .
                     "</b></td></tr>
                                 <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
-				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . Database::get()->querySingle("SELECT loginout.when as when FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</a></td>
+				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . Database::get()->querySingle("SELECT loginout.when as `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</a></td>
                                     <td class='right'><b>" .
                     Database::get()->querySingle("SELECT COUNT(*) as cnt FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;")->cnt .
                     "</b></td></tr>

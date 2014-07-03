@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,27 +32,27 @@ check_uid();
 
 if (isset($_POST['submit'])) {
     if (isset($_POST['unsub'])) {
-        db_query("UPDATE user SET receive_mail = 1");
+        Database::get()->query("UPDATE user SET receive_mail = 1 WHERE id = ?d", $uid);        
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
         $cid = intval($_POST['cid']);
         if (isset($_POST['c_unsub'])) {
-            db_query("UPDATE course_user SET receive_mail = 1
-                                WHERE user_id = $uid AND course_id = $cid");
+            Database::get()->query("UPDATE course_user SET receive_mail = 1
+                                WHERE user_id = ?d AND course_id = ?d", $uid, $cid);            
         } else {
-            db_query("UPDATE course_user SET receive_mail = 0
-                                WHERE user_id = $uid AND course_id = $cid");
+            Database::get()->query("UPDATE course_user SET receive_mail = 0
+                                WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         }
         $course_title = course_id_to_title($cid);
         $tool_content .= "<div class='success'>" . q(sprintf($course_title, $langEmailUnsubSuccess)) . "</div>";
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             if (@array_key_exists($course_code, $_POST['c_unsub'])) {
-                db_query("UPDATE course_user SET receive_mail = 1
-                                WHERE user_id = $uid AND course_id = " . course_code_to_id($course_code));
+                Database::get()->query("UPDATE course_user SET receive_mail = 1
+                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);                
             } else {
-                db_query("UPDATE course_user SET receive_mail = 0
-                                WHERE user_id = $uid AND course_id = " . course_code_to_id($course_code));
+                Database::get()->query("UPDATE course_user SET receive_mail = 0
+                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);                
             }
         }
         $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />

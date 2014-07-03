@@ -28,11 +28,10 @@ $require_current_course = true;
 $require_course_admin = true;
 $require_login = true;
 
-$qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = " . $course_id;
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
-$result = db_query($qry);
-while ($row = mysql_fetch_assoc($result)) {
-    $mid = $row['module_id'];
+$result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
+foreach ($result as $row) {
+    $mid = $row->module_id;
     $extra = '';
     if ($u_module_id == $mid) {
         $extra = 'selected';

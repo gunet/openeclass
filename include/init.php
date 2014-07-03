@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,15 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Init
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This file is included each and every time by baseTheme.php
- * It initialises variables, includes security checks and serves language switching
- *
+/**
+ * @file init.php
+ * @brief initialisation of variables, includes security checks and serves language switching.
+ *        It is included in every file via baseTheme.php
  */
 
 if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
@@ -61,15 +56,24 @@ require_once 'modules/admin/debug.php';
 // Connect to database
 require_once 'modules/db/database.php';
 
-if (!Database::get()) {
+try {
+    Database::get();
+} catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
 
-if (isset($language)) {
+if (isset($language)) {    
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);
+    $language = langname_to_code($language);    
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
+    }
+    $session = new Session();
+    $uid = $session->user_id;
+    if (isset($active_ui_languages)) {
+        $active_ui_languages = explode(' ', $active_ui_languages);
+    } else {
+        $active_ui_languages = array('el');
     }
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
@@ -83,14 +87,16 @@ if (isset($language)) {
     $urlSecure = get_config('secure_url');
     if (empty($urlSecure)) {
         $urlSecure = $urlServer;
-    }
-    $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
+    }    
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;     
-    
+    $language = $session->language;
 }
 
+$session = new Session();
+$uid = $session->user_id;
+// construct $urlAppend from $urlServer
+$urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
 require_once 'include/htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once 'include/HTMLPurifier_Filter_MyIframe.php';
@@ -114,14 +120,14 @@ if (!isset($urlMobile)) {
 }
 
 // include_messages
-require "$webDir/lang/{$session->language}/common.inc.php";
-$extra_messages = "config/{$language_codes[$session->language]}.inc.php";
+require "$webDir/lang/$language/common.inc.php";
+$extra_messages = "config/{$language_codes[$language]}.inc.php";
 if (file_exists($extra_messages)) {
     include $extra_messages;
 } else {
     $extra_messages = false;
 }
-require "$webDir/lang/{$session->language}/messages.inc.php";
+require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
 }
@@ -162,7 +168,7 @@ if (!isset($_SESSION['theme'])) {
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
-if (isset($require_login) and $require_login and !$uid) {
+if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
     $errorMessagePath = "../../";
 }
@@ -268,8 +274,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
                 , $dbname);
-
-
+                
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
             $errorMessagePath = "../../";
@@ -295,7 +300,7 @@ if (isset($require_current_course) and $require_current_course) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
                 $errorMessagePath = "../../";
-            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
+            } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
                 $toolContent_ErrorExists = $langLoginRequired;
                 $errorMessagePath = "../../";
             } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
@@ -355,8 +360,8 @@ $modules = array(
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
-    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance')
-
+    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -434,8 +439,8 @@ if (isset($_SESSION['saved_status'])) {
 $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
-if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
+if (isset($course_id) and ! $is_editor and ! defined('STATIC_MODULE')) {
+    if (isset($_SESSION['uid']) and $_SESSION['uid'] and ! check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
                                              course_id = ?d", $course_id);
@@ -445,6 +450,7 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                               course_id = ?d AND
                                 module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                   " . MODULE_ID_ASSIGN . ",
+                                                  " . MODULE_ID_BBB . ",
                                                   " . MODULE_ID_DROPBOX . ",
                                                   " . MODULE_ID_QUESTIONNAIRE . ",
                                                   " . MODULE_ID_FORUM . ",

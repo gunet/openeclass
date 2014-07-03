@@ -669,12 +669,12 @@ switch ($action) {
             $oldTime = nice_format($oldTime, true);
 
             $userInfo = user_get_data($oldEditor);
-            $oldEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
+            $oldEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
             $newTime = nice_format($newTime, TRUE);
 
             $userInfo = user_get_data($newEditor);
-            $newEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
+            $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
             $versionInfo = '('
                     . sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr)
@@ -725,7 +725,7 @@ switch ($action) {
 
                     $userInfo = user_get_data($recentChange->editor_id);
 
-                    $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
+                    $userStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
                     $userUrl = $userStr;
                     $tool_content .= '<li>'
                             . sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl)
@@ -916,7 +916,7 @@ switch ($action) {
                 if ($versionId != 0) {
                     $editorInfo = user_get_data($wikiPage->getEditorId());
 
-                    $editorStr = q($editorInfo['givenname']) . "&nbsp;" . q($editorInfo['username']);
+                    $editorStr = q($editorInfo->givenname) . "&nbsp;" . q($editorInfo->username);
 
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
 
@@ -958,7 +958,7 @@ switch ($action) {
                     $printable_content .= '<hr/>';
                 		
                     $editorInfo = user_get_data($wikiPage->getEditorId());
-                    $editorStr = $editorInfo['givenname'] . "&nbsp;" . $editorInfo['surname'];
+                    $editorStr = $editorInfo->givenname . "&nbsp;" . $editorInfo->surname;
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
                 
                     $cur_ver_time = $wikiPage->getCurrentVersionMtime();
@@ -1048,10 +1048,9 @@ switch ($action) {
                         . "\n"
                 ;
 
-                $userInfo = user_get_data($version->editor_id);
-                mysql_select_db($mysqlMainDb);
+                $userInfo = user_get_data($version->editor_id);                
 
-                $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
+                $userStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
                 $userUrl = $userStr;
 

@@ -1,20 +1,25 @@
 <?php
 require_once '../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+
+// if we are logged in there is no need to access this page
+if (isset($_SESSION['uid'])) {
+    redirect_to_home_page();
+    exit();
+}
+
 $warning = '';
 $login_user = FALSE;
 
-process_login();
-
-$shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
-if ($shibactive['auth_default'] == 1) {
+$shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
+if ($shibactive->auth_default == 1) {
     $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
 } else {
     $shibboleth_link = "";
 }
 
-$casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
-if ($casactive['auth_default'] == 1) {
+$casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
+if ($casactive->auth_default == 1) {
     $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
 } else {
     $cas_link = "";

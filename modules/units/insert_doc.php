@@ -77,14 +77,14 @@ function list_docs() {
         $nameTools = $langCommonDocs;
         $group_sql = "course_id = -1 AND subsystem = " . COMMON . "";
         $basedir = $webDir . '/courses/commondocs';
-        $result = db_query("SELECT * FROM document
+        $result = Database::get()->queryArray("SELECT * FROM document
                                     WHERE $group_sql AND
                                           visible = 1 AND
                                           path LIKE " . quote("$path/%") . " AND
                                           path NOT LIKE " . quote("$path/%/%"));
     } else {
         $common_docs = false;
-        $result = db_query("SELECT * FROM document
+        $result = Database::get()->queryArray("SELECT * FROM document
                                     WHERE $group_sql AND
                                           path LIKE " . quote("$path/%") . " AND
                                           path NOT LIKE " . quote("$path/%/%"));
@@ -93,24 +93,24 @@ function list_docs() {
     $fileinfo = array();
     $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
 
-    while ($row = mysql_fetch_assoc($result)) {
-        if ($row['extra_path']) {
+    foreach ($result as $row) {
+        if ($row->extra_path) {
             $size = 0;
         } else {
-            $size = filesize($basedir . $row['path']);
+            $size = filesize($basedir . $row->path);
         }
         $fileinfo[] = array(
-            'id' => $row['id'],
-            'is_dir' => is_dir($basedir . $row['path']),
+            'id' => $row->id,
+            'is_dir' => is_dir($basedir . $row->path),
             'size' => $size,
-            'title' => $row['title'],
-            'name' => htmlspecialchars($row['filename']),
-            'format' => $row['format'],
-            'path' => $row['path'],
-            'visible' => $row['visible'],
-            'comment' => $row['comment'],
-            'copyrighted' => $row['copyrighted'],
-            'date' => $row['date_modified'],
+            'title' => $row->title,
+            'name' => htmlspecialchars($row->filename),
+            'format' => $row->format,
+            'path' => $row->path,
+            'visible' => $row->visible,
+            'comment' => $row->comment,
+            'copyrighted' => $row->copyrighted,
+            'date' => $row->date_modified,
             'object' => MediaResourceFactory::initFromDocument($row));
     }
     if (count($fileinfo) == 0) {
@@ -121,8 +121,8 @@ function list_docs() {
             $parenthtml = '';
             $colspan = 5;
         } else {
-            list($dirname) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                   WHERE $group_sql AND path = " . quote($path)));
+            $dirname = Database::get()->querySingle("SELECT filename FROM document
+                                                                   WHERE $group_sql AND path = ?s", $path);
             $parentpath = dirname($path);
             $dirname = "/" . htmlspecialchars($dirname);
             $parentlink = $urlbase . $parentpath;

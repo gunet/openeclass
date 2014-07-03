@@ -48,7 +48,7 @@ if (!$doit) {
     if ($u == 1) {
         $tool_content .= $langTryDeleteAdmin;
     } else {
-        $success = deleteUser($u);
+        $success = deleteUser($u, true);
         if ($success === true) {
             $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>";
         } else {

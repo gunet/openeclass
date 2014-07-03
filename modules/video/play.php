@@ -33,12 +33,11 @@ $action->record(MODULE_ID_VIDEO);
 // ----------------------
 // play video
 // ----------------------
-$res = db_query("SELECT * FROM video WHERE course_id = $course_id AND id = " . intval($_GET['id']));
-$row = mysql_fetch_array($res);
+$row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $result, $_GET['id']);
 
-if (!empty($row)) {
+if ($row) {
     $vObj = MediaResourceFactory::initFromVideo($row);
-    $token = token_generate($row['path'], true);                         // generate new token
+    $token = token_generate($row->path, true);                         // generate new token
     $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
     echo MultimediaHelper::mediaHtmlObject($vObj);
 } else

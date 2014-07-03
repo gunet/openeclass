@@ -183,8 +183,9 @@ if ($uid AND !isset($_GET['logout'])) {
         $cas_link = "";
     }
 
+    $tool_content .= "</div><div id='rightbar'>";
     if (!get_config('dont_display_login_form')) {
-        $tool_content .= "</div><div id='rightbar'>
+        $tool_content .= "
                 <form action='$urlSecure' method='post'>
                  <table width='100%' class='tbl'>
                  <tr>

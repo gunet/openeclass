@@ -377,7 +377,7 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     $description = purify($_POST['description']);
-    $unit_id = description_unit_id($new_course_id);
+    $unit_id = description_unit_id($new_course_id);    
     if (!empty($description)) {
         add_unit_resource($unit_id, 'description', -1, $langDescription, $description);
     }

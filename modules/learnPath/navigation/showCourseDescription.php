@@ -52,7 +52,7 @@ $unit_id = description_unit_id($course_id);
 
             <?php
             $q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
-                        unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
+                        unit_id = $unit_id ORDER BY `order`");
 
             if ($q and mysql_num_rows($q) > 0) {
                 list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources

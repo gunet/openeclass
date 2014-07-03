@@ -19,10 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-function showQuestion($questionId, $onlyAnswers = false) {
+function showQuestion($questionId, $onlyAnswers = false, $exerciseResult = array()) {
     global $tool_content, $picturePath, $langNoAnswer,
     $langColumnA, $langColumnB, $langMakeCorrespond;
 
+//    print_a($exerciseResult);
     // construction of the Question object
     $objQuestionTmp = new Question();
     // reads question informations
@@ -72,7 +73,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     </td>
                   </tr>";
     }
-
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
+         $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
+    }
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
@@ -81,24 +84,32 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape(($answer)));
+            $replace_callback = function () use ($questionId, $exerciseResult) {
+                    static $id = 0;
+                    $id++;
+                    $value = (isset($exerciseResult[$questionId][$id])) ? 'value = '.$exerciseResult[$questionId][$id] : '';
+                    return "<input type='text' name='choice[$questionId][$id]' size='10' $value>";
+            };
+            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape(($answer)));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
+            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
 			<tr class='even'>
 			  <td class='center' width='1'>
-			    <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+			    <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked />
 			  </td>
 			  <td>" . standard_text_escape($answer) . "</td>
 			</tr>";
         }
         // multiple answers
         elseif ($answerType == MULTIPLE_ANSWER) {
+            $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
 			<tr class='even'>
 			  <td width='1' align='center'>
-			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
+			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' $checked />
 			  </td>
 			  <td>" . standard_text_escape($answer) . "</td>
 			</tr>";
@@ -129,8 +140,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
                 // fills the list-box
                 foreach ($Select as $key => $val) {
+                $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';    
                     $tool_content .= "
-					<option value=\"${key}\">${val['Lettre']}</option>";
+					<option value=\"${key}\" $selected>${val['Lettre']}</option>";
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
@@ -165,17 +177,23 @@ function showQuestion($questionId, $onlyAnswers = false) {
             }
             // $tool_content .= " </table>";
         } elseif ($answerType == TRUE_FALSE) {
+            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
                           <tr class='even'>
                             <td width='1' align='center'>
-                              <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+                              <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked />
                             </td>
                             <td>" . standard_text_escape($answer) . "</td>
                           </tr>";
         }
     } // end for()
-
-    if (!$nbrAnswers) {
+    if ($answerType == FREE_TEXT) {
+            $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
+            $tool_content .= "
+                          <tr class='even'>
+                            <td align='center'>".  rich_text_editor('choice['.$questionId.']', 14, 90, $text, '')."</td></tr>";            
+    }   
+    if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "
                   <tr>
                     <td colspan='2'><p class='caution'>$langNoAnswer</td>

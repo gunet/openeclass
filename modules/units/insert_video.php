@@ -31,10 +31,10 @@ function list_videos() {
     $table_started = false;
     $count = 0;
     foreach (array('video', 'videolink') as $table) {
-        $result = db_query("SELECT * FROM $table WHERE course_id = $course_id", $mysqlMainDb);
-        $count += mysql_num_rows($result);
+        $result = Database::get()->queryArray("SELECT * FROM $table WHERE course_id = $course_id");
+        $count += count($result);
         $numLine = 0;
-        while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        foreach ($result as $row) {
             if (!$table_started) {
                 $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
                 $tool_content .= "\n  <table class='tbl_alt' width='99%'>";
@@ -62,9 +62,9 @@ function list_videos() {
             }
 
             $tool_content .= "\n    <td>&nbsp;<img src='$themeimg/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>" .
-                    "\n    <td>" . htmlspecialchars($row['description']) . "</td>" .
-                    "\n    <td class='center'>" . nice_format($row['date'], true, true) . "</td>" .
-                    "\n    <td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td>\n" .
+                    "\n    <td>" . htmlspecialchars($row->description) . "</td>" .
+                    "\n    <td class='center'>" . nice_format($row->date, true, true) . "</td>" .
+                    "\n    <td class='center'><input type='checkbox' name='video[]' value='$table:$row->id /></td>\n" .
                     "\n  </tr>";
             $numLine++;
         }

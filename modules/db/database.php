@@ -22,7 +22,7 @@
 
 define("DB_TYPE", "MYSQL");
 
-require_once 'modules/db/dbhelper.php';
+require_once 'dbhelper.php';
 
 final class DBResult {
 
@@ -42,6 +42,7 @@ final class Database {
     private static $REQ_OBJECT = 2;
     private static $REQ_ARRAY = 3;
     private static $REQ_FUNCTION = 4;
+    private static $CORE_DB_TAG = "::CORE DB::";
 
     /**
      *
@@ -50,7 +51,7 @@ final class Database {
     private static $dbs = array();
 
     /**
-     * Get a database on its name: this is a static method
+     * Get a database with a specific name. It might throw an exception, if the database does not exist.
      * @param type $dbase The name of the database. Could be missing (or null) for the default database.
      * @return Database|null The database object
      */
@@ -61,20 +62,26 @@ final class Database {
         if (array_key_exists($dbase, self::$dbs)) {
             $db = self::$dbs[$dbase];
         } else {
-            try {
-                $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);
-                self::$dbs[$dbase] = $db;
-            } catch (Exception $e) {
-                return null;
-            }
+            $db = new Database($mysqlServer, $dbase, $mysqlUser, $mysqlPassword);   // might throw exception
+            self::$dbs[$dbase] = $db;
         }
         return $db;
+    }
+
+    /**
+     * Get a Database object which does not point to a specific database. 
+     * This is useful to perform DBMS queries, such as creating/destroying a database.
+     * @return Database|null The database object
+     */
+    public static function core() {
+        return Database::get(Database::$CORE_DB_TAG);
     }
 
     /**
      * @var PDO
      */
     private $dbh;
+    private $attribute;
 
     /**
      * @param string $server
@@ -85,12 +92,13 @@ final class Database {
     public function __construct($server, $dbase, $user, $password) {
         try {
             $params = null;
+            $databasename = $dbase == Database::$CORE_DB_TAG ? "" : (";dbname=" . $dbase);
             switch (DB_TYPE) {
                 case "POSTGRES":
-                    $dsn = "pgsql:host=" . $server . ';dbname=' . $dbase;
+                    $dsn = "pgsql:host=" . $server . $databasename;
                     break;
                 case "MYSQL":
-                    $dsn = 'mysql:host=' . $server . ';dbname=' . $dbase . ';charset=utf8';
+                    $dsn = 'mysql:host=' . $server . ';charset=utf8' . $databasename;
                     $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
                     break;
                 default :
@@ -123,7 +131,7 @@ final class Database {
      * @deprecated
      * @return int Last inserted ID
      */
-    public function queryNT($statement) {
+    private function queryNT($statement) {
         return $this->queryI(func_get_args(), false);
     }
 
@@ -155,7 +163,7 @@ final class Database {
      * @deprecated
      * @param anytype $argument... A variable argument list of each binded argument
      */
-    public function queryFuncNT($statement, $callback_function) {
+    private function queryFuncNT($statement, $callback_function) {
         return $this->queryFuncI(func_get_args(), false);
     }
 
@@ -188,7 +196,7 @@ final class Database {
      * @deprecated
      * @return array An array of all objects as a result of this statement
      */
-    public function queryArrayNT($statement) {
+    private function queryArrayNT($statement) {
         return $this->queryArrayI(func_get_args(), false);
     }
 
@@ -220,7 +228,7 @@ final class Database {
      * @deprecated
      * @return array A single object as a result of this statement
      */
-    public function querySingleNT($statement) {
+    private function querySingleNT($statement) {
         return $this->querySingleI(func_get_args(), false);
     }
 
@@ -268,7 +276,7 @@ final class Database {
         $variable_size = count($statement_parts) - 1;   // Do not take into account first part
         $variable_types = array($variable_size);
         if ($variable_size < count($variables)) {
-            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::INFO);
+            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::ERROR);
         } else if ($variable_size > count($variables)) {
             Database::dbg("Provided variables are <b>less</b> than the required statement fields", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
             die();
@@ -352,16 +360,52 @@ final class Database {
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
+            $func_affected_rows = 0;
             if ($callback_fetch)
                 while (TRUE)
-                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
+                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res)) {
+                        $result = new DBResult(0, $func_affected_rows);
                         break;
+                    } else
+                        $func_affected_rows++;
         }
         /* Close transaction, if required */
         if ($isTransactional)
             $this->dbh->commit();
         Database::dbg("Succesfully performed query", $statement, $init_time, null, Debug::INFO);
         return $result;
+    }
+
+    public function transaction($function) {
+        if (is_callable($function)) {
+            $needsTransaction = !$this->dbh->inTransaction();
+            if ($needsTransaction)
+                $this->dbh->beginTransaction();
+            try {
+                $function();
+            } catch (Exception $ex) {
+                if ($needsTransaction)
+                    $this->dbh->rollBack();
+                throw $ex;
+            }
+            if ($needsTransaction)
+                $this->dbh->commit();
+        } else {
+            $backtrace_entry = debug_backtrace();
+            $backtrace_info = $backtrace_entry[1];
+            Debug::message("Transaction needs a function as parameter", $backtrace_info['file'], $backtrace_info['line']);
+        }
+    }
+
+    /**
+     * Return an object with server information
+     * @return DatabaseAttributes attributes object
+     */
+    public function attributes() {
+        if (!$this->attribute) {
+            $this->attribute = new DatabaseAttributes($this->dbh);
+        }
+        return $this->attribute;
     }
 
     private function errorFound($callback_error, $isTransactional, $error_msg, $pdo_error, $statement, $init_time, $backtrace_info, $close_transaction = true) {
@@ -382,6 +426,64 @@ final class Database {
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
         Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+    }
+
+}
+
+class DatabaseAttributes {
+
+    private $dbh;
+
+    function __construct($dbh) {
+        $this->dbh = $dbh;
+    }
+
+    function autocommit() {
+        return $this->dbh->getAttribute(PDO::ATTR_AUTOCOMMIT);
+    }
+
+    function textCase() {
+        return $this->dbh->getAttribute(PDO::ATTR_CASE);
+    }
+
+    function clientVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    }
+
+    function connectionStatus() {
+        return $this->dbh->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+    }
+
+    function driverName() {
+        return $this->dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
+
+    function errorMode() {
+        return $this->dbh->getAttribute(PDO::ATTR_ERRMODE);
+    }
+
+    function oracleNulls() {
+        return $this->dbh->getAttribute(PDO::ATTR_ORACLE_NULLS);
+    }
+
+    function persistent() {
+        return $this->dbh->getAttribute(PDO::ATTR_PERSISTENT);
+    }
+
+    function prefech() {
+        return $this->dbh->getAttribute(PDO::ATTR_PREFETCH);
+    }
+
+    function serverInfo() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_INFO);
+    }
+
+    function serverVersion() {
+        return $this->dbh->getAttribute(PDO::ATTR_SERVER_VERSION);
+    }
+
+    function timeout() {
+        return $this->dbh->getAttribute(PDO::ATTR_TIMEOUT);
     }
 
 }

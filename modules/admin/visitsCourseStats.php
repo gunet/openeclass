@@ -134,7 +134,7 @@ if ($u_course_id == -1) {
 
         switch ($u_interval) {
             case "summary":
-                foreach ($result as $$row) {
+                foreach ($result as $row) {
                     if (array_key_exists($langSummary, $point)) {
                         $point[$langSummary] += $row->cnt;
                     } else {
@@ -143,7 +143,7 @@ if ($u_course_id == -1) {
                 }
                 break;
             case "daily":
-                foreach ($result as $$row) {
+                foreach ($result as $row) {
                     if (array_key_exists($row->date, $point)) {
                         $point[$row->date] += $row->cnt;
                     } else {
@@ -152,7 +152,7 @@ if ($u_course_id == -1) {
                 }
                 break;
             case "weekly":
-                foreach ($result as $$row) {
+                foreach ($result as $row) {
                     $week = $row->week_start . ' - ' . $row->week_end;
                     if (array_key_exists($week, $point)) {
                         $point[$week] += $row->cnt;
@@ -162,7 +162,7 @@ if ($u_course_id == -1) {
                 }
                 break;
             case "monthly":
-                foreach ($result as $$row) {
+                foreach ($result as $row) {
                     $month = $langMonths[$row->month];
                     if (array_key_exists($month, $point)) {
                         $point[$month] += $row->cnt;
@@ -172,7 +172,7 @@ if ($u_course_id == -1) {
                 }
                 break;
             case "yearly":
-                foreach ($result as $$row) {
+                foreach ($result as $row) {
                     $year = $row->year;
                     if (array_key_exists($year, $point)) {
                         $point[$year] += $row->cnt;

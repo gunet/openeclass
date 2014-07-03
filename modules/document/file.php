@@ -94,7 +94,7 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if (!$is_editor and !resource_access($file_info['visible'], $file_info['public'])) {
+if (!$is_editor and ! resource_access($file_info['visible'], $file_info['public'])) {
     error($langNoRead);
 }
 
@@ -145,29 +145,26 @@ function check_cours_access() {
     if (!$uid && !isset($course_code))
         $course_code = $_SESSION['course_code'];
 
-    $qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
-    $result = db_query($qry);
+    $cours = Database::get()->querySingle("SELECT id, code, visible FROM `course` WHERE code=?s", $course_code);
 
     // invalid lesson code
-    if (mysql_num_rows($result) != 1) {
+    if (!$cours) {
         redirect_to_home_page();
         exit;
     }
 
-    $cours = mysql_fetch_array($result);
-
-    if ($cours['visible'] != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+    if ($cours->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
         require_once 'include/lib/forcedownload.php';
         not_found(preg_replace('/^.*\.php/', '', $uri));
         exit(0);
     }
 
     if (!$uid) {
-        $_SESSION['course_id'] = $cours['id'];
+        $_SESSION['course_id'] = $cours->id;
         return; // do not do own course check if anonymous with access token
     }
 
-    switch ($cours['visible']) {
+    switch ($cours->visible) {
         case '2': return;  // cours is open
         case '1':
         case '0':

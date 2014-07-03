@@ -940,7 +940,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         . $manifestData['scos'][$item['identifierref']]['href']
                         . $manifestData['assets'][$item['identifierref']]['href']
                         . $manifestData['scos'][$item['identifierref']]['parameters']
-                        . $manifestData['assets'][$item['identifierref']]['parameters'];
+                        . $manifestData['assets'][$item['identifierref']]['parameters']
+						. $manifestData['items'][$item['itemIdentifier']]['parameters'];
 
                 // create new asset
                 $sql = "INSERT INTO `" . $TABLEASSET . "`

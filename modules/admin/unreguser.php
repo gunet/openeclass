@@ -42,7 +42,7 @@ if (isDepartmentAdmin())
 $u_account = $u ? q(uid_to_name($u, 'username')) : '';
 $u_realname = $u ? q(uid_to_name($u)) : '';
 $userdata = user_get_data($u);
-$u_status = $userdata['status'];
+$u_status = $userdata->status;
 
 
 if (!$doit) {
