@@ -92,25 +92,25 @@ draw($tool_content, 2, null, $head_content);
 
 function fill_questions($pid) {
     global $course_id;
-    $poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE course_id = $course_id AND pid=$pid"));
-    $_POST['PollName'] = $poll['name'];
-    $_POST['PollStart'] = $poll['start_date'];
-    $_POST['PollEnd'] = $poll['end_date'];
-    $_POST['PollAnonymize'] = $poll['anonymized'];
-    $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY pqid");
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ", $course_id, $pid);
+    $_POST['PollName'] = $poll->name;
+    $_POST['PollStart'] = $poll->start_date;
+    $_POST['PollEnd'] = $poll->end_date;
+    $_POST['PollAnonymize'] = $poll->anonymized;
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY pqid", $pid);
     $_POST['question'] = array();
     $qnumber = 0;
-    while ($theQuestion = mysql_fetch_array($questions)) {
-        $_POST['question'][$qnumber] = $theQuestion['question_text'];
-        $qtype = ($theQuestion['qtype'] == 'multiple') ? 1 : 2;
-        $pqid = $theQuestion['pqid'];
+    foreach ($questions as $theQuestion) {
+        $_POST['question'][$qnumber] = $theQuestion->question_text;
+        $qtype = ($theQuestion->qtype == 'multiple') ? 1 : 2;
+        $pqid = $theQuestion->pqid;
         $_POST['question_type'][$qnumber] = $qtype;
         if ($qtype == 1) {
-            $answers = db_query("SELECT * FROM poll_question_answer
-					WHERE pqid=$pqid ORDER BY pqaid");
+            $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
+					WHERE pqid = ?d ORDER BY pqaid", $pqid);
             $_POST['answer' . $qnumber] = array();
-            while ($theAnswer = mysql_fetch_array($answers)) {
-                $_POST['answer' . $qnumber][] = $theAnswer['answer_text'];
+            foreach ($answers as $theAnswer) {
+                $_POST['answer' . $qnumber][] = $theAnswer->answer_text;
             }
         }
         $qnumber++;
@@ -230,10 +230,8 @@ function insertPollQuestions($pid, $questions, $question_types) {
         $QuestionText = trim($QuestionText);
         if (!empty($QuestionText)) {
             $qtype = ($question_types[$i] == 1) ? 'multiple' : 'fill';
-            db_query("INSERT INTO poll_question (pid, question_text, qtype) VALUES ('" .
-                    mysql_real_escape_string($pid) . "','" .
-                    mysql_real_escape_string($QuestionText) . "', '$qtype')");
-            $pqid = mysql_insert_id();
+            $pqid = Database::get()->query("INSERT INTO poll_question (pid, question_text, qtype) "
+                    . "VALUES (?d, ?s, ?s)", $pid, $QuestionText, $qtype)->lastInsertID;
             if ($question_types[$i] == 1) {
                 if (isset($_POST['answer' . $i])) {
                     $answers = $_POST['answer' . $i];
@@ -243,8 +241,8 @@ function insertPollQuestions($pid, $questions, $question_types) {
                 foreach ($answers as $j => $AnswerText) {
                     $AnswerText = trim($AnswerText);
                     if (!empty($AnswerText)) {
-                        db_query("INSERT INTO poll_question_answer (pqid, answer_text)
-							VALUES ($pqid, '" . mysql_real_escape_string($AnswerText) . "')");
+                        Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
+							VALUES (?d, ?s)", $pqid, $AnswerText);
                     }
                 }
             }
@@ -263,21 +261,11 @@ function createPoll($questions, $question_types) {
     $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
     $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
     $PollActive = 1;
-    (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
+    $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
     
-    mysql_select_db($GLOBALS['mysqlMainDb']);
-    $result = db_query("INSERT INTO poll
+    $pid = Database::get()->query("INSERT INTO poll
 		(course_id, creator_id, name, creation_date, start_date, end_date, active, anonymized)
-		VALUES ('" .
-            $GLOBALS['course_id'] . "','" .
-            $GLOBALS['uid'] . "','" .
-            mysql_real_escape_string($PollName) . "','" .
-            mysql_real_escape_string($CreationDate) . "','" .
-            mysql_real_escape_string($StartDate) . "','" .
-            mysql_real_escape_string($EndDate) . "','" .
-            mysql_real_escape_string($PollActive) . "','" .
-            mysql_real_escape_string($PollAnonymize) . "')");
-    $pid = mysql_insert_id();
+		VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?d)", $GLOBALS['course_id'], $GLOBALS['uid'], $PollName, $StartDate, $EndDate, $PollActive, $PollAnonymize)->lastInsertID;
     insertPollQuestions($pid, $questions, $question_types);
     $tool_content .= "<p class='success'>" . $langPollCreated . "</p><a href='index.php?course=$course_code'>" . $langBack . "</a>";
 }
@@ -291,14 +279,12 @@ function editPoll($pid, $questions, $question_types) {
     $PollName = $_POST['PollName'];
     $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
     $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
-    (isset($_POST['PollAnonymize'])) ? $PollAnonymize = $_POST['PollAnonymize'] : $PollAnonymize = 0;
-
-    mysql_select_db($GLOBALS['mysqlMainDb']);
-    $result = db_query("UPDATE poll SET name = '$PollName',
-		start_date = '$StartDate', end_date = '$EndDate', anonymized = '$PollAnonymize' WHERE course_id = $course_id AND pid='$pid'");
-    db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid='$pid')");
-    db_query("DELETE FROM poll_question WHERE pid='$pid'");
+    $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
+    Database::get()->query("UPDATE poll SET name = ?s,
+		start_date = ?t, end_date = ?t, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $StartDate, $EndDate, $PollAnonymize, $course_id, $pid);
+    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
+		(SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+    Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
     insertPollQuestions($pid, $questions, $question_types);
     $tool_content .= "<p class='success'>" . $langPollEdited . "</p><a href='index.php?course=$course_code'>" . $langBack . "</a>";
 }
@@ -377,10 +363,9 @@ function add_fill_text_question($i, $text) {
  * ******************************************************* */
 
 function check_poll_participants($pid) {
-    global $mysqlMainDb;
-
-    $sql = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-    if (mysql_num_rows($sql) > 0)
+    $participants = Database::get()->querySingle("SELECT COUNT(*) AS participants "
+            . "FROM poll_answer_record WHERE pid = ?d", $pid)->participants;
+    if ($participants > 0)
         return true;
     else
         return false;

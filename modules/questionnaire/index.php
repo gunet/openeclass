@@ -44,42 +44,40 @@ $nameTools = $langQuestionnaire;
 
 load_js('tools.js');
 if ($is_editor) {
-// activate / dectivate polls
-if (isset($_GET['visibility'])) {
-    switch ($_GET['visibility']) {
-        case 'activate':
-            $sql = "UPDATE poll SET active='1' WHERE course_id = $course_id AND pid='" . mysql_real_escape_string($_GET['pid']) . "'";
-            $result = db_query($sql, $mysqlMainDb);
-            $GLOBALS["tool_content"] .= "" . $GLOBALS["langPollActivated"] . "<br>";
-            break;
-        case 'deactivate':
-            $sql = "UPDATE poll SET active='0' WHERE course_id = $course_id AND pid='" . mysql_real_escape_string($_GET['pid']) . "'";
-            $result = db_query($sql, $mysqlMainDb);
-            $GLOBALS["tool_content"] .= "" . $GLOBALS["langPollDeactivated"] . "<br>";
-            break;
+    if (isset($_GET['pid'])) {
+        $pid = $_GET['pid'];
+        // activate / dectivate polls
+        if (isset($_GET['visibility'])) {
+            switch ($_GET['visibility']) {
+                case 'activate':
+                    Database::get()->query("UPDATE poll SET active = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::set_flashdata($langPollActivated, 'success');
+                    break;
+                case 'deactivate':
+                    Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::set_flashdata($langPollDeactivated, 'success');
+                    break;
+            }
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
+
+        // delete polls
+        if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
+            Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
+                        (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+            Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+            Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Session::set_flashdata($langPollDeleted, 'success');
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
+        // delete poll results
+        if (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
+            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Session::set_flashdata($langPollResultsDeleted, 'success');
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
     }
-}
-
-
-// delete polls
-if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
-    $pid = intval($_GET['pid']);
-    db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid=$pid)", $mysqlMainDb);
-    db_query("DELETE FROM poll WHERE course_id = $course_id AND pid=$pid", $mysqlMainDb);
-    db_query("DELETE FROM poll_question WHERE pid='$pid'", $mysqlMainDb);
-    db_query("DELETE FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-    Session::set_flashdata($langPollDeleted, 'success');
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
-}
-// delete poll results
-if (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
-    $pid = $_GET['pid'];
-    Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
-    Session::set_flashdata($langPollResultsDeleted, 'success');
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
-}
-
     $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
@@ -107,8 +105,8 @@ function printPolls() {
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises;
 
     $poll_check = 0;
-    $result = db_query("SELECT * FROM poll WHERE course_id = $course_id", $mysqlMainDb);
-    $num_rows = mysql_num_rows($result);
+    $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d", $course_id);
+    $num_rows = count($result);
     if ($num_rows > 0)
         ++$poll_check;
     if (!$poll_check) {
@@ -130,11 +128,10 @@ function printPolls() {
             $tool_content .= "<th class='center'>$langParticipate</th>";
         }
         $tool_content .= "</tr>";
-        $active_polls = db_query("SELECT * FROM poll WHERE course_id = $course_id", $mysqlMainDb);
         $index_aa = 1;
         $k = 0;
-        while ($thepoll = mysql_fetch_array($active_polls)) {
-            $visibility = $thepoll["active"];
+        foreach ($result as $thepoll) {
+            $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
                 if ($visibility) {
@@ -160,20 +157,17 @@ function printPolls() {
                     $tool_content .= "<tr $visibility_css>";
                 }
                 $temp_CurrentDate = date("Y-m-d H:i");
-                $temp_StartDate = $thepoll["start_date"];
-                $temp_EndDate = $thepoll["end_date"];
+                $temp_StartDate = $thepoll->start_date;
+                $temp_EndDate = $thepoll->end_date;
                 $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
                 $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
                 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-                $creator_id = $thepoll["creator_id"];
+                $creator_id = $thepoll->creator_id;
                 $theCreator = uid_to_name($creator_id);
-                $pid = $thepoll["pid"];
-                $answers = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-                $countAnswers = mysql_num_rows($answers);
-                $thepid = $thepoll["pid"];
+                $pid = $thepoll->pid;
                 // check if user has participated
-                $has_participated = mysql_fetch_array(db_query("SELECT COUNT(*) FROM poll_answer_record
-                                        WHERE user_id = $uid AND pid = '$thepid'"));
+                $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_answer_record
+                                        WHERE user_id = ?d AND pid = ?d", $uid, $pid)->counter;
                 // check if poll has ended
                 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
                     $poll_ended = 0;
@@ -183,25 +177,25 @@ function printPolls() {
                 if ($is_editor) {
                     $tool_content .= "
                         <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
-                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>$thepoll[name]</a>";
+                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>$thepoll->name</a>";
                 } else {
                     $tool_content .= "
                         <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                    if (($has_participated[0] == 0) and $poll_ended == 0) {
-                        $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";
+                    if (($has_participated == 0) and $poll_ended == 0) {
+                        $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>$thepoll->name</a>";
                     } else {
-                        $tool_content .= "$thepoll[name]";
+                        $tool_content .= "$thepoll->name";
                     }
                 }
                 $tool_content .= "</td>
                         <td class='center'>" . q($theCreator) . "</td>";
                 $tool_content .= "
-                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll["creation_date"])), true) . "</td>";
+                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->creation_date)), true) . "</td>";
                 $tool_content .= "
-                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll["start_date"])), true) . "</td>";
+                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>";
                 $tool_content .= "
-                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true) . "</td>";
+                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
                 if ($is_editor) {
                     $tool_content .= "
                         <td class='center'>
@@ -222,7 +216,7 @@ function printPolls() {
                 } else {
                     $tool_content .= "
                         <td class='center'>";
-                    if (($has_participated[0] == 0) and ($poll_ended == 0)) {
+                    if (($has_participated == 0) and ($poll_ended == 0)) {
                         $tool_content .= "$langHasNotParticipated";
                     } else {
                         if ($poll_ended == 1) {

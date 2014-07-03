@@ -2444,8 +2444,8 @@ $langPollDeleted = "Το Ερωτηματολόγιο διαγράφηκε με 
 $langPollResultsDeleted = "Τα αποτελέσματα του Ερωτηματολογίου διαγράφηκαν με επιτυχία.";
 $langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης στα αποτελέσματα του Ερωτηματολογίου.";
 $langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο ερωτηματολόγιο";
-$langPollDeactivated = "<p class='success'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
-$langPollActivated = "<p class='success'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
+$langPollDeactivated = "Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
+$langPollActivated = "Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
 $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
 $langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
