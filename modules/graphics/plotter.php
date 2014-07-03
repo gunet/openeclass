@@ -25,10 +25,12 @@ class Plotter {
     private $height;
     private $title;
     private $data;
+    private static $instanceCounter = 0;
 
-    public function Plotter($width = 200, $height = 200) {
+    function __construct($width = 200, $height = 200) {
         $this->setDimension($width, $height);
         $this->data = array();
+        self::$instanceCounter++;
     }
 
     public function setDimension($width, $height) {
@@ -88,13 +90,13 @@ class Plotter {
                 
 <div class="flot-container" style="width: ' . $this->width . 'px; height: ' . $this->height . 'px;">
 <p class="flot-title">' . $this->title . '</p>
-<div class="flot-placeholder" id="placeholder"></div>
+<div class="flot-placeholder" id="placeholder'.self::$instanceCounter.'"></div>
 </div>
 
 <script type="text/javascript">
     $(function() {
         var data = ' . $dataset . ';
-        $.plot("#placeholder", [ data ], {
+        $.plot("#placeholder'.self::$instanceCounter.'", [ data ], {
             series: {
                 bars: {
                     show: true,

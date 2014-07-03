@@ -92,7 +92,7 @@ draw($tool_content, 2, null, $head_content);
 
 function fill_questions($pid) {
     global $course_id;
-    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ", $course_id, $pid);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
     $_POST['PollName'] = $poll->name;
     $_POST['PollStart'] = $poll->start_date;
     $_POST['PollEnd'] = $poll->end_date;
