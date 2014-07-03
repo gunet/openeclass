@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /* ===========================================================================
-  questionnaire.php
+  index.php
   @last update: 17-4-2006 by Costas Tsibanis
   @authors list: Dionysios G. Synodinos <synodinos@gmail.com>
   ==============================================================================
@@ -43,7 +43,7 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 $nameTools = $langQuestionnaire;
 
 load_js('tools.js');
-
+if ($is_editor) {
 // activate / dectivate polls
 if (isset($_GET['visibility'])) {
     switch ($_GET['visibility']) {
@@ -69,12 +69,17 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
     db_query("DELETE FROM poll WHERE course_id = $course_id AND pid=$pid", $mysqlMainDb);
     db_query("DELETE FROM poll_question WHERE pid='$pid'", $mysqlMainDb);
     db_query("DELETE FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-    $tool_content .= "<p class='success'>" . $langPollDeleted . "<br /><a href=\"questionnaire.php?course=$course_code\">" . $langBack . "</a></p>";
-    draw($tool_content, 2, null, $head_content);
-    exit();
+    Session::set_flashdata($langPollDeleted, 'success');
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+}
+// delete poll results
+if (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
+    $pid = $_GET['pid'];
+    Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+    Session::set_flashdata($langPollResultsDeleted, 'success');
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
 
-if ($is_editor) {
     $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
@@ -99,7 +104,7 @@ function printPolls() {
     $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
     $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
     $langParticipate, $langVisible, $user_id, $langHasParticipated,
-    $langHasNotParticipated, $uid, $langConfirmDelete;
+    $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises;
 
     $poll_check = 0;
     $result = db_query("SELECT * FROM poll WHERE course_id = $course_id", $mysqlMainDb);
@@ -120,7 +125,7 @@ function printPolls() {
 			<th width='110' class='center'>$langPollEnd</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th width='70' class='center'>$langActions</th>";
+            $tool_content .= "<th width='80' class='center'>$langActions</th>";
         } else {
             $tool_content .= "<th class='center'>$langParticipate</th>";
         }
@@ -199,7 +204,20 @@ function printPolls() {
                         <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true) . "</td>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <td class='center'><a href='addpoll.php?course=$course_code&amp;edit=yes&amp;pid=$pid'><img src='$themeimg/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"><img src='$themeimg/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}'><img src='$themeimg/" . $visibility_gif . ".png' border='0' title=\"" . $langVisible . "\" /></a></td>
+                        <td class='center'>
+                            <a href='addpoll.php?course=$course_code&amp;edit=yes&amp;pid=$pid'>
+                                <img src='$themeimg/edit.png' title='$langEdit' border='0' />
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\">
+                                <img src='$themeimg/delete.png' title='$langDelete' border='0' />
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\">
+                                <img src='$themeimg/clear.png' title='". q($langPurgeExercises) ."' border='0' />
+                            </a>                            
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}'>
+                                <img src='$themeimg/" . $visibility_gif . ".png' border='0' title=\"" . $langVisible . "\" />
+                            </a>
+                         </td>
                       </tr>";
                 } else {
                     $tool_content .= "

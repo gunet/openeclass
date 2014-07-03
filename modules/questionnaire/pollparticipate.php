@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,13 +41,13 @@ if (!isset($_REQUEST['pid']))
     die();
 
 switch ($_REQUEST['UseCase']) {
-    case 1:
+    case 1:       
         printPollForm();
         break;
     case 2:
         submitPoll();
         break;
-    default:
+    default:       
         printPollForm();
 }
 
@@ -55,10 +55,17 @@ draw($tool_content, 2);
 
 function printPollForm() {
     global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart,
-    $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
+    $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
+    $langPollAlreadyParticipated;
 
-    $pid = intval($_REQUEST['pid']);
-
+    $pid = $_REQUEST['pid'];
+    
+    // check if user has participated
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
+    if ($has_participated > 0){
+        Session::set_flashdata($langPollAlreadyParticipated, 'alert1');
+        redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+    }        
     // *****************************************************************************
     //		Get poll data
     //******************************************************************************/
