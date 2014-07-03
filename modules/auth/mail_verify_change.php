@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -86,8 +86,7 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
                 <legend>$langUserData</legend>
-                <table class='tbl' with='100%'>
-                <br />
+                <table class='tbl' with='100%'>                
                 <tr>
                         <th class='left'>$lang_email:</th>
                         <td><input type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' /></td>
@@ -97,8 +96,7 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
                         <th class='left'>&nbsp;</th>
                         <td colspan='2'><input type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
                 </tr>
-                </table>
-                <br />
+                </table>               
         </fieldset>
     </form>";
 }

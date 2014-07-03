@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -104,15 +104,17 @@ if (!isset($_SESSION['was_validated']) or
     // an authentication step now:
     // First check for Shibboleth
     if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) {
-        $r = mysql_fetch_array(db_query("SELECT auth_settings FROM auth WHERE auth_id = 6"));
-        $shibsettings = $r['auth_settings'];
-        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-            $shibseparator = $shibsettings;
-        }
-        if (strpos($_SESSION['shib_surname'], $shibseparator)) {
-            $temp = explode($shibseparator, $_SESSION['shib_surname']);
-            $auth_user_info['firstname'] = $temp[0];
-            $auth_user_info['lastname'] = $temp[1];
+        $r = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
+        if ($r) {
+            $shibsettings = $r->auth_settings;
+            if ($shibsettings != 'shibboleth' and $shibsettings != '') {
+                $shibseparator = $shibsettings;
+            }
+            if (strpos($_SESSION['shib_surname'], $shibseparator)) {
+                $temp = explode($shibseparator, $_SESSION['shib_surname']);
+                $auth_user_info['firstname'] = $temp[0];
+                $auth_user_info['lastname'] = $temp[1];
+            }
         }
         $auth_user_info['email'] = $_SESSION['shib_email'];
         $uname = $_SESSION['shib_uname'];
@@ -251,28 +253,23 @@ if ($is_valid) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-
-        $registered_at = time();
-        $expires_at = time() + get_config('account_duration');
-        $authmethods = array('2', '3', '4', '5');
-
-        $q1 = "INSERT INTO user
-                      SET surname = " . autoquote($surname_form) . ",
-                          givenname = " . autoquote($givenname_form) . ",
-                          username = " . autoquote($uname) . ",
-                          password = '$password',
-                          email = " . autoquote($email) . ",
+        
+        $authmethods = array('2', '3', '4', '5');        
+        $q1 = Database::get()->query("INSERT INTO user
+                      SET surname = ?s,
+                          givenname = ?s,
+                          username = ?s,
+                          password = ?s,
+                          email = ?s,
                           status = " . USER_STUDENT . ",
-                          am = " . autoquote($am) . ",
-                          registered_at = $registered_at,
-                          expires_at = $expires_at,
-                          lang = '$language',
-                          verified_mail = $verified_mail,                          
+                          am = ?s,
+                          registered_at = " . DBHelper::timeAfter() . ",
+                          expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                          lang = ?s,
+                          verified_mail = ?d,
                           whitelist='',
-                          description = ''";
-
-        $inscr_user = db_query($q1);
-        $last_id = mysql_insert_id();
+                          description = ''", $surname_form, $givenname_form, $uname, $password, $email, $am, $language, $verified_mail);
+        $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, array(intval($depid)));
 
         if ($vmail and !empty($email)) {
@@ -282,6 +279,8 @@ if ($is_valid) {
         // Register a new user
         $password = $auth_ids[$auth];
         $telephone = get_config('phone');
+        $administratorName = get_config('admin_name');
+        $emailhelpdesk = get_config('email_helpdesk');
         $emailsubject = "$langYourReg $siteName";
         $emailbody = "$langDestination $givenname_form $surname_form\n" .
                 "$langYouAreReg $siteName $langSettings $uname\n" .
@@ -289,27 +288,25 @@ if ($is_valid) {
                 "$urlServer\n" .
                 ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?ver=" . $hmac . "&id=" . $last_id . "\n" : "") .
                 "$langProblem\n$langFormula" .
-                "$administratorName $administratorSurname\n" .
+                "$administratorName\n" .
                 "$langManager $siteName \n$langTel $telephone \n" .
                 "$langEmail: $emailhelpdesk";
 
         if (!empty($email)) {
             send_mail('', $emailhelpdesk, '', $email, $emailsubject, $emailbody, $charset);
         }
-
-        $result = db_query("SELECT id, surname, givenname FROM user WHERE id = $last_id");
-        while ($myrow = mysql_fetch_array($result)) {
-            $uid = $myrow[0];
-            $surname = $myrow[1];
-            $givenname = $myrow[2];
+        
+        $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
+        if ($myrow) {        
+            $uid = $myrow->id;
+            $surname = $myrow->surname;
+            $givenname = $myrow->givenname;
         }
 
         if (!$vmail) {
-            db_query("INSERT INTO loginout
-                                         SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
-                                             `when` = NOW(), action = 'LOGIN'");
+            Database::get()->query("INSERT INTO loginout SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',`when` = NOW(), action = 'LOGIN'");
             $_SESSION['uid'] = $uid;
-            $_SESSION['status'] = 5;
+            $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname;
             $_SESSION['surname'] = $surname;
             $_SESSION['uname'] = canonicalize_whitespace($username);            
@@ -343,26 +340,16 @@ if ($is_valid) {
             $email = mb_strtolower(trim($email));
         }
 
-        // Record user request
-        db_query('INSERT INTO user_request SET
-                         givenname = ' . autoquote($givenname_form) . ',
-                         surname = ' . autoquote($surname_form) . ',
-                         username = ' . autoquote($uname) . ",
-                         password = '$password',
-                         email = " . autoquote($email) . ",
-                         faculty_id = $depid,
-                         phone = " . autoquote($userphone) . ",
-                         am = " . autoquote($am) . ",
-                         state = 1,
-                         status = $status,
-                         verified_mail = $verified_mail,
-                         date_open = NOW(),
-                         comment = " . autoquote($usercomment) . ",
-                         lang = '$language',
-                         request_ip = " . autoquote($_SERVER[REMOTE_ADDR]), $mysqlMainDb);
-
-        $request_id = mysql_insert_id();
-
+        // Record user request        
+        $q1 = Database::get()->query("INSERT INTO user_request SET
+                                        givenname = ?s, surname = ?s, username = ?s, password = '$password',
+                                        email = ?s, faculty_id = ?d, phone = ?s,
+                                        am = ?s, state = 1, status = ?d, verified_mail = ?d,
+                                        date_open = " . DBHelper::timeAfter() . ", comment = ?s, lang = ?s,
+                                        request_ip = ?s", 
+                            $givenname_form, $surname_form, $uname, $email, $depid, $userphone, 
+                            $am, $status, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+        $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk
         if (!$email_verification_required) {
             // send email
@@ -382,7 +369,7 @@ if ($is_valid) {
         } else {
             // email needs verification -> mail user
             $hmac = token_generate($uname . $email . $request_id);
-
+            $emailhelpdesk = get_config('email_helpdesk');
             $subject = $langMailVerificationSubject;
             $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?ver=' . $hmac . '&rid=' . $request_id);
             if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
@@ -421,9 +408,7 @@ function set($name) {
 /**
  * @brief display form
  * 
- * @global type $tool_content
- * @global type $langTheUser
- * @global type $ldapfound
+ * @global type $tool_content  
  * @global type $langName
  * @global type $langSurname
  * @global type $langEmail
@@ -435,14 +420,12 @@ function set($name) {
  * @global type $langUserData
  * @global type $langRequiredFields
  * @global type $langAm
- * @global type $langUserFree
  * @global type $profreason
  * @global type $auth_user_info
  * @global type $auth
  * @global type $prof
  * @global string $usercomment
  * @global int $depid
- * @global type $init_auth
  * @global type $email_required
  * @global type $phone_required
  * @global type $am_required
@@ -452,10 +435,10 @@ function set($name) {
  * @global type $head_content
  */
 function user_info_form() {
-    global $tool_content, $langTheUser, $ldapfound, $langName, $langSurname, $langEmail,
+    global $tool_content, $langName, $langSurname, $langEmail,
     $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
-    $langUserData, $langRequiredFields, $langAm, $langUserFree, $profreason,
-    $auth_user_info, $auth, $prof, $usercomment, $depid, $init_auth, $email_required,
+    $langUserData, $langRequiredFields, $langAm, $profreason,
+    $auth_user_info, $auth, $prof, $usercomment, $depid, $email_required,
     $phone_required, $am_required, $comment_required, $langEmailNotice, $tree, $head_content;
 
     if (!isset($usercomment)) {

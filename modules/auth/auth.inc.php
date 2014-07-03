@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -187,11 +187,13 @@ function get_auth_settings($auth) {
     global $auth_ids;
 
     $auth = intval($auth);
-    $result = db_query("SELECT * FROM auth WHERE auth_id = " . $auth);
-    if ($result) {
-        if (mysql_num_rows($result) == 1) {
-            $settings = mysql_fetch_assoc($result);
+    $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);        
+    if ($result) {        
+            $settings['auth_id'] = $result->auth_id;            
+            $settings['auth_settings'] = $result->auth_settings;
             $auth_settings = $settings['auth_settings'];
+            $settings['auth_instructions'] = $result->auth_instructions;
+            $settings['auth_default'] = $result->auth_default;
             switch ($auth) {
                 case 2:
                     $settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
@@ -236,9 +238,8 @@ function get_auth_settings($auth) {
                         'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
                     break;
             }
-            $settings['auth_name'] = $auth_ids[$auth];
-            return $settings;
-        }
+            $settings['auth_name'] = $auth_ids[$auth];            
+            return $settings;        
     }
     return 0;
 }
@@ -265,26 +266,19 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";
-            $sql = "SELECT password FROM user WHERE username " . $unamewhere . quote($test_username);
-            $result = db_query($sql);
-
-            if (mysql_num_rows($result) == 1) {
-
-                $myrow = mysql_fetch_assoc($result);
-                $hasher = new PasswordHash(8, false);
-
-                if ($hasher->CheckPassword($test_password, $myrow['password']))
-                    $testauth = true;
-                else if (strlen($myrow['password']) < 60 && md5($test_password) == $myrow['password']) {
-                    $testauth = true;
-
-                    // password is in old md5 format, update transparently
-                    $password_encrypted = $hasher->HashPassword($test_password);
-
-                    $sql = "UPDATE user SET password = " . quote($password_encrypted) . " WHERE username COLLATE utf8_bin = " . quote($test_username);
-                    db_query($sql, $mysqlMainDb);
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";            
+            $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
+            if ($result) {
+                foreach ($result as $myrow) {
+                    $hasher = new PasswordHash(8, false);
+                    if ($hasher->CheckPassword($test_password, $myrow->password)) {
+                        $testauth = true;
+                    } else if (strlen($myrow->password) < 60 && md5($test_password) == $myrow->password) {
+                        $testauth = true;
+                        // password is in old md5 format, update transparently
+                        $password_encrypted = $hasher->HashPassword($test_password);
+                        Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
+                    }
                 }
             }
             break;
@@ -588,7 +582,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 function process_login() {
     global $warning, $surname, $givenname, $email, $status, $is_admin, $language,
     $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-    $langNoCookies, $langEnterPlatform, $urlServer, $urlAppend, $langHere,
+    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
     $auth_ids, $inactive_uid, $langTooManyFails;
 
     if (isset($_POST['uname'])) {
@@ -606,21 +600,23 @@ function process_login() {
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
-            $r = db_query("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' 
+            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' 
                                         AND COUNT > " . intval(get_config('login_fail_threshold')) . " 
-                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");            
         }
-        if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
+        if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
         } else {
             $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
-                $sqlLogin .= "= " . quote($posted_uname);
+                $sqlLogin = "= " . quote($posted_uname);
             } else {
-                $sqlLogin .= "COLLATE utf8_bin = " . quote($posted_uname);
-            }
-            $result = db_query($sqlLogin);
+                $sqlLogin = "COLLATE utf8_bin = " . quote($posted_uname);
+            }           
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
+                                FROM user WHERE username $sqlLogin");
+            //print_r($result);
             // cas might have alternative authentication defined
             $exists = 0;
             if (!isset($_COOKIE) or count($_COOKIE) == 0) {
@@ -630,10 +626,10 @@ function process_login() {
                 // Disallow login with empty password
                 $auth_allow = 4;
             } else {
-                while ($myrow = mysql_fetch_assoc($result)) {
-                    $exists = 1;
+                if ($myrow) {
+                    $exists = 1;                    
                     if (!empty($auth)) {
-                        if (in_array($myrow['password'], $auth_ids)) {
+                        if (in_array($myrow->password, $auth_ids)) {
                             // alternate methods login
                             $auth_allow = alt_login($myrow, $posted_uname, $pass);
                         } else {
@@ -647,7 +643,7 @@ function process_login() {
             }
             if (!$exists and !$auth_allow) {
                 Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                    'pass' => $pass));
+                                                            'pass' => $pass));
                 $auth_allow = 4;
             }
         }
@@ -678,9 +674,8 @@ function process_login() {
                     break;
             }
         } else {
-            db_query("INSERT INTO loginout
-						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
-						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");            
+            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
+                    . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
@@ -700,31 +695,28 @@ function process_login() {
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_array, $posted_uname, $pass) {
+function login($user_info_object, $posted_uname, $pass) {
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
-    if (check_username_sensitivity($posted_uname, $user_info_array['username'])) {
-        if ($hasher->CheckPassword($pass, $user_info_array['password'])) {
+    if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
+        if ($hasher->CheckPassword($pass, $user_info_object->password)) {
             $pass_match = true;
-        } else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
+        } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
             $pass_match = true;
             // password is in old md5 format, update transparently
             $password_encrypted = $hasher->HashPassword($pass);
-            $user_info_array['password'] = $password_encrypted;
-
-            db_query('SET sql_mode = TRADITIONAL');
-            $sql = "UPDATE user SET password = " . quote($password_encrypted) . " 
-                                       WHERE id = " . intval($user_info_array['id']);
-            db_query($sql);
+            $user_info_object->password = $password_encrypted;
+            Database::core()->query("SET sql_mode = TRADITIONAL");
+            Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
         }
     }
 
     if ($pass_match) {
         // check if account is active
-        $is_active = check_activity($user_info_array['id']);
+        $is_active = check_activity($user_info_object->id);
         // check for admin privileges
-        $admin_rights = get_admin_rights($user_info_array['id']);
+        $admin_rights = get_admin_rights($user_info_object->id);
         if ($admin_rights == ADMIN_USER) {
             $is_active = 1;   // admin user is always active
             $_SESSION['is_admin'] = 1;
@@ -736,23 +728,22 @@ function login($user_info_array, $posted_uname, $pass) {
             $_SESSION['is_departmentmanage_user'] = 1;
         }
         if ($is_active) {
-            //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
-            $_SESSION['uid'] = $user_info_array['id'];
-            $_SESSION['uname'] = $user_info_array['username'];
-            $_SESSION['surname'] = $user_info_array['surname'];
-            $_SESSION['givenname'] = $user_info_array['givenname'];
-            $_SESSION['status'] = $user_info_array['status'];
-            $_SESSION['email'] = $user_info_array['email'];
-            $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_array['lang'];
+            $_SESSION['uid'] = $user_info_object->id;
+            $_SESSION['uname'] = $user_info_object->username;
+            $_SESSION['surname'] = $user_info_object->surname;
+            $_SESSION['givenname'] = $user_info_object->givenname;
+            $_SESSION['status'] = $user_info_object->status;
+            $_SESSION['email'] = $user_info_object->email;
+            $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
             $auth_allow = 1;
         } else {
             $auth_allow = 3;
-            $GLOBALS['inactive_uid'] = $user_info_array['id'];
+            $GLOBALS['inactive_uid'] = $user_info_object->id;
         }
     } else {
         $auth_allow = 4; // means wrong password
         Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-            'pass' => $pass));
+                                                   'pass' => $pass));
     }
 
     return $auth_allow;
@@ -762,10 +753,10 @@ function login($user_info_array, $posted_uname, $pass) {
   Authenticate user via alternate defined methods
  * ************************************************************** */
 
-function alt_login($user_info_array, $uname, $pass) {
+function alt_login($user_info_object, $uname, $pass) {
     global $warning, $auth_ids;
 
-    $auth = array_search($user_info_array['password'], $auth_ids);
+    $auth = array_search($user_info_object->password, $auth_ids);
     $auth_method_settings = get_auth_settings($auth);
     $auth_allow = 1;
 
@@ -788,12 +779,12 @@ function alt_login($user_info_array, $uname, $pass) {
         return 6; // Redirect to Shibboleth login
     }
 
-    if (($user_info_array['password'] == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
+    if (($user_info_object->password == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
-            $is_active = check_activity($user_info_array['id']);
+            $is_active = check_activity($user_info_object->id);
             // check for admin privileges
-            $admin_rights = get_admin_rights($user_info_array['id']);
+            $admin_rights = get_admin_rights($user_info_object->id);
             if ($admin_rights == ADMIN_USER) {
                 $is_active = 1;   // admin user is always active
                 $_SESSION['is_admin'] = 1;
@@ -808,32 +799,32 @@ function alt_login($user_info_array, $uname, $pass) {
                 $auth_allow = 1;
             } else {
                 $auth_allow = 3;
-                $user = $user_info_array["id"];
+                $user = $user_info_object->id;
             }
         } else {
             $auth_allow = 2;
             // log invalid logins
             Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname,
-                'pass' => $pass));
+                                                       'pass' => $pass));
         }
         if ($auth_allow == 1) {
-            $_SESSION['uid'] = $user_info_array['id'];
-            $_SESSION['uname'] = $user_info_array['username'];
+            $_SESSION['uid'] = $user_info_object->id;
+            $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
-            if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_array['givenname'] != $auth_user_info['firstname']) or
-                    ($user_info_array['surname'] != $auth_user_info['lastname']))) {
-                db_query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
+            if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_object->givenname != $auth_user_info['firstname']) or
+                    ($user_info_object->surname != $auth_user_info['lastname']))) {
+                Database::get()->query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
                                                           surname = '" . $auth_user_info['lastname'] . "'
-                                                      WHERE id = " . $user_info_array['id'] . "");
+                                                      WHERE id = " . $user_info_object->id . "");
                 $_SESSION['surname'] = $auth_user_info['firstname'];
                 $_SESSION['givenname'] = $auth_user_info['lastname'];
             } else {
-                $_SESSION['surname'] = $user_info_array['surname'];
-                $_SESSION['givenname'] = $user_info_array['givenname'];
+                $_SESSION['surname'] = $user_info_object->surname;
+                $_SESSION['givenname'] = $user_info_object->givenname;
             }
-            $_SESSION['status'] = $user_info_array['status'];
-            $_SESSION['email'] = $user_info_array['email'];
-            $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_array['lang'];
+            $_SESSION['status'] = $user_info_object->status;
+            $_SESSION['email'] = $user_info_object->email;
+            $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
         }
     } else {
         $warning .= "<br>$langInvalidAuth<br>";
@@ -861,15 +852,17 @@ function shib_cas_login($type) {
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
         $email = $_SESSION['shib_email'];
-        $shib_surname = $_SESSION['shib_surname'];
-        list($shibsettings) = mysql_fetch_row(db_query('SELECT auth_settings FROM auth WHERE auth_id = 6'));
-        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-            $shibseparator = $shibsettings;
-        }
-        if (strpos($shib_surname, $shibseparator)) {
-            $temp = explode($shibseparator, $shib_surname);
-            $givenname = $temp[0];
-            $surname = $temp[1];
+        $shib_surname = $_SESSION['shib_surname'];        
+        $shibsettings = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
+        if ($shibsettings) {
+            if ($shibsettings->auth_settings != 'shibboleth' and $shibsettings->auth_settings != '') {
+                $shibseparator = $shibsettings->auth_settings;
+            }
+            if (strpos($shib_surname, $shibseparator)) {
+                $temp = explode($shibseparator, $shib_surname);
+                $givenname = $temp[0];
+                $surname = $temp[1];
+            }
         }
     } elseif ($type == 'cas') {
         $uname = $_SESSION['cas_uname'];
@@ -877,66 +870,63 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
     }
-    // user is authenticated, now let's see if he is registered also in db
-    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
-						FROM user WHERE username ";
+    // user is authenticated, now let's see if he is registered also in db    
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin .= "= " . quote($uname);
+        $sqlLogin = "= " . quote($uname);
     } else {
-        $sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
+        $sqlLogin = "COLLATE utf8_bin = " . quote($uname);
     }
-    $r = db_query($sqlLogin);
+    $r = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
+						FROM user WHERE username $sqlLogin");
 
-    if (mysql_num_rows($r) > 0) {
+    if ($r) {
         // if user found
-        $info = mysql_fetch_assoc($r);
-        if ($info['password'] != $type) {
-            // has different auth method - redirect to home page
-            unset($_SESSION['shib_uname']);
-            unset($_SESSION['shib_email']);
-            unset($_SESSION['shib_surname']);
-            unset($_SESSION['cas_uname']);
-            unset($_SESSION['cas_email']);
-            unset($_SESSION['cas_surname']);
-            unset($_SESSION['cas_givenname']);
-            Session::set_flashdata($langUserAltAuth, 'caution');
-            redirect_to_home_page();
-        } else {
-            // don't force email address from CAS/Shibboleth.
-            // user might prefer a different one
-            if (!empty($info['email'])) {
-                $email = $info['email'];
-            }
-            if (!empty($info['status'])) {
-                $status = $info['status'];
-            }
-            // update user information
-            db_query("UPDATE user SET surname = " . quote($surname) . ",
-							givenname = " . quote($givenname) . ",
-							email = " . quote($email) . "
-							WHERE id = $info[id]");
-            // check for admin privileges
-            $admin_rights = get_admin_rights($info['id']);
-            if ($admin_rights == ADMIN_USER) {
-                $is_active = 1;   // admin user is always active
-                $_SESSION['is_admin'] = 1;
-                $is_admin = 1;
-            } elseif ($admin_rights == POWER_USER) {
-                $_SESSION['is_power_user'] = 1;
-                $is_power_user = 1;
-            } elseif ($admin_rights == USERMANAGE_USER) {
-                $_SESSION['is_usermanage_user'] = 1;
-                $is_usermanage_user = 1;
-            } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
-                $_SESSION['is_departmentmanage_user'] = 1;
-                $is_departmentmanage_user = 1;
-            }
-            $_SESSION['uid'] = $info['id'];
-            //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL            
-            if (isset($_SESSION['langswitch'])) {
-                $language = $_SESSION['langswitch'];
+        foreach ($r as $info) {        
+            if ($info->password != $type) {
+                // has different auth method - redirect to home page
+                unset($_SESSION['shib_uname']);
+                unset($_SESSION['shib_email']);
+                unset($_SESSION['shib_surname']);
+                unset($_SESSION['cas_uname']);
+                unset($_SESSION['cas_email']);
+                unset($_SESSION['cas_surname']);
+                unset($_SESSION['cas_givenname']);
+                Session::set_flashdata($langUserAltAuth, 'caution');
+                redirect_to_home_page();
             } else {
-                $language = $info['lang'];
+                // don't force email address from CAS/Shibboleth.
+                // user might prefer a different one
+                if (!empty($info->email)) {
+                    $email = $info->email;
+                }
+                if (!empty($info->status)) {
+                    $status = $info->status;
+                }
+                // update user information                
+                Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s
+                                        WHERE id = ?d", $surname, $givenname, $email, $info->id);
+                // check for admin privileges
+                $admin_rights = get_admin_rights($info->id);
+                if ($admin_rights == ADMIN_USER) {
+                    $is_active = 1;   // admin user is always active
+                    $_SESSION['is_admin'] = 1;
+                    $is_admin = 1;
+                } elseif ($admin_rights == POWER_USER) {
+                    $_SESSION['is_power_user'] = 1;
+                    $is_power_user = 1;
+                } elseif ($admin_rights == USERMANAGE_USER) {
+                    $_SESSION['is_usermanage_user'] = 1;
+                    $is_usermanage_user = 1;
+                } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
+                    $_SESSION['is_departmentmanage_user'] = 1;
+                    $is_departmentmanage_user = 1;
+                }
+                $_SESSION['uid'] = $info->id;                
+                if (isset($_SESSION['langswitch'])) {
+                    $language = $_SESSION['langswitch'];
+                } else {
+                    $language = $info->lang;
+                }
             }
         }
     } elseif ($autoregister and !get_config('am_required')) {
@@ -971,9 +961,8 @@ function shib_cas_login($type) {
     $_SESSION['status'] = $status;
     //$_SESSION['is_admin'] = $is_admin;
     $_SESSION['shib_user'] = 1; // now we are shibboleth user    
-
-    db_query("INSERT INTO loginout
-					(loginout.id_user, loginout.ip, loginout.when, loginout.action)
+    
+    Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
     if (get_config('email_verification_required') and
@@ -1008,24 +997,33 @@ function acceptable_password($pass1, $pass2) {
     return $errors;
 }
 
+/**
+ * @brief increase number of login failures
+ * @return type
+ */
 function increaseLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '" . $ip . "'");
+    $ip = $_SERVER['REMOTE_ADDR'];    
+    $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $ip . "'");
 
-    if (mysql_num_rows($r) > 0)
-        db_query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '" . $ip . "'");
-    else
-        db_query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '" . $ip . "', 1, CURRENT_TIMESTAMP)");
+    if ($r) {
+        Database::get()->query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '" . $ip . "'");
+    } else {
+        Database::get()->query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '" . $ip . "', 1, CURRENT_TIMESTAMP)");
+    }
 }
 
+/**
+ * @brief reset number of login failures
+ * @return type
+ */
 function resetLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
-
-    db_query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
+    
+    Database::get()->query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
 }
 
 function external_DB_Check_Pass($test_password, $hash, $encryption) {

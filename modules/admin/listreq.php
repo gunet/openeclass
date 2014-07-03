@@ -147,7 +147,7 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= "<td align='center'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td align='center'>
-			<a href='$_SERVER[SCRIPT_NAME]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
+			<a href='$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
             $k++;
         }
     }
@@ -218,11 +218,13 @@ if (!empty($show) and $show == 'closed') {
                     if (Database::get()->query($sql)->affectedRows > 0) {
                         if (isset($_POST['sendmail']) and ( $_POST['sendmail'] == 1)) {
                             $telephone = get_config('phone');
+                            $administratorName = get_config('admin_name');
+                            $emailhelpdesk = get_config('email_helpdesk');
                             $emailsubject = $langemailsubjectBlocked;
                             $emailbody = "$langemailbodyBlocked
 $langComments:> $_POST[comment]
 $langManager $siteName
-$administratorName $administratorSurname
+$administratorName
 $langPhone: $telephone
 $langEmail: $emailhelpdesk";
                             send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
@@ -240,7 +242,7 @@ $langEmail: $emailhelpdesk";
 			<div class='alert1'>$warning</div>
 			<table width='100%' class='tbl_border'>
 			<tr><th class='left'>$langName</th>
-			<td>" . q($d->name) . "</td></tr>
+			<td>" . q($d->givenname) . "</td></tr>
 			<tr><th class='left'>$langSurname</th>
 			<td>" . q($d->surname) . "</td></tr>
 			<tr><th class='left'>$langEmail</th>
@@ -323,7 +325,7 @@ else {
                                                    $langElaboration</a>";
                     break;
             }
-            $tool_content .= "</td></tr>\n";
+            $tool_content .= "</td></tr>";
             $k++;
         }
         $tool_content .= "</table>";

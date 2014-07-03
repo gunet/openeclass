@@ -39,8 +39,7 @@ $nameTools = $langContactAdmin;
 
 $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'])) {
-    //$q = db_query("SELECT * FROM user WHERE id = " . $userid);
+if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'])) {    
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $userid);
     if ($info) {      
         $firstname = $info->givenname;

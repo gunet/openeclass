@@ -227,8 +227,6 @@ if (!isset($_POST['submit'])) {
             $vmail = FALSE;
         }
 
-        $account_duration = get_config('account_duration');
-
         $password = unescapeSimple($password);
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
@@ -236,8 +234,8 @@ if (!isset($_POST['submit'])) {
         $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                  status, am, phone, registered_at, expires_at,
                                  lang, verified_mail, whitelist, description)
-                      VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, NOW(),
-                              DATE_ADD(NOW(), INTERVAL $account_duration SECOND), ?s, $verified_mail, '', '')", 
+                      VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
+                              " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')", 
                             $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
