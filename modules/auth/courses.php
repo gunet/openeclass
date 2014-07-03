@@ -61,8 +61,8 @@ if (isset($_POST['submit'])) {
         $cid = intval($value);
         if (!in_array($cid, $selectCourse)) {
             Database::get()->query("DELETE FROM course_user "
-                    . " WHERE status <> ?d AND stats <> ?d AND user_id = ?d "
-                    . " AND course_id = ?d", USER_TEACHER, USER_GUEST, intval($uid), intval($cid));
+                    . " WHERE status <> ?d AND status <> ?d AND user_id = ?d "
+                    . " AND course_id = ?d", USER_TEACHER, USER_GUEST, $uid, $cid);
             // logging
             Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
         }
