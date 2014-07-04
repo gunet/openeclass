@@ -46,19 +46,19 @@ if ($is_editor) {
 
     if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
         $id = intval($_POST['id']);
-        $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
-        if (mysql_num_rows($r) > 0) {
-            list($title) = mysql_fetch_row($r);
-            db_query("DELETE FROM ebook_subsection WHERE section_id IN
-                                         (SELECT id FROM ebook_section WHERE ebook_id = $id)");
-            db_query("DELETE FROM ebook_section WHERE ebook_id = $id");
-            db_query("DELETE FROM ebook WHERE id = $id");
+        $r = Database::get()->querySingle("SELECT title FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        if ($r) {
+            $title = $r->title;
+            Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
+                                         (SELECT id FROM ebook_section WHERE ebook_id = ?d)", $id);
+            Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d", $id);
+            Database::get()->query("DELETE FROM ebook WHERE id = ?d", $id);
             $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
             my_delete($basedir);
-            db_query("DELETE FROM document WHERE
+            Database::get()->query("DELETE FROM document WHERE
                                  subsystem = " . EBOOK . " AND
-                                 subsystem_id = $id AND
-                                 course_id = $course_id");
+                                 subsystem_id = ?d AND
+                                 course_id = ?d", $id, $course_id);
             $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
         }
     } elseif (isset($_GET['create'])) {
@@ -87,9 +87,9 @@ if ($is_editor) {
     } elseif (isset($_GET['up'])) {
         move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
     } elseif (isset($_GET['vis'])) {
-        db_query("UPDATE ebook SET visible = NOT visible
-                                 WHERE course_id = $course_id AND
-                                       id = " . intval($_GET['vis']));
+        Database::get()->query("UPDATE ebook SET visible = NOT visible
+                                 WHERE course_id = ?d AND
+                                       id = ?d", $course_id, $_GET['vis']);
     }
 }
 
@@ -98,15 +98,15 @@ if ($is_editor) {
 } else {
     $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
 }
-$q = db_query("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) AS sid
+$q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) AS sid
                       FROM ebook LEFT JOIN ebook_section ON ebook.id = ebook_id
                            LEFT JOIN ebook_subsection ON ebook_section.id = section_id
-                      WHERE course_id = $course_id
+                      WHERE course_id = ?d
                             $visibility_check
                       GROUP BY ebook.id
-                      ORDER BY `order`");
+                      ORDER BY `order`", $course_id);
 
-if (mysql_num_rows($q) == 0) {
+if (!$q) {
     $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
     $tool_content .= "
@@ -120,22 +120,22 @@ if (mysql_num_rows($q) == 0) {
      </tr>\n";
 
     $k = 0;
-    $num = mysql_num_rows($q);
-    while ($r = mysql_fetch_array($q)) {
-        $vis_class = $r['visible'] ? '' : 'invisible';
-        if (is_null($r['sid'])) {
-            $title_link = q($r['title']) . ' <i>(' . $langEBookNoSections . ')</i>';
+    $num = count($q);
+    foreach ($q as $r) {
+        $vis_class = $r->visible ? '' : 'invisible';
+        if (is_null($r->sid)) {
+            $title_link = q($r->title) . ' <i>(' . $langEBookNoSections . ')</i>';
         } else {
-            $title_link = "<a href='show.php/$course_code/$r[id]/'>" .
-                    q($r['title']) . "</a>";
+            $title_link = "<a href='show.php/$course_code/$r->id/'>" .
+                    q($r->title) . "</a>";
         }
-        $warning = is_null($r['sid']) ? " <i>($langInactive)</i>" : '';
+        $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
         $tool_content .= "
      <tr" . odd_even($k, $vis_class) . ">
        <td width='16' valign='top'>
           <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
        <td>$title_link</td>" .
-                tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
+                tools($r->id, $r->title, $k, $num, $r->visible) . "
      </tr>\n";
         $k++;
     }

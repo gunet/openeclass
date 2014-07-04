@@ -98,14 +98,14 @@ if ($unit !== false) {
     $exit_fullscreen_link = $urlAppend . '/courses/' . $course_code . '/';
     $unit_parameter = '';
 }
-$q = db_query("SELECT ebook_section.id AS sid,
+$q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
                       ebook_section.public_id AS psid,
                       ebook_section.title AS section_title,
                       ebook_subsection.id AS ssid,
                       ebook_subsection.public_id AS pssid,
                       ebook_subsection.title AS subsection_title,
-                      document.path,
-                      document.filename
+                      document.path as path,
+                      document.filename as filename
                FROM ebook, ebook_section, ebook_subsection, document
                WHERE ebook.id = $ebook_id AND
                      ebook.course_id = $course_id AND
@@ -116,48 +116,48 @@ $q = db_query("SELECT ebook_section.id AS sid,
                      document.subsystem = $subsystem
                      ORDER BY CONVERT(psid, UNSIGNED), psid,
                               CONVERT(pssid, UNSIGNED), pssid");
-if (!$q or mysql_num_rows($q) == 0) {
+if (!$q) {
     not_found($uri);
 }
 $last_section_id = null;
 $sections = array();
-while ($row = mysql_fetch_array($q)) {
-    $url_filename = public_file_path($row['path'], $row['filename']);
-    $sid = $row['sid'];
-    $ssid = $row['ssid'];
+foreach ($q as $row) {
+    $url_filename = public_file_path($row->path, $row->filename);
+    $sid = $row->sid;
+    $ssid = $row->ssid;
     if (!isset($current_sid)) {
         $current_sid = $sid;
     }
     if ($current_sid == $sid and !isset($current_ssid)) {
-        $current_ssid = $row['ssid'];
+        $current_ssid = $row->ssid;
     }
     if (!isset($current_display_id) and isset($current_sid) and isset($current_ssid)) {
         $current_display_id = $sid . ',' . $ssid;
     }
     $display_id = $sid . ',' . $ssid;
-    if ($last_section_id != $row['sid']) {
+    if ($last_section_id != $row->sid) {
         $sections[] = array('id' => $display_id,
-            'title' => $row['section_title'],
+            'title' => $row->section_title,
             'current' => false,
             'indent' => false);
     }
     $sections[] = array('id' => $display_id,
-        'title' => $row['subsection_title'],
+        'title' => $row->subsection_title,
         'indent' => true,
         'current' => (isset($current_display_id) and $current_display_id == $display_id));
-    $subsection_path[$sid][$ssid] = $row['path'];
+    $subsection_path[$sid][$ssid] = $row->path;
     if (isset($last_display_id) and isset($current_display_id)) {
         if ($current_display_id == $display_id) {
             $back_section_id = $last_display_id;
             $back_title = $last_title;
         } elseif ($current_display_id == $last_display_id) {
             $next_section_id = $display_id;
-            $next_title = $row['subsection_title'];
+            $next_title = $row->subsection_title;
         }
     }
     $last_section_id = $sid;
     $last_display_id = $display_id;
-    $last_title = $row['subsection_title'];
+    $last_title = $row->subsection_title;
 }
 
 if (!$full_url_found) {
@@ -248,8 +248,7 @@ foreach ($sections as $section_info) {
     $t->parse('option_var', 'chapter_select_options', true);
 }
 
-$q = db_query("SELECT title FROM ebook WHERE id = $ebook_id");
-list($ebook_title) = mysql_fetch_row($q);
+$ebook_title = Database::get()->querySingle("SELECT title FROM ebook WHERE id = ?d", $ebook_id)->title;
 $t->set_var('ebook_title', q($ebook_title));
 $t->set_var('ebook_title_short', q(ellipsize($ebook_title, 35)));
 
