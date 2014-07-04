@@ -409,6 +409,7 @@ if (!$questionList) {
         </table>";
 }
 $tool_content .= "</form>";
+if ($questionList) {
 $head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
                     var date = new Date();
@@ -448,4 +449,5 @@ $head_content .= "<script type='text/javascript'>
                     
     		});
                 $(exercise_enter_handler);</script>";
+}
 draw($tool_content, 2, null, $head_content);
