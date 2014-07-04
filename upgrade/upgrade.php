@@ -1153,6 +1153,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
                             `start_date` DATETIME DEFAULT NULL,
                             `end_date` DATETIME DEFAULT NULL,
+                            `temp_save` TINYINT(1) NOT NULL DEFAULT 0,
                             `time_constraint` INT(11) DEFAULT 0,
                             `attempts_allowed` INT(11) DEFAULT 0,
                             `random` SMALLINT(6) NOT NULL DEFAULT 0,

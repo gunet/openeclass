@@ -42,6 +42,7 @@ if (!class_exists('Exercise')):
         var $type;
         var $startDate;
         var $endDate;
+        var $tempSave;
         var $timeConstraint;
         var $attemptsAllowed;
         var $random;
@@ -63,6 +64,7 @@ if (!class_exists('Exercise')):
             $this->type = 1;
             $this->startDate = date("Y-m-d H:i");
             $this->endDate = '';
+            $this->tempSave = 0;
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
             $this->random = 0;
@@ -83,7 +85,7 @@ if (!class_exists('Exercise')):
         function read($id) {
             global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $course_id;
 
-            $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, time_constraint,
+            $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
 			attempts_allowed, random, active, results, score
 			FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
@@ -95,6 +97,7 @@ if (!class_exists('Exercise')):
                 $this->type = $object->type;
                 $this->startDate = $object->start_date;
                 $this->endDate = $object->end_date;
+                $this->tempSave = $object->temp_save;
                 $this->timeConstraint = $object->time_constraint;
                 $this->attemptsAllowed = $object->attempts_allowed;
                 $this->random = $object->random;
@@ -201,7 +204,11 @@ if (!class_exists('Exercise')):
         function selectEndDate() {
             return $this->endDate;
         }
-
+        
+        function selectTempSave() {
+            return $this->tempSave;
+        }
+        
         function selectTimeConstraint() {
             return $this->timeConstraint;
         }
@@ -353,7 +360,11 @@ if (!class_exists('Exercise')):
         function updateEndDate($endDate) {
             $this->endDate = $endDate;
         }
-
+        
+        function updateTempSave($tempSave) {
+            $this->tempSave = $tempSave;
+        }
+        
         function updateTimeConstraint($timeConstraint) {
             $this->timeConstraint = $timeConstraint;
         }
@@ -427,6 +438,7 @@ if (!class_exists('Exercise')):
             $type = $this->type;
             $startDate = $this->startDate;
             $endDate = $this->endDate;
+            $tempSave = $this->tempSave;
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
@@ -439,10 +451,10 @@ if (!class_exists('Exercise')):
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `$TBL_EXERCISE`
 				SET title = ?s, description = ?s, type = ?d," .
-                        "start_date = ?t, end_date = ?t, time_constraint = ?d," .
+                        "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
                         "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d
                         WHERE course_id = ?d AND id = ?d", 
-                        $exercise, $description, $type, $startDate, $endDate, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $course_id, $id)->affectedRows;
+                        $exercise, $description, $type, $startDate, $endDate, $tempSave, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $course_id, $id)->affectedRows;
                 if ($affected_rows > 0) {
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
                         'title' => $exercise,
@@ -452,9 +464,10 @@ if (!class_exists('Exercise')):
             // creates a new exercise
             else {
                 $this->id = Database::get()->query("INSERT INTO `$TBL_EXERCISE` (course_id, title, description, type, start_date, 
-                                        end_date, time_constraint, attempts_allowed, random, active, results, score) 
-				VALUES (?d, ?s, ?s, ?d, ?t, ?t,
-					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)", $course_id, $exercise, $description, $type, $startDate, $endDate)->lastInsertID;
+                        end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
+			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
+                        $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
+                        $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,

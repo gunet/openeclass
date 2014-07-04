@@ -134,6 +134,7 @@ $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $randomQuestions = $objExercise->isRandom();
 $exerciseType = $objExercise->selectType();
+$exerciseTempSave = $objExercise->selectTempSave(); 
 $exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
@@ -289,7 +290,7 @@ if (isset($_POST['formSent'])) {
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
-    if (isset($_POST['buttonSave'])) {
+    if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $secs_remaining = $_POST['secsRemaining'];
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
@@ -397,9 +398,9 @@ if (!$questionList) {
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
-
-    $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='$langTemporarySave' />";   
-
+    if ($exerciseTempSave) {
+        $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='$langTemporarySave' />";   
+    }
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>
         </tr>
