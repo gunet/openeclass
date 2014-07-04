@@ -64,14 +64,14 @@ class Log {
         } else {
             $userid = $_SESSION['uid']; // in all other cases
         }
-        db_query("INSERT INTO log SET
-                                user_id = $userid,
-                                course_id = $course_id,
-                                module_id = $module_id,
+        Database::get()->query("INSERT INTO log SET
+                                user_id = ?d,
+                                course_id = ?d,
+                                module_id = ?d,
                                 details = " . quote(serialize($details)) . ",
                                 action_type = $action_type,
-                                ts = NOW(),
-                                ip = '$_SERVER[SERVER_ADDR]'");
+                                ts = " . DBHelper::timeAfter() . ",
+                                ip = ?s", $userid, $course_id, $module_id, $_SERVER['SERVER_ADDR']);
         return;
     }
 
@@ -123,9 +123,9 @@ class Log {
             $q4 = "AND course_id > 0"; // but exclude system logging
         }
         // count logs
-        $num_of_logs = mysql_num_rows(db_query("SELECT * FROM log WHERE ts BETWEEN '$date_from' AND '$date_now' $q1 $q2 $q3 $q4"));
+        $num_of_logs = Database::get()->querySingle("SELECT COUNT(*) AS count FROM log WHERE ts BETWEEN '$date_from' AND '$date_now' $q1 $q2 $q3 $q4")->count;
         // fetch logs
-        $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
+        $sql = Database::get()->queryArray("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC LIMIT $limit, " . LOGS_PER_PAGE . "");
@@ -157,20 +157,20 @@ class Log {
             }
             $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
             $tool_content .= "</tr>";
-            // display logs
-            while ($r = mysql_fetch_array($sql)) {
+            // display logs            
+            foreach ($sql as $r) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($r['ts'], true) . "</td>";
-                if (($r['user_id'] == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
+                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
+                if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
-                    $tool_content .= "<td>" . display_user($r['user_id'], false, false) . "</td>";
+                    $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
                 if ($course_id == -1) { // all courses
-                    $tool_content .= "<td>" . course_id_to_title($r['course_id']) . "</td>";
+                    $tool_content .= "<td>" . course_id_to_title($r->course_id) . "</td>";
                 }
                 if ($module_id == -1) { // all modules                                                
-                    $mid = $r['module_id'];
+                    $mid = $r->module_id;
                     if ($mid == MODULE_ID_USERS) {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
@@ -179,11 +179,11 @@ class Log {
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
-                $tool_content .= "<td>" . $this->get_action_names($r['action_type']) . "</td>";
+                $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
-                    $tool_content .= "<td>" . $this->other_action_details($r['action_type'], $r['details']) . "</td>";
+                    $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r['module_id'], $r['details']) . "</td>";
+                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
                 $tool_content .= "</tr>";
             }
@@ -202,13 +202,13 @@ class Log {
 
         $date = get_config('log_expire_interval');
         // move records in table `log_archive`
-        $sql = db_query("INSERT INTO log_archive (user_id, course_id, module_id, details, action_type, ts, ip)
+        $sql = Database::get()->query("INSERT INTO log_archive (user_id, course_id, module_id, details, action_type, ts, ip)
                                 SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
                                 WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
 
         // delete previous records from `log`
         if ($sql) {
-            db_query("DELETE FROM log WHERE date_sub(CURDATE(),interval $date month) > ts");
+            Database::get()->query("DELETE FROM log WHERE date_sub(CURDATE(),interval $date month) > ts");
         }
         return;
     }
@@ -220,7 +220,7 @@ class Log {
     public static function purge() {
 
         $date = get_config('log_purge_interval');
-        $sql = db_query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
+        $sql = Database::get()->query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
 
         return;
     }
