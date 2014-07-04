@@ -95,8 +95,9 @@ if (isset($_GET['eurId'])) {
         Session::set_flashdata($langExerciseNotFound, 'alert1');
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    if (!$is_editor && $exercise_user_record->uid != $uid) {
-       // user is not allowed to view other people's exercise results
+    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status==ATTEMPT_PAUSED) {
+       // student is not allowed to view other people's exercise results
+       // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $objExercise = new Exercise();

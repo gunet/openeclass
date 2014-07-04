@@ -139,7 +139,7 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            if ($row2->attempt_status == ATTEMPT_COMPLETED || $row2->attempt_status == ATTEMPT_PAUSED && $is_editor) {
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a>";
             } else {
                 if ($row2->attempt_status == ATTEMPT_PAUSED) {
