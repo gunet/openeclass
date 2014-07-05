@@ -319,6 +319,8 @@ function load_js($file, $init = '') {
         $file = 'datatables/media/js/jquery.dataTables.min.js';                
     } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
+    } elseif ($file == 'RateIt') {
+        $file = 'jquery.rateit.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     if ($file == 'jquery-1.10.2.min.js')
