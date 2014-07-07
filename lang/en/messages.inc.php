@@ -1527,8 +1527,17 @@ $m['prof'] = "$langTeacher";
 $m['mailprof'] = "To enroll to this lesson you need to send an email to the " . $langsTeacher . "by clicking ";
 $m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
-$titreBloc = array("Course Content", "Educational Activities", "Books",
-    "Human Resources", "Evaluation Methods / Exams", "Supplementary Information");
+$titreBloc = array(
+    'Course Syllabus',
+    'Course Objectives/Goals',
+    'Bibliography',
+    'Instructional Methods',
+    'Assessment Methods',
+    'Prerequisites/Prior Knowledge',
+    'Instructors',
+    'Target Group',
+    'Textbooks',
+    'Additional info');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modify portfolio view";
 $langMyPersoLessons = "MY COURSES";

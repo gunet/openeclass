@@ -69,18 +69,15 @@ $public_code = $result->public_code;
 $course_license = $result->course_license;
 $main_extra = $description = $addon = '';
 
-$res = Database::get()->queryArray("SELECT id, title, comments, type FROM course_description
-        WHERE course_id = ?d AND visible = 1 ORDER BY `order`", $course_id);
+$res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
+    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)    
+    WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
 foreach ($res as $row) {
     $desctype = intval($row->type) - 1;
-    if (isset($titreBloc[$desctype])) {
-        $element_id = "class='course_info' id='{$titreBloc[$desctype]}'";
-        $icon_url = "$themeimg/bloc/" . $desctype . ".png";
-    } else {
-        $element_id = 'class="course_info other"';
-        $icon_url = "$themeimg/bloc/default.png";
-    }
+    $descicon = (!empty($row->icon)) ? $row->icon : 'default.png';
+    $element_id = (isset($titreBloc[$desctype])) ? "class='course_info' id='{$titreBloc[$desctype]}'" : 'class="course_info other"';
+    $icon_url = "$themeimg/bloc/" . $descicon;
     $hidden_id = "hidden_" . $row->id;
     $tool_content .= "<div id='$hidden_id'><h1>" .
             q($row->title) . "</h1>" .

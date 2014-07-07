@@ -1055,7 +1055,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $desctypes = array(
             'course_contents_' . $clang => 'syllabus',
             'course_objectives_' . $clang => 'objectives',
-            'course_literature_' . $clang => 'literature',
+            'course_literature_' . $clang => 'bibliography',
             'course_teachingMethod_' . $clang => 'teaching_method',
             'course_assessmentMethod_' . $clang => 'assessment_method',
             'course_prerequisites_' . $clang => 'prerequisites');
