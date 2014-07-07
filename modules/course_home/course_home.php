@@ -94,12 +94,11 @@ if ($is_editor) {
 }
 
 $main_content .= "\n      <div class='course_info'>";
-$desccomm = db_query_get_single_value("SELECT comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                        AND res_id = -1
-        ORDER BY `order`");
-if ($desccomm !== false) {
-    $description = standard_text_escape($desccomm);
+$desccomm = Database::get()->querySingle("SELECT comments FROM unit_resources WHERE unit_id =
+                        (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
+                        AND res_id = -1 ORDER BY `order`", $course_id);
+if ($desccomm && $desccomm->comments) {
+    $description = standard_text_escape($desccomm->comments);
 }
 if (!empty($description)) {
     $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";

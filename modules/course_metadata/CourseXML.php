@@ -878,8 +878,6 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param CourseXMLElement $xml
      */
     public static function save($courseId, $courseCode, $xml) {
-        global $mysqlMainDb;
-
         // pre-save operations
         foreach ($xml->instructor as $instructor) {
             $instrFirst = array();
@@ -917,143 +915,143 @@ class CourseXMLElement extends SimpleXMLElement {
         $firstCreateDate = null;
         $ts = strtotime($xml->firstCreateDate);
         if ($ts > 0) {
-            $firstCreateDate = quote(date('Y-m-d H:i:s', $ts));
+            $firstCreateDate = date('Y-m-d H:i:s', $ts);
         } else {
             $firstCreateDate = 'NOW()';
         }
 
         // insert or update oai_record
-        $exists = db_query_get_single_value("SELECT 1 FROM `$mysqlMainDb`.oai_record WHERE course_id = " . $courseId);
-        if ($exists) {
+        $exists = Database::get()->querySingle("SELECT 1 AS `exists` FROM oai_record WHERE course_id = ?d", $courseId);
+        if ($exists && intval($exists->exists) == 1) {
             $deleted = ($is_certified) ? 0 : 1;
-            db_query("UPDATE `$mysqlMainDb`.oai_record SET
-                `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
+            Database::get()->query("UPDATE oai_record SET
+                `oai_identifier` = ?s,
                 `datestamp` = NOW(),
-                `deleted` = " . $deleted . ",
-                `dc_title` = " . quote(self::serialize($xml->title)) . ",
-                `dc_description` = " . quote(self::serialize($xml->description)) . ",
-                `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
-                `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
-                `dc_subsubject` = " . quote(self::makeMultiLang($xml->subthematic)) . ",
-                `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
-                `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
-                `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
-                `dc_instructor` = " . quote(self::serializeMulti($xml->instructor, "fullName")) . ",
-                `dc_department` = " . quote(self::serialize($xml->department)) . ",
-                `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
-                `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
-                `dc_coursephotomime` = " . quote($xml->coursePhoto['mime']) . ",
-                `dc_instructorphoto` = " . quote(self::serializeMulti($xml->instructor, "photo")) . ",
-                `dc_instructorphotomime` = " . quote(self::serializeAttr($xml->instructor, "photo", "mime")) . ",
-                `dc_url` = " . quote($xml->url) . ",
-                `dc_language` = " . quote(self::serialize($xml->language)) . ",
-                `dc_date` = " . $firstCreateDate . ",
-                `dc_format` = " . quote($level) . ",
-                `dc_rights` = " . quote(self::serialize($xml->license)) . ",
-                `dc_videolectures` = " . quote($xml->videolectures) . ",
-                `dc_code` = " . quote($xml->code) . ",
-                `dc_keywords` = " . quote(self::serialize($xml->keywords)) . ",
-                `dc_contentdevelopment` = " . quote(self::serialize($xml->contentDevelopment)) . ",
-                `dc_formattypes` = " . quote($xml->format) . ",
-                `dc_recommendedcomponents` = " . quote(self::serialize($xml->recommendedComponents)) . ",
-                `dc_assignments` = " . quote(self::serialize($xml->assignments)) . ",
-                `dc_requirements` = " . quote(self::serialize($xml->requirements)) . ",
-                `dc_remarks` = " . quote(self::serialize($xml->remarks)) . ",
-                `dc_acknowledgments` = " . quote(self::serialize($xml->acknowledgments)) . ",
-                `dc_coteaching` = " . quote($xml->coTeaching) . ",
-                `dc_coteachingcolleagueopenscourse` = " . quote($xml->coTeachingColleagueOpensCourse) . ",
-                `dc_coteachingautonomousdepartment` = " . quote($xml->coTeachingAutonomousDepartment) . ",
-                `dc_coteachingdepartmentcredithours` = " . quote($xml->coTeachingDepartmentCreditHours) . ",
-                `dc_yearofstudy` = " . quote($xml->yearOfStudy) . ",
-                `dc_semester` = " . quote($xml->semester) . ",
-                `dc_coursetype` = " . quote($xml->type) . ",
-                `dc_credithours` = " . quote($xml->credithours) . ",
-                `dc_credits` = " . quote($xml->credits) . ",
-                `dc_institutiondescription` = " . quote(self::serialize($xml->institutionDescription)) . ",
-                `dc_curriculumtitle` = " . quote(self::serialize($xml->curriculumTitle)) . ",
-                `dc_curriculumdescription` = " . quote(self::serialize($xml->curriculumDescription)) . ",
-                `dc_outcomes` = " . quote(self::serialize($xml->outcomes)) . ",
-                `dc_curriculumkeywords` = " . quote(self::serialize($xml->curriculumKeywords)) . ",
-                `dc_sector` = " . quote(self::serialize($xml->sector)) . ",
-                `dc_targetgroup` = " . quote(self::serialize($xml->targetGroup)) . ",
-                `dc_curriculumtargetgroup` = " . quote(self::serialize($xml->curriculumTargetGroup)) . ",
-                `dc_featuredbooks` = " . quote(self::serialize($xml->featuredBooks)) . ",
-                `dc_structure` = " . quote(self::serialize($xml->structure)) . ",
-                `dc_teachingmethod` = " . quote(self::serialize($xml->teachingMethod)) . ",
-                `dc_assessmentmethod` = " . quote(self::serialize($xml->assessmentMethod)) . ",
-                `dc_eudoxuscode` = " . quote($xml->eudoxusCode) . ",
-                `dc_eudoxusurl` = " . quote($xml->eudoxusURL) . ",
-                `dc_kalliposurl` = " . quote($xml->kalliposURL) . ",
-                `dc_numberofunits` = " . quote($xml->numberOfUnits) . ",
-                `dc_unittitle` = " . quote(self::serializeMulti($xml->unit, "title")) . ",
-                `dc_unitdescription` = " . quote(self::serializeMulti($xml->unit, "description")) . ",
-                `dc_unitkeywords` = " . quote(self::serializeMulti($xml->unit, "keywords")) . "
-                WHERE course_id = " . intval($courseId));
+                `deleted` = ?d,
+                `dc_title` = ?s,
+                `dc_description` = ?s,
+                `dc_syllabus` = ?s,
+                `dc_subject` = ?s,
+                `dc_subsubject` = ?s,
+                `dc_objectives` = ?s,
+                `dc_level` = ?s,
+                `dc_prerequisites` = ?s,
+                `dc_instructor` = ?s,
+                `dc_department` = ?s,
+                `dc_institution` = ?s,
+                `dc_coursephoto` = ?s,
+                `dc_coursephotomime` = ?s,
+                `dc_instructorphoto` = ?s,
+                `dc_instructorphotomime` = ?s,
+                `dc_url` = ?s,
+                `dc_language` = ?s,
+                `dc_date` = ?t,
+                `dc_format` = ?s,
+                `dc_rights` = ?s,
+                `dc_videolectures` = ?s,
+                `dc_code` = ?s,
+                `dc_keywords` = ?s,
+                `dc_contentdevelopment` = ?s,
+                `dc_formattypes` = ?s,
+                `dc_recommendedcomponents` = ?s,
+                `dc_assignments` = ?s,
+                `dc_requirements` = ?s,
+                `dc_remarks` = ?s,
+                `dc_acknowledgments` = ?s,
+                `dc_coteaching` = ?s,
+                `dc_coteachingcolleagueopenscourse` = ?s,
+                `dc_coteachingautonomousdepartment` = ?s,
+                `dc_coteachingdepartmentcredithours` = ?s,
+                `dc_yearofstudy` = ?s,
+                `dc_semester` = ?s,
+                `dc_coursetype` = ?s,
+                `dc_credithours` = ?s,
+                `dc_credits` = ?s,
+                `dc_institutiondescription` = ?s,
+                `dc_curriculumtitle` = ?s,
+                `dc_curriculumdescription` = ?s,
+                `dc_outcomes` = ?s,
+                `dc_curriculumkeywords` = ?s,
+                `dc_sector` = ?s,
+                `dc_targetgroup` = ?s,
+                `dc_curriculumtargetgroup` = ?s,
+                `dc_featuredbooks` = ?s,
+                `dc_structure` = ?s,
+                `dc_teachingmethod` = ?s,
+                `dc_assessmentmethod` = ?s,
+                `dc_eudoxuscode` = ?s,
+                `dc_eudoxusurl` = ?s,
+                `dc_kalliposurl` = ?s,
+                `dc_numberofunits` = ?s,
+                `dc_unittitle` = ?s,
+                `dc_unitdescription` = ?s,
+                `dc_unitkeywords` = ?s
+                WHERE course_id = ?d", "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), $xml->coursePhoto, $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), $xml->videolectures, $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), $xml->coTeaching, $xml->coTeachingColleagueOpensCourse, $xml->coTeachingAutonomousDepartment, $xml->coTeachingDepartmentCreditHours, $xml->yearOfStudy, $xml->semester, $xml->type, $xml->credithours, $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), $xml->eudoxusCode, $xml->eudoxusURL, $xml->kalliposURL, $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"), intval($courseId));
         } else {
             if ($is_certified) {
-                db_query("INSERT INTO `$mysqlMainDb`.oai_record SET
-                    `course_id` = " . intval($courseId) . ",
-                    `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
+                Database::get()->query("INSERT INTO oai_record SET
+                    `course_id` = ?d,
+                    `oai_identifier` = ?s,
                     `datestamp` = NOW(),
-                    `deleted` = 0,
-                    `dc_title` = " . quote(self::serialize($xml->title)) . ",
-                    `dc_description` = " . quote(self::serialize($xml->description)) . ",
-                    `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
-                    `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
-                    `dc_subsubject` = " . quote(self::makeMultiLang($xml->subthematic)) . ",
-                    `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
-                    `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
-                    `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
-                    `dc_instructor` = " . quote(self::serializeMulti($xml->instructor, "fullName")) . ",
-                    `dc_department` = " . quote(self::serialize($xml->department)) . ",
-                    `dc_institution` = " . quote(self::makeMultiLang($xml->institution)) . ",
-                    `dc_coursephoto` = " . quote($xml->coursePhoto) . ",
-                    `dc_coursephotomime` = " . quote($xml->coursePhoto['mime']) . ",
-                    `dc_instructorphoto` = " . quote(self::serializeMulti($xml->instructor, "photo")) . ",
-                    `dc_instructorphotomime` = " . quote(self::serializeAttr($xml->instructor, "photo", "mime")) . ",
-                    `dc_url` = " . quote($xml->url) . ",
-                    `dc_language` = " . quote(self::serialize($xml->language)) . ",
-                    `dc_date` = " . $firstCreateDate . ",
-                    `dc_format` = " . quote($level) . ",
-                    `dc_rights` = " . quote(self::serialize($xml->license)) . ",
-                    `dc_videolectures` = " . quote($xml->videolectures)) . ",
-                    `dc_code` = " . quote($xml->code) . ",
-                    `dc_keywords` = " . quote(self::serialize($xml->keywords)) . ",
-                    `dc_contentdevelopment` = " . quote(self::serialize($xml->contentDevelopment)) . ",
-                    `dc_formattypes` = " . quote($xml->format) . ",
-                    `dc_recommendedcomponents` = " . quote(self::serialize($xml->recommendedComponents)) . ",
-                    `dc_assignments` = " . quote(self::serialize($xml->assignments)) . ",
-                    `dc_requirements` = " . quote(self::serialize($xml->requirements)) . ",
-                    `dc_remarks` = " . quote(self::serialize($xml->remarks)) . ",
-                    `dc_acknowledgments` = " . quote(self::serialize($xml->acknowledgments)) . ",
-                    `dc_coteaching` = " . quote($xml->coTeaching) . ",
-                    `dc_coteachingcolleagueopenscourse` = " . quote($xml->coTeachingColleagueOpensCourse) . ",
-                    `dc_coteachingautonomousdepartment` = " . quote($xml->coTeachingAutonomousDepartment) . ",
-                    `dc_coteachingdepartmentcredithours` = " . quote($xml->coTeachingDepartmentCreditHours) . ",
-                    `dc_yearofstudy` = " . quote($xml->yearOfStudy) . ",
-                    `dc_semester` = " . quote($xml->semester) . ",
-                    `dc_coursetype` = " . quote($xml->type) . ",
-                    `dc_credithours` = " . quote($xml->credithours) . ",
-                    `dc_credits` = " . quote($xml->credits) . ",
-                    `dc_institutiondescription` = " . quote(self::serialize($xml->institutionDescription)) . ",
-                    `dc_curriculumtitle` = " . quote(self::serialize($xml->curriculumTitle)) . ",
-                    `dc_curriculumdescription` = " . quote(self::serialize($xml->curriculumDescription)) . ",
-                    `dc_outcomes` = " . quote(self::serialize($xml->outcomes)) . ",
-                    `dc_curriculumkeywords` = " . quote(self::serialize($xml->curriculumKeywords)) . ",
-                    `dc_sector` = " . quote(self::serialize($xml->sector)) . ",
-                    `dc_targetgroup` = " . quote(self::serialize($xml->targetGroup)) . ",
-                    `dc_curriculumtargetgroup` = " . quote(self::serialize($xml->curriculumTargetGroup)) . ",
-                    `dc_featuredbooks` = " . quote(self::serialize($xml->featuredBooks)) . ",
-                    `dc_structure` = " . quote(self::serialize($xml->structure)) . ",
-                    `dc_teachingmethod` = " . quote(self::serialize($xml->teachingMethod)) . ",
-                    `dc_assessmentmethod` = " . quote(self::serialize($xml->assessmentMethod)) . ",
-                    `dc_eudoxuscode` = " . quote($xml->eudoxusCode) . ",
-                    `dc_eudoxusurl` = " . quote($xml->eudoxusURL) . ",
-                    `dc_kalliposurl` = " . quote($xml->kalliposURL) . ",
-                    `dc_numberofunits` = " . quote($xml->numberOfUnits) . ",
-                    `dc_unittitle` = " . quote(self::serializeMulti($xml->unit, "title")) . ",
-                    `dc_unitdescription` = " . quote(self::serializeMulti($xml->unit, "description")) . ",
-                    `dc_unitkeywords` = " . quote(self::serializeMulti($xml->unit, "keywords"));
+                    `deleted` = ?d,
+                    `dc_title` = ?s,
+                    `dc_description` = ?s,
+                    `dc_syllabus` = ?s,
+                    `dc_subject` = ?s,
+                    `dc_subsubject` = ?s,
+                    `dc_objectives` = ?s,
+                    `dc_level` = ?s,
+                    `dc_prerequisites` = ?s,
+                    `dc_instructor` = ?s,
+                    `dc_department` = ?s,
+                    `dc_institution` = ?s,
+                    `dc_coursephoto` = ?s,
+                    `dc_coursephotomime` = ?s,
+                    `dc_instructorphoto` = ?s,
+                    `dc_instructorphotomime` = ?s,
+                    `dc_url` = ?s,
+                    `dc_language` = ?s,
+                    `dc_date` = ?t,
+                    `dc_format` = ?s,
+                    `dc_rights` = ?s,
+                    `dc_videolectures` = ?s,
+                    `dc_code` = ?s,
+                    `dc_keywords` = ?s,
+                    `dc_contentdevelopment` = ?s,
+                    `dc_formattypes` = ?s,
+                    `dc_recommendedcomponents` = ?s,
+                    `dc_assignments` = ?s,
+                    `dc_requirements` = ?s,
+                    `dc_remarks` = ?s,
+                    `dc_acknowledgments` = ?s,
+                    `dc_coteaching` = ?s,
+                    `dc_coteachingcolleagueopenscourse` = ?s,
+                    `dc_coteachingautonomousdepartment` = ?s,
+                    `dc_coteachingdepartmentcredithours` = ?s,
+                    `dc_yearofstudy` = ?s,
+                    `dc_semester` = ?s,
+                    `dc_coursetype` = ?s,
+                    `dc_credithours` = ?s,
+                    `dc_credits` = ?s,
+                    `dc_institutiondescription` = ?s,
+                    `dc_curriculumtitle` = ?s,
+                    `dc_curriculumdescription` = ?s,
+                    `dc_outcomes` = ?s,
+                    `dc_curriculumkeywords` = ?s,
+                    `dc_sector` = ?s,
+                    `dc_targetgroup` = ?s,
+                    `dc_curriculumtargetgroup` = ?s,
+                    `dc_featuredbooks` = ?s,
+                    `dc_structure` = ?s,
+                    `dc_teachingmethod` = ?s,
+                    `dc_assessmentmethod` = ?s,
+                    `dc_eudoxuscode` = ?s,
+                    `dc_eudoxusurl` = ?s,
+                    `dc_kalliposurl` = ?s,
+                    `dc_numberofunits` = ?s,
+                    `dc_unittitle` = ?s,
+                    `dc_unitdescription` = ?s,
+                    `dc_unitkeywords` = ?s", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), $xml->coursePhoto, $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), $xml->videolectures, $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), $xml->coTeaching, $xml->coTeachingColleagueOpensCourse, $xml->coTeachingAutonomousDepartment, $xml->coTeachingDepartmentCreditHours, $xml->yearOfStudy, $xml->semester, $xml->type, $xml->credithours, $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), $xml->eudoxusCode, $xml->eudoxusURL, $xml->kalliposURL, $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"));
             }
         }
     }
@@ -1293,18 +1291,18 @@ class CourseXMLElement extends SimpleXMLElement {
             'course_assessmentMethod_' . $clang => 'assessment_method',
             'course_prerequisites_' . $clang => 'prerequisites');
         foreach ($desctypes as $xmlkey => $desctype) {
-            $resDesc = db_query("SELECT cd.comments
-                    FROM `$mysqlMainDb`.course_description cd
-                    LEFT JOIN `$mysqlMainDb`.course_description_type t on (t.id = cd.type)
-                    WHERE cd.course_id = " . intval($courseId) . " AND t.`" . $desctype . "` = 1
-                    ORDER BY cd.order");
+            $resDesc = Database::get()->queryArray("SELECT cd.comments
+                    FROM course_description cd
+                    LEFT JOIN course_description_type t on (t.id = cd.type)
+                    WHERE cd.course_id = ?d AND t.`" . $desctype . "` = 1
+                    ORDER BY cd.order", intval($courseId));
             $commDesc = '';
             $i = 0;
-            while ($row = mysql_fetch_array($resDesc)) {
+            foreach ($resDesc as $row) {
                 if ($i > 0) {
                     $commDesc .= ' ';
                 }
-                $commDesc .= strip_tags($row['comments']);
+                $commDesc .= strip_tags($row->comments);
                 $i++;
             }
             if (strlen($commDesc) > 0) {

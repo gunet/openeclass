@@ -68,20 +68,20 @@ if ($is_editor) {
     }
 }
 
-$q = db_query("SELECT id, title, comments, type, visible FROM course_description WHERE course_id = $course_id ORDER BY `order`");
-if ($q && mysql_num_rows($q) > 0) {
+$q = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
+if ($q && count($q) > 0) {
     $i = 0;
-    while ($row = mysql_fetch_array($q)) {
+    foreach ($q as $row) {
         $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr class='odd'>
-         <td class='bold'>" . q($row['title']) . "</td>" .
-                handleActions($row['id'], $row['visible'], $i, mysql_num_rows($q)) . "
+         <td class='bold'>" . q($row->title) . "</td>" .
+                handleActions($row->id, $row->visible, $i, count($q)) . "
         </tr>";
-        $tool_content .= handleType($row['type']);
+        $tool_content .= handleType($row->type);
         $tool_content .= "<tr>";
         $colspan = ($is_editor) ? "colspan='6'" : "";
-        $tool_content .= "<td $colspan>" . standard_text_escape($row['comments']) . "</td>";
+        $tool_content .= "<td $colspan>" . standard_text_escape($row->comments) . "</td>";
         $tool_content .= "</tr></table><br />";
         $i++;
     }
@@ -152,9 +152,9 @@ function handleType($typeId) {
     }
     $colspan = ($is_editor) ? "colspan='6'" : "";
 
-    $res = db_query_get_single_value("SELECT title FROM course_description_type WHERE id = $typeId");
+    $res = Database::get()->querySingle("SELECT title FROM course_description_type WHERE id = ?d", $typeId);
 
-    $title = $titles = @unserialize($res);
+    $title = $titles = @unserialize($res->title);
     if ($titles !== false) {
         $lang = langname_to_code($language);
         if (isset($titles[$lang]) && !empty($titles[$lang])) {
@@ -174,14 +174,14 @@ function processActions() {
 
     if (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_REQUEST['del']);
-        db_query("DELETE FROM course_description WHERE id = $res_id AND course_id = $course_id");
+        Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
         $res_id = intval($_REQUEST['vis']);
-        $vis = db_query_get_single_value("SELECT `visible` FROM course_description WHERE id = $res_id AND course_id = $course_id");
-        $newvis = (intval($vis) === 1) ? 0 : 1;
-        db_query("UPDATE course_description SET `visible` = $newvis, update_dt = NOW() WHERE id = $res_id AND course_id = $course_id");
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
+        $newvis = (intval($vis->visible) === 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_description SET `visible` = ?d, update_dt = NOW() WHERE id = ?d AND course_id = ?d", $newvis, $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
@@ -197,23 +197,23 @@ function updateCourseDescription($cdId, $title, $comments, $type) {
     $type = (isset($type)) ? intval($type) : null;
 
     if ($cdId !== null) {
-        db_query("UPDATE course_description SET
-                title = " . quote($title) . ",
-                comments = " . quote($comments) . ",
-                type = " . $type . ",
+        Database::get()->query("UPDATE course_description SET
+                title = ?s,
+                comments = ?s,
+                type = ?d,
                 update_dt = NOW()
-                WHERE id = " . intval($cdId));
+                WHERE id = ?d", $title, $comments, $type, intval($cdId));
     } else {
-        $res = db_query_get_single_value("SELECT MAX(`order`) FROM course_description WHERE course_id = $course_id");
-        $maxorder = ($res !== false) ? intval($res) + 1 : 1;
+        $res = Database::get()->querySingle("SELECT MAX(`order`) FROM course_description WHERE course_id = ?d", $course_id);
+        $maxorder = ($res->max !== false) ? intval($res->max) + 1 : 1;
 
-        db_query("INSERT INTO course_description SET
-                course_id = " . $course_id . ",
-                title = " . quote($title) . ",
-                comments = " . quote(purify($comments)) . ",
-                type = " . $type . ",
-                `order` = " . $maxorder . ",
-                update_dt = NOW()");
+        Database::get()->query("INSERT INTO course_description SET
+                course_id = ?d,
+                title = ?s,
+                comments = ?s,
+                type = ?d,
+                `order` = ?d,
+                update_dt = NOW()", $course_id, $title, purify($comments), $type, $maxorder);
     }
     CourseXMLElement::refreshCourse($course_id, $course_code);
 }

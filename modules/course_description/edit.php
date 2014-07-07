@@ -34,18 +34,20 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 
 if (isset($_REQUEST['id'])) {
     $editId = intval($_REQUEST['id']);
-    $q = db_query("SELECT title, comments, type FROM course_description WHERE course_id = $course_id AND id = $editId");
-    list($cdtitle, $comments, $defaultType) = mysql_fetch_row($q);
+    $q = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $editId);
+    $cdtitle = $q->title;
+    $comments = $q->comments;
+    $defaultType = $q->type;
 } else {
     $editId = false;
     $cdtitle = $comments = $defaultType = '';
 }
 
-$q = db_query("SELECT id, title FROM course_description_type ORDER BY `order`");
+$q = Database::get()->queryArray("SELECT id, title FROM course_description_type ORDER BY `order`");
 $types = array();
 $types[''] = '';
-while ($type = mysql_fetch_array($q)) {
-    $title = $titles = @unserialize($type['title']);
+foreach ($q as $type) {
+    $title = $titles = @unserialize($type->title);
     if ($titles !== false) {
         $lang = langname_to_code($language);
         if (isset($titles[$lang]) && !empty($titles[$lang])) {
@@ -56,7 +58,7 @@ while ($type = mysql_fetch_array($q)) {
             $title = array_shift($titles);
         }
     }
-    $types[$type['id']] = $title;
+    $types[$type->id] = $title;
 }
 
 $tool_content .= "<form method='post' action='index.php?course=$course_code'>";
