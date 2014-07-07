@@ -74,8 +74,7 @@
 
 
     <curriculumLevel></curriculumLevel>
-    <institution lang="el"></institution>
-    <institution lang="en"></institution>
+    <institution></institution>
     <department lang="el"></department>
     <department lang="en"></department>
     <language lang="el"></language>
