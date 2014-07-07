@@ -1129,7 +1129,7 @@ function upgrade_course_2_10($code, $extramessage = '') {
     Database::get($code)->query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
     
     // refresh XML metadata
-    require_once "{$webDir}modules/course_metadata/CourseXML.php";
+    require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }

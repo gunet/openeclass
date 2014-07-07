@@ -105,8 +105,8 @@ function submitForm() {
 
     // handle uploaded files
     $fileData = array();
-    foreach (CourseXMLElement::$binaryFields as $bkey) {
-        if (in_array($bkey, CourseXMLElement::$multipleFields)) {
+    foreach (CourseXMLConfig::$binaryFields as $bkey) {
+        if (in_array($bkey, CourseXMLConfig::$multipleFields)) {
             if (isset($_FILES[$bkey]) && isset($_FILES[$bkey]['tmp_name']) && isset($_FILES[$bkey]['type'])
                     && is_array($_FILES[$bkey]['tmp_name'])) {
                 for ($i = 0; $i < count($_FILES[$bkey]['tmp_name']); $i++) {
