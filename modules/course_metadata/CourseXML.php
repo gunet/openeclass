@@ -262,7 +262,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // textarea fields
         if (in_array($fullKeyNoLang, self::$textareaFields)) {
-            return $fieldStart . "<textarea cols='53' rows='2' name='" . q($fullKey) . "'>" . q((string) $this) . "</textarea>" . $fieldEnd;
+            return $fieldStart . "<textarea cols='53' rows='2' name='" . q($fullKey) . "' $readonly>" . q((string) $this) . "</textarea>" . $fieldEnd;
         }
 
         // binary (file-upload) fields
@@ -735,8 +735,8 @@ class CourseXMLElement extends SimpleXMLElement {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
             if (!$xml) { // fallback if xml is broken
                 return $skeletonXML;
-            } else { // xml is valid, merge autogen data and current xml data
-                $new_data = array_merge_recursive($xml->asFlatArray(), $data);
+            } else { // xml is valid, merge/replace autogen data and current xml data
+                $new_data = array_replace_recursive($xml->asFlatArray(), $data);
                 $data = $new_data;
             }
         } else { // fallback if starting fresh
@@ -832,6 +832,34 @@ class CourseXMLElement extends SimpleXMLElement {
             $data['course_license'] = $license[$course->course_license]['title'];
         } else {
             $data['course_license'] = '';
+        }
+
+        // course description types
+        $desctypes = array(
+            'course_contents_' . $clang => 'syllabus',
+            'course_objectives_' . $clang => 'objectives',
+            'course_literature_' . $clang => 'literature',
+            'course_teachingMethod_' . $clang => 'teaching_method',
+            'course_assessmentMethod_' . $clang => 'assessment_method',
+            'course_prerequisites_' . $clang => 'prerequisites');
+        foreach ($desctypes as $xmlkey => $desctype) {
+            $resDesc = db_query("SELECT cd.comments
+                    FROM `$mysqlMainDb`.course_description cd
+                    LEFT JOIN `$mysqlMainDb`.course_description_type t on (t.id = cd.type)
+                    WHERE cd.course_id = " . intval($courseId) . " AND t.`" . $desctype . "` = 1
+                    ORDER BY cd.order");
+            $commDesc = '';
+            $i = 0;
+            while ($row = mysql_fetch_array($resDesc)) {
+                if ($i > 0) {
+                    $commDesc .= ' ';
+                }
+                $commDesc .= strip_tags($row['comments']);
+                $i++;
+            }
+            if (strlen($commDesc) > 0) {
+                $data[$xmlkey] = $commDesc;
+            }
         }
 
         // turn visible units to associative array
@@ -1001,7 +1029,10 @@ class CourseXMLElement extends SimpleXMLElement {
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
         'course_url', 'course_keywords', 'course_numberOfUnits',
-        'course_unit_title', 'course_unit_description', 'course_license'
+        'course_unit_title', 'course_unit_description', 'course_license',
+        'course_contents', 'course_objectives', 'course_literature',
+        'course_teachingMethod', 'course_assessmentMethod',
+        'course_prerequisites'
     );
 
     /**
@@ -1177,7 +1208,10 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_title', 'course_instructor_fullName',
         'course_language', 'course_keywords',
         'course_unit_title', 'course_unit_description',
-        'course_numberOfUnits', 'course_license'
+        'course_numberOfUnits', 'course_license',
+        'course_contents', 'course_objectives', 'course_literature',
+        'course_teachingMethod', 'course_assessmentMethod',
+        'course_prerequisites'
     );
 
     /**
@@ -1198,6 +1232,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $course_code, $currentCourseLanguage;
 
         $courseinfo = $urlServer . 'modules/course_info/index.php?course=' . $course_code;
+        $coursedesc = $urlServer . 'modules/course_description/index.php?course=' . $course_code;
         $coursehome = $urlServer . 'courses/' . $course_code . '/index.php';
         $clang = langname_to_code($currentCourseLanguage);
 
@@ -1209,7 +1244,13 @@ class CourseXMLElement extends SimpleXMLElement {
             'course_unit_title_' . $clang => $coursehome,
             'course_unit_description_' . $clang => $coursehome,
             'course_numberOfUnits' => $coursehome,
-            'course_license' => $courseinfo
+            'course_license' => $courseinfo,
+            'course_contents_' . $clang => $coursedesc,
+            'course_objectives_' . $clang => $coursedesc,
+            'course_literature_' . $clang => $coursedesc,
+            'course_teachingMethod_' . $clang => $coursedesc,
+            'course_assessmentMethod_' . $clang => $coursedesc,
+            'course_prerequisites_' . $clang => $coursedesc
         );
 
         if (isset($valArr[$key])) {

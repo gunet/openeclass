@@ -46,6 +46,7 @@ Database::get()->query("DROP TABLE IF EXISTS announcements");
 Database::get()->query("DROP TABLE IF EXISTS auth");
 Database::get()->query("DROP TABLE IF EXISTS course");
 Database::get()->query("DROP TABLE IF EXISTS course_user");
+Database::get()->query("DROP TABLE IF EXISTS course_description");
 Database::get()->query("DROP TABLE IF EXISTS course_review");
 Database::get()->query("DROP TABLE IF EXISTS faculte");
 Database::get()->query("DROP TABLE IF EXISTS institution");
@@ -178,9 +179,48 @@ Database::get()->query("CREATE TABLE course_user (
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
 
+//
+// table `course_description_type`
+//
+
+Database::get()->query("CREATE TABLE `course_description_type` (
+    `id` smallint(6) NOT NULL AUTO_INCREMENT,
+    `title` mediumtext,
+    `syllabus` tinyint(1) DEFAULT 0,
+    `objectives` tinyint(1) DEFAULT 0,
+    `literature` tinyint(1) DEFAULT 0,
+    `teaching_method` tinyint(1) DEFAULT 0,
+    `assessment_method` tinyint(1) DEFAULT 0,
+    `prerequisites` tinyint(1) DEFAULT 0,
+    `active` tinyint(1) DEFAULT 1,
+    `order` int(11) NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `syllabus`, `order`) VALUES (1, 'a:2:{s:2:\"el\";s:52:\"Περιεχόμενο μαθήματος (Syllabus)\";s:2:\"en\";s:25:\"Course Content (Syllabus)\";}', 1, 1)");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `objectives`, `order`) VALUES (2, 'a:2:{s:2:\"el\";s:41:\"Αντικειμενικοί Στόχοι\";s:2:\"en\";s:25:\"Objectives / Overall Aims\";}', 1, 2)");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `literature`, `order`) VALUES (3, 'a:2:{s:2:\"el\";s:47:\"Συνιστώμενη Βιβλιογραφία\";s:2:\"en\";s:30:\"Study Materials / Reading List\";}', 1, 3)");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `teaching_method`, `order`) VALUES (4, 'a:2:{s:2:\"el\";s:63:\"Διδακτικές και μαθησιακές μέθοδοι\";s:2:\"en\";s:30:\"Education and Teaching Methods\";}', 1, 4)");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `assessment_method`, `order`) VALUES (5, 'a:2:{s:2:\"el\";s:62:\"Μέθοδοι αξιολόγησης/βαθμολόγησης\";s:2:\"en\";s:26:\"Assessment Methods / Exams\";}', 1, 5)");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `prerequisites`, `order`) VALUES (6, 'a:2:{s:2:\"el\";s:26:\"Προαπαιτήσεις\";s:2:\"en\";s:25:\"Recommended Prerequisites\";}', 1, 6)");
 
 //
-// Tabe `course_review`
+// table `course_description`
+//
+
+Database::get()->query("CREATE TABLE IF NOT EXISTS `course_description` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `comments` mediumtext,
+    `type` smallint(6),
+    `visible` tinyint(4) DEFAULT 0,
+    `order` int(11) NOT NULL,
+    `update_dt` datetime NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+
+//
+// Table `course_review`
 //
 
 Database::get()->query("CREATE TABLE course_review (
@@ -1232,6 +1272,9 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
 Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)');
+Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
+Database::get()->query('CREATE INDEX `cd_type_index` ON course_description (type)');
+Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
 Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');

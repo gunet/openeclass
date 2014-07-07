@@ -1332,7 +1332,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
     }
     $current = $sql->$order_field;
     $sql = Database::get()->querySingle("SELECT `$id_field`, `$order_field` FROM `$table`
-                        WHERE `order` $op '$current' $condition
+                        WHERE `$order_field` $op '$current' $condition
                         ORDER BY `$order_field` $desc LIMIT 1");
     if ($sql) {
         $next_id = $sql->$id_field;

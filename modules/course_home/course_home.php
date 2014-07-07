@@ -69,24 +69,26 @@ $public_code = $result->public_code;
 $course_license = $result->course_license;
 $main_extra = $description = $addon = '';
 
-$res = Database::get()->queryArray("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
-                        AND (visible = 1 OR res_id < 0)
-                 ORDER BY `order`", $course_id);
+$res = Database::get()->queryArray("SELECT id, title, comments, type FROM course_description
+        WHERE course_id = ?d AND visible = 1 ORDER BY `order`", $course_id);
+
 foreach ($res as $row) {
-    if ($row->res_id == -1) {
-        $description = standard_text_escape($row->comments);
-    } elseif ($row->res_id == -2) {
-        $addon = standard_text_escape($row->comments);
+    $desctype = intval($row->type) - 1;
+    if (isset($titreBloc[$desctype])) {
+        $element_id = "class='course_info' id='{$titreBloc[$desctype]}'";
+        $icon_url = "$themeimg/bloc/" . $desctype . ".png";
     } else {
-        if (isset($idBloc[$row->res_id]) and ! empty($idBloc[$row->res_id])) {
-            $element_id = "class='course_info' id='{$idBloc[$row->res_id]}'";
-        } else {
-            $element_id = 'class="course_info other"';
-        }
-        $main_extra .= "<div $element_id><h1>" . q($row->title) . "</h1>" .
-                standard_text_escape($row->comments) . "</div>\n";
+        $element_id = 'class="course_info other"';
+        $icon_url = "$themeimg/bloc/default.png";
     }
+    $hidden_id = "hidden_" . $row->id;
+    $tool_content .= "<div id='$hidden_id'><h1>" .
+            q($row->title) . "</h1>" .
+            standard_text_escape($row->comments) . "</div>\n";
+    $main_extra .= "<div $element_id>" .
+            "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
+            q($row->title) .
+            "</a></div>\n";
 }
 if ($is_editor) {
     $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
