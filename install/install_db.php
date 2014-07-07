@@ -1296,7 +1296,8 @@ Database::get()->query("CREATE TABLE `oai_record` (
     `dc_format` text DEFAULT NULL,
     `dc_rights` text DEFAULT NULL,
     `dc_videolectures` text DEFAULT NULL,
-    PRIMARY KEY (`id`)) $charset_spec");
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
 
 // create indexes
 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
@@ -1306,6 +1307,7 @@ Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
 Database::get()->query('CREATE INDEX `cd_type_index` ON course_description (type)');
 Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
 Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
+Database::get()->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
 Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');

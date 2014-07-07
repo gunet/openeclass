@@ -820,9 +820,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `dc_format` text DEFAULT NULL,
                             `dc_rights` text DEFAULT NULL,
                             `dc_videolectures` text DEFAULT NULL,
-                            PRIMARY KEY (`id`)) $charset_spec");
+                            PRIMARY KEY (`id`),
+                            UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
 
                         db_query('CREATE INDEX `cid` ON oai_record (course_id)');
+                        db_query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
                     }
                 }
 
