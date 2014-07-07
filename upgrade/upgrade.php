@@ -813,6 +813,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `dc_description` text DEFAULT NULL,
                             `dc_syllabus` text DEFAULT NULL,
                             `dc_subject` text DEFAULT NULL,
+                            `dc_subsubject` text DEFAULT NULL,
                             `dc_objectives` text DEFAULT NULL,
                             `dc_level` text DEFAULT NULL,
                             `dc_prerequisites` text DEFAULT NULL,

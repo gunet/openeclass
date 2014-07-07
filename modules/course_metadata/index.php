@@ -35,7 +35,23 @@ if (!get_config('course_metadata')) {
 if (isset($_POST['submit'])) {
     $tool_content .= submitForm();
 }
-$tool_content .= displayForm();
+
+// display Form
+list($displayHtml, $xml) = displayForm();
+$tool_content .= $displayHtml;
+
+$naturalKeys = array('othernatural', 'maths', 'cis', 'phys', 'chem', 'environ', 'biology');
+$naturalJSON = generateJSON($naturalKeys);
+$agriKeys = array('otheragri', 'agrifor', 'animal', 'veterin', 'agribio');
+$agriJSON = generateJSON($agriKeys);
+$engKeys = array('othereng', 'civil', 'eeeeie', 'mechan', 'chemic', 'mateng', 'medeng', 'enveng', 'envbio', 'indbio', 'nanotech');
+$engJSON = generateJSON($engKeys);
+$socKeys = array('othersoc', 'psych', 'ecobi', 'edusoc', 'sociology', 'law', 'political', 'ecogeosoc', 'mediacomm');
+$socJSON = generateJSON($socKeys);
+$medKeys = array('othermed', 'basicmed', 'clinicalmed', 'healthsci', 'medbio');
+$medJSON = generateJSON($medKeys);
+$humKeys = array('otherhum', 'hisarch', 'langlit', 'philosophy', 'arts', 'paidagogy');
+$humJSON = generateJSON($humKeys);
 
 load_js('jquery');
 load_js('jquery-ui');
@@ -43,6 +59,24 @@ load_js('jquery-multiselect');
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
+        
+    var subThematics = {
+        "othersubj" : [{"val" : "othersubsubj", "name" : "{$langCMeta['othersubsubj']}"}],
+        "natural" : {$naturalJSON},
+        "agricultural" : {$agriJSON},
+        "engineering" : {$engJSON},
+        "social" : {$socJSON},
+        "medical" : {$medJSON},
+        "humanities" : {$humJSON},
+    };
+        
+    var populateSubThematic = function(key) {
+        var subthem = $( "#course_subthematic" );
+        subthem.empty();
+        $.each(subThematics[key], function() {
+            subthem.append( $( "<option />" ).val(this.val).text(this.name) );
+        });
+    };
         
     var photoDelete = function(id) {
         $( id + "_image" ).remove();
@@ -74,6 +108,13 @@ $head_content .= <<<EOF
         $( "#course_instructor_photo_add" ).on('click', function() {
             $( "#course_instructor_photo_container" ).append( '<div class="cmetarow"><span class="cmetalabelinaccordion"></span><span class="cmetafield"><input size="30" name="course_instructor_photo[]" type="file"></span></div>' );
         });
+        
+        $( "#course_thematic" ).on('change', function() {
+            populateSubThematic( $( "#course_thematic" ).val() );
+        });
+        
+        populateSubThematic( $( "#course_thematic" ).val() );
+        $( "#course_subthematic" ).val('{$xml->subthematic}');
     });
 
 /* ]]> */
@@ -96,7 +137,7 @@ draw($tool_content, 2, null, $head_content);
 function displayForm() {
     global $course_id, $course_code;
     $xml = CourseXMLElement::init($course_id, $course_code);
-    return $xml->asForm();
+    return array($xml->asForm(), $xml);
 }
 
 function submitForm() {
@@ -185,4 +226,13 @@ function isValidImage($type) {
     }
 
     return $ret;
+}
+
+function generateJSON($keys) {
+    $json = "[";
+    foreach($keys as $key) {
+        $json .= "{\"val\" : \"" . $key . "\", \"name\" : \"" . $GLOBALS['langCMeta'][$key] . "\"}, ";
+    }
+    $json .= "]";
+    return $json;
 }

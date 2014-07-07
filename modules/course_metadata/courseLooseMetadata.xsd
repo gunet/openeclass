@@ -280,6 +280,7 @@
             <xs:element name="eudoxusURL"  type="t_url"/>
             <xs:element name="kalliposURL" type="t_url"/>
             <xs:element name="thematic"    type="t_langString"/>
+            <xs:element name="subthematic" type="t_langString"/>
             <xs:element name="license"     type="t_langString"/>
         </xs:choice>
     </xs:group>

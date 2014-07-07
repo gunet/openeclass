@@ -239,7 +239,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // enumeration fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$enumerationFields)) {
-            return $fieldStart . selection(CourseXMLConfig::getEnumerationValues($fullKey), $fullKey, (string) $this) . $fieldEnd;
+            return $fieldStart . selection(CourseXMLConfig::getEnumerationValues($fullKey), $fullKey, (string) $this, "id='" . $fullKeyNoLang . "'") . $fieldEnd;
         }
 
         // multiple enumeration fields
@@ -848,6 +848,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_description` = " . quote(self::serialize($xml->description)) . ",
                 `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
                 `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
+                `dc_subsubject` = " . quote(self::makeMultiLang($xml->subthematic)) . ",
                 `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                 `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                 `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
@@ -874,6 +875,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_description` = " . quote(self::serialize($xml->description)) . ",
                     `dc_syllabus` = " . quote(self::serialize($xml->contents)) . ",
                     `dc_subject` = " . quote(self::makeMultiLang($xml->thematic)) . ",
+                    `dc_subsubject` = " . quote(self::makeMultiLang($xml->subthematic)) . ",
                     `dc_objectives` = " . quote(self::serialize($xml->objectives)) . ",
                     `dc_level` = " . quote(self::makeMultiLang($xml->level)) . ",
                     `dc_prerequisites` = " . quote(self::serialize($xml->prerequisites)) . ",
@@ -943,19 +945,22 @@ class CourseXMLElement extends SimpleXMLElement {
             if ($ele->getName() === 'thematic') {
                 $key = 'othersubj';
             }
+            if ($ele->getName() === 'subthematic') {
+                $key = 'othersubsubj';
+            }
         }
         $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
             include("${webDir}modules/lang/english/common.inc.php");
             include("${webDir}modules/lang/english/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            $arr['en'] = $langCMeta[$key];
             $revert = true;
         }
         if ($clang != 'el') {
             include("${webDir}modules/lang/greek/common.inc.php");
             include("${webDir}modules/lang/greek/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            $arr['en'] = $langCMeta[$key];
             $revert = true;
         }
         if ($revert) { // revert messages back to current language

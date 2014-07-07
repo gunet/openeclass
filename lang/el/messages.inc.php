@@ -3875,6 +3875,7 @@ $langCMeta['course_thematic'] = "Θεματική επιστημονική πε�
 $langCMeta['help_course_thematic'] = "Θεματική ταξινόμηση σύμφωνα με πρότυπα βιβλιοθηκονομίας. Θα υπάρχουν συγκεκριμένες επιλογές. 
     Η συμπλήρωση πιθανόν να γίνει σε συνεργασία με την αντίστοιχη βιβλιοθήκη του τμήματος ή της σχολής. Θα υπάρξουν διευκρινήσεις 
     σε επόμενη έκδοση.";
+$langCMeta['course_subthematic'] = "Θεματική επιστημονική υπο-περιοχή";
 $langCMeta['course_license'] = "Άδεια χρήσης Creative Commons (CC)";
 $langCMeta['help_course_license'] = "Θα πρέπει να πραγματοποιηθεί η επιλογή άδειας χρήσης CC σε συνεργασία με το μέλος ΔΕΠ και σε 
     συμφωνία με την αντίστοιχη πολιτική του ιδρύματος.";
@@ -3938,6 +3939,50 @@ $langCMeta['engineering'] = "Μηχανική και Τεχνολογία";
 $langCMeta['social'] = "Κοινωνικές Επιστήμες";
 $langCMeta['medical'] = "Ιατρική και Επιστήμες Υγείας";
 $langCMeta['humanities'] = "Ανθρωπιστικές Επιστήμες";
+$langCMeta['othersubsubj'] = "Άλλο Επιστημονικό Υπο-Πεδίο";
+$langCMeta['othernatural'] = "Άλλες Φυσικές Επιστήμες";
+$langCMeta['maths'] = "Μαθηματικά";
+$langCMeta['cis'] = "Επιστήμες Ηλεκτρονικών Υπολογιστών & Πληροφορικής";
+$langCMeta['phys'] = "Φυσική";
+$langCMeta['chem'] = "Χημεία";
+$langCMeta['environ'] = "Γεωεπιστήμες & Επιστήμες Περιβάλλοντος";
+$langCMeta['biology'] = "Βιολογικές Επιστήμες";
+$langCMeta['otheragri'] = "Άλλες Γεωργικές Επιστήμες";
+$langCMeta['agrifor'] = "Γεωργία, Δασοκομία, και Αλιεία";
+$langCMeta['animal'] = "Επιστήμες Ζωικής Παραγωγής";
+$langCMeta['veterin'] = "Κτηνιατρική";
+$langCMeta['agribio'] = "Γεωργική Βιοτεχνολογία";
+$langCMeta['othereng'] = "Άλλες Επιστήμες Μηχανικού & Τεχνολογίας";
+$langCMeta['civil'] = "Επιστήμες Πολιτικού Μηχανικού";
+$langCMeta['eeeeie'] = "Επιστήμες Ηλεκτρολόγου Μηχανικού, Ηλεκτρονικού Μηχανικού & Μηχανικού Η/Υ";
+$langCMeta['mechan'] = "Επιστήμες Μηχανολόγου Μηχανικού";
+$langCMeta['chemic'] = "Επιστήμες Χημικού Μηχανικού";
+$langCMeta['mateng'] = "Μηχανική Υλικών";
+$langCMeta['medeng'] = "Βιοϊατρική Μηχανική";
+$langCMeta['enveng'] = "Μηχανική Περιβάλλοντος";
+$langCMeta['envbio'] = "Περιβαλλοντική Βιοτεχνολογία";
+$langCMeta['indbio'] = "Βιομηχανική Βιοτεχνολογία";
+$langCMeta['nanotech'] = "Νανοτεχνολογία";
+$langCMeta['othersoc'] = "Άλλες Κοινωνικές Επιστήμες";
+$langCMeta['psych'] = "Ψυχολογία";
+$langCMeta['ecobi'] = "Οικονομικά και Διοίκηση Επιχειρήσεων";
+$langCMeta['edusoc'] = "Εκπαίδευση";
+$langCMeta['sociology'] = "Κοινωνιολογία";
+$langCMeta['law'] = "Νομική Επιστήμη - Δίκαιο";
+$langCMeta['political'] = "Πολιτικές Επιστήμες";
+$langCMeta['ecogeosoc'] = "Κοινωνική & Οικονομική Γεωγραφία";
+$langCMeta['mediacomm'] = "ΜΜΕ και Επικοινωνίες";
+$langCMeta['othermed'] = "Άλλες Ιατρικές Επιστήμες";
+$langCMeta['basicmed'] = "Βασική Ιατρική";
+$langCMeta['clinicalmed'] = "Κλινική Ιατρικη";
+$langCMeta['healthsci'] = "Επιστήμες Υγείας";
+$langCMeta['medbio'] = "Ιατρική Βιοτεχνολογία";
+$langCMeta['otherhum'] = "Άλλες Ανθρωπιστικές Επιστήμες";
+$langCMeta['hisarch'] = "Ιστορία & Αρχαιολογία";
+$langCMeta['langlit'] = "Γλώσσα & Λογοτεχνία";
+$langCMeta['philosophy'] = "Φιλοσοφία, Ηθική, Θρησκεία";
+$langCMeta['arts'] = "Τέχνες";
+$langCMeta['paidagogy'] = "Παιδαγωγική";
 
 /* * ******************************************
   Messages for Big Blue Button
