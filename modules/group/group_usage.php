@@ -131,7 +131,7 @@ if ($type == 'duration') {
 } elseif ($type == 'lp') {
     $label = $langProgress;
     // list available learning paths
-    $learningPathList = db_query_fetch_all("SELECT learnPath_id FROM `$course_code`.lp_learnPath");
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM `$course_code`.lp_learnPath");
 } else {
     $label = '?';
 }
@@ -171,7 +171,7 @@ if (count($result) > 0) {
             $progress = 0;
             mysql_select_db($course_code);
             foreach ($learningPathList as $learningPath) {
-                $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
+                $progress += get_learnPath_progress($learningPath->learnPath_id, $user_id);
                 $iterator++;
             }
             if ($iterator > 0) {

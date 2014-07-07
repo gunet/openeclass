@@ -31,25 +31,24 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langG
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 
 if (isset($_GET['delete'])) {
-    $sql = db_query("UPDATE group_members SET description = ''
-		WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-    if (mysql_affected_rows() > 0) {
+    $sql = Database::get()->query("UPDATE group_members SET description = ''
+		WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
+    if ($sql->affectedRows > 0) {
         $tool_content .= "<div class='success'>$langBlockDeleted<br /><br />";
     }
     $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else if (isset($_POST['submit'])) {
-    $sql = db_query("UPDATE group_members SET description = " . autoquote($_POST['group_desc']) . "
-			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-    if (mysql_affected_rows() > 0) {
+    $sql = Database::get()->query("UPDATE group_members SET description = ?s
+			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $uid);
+    if ($sql->affectedRows > 0) {
         $tool_content .= "<div class='success'>$langRegDone<br /><br />";
     } else {
         $tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
     }
     $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else { // display form
-    $sql = db_query("SELECT description FROM group_members
-			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-    list($description) = mysql_fetch_array($sql);
+    $description = Database::get()->querySingle("SELECT description FROM group_members
+			WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
     $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	  <table class='FormData' width='99%' align='left'>
 	  <tbody>
