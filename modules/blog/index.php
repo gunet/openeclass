@@ -49,9 +49,6 @@ $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
 if ($comments_enabled == 1) {
     commenting_add_js(); //add js files needed for comments
 }
-if ($ratings_enabled ==1) {
-    rating_add_js(); //add js file needed for rating
-}
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
@@ -353,7 +350,7 @@ if ($action == "showPost") {
         $tool_content .= "</div>";
         
         if ($ratings_enabled == 1) {
-        	$rating = new Rating('blogpost', $post->getId());
+        	$rating = new Rating('up_down', 'blogpost', $post->getId());
         	$tool_content .= $rating->put($is_editor, $uid, $course_id);
         }
         
@@ -421,7 +418,7 @@ if ($action == "showBlog") {
             $tool_content .= "</div>";
             
             if ($ratings_enabled == 1) {
-            	$rating = new Rating('blogpost', $post->getId());
+            	$rating = new Rating('up_down', 'blogpost', $post->getId());
             	$tool_content .= $rating->put($is_editor, $uid, $course_id);
             }
             

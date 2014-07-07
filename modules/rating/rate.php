@@ -30,6 +30,7 @@ if ($_GET['rtype'] == 'blogpost') {
 
 if (setting_get($setting_id, $course_id) == 1) {
     if (Rating::permRate($is_editor, $uid, $course_id)) {
+        $widget = $_GET['widget'];
         $rtype = $_GET['rtype'];
         $rid = intval($_GET['rid']);
         $value = intval($_GET['value']);
@@ -37,7 +38,7 @@ if (setting_get($setting_id, $course_id) == 1) {
         //response array
         $response = array();
         
-        $rating = new Rating($rtype, $rid);
+        $rating = new Rating($widget, $rtype, $rid);
         $action = $rating->castRating($value, $uid);
         
         $up_value = $rating->getUpRating();
