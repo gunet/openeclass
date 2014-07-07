@@ -831,7 +831,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $firstCreateDate = null;
         $ts = strtotime($xml->firstCreateDate);
         if ($ts > 0) {
-            $firstCreateDate = date('Y-m-d H:i:s', $ts);
+            $firstCreateDate = quote(date('Y-m-d H:i:s', $ts));
+        } else {
+            $firstCreateDate = 'NOW()';
         }
 
         // insert or update oai_record
@@ -856,7 +858,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
                 `dc_url` = " . quote($xml->url) . ",
                 `dc_language` = " . quote(self::serialize($xml->language)) . ",
-                `dc_date` = " . quote($firstCreateDate) . ",
+                `dc_date` = " . $firstCreateDate . ",
                 `dc_format` = " . quote($level) . ",
                 `dc_rights` = " . quote(self::serialize($xml->license)) . ",
                 `dc_videolectures` = " . quote($xml->videolectures) . "
@@ -882,7 +884,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_instructorphoto` = " . quote($xml->instructor->photo) /* TODO: multiplicity */ . ",
                     `dc_url` = " . quote($xml->url) . ",
                     `dc_language` = " . quote(self::serialize($xml->language)) . ",
-                    `dc_date` = " . quote($firstCreateDate) . ",
+                    `dc_date` = " . $firstCreateDate . ",
                     `dc_format` = " . quote($level) . ",
                     `dc_rights` = " . quote(self::serialize($xml->license)) . ",
                     `dc_videolectures` = " . quote($xml->videolectures));
