@@ -56,6 +56,7 @@ Database::get()->query("DROP TABLE IF EXISTS monthly_summary");
 Database::get()->query("DROP TABLE IF EXISTS user_request");
 Database::get()->query("DROP TABLE IF EXISTS prof_request");
 Database::get()->query("DROP TABLE IF EXISTS user");
+Database::get()->query("DROP TABLE IF EXISTS oai_record");
 Database::get()->query("DROP TABLE IF EXISTS bbb_servers");
 Database::get()->query("DROP TABLE IF EXISTS bbb_session");
 
@@ -1268,6 +1269,35 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
         `grade` FLOAT NOT NULL DEFAULT -1,
         `comments` TEXT NOT NULL) $charset_spec");
 
+Database::get()->query("CREATE TABLE `oai_record` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL UNIQUE,
+    `oai_identifier` varchar(255) DEFAULT NULL,
+    `oai_metadataprefix` varchar(255) DEFAULT 'oai_dc',
+    `oai_set` varchar(255) DEFAULT 'class:course',
+    `datestamp` datetime DEFAULT NULL,
+    `deleted` tinyint(1) NOT NULL DEFAULT 0,
+    `dc_title` text DEFAULT NULL,
+    `dc_description` text DEFAULT NULL,
+    `dc_syllabus` text DEFAULT NULL,
+    `dc_subject` text DEFAULT NULL,
+    `dc_objectives` text DEFAULT NULL,
+    `dc_level` text DEFAULT NULL,
+    `dc_prerequisites` text DEFAULT NULL,
+    `dc_instructor` text DEFAULT NULL,
+    `dc_department` text DEFAULT NULL,
+    `dc_institution` text DEFAULT NULL,
+    `dc_coursephoto` text DEFAULT NULL,
+    `dc_instructorphoto` text DEFAULT NULL,
+    `dc_url` text DEFAULT NULL,
+    `dc_identifier` text DEFAULT NULL,
+    `dc_language` text DEFAULT NULL,
+    `dc_date` datetime DEFAULT NULL,
+    `dc_format` text DEFAULT NULL,
+    `dc_rights` text DEFAULT NULL,
+    `dc_videolectures` text DEFAULT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
 // create indexes
 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
@@ -1275,6 +1305,7 @@ Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id
 Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
 Database::get()->query('CREATE INDEX `cd_type_index` ON course_description (type)');
 Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
+Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
 Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');

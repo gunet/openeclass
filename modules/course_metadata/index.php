@@ -165,7 +165,7 @@ function submitForm() {
     $xml->adapt($data);
     $xml->populate($data);
 
-    CourseXMLElement::save($course_code, $xml);
+    CourseXMLElement::save($course_id, $course_code, $xml);
 
     return "<p class='success'>$langModifDone</p>";
 //    return "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
