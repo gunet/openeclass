@@ -156,9 +156,8 @@ function handleType($typeId) {
 
     $title = $titles = @unserialize($res->title);
     if ($titles !== false) {
-        $lang = langname_to_code($language);
-        if (isset($titles[$lang]) && !empty($titles[$lang])) {
-            $title = $titles[$lang];
+        if (isset($titles[$language]) && !empty($titles[$language])) {
+            $title = $titles[$language];
         } else if (isset($titles['en']) && !empty($titles['en'])) {
             $title = $titles['en'];
         } else {

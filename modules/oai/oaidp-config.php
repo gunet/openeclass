@@ -123,7 +123,7 @@ if (strcmp($identifyResponse["granularity"], 'YYYY-MM-DDThh:mm:ssZ') == 0) {
 
 // MUST (multiple)
 // please adjust
-$adminEmail = array($emailAdministrator);
+$adminEmail = array(get_config('email_sender'));
 
 /** Compression methods supported. Optional (multiple). Default: null.
  * 

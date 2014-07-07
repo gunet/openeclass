@@ -912,6 +912,7 @@ class CourseXMLElement extends SimpleXMLElement {
         } else {
             $is_certified = 0;
         }
+        $deleted = ($is_certified) ? 0 : 1;
         $firstCreateDate = null;
         $ts = strtotime($xml->firstCreateDate);
         if ($ts > 0) {
@@ -923,7 +924,6 @@ class CourseXMLElement extends SimpleXMLElement {
         // insert or update oai_record
         $exists = Database::get()->querySingle("SELECT 1 AS `exists` FROM oai_record WHERE course_id = ?d", $courseId);
         if ($exists && intval($exists->exists) == 1) {
-            $deleted = ($is_certified) ? 0 : 1;
             Database::get()->query("UPDATE oai_record SET
                 `oai_identifier` = ?s,
                 `datestamp` = NOW(),
@@ -986,7 +986,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 `dc_unittitle` = ?s,
                 `dc_unitdescription` = ?s,
                 `dc_unitkeywords` = ?s
-                WHERE course_id = ?d", "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), $xml->coursePhoto, $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), $xml->videolectures, $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), $xml->coTeaching, $xml->coTeachingColleagueOpensCourse, $xml->coTeachingAutonomousDepartment, $xml->coTeachingDepartmentCreditHours, $xml->yearOfStudy, $xml->semester, $xml->type, $xml->credithours, $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), $xml->eudoxusCode, $xml->eudoxusURL, $xml->kalliposURL, $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"), intval($courseId));
+                WHERE course_id = ?d", "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), (string) $xml->coursePhoto, (string) $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), (string) $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), (string) $xml->videolectures, (string) $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), (string) $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), (string) $xml->coTeaching, (string) $xml->coTeachingColleagueOpensCourse, (string) $xml->coTeachingAutonomousDepartment, (string) $xml->coTeachingDepartmentCreditHours, (string) $xml->yearOfStudy, (string) $xml->semester, (string) $xml->type, (string) $xml->credithours, (string) $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), (string) $xml->eudoxusCode, (string) $xml->eudoxusURL, (string) $xml->kalliposURL, (string) $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"), intval($courseId));
         } else {
             if ($is_certified) {
                 Database::get()->query("INSERT INTO oai_record SET
@@ -1051,7 +1051,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `dc_numberofunits` = ?s,
                     `dc_unittitle` = ?s,
                     `dc_unitdescription` = ?s,
-                    `dc_unitkeywords` = ?s", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), $xml->coursePhoto, $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), $xml->videolectures, $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), $xml->coTeaching, $xml->coTeachingColleagueOpensCourse, $xml->coTeachingAutonomousDepartment, $xml->coTeachingDepartmentCreditHours, $xml->yearOfStudy, $xml->semester, $xml->type, $xml->credithours, $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), $xml->eudoxusCode, $xml->eudoxusURL, $xml->kalliposURL, $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"));
+                    `dc_unitkeywords` = ?s", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), (string) $xml->coursePhoto, (string) $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), (string) $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), (string) $xml->videolectures, (string) $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), (string) $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), (string) $xml->coTeaching, (string) $xml->coTeachingColleagueOpensCourse, (string) $xml->coTeachingAutonomousDepartment, (string) $xml->coTeachingDepartmentCreditHours, (string) $xml->yearOfStudy, (string) $xml->semester, (string) $xml->type, (string) $xml->credithours, (string) $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), (string) $xml->eudoxusCode, (string) $xml->eudoxusURL, (string) $xml->kalliposURL, (string) $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"));
             }
         }
     }
@@ -1170,20 +1170,20 @@ class CourseXMLElement extends SimpleXMLElement {
         $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
-            include("${webDir}modules/lang/english/common.inc.php");
-            include("${webDir}modules/lang/english/messages.inc.php");
+            include("${webDir}/lang/en/common.inc.php");
+            include("${webDir}/lang/en/messages.inc.php");
             $arr['en'] = $langCMeta[$key];
             $revert = true;
         }
         if ($clang != 'el') {
-            include("${webDir}modules/lang/greek/common.inc.php");
-            include("${webDir}modules/lang/greek/messages.inc.php");
+            include("${webDir}/lang/el/common.inc.php");
+            include("${webDir}/lang/el/messages.inc.php");
             $arr['en'] = $langCMeta[$key];
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
-            include("${webDir}modules/lang/" . $currentCourseLanguage . "/common.inc.php");
-            include("${webDir}modules/lang/" . $currentCourseLanguage . "/messages.inc.php");
+            include("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
+            include("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
         }
         return base64_encode(serialize($arr));
     }
@@ -1209,7 +1209,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $data['course_language'] = $clang;
         $data['course_language_' . $clang] = $GLOBALS['langNameOfLang'][langcode_to_name($clang)];
         if ($clang != 'en') {
-            $data['course_language_en'] = ucfirst($clang);
+            $data['course_language_en'] = ucfirst(langcode_to_name($clang));
         }
         if ($clang != 'el') {
             include("${webDir}/lang/el/common.inc.php");
