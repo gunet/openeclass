@@ -239,7 +239,8 @@ Database::get()->query("CREATE TABLE course_review (
     `level` TINYINT(4) NOT NULL DEFAULT 0,
     `last_review` DATETIME NOT NULL,
     `last_reviewer` INT(11) NOT NULL,
-    PRIMARY KEY (id)) $charset_spec");
+    PRIMARY KEY (id),
+    UNIQUE KEY cid (course_id)) $charset_spec");
 
 
 #

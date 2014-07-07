@@ -791,12 +791,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) WHERE cu.order = -1 AND ur.res_id <> -1", function($ures) {
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
-                                course_id = " . intval($ures->course_id) . ",
-                                title = " . quote($ures->title) . ",
-                                comments = " . quote(purify($ures->comments)) . ",
-                                visible = " . intval($newvis) . ",
-                                `order` = " . intval($ures->order) . ",
-                                update_dt = " . quote($ures->date));
+                                course_id = ?d, title = ?s, comments = ?s,
+                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), quote($ures->date));
                         });
                     }
 
@@ -832,9 +828,23 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY (`id`),
                             UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
 
-                        db_query('CREATE INDEX `cid` ON oai_record (course_id)');
-                        db_query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
+                        Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
+                        Database::get()->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
                     }
+
+                    // unique course_id for course_review
+                    $crevres = Database::get()->queryArray("SELECT DISTINCT course_id FROM course_review");
+                    foreach ($crevres as $crev) {
+                        $crevres2 = Database::get()->queryArray("SELECT * FROM course_review WHERE course_id = ?d ORDER BY last_review DESC", intval($crev->course_id));
+                        $crevcnt = 0;
+                        foreach ($revres2 as $crev2) {
+                            if ($crevcnt > 0) {
+                                Database::get()->query("DELETE FROM course_review WHERE id = ?d", intval($crev2['id']));
+                            }
+                            $crevcnt++;
+                        }
+                    }
+                    Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
                 }
 
 
