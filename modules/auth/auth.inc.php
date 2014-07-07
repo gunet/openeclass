@@ -610,12 +610,12 @@ function process_login() {
             $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
-                $sqlLogin = "= " . quote($posted_uname);
+                $sqlLogin = "= ?s";
             } else {
-                $sqlLogin = "COLLATE utf8_bin = " . quote($posted_uname);
+                $sqlLogin = "COLLATE utf8_bin = ?s";
             }           
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
-                                FROM user WHERE username $sqlLogin");
+                                FROM user WHERE username $sqlLogin", $posted_uname);
             //print_r($result);
             // cas might have alternative authentication defined
             $exists = 0;
