@@ -556,6 +556,17 @@ function unit_map_function(&$data, $maps) {
     return true;
 }
 
+function ratings_map_function(&$data, $maps) {
+    list($blog_post_map, $course_id) = $maps;
+    $rtype = $data['rtype'];
+    if ($rtype == 'blogpost') {
+        $data['rid'] = $blog_post_map[$data['rid']];
+    } elseif ($rtype == 'course') {
+        $data['rid'] = $course_id;
+    }
+    return true;
+}
+
 function offset_map_function(&$data, $maps) {
     list($key, $offset) = $maps;
     if (isset($data[$key])) {
