@@ -53,6 +53,12 @@ $medJSON = generateJSON($medKeys);
 $humKeys = array('otherhum', 'hisarch', 'langlit', 'philosophy', 'arts', 'paidagogy');
 $humJSON = generateJSON($humKeys);
 
+$instrFirst = $langCMeta['course_instructor_firstName'];
+$instrLast = $langCMeta['course_instructor_lastName'];
+$greek = $langCMeta['el'];
+$english = $langCMeta['en'];
+$instrPhoto = $langCMeta['course_instructor_photo'];
+
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-multiselect');
@@ -105,8 +111,44 @@ $head_content .= <<<EOF
             $( "#course_coursePhoto_hidden_mime" ).remove();
         });
         
-        $( "#course_instructor_photo_add" ).on('click', function() {
-            $( "#course_instructor_photo_container" ).append( '<div class="cmetarow"><span class="cmetalabelinaccordion"></span><span class="cmetafield"><input size="30" name="course_instructor_photo[]" type="file"></span></div>' );
+        $( ".course_instructor_photo_delete" ).on('click', function() {
+            $(this).parent().children( ".course_instructor_photo_image" ).remove();
+            $(this).parent().children( ".course_instructor_photo_hidden" ).val('');
+            $(this).parent().children( ".course_instructor_photo_hidden_mime" ).val('');
+            $(this).parent().children( ".course_instructor_photo_delete" ).remove();
+        });
+        
+        $( ".instructor_add" ).on('click', function() {
+            $(this).parent().parent().children( ".instructor_container" ).append(
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrFirst} ({$greek}):</span>' +
+                    '<span class="cmetafield"><input size="55" name="course_instructor_firstName_el[]" type="text"></span>' +
+                    '<span class="cmetamandatory">*</span>' +
+                '</div>' +
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrLast} ({$greek}):</span>' +
+                    '<span class="cmetafield"><input size="55" name="course_instructor_lastName_el[]" type="text"></span>' +
+                    '<span class="cmetamandatory">*</span>' +
+                '</div>' +
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrFirst} ({$english}):</span>' +
+                    '<span class="cmetafield"><input size="55" name="course_instructor_firstName_en[]" type="text"></span>' +
+                    '<span class="cmetamandatory">*</span>' +
+                '</div>' +
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrLast} ({$english}):</span>' +
+                    '<span class="cmetafield"><input size="55" name="course_instructor_lastName_en[]" type="text"></span>' +
+                    '<span class="cmetamandatory">*</span>' +
+                '</div>' +
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrPhoto}:</span>' +
+                    '<span class="cmetafield">' +
+                        '<input class="course_instructor_photo_hidden" type="hidden" name="course_instructor_photo[]">' +
+                        '<input class="course_instructor_photo_hidden_mime" type="hidden" name="course_instructor_photo_mime[]">' +
+                        '<input size="30" name="course_instructor_photo[]" type="file">' +
+                    '</span>' +
+                '</div>'
+                    );
         });
         
         $( "#course_thematic" ).on('change', function() {
@@ -141,13 +183,12 @@ function displayForm() {
 }
 
 function submitForm() {
-    global $course_id, $course_code, $urlServer, $webDir,
-    $langModifDone, $langBack, $langBackCourse;
+    global $course_id, $course_code, $webDir, $langModifDone;
 
     // handle uploaded files
     $fileData = array();
     foreach (CourseXMLConfig::$binaryFields as $bkey) {
-        if (in_array($bkey, CourseXMLConfig::$multipleFields)) {
+        if (in_array($bkey, CourseXMLConfig::$multipleFields) || in_array($bkey, CourseXMLConfig::$arrayFields)) {
             if (isset($_FILES[$bkey]) && isset($_FILES[$bkey]['tmp_name']) && isset($_FILES[$bkey]['type'])
                     && is_array($_FILES[$bkey]['tmp_name'])) {
                 for ($i = 0; $i < count($_FILES[$bkey]['tmp_name']); $i++) {
@@ -165,6 +206,10 @@ function submitForm() {
                             $fileData[$bkey][$i] = '';
                             $fileData[$bkey . '_mime'][$i] = '';
                         }
+                    } else {
+                        // add to array as empty, in order to keep correspondence
+                        $fileData[$bkey][$i] = '';
+                        $fileData[$bkey . '_mime'][$i] = '';
                     }
                 }
             }
@@ -193,6 +238,19 @@ function submitForm() {
 
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($course_id);
+    // manually merge instructor photo, to achieve multiplicity sync
+    foreach ($fileData['course_instructor_photo'] as $key => $value) {
+        if (!empty($value)) {
+            $_POST['course_instructor_photo'][$key] = $value;
+        }
+    }
+    unset($fileData['course_instructor_photo']);
+    foreach ($fileData['course_instructor_photo_mime'] as $key => $value) {
+        if (!empty($value)) {
+            $_POST['course_instructor_photo_mime'][$key] = $value;
+        }
+    }
+    unset($fileData['course_instructor_photo_mime']);
     $data = array_merge($_POST, $extraData, $fileData);
     // course-based adaptation
     $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?d", $course_id)->count;
@@ -209,8 +267,6 @@ function submitForm() {
     CourseXMLElement::save($course_id, $course_code, $xml);
 
     return "<p class='success'>$langModifDone</p>";
-//    return "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
-//            <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
 }
 
 function isValidImage($type) {

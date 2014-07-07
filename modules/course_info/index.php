@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 // if we come from the home page
-if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
+if (isset($_GET['from_home']) and ( $_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
     session_start();
     $_SESSION['dbname'] = $_GET['cid'];
 }
@@ -125,9 +125,9 @@ if (isset($_POST['submit'])) {
     if (empty($_POST['title'])) {
         $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-    } else {        
+    } else {
         // update course settings
-        if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
+        if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
             $password = "";
@@ -203,10 +203,12 @@ if (isset($_POST['submit'])) {
 	    <li><a href='archive_course.php?course=$course_code'>$langBackupCourse</a></li>
 	    <li><a href='delete_course.php?course=$course_code'>$langDelCourse</a></li>
 	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>";
-    if (get_config('course_metadata'))
+    if (get_config('course_metadata')) {
         $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
-    if (get_config('opencourses_enable') && $is_opencourses_reviewer)
+    }
+    if (get_config('opencourses_enable') && $is_opencourses_reviewer) {
         $tool_content .= "<li><a href='../course_metadata/control.php?course=$course_code'>$langCourseMetadataControlPanel</a></li>";
+    }
     $tool_content .= "
 	  </ul>
 	</div>";
@@ -230,7 +232,7 @@ if (isset($_POST['submit'])) {
         $cc_checked = '';
     }
     foreach ($license as $id => $l_info) {
-        $license_checked[$id] = ($course_license == $id)? ' checked': '';
+        $license_checked[$id] = ($course_license == $id) ? ' checked' : '';
         if ($id and $id < 10) {
             $cc_license[$id] = $l_info['title'];
         }
@@ -286,7 +288,7 @@ if (isset($_POST['submit'])) {
             </td>
             </tr>
             <tr id = 'cc'><td>
-                ".selection($cc_license, 'cc_use', $course_license, $disabledVisibility)."
+                " . selection($cc_license, 'cc_use', $course_license, $disabledVisibility) . "
              </td></tr>
              </table>
         </fieldset>

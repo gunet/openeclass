@@ -3760,10 +3760,10 @@ $langCMeta['podcasts'] = "Podcasts";
 $langCMeta['audio material'] = "Ηχητικό υλικό";
 $langCMeta['multimedia material'] = "Πολυμεσικό υλικό";
 $langCMeta['interactive exercises'] = "Διαδραστικές ασκήσεις";
-$langCMeta['course_instructor_firstName'] = "Όνομα διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_lastName'] = "Επώνυμο διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον/τους διδάσκοντες";
+$langCMeta['course_instructor_firstName'] = "Όνομα διδάσκοντος";
+$langCMeta['course_instructor_lastName'] = "Επώνυμο διδάσκοντος";
+$langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκοντος";
+$langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον διδάσκοντα";
 $langCMeta['course_instructor_cv'] = "Σύνδεσμος σε βιογραφικό ή σύντομο βιογραφικό (έως 10 γραμμές)";
 $langCMeta['course_instructor_photo'] = "Φωτογραφία διδάσκοντος";
 $langCMeta['course_title'] = "Τίτλος Μαθήματος";
@@ -3983,6 +3983,7 @@ $langCMeta['langlit'] = "Γλώσσα & Λογοτεχνία";
 $langCMeta['philosophy'] = "Φιλοσοφία, Ηθική, Θρησκεία";
 $langCMeta['arts'] = "Τέχνες";
 $langCMeta['paidagogy'] = "Παιδαγωγική";
+$langCMeta['instructor_add'] = "Προσθήκη διδάσκοντος";
 
 /* * ******************************************
   Messages for Big Blue Button
