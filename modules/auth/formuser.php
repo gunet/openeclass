@@ -88,7 +88,7 @@ if (user_exists(autounquote($username))) {
     $all_set = false;
 }
 
-// check if the username has allready applied
+// check if exists user request with the same username
 if (user_app_exists(autounquote($username))) {
     $errors[] = $langUserFree3;
     $all_set = false;

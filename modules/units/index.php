@@ -55,7 +55,7 @@ if (isset($_REQUEST['edit_submit'])) {
 $form = process_actions();
 
 // check if we are trying to access a protected resource directly
-$access = db_query_get_single_value("SELECT public FROM course_units WHERE id = $id");
+$access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id)->public;
 if (!resource_access(1, $access)) {
     $tool_content .= "<p class='caution'>$langForbidden</p>";
     draw($tool_content, 2, null, $head_content);
