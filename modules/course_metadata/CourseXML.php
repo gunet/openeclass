@@ -412,7 +412,13 @@ class CourseXMLElement extends SimpleXMLElement {
         // enumeration and multiple enumeration fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$enumerationFields)) {
             $valArr = CourseXMLConfig::getEnumerationValues($fullKey);
-            return $fieldStart . $valArr[(string) $this] . $fieldEnd;
+            $value = "";
+            if (!isset($valArr[(string) $this]) && isset($GLOBALS['langCMeta'][(string) $this])) {
+                $value = $GLOBALS['langCMeta'][(string) $this];
+            } else {
+                $value = $valArr[(string) $this];
+            }
+            return $fieldStart . $value . $fieldEnd;
         }
 
         // multiple enumeration fiels
