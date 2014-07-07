@@ -3931,6 +3931,13 @@ $langCMeta['teipir'] = "ΤΕΙ Πειραιά";
 $langCMeta['teiser'] = "ΤΕΙ Κεντρικής Μακεδονίας";
 $langCMeta['aspete'] = "Ανώτατη Σχολή Παιδαγωγικής και Τεχνολογικής Εκπαίδευσης";
 $langCMeta['otherinst'] = "Άλλο Ίδρυμα";
+$langCMeta['othersubj'] = "Άλλο Επιστημονικό Πεδίο";
+$langCMeta['natural'] = "Θετικές και Φυσικές Επιστήμες";
+$langCMeta['agricultural'] = "Γεωργικές Επιστήμες";
+$langCMeta['engineering'] = "Μηχανική και Τεχνολογία";
+$langCMeta['social'] = "Κοινωνικές Επιστήμες";
+$langCMeta['medical'] = "Ιατρική και Επιστήμες Υγείας";
+$langCMeta['humanities'] = "Ανθρωπιστικές Επιστήμες";
 
 /* * ******************************************
   Messages for Big Blue Button
