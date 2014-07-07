@@ -787,12 +787,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query('CREATE INDEX `cd_type_index` ON course_description (type)');
                         Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, type)');
 
-                        Database::get()->queryFunc("SELECT ur.res_id, ur.title, ur.comments, ur.order, ur.visibility, ur.date, cu.course_id
+                        Database::get()->queryFunc("SELECT ur.id, ur.res_id, ur.title, ur.comments, ur.order, ur.visibility, ur.date, cu.course_id
                                 FROM unit_resources ur LEFT JOIN course_units cu ON (cu.id = ur.unit_id) WHERE cu.order = -1 AND ur.res_id <> -1", function($ures) {
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
                                 course_id = ?d, title = ?s, comments = ?s,
                                 visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), quote($ures->date));
+                            Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", intval($ures->id));
                         });
                     }
 
