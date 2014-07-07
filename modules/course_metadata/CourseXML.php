@@ -913,7 +913,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     $arr[] = (string) $innerele;
                 }
             }
-            return serialize($arr);
+            return base64_encode(serialize($arr));
         } else {
             return null;
         }
@@ -967,7 +967,7 @@ class CourseXMLElement extends SimpleXMLElement {
             include("${webDir}modules/lang/" . $currentCourseLanguage . "/common.inc.php");
             include("${webDir}modules/lang/" . $currentCourseLanguage . "/messages.inc.php");
         }
-        return serialize($arr);
+        return base64_encode(serialize($arr));
     }
 
     /**

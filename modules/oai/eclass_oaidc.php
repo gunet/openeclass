@@ -65,7 +65,7 @@ class ECLASS_OAIDC {
                 foreach ($record as $rkey => $rvalue) {
                     if (!strncmp($rkey, 'dc_', 3)) {
                         $is_serialized = false;
-                        $valArr = @unserialize($rvalue);
+                        $valArr = @unserialize(base64_decode($rvalue));
 
                         if ($valArr !== false) {
                             $is_serialized = true;
