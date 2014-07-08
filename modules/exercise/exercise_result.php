@@ -81,33 +81,50 @@ if (isset($_GET['eurId'])) {
     //exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
-
+if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>                             
-    		$(document).ready(function(){                     
+    		$(document).ready(function(){
+                    function save_grade(elem){
+                        grade = parseInt($(elem).val());
+                        var element_name = $(elem).attr('name');
+                        var questionId = parseInt(element_name.substring(14,element_name.length - 1));
+                        questionMaxGrade = parseInt($(elem).next().val());
+                        if (grade > questionMaxGrade) {
+                            alert('$langGradeTooBig');
+                            return false;
+                        } else if (isNaN(grade)){
+                            $(elem).css({'border-color':'red'});
+                            return false;
+                        } else {
+                            $.ajax({
+                              type: 'POST',
+                              url: '',
+                              data: {question_grade: grade, question_id: questionId},
+                            });
+                            $(elem).parent().prev().hide();
+                            $(elem).prop('disabled', true);
+                            $(elem).css({'border-color':'#dfdfdf'});
+                            prev_grade = parseInt($('span#total_score').html());
+                            updated_grade = prev_grade + grade;
+                            $('span#total_score').html(updated_grade);
+                            return true;
+                        }                    
+                    }
                     $('.questionGradeBox').keyup(function (e) {
                         if (e.keyCode == 13) {
-                            grade = parseInt($(this).val());
-                            var element_name = $(this).attr('name');
-                            var questionId = parseInt(element_name.substring(14,element_name.length - 1));
-                            questionMaxGrade = parseInt($(this).next().val());
-                            if (grade > questionMaxGrade) {
-                                alert('$langGradeTooBig');
-                            } else {
-                                $.ajax({
-                                  type: 'POST',
-                                  url: '',
-                                  data: {question_grade: grade, question_id: questionId},
-                                });
-                                $(this).parent().prev().hide();
-                                $(this).prop('disabled', true);
-                                prev_grade = parseInt($('span#total_score').html());
-                                updated_grade = prev_grade + grade;
-                                $('span#total_score').html(updated_grade);
-                            }
+                            save_grade(this);
                         }
-                    });";
-if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-   $head_content .=  "
+                    });
+                    $('a#submitButton').click(function(e){
+                        e.preventDefault();
+                        var success = true;
+                        $('.questionGradeBox').each(function() {
+                           success = save_grade(this);
+                        });
+                        if (success) {
+                         $(this).parent().hide();
+                        }
+                    });                    
                     $('a#ungraded').click(function(e){
                         e.preventDefault();
                         $('table.graded').hide('slow');
@@ -116,11 +133,9 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
                         e.preventDefault();
                         $('table.graded').show('slow');
                     });        
-           ";
-}
-$head_content .=    "});
+                });
                 </script>";
-
+}
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
@@ -426,9 +441,9 @@ if ($displayScore == 1 || $is_editor) {
 }
 $tool_content .= "
   <br/>
-  <form method='GET' action='index.php'><input type='hidden' name='course' value='$course_code'/>
-  <div align='center'><input type='submit' value='$langReturn' /></div>
-  <br />
-  </form><br />";
+  <div align='center'>".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
+  "<span class='eclass_button'><a href='index.php' id='submitButton'>$langSubmit</a></span>" : '')."
+  <span class='eclass_button'><a href='index.php?course=$course_code'>$langReturn</a></span>   
+  </div>";
 
 draw($tool_content, 2, null, $head_content);

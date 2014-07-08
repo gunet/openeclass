@@ -135,7 +135,8 @@ input[type=submit] {
     text-align: center;
 }
 
-.eclass_button a:link {
+.eclass_button a:link, .eclass_button a:hover, .eclass_button a:visited {
+    text-decoration: none;
     color: #ffffff !important;
 }
 
