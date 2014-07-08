@@ -59,12 +59,13 @@ function unset_exercise_var($exerciseId){
 }
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        if ($_POST['action'] == 'endExerciseNoSubmit') {             
+        if ($_POST['action'] == 'endExerciseNoSubmit') {   
+            
             $exerciseId = $_POST['eid'];             
             $record_end_date = date('Y-m-d H:i:s', time());
             $eurid = $_POST['eurid'];
-            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = 0,
-                    WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, $eurid);
+            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
+                    WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             unset_exercise_var($exerciseId);
             exit();
