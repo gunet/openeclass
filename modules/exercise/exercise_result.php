@@ -58,32 +58,7 @@ ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
 load_js('jquery');
-$head_content .= "<script type='text/javascript'>                             
-    		$(document).ready(function(){
-                    $('.questionGradeBox').keyup(function (e) {
-                        if (e.keyCode == 13) {
-                            grade = parseInt($(this).val());
-                            var element_name = $(this).attr('name');
-                            var questionId = parseInt(element_name.substring(14,element_name.length - 1));
-                            questionMaxGrade = parseInt($(this).next().val());
-                            if (grade > questionMaxGrade) {
-                                alert('$langGradeTooBig');
-                            } else {
-                                $.ajax({
-                                  type: 'POST',
-                                  url: '',
-                                  data: {question_grade: grade, question_id: questionId},
-                                });
-                                $(this).parent().prev().hide();
-                                $(this).prop('disabled', true);
-                                prev_grade = parseInt($('span#total_score').html());
-                                updated_grade = prev_grade + grade;
-                                $('span#total_score').html(updated_grade);
-                            }
-                        }
-                    });
-    		});
-                </script>";
+
 
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
@@ -107,6 +82,45 @@ if (isset($_GET['eurId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+$head_content .= "<script type='text/javascript'>                             
+    		$(document).ready(function(){                     
+                    $('.questionGradeBox').keyup(function (e) {
+                        if (e.keyCode == 13) {
+                            grade = parseInt($(this).val());
+                            var element_name = $(this).attr('name');
+                            var questionId = parseInt(element_name.substring(14,element_name.length - 1));
+                            questionMaxGrade = parseInt($(this).next().val());
+                            if (grade > questionMaxGrade) {
+                                alert('$langGradeTooBig');
+                            } else {
+                                $.ajax({
+                                  type: 'POST',
+                                  url: '',
+                                  data: {question_grade: grade, question_id: questionId},
+                                });
+                                $(this).parent().prev().hide();
+                                $(this).prop('disabled', true);
+                                prev_grade = parseInt($('span#total_score').html());
+                                updated_grade = prev_grade + grade;
+                                $('span#total_score').html(updated_grade);
+                            }
+                        }
+                    });";
+if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
+   $head_content .=  "
+                    $('a#ungraded').click(function(e){
+                        e.preventDefault();
+                        $('table.graded').hide('slow');
+                    });
+                    $('a#all').click(function(e){
+                        e.preventDefault();
+                        $('table.graded').show('slow');
+                    });        
+           ";
+}
+$head_content .=    "});
+                </script>";
+
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
@@ -117,12 +131,12 @@ $displayScore = $objExercise->selectScore();
 $tool_content .= "
   <table class='tbl_border' width='99%'>
   <tr class='odd'>
-    <td colspan='2'><b>" . q(stripslashes($exerciseTitle)) . "</b>
+    <td colspan='2'>".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ? "<div style='float:right;'><a href='#' id='all'>Όλες οι ερωτήσεις</a> / <a href='#' id='ungraded'>Ερωτήσεις προς Βαθμολόγηση</a></div>" : "")."<b>" . q(stripslashes($exerciseTitle)) . "</b>
     <br/>" . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
-    </td>
+    </td>  
   </tr>
   </table>";
-
+$tool_content .= "<div class='filtering'></div>";
 
 $i = 0;
 
@@ -141,9 +155,13 @@ if (count($exercise_question_ids)>0){
         $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
+ 
         // destruction of the Question object
-        unset($objQuestionTmp);
-
+        unset($objQuestionTmp); 
+        //check if question has been graded
+        $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+        $question_graded = is_null($question_weight) ? FALSE : TRUE; 
+        
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
             $colspan = 4;
         } elseif ($answerType == MATCHING) {
@@ -153,8 +171,7 @@ if (count($exercise_question_ids)>0){
         }
         $iplus = $i + 1;
         $tool_content .= "
-            <br/>
-            <table width='100%' class='tbl_alt'>
+            <table width='100%' class='tbl_alt ".(($question_graded)? 'graded' : 'ungraded')."'>
             <tr class='odd'>
               <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
             </tr>
@@ -363,8 +380,6 @@ if (count($exercise_question_ids)>0){
         if ($answerType == FREE_TEXT) {
             $choice = purify($choice);
             if (!empty($choice)) {
-                $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
-                $question_graded = is_null($question_weight) ? FALSE : TRUE; 
                 if (!$question_graded) {
                     $tool_content .= "<span style='color:red;'>$langAnswerUngraded</span>";   
                 } else {

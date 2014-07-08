@@ -55,8 +55,7 @@ function unset_exercise_var($exerciseId){
             unset($_SESSION['objExercise'][$exerciseId]);
             unset($_SESSION['exerciseResult'][$exerciseId]);
             unset($_SESSION['questionList'][$exerciseId]);
-            unset($_SESSION['exercise_begin_time'][$exerciseId]);    
-            unset($_SESSION['exercise_end_time']);
+            unset($_SESSION['exercise_begin_time'][$exerciseId]);
 }
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -233,7 +232,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId]) || $paused_attempt) {
 $questionNum = count($exerciseResult)+1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-
     $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
             
     // checking if user's time is more than exercise's time constrain

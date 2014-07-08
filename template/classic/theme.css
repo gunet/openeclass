@@ -671,6 +671,14 @@ fieldset table.th {
     border: 1px solid #dfdfdf; 
 }	
 
+table.graded, table.ungraded{
+    margin: 15px 0;
+}
+
+div.filtering {
+    margin-top: 10px;
+}
+
 .tbl_alt th {
     font-weight: bold;
     color: #827C78;

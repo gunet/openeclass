@@ -56,7 +56,6 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
     unset($_SESSION['exercise_begin_time']);
-    unset($_SESSION['exercise_end_time']);
 }
 
 $tool_content_extra = "<br/>
