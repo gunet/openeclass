@@ -64,7 +64,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $exerciseId = $_POST['eid'];             
             $record_end_date = date('Y-m-d H:i:s', time());
             $eurid = $_POST['eurid'];
-            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d
+            Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = 0,
                     WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, $eurid);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             unset_exercise_var($exerciseId);
@@ -111,11 +111,7 @@ if (isset($_POST['buttonCancel'])) {
         Session::set_flashdata($landAttemptCanceled, 'alert1');
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
-// if the user has clicked on the "Save & Exit" button
-// keeps the exercise in a pending/uncompleted state and returns to the exercise list
-if (isset($_POST['buttonSave'])) {
 
-}
 // setting a cookie in OnBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh 
 // (It is executed after page load in Chrome and Mozilla and before page load in IE).  
@@ -267,6 +263,7 @@ if (isset($_POST['formSent'])) {
     // if it is a sequnential exercise in the last question OR the time has expired
     if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
         // goes to the script that will show the result of the exercise
+        $secs_remaining = $_POST['secsRemaining'];
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
@@ -280,7 +277,7 @@ if (isset($_POST['formSent'])) {
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         // record results of exercise
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
-                                total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
+                                total_weighting = ?f, secs_remaining = ?d WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $secs_remaining, $eurid);
         
         unset($objExercise);
         unset_exercise_var($exerciseId);
@@ -290,6 +287,8 @@ if (isset($_POST['formSent'])) {
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }
+    // if the user has clicked on the "Save & Exit" button
+    // keeps the exercise in a pending/uncompleted state and returns to the exercise list    
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $secs_remaining = $_POST['secsRemaining'];
