@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,11 +25,11 @@
 
 require_once 'include/init.php';
 
-$result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+$result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
 		FROM admin_announcement
-		WHERE visible = 1 AND lang = '$language'
-		ORDER BY `date` DESC");
-list($lastbuilddate) = mysql_fetch_row($result);
+		WHERE visible = 1 AND lang = ?s
+		ORDER BY `date` DESC", $language);
+$lastbuilddate = $result->dateformat;
 
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
@@ -42,18 +42,18 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>" . $language . "</language>";
 
-$sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+$sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
 		FROM admin_announcement
-		WHERE visible = 1 AND lang = '$language'
-		ORDER BY `date` DESC");
+		WHERE visible = 1 AND lang = ?s
+		ORDER BY `date` DESC", $language);
 
-while ($r = mysql_fetch_array($sql)) {
+foreach ($sql as $r) {
     echo "<item>";
-    echo "<title>" . htmlspecialchars($r['title'], ENT_NOQUOTES) . "</title>";
-    echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r['id'] . "</link>";
-    echo "<description>" . htmlspecialchars($r['body'], ENT_NOQUOTES) . "</description>";
-    echo "<pubDate>" . $r['dateformat'] . "</pubDate>";
-    echo "<guid isPermaLink='false'>" . $r['dateformat'] . $r['id'] . "</guid>";
+    echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
+    echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
+    echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
+    echo "<pubDate>" . $r->dateformat . "</pubDate>";
+    echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
     echo "</item>";
 }
 echo "</channel></rss>";
