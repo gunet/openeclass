@@ -1709,21 +1709,24 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  */
 function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
     global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+    static $init_done = false;
 
-    $filebrowser = $url = '';
-    $activemodule = 'document/index.php';
-    if (isset($course_code) && !empty($course_code)) {
-        $filebrowser = "file_browser_callback : 'openDocsPicker',";
-        if (!$is_editor) {
-            $cid = course_code_to_id($course_code);
-            $module = Database::get()->querySingle("SELECT * FROM course_module
+    if (!$init_done) {
+        $init_done = true;
+        $filebrowser = $url = '';
+        $activemodule = 'document/index.php';
+        if (isset($course_code) && !empty($course_code)) {
+            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            if (!$is_editor) {
+                $cid = course_code_to_id($course_code);
+                $module = Database::get()->querySingle("SELECT * FROM course_module
                             WHERE course_id = ?d
                               AND (module_id =" . MODULE_ID_DOCS . " OR module_id =" . MODULE_ID_VIDEO . " OR module_id =" . MODULE_ID_LINKS . ")
                               AND VISIBLE = 1 ORDER BY module_id", $cid);
-            if ($module === false) {
-                $filebrowser = '';
-            } else {
-                switch ($module->module_id) {
+                if ($module === false) {
+                    $filebrowser = '';
+                } else {
+                    switch ($module->module_id) {
                     case MODULE_ID_LINKS:
                         $activemodule = 'link/index.php';
                         break;
@@ -1736,16 +1739,16 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
                     default:
                         $filebrowser = '';
                         break;
+                    }
                 }
             }
+            $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
+        } elseif ($is_admin) { /* special case for admin announcements */
+            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-        $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
-    } elseif ($is_admin) { /* special case for admin announcements */
-        $filebrowser = "file_browser_callback : 'openDocsPicker',";
-        $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
-    }
-    load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
-    $head_content .= "
+        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        $head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
         plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
@@ -1811,6 +1814,7 @@ function openDocsPicker(field_name, url, type, win) {
     return false;
 }
 </script>";
+    }
 
     /* $text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
       array('[m]', '[/m]', '[m]', '[/m]'),
