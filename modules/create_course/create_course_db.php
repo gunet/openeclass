@@ -588,6 +588,8 @@ db_query("CREATE TABLE poll (
       start_date datetime NOT NULL default '0000-00-00 00:00:00',
       end_date datetime NOT NULL default '0000-00-00 00:00:00',
       active int(11) NOT NULL default 0,
+      description MEDIUMTEXT NOT NULL,
+      end_message MEDIUMTEXT NOT NULL,
       PRIMARY KEY  (pid))
      $charset_spec");
 
@@ -606,7 +608,8 @@ db_query("CREATE TABLE poll (
       pqid bigint(12) NOT NULL AUTO_INCREMENT,
       pid int(11) NOT NULL DEFAULT 0,
       question_text varchar(250) NOT NULL default '',
-      qtype ENUM('multiple', 'fill') NOT NULL,
+      qtype tinyint(3) UNSIGNED NOT NULL,
+      qorder int(11) NOT NULL DEFAULT 0,
       PRIMARY KEY  (pqid))
      $charset_spec");
 

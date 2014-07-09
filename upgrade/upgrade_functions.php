@@ -347,6 +347,15 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
+
+    if (!mysql_field_exists(null, 'poll', 'description')) {
+        db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+                                   ADD end_message MEDIUMTEXT NOT NULL');
+        db_query('ALTER TABLE poll_question
+                    CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL,
+                    ADD qorder int(11) NOT NULL DEFAULT 0');
+        db_query('UPDATE poll_question SET qorder = pqid');
+    }
 }
 
 function upgrade_course_2_9($code, $lang, $extramessage = '') {

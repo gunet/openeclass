@@ -308,3 +308,53 @@ function secondsToHms(d) {
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
+
+// Questionnaire / Poll
+
+function poll_init() {
+    var deleteIcon = $('#deleteIcon').html();
+    $('input[type=submit][value="+"]').on('click', function (event) {
+        var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
+        $(this).closest('tr').next().find('li').last()
+            .before('<li><input type="text" name="answer' +
+                qid + '[]" value="" size="50">' + deleteIcon + '</li>');
+        event.preventDefault();
+    });
+    $('.poll_answers').sortable({ items: "li:not(:last-child)" });
+    $('.poll_answers li:not(:last-child)').css('cursor', 'move').append(deleteIcon);
+    $('.poll_answers img').css('cursor', 'pointer').on('click', function () {
+        $(this).closest('li').remove();
+    });
+    $('.poll_toolbar img').css('cursor', 'pointer').on('click', function () {
+        var icon = icon_src_to_name($(this).attr('src'));
+        var cur = $(this).closest('.poll_item');
+        if (icon == 'up') {
+            var prev = cur.prevAll('.poll_item');
+            if (prev.length) {
+                prev = prev.eq(0);
+                var prev_contents = prev.clone(true);
+                var cur_contents = cur.clone(true);
+                cur.replaceWith(prev_contents);
+                prev.replaceWith(cur_contents);
+            }
+        } else if (icon == 'down') {
+            var next = cur.nextAll('.poll_item');
+            if (next.length) {
+                next = next.eq(0);
+                var next_contents = next.clone(true);
+                var cur_contents = cur.clone(true);
+                cur.replaceWith(next_contents);
+                next.replaceWith(cur_contents);
+            }
+        } else if (icon == 'delete') {
+            cur.prev('hr').remove();
+            cur.prev('br').remove();
+            cur.remove();
+        }
+    });
+}
+
+function icon_src_to_name(src) {
+    var spl = src.split(/[\/.]/);
+    return spl[spl.length - 2];
+}

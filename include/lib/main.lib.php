@@ -1696,6 +1696,10 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
 
+    static $init_done = false;
+
+    if (!$init_done) {
+        $init_done = true;
         $filebrowser = $url = '';
         $activemodule = 'document/document.php';
         if (isset($code_cours) && !empty($code_cours)) {
@@ -1734,10 +1738,10 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 $url = $urlAppend."/modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
 
-	$lang_editor = langname_to_code($language);
+        $lang_editor = langname_to_code($language);
 
-	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
-	$head_content .= "
+        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        $head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
         plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
@@ -1803,6 +1807,7 @@ function openDocsPicker(field_name, url, type, win) {
     return false;
 }
 </script>";
+    }
 
 	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),

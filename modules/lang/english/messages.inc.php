@@ -1895,6 +1895,7 @@ $langSurveyCharts = "Survey results";
 $langHasParticipated = "Already participated";
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
+$langPollPurged = "Questionnaire results have been purged.";
 $langPollsActive = "Active Questionnaires";
 $langPollsInactive = "Inactive Questionnaires";
 $langPollStart = "Start Date";
@@ -1927,6 +1928,8 @@ $langPollInactive = "<p class='caution'>The Questionnaire has expired or is not 
 $langPollHasEnded = "Has expired";
 $langPollCharts = "Questionnaire results";
 $langPollUnknown = "Don't know / No answer";
+$langPollEndMessage = 'Completion message';
+$langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langIndividuals = "Results per user";
 $langCollectiveCharts = "Aggregate results";
 $langHasNotParticipated = "Have not participated";

@@ -952,6 +952,11 @@ a.unit_link_invisible:hover {
     text-decoration: underline;
 }
 
+ul.poll_answers li {
+    margin: 1em 0;
+    list-style-image: url(img/arrow.png);
+}
+
 /*-------------------------------------
    7. Perso
 -------------------------------------*/

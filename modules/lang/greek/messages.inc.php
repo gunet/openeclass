@@ -2242,6 +2242,7 @@ $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langQQuestionNotGiven ="Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs ="Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
+$langPollPurged = "Τα αποτελέσματα του ερωτηματολογίου διαγράφτηκαν.";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
@@ -2260,6 +2261,9 @@ $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers ="+";
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
+$langPollAddLabel = "Νέα ετικέτα/σχόλιο";
+$langPollEndMessage = 'Μήνυμα ολοκλήρωσης';
+$langPollEndMessageText = 'Σας ευχαριστούμε για τη συμμετοχή σας στο ερωτηματολόγιο!';
 $langPollCreated ="Το Ερωτηματολόγιο δημιουργήθηκε με επιτυχία.";
 $langPollEdited ="Το Ερωτηματολόγιο τροποποιήθηκε με επιτυχία.";
 $langPollCreator = "Δημιουργός";

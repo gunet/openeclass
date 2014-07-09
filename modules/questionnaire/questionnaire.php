@@ -31,10 +31,11 @@ $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'functions.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_QUESTIONNAIRE');
 /**************************************/
@@ -44,43 +45,46 @@ $nameTools = $langQuestionnaire;
 load_js('tools.js');
 
 if ($is_editor) {
-// activate / dectivate polls
-if (isset($_GET['visibility'])) {
-		switch ($_GET['visibility']) {
-		case 'activate':
-			$sql = "UPDATE poll SET active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
-			$result = db_query($sql,$currentCourseID);
-			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollActivated"]."<br>";
-			break;
-		case 'deactivate':
-			$sql = "UPDATE poll SET active='0' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
-			$result = db_query($sql, $currentCourseID);
-			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeactivated"]."<br>";
-			break;
-		}
-}
+    if (isset($_GET['pid']) and is_numeric($_GET['pid'])) {
+        $pid = intval($_GET['pid']);
+    } else {
+        $pid = 0;
+    }
 
+    if (isset($_GET['visibility'])) {
+        // activate / dectivate polls
+        switch ($_GET['visibility']) {
+            case 'activate':
+                $sql = "UPDATE poll SET active = 1 WHERE pid = $pid";
+                $result = db_query($sql, $currentCourseID);
+                $GLOBALS["tool_content"] .= "<p class='success'>" . q($langPollActivated) . "</p>";
+                break;
+            case 'deactivate':
+                $sql = "UPDATE poll SET active = 0 WHERE pid = $pid";
+                $result = db_query($sql, $currentCourseID);
+                $GLOBALS["tool_content"] .= "<p class='success'>" . q($langPollDeactivated) . "</p>";
+                break;
+        }
+    } elseif (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
+        // delete polls
+        db_query("DELETE FROM poll_question_answer WHERE pqid IN
+                        (SELECT pqid FROM poll_question WHERE pid = $pid)");
+        db_query("DELETE FROM poll WHERE pid= $pid ");
+        db_query("DELETE FROM poll_question WHERE pid = $pid");
+        db_query("DELETE FROM poll_answer_record WHERE pid = $pid");
+        $tool_content .= "<p class='success'>".q($langPollDeleted)."</p>";
+    } elseif (isset($_GET['purge']) and $_GET['purge'] == 'yes')  {
+        // purge poll results
+        db_query("DELETE FROM poll_answer_record WHERE pid = $pid");
+        $tool_content .= "<p class='success'>".q($langPollPurged)."</p>";
+    }
 
-// delete polls
-if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
-	$pid = intval($_GET['pid']);
-	db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid=$pid)");
-	db_query("DELETE FROM poll WHERE pid=$pid");
-	db_query("DELETE FROM poll_question WHERE pid='$pid'");
-	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");
-    $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
-	draw($tool_content, 2, null, $head_content);
-	exit();
-}
-
-
-	$tool_content .= "
-        <div id=\"operations_container\">
-	  <ul id=\"opslist\">
-	    <li><a href='addpoll.php?course=$code_cours'>$langCreatePoll</a></li>
-	  </ul>
-	</div>";
+    $tool_content .= "
+        <div id='operations_container'>
+          <ul id='opslist'>
+            <li><a href='addpoll.php?course=$code_cours'>$langCreatePoll</a></li>
+          </ul>
+        </div>";
 }
 
 printPolls();
@@ -98,7 +102,8 @@ function printPolls() {
                $mysqlMainDb, $langEdit, $langDelete, $langActions,
                $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, 
                $langParticipate, $langVisible, $user_id, $langHasParticipated,
-               $langHasNotParticipated, $uid, $langConfirmDelete;
+               $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
+               $langConfirmPurgeExercises, $langAnswers, $langSee;
 
         $poll_check = 0;
         $result = db_query("SHOW TABLES FROM `$currentCourse`", $currentCourse);
@@ -118,18 +123,17 @@ function printPolls() {
 		      <table align='left' width='100%' class='tbl_alt'>
 		      <tr>
 			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
-			<th width='150' class='center'>$langPollCreator</th>
-			<th width='120' class='center'>$langPollCreation</th>
-			<th width='110' class='center'>$langPollStart</th>
-			<th width='110' class='center'>$langPollEnd</th>";
+			<th class='center'>$langPollStart</th>
+			<th class='center'>$langPollEnd</th>";
 		
                 if ($is_editor) {
-                        $tool_content .= "<th width='70' class='center'>$langActions</th>";
+                    $tool_content .= "<th class='center' width='16'>$langAnswers</th>
+                                      <th class='center'>$langActions</th>";
                 } else {
-                        $tool_content .= "<th class='center'>$langParticipate</th>";
+                    $tool_content .= "<th class='center'>$langParticipate</th>";
                 }
                 $tool_content .= "</tr>";
-                $active_polls = db_query("SELECT * FROM poll", $currentCourse);
+                $active_polls = db_query("SELECT pid, name, active, start_date, end_date FROM poll ORDER BY end_date DESC", $currentCourse);
                 $index_aa = 1;
                 $k =0;
                 while ($thepoll = mysql_fetch_array($active_polls)) {
@@ -138,19 +142,19 @@ function printPolls() {
                         if (($visibility) or ($is_editor)) {
                                 if ($visibility) {
                                         if ($k%2 == 0) {
-                                                $visibility_css = " class=\"even\"";
+                                                $visibility_css = 'class="even"';
                                         } else {
-                                                $visibility_css = " class=\"odd\"";
+                                                $visibility_css = 'class="odd"';
                                         }
-                                        $visibility_gif = "visible";
-                                        $visibility_func = "deactivate";
-                                        $arrow_png = "arrow";
+                                        $visibility_gif = 'visible';
+                                        $visibility_func = 'deactivate';
+                                        $arrow_png = 'arrow';
                                         $k++;
                                 } else {
-                                        $visibility_css = " class=\"invisible\"";
-                                        $visibility_gif = "invisible";
-                                        $visibility_func = "activate";
-                                        $arrow_png = "arrow";
+                                        $visibility_css = 'class="invisible"';
+                                        $visibility_gif = 'invisible';
+                                        $visibility_func = 'activate';
+                                        $arrow_png = 'arrow';
                                         $k++;
                                 }
                                 if ($k%2 == 0) {
@@ -158,23 +162,19 @@ function printPolls() {
                                 } else {
                                         $tool_content .= "<tr $visibility_css>";
                                 }			
-                                $temp_CurrentDate = date("Y-m-d H:i");
-                                $temp_StartDate = $thepoll["start_date"];
-                                $temp_EndDate = $thepoll["end_date"];
+                                $temp_CurrentDate = date('Y-m-d H:i');
+                                $temp_StartDate = $thepoll['start_date'];
+                                $temp_EndDate = $thepoll['end_date'];
                                 $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
                                 $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
                                 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-                                $creator_id = $thepoll["creator_id"];
-                                $theCreator = uid_to_name($creator_id);
-                                $pid = $thepoll["pid"];
-                                $answers = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $currentCourse);
-                                $countAnswers = mysql_num_rows($answers);
-                                $thepid = $thepoll["pid"];
+                                $pid = $thepoll['pid'];
+                                $countAnswers = db_query_get_single_value("SELECT COUNT(*) FROM poll_answer_record WHERE pid = $pid", $currentCourse);
                                 // check if user has participated
-                                $has_participated = mysql_fetch_array(db_query("SELECT COUNT(*) FROM poll_answer_record
-                                        WHERE user_id = $uid AND pid = '$thepid'"));
+                                $has_participated = db_query_get_single_value("SELECT COUNT(*) FROM poll_answer_record
+                                                        WHERE user_id = $uid AND pid = $pid");
                                 // check if poll has ended
-                                if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+                                if ($temp_CurrentDate >= $temp_StartDate and $temp_CurrentDate < $temp_EndDate) {
                                         $poll_ended = 0;
                                 } else {
                                         $poll_ended = 1;
@@ -188,23 +188,28 @@ function printPolls() {
                         <td>" . icon('arrow') . "</td>
                         <td>";
                                         if (($has_participated[0] == 0) and $poll_ended == 0) {
-                                                $tool_content .= "<a href='pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";
+                                            $tool_content .= "<a href='pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid'>" .
+                                                q($thepoll['name']) . "</a>";
                                         } else {
-                                                $tool_content .= "$thepoll[name]";
+                                            $tool_content .= q($thepoll['name']);
                                         }
                                 }
                                 $tool_content .= "</td>
-                        <td class='center'>".q($theCreator)."</td>";
-                                $tool_content .= "
-                        <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["creation_date"])), true)."</td>";
-                                $tool_content .= "
                         <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["start_date"])), true)."</td>";
                                 $tool_content .= "
                         <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true)."</td>";
                                 if ($is_editor)  {
-                                        $tool_content .= "<td class='center'>" .
+                                    $tool_content .= "
+                                        <td class='center'>$countAnswers</td>
+                                        <td class='center'>" .
+                                            icon('search', $langSee, "pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid") .
+                                            "&nbsp;" . 
                                             icon('edit', $langEdit, "addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid") .
                                             "&nbsp;" . 
+                                            icon('clear', $langPurgeExercises,
+                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;purge=yes&amp;pid=$pid",
+                                                "onClick=\"return confirmation('" . js_escape($langConfirmPurgeExercises) . "');\"") .
+                                            "&nbsp;" .
                                             icon('delete', $langDelete,
                                                 "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid",
                                                 "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") .

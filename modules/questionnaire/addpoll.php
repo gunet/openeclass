@@ -23,48 +23,31 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'functions.php';
+require_once '../../include/jscalendar/calendar.php';
+
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('tools.js');
 
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
-        
-// -------------- jscalendar -----------------
-include('../../include/jscalendar/calendar.php');
 
 $lang = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
-        
-$local_head .= "<script type = 'text/javascript'>
-    function checkrequired(which, entry) {
-    var pass=true;
-    if (document.images) {
-        for (i=0;i<which.length;i++) {
-            var tempobj = which.elements[i];
-            if (tempobj.name == entry) {
-                if (tempobj.type == 'text' && tempobj.value == '') {
-                    pass=false;
-                    break;
-                }
-            }
-        }
-    }
-    if (!pass) {
-        alert(langEmptyGroupName);
-        return false;
-    } else {
-        return true;
-    }
-}
+$head_content .= $jscalendar->get_load_files_code() .
+    "<script type = 'text/javascript'>
+    var langEmptyGroupName = '" . js_escape($langEmptyPollTitle) . "',
+        langPollNumAnswers  = '" . js_escape($langPollNumAnswers) . "',
+        themeimg = '" . js_escape($themeimg) . "';
+    $(poll_init);
 </script>";
 
-$local_head .= '<script type="text/javascript">var langEmptyGroupName = "' .
-         $langEmptyPollTitle . '";</script>';
-        
-$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
+$navigation[] = array('url' => "questionnaire.php?course=$code_cours", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
 if (isset($_REQUEST['pid'])) {
@@ -72,25 +55,31 @@ if (isset($_REQUEST['pid'])) {
 	$nameTools = $langEditPoll;
 }
 
-if (isset($_GET['edit']) and isset($pid))  {
+if (isset($_GET['edit']) and isset($pid)) {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "$langThereAreParticipants";
 		$tool_content .= "<br ><br /><div align='right'><a href='questionnaire.php?course=$code_cours'>$langBack</a></div>";
-		draw($tool_content, 2, null, $local_head);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	} else {
 		fill_questions($pid);
 	}
 }
 
-if (isset($_POST['PollCreate']))  {
+if (isset($_POST['PollCreate'])) {
 	if (isset($_POST['question']) and questions_exist()) {
+        register_posted_variables(array(
+            'PollName' => true, 'PollStart' => true, 'PollEnd' => true,
+            'PollDescription' => true, 'PollEndMessage' => true));
+        $PollDescription = purify($PollDescription);
+        $PollEndMessage = purify($PollEndMessage);
+
 		if (isset($pid)) {
 			editPoll($pid, $_POST['question'], $_POST['question_type']);
 		} else {
 			createPoll($_POST['question'], $_POST['question_type']);
 		}
-		draw($tool_content, 2, null, $local_head);
+		draw($tool_content, 2, null, $head_content);
 		exit;
 	} else {
 		$tool_content .= "$langPollEmpty<br />";
@@ -98,28 +87,30 @@ if (isset($_POST['PollCreate']))  {
 }
 
 printPollCreationForm();
-draw($tool_content, 2, null, $local_head);
+draw($tool_content, 2, null, $head_content);
 
 /*****************************************************************************
 Fill the appropriate $_POST values from the database as if poll $pid was submitted
 ******************************************************************************/
 function fill_questions($pid)
 {
-	$poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE pid=$pid"));
+	$poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE pid = $pid"));
 	$_POST['PollName'] = $poll['name'];
 	$_POST['PollStart'] = $poll['start_date'];
 	$_POST['PollEnd'] = $poll['end_date'];
-	$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY pqid");
+	$_POST['PollDescription'] = $poll['description'];
+	$_POST['PollEndMessage'] = $poll['end_message'];
+	$questions = db_query("SELECT * FROM poll_question WHERE pid = $pid ORDER BY pqid");
 	$_POST['question'] = array();
 	$qnumber = 0;
 	while ($theQuestion = mysql_fetch_array($questions)) {
 		$_POST['question'][$qnumber] = $theQuestion['question_text'];
-		$qtype = ($theQuestion['qtype'] == 'multiple')? 1: 2;
+		$qtype = $theQuestion['qtype'];
 		$pqid = $theQuestion['pqid'];
 		$_POST['question_type'][$qnumber] = $qtype;
-		if ($qtype == 1) {
+		if ($qtype == QTYPE_SINGLE or $qtype == QTYPE_MULTIPLE) {
 			$answers = db_query("SELECT * FROM poll_question_answer
-					WHERE pqid=$pqid ORDER BY pqaid");
+					WHERE pqid = $pqid ORDER BY pqaid");
 			$_POST['answer'.$qnumber] = array();
 			while ($theAnswer = mysql_fetch_array($answers)) {
 				$_POST['answer'.$qnumber][] = $theAnswer['answer_text'];
@@ -154,36 +145,29 @@ function jscal_html($name, $u_date = FALSE) {
 ******************************************************************************/
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
-		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-		$nameTools, $pid, $langSurvey, $langSelection, $code_cours;                
+        $langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
+        $langPollAddLabel, $langDescription, $langPollEndMessage, $langPollEndMessageText,
+        $nameTools, $pid, $langSurvey, $langDelete, $langSelection, $code_cours,
+        $PollName, $PollDescription, $PollEndMessage, $PollStart, $PollEnd;
 
-	if(isset($_POST['PollName'])) {
-		$PollName = htmlspecialchars($_POST['PollName']);
-	} else {
-		$PollName = '';
-	}
-	if(isset($_POST['PollStart'])){
-		$PollStart = jscal_html('PollStart', $_POST['PollStart']);
-	} else {
-		$PollStart = jscal_html('PollStart');
-	}
-	if(isset($_POST['PollEnd'])) {
-		$PollEnd = jscal_html('PollEnd', $_POST['PollEnd']);
-	} else {
-		$PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
-	}
-	if (isset($pid)) {
-		$pidvar = "<input type='hidden' name='pid' value='$pid'>";
-	} else {
-		$pidvar = '';
-	}
+    register_posted_variables(array('PollName' => true, 'PollDescription' => true, 'PollEndMessage' => true,
+                                    'PollStart' => true, 'PollEnd' => true));
+    if (!$PollEndMessage) {
+        $PollEndMessage = $langPollEndMessageText;
+    }
+    $PollStart = jscal_html('PollStart', $PollStart);
+    $PollEnd = jscal_html('PollEnd',
+        empty($PollEnd)? strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')): $PollEnd);
+    $pidvar = isset($pid)? "<input type='hidden' name='pid' value='$pid'>": '';
+
 	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post' onsubmit=\"return checkrequired(this, 'PollName');\">";
 	$tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
            <li>$langSelection:&nbsp;
-               <input type='submit' name='MoreMultiple' value='".q($langPollAddMultiple)."' />&nbsp;&nbsp;
-	       <input type='submit' size='5' name='MoreFill' value='".q($langPollAddFill)."' />
+               <input type='submit' name='MoreMultiple' value='".q($langPollAddMultiple)."'>&nbsp;&nbsp;
+	           <input type='submit' size='5' name='MoreFill' value='".q($langPollAddFill)."'>&nbsp;&nbsp;
+               <input type='submit' size='5' name='MoreLabel' value='".q($langPollAddLabel)."'>
            </li>
 	  </ul>
 	</div>
@@ -193,7 +177,7 @@ function printPollCreationForm() {
 	<table width='100%' class='tbl'>
 	<tr>
 	  <th width='100'>$langTitle:</th>
-	  <td><input type='text' size='50' name='PollName' value='$PollName'></td>
+	  <td><input type='text' size='50' name='PollName' value='".q($PollName)."'></td>
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
@@ -201,6 +185,14 @@ function printPollCreationForm() {
 	<tr>
 	  <th>$langPollEnd:</th>
 	  <td>$PollEnd</td>
+	</tr>
+	<tr>
+	  <th>$langDescription:</th>
+	  <td>".rich_text_editor('PollDescription', 4, 52, $PollDescription)."</td>
+	</tr>
+	<tr>
+	  <th>$langPollEndMessage:</th>
+	  <td>".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."</td>
 	</tr>
 	</table>
         <br />";
@@ -214,10 +206,13 @@ function printPollCreationForm() {
 	}
 	if (isset($_POST['MoreMultiple'])) {
 		$questions[] = '';
-		$question_types[] = 1;
+		$question_types[] = QTYPE_SINGLE;
 	} elseif (isset($_POST['MoreFill'])) {
 		$questions[] = '';
-		$question_types[] = 2;
+		$question_types[] = QTYPE_FILL;
+	} elseif (isset($_POST['MoreLabel'])) {
+		$questions[] = '';
+		$question_types[] = QTYPE_LABEL;
 	}
 	printQuestionForm($questions, $question_types);
 	if (isset($pid)) {
@@ -230,12 +225,14 @@ function printPollCreationForm() {
 	<tr>
 	  <th>&nbsp;</th>
 	  <td class="right">
-	  <input type="submit" name="PollCreate" value="'.$nameTools.'">
+	  <input type="submit" name="PollCreate" value="'.q($nameTools).'">
 	  </td>
 	</tr>
 	</table>
         </fieldset>
-	</form>';
+	</form>
+    <div id="deleteIcon" style="display: none">&nbsp;' .
+        icon('delete', $langDelete) . '</div>';
 }
 
 /*****************************************************************************
@@ -246,12 +243,18 @@ function printQuestionForm($questions, $question_types) {
 		$langCreate, $langPollMoreQuestions,
 		$langPollCreated, $MoreQuestions;
 
+    $number = 1;
 	foreach ($questions as $i => $text) {
-		if ($question_types[$i] == 1) {
-			add_multiple_choice_question($i, $text);
+        if ($question_types[$i] == QTYPE_SINGLE or
+            $question_types[$i] == QTYPE_MULTIPLE) {
+                add_multiple_choice_question($i, $number, $text, $question_types[$i]);
+        } elseif ($question_types[$i] == QTYPE_FILL) {
+                add_fill_text_question($i, $number, $text);
 		} else {
-			add_fill_text_question($i, $text);
-		}
+                add_label_question($i, $text);
+                $number--; // don't increment number for labels
+        }
+        $number++;
 	}
 }
 
@@ -265,12 +268,14 @@ function insertPollQuestions($pid, $questions, $question_types)
 	foreach ($questions as $i => $QuestionText) {
 		$QuestionText = trim($QuestionText);
 		if (!empty($QuestionText)) {
-			$qtype = ($question_types[$i] == 1)? 'multiple': 'fill';
-			db_query("INSERT INTO poll_question (pid, question_text, qtype) VALUES ('".
-				mysql_real_escape_string($pid) . "','".
-				mysql_real_escape_string($QuestionText) . "', '$qtype')");
+			$qtype = validate_qtype($question_types[$i]);
+            if ($qtype == QTYPE_LABEL) {
+                $QuestionText = purify($QuestionText);
+            }
+            db_query("INSERT INTO poll_question (pid, question_text, qtype) VALUES
+                ($pid, " . quote($QuestionText) . ", $qtype)");
 			$pqid = mysql_insert_id();
-			if ($question_types[$i] == 1) {
+			if ($question_types[$i] == QTYPE_SINGLE or $question_types[$i] == QTYPE_MULTIPLE) {
 				if (isset($_POST['answer'.$i])) {
 					$answers = $_POST['answer'.$i];
 				} else {
@@ -280,13 +285,12 @@ function insertPollQuestions($pid, $questions, $question_types)
 					$AnswerText = trim($AnswerText);
 					if (!empty($AnswerText)) {
 						db_query("INSERT INTO poll_question_answer (pqid, answer_text)
-							VALUES ($pqid, '".mysql_real_escape_string($AnswerText) ."')");
+							VALUES ($pqid, " . quote($AnswerText) . ")");
 					}
 				}
 			}
 		}
 	}
-
 }
 
 
@@ -294,28 +298,24 @@ function insertPollQuestions($pid, $questions, $question_types)
 // Create a Poll
 // ----------------------------------------
 function createPoll($questions, $question_types) {
-	global $tool_content, $code_cours, $langPollCreated, $langBack;
-
-	$CreationDate = date("Y-m-d H:i");
-	$PollName = $_POST['PollName'];
-	$StartDate = $_POST['PollStart'];
-	$EndDate = $_POST['PollEnd'];
-	$PollActive = 1;
+    global $tool_content, $code_cours, $cours_id, $uid, $langPollCreated, $langBack,
+        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
+	$CreationDate = date("Y-m-d H:i");
 	$result = db_query("INSERT INTO poll
-		(creator_id, course_id, name, creation_date, start_date, end_date, active)
-		VALUES ('".
-		$GLOBALS['uid']. "','".
-		$GLOBALS['currentCourseID'] . "','".
-		mysql_real_escape_string($PollName) . "','".
-		mysql_real_escape_string($CreationDate) . "','".
-		mysql_real_escape_string($StartDate) . "','".
-		mysql_real_escape_string($EndDate) . "','".
-		mysql_real_escape_string($PollActive) ."')");
+                            SET creator_id = $uid,
+                                course_id = $cours_id,
+                                name = " . quote($PollName) . ",
+                                creation_date = " . quote($CreationDate) . ",
+                                start_date = " . quote($PollStart) . ",
+                                end_date = " . quote($PollEnd) . ",
+                                description = " . quote($PollDescription) . ",
+                                end_message = " . quote($PollEndMessage) . ",
+                                active = 1");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
-	$tool_content .= "<p class='success'>".$langPollCreated."</p><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a>";
+	$tool_content .= "<p class='success'>".q($langPollCreated)."</p><a href='questionnaire.php?course=$code_cours'>".q($langBack)."</a>";
 }
 
 
@@ -323,18 +323,20 @@ function createPoll($questions, $question_types) {
 // Modify existing Poll
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
-	global $pid, $tool_content, $code_cours, $langPollEdited, $langBack;
-	
-	$PollName = $_POST['PollName'];
-	$StartDate = $_POST['PollStart'];
-	$EndDate = $_POST['PollEnd'];
+    global $pid, $tool_content, $code_cours, $langPollEdited, $langBack,
+        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
-	$result = db_query("UPDATE poll SET name = '$PollName',
-		start_date = '$StartDate', end_date = '$EndDate' WHERE pid='$pid'");
+    $result = db_query("UPDATE poll
+                            SET name = " . quote($PollName) . ",
+                                start_date = " . quote($PollStart) . ",
+                                end_date = " . quote($PollEnd) . ",
+                                description = " . quote($PollDescription) . ",
+                                end_message = " . quote($PollEndMessage) . "
+		                    WHERE pid='$pid'");
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid='$pid')");
-	db_query("DELETE FROM poll_question WHERE pid='$pid'");
+		(SELECT pqid FROM poll_question WHERE pid = $pid)");
+	db_query("DELETE FROM poll_question WHERE pid = $pid");
  	insertPollQuestions($pid, $questions, $question_types);
 	$tool_content .= "<p class='success'>".$langPollEdited."</p><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a>";
 }
@@ -343,20 +345,32 @@ function editPoll($pid, $questions, $question_types) {
 /*****************************************************************************
 	Add multiple choice question $i to $tool_content
 ******************************************************************************/
-function add_multiple_choice_question($i, $text)
+function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE)
 {
-    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, 
-           $langPollUnknown, $langPollFillText, $langPollNumAnswers, 
-           $langPollAddAnswer, $langPollMC, $themeimg;
+    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers,
+           $langPollUnknown, $langPollFillText, $langPollNumAnswers,
+           $langPollAddAnswer, $langDelete,
+           $langUniqueSelect, $langMultipleSelect;
+
+    if ($qtype == QTYPE_SINGLE) {
+        $qs_single = ' selected';
+        $qs_multiple = '';
+    } else {
+        $qs_single = '';
+        $qs_multiple = ' selected';
+    }
 
 	$tool_content .= "
         <hr />
-        <table width=\"100%\" class='tbl'>
+        <table width=\"100%\" class='tbl poll_item'>
 	<tr>
-	  <td width='150'><b>$langQuestion #" . ($i+1) ."</b>&nbsp;&nbsp;&nbsp;</td>
-          <td> 
+	  <td width='150'><b>$langQuestion #$number</b>" . toolbar($i) . "</td>
+      <td>
 	    <input type='text' name='question[$i]' value='$text' size='52' />" ."
-	    <input type='hidden' name='question_type[$i]' value='1' />&nbsp;($langPollMC)
+        <select name='question_type[$i]'>
+          <option value='".QTYPE_SINGLE."'$qs_single>$langUniqueSelect</option>
+          <option value='".QTYPE_MULTIPLE."'$qs_multiple>$langMultipleSelect</option>
+        </select>
 	  </td>
 	</tr>";
 	if (isset($_POST['answer'.$i])) {
@@ -375,11 +389,13 @@ function add_multiple_choice_question($i, $text)
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td>";
+          <td><ul class='poll_answers'>";
+
 	foreach ($answers as $j => $answertext) {
-	    $tool_content .= "<img src='$themeimg/arrow.png' title='".q($langPollNumAnswers)."'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
+        $tool_content .= "<li><input type='text' name='answer${i}[]' value='$answertext' size='50'></li>";
 	}
-	$tool_content .= "<img src='$themeimg/arrow.png' title='".q($langPollNumAnswers)."'>&nbsp;&nbsp;$langPollUnknown
+    $tool_content .= "<li>$langPollUnknown</li>
+            </ul>
           </td>
           <td>&nbsp;</td>
         </tr>";
@@ -391,15 +407,15 @@ function add_multiple_choice_question($i, $text)
 /*****************************************************************************
 	Add fill text question $i to $tool_content
 ******************************************************************************/
-function add_fill_text_question($i, $text)
+function add_fill_text_question($i, $number, $text)
 {
 	global $tool_content, $langQuestion, $langAnswer, $langPollFillText;
 
 	$tool_content .= "
         <hr />
-        <table width=\"100%\" class='tbl'>
+        <table width=\"100%\" class='tbl poll_item'>
 	<tr>
-	  <td width=\"120\"><b>$langQuestion #" . ($i+1) ."</b></td>
+	  <td width=\"120\"><b>$langQuestion #$number</b>" . toolbar($i) . "</td>
 	  <td>
 	  <input type='text' name='question[$i]' value='$text' size='52' />" . "
 	  <input type='hidden' name='question_type[$i]' value='2'> ($langPollFillText)
@@ -408,6 +424,27 @@ function add_fill_text_question($i, $text)
 	</table>
         <br />";
 }
+
+/*****************************************************************************
+	Add label/comment "question" $i to $tool_content
+******************************************************************************/
+function add_label_question($i, $text)
+{
+	global $tool_content, $langComment;
+
+	$tool_content .= "
+        <hr />
+        <table width='100%' class='tbl poll_item'>
+	<tr>
+	  <td width='120'><b>$langComment</b>" .  toolbar($i) . "</td>
+	  <td>" . rich_text_editor("question[$i]", 4, 52, $text)  . "
+	  <input type='hidden' name='question_type[$i]' value='".QTYPE_LABEL."'>
+	  </td>
+	</tr>
+	</table>
+        <br />";
+}
+
 
 /********************************************************
 	Check if there are participants in the poll
@@ -436,4 +473,13 @@ function questions_exist()
 		}
 	}
 	return false;
+}
+
+function toolbar($i)
+{
+    global $langDelete, $langUp, $langDown;
+    return "<div class='poll_toolbar' data-id='$i'>" . 
+        icon('up', $langUp) . '&nbsp;' .
+        icon('down', $langDown) . '&nbsp;' . 
+        icon('delete', $langDelete) . "</div>";
 }
