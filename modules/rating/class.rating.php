@@ -54,12 +54,38 @@ Class Rating {
     
     /**
      * Get number of ratings for the resource
-     * @return int
+     * @return array
      */
     public function getRatingsNum() {
-    	$sql = "SELECT COUNT(`rate_id`) as c FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d AND `widget` = ?s";
-    	$res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
-    	return $res->c;
+        $ret = array();
+        
+        if ($this->widget == "up_down") {
+            $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
+            $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, 'up');
+            if (is_null($res)) {
+                $ret['up'] = 0;
+            } else {
+                $ret['up'] = $res->c;
+            }
+            
+            $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
+            $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, 'down');
+            if (is_null($res)) {
+                $ret['down'] = 0;
+            } else {
+                $ret['down'] = $res->c;
+            }
+        } elseif ($this->widget == "fivestar"){
+            $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
+            $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
+            if (is_null($res)) {
+                $ret['fivestar'] = 0;
+            } else {
+                $ret['fivestar'] = $res->c;
+            }
+        }
+    	
+    	return $ret;
     }
     
     /**
@@ -136,8 +162,8 @@ Class Rating {
         $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, 1);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`,`time`, `tag`) VALUES(?d,?s,?d,NOW(),?s)";
-        Database::get()->query($sql, $this->rid, $this->rtype, $res->c, 'up');
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, 'up');
     }
     
     /**
@@ -150,8 +176,8 @@ Class Rating {
         $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, -1);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`,`time`, `tag`) VALUES(?d,?s,?d,NOW(),?s)";
-        Database::get()->query($sql, $this->rid, $this->rtype, $res->c, 'down');
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, 'down');
     }
     
     /**
@@ -161,11 +187,11 @@ Class Rating {
         $sql = "DELETE FROM `rating_cache` WHERE `rtype`=?s AND `rid`=?d AND `tag`=?s";
         Database::get()->query($sql, $this->rtype, $this->rid, $this->widget);
         
-        $sql = "SELECT AVERAGE(`rate_id`) as `avg` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s";
+        $sql = "SELECT COUNT(`rate_id`) as `c`, AVERAGE(`rate_id`) as `avg` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`,`time`, `tag`) VALUES(?d,?s,?d,NOW(),?s)";
-        Database::get()->query($sql, $this->rid, $this->rtype, $res->avg, $this->widget);
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d NOW(),?s)";
+        Database::get()->query($sql, $this->rid, $this->rtype, $res->avg, $res->c, $this->widget);
     }
     
     /**

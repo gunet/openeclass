@@ -611,6 +611,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                 `rid` INT(11) NOT NULL,
                 `rtype` VARCHAR(50) NOT NULL,
                 `value` FLOAT NOT NULL DEFAULT 0,
+                `count` INT(11) NOT NULL DEFAULT 0,
                 `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `tag` VARCHAR(50),
                 INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
