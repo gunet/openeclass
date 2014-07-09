@@ -201,6 +201,7 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['s_radio'])) {
             setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
         }
+        setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
     }
 } else {
     $tool_content .= "
@@ -370,6 +371,22 @@ if (isset($_POST['submit'])) {
                 <tr><td colspan='2'><input type='radio' value='1' name='s_radio' $checkEn $radio_dis/>$langSharingEn</td></td></tr>
                 <tr><td colspan='2'><input type='radio' value='0' name='s_radio' $checkDis $radio_dis/>$langSharingDis</td></tr>
                 <tr><td colspan='2'>$sharing_dis_label</tr></td>
+            </table>
+    </fieldset>";
+    
+    if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<fieldset>
+        <legend>$langRating</legend>
+            <table class='tbl' width='100%'>
+                <tr><td colspan='2'><input type='radio' value='1' name='r_radio' $checkEn />$langRatingEn</td></td></tr>
+                <tr><td colspan='2'><input type='radio' value='0' name='r_radio' $checkDis />$langRatingDis</td></tr>
             </table>
     </fieldset>";
     
