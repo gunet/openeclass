@@ -73,6 +73,7 @@ function course_index($code) {
     global $webDir;
 
     $fd = fopen($webDir . "/courses/$code/index.php", "w");
+    chmod($webDir . "/courses/$code/index.php", 0644);
     if (!$fd) {
         return false;
     }

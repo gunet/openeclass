@@ -1021,7 +1021,7 @@ function mkpath($path) {
             if (!is_dir($path)) {
                 return false;
             }
-        } elseif (!mkdir($path, 0775)) {
+        } elseif (!mkdir($path, 0755)) {
             return false;
         }
     }
