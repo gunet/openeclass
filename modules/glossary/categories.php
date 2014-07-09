@@ -37,11 +37,11 @@ $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
 $nameTools = $langCategories;
 
 $categories = array();
-$q = db_query("SELECT id, name, description, `order`
-                      FROM glossary_category WHERE course_id = $course_id
-                      ORDER BY name");
-while ($cat = mysql_fetch_assoc($q)) {
-    $categories[intval($cat['id'])] = $cat['name'];
+$q = Database::get()->queryArray("SELECT id, name, description, `order`
+                      FROM glossary_category WHERE course_id = ?d
+                      ORDER BY name", $course_id);
+foreach ($q as $cat) {
+    $categories[intval($cat->id)] = $cat->name;
 }
 
 if ($is_editor) {
@@ -61,23 +61,25 @@ if ($is_editor) {
     if (isset($_POST['submit_category'])) {
         if (isset($_POST['category_id'])) {
             $category_id = intval($_POST['category_id']);
-            $q = db_query("UPDATE glossary_category
-                                              SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . "
-                                              WHERE id = $category_id AND course_id = $course_id");
+            $q = Database::get()->query("UPDATE glossary_category
+                                              SET name = ?s,
+                                                  description = ?s
+                                              WHERE id = ?d AND course_id = ?d"
+                    , $_POST['name'], $_POST['description'], $category_id, $course_id);
             $success_message = $langCategoryModded;
         } else {
-            db_query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
-                                         FROM glossary_category WHERE course_id = $course_id");
-            $q = db_query("INSERT INTO glossary_category
-                                              SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . ",
-                                                  course_id = $course_id,
-                                                  `order` = @new_order");
-            $category_id = mysql_insert_id();
+            Database::get()->query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
+                                         FROM glossary_category WHERE course_id = ?d", $course_id);
+            $q = Database::get()->query("INSERT INTO glossary_category
+                                              SET name = ?s,
+                                                  description = ?s,
+                                                  course_id = ?d,
+                                                  `order` = @new_order"
+                    , $_POST['name'], $_POST['description'], $course_id);
+            $category_id = $q->lastInsertID;
             $success_message = $langCategoryAdded;
         }
-        if ($q and mysql_affected_rows()) {
+        if ($q and $q->affectedRows) {
             $categories[$category_id] = autounquote($_POST['name']);
             $tool_content .= "<div class='success'>$success_message</div><br />";
         }
@@ -86,12 +88,12 @@ if ($is_editor) {
     // Delete category, turn terms in it to uncategorized
     if (isset($_GET['delete'])) {
         $cat_id = intval($_GET['delete']);
-        $q = db_query("DELETE FROM glossary_category
-                                      WHERE id = $cat_id AND course_id = $course_id");
-        if ($q and mysql_affected_rows()) {
-            db_query("UPDATE glossary SET category_id = NULL
-                                                  WHERE course_id = $course_id AND
-                                                        category_id = $cat_id");
+        $q = Database::get()->query("DELETE FROM glossary_category
+                                      WHERE id = ?d AND course_id = ?d", $cat_id, $course_id);
+        if ($q and $q->affectedRows) {
+            Database::get()->query("UPDATE glossary SET category_id = NULL
+                                                  WHERE course_id = ?d AND
+                                                        category_id = ?d", $course_id, $cat_id);
             $tool_content .= "<div class='success'>$langCategoryDeletedGlossary</div><br />";
         }
     }
@@ -106,13 +108,12 @@ if ($is_editor) {
         } else {
             $nameTools = $langCategoryMod;
             $cat_id = intval($_GET['edit']);
-            $q = db_query("SELECT name, description
-                                              FROM glossary_category WHERE id = $cat_id");
-            if (mysql_num_rows($q)) {
-                $data = mysql_fetch_assoc($q);
-                $html_name = " value='" . q($data['name']) . "'";
+            $data = Database::get()->querySingle("SELECT name, description
+                                              FROM glossary_category WHERE id = ?d", $cat_id);
+            if ($data) {
+                $html_name = " value='" . q($data->name) . "'";
                 $html_id = "<input type = 'hidden' name='category_id' value='$cat_id'>";
-                $description = $data['description'];
+                $description = $data->description;
             }
             $submit_value = $langModify;
         }
@@ -143,11 +144,11 @@ if ($is_editor) {
     }
 }
 
-$q = db_query("SELECT id, name, description
-                      FROM glossary_category WHERE course_id = $course_id
-                      ORDER BY name");
+$q = Database::get()->queryArray("SELECT id, name, description
+                      FROM glossary_category WHERE course_id = ?d
+                      ORDER BY name", $course_id);
 
-if ($q and mysql_num_rows($q)) {
+if ($q and count($q)) {
     $tool_content .= "
                <script type='text/javascript' src='../auth/sorttable.js'></script>
                <table class='sortable' id='t2' width='100%'>
@@ -157,18 +158,18 @@ if ($q and mysql_num_rows($q)) {
             ($is_editor ? "<th width='20' class='center'>$langActions</th>" : '') . "
                </tr>";
     $i = 0;
-    while ($cat = mysql_fetch_assoc($q)) {
+    foreach ($q as $cat) {
         $class = ($i % 2) ? 'odd' : 'even';
-        if ($cat['description']) {
-            $desc = "<br>" . standard_text_escape($cat['description']);
+        if ($cat->description) {
+            $desc = "<br>" . standard_text_escape($cat->description);
         } else {
             $desc = '';
         }
         if ($is_editor) {
             $actions = "<td class='center'>
-                     <a href='$cat_url&amp;edit=$cat[id]' title='$langCategoryMod'>
+                     <a href='$cat_url&amp;edit=$cat->id title='$langCategoryMod'>
                         <img src='$themeimg/edit.png' alt='$langCategoryMod'></a>&nbsp;
-                     <a href='$cat_url&amp;delete=$cat[id]' onClick=\"return confirmation('" .
+                     <a href='$cat_url&amp;delete=$cat->id onClick=\"return confirmation('" .
                     js_escape($langConfirmDelete) .
                     "');\"><img src='$themeimg/delete.png' alt='$langCategoryDel'
                         title='$langCategoryDel'></a>
@@ -181,7 +182,7 @@ if ($q and mysql_num_rows($q)) {
                  <td width='1' valign='top'>
                    <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
                  </td>
-                 <td><a href='$base_url&amp;cat=$cat[id]'>" . q($cat['name']) . "</a>$desc</td>$actions
+                 <td><a href='$base_url&amp;cat=$cat->id'>" . q($cat->name) . "</a>$desc</td>$actions
                </tr>\n";
         $i++;
     }
