@@ -194,18 +194,6 @@ function db_query_get_single_row($sqlQuery, $db = false) {
     }
 }
 
-
-// Eclass SQL query and fetch array wrapper. It returns all the result rows
-// in an associative array.
-function db_query_fetch_all($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result)
-        return db_fetch_all($result);
-    else
-        return false;
-}
-
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------

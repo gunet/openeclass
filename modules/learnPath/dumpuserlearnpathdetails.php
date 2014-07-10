@@ -56,16 +56,16 @@ foreach ($usersList as $user) {
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
+        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
-    echo csv_escape(uid_to_name($user['id'])) .
-    ";" . csv_escape(uid_to_am($user['id'])) .
-    ";" . csv_escape(user_groups($course_id, $user['id'], 'csv')) .
+    echo csv_escape(uid_to_name($user->id)) .
+    ";" . csv_escape(uid_to_am($user->id)) .
+    ";" . csv_escape(user_groups($course_id, $user->id, 'csv')) .
     ";" . $total . "%";
 }
 echo $crlf;

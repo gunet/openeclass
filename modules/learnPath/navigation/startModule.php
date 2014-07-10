@@ -42,10 +42,6 @@
 $require_current_course = true;
 require_once '../../../include/init.php';
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
 $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 $clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
@@ -59,61 +55,54 @@ require_once 'modules/document/doc_init.php';
 function directly_pass_lp_module($table, $userid, $lpmid) {
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
     $sql = "UPDATE `" . $table . "`
-				SET `credit` = 1,
-					`raw` = 100,
-					`lesson_status` = 'completed',
-					`scoreMin` = 0,
-					`scoreMax` = 100
-				WHERE `user_id` = " . (int) $userid . "
-				AND `learnPath_module_id` = " . (int) $lpmid;
-    db_query($sql);
+               SET `credit` = 1,
+                   `raw` = 100,
+                   `lesson_status` = 'completed',
+                   `scoreMin` = 0,
+                   `scoreMax` = 100
+             WHERE `user_id` = ?d
+               AND `learnPath_module_id` = ?d";
+    Database::get()->query($sql, $userid, $lpmid);
 }
 
-if (isset($_GET['viewModule_id']) and !empty($_GET['viewModule_id']))
+if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
     $_SESSION['lp_module_id'] = intval($_GET['viewModule_id']);
+}
 
 check_LPM_validity($is_editor, $course_code, true, true);
 
 // SET USER_MODULE_PROGRESS IF NOT SET
 if ($uid) { // if not anonymous
     // check if we have already a record for this user in this module
-    $sql = "SELECT COUNT(LPM.`learnPath_module_id`)
-	        FROM `" . $TABLEUSERMODULEPROGRESS . "` AS UMP, `" . $TABLELEARNPATHMODULE . "` AS LPM
-	       WHERE UMP.`user_id` = '" . (int) $uid . "'
+    $num = Database::get()->querySingle("SELECT COUNT(LPM.`learnPath_module_id`) AS count
+	        FROM `lp_user_module_progress` AS UMP, `lp_rel_learnPath_module` AS LPM
+	       WHERE UMP.`user_id` = ?d
 	         AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-	         AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-	         AND LPM.`module_id` = " . (int) $_SESSION['lp_module_id'];
-    $num = db_query_get_single_value($sql);
+	         AND LPM.`learnPath_id` = ?d
+	         AND LPM.`module_id` = ?d", $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'])->count;
 
-    $sql = "SELECT `learnPath_module_id`
-	        FROM `" . $TABLELEARNPATHMODULE . "`
-	       WHERE `learnPath_id` = " . (int) $_SESSION['path_id'] . "
-	         AND `module_id` = " . (int) $_SESSION['lp_module_id'];
-    $learnPathModuleId = db_query_get_single_value($sql);
+    $learnPathModuleId = Database::get()->querySingle("SELECT `learnPath_module_id`
+	      FROM `lp_rel_learnPath_module`
+	     WHERE `learnPath_id` = ?d
+	       AND `module_id` = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id'])->learnPath_module_id;
 
     // if never intialised : create an empty user_module_progress line
-    if (!$num || $num == 0) {
-        $sql = "INSERT INTO `" . $TABLEUSERMODULEPROGRESS . "`
+    if ($num == 0) {
+        Database::get()->query("INSERT INTO `lp_user_module_progress`
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
-	            VALUES ( '" . (int) $uid . "' , " . (int) $_SESSION['path_id'] . " , " . (int) $learnPathModuleId . ",'', '')";
-        db_query($sql);
+	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
     }
 }  // else anonymous : record nothing !
 // Get info about launched module
-$sql = "SELECT `contentType`, `startAsset_id`, `name`
-          FROM `" . $TABLEMODULE . "`
-         WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
-         AND `course_id` = $course_id";
+$module = Database::get()->querySingle("SELECT `contentType`, `startAsset_id`, `name`
+        FROM `lp_module`
+       WHERE `module_id` = ?d
+         AND `course_id` = ?d", $_SESSION['lp_module_id'], $course_id);
 
-$module = db_query_get_single_row($sql);
-
-$sql = "SELECT `path` FROM `" . $TABLEASSET . "`
-              WHERE `asset_id` = " . (int) $module['startAsset_id'];
-
-$assetPath = db_query_get_single_value($sql);
+$assetPath = Database::get()->querySingle("SELECT `path` FROM `lp_asset` WHERE `asset_id` = ?d", $module->startAsset_id)->path;
 
 // Get path of file of the starting asset to launch
-switch ($module['contentType']) {
+switch ($module->contentType) {
     case CTDOCUMENT_ :
         if ($uid) { // Directly pass this module
             directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
@@ -122,7 +111,7 @@ switch ($module['contentType']) {
         $play_url = file_playurl($assetPath);
 
         $furl = $file_url;
-        if (MultimediaHelper::isSupportedMedia($module['name'])) {
+        if (MultimediaHelper::isSupportedMedia($module->name)) {
             $furl = $play_url;
         }
 
@@ -197,7 +186,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 <html><head>";
 
 // add the update frame if this is a SCORM module
-if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
+if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
     require_once("scormAPI.inc.php");
     echo "<frameset border='0' rows='0,85,*' frameborder='no'>
 		<frame src='updateProgress.php?course=$course_code' name='upFrame'>";
@@ -215,4 +204,3 @@ echo "<noframes>";
 echo "<body>";
 echo $langBrowserCannotSeeFrames;
 echo "</body></noframes></html>";
-?>

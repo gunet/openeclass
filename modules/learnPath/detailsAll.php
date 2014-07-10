@@ -131,7 +131,7 @@ foreach ($usersList as $user) {
     }
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
+        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
@@ -139,9 +139,9 @@ foreach ($usersList as $user) {
     }
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= '    <td width="1"><img src="' . $themeimg . '/arrow.png" alt=""></td>' . "\n"
-            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user['id'] . '">' . $user['surname'] . ' ' . $user['givenname'] . '</a></td>' . "\n"
-            . '    <td class="center">' . q(uid_to_am($user['id'])) . '</td>' . "\n"
-            . '    <td align="center">' . user_groups($course_id, $user['id']) . '</td>' . "\n"
+            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . $user->surname . ' ' . $user->givenname . '</a></td>' . "\n"
+            . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>' . "\n"
+            . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>' . "\n"
             . '    <td class="right" width=\'120\'>'
             . disp_progress_bar($total, 1)
             . '</td>' . "\n"

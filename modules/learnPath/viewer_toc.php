@@ -40,25 +40,13 @@
 
 $require_current_course = TRUE;
 require_once '../../include/init.php';
-
-/*
- * DB tables definition
- */
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
-/* * ** The following is added for statistics purposes ** */
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+// The following is added for statistics purposes
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /* * *********************************** */
-// lib of this tool
-require_once 'include/lib/learnPathLib.inc.php';
-//lib of document tool
-require_once 'include/lib/fileDisplayLib.inc.php';
 
 //  set redirection link
 $returl = "navigation/viewModule.php?course=$course_code&amp;go=" .
@@ -74,28 +62,44 @@ if ($uid) {
 $sql = "SELECT LPM.`learnPath_module_id` ,
 	LPM.`parent`,
 	LPM.`lock`,
-            M.`module_id`,
-            M.`contentType`,
-            M.`name`,
-            UMP.`lesson_status`, UMP.`raw`,
-            UMP.`scoreMax`, UMP.`credit`,
-            A.`path`
-         FROM (`" . $TABLELEARNPATHMODULE . "` AS LPM,
-              `" . $TABLEMODULE . "` AS M)
-   LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
-           ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+          M.`module_id`,
+          M.`contentType`,
+          M.`name`,
+        UMP.`lesson_status`, UMP.`raw`,
+        UMP.`scoreMax`, UMP.`credit`,
+          A.`path`
+       FROM (`lp_rel_learnPath_module` AS LPM,
+             `lp_module` AS M)
+   LEFT JOIN `lp_user_module_progress` AS UMP
+          ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
            " . $uidCheckString . "
-   LEFT JOIN `" . $TABLEASSET . "` AS A
+   LEFT JOIN `lp_asset` AS A
           ON M.`startAsset_id` = A.`asset_id`
-        WHERE LPM.`module_id` = M.`module_id`
-          AND LPM.`learnPath_id` = '" . (int) $_SESSION['path_id'] . "'
-          AND LPM.`visible` = 1
-          AND LPM.`module_id` = M.`module_id`
-          AND M.`course_id` = $course_id
-     GROUP BY LPM.`module_id`
-     ORDER BY LPM.`rank`";
+       WHERE LPM.`module_id` = M.`module_id`
+         AND LPM.`learnPath_id` = ?d
+         AND LPM.`visible` = 1
+         AND LPM.`module_id` = M.`module_id`
+         AND M.`course_id` = ?d
+    GROUP BY LPM.`module_id`
+    ORDER BY LPM.`rank`";
+$moduleList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
-$extendedList = db_query_fetch_all($sql);
+$extendedList = array();
+$modar = array();
+foreach ($moduleList as $module) {
+    $modar['name'] = $module->name;
+    $modar['contentType'] = $module->contentType;
+    $modar['learnPath_module_id'] = $module->learnPath_module_id;
+    $modar['parent'] = $module->parent;
+    $modar['path'] = $module->path;
+    $modar['lock'] = $module->lock;
+    $modar['module_id'] = $module->module_id;
+    $modar['lesson_status'] = $module->lesson_status;
+    $modar['raw'] = $module->raw;
+    $modar['scoreMax'] = $module->scoreMax;
+    $modar['credit'] = $module->credit;
+    $extendedList[] = $modar;
+}
 
 // build the array of modules
 // build_element_list return a multi-level array, where children is an array with all nested modules
@@ -107,11 +111,10 @@ $moduleNb = 0;
 
 // get the name of the learning path
 $sql = "SELECT `name`
-      FROM `" . $TABLELEARNPATH . "`
-      WHERE `learnPath_id` = '" . (int) $_SESSION['path_id'] . "'
-      AND `course_id` = $course_id";
-
-$lpName = db_query_get_single_value($sql);
+          FROM `lp_learnPath`
+         WHERE `learnPath_id` = ?d
+           AND `course_id` = ?d";
+$lpName = Database::get()->querySingle($sql, $_SESSION['path_id'], $course_id)->name;
 
 $previous = ""; // temp id of previous module, used as a buffer in foreach
 $previousModule = ""; // module id that will be used in the previous link
@@ -135,22 +138,22 @@ foreach ($flatElementList as $module) {
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if (($module['lock'] == 'CLOSE') 
-            and ($module['credit'] != 'CREDIT' 
-            or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
-                    $is_blocked = true; // following modules will be unlinked
+        if (($module['lock'] == 'CLOSE')
+                && ( $module['credit'] != 'CREDIT'
+                || ( $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED'))) {
+            $is_blocked = true; // following modules will be unlinked
         }
     }
 
-    if ($module['contentType'] != CTLABEL_)
+    if ($module['contentType'] != CTLABEL_) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
+    }
 
-
-        
 // used in the foreach the remember the id of the previous module_id
     // don't remember if label...
-    if ($module['contentType'] != CTLABEL_)
+    if ($module['contentType'] != CTLABEL_) {
         $previous = $module['module_id'];
+    }
 } // end of foreach ($flatElementList as $module)
 
 $prevNextString = "";
@@ -159,16 +162,18 @@ if ($moduleNb > 1) {
     $imgPrevious = '<img src="' . $themeimg . '/lp/back.png" alt="' . $langPrevious . '" title="' . $langPrevious . '">';
     $imgNext = '<img src="' . $themeimg . '/lp/next.png" alt="' . $langNext . '" title="' . $langNext . '">';
 
-    if ($previousModule != '')
+    if ($previousModule != '') {
         $prevNextString .= '<a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame">' . $imgPrevious . '</a>';
-    else
+    } else {
         $prevNextString .= $imgPrevious;
+    }
     $prevNextString .= '&nbsp;';
 
-    if ($nextModule != '')
+    if ($nextModule != '') {
         $prevNextString .= '<a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame">' . $imgNext . '</a>';
-    else
+    } else {
         $prevNextString .= $imgNext;
+    }
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>

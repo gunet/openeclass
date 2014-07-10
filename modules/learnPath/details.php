@@ -65,7 +65,6 @@ if (empty($_REQUEST['path_id'])) {
     exit();
 }
 
-mysql_select_db($mysqlMainDb);
 $path_id = intval($_REQUEST['path_id']);
 
 // get infos about the learningPath
@@ -88,7 +87,6 @@ if ($learnPathName) {
     @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 
     $usersList = get_limited_list($sql, 30);
-    mysql_select_db($course_code);
 
     // display tab header
     $tool_content .= '' . "\n\n"
@@ -105,7 +103,7 @@ if ($learnPathName) {
     // display tab content
     $k = 0;
     foreach ($usersList as $user) {
-        $lpProgress = get_learnPath_progress($path_id, $user['id']);
+        $lpProgress = get_learnPath_progress($path_id, $user->id);
         if ($k % 2 == 0) {
             $tool_content .= "\n    <tr class=\"even\">";
         } else {
@@ -113,7 +111,7 @@ if ($learnPathName) {
         }
         $tool_content .= '' . "\n"
                 . '      <td width="1"><img src="' . $themeimg . '/arrow.png" alt="bullet" title="bullet" border="0"></td>' . "\n"
-                . '      <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $user['id'] . '&amp;path_id=' . $path_id . '">' . q($user['surname']) . ' ' . q($user['givenname']) . '</a></td>' . "\n"
+                . '      <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;path_id=' . $path_id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
                 . '      <td align="right">'
                 . disp_progress_bar($lpProgress, 1)
                 . '</td>' . "\n"
