@@ -203,7 +203,7 @@ function updateCourseDescription($cdId, $title, $comments, $type) {
                 update_dt = NOW()
                 WHERE id = ?d", $title, $comments, $type, intval($cdId));
     } else {
-        $res = Database::get()->querySingle("SELECT MAX(`order`) FROM course_description WHERE course_id = ?d", $course_id);
+        $res = Database::get()->querySingle("SELECT MAX(`order`) AS max FROM course_description WHERE course_id = ?d", $course_id);
         $maxorder = ($res->max !== false) ? intval($res->max) + 1 : 1;
 
         Database::get()->query("INSERT INTO course_description SET
