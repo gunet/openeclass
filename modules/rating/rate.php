@@ -26,6 +26,8 @@ require_once 'include/course_settings.php';
 
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
+} elseif ($_GET['rtype'] == 'course') {
+    $setting_id = SETTING_COURSE_RATING_ENABLE;
 }
 
 if (setting_get($setting_id, $course_id) == 1) {
@@ -41,14 +43,31 @@ if (setting_get($setting_id, $course_id) == 1) {
         $rating = new Rating($widget, $rtype, $rid);
         $action = $rating->castRating($value, $uid);
         
-        $up_value = $rating->getUpRating();
-        $down_value = $rating->getDownRating();
-        
-        $response[0] = $up_value;//positive rating
-        $response[1] = $down_value;//negative rating
-        $response[2] = $action;//new rating or deletion of old one
-        $response[3] = $langUserHasRated;//necessary string
-        
+        if ($widget == 'up_down') {
+            $up_value = $rating->getUpRating();
+            $down_value = $rating->getDownRating();
+            
+            $response[0] = $up_value;//positive rating
+            $response[1] = $down_value;//negative rating
+            $response[2] = $action;//new rating or deletion of old one
+            $response[3] = $langUserHasRated;//necessary string
+        } elseif ($widget == 'fivestar') {
+            $response[0] = "";
+            
+            $num_ratings = $rating->getRatingsNum();
+            
+            if ($num_ratings['fivestar'] != 0) {
+                $avg = $rating->getFivestarRating();
+                $response[0] .= $langRatingAverage.$avg.', ';
+            }
+            
+            if ($num_ratings['fivestar'] == 1) {
+                $response[0] .= $num_ratings['fivestar'].$langRatingVote;
+            } else {
+                $response[0] .= $num_ratings['fivestar'].$langRatingVotes;
+            }
+            
+        }
         
         echo json_encode($response);
     }

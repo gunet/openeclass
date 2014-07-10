@@ -34,6 +34,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
+require_once 'modules/rating/class.rating.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -112,6 +113,11 @@ $main_content .= "</div>";
 
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+}
+
+if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+    $rating = new Rating('fivestar', 'course', $course_id);
+    $main_content .= $rating->put($is_editor, $uid, $course_id);
 }
 
 if (is_sharing_allowed($course_id)) {

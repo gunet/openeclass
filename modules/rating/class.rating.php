@@ -23,9 +23,9 @@
 */
 Class Rating {
     
-    private $widget = '';
-    private $rtype = '';
-    private $rid = 0;
+    private $widget = ''; //rating widget type
+    private $rtype = ''; //resource type
+    private $rid = 0; //resource id
     
     /**
      * Constructor
@@ -46,8 +46,9 @@ Class Rating {
         global $head_content;
         
         if ($this->widget == 'up_down') {
-            $head_content .= '<script src="../rating/rating.js" type="text/javascript"></script>';
+            $head_content .= '<script src="../rating/js/up_down/rating.js" type="text/javascript"></script>';
         } elseif ($this->widget == 'fivestar') {
+            load_js('jquery');
             load_js('jquery.rateit.min.js');
         }
     }
@@ -62,7 +63,7 @@ Class Rating {
         if ($this->widget == "up_down") {
             $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
             $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, 'up');
-            if (is_null($res)) {
+            if (!$res) {
                 $ret['up'] = 0;
             } else {
                 $ret['up'] = $res->c;
@@ -70,7 +71,7 @@ Class Rating {
             
             $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
             $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, 'down');
-            if (is_null($res)) {
+            if (!$res) {
                 $ret['down'] = 0;
             } else {
                 $ret['down'] = $res->c;
@@ -78,7 +79,7 @@ Class Rating {
         } elseif ($this->widget == "fivestar"){
             $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
             $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
-            if (is_null($res)) {
+            if (!$res) {
                 $ret['fivestar'] = 0;
             } else {
                 $ret['fivestar'] = $res->c;
@@ -86,21 +87,6 @@ Class Rating {
         }
     	
     	return $ret;
-    }
-    
-    /**
-     * Check if a user has rated the resource
-     * @param
-     * @return boolean
-     */
-    public function hasUserRated($user_id) {
-        $sql = "SELECT COUNT(`rate_id`) as c FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d AND `user_id`=?d AND `widget` = ?s";
-        $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $user_id, $this->widget);
-        if ($res->c > 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     
     /**
@@ -129,15 +115,27 @@ Class Rating {
                 Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id);
                 
                 $action = "ins";
-            }
-            
-            //update cache table records for this resource
-            $this->updateCache();
-            
-            return $action; 
+            } 
         } elseif ($this->widget == 'fivestar') {
-            
+            //Delete old ratings       
+            $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
+            Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+         
+            if ($value == 0) {//reset vote
+                $action = "del";
+            } else {
+                //cast new rating
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`) VALUES(?d,?s,?s,?d,?d)";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id);
+                
+                $action = "ins";
+            }
         }
+        
+        //update cache table records for this resource
+        $this->updateCache();
+        
+        return $action;
     }
     
     /**
@@ -187,11 +185,13 @@ Class Rating {
         $sql = "DELETE FROM `rating_cache` WHERE `rtype`=?s AND `rid`=?d AND `tag`=?s";
         Database::get()->query($sql, $this->rtype, $this->rid, $this->widget);
         
-        $sql = "SELECT COUNT(`rate_id`) as `c`, AVERAGE(`rate_id`) as `avg` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s";
+        $sql = "SELECT COUNT(`rate_id`) as `c`, AVG(`value`) as `avg` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d NOW(),?s)";
-        Database::get()->query($sql, $this->rid, $this->rtype, $res->avg, $res->c, $this->widget);
+        if ($res->c != 0) {
+            $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?f,?d,NOW(),?s)";
+            Database::get()->query($sql, $this->rid, $this->rtype, $res->avg, $res->c, $this->widget);
+        }
     }
     
     /**
@@ -223,6 +223,20 @@ Class Rating {
     }
     
     /**
+     * Get fivestar rating for a resource (fivestar widget)
+     * @return int
+     */
+    public function getFivestarRating() {
+        $sql = "SELECT `value` FROM `rating_cache` WHERE `rid`=?d AND `rtype`=?s AND `tag`=?s";
+        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar');
+        if (is_object($res)) {
+            return round($res->value,1);
+        } else {
+            return -1;
+        }
+    }
+    
+    /**
      * check if a user has rated the resource
      * @param int the user id
      * @return boolean
@@ -237,8 +251,19 @@ Class Rating {
         }
     }
     
+    /**
+     * get user rating (fivestar widget)
+     * @param int the user id
+     * @return int
+     */
+    public function getFivestarUserRating($user_id) {
+        $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
+        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id);
+        return round($res->value,1);
+    }
+    
     public function put($isEditor, $uid, $courseId) {
-        global $langUserHasRated;
+        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage;
         
         $this->rating_add_js();
         
@@ -267,10 +292,76 @@ Class Rating {
             $out .= "</div>";
             $out .= "</div>";
             
-            return $out;
         } elseif ($this->widget == 'fivestar') {
+            $out = "<div class=\"rating\">";
             
+            $num_ratings = $this->getRatingsNum();
+            
+            if (Rating::permRate($isEditor, $uid, $courseId)) {
+                $userRating = "";
+                if ($this->userHasRated($uid)) {
+                    $userRating = 'data-rateit-value="'.$this->getFivestarUserRating($uid).'"';
+                }
+                $out .= '<div class="rateit" id="rateit-'.$this->rtype.'-'.$this->rid.'" '.$userRating.'></div>';
+                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+                if ($num_ratings['fivestar'] != 0) {
+                    $out .= $langRatingAverage.$this->getFivestarRating().', ';
+                }
+                
+                if ($num_ratings['fivestar'] == 1) {
+                    $out .= $num_ratings['fivestar'].$langRatingVote.'</div>';
+                } else {
+                    $out .= $num_ratings['fivestar'].$langRatingVotes.'</div>';
+                }
+                $out .= '<script type="text/javascript">';
+                $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'rated\', function (event, value) { 
+                    $.ajax({
+                         url: \'../../modules/rating/rate.php\',
+                         data: { rtype: "'.$this->rtype.'", rid: '.$this->rid.', widget: "'.$this->widget.'",value: value }, 
+                         type: \'GET\',
+                         success: function (data) {
+                             response = JSON.parse(data);
+                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                         },
+                     });
+                });';
+                $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'reset\', function (event, value) {
+                    $.ajax({
+                         url: \'../../modules/rating/rate.php\',
+                         data: { rtype: "'.$this->rtype.'", rid: '.$this->rid.', widget: "'.$this->widget.'",value: 0 }, 
+                         type: \'GET\',
+                         success: function (data) {
+                             response = JSON.parse(data);
+                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                         },
+                     });
+                });';
+                $out .= '</script>';
+                
+            } else {
+                $avg_datavalue = "";
+                if ($num_ratings['fivestar'] != 0) {
+                    $avg = $this->getFivestarRating();
+                    $avg_datavalue = 'data-rateit-value="'.$avg.'"';
+                }
+                
+                $out .= '<div class="rateit" '.$avg_datavalue.' data-rateit-ispreset="true" data-rateit-readonly="true"></div>';
+                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+                if ($num_ratings['fivestar'] != 0) {
+                    $out .= $langRatingAverage.$avg.', ';
+                }
+                
+                if ($num_ratings['fivestar'] == 1) {
+                    $out .= $num_ratings['fivestar'].$langRatingVote.'</div>';
+                } else {
+                    $out .= $num_ratings['fivestar'].$langRatingVotes.'</div>';
+                }
+            }
+            
+            $out .= "</div>";
         }
+        
+        return $out;
     }
     
     /**
