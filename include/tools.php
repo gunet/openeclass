@@ -453,15 +453,7 @@ function adminMenu() {
         array_push($sideMenuLink, "../admin/hierarchy.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
-        array_push($sideMenuLink, "../admin/multicourse.php");
-
-        // check if we have betacms enabled
-        if (get_config('betacms') == TRUE) {
-            array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
-            array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
-        }
-
+        array_push($sideMenuLink, "../admin/multicourse.php");       
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);

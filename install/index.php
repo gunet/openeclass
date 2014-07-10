@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset=UTF-8');
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -134,7 +134,7 @@ if (isset($_POST['welcomeScreen'])) {
     $dropbox_quota = 100;
     $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
     $email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
-    $display_captcha = $block_username_change = $insert_xml_metadata = $betacms = $enable_mobileapi = '';
+    $display_captcha = $block_username_change = $insert_xml_metadata = $enable_mobileapi = '';
     $email_verification_required = $dont_mail_unverified_mails = '';
     $course_multidep = $user_multidep = $restrict_owndep = $restrict_teacher_owndep = $disable_log_user_actions = '';
     $email_from = 1;
@@ -171,8 +171,7 @@ if (isset($_POST['welcomeScreen'])) {
         'dont_display_login_form' => true,
         'block_username_change' => true,
         'display_captcha' => true,
-        'insert_xml_metadata' => true,
-        'betacms' => true,
+        'insert_xml_metadata' => true,        
         'enable_mobileapi' => true,
         'eclass_stud_reg' => true,
         'eclass_prof_reg' => true,
@@ -233,7 +232,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
     'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
     'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-    'insert_xml_metadata', 'betacms', 'enable_mobileapi',
+    'insert_xml_metadata', 'enable_mobileapi',
     'course_multidep', 'user_multidep',
     'eclass_stud_reg', 'eclass_prof_reg',
     'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search',
@@ -408,11 +407,7 @@ elseif (isset($_REQUEST['install5']) OR isset($_REQUEST['back5'])) {
 	  <tr>
 		<th class='left'><b>$lang_insert_xml_metadata</b></th>
 		<td>" . checkbox_input('insert_xml_metadata') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_betacms</b></th>
-		<td>" . checkbox_input('betacms') . "</td>
-	  </tr>
+	  </tr>	  
 	  <tr>
 		<th class='left'><b>$lang_enable_mobileapi</b></th>
 		<td>" . checkbox_input('enable_mobileapi') . "</td>

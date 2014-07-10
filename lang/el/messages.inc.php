@@ -1890,7 +1890,6 @@ $lang_dont_display_login_form = "Να μην εμφανίζεται στην α�
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_display_captcha = "Να εμφανίζεται κωδικός ασφαλείας κατά την εγγραφή των χρηστών";
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
-$lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tablets)";
 $lang_course_multidep = "Να επιτρέπεται τα μαθήματα να ανήκουν σε πολλά τμήματα-σχολές";
 $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλά τμήματα-σχολές";
@@ -3593,49 +3592,6 @@ $langVerifiedMail = "Επιβεβαιωμένη διεύθυνση email";
 $langMailNotVerified = "Το email σας δεν είναι επιβεβαιωμένο. Δεν θα μπορείτε να λαμβάνετε emails από τα μαθήματα έως ότου το επιβεβαιώσετε.
                 Για να το επιβεβαιώσετε κάντε κλικ";
 
-/* * ********************************************************************
-  BetaCMS Bridge
- * ********************************************************************* */
-$langBrowseBCMSRepo = "Γέφυρα BetaCMS";
-$langNeedAllowUrlInclude = "Πρέπει να ενεργοποιήσετε το PHP option allow_url_include για να λειτουργήσει η γέφυρα BetaCMS";
-$langNeedAllowUrlFopen = "Πρέπει να ενεργοποιήσετε το PHP option allow_url_fopen για να λειτουργήσει η γέφυρα BetaCMS";
-$langFailConnectBetaCMSBridge = "Αποτυχία: αδυναμία σύνδεσης με το απομακρυσμένο αποθετήριο BetaCMS";
-$langBetaCMSLogout = "Έξοδος από το BetaCMS";
-$langBetaCMSCreateNewLesson = "Δημιουργία νέου μαθήματος στο BetaCMS";
-$langBetaCMSId = "Id Μαθήματος";
-$langBetaCMSTitle = "Τίτλος Μαθήματος";
-$langBetaCMSDescription = "Περιγραφή Μαθήματος";
-$langBetaCMSKeywords = "Λέξεις-Κλειδιά Μαθήματος";
-$langBetaCMSCopyright = "Πνευματικά Δικαιώματα Μαθήματος";
-$langBetaCMSAuthors = "Συγγραφική Ομάδα Μαθήματος";
-$langBetaCMSProject = "Έργο Μαθήματος";
-$langBetaCMSComments = "Σχόλια Μαθήματος";
-$langBetaCMSActions = "Ενέργειες";
-$langBetaCMSLoginProperties = "Ιδιότητα Αποθετηρίου BetaCMS και της Γέφυρας PHP";
-$langBetaCMSBridgeHost = "Bridge Host";
-$langBetaCMSContext = "Bridge Context";
-$langBetaCMSHost = "BetaCMS Host";
-$langBetaCMSRepository = "BetaCMS Repository";
-$langBetaCMSUsername = "BetaCMS Username";
-$langBetaCMSPassword = "BetaCMS Password";
-$langBetaCMSLessonCreatedOK = "Το μάθημα δημιουργήθηκε επιτυχώς!";
-$langBetaCMSLessonCreateFail = "Αποτυχία δημιουργίας μαθήματος";
-$langBetaCMSRedirectAfterImport = "Παρακαλώ χρησιμοποιήστε το εργαλείο δημιουργίας μαθήματος για να εισαγάγετε το επιλεγμένο μάθημα. Αν ο περιηγητής ιστού δε σας ανακατευθύνει αυτόματα, πατήστε";
-$langBetaCMSRedirectHere = "εδώ";
-$langBetaCMSEclassLessonObjectView = "Προεπισκόπηση Ψηφιακού Αντικειμένου Μαθήματος";
-$langBetaCMSTotalNumber = "συνολικός αριθμός";
-$langBetaCMSUnits = "Ενότητες";
-$langBetaCMSUnitTitle = "Τίτλος Ενότητας";
-$langBetaCMSUnitDescription = "Περιγραφή Ενότητας";
-$langBetaCMSScormFiles = "Αρχεία Scorm";
-$langBetaCMSSourceFilename = "Όνομα Αρχείου";
-$langBetaCMSMimeType = "Mime Type";
-$langBetaCMSCalculatedSize = "Μέγεθος Αρχείου";
-$langBetaCMSFiles = "Έγγραφα";
-$langBetaCMSUnitScormFiles = "Αρχεία Scorm Eνότητας";
-$langBetaCMSUnitDocumentFiles = "Έγγραφα Ενότητας";
-$langBetaCMSUnitTexts = "Κείμενα Ενότητας";
-$langBetaCMSText = "Κείμενο";
 $langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τα cookies στο πρόγραμμα πλοήγησης που χρησιμοποιείτε. Η σύνδεση δεν είναι δυνατή.';
 
 /* * ***********************************

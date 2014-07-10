@@ -1077,7 +1077,6 @@ $dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
 $block_username_change = intval($block_username_change);
 $display_captcha = intval($display_captcha);
 $insert_xml_metadata = intval($insert_xml_metadata);
-$betacms = intval($betacms);
 $enable_mobileapi = intval($enable_mobileapi);
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
@@ -1107,8 +1106,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('dont_mail_unverified_mails', $dont_mail_unverified_mails),
                 ('am_required', $am_required),
                 ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
-                ('block_username_change', $block_username_change),
-                ('betacms', $betacms),
+                ('block_username_change', $block_username_change),                
                 ('enable_mobileapi', $enable_mobileapi),
                 ('code_key', '" . generate_secret_key(32) . "'),
                 ('display_captcha', $display_captcha),
