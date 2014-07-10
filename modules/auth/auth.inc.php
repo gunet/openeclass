@@ -872,12 +872,12 @@ function shib_cas_login($type) {
     }
     // user is authenticated, now let's see if he is registered also in db    
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin = "= " . $uname;
+        $sqlLogin = "= ?s";
     } else {
-        $sqlLogin = "COLLATE utf8_bin = " . $uname;
+        $sqlLogin = "COLLATE utf8_bin = ?s";
     }
     $r = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
-						FROM user WHERE username $sqlLogin");
+						FROM user WHERE username $sqlLogin", $uname);
 
     if ($r) {
         // if user found
@@ -963,7 +963,7 @@ function shib_cas_login($type) {
     $_SESSION['shib_user'] = 1; // now we are shibboleth user    
     
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
 
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {

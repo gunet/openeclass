@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,8 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
-  Units module
+/**
+ *  @file info.php
+ *  @brief edit course unit
  */
 
 $require_current_course = true;
@@ -34,12 +35,11 @@ $nameTools = $langEditUnit;
 load_js('tools.js');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
-    $id = intval($_GET['edit']);
-    $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
-    $cu = mysql_fetch_array($sql);
-    $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";
-    $unitdescr = $cu['comments'];
-    $unit_id = $cu['id'];
+    $id = $_GET['edit'];
+    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d",$id);    
+    $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
+    $unitdescr = $cu->comments;
+    $unit_id = $cu->id;
 } else {
     $nameTools = $langAddUnit;
     $unitdescr = $unittitle = '';
@@ -51,13 +51,11 @@ if (isset($_GET['next'])) {
     $action = "${urlServer}courses/$course_code/";
 }
 
-$tool_content .= "
-    <form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
+$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
     <fieldset>
     <legend>$nameTools</legend>";
 if (isset($unit_id)) {
-    $tool_content .= "
-    <input type='hidden' name='unit_id' value='$unit_id'>";
+    $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
 }
 $tool_content .= "
     <table class='tbl' width='100%'>

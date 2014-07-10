@@ -161,7 +161,7 @@ if (!empty($show) and $show == 'closed') {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         $tool_content = "
-		<p class=\"success\">$langReintroductionApplication</p>";
+		<p class='success'>$langReintroductionApplication</p>";
     } else {
         $tool_content .= "<table class'tbl_al' width='100%' align='left'>";
         $tool_content .= table_header(1, $langDateReject_small);
@@ -199,7 +199,7 @@ if (!empty($show) and $show == 'closed') {
 } elseif (!empty($close)) {
     switch ($close) {
         case '1':
-            Database::get()->query("UPDATE user_request SET state = 2, date_closed = NOW() WHERE id = ?d", $id);
+            Database::get()->query("UPDATE user_request SET state = 2, date_closed = " . DBHelper::timeAfter() . " WHERE id = ?d", $id);
             if ($list_status == 1) {
                 $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
             } else {
@@ -290,8 +290,8 @@ else {
             $tool_content .= "<td align='right' width='1'>
                         <img src='$themeimg/arrow.png' title='bullet'></td>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
-            $tool_content .= "<td>" . q($req->username) . "</td>";
-            $tool_content .= "<td>" . q(find_faculty_by_id($req->faculty_id)) . "</td>";
+            $tool_content .= "<td>" . q($req->username) . "</td>";            
+            $tool_content .= "<td>" . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . "</td>";
             $tool_content .= "<td align='center'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td align='center' class='smaller'>";
@@ -343,13 +343,24 @@ $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3, null, $head_content);
 
-// --------------------------------------
-// function to display table header
-// --------------------------------------
+
+/**
+ * @brief function to display table header
+ * @global type $langName
+ * @global type $langSurname
+ * @global type $langFaculty
+ * @global type $langDate
+ * @global type $langActions
+ * @global type $langUsername
+ * @global type $langDateRequest_small
+ * @param type $addon
+ * @param type $message
+ * @return string
+ */
 function table_header($addon = FALSE, $message = FALSE) {
 
-    global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;
-    global $langDateRequest_small, $list_status;
+    global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langUsername;
+    global $langDateRequest_small;
 
     $string = '';
     if ($addon) {
