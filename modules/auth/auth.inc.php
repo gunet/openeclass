@@ -872,9 +872,9 @@ function shib_cas_login($type) {
     }
     // user is authenticated, now let's see if he is registered also in db    
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin = "= " . quote($uname);
+        $sqlLogin = "= " . $uname;
     } else {
-        $sqlLogin = "COLLATE utf8_bin = " . quote($uname);
+        $sqlLogin = "COLLATE utf8_bin = " . $uname;
     }
     $r = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
 						FROM user WHERE username $sqlLogin");
