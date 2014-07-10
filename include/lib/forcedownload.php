@@ -316,24 +316,23 @@ function public_path_to_disk_path($path_components, $path = '') {
     $depth = substr_count($path, '/') + 1;
     foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
-        $q = db_query("SELECT path, visible, public, format, extra_path,
+        $r = Database::get()->querySingle("SELECT path, visible, public, format, extra_path,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
-                                            filename = " . quote($component) . " AND
-                                            path LIKE '$path%' HAVING depth = $depth");
-        if (!$q or mysql_num_rows($q) == 0) {
+                                            filename = ?s AND
+                                            path LIKE '$path%' HAVING depth = $depth", $component);
+        if (!$r) {
             not_found('/' . implode('/', $path_components));
-        }
-        $r = mysql_fetch_assoc($q);
-        $path = $r['path'];
+        }        
+        $path = $r->path;
         $depth++;
     }
 
-    if (!preg_match("/\.$r[format]$/", $component)) {
-        $component .= '.' . $r['format'];
+    if (!preg_match("/\.$r->format$/", $component)) {
+        $component .= '.' . $r->format;
     }
-    $r['filename'] = $component;
+    $r->filename = $component;
 
     return $r;
 }

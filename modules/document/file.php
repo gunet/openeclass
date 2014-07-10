@@ -94,42 +94,42 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if (!$is_editor and ! resource_access($file_info['visible'], $file_info['public'])) {
+if (!$is_editor and ! resource_access($file_info->visible, $file_info->public)) {
     error($langNoRead);
 }
 
-if ($file_info['extra_path']) {
+if ($file_info->extra_path) {
     // $disk_path is set if common file link
-    $disk_path = common_doc_path($file_info['extra_path'], true);
+    $disk_path = common_doc_path($file_info->extra_path, true);
     if (!$disk_path) {
         // external file URL
-        header("Location: $file_info[extra_path]");
+        header("Location: $file_info->extra_path");
         exit;
     } elseif (!$common_doc_visible) {
         forbidden(preg_replace('/^.*file\.php/', '', $uri));
     }
 } else {
     // Normal file
-    $disk_path = $basedir . $file_info['path'];
+    $disk_path = $basedir . $file_info->path;
 }
 
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
-        $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info->path, $_GET['token'], 30);
         if (!$valid) {
             not_found(preg_replace('/^.*file\.php/', '', $uri));
             exit();
         }
-        send_file_to_client($disk_path, $file_info['filename']);
+        send_file_to_client($disk_path, $file_info->filename);
     } else {
         require_once 'include/lib/fileDisplayLib.inc.php';
         require_once 'include/lib/multimediahelper.class.php';
 
-        $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info['path'];
+        $mediaPath = file_url($file_info->path, $file_info->filename);
+        $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info['path'];
-        $token = token_generate($file_info['path'], true);
+            $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info->path;
+        $token = token_generate($file_info->path, true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
         echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);

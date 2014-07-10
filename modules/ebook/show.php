@@ -79,9 +79,9 @@ if ($show_orphan_file and $file_path) {
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
 
-        $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer . 'modules/ebook/document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . '&amp;download=' . $file_info['path'];
-        $token = token_generate($file_info['path'], true);
+        $mediaPath = file_url($file_info->path, $file_info->filename);
+        $mediaURL = $urlServer . 'modules/ebook/document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . '&amp;download=' . $file_info->path;
+        $token = token_generate($file_info->path, true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
         echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
@@ -254,19 +254,26 @@ $t->set_var('ebook_title_short', q(ellipsize($ebook_title, 35)));
 
 $t->pparse('Output', 'page');
 
+/**
+ * 
+ * @global type $basedir
+ * @global type $uid
+ * @param type $file_path
+ * @param type $initial_path
+ */
 function send_file_by_url_file_path($file_path, $initial_path = '') {
     global $basedir, $uid;
 
     $path_components = explode('/', str_replace('//', chr(1), $file_path));
     $file_info = public_path_to_disk_path($path_components, $initial_path);
 
-    $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+    $valid = ($uid) ? true : token_validate($file_info->path, $_GET['token'], 30);
     if (!$valid) {
         header("Location: ${urlServer}");
         exit();
     }
 
-    if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], null, false)) {
+    if (!send_file_to_client($basedir . $file_info->path, $file_info->filename, null, false)) {
         not_found($file_path);
     }
     exit;
