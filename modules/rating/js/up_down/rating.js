@@ -17,7 +17,7 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-function Rate(widget, rid, rtype,value) {
+function Rate(widget, rid, rtype, value, url) {
     if (window.XMLHttpRequest){
         // code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp=new XMLHttpRequest();
@@ -38,7 +38,7 @@ function Rate(widget, rid, rtype,value) {
         }
     }
 
-    xmlhttp.open("GET","../rating/rate.php?widget="+widget+"&rid="+rid+"&rtype="+rtype+"&value="+value,true);
+    xmlhttp.open("GET",url+"?widget="+widget+"&rid="+rid+"&rtype="+rtype+"&value="+value,true);
 
     xmlhttp.send();
 }

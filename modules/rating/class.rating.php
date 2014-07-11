@@ -43,10 +43,10 @@ Class Rating {
      * Add necessary javascript to head section of an html document
      */
     private function rating_add_js() {
-        global $head_content;
+        global $head_content, $urlServer;
         
         if ($this->widget == 'up_down') {
-            $head_content .= '<script src="../rating/js/up_down/rating.js" type="text/javascript"></script>';
+            $head_content .= '<script src="'.$urlServer.'modules/rating/js/up_down/rating.js" type="text/javascript"></script>';
         } elseif ($this->widget == 'fivestar') {
             load_js('jquery');
             load_js('jquery.rateit.min.js');
@@ -263,7 +263,7 @@ Class Rating {
     }
     
     public function put($isEditor, $uid, $courseId) {
-        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage;
+        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage, $urlServer;
         
         $this->rating_add_js();
         
@@ -275,13 +275,13 @@ Class Rating {
             
             //disable icons when user hasn't permission to vote
             if (Rating::permRate($isEditor, $uid, $courseId)) {
-                $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1)\"";
-                $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1)\"";
+                $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
+                $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
             }
             
-            $out .= "<img src=\"../rating/up.png\" ".$onclick_up."/>&nbsp;";
+            $out .= "<img src=\"".$urlServer."modules/rating/up.png\" ".$onclick_up."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
-            $out .= "<img src=\"../rating/down.png\" ".$onclick_down."/>&nbsp;";
+            $out .= "<img src=\"".$urlServer."modules/rating/down.png\" ".$onclick_down."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
             $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
             
@@ -316,7 +316,7 @@ Class Rating {
                 $out .= '<script type="text/javascript">';
                 $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'rated\', function (event, value) { 
                     $.ajax({
-                         url: \'../../modules/rating/rate.php\',
+                         url: \''.$urlServer.'modules/rating/rate.php\',
                          data: { rtype: "'.$this->rtype.'", rid: '.$this->rid.', widget: "'.$this->widget.'",value: value }, 
                          type: \'GET\',
                          success: function (data) {
@@ -327,7 +327,7 @@ Class Rating {
                 });';
                 $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'reset\', function (event, value) {
                     $.ajax({
-                         url: \'../../modules/rating/rate.php\',
+                         url: \''.$urlServer.'modules/rating/rate.php\',
                          data: { rtype: "'.$this->rtype.'", rid: '.$this->rid.', widget: "'.$this->widget.'",value: 0 }, 
                          type: \'GET\',
                          success: function (data) {

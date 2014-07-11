@@ -43,9 +43,9 @@ if (setting_get($setting_id, $course_id) == 1) {
                 $response[3] = '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
                 $response[3] .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 $response[3] .= '<div class="comment_actions">';
-                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
+                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
                 $response[3] .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
-                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                 $response[3] .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
                 $response[3] .='</div>';
             } else {
@@ -84,7 +84,7 @@ if (setting_get($setting_id, $course_id) == 1) {
                 $response[0] = 'OK';
                 $response[1] = '';
                 $response[2] = '<textarea id="edit-textarea-'.$_POST['cid'].'" cols="40" rows="5">'.q($comment->getContent()).'</textarea><br/>';
-                $response[2] .= '<input type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\'../comments/comments.php?course='.$course_code.'\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
+                $response[2] .= '<input type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<p class='alert1'>".$langCommentsEditNoPerm."</p>";

@@ -73,7 +73,7 @@ Class Commenting {
      */
     public function put($courseCode, $isEditor, $uid) {
         global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm;
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer;
         
         $commentsNum = $this->getCommentsNum();
         
@@ -95,9 +95,9 @@ Class Commenting {
                 
                 if ($comment->permEdit($isEditor, $uid)) {
                     $out .= '<div class="comment_actions">';
-                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                     $out .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
-                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                     $out .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
                     $out .='</div>';
                 }
@@ -108,7 +108,7 @@ Class Commenting {
         $out .= "</div>";
         
         if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-            $out .= '<form action="" onsubmit="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+            $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
             $out .= '<textarea name="textarea" id="textarea-'.$this->rid.'" cols="40" rows="5"></textarea><br/>';
             $out .= '<input name="send_button" type="submit" value="'.$langSubmit.'" />';
             $out .= '</form>';
@@ -158,6 +158,6 @@ Class Commenting {
  * Add necessary javascript to head section of an html document
  */
 function commenting_add_js() {
-    global $head_content;
-    $head_content .= '<script src="../comments/commenting.js" type="text/javascript"></script>';
+    global $head_content, $urlServer;
+    $head_content .= '<script src="'.$urlServer.'modules/comments/commenting.js" type="text/javascript"></script>';
 }
