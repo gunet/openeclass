@@ -110,7 +110,7 @@ function dir_total_space($dirPath) {
 function add_ext_on_mime($fileName, $userFile = 'userFile') {
     /*     * * check if the file has an extension AND if the browser has send a MIME Type ** */
 
-    if (!preg_match('/\.[[:alnum:]]+$/', $fileName) and @$_FILES[$userFile]['type']) {
+    if (!preg_match('/\.[[:alnum:]]+$/', $fileName) and @ $_FILES[$userFile]['type']) {
         /*         * * Build a "MIME-types/extensions" connection table ** */
 
         static $mimeType = array();
@@ -478,25 +478,28 @@ function process_extracted_file($p_event, &$p_header) {
     if ($p_header['folder']) {
         // Directory has been created by make_path(),
         // only need to update the index
-        $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = " . autoquote($path)));
-        $didx->store($r['id']);
+        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+        $didx->store($r->id);
         return 0;
     } else {
         // Check if file already exists
-        $result = db_query("SELECT id, path, visible FROM document
+        // db_query check argument
+        $result = Database::get()->querySingle("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
                                                  path REGEXP " . quote("^$path/[^/]+$") . " AND
-                                                 filename = " . quote($filename) . " LIMIT 1");
+                                                 filename = ?s LIMIT 1", $filename);
         $format = get_file_extension($filename);
-        if (mysql_num_rows($result)) {
-            list($old_id, $file_path, $vis) = mysql_fetch_row($result);
+        if ($result) {
+            $old_id = $result->id;
+            $file_path = $result->path;
+            $vis = $result->visible;
             if ($replace) {
                 // Overwrite existing file
                 $p_header['filename'] = $basedir . $file_path;
-                db_query("UPDATE document
-                                                 SET date_modified = " . quote($file_date) . "
+                Database::get()->query("UPDATE document
+                                                 SET date_modified = ?t
                                                  WHERE $group_sql AND
-                                                       id = $old_id");
+                                                       id = ?d", $file_date, $old_id);
                 return 1;
             } else {
                 // Rename existing file
@@ -504,40 +507,43 @@ function process_extracted_file($p_event, &$p_header) {
                 do {
                     $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
                             '_backup_' . $backup_n . '.' . $format;
-                    $q = db_query("SELECT COUNT(*) FROM document
+                    // db_query check argument
+                    $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
                                                               WHERE $group_sql AND
                                                                     path REGEXP " . quote("^$path/[^/]+$") . " AND
-                                                                    filename = " . quote($backup) . " LIMIT 1");
-                    list($n) = mysql_fetch_row($q);
+                                                                    filename = ?s LIMIT 1", $backup)->count;
                     $backup_n++;
                 } while ($n > 0);
-                db_query("UPDATE document SET filename = " . quote($backup) . "
+                Database::get()->query("UPDATE document SET filename = ?s
                                                  WHERE $group_sql AND
-                                                       path = " . quote($file_path));
+                                                       path = ?s", $backup, $file_path);
                 $didx->store($old_id);
             }
         }
 
         $path .= '/' . safe_filename($format);
-        db_query("INSERT INTO document SET
-                                 course_id = $course_id,
-				 subsystem = $subsystem,
-                                 subsystem_id = $subsystem_id,
-                                 path = '$path',
-                                 filename = " . quote($filename) . ",
+        Database::get()->query("INSERT INTO document SET
+                                 course_id = ?d,
+				 subsystem = ?d,
+                                 subsystem_id = ?d,
+                                 path = ?s,
+                                 filename = ?s,
                                  visible = 1,
-                                 comment = " . quote($file_comment) . ",
-                                 category = " . intval($file_category) . ",
-                                 title = " . quote($file_title) . ",
-                                 creator = " . quote($file_creator) . ",
-                                 date = " . quote($file_date) . ",
-                                 date_modified = " . quote($file_date) . ",
-                                 subject = " . quote($file_subject) . ",
-                                 description = " . quote($file_description) . ",
-                                 author = " . quote($file_author) . ",
-                                 format = '$format',
-                                 language = " . quote($file_language) . ",
-                                 copyrighted = " . intval($file_copyrighted));
+                                 comment = ?s,
+                                 category = ?d,
+                                 title = ?s,
+                                 creator = ?s,
+                                 date = ?t,
+                                 date_modified = ?t,
+                                 subject = ?s,
+                                 description = ?s,
+                                 author = ?s,
+                                 format = ?s,
+                                 language = ?s,
+                                 copyrighted = ?d"
+                , $course_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
+                , $file_title, $file_creator, $file_date, $file_date, $file_subject, $file_description
+                , $file_author, $format, $file_language, $file_copyrighted);
         // Logging
         $id = mysql_insert_id();
         $didx->store($id);
@@ -562,33 +568,33 @@ function make_path($path, $path_components) {
     $path_already_exists = true;
     $depth = 1 + substr_count($path, '/');
     foreach ($path_components as $component) {
-        $q = db_query("SELECT path, visible, format,
+        // db_query check argument
+        $q = Database::get()->querySingle("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
-                                            filename = " . quote($component) . " AND
-                                            path LIKE " . quote($path . '%') . " HAVING depth = $depth");
-        if (mysql_num_rows($q) > 0) {
+                                            filename = ?s AND
+                                            path LIKE " . quote($path . '%') . " HAVING depth = $depth", $component);
+        if ($q) {
             // Path component already exists in database
-            $r = mysql_fetch_array($q);
-            $path = $r['path'];
+            $path = $q->path;
             $depth++;
         } else {
             // Path component must be created
             $path .= '/' . safe_filename();
             mkdir($basedir . $path, 0775);
-            db_query("INSERT INTO document SET
-                                          course_id = $course_id,
-					  subsystem = $subsystem,
-                                          subsystem_id = $subsystem_id,
-                                          path = " . quote($path) . ",
-                                          filename = " . quote($component) . ",
+            $id = Database::get()->query("INSERT INTO document SET
+                                          course_id = ?d,
+					  subsystem = ?d,
+                                          subsystem_id = ?d,
+                                          path = ?s,
+                                          filename = ?s,
                                           visible = 1,
-                                          creator = " . quote("$givenname $surname") . ",
+                                          creator = ?s,
                                           date = NOW(),
                                           date_modified = NOW(),
-                                          format = '.dir'");
-            $id = mysql_insert_id();
+                                          format = '.dir'"
+                            , $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
                 'path' => $path,
                 'filename' => $component));
@@ -685,9 +691,8 @@ function isWhitelistAllowed($filename) {
  * @return string       - The given user's whitelist.
  */
 function fetchUserWhitelist($uid) {
-    $q = db_query("SELECT whitelist FROM user WHERE id = " . intval($uid));
-    $r = mysql_fetch_array($q);
-    return $r['whitelist'];
+    $r = Database::get()->querySingle("SELECT whitelist FROM user WHERE id = ?d", $uid);
+    return $r->whitelist;
 }
 
 /**
