@@ -35,8 +35,6 @@ $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
-mysql_select_db($mysqlMainDb);
-
 if (isset($_POST['submit'])) {
     $unit_id = description_unit_id($course_id);
     add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
