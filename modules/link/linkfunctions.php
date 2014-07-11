@@ -36,11 +36,9 @@ function makedefaultviewcode($locatie) {
  */
 function getNumberOfLinks($catid) {
     global $course_id;
-
-    list($count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `link`
-                                                        WHERE course_id = $course_id AND category = $catid
-                                                        ORDER BY `order`"));
-    return $count;
+    return Database::get()->querySingle("SELECT COUNT(*) as count FROM `link`
+                                                        WHERE course_id = ?d AND category = ?d
+                                                        ORDER BY `order`", $course_id, $catid)->count;
 }
 
 function showlinksofcategory($catid) {
@@ -50,19 +48,19 @@ function showlinksofcategory($catid) {
     $langModify, $langLinks, $langCategoryDelconfirm,
     $is_in_tinymce;
 
-    $result = db_query("SELECT * FROM `link`
-                                   WHERE course_id = $course_id AND category = $catid
-                                   ORDER BY `order`");
-    $numberoflinks = mysql_num_rows($result);
+    $result = Database::get()->queryArray("SELECT * FROM `link`
+                                   WHERE course_id = ?d AND category = ?d
+                                   ORDER BY `order`", $course_id, $catid);
+    $numberoflinks = count($result);
 
     $i = 1;
-    while ($myrow = mysql_fetch_array($result)) {
+    foreach ($result as $myrow) {
         if ($i % 2 == 0) {
             $tool_content .= "<tr class='odd'>";
         } else {
             $tool_content .= "<tr class='even'>";
         }
-        $title = empty($myrow['title']) ? $myrow['url'] : $myrow['title'];
+        $title = empty($myrow->title) ? $myrow->url : $myrow->title;
         $tool_content .= "<td>&nbsp;</td><td width='1' valign='top'><img src='$themeimg/arrow.png' alt='' /></td>";
         if ($is_editor) {
             $num_merge_cols = 1;
@@ -71,31 +69,31 @@ function showlinksofcategory($catid) {
         }
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "
-                  <td valign='top' colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?c=$course_code&amp;id=$myrow[id]&amp;url=" .
-                urlencode($myrow['url']) . "' $aclass target='_blank'>" . q($title) . "</a>";
-        if (!empty($myrow['description'])) {
-            $tool_content .= "<br />" . standard_text_escape($myrow['description']);
+                  <td valign='top' colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?c=$course_code&amp;id=$myrow->id&amp;url=" .
+                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>";
+        if (!empty($myrow->description)) {
+            $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
         $tool_content .= "</td>";
 
         if ($is_editor && !$is_in_tinymce) {
             $tool_content .= "<td width='45' valign='top' align='right'>";
-            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview";
+            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
             if (isset($category)) {
                 $editlink .= "&amp;category=$category";
             }
 
             $tool_content .= icon('edit', $langModify, $editlink) .
                     "&nbsp;&nbsp;" .
-                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview", "onclick=\"javascript:if(!confirm('" . $langLinkDelconfirm . "')) return false;\"") .
+                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview", "onclick=\"javascript:if(!confirm('" . $langLinkDelconfirm . "')) return false;\"") .
                     "</td><td width='35' valign='top' align='right'>";
             // Display move up command only if it is not the top link
             if ($i != 1) {
-                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow[id]");
+                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id");
             }
             // Display move down command only if it is not the bottom link
             if ($i < $numberoflinks) {
-                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow[id]");
+                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id");
             }
             $tool_content .= "</td>";
         }
@@ -145,27 +143,26 @@ function submit_link() {
 
     if (isset($_POST['id'])) {
         $id = intval($_POST['id']);
-        db_query("UPDATE `link` $set_sql WHERE course_id = $course_id AND id = $id");
+        Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
         $catlinkstatus = $langLinkMod;
         $log_type = LOG_MODIFY;
     } else {
-        $q = db_query("SELECT MAX(`order`) FROM `link`
-                                      WHERE course_id = $course_id AND category = $selectcategory");
-        list($order) = mysql_fetch_row($q);
+        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
+                                      WHERE course_id = ?d AND category = ?d", $course_id, $selectcategory)->maxorder;
         $order++;
-        db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");
-        $id = mysql_insert_id();
+        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order)->lastInsertID;
         $catlinkstatus = $langLinkAdded;
         $log_type = LOG_INSERT;
     }
     $lidx = new LinkIndexer();
     $lidx->store($id);
     // find category name
-    list($category) = mysql_fetch_array(db_query("SELECT link_category.name FROM link, link_category
+    $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
                                                         WHERE link.category = link_category.id
-                                                        AND link.course_id = $course_id
-                                                        AND link.id = $id"));
+                                                        AND link.course_id = ?s
+                                                        AND link.id = ?d", $course_id, $id);
+    $category = $category_object ? $category_object->name : 0;
     $txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
     Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
         'url' => $urllink,
@@ -177,10 +174,10 @@ function submit_link() {
 function category_form_defaults($id) {
     global $course_id, $form_name, $form_description;
 
-    $result = db_query("SELECT * FROM link_category WHERE course_id = $course_id AND id = $id");
-    if ($myrow = mysql_fetch_array($result)) {
-        $form_name = ' value="' . q($myrow['name']) . '"';
-        $form_description = q($myrow['description']);
+    $myrow = Database::get()->querySingle("SELECT name,description  FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if ($myrow) {
+        $form_name = ' value="' . q($myrow->name) . '"';
+        $form_description = q($myrow->description);
     } else {
         $form_name = $form_description = '';
     }
@@ -189,12 +186,12 @@ function category_form_defaults($id) {
 function link_form_defaults($id) {
     global $course_id, $form_url, $form_title, $form_description, $category;
 
-    $result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND id = $id");
-    if ($myrow = mysql_fetch_array($result)) {
-        $form_url = ' value="' . q($myrow['url']) . '"';
-        $form_title = ' value="' . q($myrow['title']) . '"';
-        $form_description = purify(trim($myrow['description']));
-        $category = $myrow['category'];
+    $myrow = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if ($myrow) {
+        $form_url = ' value="' . q($myrow->url) . '"';
+        $form_title = ' value="' . q($myrow->title) . '"';
+        $form_description = purify(trim($myrow->description));
+        $category = $myrow->category;
     } else {
         $form_url = $form_title = $form_description = '';
     }
@@ -212,15 +209,14 @@ function submit_category() {
 
     if (isset($_POST['id'])) {
         $id = intval($_POST['id']);
-        db_query("UPDATE `link_category` $set_sql WHERE course_id = $course_id AND id = $id");
+        Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $catlinkstatus = $langCategoryModded;
         $log_type = LOG_MODIFY;
     } else {
-        $q = db_query("SELECT MAX(`order`) FROM `link_category`
-                                      WHERE course_id = $course_id");
-        list($order) = mysql_fetch_row($q);
+        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
+                                      WHERE course_id = ?d", $course_id)->maxorder;
         $order++;
-        db_query("INSERT INTO `link_category` $set_sql, course_id = $course_id, `order` = $order");
+        Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order);
         $id = mysql_insert_id();
         $catlinkstatus = $langCategoryAdded;
         $log_type = LOG_INSERT;
@@ -234,8 +230,10 @@ function submit_category() {
 function delete_link($id) {
     global $course_id, $langLinkDeleted, $catlinkstatus;
 
-    list($url, $title) = mysql_fetch_row(db_query("SELECT url, title FROM link WHERE course_id = $course_id AND id = $id"));
-    db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
+    $tuple = Database::get()->querySingle("SELECT url, title FROM link WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $url = $tuple->url;
+    $title = $tuple->title;
+    Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $lidx = new LinkIndexer();
     $lidx->remove($id);
     $catlinkstatus = $langLinkDeleted;
@@ -247,9 +245,9 @@ function delete_link($id) {
 function delete_category($id) {
     global $course_id, $langCategoryDeleted, $catlinkstatus;
 
-    db_query("DELETE FROM `link` WHERE course_id = $course_id AND category = $id");
-    list($category) = mysql_fetch_array(db_query("SELECT name FROM link_category WHERE course_id = $course_id AND id = $id"));
-    db_query("DELETE FROM `link_category` WHERE course_id = $course_id AND id = $id");
+    Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, $id);
+    $category = Database::get()->querySingle("SELECT name FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id)->name;
+    Database::get()->query("DELETE FROM `link_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $catlinkstatus = $langCategoryDeleted;
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
         'category' => $category));
