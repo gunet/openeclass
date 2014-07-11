@@ -65,57 +65,52 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     if (isset($_GET['cat_id'])) {
         $cat_id = intval($_GET['cat_id']);
     }
-    $rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
-		WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $course_id", $mysqlMainDb));
+    $rows = Database::get()->querySingle("SELECT COUNT(*) as count FROM forum_notify
+		WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $cat_id, $course_id)->count;
     if ($rows > 0) {
-        db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumcatnotify']) . "
-			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $course_id", $mysqlMainDb);
+        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d"
+                , $_GET['forumcatnotify'], $uid, $cat_id, $course_id);
     } else {
-        db_query("INSERT INTO forum_notify SET user_id = $uid,
-		cat_id = $cat_id, notify_sent = 1, course_id = $course_id", $mysqlMainDb);
+        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, cat_id = ?d, notify_sent = 1, course_id = ?d"
+                , $uid, $cat_id, $course_id);
     }
 } elseif (isset($_GET['forumnotify'])) { // modify forum notification
     if (isset($_GET['forum_id'])) {
         $forum_id = intval($_GET['forum_id']);
     }
-    $rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
-		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $course_id", $mysqlMainDb));
+    $rows = Database::get()->querySingle("SELECT COUNT(*) as count FROM forum_notify
+		WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $uid, $forum_id, $course_id);
     if ($rows > 0) {
-        db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumnotify']) . "
-			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $course_id", $mysqlMainDb);
+        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d"
+                , $_GET['forumnotify'], $uid, $forum_id, $course_id);
     } else {
-        db_query("INSERT INTO forum_notify SET user_id = $uid,
-		forum_id = $forum_id, notify_sent = 1, course_id = $course_id", $mysqlMainDb);
+        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, forum_id = ?d, notify_sent = 1, course_id = ?d"
+                , $uid, $forum_id, $course_id);
     }
 }
 
 /*
  * Populate data with forum categories
  */
-$sql = "SELECT id, cat_title FROM forum_category WHERE course_id = $course_id ORDER BY id ";
+$categories = Database::get()->queryArray("SELECT id, cat_title FROM forum_category WHERE course_id = ?d ORDER BY id ", $course_id);
 
-$result = db_query($sql);
-$total_categories = mysql_num_rows($result);
+$total_categories = count($categories);
 
 if ($total_categories) {
-    while ($cat_row = mysql_fetch_array($result)) {
-        $categories[] = $cat_row;
-    }
-    $sql = "SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
+    $forum_row = Database::get()->queryArray("SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
 		FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
-                AND f.course_id = $course_id
-		ORDER BY f.cat_id, f.id";
+                AND f.course_id = ?d
+		ORDER BY f.cat_id, f.id", $course_id);
 
-    $f_res = db_query($sql);
-    while ($forum_data = mysql_fetch_assoc($f_res)) {
-        $forum_row[] = $forum_data;
-    }
-    for ($i = 0; $i < $total_categories; $i++) {
-        $title = stripslashes($categories[$i]['cat_title']);
-        $catNum = $categories[$i]['id'];
-        list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
-				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $course_id", $mysqlMainDb));
-        if (!isset($action_notify)) {
+    foreach ($categories as $cat_row) {
+        $title = stripslashes($cat_row->cat_title);
+        $catNum = $cat_row->id;
+        $action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+				WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d"
+                , $uid, $catNum, $course_id);
+        if ($action_notify)
+            $action_notify = $action_notify->notify_sent;
+        if (!$action_notify) {
             $link_notify = FALSE;
             $icon = '_off';
         } else {
@@ -146,17 +141,16 @@ if ($total_categories) {
 		<td class='center'>$langActions</td>
 		</tr>";
 
-        @reset($forum_row);
         // display forum topics
-        for ($x = 0; $x < count($forum_row); $x++) {
+        foreach ($forum_row as $forum_data) {
             unset($last_post);
-            $cat_id = $categories[$i]['id'];
-            $sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
-            if (mysql_num_rows($sql) > 0) { // if category forum topics are found
-                if ($forum_row[$x]['cat_id'] == $cat_id) {
-                    if ($forum_row[$x]["post_time"]) {
-                        $last_post = $forum_row[$x]["post_time"];
-                        $last_post_datetime = $forum_row[$x]["post_time"];
+            $cat_id = $cat_row->id;
+            if (Database::get()->querySingle("SELECT COUNT(*) as count FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id)->count > 0) {
+                // if category forum topics are found
+                if ($forum_data->cat_id == $cat_id) {
+                    if ($forum_data->post_time) {
+                        $last_post = $forum_data->post_time;
+                        $last_post_datetime = $forum_data->post_time;
                         list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
                         list($year, $month, $day) = explode('-', $last_post_date);
                         list($hour, $min) = explode(':', $last_post_time);
@@ -175,18 +169,18 @@ if ($total_categories) {
                     } else {
                         $tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
                     }
-                    $forum_name = q($forum_row[$x]['name']);
-                    if ($forum_row[$x]['poster_id']) {
-                        $last_user_post = uid_to_name($forum_row[$x]['poster_id']);
+                    $forum_name = q($forum_data->name);
+                    if ($forum_data->poster_id) {
+                        $last_user_post = uid_to_name($forum_data->poster_id);
                     } else {
                         $last_user_post = '';
                     }
-                    $last_post_topic_id = $forum_row[$x]['topic_id'];
-                    $total_posts = $forum_row[$x]['num_posts'];
-                    $total_topics = $forum_row[$x]['num_topics'];
-                    $desc = q($forum_row[$x]['desc']);
+                    $last_post_topic_id = $forum_data->topic_id;
+                    $total_posts = $forum_data->num_posts;
+                    $total_topics = $forum_data->num_topics;
+                    $desc = q($forum_data->desc);
                     $tool_content .= "<td>";
-                    $forum_id = $forum_row[$x]['id'];
+                    $forum_id = $forum_data->id;
                     $is_member = false;
                     $group_id = init_forum_group_info($forum_id);
                     $member = $is_member ? "&nbsp;&nbsp;($langMyGroup)" : '';
@@ -195,7 +189,7 @@ if ($total_categories) {
                     //  - forum doesn't belong to group
                     //  - forum belongs to group and group forums are enabled and
                     //     - user is member of group
-                    if ($is_editor or !$group_id or ($has_forum and $is_member)) {
+                    if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
                         $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member;
@@ -216,11 +210,14 @@ if ($total_categories) {
                     } else {
                         $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
                     }
-                    list($forum_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
-								WHERE user_id = $uid
-								AND forum_id = $forum_id
-								AND course_id = $course_id"));
-                    if (!isset($forum_action_notify)) {
+                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+								WHERE user_id = ?d
+								AND forum_id = ?d
+								AND course_id = ?d"
+                            , $uid, $forum_id, $course_id);
+                    if ($forum_action_notify)
+                        $forum_action_notify = $forum_action_notify->notify_sent;
+                    if ($forum_action_notify) {
                         $forum_link_notify = false;
                         $forum_icon = '_off';
                     } else {
