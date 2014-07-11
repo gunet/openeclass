@@ -26,6 +26,8 @@ require_once 'include/course_settings.php';
 
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
+} elseif ($_POST['rtype'] == 'course') {
+    $setting_id = SETTING_COURSE_COMMENT_ENABLE;
 }
 
 if (setting_get($setting_id, $course_id) == 1) {

@@ -35,6 +35,8 @@ require_once 'include/lib/course.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -118,6 +120,12 @@ if (!empty($addon)) {
 if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
     $rating = new Rating('fivestar', 'course', $course_id);
     $main_content .= $rating->put($is_editor, $uid, $course_id);
+}
+
+if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+    commenting_add_js();
+    $comm = new Commenting('course', $course_id);
+    $main_content .= $comm->put($course_code, $is_editor, $uid);
 }
 
 if (is_sharing_allowed($course_id)) {
