@@ -37,11 +37,11 @@
 if (isset($cmd) && $cmd = "raw") {
     // change raw if value is a number between 0 and 100
     if (isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0) {
-        $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-				SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
-				WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
-				AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-        db_query($sql, $mysqlMainDb);
+        $sql = "UPDATE `lp_rel_learnPath_module`
+				SET `raw_to_pass` = ?d
+				WHERE `module_id` = ?d
+				AND `learnPath_id` = ?d";
+        Database::get()->query($sql, $_POST['newRaw'], $_SESSION['lp_module_id'], $_SESSION['path_id']);
 
         $dialogBox = $langRawHasBeenChanged;
     }
@@ -59,39 +59,39 @@ if (!empty($dialogBox)) {
 
 // form to change raw needed to pass the exercise
 $sql = "SELECT `lock`, `raw_to_pass`
-        FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
-       WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
-         AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
+        FROM `lp_rel_learnPath_module` AS LPM
+       WHERE LPM.`module_id` = ?d
+         AND LPM.`learnPath_id` = ?d";
 
-$learningPath_module = db_query_get_single_row($sql, $mysqlMainDb);
+$learningPath_module = Database::get()->querySingle($sql, $_SESSION['lp_module_id'], $_SESSION['path_id']);
 
 // if this module blocks the user if he doesn't complete
-if (isset($learningPath_module['lock']) && $learningPath_module['lock'] == 'CLOSE' && isset($learningPath_module['raw_to_pass'])) {
+if (isset($learningPath_module->lock) && $learningPath_module->lock == 'CLOSE' && isset($learningPath_module->raw_to_pass)) {
     $tool_content .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n"
             . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
-            . '<input type="text" value="' . htmlspecialchars($learningPath_module['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
+            . '<input type="text" value="' . htmlspecialchars($learningPath_module->raw_to_pass) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
             . '<input type="hidden" name="cmd" value="raw" />' . "\n"
             . '<input type="submit" value="' . $langOk . '" />' . "\n"
             . '</form>' . "\n\n";
 }
 
 // display current exercise info and change comment link
-$sql = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
-        FROM `$mysqlMainDb`.`" . $TABLEMODULE . "` AS `M`,
-             `$mysqlMainDb`.`" . $TABLEASSET . "`  AS `A`,
-             `$mysqlMainDb`.`" . $TABLEQUIZTEST . "` AS `E`
+$sql2 = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
+        FROM `lp_module` AS `M`,
+             `lp_asset`  AS `A`,
+             `exercise` AS `E`
        WHERE `A`.`module_id` = M.`module_id`
-         AND `M`.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
-         AND `M`.`course_id` = $course_id
+         AND `M`.`module_id` = ?d
+         AND `M`.`course_id` = ?d
          AND `E`.`id` = `A`.`path`";
+$module = Database::get()->querySingle($sql2, $_SESSION['lp_module_id'], $course_id);
 
-$module = db_query_get_single_row($sql);
 if ($module) {
     $tool_content .= "\n\n" . '<h4>' . $langExerciseInModule . ' :</h4>' . "\n"
             . '<p>' . "\n"
-            . htmlspecialchars($module['name'])
+            . htmlspecialchars($module->name)
             . '&nbsp;' . "\n"
-            . '<a href="../exercise/admin.php?course=' . $course_code . '&amp;exerciseId=' . $module['exerciseId'] . '">'
+            . '<a href="../exercise/admin.php?course=' . $course_code . '&amp;exerciseId=' . $module->exerciseId . '">'
             . '<img src="' . $imgRepositoryWeb . 'edit.png" border="0" alt="' . $langModify . '" title="' . $langModify . '" />'
             . '</a>' . "\n"
             . '</p>' . "\n";

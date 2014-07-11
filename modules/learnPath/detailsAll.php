@@ -43,19 +43,10 @@
   ==============================================================================
  */
 
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
-$TABLELEARNPATH = "lp_learnPath";
-$TABLECOURSUSER = "course_user";
-$TABLEUSER = "user";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 require_once 'include/lib/learnPathLib.inc.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
@@ -68,7 +59,7 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
 
 // display a list of user and their respective progress
 $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
-	FROM `$TABLEUSER` AS U, `$TABLECOURSUSER` AS CU
+	FROM `user` AS U, `course_user` AS CU
 	WHERE U.`id`= CU.`user_id`
 	AND CU.`course_id` = $course_id
 	ORDER BY U.`surname` ASC";
@@ -90,8 +81,8 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
 }
 
 // check if there are learning paths available
-$l = db_query("SELECT * FROM `$TABLELEARNPATH` WHERE course_id = $course_id");
-if ((mysql_num_rows($l) == 0)) {
+$lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
+if ($lcnt == 0) {
     $tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
     draw($tool_content, 2, null, $head_content);
     exit;
@@ -118,9 +109,7 @@ $tool_content .= "
 $k = 0;
 foreach ($usersList as $user) {
     // list available learning paths
-    $sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $course_id";
-
-    $learningPathList = db_query_fetch_all($sql);
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
 
     $iterator = 1;
     $globalprog = 0;
@@ -131,7 +120,7 @@ foreach ($usersList as $user) {
     }
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user->id);
+        $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }

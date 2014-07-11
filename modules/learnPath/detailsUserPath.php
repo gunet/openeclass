@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* ===========================================================================
   detailsUserPath.php
   @last update: 30-06-2006 by Thanos Kyritsis
@@ -39,19 +38,9 @@
   ==============================================================================
  */
 
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
-
-$TABLECOURSUSER = "course_user";
-$TABLEUSER = "user";
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -64,21 +53,16 @@ if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     exit();
 }
 
-
 // get infos about the user
-$sql = "SELECT surname, givenname, email FROM `" . $TABLEUSER . "`
-               WHERE id = " . (int) $_REQUEST['uInfo'];
-$uDetails = db_query_get_single_row($sql);
-
-mysql_select_db($mysqlMainDb);
+$uDetails = Database::get()->querySingle("SELECT surname, givenname, email 
+    FROM `user`
+    WHERE id = ?d", $_REQUEST['uInfo']);
 
 // get infos about the learningPath
-$sql = "SELECT `name`
-        FROM `" . $TABLELEARNPATH . "`
-        WHERE `learnPath_id` = " . (int) $_REQUEST['path_id'] . "
-        AND `course_id` = $course_id";
-$LPresult = mysql_fetch_row(db_query($sql));
-$LPname = $LPresult[0];
+$LPname = Database::get()->querySingle("SELECT `name`
+        FROM `lp_learnPath`
+        WHERE `learnPath_id` = ?d
+        AND `course_id` = ?d", $_REQUEST['path_id'], $course_id)->name;
 
 //### PREPARE LIST OF ELEMENTS TO DISPLAY #################################
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
@@ -87,25 +71,38 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 	UMP.`lesson_status`, UMP.`raw`,
 	UMP.`scoreMax`, UMP.`credit`,
 	UMP.`session_time`, UMP.`total_time`, A.`path`
-	FROM (`" . $TABLELEARNPATHMODULE . "` AS LPM, `" . $TABLEMODULE . "` AS M)
-	LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
+	FROM (`lp_rel_learnPath_module` AS LPM, `lp_module` AS M)
+	LEFT JOIN `lp_user_module_progress` AS UMP
 		ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-		AND UMP.`user_id` = " . (int) $_REQUEST['uInfo'] . "
-	LEFT JOIN `" . $TABLEASSET . "` AS A
+		AND UMP.`user_id` = ?d
+	LEFT JOIN `lp_asset` AS A
 		ON M.`startAsset_id` = A.`asset_id`
 	WHERE LPM.`module_id` = M.`module_id`
-		AND LPM.`learnPath_id` = " . (int) $_REQUEST['path_id'] . "
+		AND LPM.`learnPath_id` = ?d
 		AND LPM.`visible` = 1
 		AND LPM.`module_id` = M.`module_id`
-		AND M.`course_id` = $course_id
+		AND M.`course_id` = ?d
 	GROUP BY LPM.`module_id`
 	ORDER BY LPM.`rank`";
-
-$moduleList = db_query_fetch_all($sql);
+$moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
 
 $extendedList = array();
+$modar = array();
 foreach ($moduleList as $module) {
-    $extendedList[] = $module;
+    $modar['learnPath_module_id'] = $module->learnPath_module_id;
+    $modar['parent'] = $module->parent;
+    $modar['lock'] = $module->lock;
+    $modar['module_id'] = $module->module_id;
+    $modar['contentType'] = $module->contentType;
+    $modar['name'] = $module->name;
+    $modar['lesson_status'] = $module->lesson_status;
+    $modar['raw'] = $module->raw;
+    $modar['scoreMax'] = $module->scoreMax;
+    $modar['credit'] = $module->credit;
+    $modar['session_time'] = $module->session_time;
+    $modar['total_time'] = $module->total_time;
+    $modar['path'] = $module->path;
+    $extendedList[] = $modar;
 }
 
 // build the array of modules
@@ -120,8 +117,9 @@ $global_time = "0000:00:00";
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
 for ($i = 0; $i < sizeof($flatElementList); $i++) {
-    if ($flatElementList[$i]['children'] > $maxDeep)
+    if ($flatElementList[$i]['children'] > $maxDeep) {
         $maxDeep = $flatElementList[$i]['children'];
+    }
 }
 
 
@@ -131,7 +129,7 @@ $tool_content .= '
         // ------------------- some user details --------------------------
         . '    <tr class="odd">' . "\n"
         . '      <td colspan="' . ($maxDeep + 1) . '" class="left"><small><b>' . $langLearnPath . '</b>:&nbsp;' . $LPname . '</small></td>' . "\n"
-        . '      <td colspan="' . ($maxDeep + 4) . '" class="right"><small><b>' . $langStudent . '</b>: ' . q($uDetails['surname']) . ' ' . q($uDetails['givenname']) . ' (' . q($uDetails['email']) . ')</small></td>' . "\n"
+        . '      <td colspan="' . ($maxDeep + 4) . '" class="right"><small><b>' . $langStudent . '</b>: ' . q($uDetails->surname) . ' ' . q($uDetails->givenname) . ' (' . q($uDetails->email) . ')</small></td>' . "\n"
         . '    </tr>' . "\n"
         . '    <tr>' . "\n"
         . '      <th colspan="' . ($maxDeep + 1) . '">' . $langLearningObjects . '</th>' . "\n"
@@ -159,8 +157,9 @@ foreach ($flatElementList as $module) {
 
     // display the current module name
     $spacingString = '';
-    for ($i = 0; $i < $module['children']; $i++)
+    for ($i = 0; $i < $module['children']; $i++) {
         $spacingString .= '      <td width="5">&nbsp;</td>' . "\n";
+    }
     $colspan = $maxDeep - $module['children'] + 1;
 
     $tool_content .= '    <tr>' . "\n" . $spacingString . '      <td colspan="' . $colspan . '" align="left">';
@@ -257,8 +256,9 @@ foreach ($flatElementList as $module) {
     if ($progress > 0) {
         $globalProg += $progress;
     }
-    if ($module['contentType'] != CTLABEL_)
+    if ($module['contentType'] != CTLABEL_) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
+    }
 
     $tool_content .= '    </tr>' . "\n";
 }

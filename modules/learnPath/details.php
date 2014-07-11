@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* ===========================================================================
   details.php
   @last update: 05-12-2006 by Thanos Kyritsis
@@ -41,19 +40,10 @@
   ==============================================================================
  */
 
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
+
 require_once '../../include/baseTheme.php';
-
-$TABLECOURSUSER = "course_user";
-$TABLEUSER = "user";
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
@@ -68,18 +58,16 @@ if (empty($_REQUEST['path_id'])) {
 $path_id = intval($_REQUEST['path_id']);
 
 // get infos about the learningPath
-$sql = "SELECT `name` FROM `" . $TABLELEARNPATH . "` WHERE `learnPath_id` = " . (int) $path_id . " AND `course_id` = " . $course_id;
-$learnPathName = db_query_get_single_value($sql);
+$learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
 
 if ($learnPathName) {
     // display title
-    $titleTab['subTitle'] = htmlspecialchars($learnPathName);
-    mysql_select_db($mysqlMainDb);
+    $titleTab['subTitle'] = htmlspecialchars($learnPathName->name);
 
     // display a list of user and their respective progress
     $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
-		FROM `$TABLEUSER` AS U,
-		     `$TABLECOURSUSER` AS CU
+		FROM `user` AS U,
+		     `course_user` AS CU
 		WHERE U.`id` = CU.`user_id`
 		AND CU.`course_id` = $course_id
 		ORDER BY U.`surname` ASC, U.`givenname` ASC";

@@ -132,29 +132,18 @@ if (!class_exists('ScormExport')):
          * @author Amand Tihon <amand@alrj.org>
          */
         function fetch() {
-            global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $course_code,
-            $mysqlMainDb, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
+            global $webDir, $course_code, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
 
             /* Get general infos about the learning path */
-            $sql = 'SELECT `name`, `comment`
-                FROM `' . $TABLELEARNPATH . '`
-                WHERE `learnPath_id` = ' . $this->id . '
-        		AND `course_id` = ' . $course_id;
-
-            $result = db_query($sql, $mysqlMainDb);
-            if (empty($result)) {
+            $lp = Database::get()->querySingle("SELECT `name`, `comment` FROM `lp_learnPath`
+                WHERE `learnPath_id` = ?d AND `course_id` = ?d", $this->id, $course_id);
+            if (!$lp) {
                 $this->error[] = $langLearningPathNotFound;
                 return false;
             }
 
-            $list = mysql_fetch_array($result, MYSQL_ASSOC);
-            if (empty($list)) {
-                $this->error[] = $langLearningPathNotFound;
-                return false;
-            }
-
-            $this->name = $list['name'];
-            $this->comment = $list['comment'];
+            $this->name = $lp->name;
+            $this->comment = $lp->comment;
 
             /* Build various directories' names */
 
@@ -170,30 +159,44 @@ if (!class_exists('ScormExport')):
             $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`,
                         LPM.`parent`, LPM.`raw_to_pass`, LPM.`specificComment` itemComment,
                         M.`name`, M.`contentType`, M.`comment` resourceComment, A.`path`
-                FROM `' . $TABLELEARNPATHMODULE . '` AS LPM
-                LEFT JOIN `' . $TABLEMODULE . '` AS M
+                FROM `lp_rel_learnPath_module` AS LPM
+                LEFT JOIN `lp_module` AS M
                        ON LPM.`module_id` = M.`module_id`
-                LEFT JOIN `' . $TABLEASSET . '` AS A
+                LEFT JOIN `lp_asset` AS A
                        ON M.`startAsset_id` = A.`asset_id`
-                WHERE LPM.`learnPath_id` = ' . $this->id . '
-                AND M.`course_id` = ' . $course_id . '
-                ORDER BY LPM.`parent`, LPM.`rank`
-               ';
+                WHERE LPM.`learnPath_id` = ?d
+                AND M.`course_id` = ?d
+                ORDER BY LPM.`parent`, LPM.`rank`';
 
-            $result = db_query($sql);
-            if (empty($result)) {
-                $this->error = $langLearningPathEmpty;
+            $result = Database::get()->queryArray($sql, $this->id, $course_id);
+            if (!$result) {
+                $this->error[] = $langLearningPathEmpty;
                 return false;
             }
-
-            while ($module = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            
+            $module = array();
+            foreach ($result as $modobj) {
+                $module['ID'] = $modobj->ID;
+                $module['lock'] = $modobj->lock;
+                $module['visible'] = $modobj->visible;
+                $module['rank'] = $modobj->rank;
+                $module['parent'] = $modobj->parent;
+                $module['raw_to_pass'] = $modobj->raw_to_pass;
+                $module['itemComment'] = $modobj->itemComment;
+                $module['name'] = $modobj->name;
+                $module['contentType'] = $modobj->contentType;
+                $module['resourceComment'] = $modobj->resourceComment;
+                $module['path'] = $modobj->path;
+            
                 // Check for SCORM content. If at least one module is SCORM, we need to export the existing SCORM package
-                if ($module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET')
+                if ($module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET') {
                     $this->fromScorm = true;
+                }
 
                 // If it is an exercise, create a filename for it.
-                if ($module['contentType'] == 'EXERCISE')
+                if ($module['contentType'] == 'EXERCISE') {
                     $module['fileName'] = 'quiz_' . $module['path'] . '.html';
+                }
 
                 // Only for clarity :
                 $id = $module['ID'];
@@ -264,7 +267,7 @@ if (!class_exists('ScormExport')):
             // read the exercise
             $quiz = new Exercise();
             if (!$quiz->read($quizId)) {
-                $this->error[] = $langErrorLoadingExercise;
+                $this->error[] = $GLOBALS['langErrorLoadingExercise'];
                 return false;
             }
 
@@ -290,7 +293,7 @@ if (!class_exists('ScormExport')):
                 // read the question, abort on error
                 $question = new Question();
                 if (!$question->read($questionId)) {
-                    $this->error[] = $langErrorLoadingQuestion;
+                    $this->error[] = $GLOBALS['langErrorLoadingQuestion'];
                     return false;
                 }
                 $qtype = $question->selectType();
@@ -310,14 +313,15 @@ if (!class_exists('ScormExport')):
                 if (!empty($attachedFile)) {
                     // copy the attached file
                     if (!claro_copy_file($this->srcDirExercise . '/' . $attachedFile, $this->destDir . '/Exercises')) {
-                        $this->error[] = $langErrorCopyAttachedFile . $attachedFile;
+                        $this->error[] = $GLOBALS['langErrorCopyAttachedFile'] . $attachedFile;
                         return false;
                     }
 
                     // Ok, if it was an mp3, we need to copy the flash mp3-player too.
                     $extension = substr(strrchr($attachedFile, '.'), 1);
-                    if ($extension == 'mp3')
+                    if ($extension == 'mp3') {
                         $this->mp3Found = true;
+                    }
 
                     $pageBody .= '<tr><td colspan="2">' . display_attached_file($attachedFile) . '</td></tr>' . "\n";
                 }
@@ -380,8 +384,9 @@ if (!class_exists('ScormExport')):
                         $weighting = (isset($explodedAnswer[1])) ? $explodedAnswer[1] : '';
                         $fillType = (!empty($explodedAnswer[2])) ? $explodedAnswer[2] : 1;
                         // default value if value is invalid
-                        if ($fillType != TEXTFIELD_FILL && $fillType != LISTBOX_FILL)
+                        if ($fillType != TEXTFIELD_FILL && $fillType != LISTBOX_FILL) {
                             $fillType = TEXTFIELD_FILL;
+                        }
                         $wrongAnswers = (!empty($explodedAnswer[3])) ? explode('[', $explodedAnswer[3]) : array();
                         // get the scorings as a list
                         $fillScoreList = explode(',', $weighting);
@@ -589,7 +594,7 @@ if (!class_exists('ScormExport')):
                     . $pageEnd;
 
             if (!$f = fopen($this->destDir . '/' . $filename, 'w')) {
-                $this->error[] = $langErrorCreatingFile . $filename;
+                $this->error[] = $GLOBALS['langErrorCreatingFile'] . $filename;
                 return false;
             }
             fwrite($f, $pageContent);
@@ -711,8 +716,9 @@ if (!class_exists('ScormExport')):
              * @author Amand Tihon <amand@alrj.org>
              */
             function makeMetaData($title, $description, $identifier) {
-                if (empty($title) and empty($description))
+                if (empty($title) and empty($description)) {
                     return ' ';
+                }
 
                 $out = "<metadata>" . "\n"
                         . "<lom:lom>" . "\n"
@@ -794,8 +800,9 @@ if (!class_exists('ScormExport')):
              * @author Thanos Kyritsis <atkyritsis@upnet.gr>
              */
             function makeCAMetaData($title, $description) {
-                if (empty($title) and empty($description))
+                if (empty($title) and empty($description)) {
                     return ' ';
+                }
 
                 $out = "<metadata>" . "\n"
                         . "<schema>ADL SCORM</schema>" . "\n"
@@ -848,8 +855,9 @@ if (!class_exists('ScormExport')):
                 global $blocking;
                 $out = "";
                 $ident = "";
-                for ($i = 0; $i < $depth; $i++)
+                for ($i = 0; $i < $depth; $i++) {
                     $ident .= "    ";
+                }
                 foreach ($itemlist as $item) {
                     $identifier = "I_" . $item['ID'];
                     $out .= $ident . '<item identifier="' . $identifier . '" isvisible="true" ';
@@ -923,7 +931,7 @@ if (!class_exists('ScormExport')):
              * @author Thanos Kyritsis <atkyritsis@upnet.gr>
              */
             function createDescFrameFile($fileName) {
-                global $langErrorCreatingFrame, $langErrorCreatingManifest, $langThisCourseDescriptionIsEmpty, $charset;
+                global $langErrorCreatingFrame, $course_id, $langThisCourseDescriptionIsEmpty, $charset;
 
                 if (!($f = fopen($fileName, 'w'))) {
                     $this->error[] = $langErrorCreatingFrame;
@@ -931,18 +939,17 @@ if (!class_exists('ScormExport')):
                 }
 
                 $course_description = "";
-                $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-                $res = db_query($sql);
-                if (mysql_num_rows($res) > 0) {
+                $blocs = Database::get()->queryArray("SELECT `id`, `title`, `comments` FROM `course_description` WHERE course_id = ?d ORDER BY id", $course_id);
+                if (count($blocs) > 0) {
                     $course_description .= "
 					<hr noshade size=\"1\">";
-                    while ($bloc = mysql_fetch_array($res)) {
+                    foreach ($blocs as $bloc) {
                         $course_description .= "
 					<H4>
-						" . $bloc["title"] . "
+						" . $bloc->title . "
 					</H4>
 					<font size=2 face='arial, helvetica'>
-						" . make_clickable(nl2br($bloc["content"])) . "
+						" . make_clickable(nl2br($bloc->comments)) . "
 					</font>";
                     }
                 } else {
@@ -987,8 +994,9 @@ if (!class_exists('ScormExport')):
 
             $manifest_resources = "<resources>\n";
             foreach ($this->resourceMap as $module) {
-                if ($module['contentType'] == 'LABEL')
+                if ($module['contentType'] == 'LABEL') {
                     continue;
+                }
 
                 switch ($module['contentType']) {
                     case 'DOCUMENT':
@@ -997,8 +1005,9 @@ if (!class_exists('ScormExport')):
                         $targetfile = 'Documents' . $module['path'];
 
                         // Create an html file with a frame for the document.
-                        if (!createFrameFile($framefile, $targetfile))
+                        if (!createFrameFile($framefile, $targetfile)) {
                             return false;
+                        }
 
                         // Add the resource to the manifest
                         $ridentifier = "R_" . $module['ID'];
@@ -1052,8 +1061,9 @@ if (!class_exists('ScormExport')):
                         $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
 
                         // Create an html file with a frame for the document.
-                        if (!createDescFrameFile($framefile))
+                        if (!createDescFrameFile($framefile)) {
                             return false;
+                        }
 
                         // Add the resource to the manifest
                         $ridentifier = "R_" . $module['ID'];
@@ -1072,8 +1082,9 @@ if (!class_exists('ScormExport')):
                         $targetfile = $module['path'];
 
                         // Create an html file with a frame for the document.
-                        if (!createFrameFile($framefile, $targetfile))
+                        if (!createFrameFile($framefile, $targetfile)) {
                             return false;
+                        }
 
                         // Add the resource to the manifest
                         $ridentifier = "R_" . $module['ID'];
@@ -1092,7 +1103,7 @@ if (!class_exists('ScormExport')):
 
             $manifestPath = $this->destDir . '/imsmanifest.xml';
             if (!$f = fopen($manifestPath, 'w')) {
-                $this->error[] = $langErrorCreatingManifest;
+                $this->error[] = $GLOBALS['langErrorCreatingManifest'];
                 return false;
             }
 
@@ -1172,14 +1183,18 @@ if (!class_exists('ScormExport')):
          * @author Amand Tihon <amand@alrj.org>
          */
         function export() {
-            if (!$this->fetch())
+            if (!$this->fetch()) {
                 return false;
-            if (!$this->prepare())
+            }
+            if (!$this->prepare()) {
                 return false;
-            if (!$this->createManifest())
+            }
+            if (!$this->createManifest()) {
                 return false;
-            if (!$this->zip())
+            }
+            if (!$this->zip()) {
                 return false;
+            }
             $this->send();
             return True;
         }

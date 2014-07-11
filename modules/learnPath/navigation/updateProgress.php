@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* * ===========================================================================
   updateProgress.php
   @last update: 22-07-2009 by Thanos Kyritsis
@@ -45,12 +44,6 @@ $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 $TOCurl = "../viewer_toc.php?course=$course_code";
 $TOCleft = "../toc.php?course=$course_code";
 
@@ -73,18 +66,21 @@ if (isset($_POST['ump_id'])) {
     $entry_value = "RESUME";
 
     // Set lesson status to COMPLETED if the SCO didn't change it itself.
-    if ($lesson_status_value == "NOT ATTEMPTED")
+    if ($lesson_status_value == "NOT ATTEMPTED") {
         $lesson_status_value = "COMPLETED";
+    }
 
     // set credit if needed
     if ($lesson_status_value == "COMPLETED" || $lesson_status_value == "PASSED") {
-        if (strtoupper($_POST['credit']) == "CREDIT")
+        if (strtoupper($_POST['credit']) == "CREDIT") {
             $credit_value = "CREDIT";
+        }
     }
 
     //set maxScore to 100 if the SCO didn't change it itself, but gave raw
-    if (isset($raw_value) && isset($scoreMax_value) && $raw_value > 0 && $raw_value <= 100 && $scoreMax_value == 0)
+    if (isset($raw_value) && isset($scoreMax_value) && $raw_value > 0 && $raw_value <= 100 && $scoreMax_value == 0) {
         $scoreMax_value = 100;
+    }
 
     if (isScorm2004Time($_POST['session_time'])) {
         $total_time_value = addScorm2004Time($_POST['total_time'], $_POST['session_time']);
@@ -96,20 +92,20 @@ if (isset($_POST['ump_id'])) {
         $total_time_value = $_POST['total_time'];
     }
 
-    $sql = "UPDATE `" . $TABLEUSERMODULEPROGRESS . "`
+    $sql = "UPDATE `lp_user_module_progress`
             SET
-                `lesson_location` = '" . addslashes($_POST['lesson_location']) . "',
-                `lesson_status` = '" . addslashes($lesson_status_value) . "',
-                `entry` = '" . addslashes($entry_value) . "',
-                `raw` = '" . $raw_value . "',
-                `scoreMin` = '" . $scoreMin_value . "',
-                `scoreMax` = '" . $scoreMax_value . "',
-                `total_time` = '" . addslashes($total_time_value) . "',
-                `session_time` = '" . addslashes($session_time_formatted) . "',
-                `suspend_data` = '" . addslashes($_POST['suspend_data']) . "',
-                `credit` = '" . addslashes($credit_value) . "'
-          WHERE `user_module_progress_id` = " . (int) $_POST['ump_id'];
-    db_query($sql);
+                `lesson_location` = ?s,
+                `lesson_status` = ?s,
+                `entry` = ?s,
+                `raw` = ?d,
+                `scoreMin` = ?d,
+                `scoreMax` = ?d,
+                `total_time` = ?s,
+                `session_time` = ?s,
+                `suspend_data` = ?s,
+                `credit` = ?s
+          WHERE `user_module_progress_id` = ?d";
+    Database::get()->query($sql, $_POST['lesson_location'], $lesson_status_value, $entry_value, $raw_value, $scoreMin_value, $scoreMax_value, $total_time_value, $session_time_formatted, $_POST['suspend_data'], $credit_value, $_POST['ump_id']);
 }
 
 // display the form to accept new commit and
