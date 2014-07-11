@@ -317,7 +317,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     
     //Comments
     if (file_exists("$restoreThis/comments")) {
-        restore_table($restoreThis, 'comments', array('map' => array('rid' => $blog_map, 'user_id' => $userid_map),'return_mapping' => 'id'));
+        restore_table($restoreThis, 'rating', array('delete' => array('id'),
+        'map' => array('user_id' => $userid_map),
+        'map_function' => 'comments_map_function',
+        'map_function_data' => array($blog_map,
+        $course_id)));
     }
     
     //Rating
