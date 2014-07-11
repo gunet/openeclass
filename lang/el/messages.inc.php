@@ -3565,6 +3565,7 @@ $langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
+$langInsertPoll = "ερωτηματολογίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση / Απόκρυψη στην κεντρική σελίδα του μαθήματος";

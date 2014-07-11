@@ -165,6 +165,9 @@ function show_resource($info) {
         case 'wiki':
             $tool_content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'poll':
+            $tool_content .= show_poll($info->title, $info->id, $info->res_id, $info->visible);
+            break;
         case 'link':
             $tool_content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
@@ -596,6 +599,59 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         </tr>';
 }
 
+
+/**
+ * @brief display resource poll
+ * @param type $type
+ * @param type $title
+ * @param type $resource_id
+ * @param type $poll_id
+ * @param type $visibility
+ * @return string
+ */
+function show_poll($title, $resource_id, $poll_id, $visibility) {
+    
+    global $course_id, $themeimg, $course_code, $is_editor, $urlServer, $id;
+    
+    $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
+
+    if (!$module_visible and ! $is_editor) {
+        return '';
+    }
+    
+    $imagelink = $link = $class_vis = '';
+    $class_vis = ($visibility == 0 or ! $module_visible) ?
+            ' class="invisible"' : ' class="even"';
+    $title = q($title);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+    if (!$poll) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $status = 'del';
+            $imagelink = "<img src='$themeimg/delete.png' />";
+            $wikilink = "<span class='invisible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        $link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
+        $polllink = $link . "$title</a>";
+        if (!$module_visible) {
+            $polllink .= " <i>($langInactiveModule)</i>";
+        }
+        $imagelink = $link .
+                "<img src='$themeimg/questionnaire_" .
+                ($visibility == 0 ? 'off' : 'on') . ".png' /></a>";
+    }
+    
+    return "
+        <tr$class_vis>
+          <td width='1'>$imagelink</td>
+          <td>$polllink </td>" .
+            actions('poll', $resource_id, $visibility) . '
+        </tr>';
+    
+    
+}
 /**
  * @brief display resource wiki
  * @global type $id
@@ -615,7 +671,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  * @return string
  */
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
-    global $id, $mysqlMainDb, $urlServer, $is_editor,
+    global $id, $urlServer, $is_editor,
     $langWasDeleted, $langInactiveModule, $course_id, $course_code, $themeimg;
 
     $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility

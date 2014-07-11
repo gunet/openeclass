@@ -73,6 +73,8 @@ if (isset($_POST['submit_doc'])) {
     insert_work($id);
 } elseif (isset($_POST['submit_forum'])) {
     insert_forum($id);
+} elseif (isset($_POST['submit_poll'])) {
+    insert_poll($id);
 } elseif (isset($_POST['submit_wiki'])) {
     insert_wiki($id);
 } elseif (isset($_POST['submit_link'])) {
@@ -118,6 +120,10 @@ switch ($_GET['type']) {
     case 'forum': $nameTools = "$langAdd $langInsertForum";
         include 'insert_forum.php';
         list_forums();
+        break;
+    case 'poll': $nameTools = "$langAdd $langInsertPoll";
+        include 'insert_poll.php';
+        list_polls();
         break;
     case 'wiki': $nameTools = "$langAdd $langInsertWiki";
         include 'insert_wiki.php';
@@ -393,6 +399,34 @@ function insert_forum($id) {
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
+}
+
+
+/**
+ * @brief insert poll in database
+ * @global type $course_id
+ * @global type $course_code
+ * @global CourseIndexer $cidx
+ * @global UnitResourceIndexer $urdx
+ * @param type $id
+ */
+function insert_poll($id) {
+    global $course_id, $course_code, $cidx, $urdx;
+    
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    foreach ($_POST['poll'] as $poll_id) {
+        $order++;
+        $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', 
+                                        title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                                    $id, $poll->name, $order, $poll->pid);
+        $uresId = $q->lastInsertID;
+        $urdx->store($uresId, false);
+    }
+    $cidx->store($course_id, true);
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    exit;       
 }
 
 /**

@@ -80,7 +80,8 @@ if ($is_editor) {
 			<option value='forum'>$langInsertForum</option>
 			<option value='ebook'>$langInsertEBook</option>
 			<option value='work'>$langInsertWork</option>
-			<option value='wiki'>$langInsertWiki</option>
+                        <option value='poll'>$langInsertPoll</option>
+			<option value='wiki'>$langInsertWiki</option>                            
 		</select>
 		<input type='hidden' name='id' value='$id'>
 		<input type='hidden' name='course' value='$course_code'>
