@@ -382,6 +382,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `course_id` INT(11) NOT NULL,
                `limit` TINYINT(4) NOT NULL DEFAULT 0,
                `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+ 
  Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
@@ -391,12 +392,18 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ 
  Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                `uid` int(11) NOT NULL DEFAULT 0,
                `attend` TINYINT(4) NOT NULL DEFAULT 0,
                `comments` TEXT NOT NULL) $charset_spec");
+ 
+ Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
   
 Database::get()->query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -1275,6 +1282,11 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
         `uid` int(11) NOT NULL DEFAULT 0,
         `grade` FLOAT NOT NULL DEFAULT -1,
         `comments` TEXT NOT NULL) $charset_spec");
+
+Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `gradebook_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
 
 Database::get()->query("CREATE TABLE `oai_record` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
