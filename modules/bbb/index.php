@@ -601,7 +601,9 @@ function bbb_session_details() {
     global $themeimg;
     global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
     global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
-        
+
+    $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
+
     $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s ORDER BY id DESC", $course_id);
 
     if (($result)) {
@@ -618,7 +620,10 @@ function bbb_session_details() {
                           </tr>";
         $k = 0;
 
-        foreach ($result as $row) {        
+        foreach ($result as $row) {    
+                // Get participants groups
+                $r_group = explode(",",$row->participants);
+                
                 $id = $row->id;
                 $title = $row->title;
                 $start_date = $row->start_date;
@@ -656,23 +661,32 @@ function bbb_session_details() {
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_enable&amp;id=$row->id'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
                         }
                 } else {
-                    $tool_content .= "<td align='center'>";
-                    // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
+                    //Allow access to session only if user is in participant group or session is scheduled for everyone
+                    $access='false';
+                    foreach($myGroups as $mg)
                     {
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$title</a>";
-                    } else {
-                        $tool_content .= "$title";
+                        if(in_array($my,$r_group)) {$access='true';};
                     }
-                    $tool_content .="<td>".$row->description."</td>
-                        <td align='center'>$start_date</td>
-                        <td align='center'>$type</td>
-                        <td class='center'>";
-                    // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a></td>";
-                    } else {
-                        $tool_content .= "-</td>";
+                    if(in_array("0",$r_group) || $access == 'true')
+                    {
+                        $tool_content .= "<td align='center'>";
+                        // Join url will be active only X minutes before scheduled time and if session is visible for users
+                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
+                        {
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$title</a>";
+                        } else {
+                            $tool_content .= "$title";
+                        }
+                        $tool_content .="<td>".$row->description."</td>
+                            <td align='center'>$start_date</td>
+                            <td align='center'>$type</td>
+                            <td class='center'>";
+                        // Join url will be active only X minutes before scheduled time and if session is visible for users
+                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a></td>";
+                        } else {
+                            $tool_content .= "-</td>";
+                        }
                     }
                 }
                 $tool_content .= "</tr>";
