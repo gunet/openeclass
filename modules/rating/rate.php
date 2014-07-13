@@ -51,6 +51,12 @@ if (setting_get($setting_id, $course_id) == 1) {
             $response[1] = $down_value;//negative rating
             $response[2] = $action;//new rating or deletion of old one
             $response[3] = $langUserHasRated;//necessary string
+        } elseif ($widget == 'thumbs_up') {
+            $up_value = $rating->getThumbsUpRating();
+            
+            $response[0] = $up_value;//positive rating
+            $response[1] = $action;//new rating or deletion of old one
+            $response[2] = $langUserHasRated;//necessary string
         } elseif ($widget == 'fivestar') {
             $response[0] = "";
             

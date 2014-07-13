@@ -50,6 +50,8 @@ Class Rating {
         } elseif ($this->widget == 'fivestar') {
             load_js('jquery');
             load_js('jquery.rateit.min.js');
+        } elseif ($this->widget == 'thumbs_up') {
+            $head_content .= '<script src="'.$urlServer.'modules/rating/js/thumbs_up/rating.js" type="text/javascript"></script>';
         }
     }
     
@@ -83,6 +85,14 @@ Class Rating {
                 $ret['fivestar'] = 0;
             } else {
                 $ret['fivestar'] = $res->c;
+            }
+        } elseif ($this->widget == "thumbs_up"){
+            $sql = "SELECT `count` as c FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d AND `tag` = ?s";
+            $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
+            if (!$res) {
+                $ret['like'] = 0;
+            } else {
+                $ret['like'] = $res->c;
             }
         }
     	
@@ -132,6 +142,32 @@ Class Rating {
                 
                 $action = "ins";
             } 
+        } elseif ($this->widget == 'thumbs_up') {
+            if ($user_id == 0) {//anonymous user
+                $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+            } else {
+                $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+            }
+            
+            if ($res->c > 0) {//clicking again the same icon deletes the rating
+                if ($user_id == 0) {//anonymous user
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                } else {
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+                }
+            
+                $action = "del";
+            } else {//either casting a new rating or changing the rating
+                //cast new rating
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
+            
+                $action = "ins";
+            }
         } elseif ($this->widget == 'fivestar') {
             //Delete old ratings
             if ($user_id == 0) {//anonymous user
@@ -168,6 +204,8 @@ Class Rating {
             $this->updateDownCache();
         } elseif ($this->widget == 'fivestar') {
             $this->updateFivestarCache();
+        } elseif ($this->widget == 'thumbs_up') {
+            $this->updateThumbsUpCache();
         }
     }
     
@@ -216,6 +254,20 @@ Class Rating {
     }
     
     /**
+     * Update caching table for thumbs up widget
+     */
+    private function updateThumbsUpCache() {
+        $sql = "DELETE FROM `rating_cache` WHERE `rtype`=?s AND `rid`=?d AND `tag`=?s";
+        Database::get()->query($sql, $this->rtype, $this->rid, $this->widget);
+    
+        $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
+        $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, 1);
+    
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, $this->widget);
+    }
+    
+    /**
      * Get positive ratings for a resource (vote up down widget)
      * @return int
      */
@@ -249,11 +301,25 @@ Class Rating {
      */
     public function getFivestarRating() {
         $sql = "SELECT `value` FROM `rating_cache` WHERE `rid`=?d AND `rtype`=?s AND `tag`=?s";
-        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar');
+        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget);
         if (is_object($res)) {
             return round($res->value,1);
         } else {
             return -1;
+        }
+    }
+    
+    /**
+     * Get rating for a resource (thumbs up widget)
+     * @return int
+     */
+    public function getThumbsUpRating() {
+        $sql = "SELECT `value` FROM `rating_cache` WHERE `rid`=?d AND `rtype`=?s AND `tag`=?s";
+        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget);
+        if (is_object($res)) {
+            return $res->value;
+        } else {
+            return 0;
         }
     }
     
@@ -319,6 +385,26 @@ Class Rating {
             $out .= "</div>";
             $out .= "</div>";
             
+        } elseif ($this->widget == 'thumbs_up') {
+            $out = "<div class=\"rating\">";
+            
+            $onclick_up = "";
+            
+            //disable icons when user hasn't permission to vote
+            if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
+                $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
+            }
+            
+            $out .= "<img src=\"".$urlServer."modules/rating/up.png\" ".$onclick_up."/>&nbsp;";
+            $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
+            $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
+            
+            if ($this->userHasRated($uid)) {
+                $out .= $langUserHasRated;
+            }
+            
+            $out .= "</div>";
+            $out .= "</div>";
         } elseif ($this->widget == 'fivestar') {
             $out = "<div class=\"rating\">";
             
