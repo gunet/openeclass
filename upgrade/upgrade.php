@@ -1435,6 +1435,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `att_pw` varchar(255) DEFAULT NULL,
                       `unlock_interval` int(11) DEFAULT NULL,
                       `external_users` varchar(255) DEFAULT "",
+                      `participants` varchar(255) DEFAULT "",
                       PRIMARY KEY (`id`)
                     )');
 

@@ -56,10 +56,24 @@ if (check_guest()) {
     draw($tool_content, 2);
 }
 load_js('tools.js');
-load_js('jquery.js');
+#load_js('jquery.js');
 load_js('taginput/jquery.tagsinput.js');
 load_js('taginput/jquery.tagsinput.min.js');
+load_js('jquery');
+load_js('jquery-ui');
 
+        
+        load_js('jquery.multiselect.min.js');
+        $head_content .= "<script type='text/javascript'>$(document).ready(function () {
+                $('#select-groups').multiselect({
+                    selectedText: '$langJQSelectNum',
+                    noneSelectedText: '$langJQNoneSelected',
+                    checkAllText: '$langJQCheckAll',
+                    uncheckAllText: '$langJQUncheckAll'
+                });
+        });</script>
+        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+        
 $head_content .= "
 <script type='text/javascript'>
 		function onAddTag(tag) {
@@ -169,6 +183,7 @@ function new_bbb_session() {
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langBBBScheduleSessionInfo, $langBBBScheduleSessionInfo2 ;
+    global $langAllUsers, $langParticipants;
 
     $start_session = jscal_html('start_session');
 
@@ -190,6 +205,20 @@ function new_bbb_session() {
         <tr>
           <th>$langNewBBBSessionStart:</th>
           <td>$start_session</td>
+        </tr>
+        <tr>
+        <th valign='top'>$langParticipants:</th>
+        <td>
+    	<select name='groups[]' multiple='multiple' class='auth_input' id='select-groups'>";
+            //select all users from this course except yourself
+            $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
+            $res = Database::get()->queryArray($sql,$course_code);
+            $tool_content .= "<option value=0>" . $langAllUsers . "</option>";
+            foreach ($res as $r) {
+                $tool_content .= "<option value=" . $r->id . ">" . q($r->name) . "</option>";
+            }  
+        $tool_content .= "</select></td>";
+        $tool_content .="</th>
         </tr>
         <tr>
         <th valign='top'>$langNewBBBSessionType:</th>
@@ -238,6 +267,7 @@ function new_bbb_session() {
         </fieldset>
         </form>
         <br />";
+        
     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
@@ -264,8 +294,15 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     global $langBBBScheduledSession;
     global $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $course_code, $langBack;
 
-    Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
-        . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users);
+    // Groups of participants per session
+    $r_group = "";
+    foreach ($_POST['groups'] as $group)
+    { $r_group .= $group .','; }
+    
+    $r_group = rtrim($r_group,',');
+    
+    Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants)"
+        . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group);
     
     $tool_content .= "<div class='success'>$langBBBAddSuccessful</div>";
     $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
@@ -331,9 +368,16 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
 {
     global $tool_content, $langBBBAddSuccessful, $course_id;
     global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2 ;
-        
+
+    // Groups of participants per session
+    $r_group = "";
+    foreach ($_POST['groups'] as $group)
+    { $r_group .= $group .','; }
+    
+    $r_group = rtrim($r_group,',');
+
     Database::get()->querySingle("UPDATE bbb_session SET title=?s,description=?s,"
-            . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $session_id);
+            . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s,participants=?s WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $r_group, $session_id);
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -406,12 +450,15 @@ function edit_bbb_session($session_id) {
     global $start_session;
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
+    global $langAllUsers,$langParticipants;
 
+    
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
     
     $type = ($row->type == 1 ? 1 : 0);
     $status = ($row->status == 1 ? 1 : 0);
-
+    $r_group = explode(",",$row->participants);
+    
     $start_session = jscal_html('start_session',$row->start_date);
 
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
@@ -432,6 +479,30 @@ function edit_bbb_session($session_id) {
                     <tr>
                       <th>$langNewBBBSessionStart:</th>
                       <td>$start_session</td>
+                    </tr>
+                            <tr>
+                    <th valign='top'>$langParticipants:</th>
+                    <td>
+                    <select name='groups[]' multiple='multiple' class='auth_input' id='select-groups'>";
+                        //select all users from this course except yourself
+                        $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
+                        $res = Database::get()->queryArray($sql,$course_code);
+                        $tool_content .= "<option value=0 ";
+                                    if(in_array(0,$r_group))
+                                    {
+                                        $tool_content.="selected ";
+                                    }
+                        $tool_content .=">" . $langAllUsers . "</option>";
+                        foreach ($res as $r) {
+                            $tool_content .= "<option "; 
+                                    if(in_array($r->id,$r_group))
+                                    {
+                                        $tool_content.="selected ";
+                                    }
+                                    $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
+                        }  
+                    $tool_content .= "</select></td>";
+                    $tool_content .="</th>
                     </tr>
                     <tr>
                     <th valign='top'>$langNewBBBSessionType:</th>

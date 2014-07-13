@@ -1223,6 +1223,7 @@ Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
   `max_rooms` int(11) DEFAULT NULL,
   `max_users` int(11) DEFAULT NULL,
   `enable_recordings` enum("yes","no") DEFAULT NULL,
+  `weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_bbb_servers` (`hostname`))');
     
@@ -1241,6 +1242,7 @@ Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
   `att_pw` varchar(255) DEFAULT NULL,
   `unlock_interval` int(11) DEFAULT NULL,
   `external_users` varchar(255) DEFAULT NULL,
+  `participants` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 )');
 
