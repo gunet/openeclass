@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once 'question.class.php';
+require_once 'answer.class.php';
 if (file_exists('../../include/log.php'))
     require_once '../../include/log.php';
 if (file_exists('../../../include/log.php'))
@@ -40,6 +42,7 @@ if (!class_exists('Exercise')):
         var $type;
         var $startDate;
         var $endDate;
+        var $tempSave;
         var $timeConstraint;
         var $attemptsAllowed;
         var $random;
@@ -61,6 +64,7 @@ if (!class_exists('Exercise')):
             $this->type = 1;
             $this->startDate = date("Y-m-d H:i");
             $this->endDate = '';
+            $this->tempSave = 0;
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
             $this->random = 0;
@@ -81,18 +85,19 @@ if (!class_exists('Exercise')):
         function read($id) {
             global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $course_id;
 
-            $sql = "SELECT title, description, type, start_date, end_date, time_constraint,
+            $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
 			attempts_allowed, random, active, results, score
-			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = $id";
-            $result = db_query($sql);
+			FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+
             // if the exercise has been found
-            if ($object = mysql_fetch_object($result)) {
+            if ($object) {
                 $this->id = $id;
                 $this->exercise = $object->title;
                 $this->description = $object->description;
                 $this->type = $object->type;
                 $this->startDate = $object->start_date;
                 $this->endDate = $object->end_date;
+                $this->tempSave = $object->temp_save;
                 $this->timeConstraint = $object->time_constraint;
                 $this->attemptsAllowed = $object->attempts_allowed;
                 $this->random = $object->random;
@@ -100,25 +105,24 @@ if (!class_exists('Exercise')):
                 $this->results = $object->results;
                 $this->score = $object->score;
 
-                $sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
-				WHERE course_id = $course_id AND question_id = id AND exercise_id = $id ORDER BY q_position";
-                $result = db_query($sql);
-
+                $result = Database::get()->queryArray("SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
+                
                 // fills the array with the question ID for this exercise
                 // the key of the array is the question position
-                while ($object = mysql_fetch_object($result)) {
+                foreach ($result as $row) {
                     // makes sure that the question position is unique
-                    while (isset($this->questionList[$object->q_position])) {
-                        $object->q_position++;
+                    while (isset($this->questionList[$row->q_position])) {
+                        $row->q_position++;
                     }
-                    $this->questionList[$object->q_position] = $object->question_id;
-                    // find the total weighting of an exercise
-                    $this->totalweight = db_query_get_single_value("SELECT SUM(exercise_question.weight)
-                                                FROM $TBL_QUESTION, $TBL_EXERCISE_QUESTION
-                                                WHERE exercise_question.course_id = $course_id 
-                                                AND exercise_question.id = exercise_with_questions.question_id
-                                                AND exercise_with_questions.exercise_id = $id");
+                    $this->questionList[$row->q_position] = $row->question_id;
                 }
+                // find the total weighting of an exercise
+                $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
+                                                FROM exercise_question, exercise_with_questions
+                                                WHERE exercise_question.course_id = ?d 
+                                                AND exercise_question.id = exercise_with_questions.question_id
+                                                AND exercise_with_questions.exercise_id = ?d", $course_id, $id)->totalweight;
                 return true;
             }
             // exercise not found
@@ -200,7 +204,11 @@ if (!class_exists('Exercise')):
         function selectEndDate() {
             return $this->endDate;
         }
-
+        
+        function selectTempSave() {
+            return $this->tempSave;
+        }
+        
         function selectTimeConstraint() {
             return $this->timeConstraint;
         }
@@ -352,7 +360,11 @@ if (!class_exists('Exercise')):
         function updateEndDate($endDate) {
             $this->endDate = $endDate;
         }
-
+        
+        function updateTempSave($tempSave) {
+            $this->tempSave = $tempSave;
+        }
+        
         function updateTimeConstraint($timeConstraint) {
             $this->timeConstraint = $timeConstraint;
         }
@@ -426,6 +438,7 @@ if (!class_exists('Exercise')):
             $type = $this->type;
             $startDate = $this->startDate;
             $endDate = $this->endDate;
+            $tempSave = $this->tempSave;
             $timeConstraint = $this->timeConstraint;
             $attemptsAllowed = $this->attemptsAllowed;
             $random = $this->random;
@@ -436,26 +449,25 @@ if (!class_exists('Exercise')):
 
             // exercise already exists
             if ($id) {
-                $sql = "UPDATE `$TBL_EXERCISE`
-				SET title = " . quote($exercise) . ", description = " . quote($description) . ", type = '$type'," .
-                        "start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint'," .
-                        "attempts_allowed = '$attemptsAllowed', random = '$random',
-				active = $active, public = $public, results = '$results', score = '$score' 
-                                WHERE course_id = $course_id AND id = $id";
-                db_query($sql);
-
-                Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
-                    'title' => $exercise,
-                    'description' => $description));
+                $affected_rows = Database::get()->query("UPDATE `$TBL_EXERCISE`
+				SET title = ?s, description = ?s, type = ?d," .
+                        "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
+                        "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d
+                        WHERE course_id = ?d AND id = ?d", 
+                        $exercise, $description, $type, $startDate, $endDate, $tempSave, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $course_id, $id)->affectedRows;
+                if ($affected_rows > 0) {
+                    Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
+                        'title' => $exercise,
+                        'description' => $description));
+                }
             }
             // creates a new exercise
             else {
-                $sql = "INSERT INTO `$TBL_EXERCISE` (course_id, title, description, `type`, start_date, 
-                                        end_date, time_constraint, attempts_allowed, random, active, results, score) 
-				VALUES ($course_id, " . quote($exercise) . ", " . quote($description) . ", $type, '$startDate', '$endDate',
-					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
-                db_query($sql);
-                $this->id = mysql_insert_id();
+                $this->id = Database::get()->query("INSERT INTO `$TBL_EXERCISE` (course_id, title, description, type, start_date, 
+                        end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
+			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
+                        $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
+                        $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,
@@ -463,9 +475,8 @@ if (!class_exists('Exercise')):
             }
             // updates the question position
             foreach ($this->questionList as $position => $questionId) {
-                $sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' 
-                                WHERE course_id = $course_id AND id='$questionId'";
-                db_query($sql);
+                Database::get()->query("UPDATE `$TBL_QUESTION` SET q_position = ?d 
+                                WHERE course_id = ?d AND id = ?d", $position, $course_id, $questionId);
             }
         }
 
@@ -478,9 +489,8 @@ if (!class_exists('Exercise')):
         function moveUp($id) {
             global $TBL_QUESTION, $course_id;
 
-            list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'"));
-
+            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos > 1) {
                 $temp = $this->questionList[$pos - 1];
                 $this->questionList[$pos - 1] = $this->questionList[$pos];
@@ -498,9 +508,8 @@ if (!class_exists('Exercise')):
         function moveDown($id) {
             global $TBL_QUESTION, $course_id;
 
-            list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'"));
-
+            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos < count($this->questionList)) {
                 $temp = $this->questionList[$pos + 1];
                 $this->questionList[$pos + 1] = $this->questionList[$pos];
@@ -566,26 +575,309 @@ if (!class_exists('Exercise')):
             global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $course_id;
 
             $id = $this->id;
-
-            $sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = '$id'";
-            db_query($sql);
-
-            $title = db_query_get_single_value("SELECT title FROM `$TBL_EXERCISE` 
-                                                WHERE course_id = $course_id AND id = '$id'");
-
-            $sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
-            db_query($sql);
-            Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
+            Database::get()->query("DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = ?d", $id);
+            $title = Database::get()->querySingle("SELECT title FROM `$TBL_EXERCISE` 
+                                                WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $deleted_rows = Database::get()->query("DELETE FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
+            if ($deleted_rows > 0) {
+                Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
+            }
         }
+         /**
+         * checks if exercise time has expired
+         */
+        function has_time_expired($choice, $exerciseResult) {
+            global $is_editor;
+       
 
+        }       
+        /**
+         * keeps record of user answers
+         */
+        function record_answers($choice, $exerciseResult, $record_type = 'insert') {
+            global $is_editor;
+            $action = $record_type.'_answer_records'; 
+            // if the user has answered at least one question
+            if (is_array($choice)) {
+                //if all questions on the same page
+                if ($this->selectType() == 1) {
+                    // $exerciseResult receives the content of the form.
+                    // Each choice of the student is stored into the array $choice
+                    $exerciseResult = $choice;
+                    foreach ($exerciseResult as $key => $value) {
+                        $this->$action($key, $value);
+                    }
+                //else if one question per page
+                } else {
+                    // gets the question ID from $choice. It is the key of the array
+                    list($key) = array_keys($choice);
+                    // if the user didn't already answer this question
+                    if (!isset($exerciseResult[$key])) {
+                        // stores the user answer into the array
+                        $value = $exerciseResult[$key] = $choice[$key];                       
+                        $this->$action($key, $value);                    
+                    }
+                }
+            }
+            return $exerciseResult;
+        }
+        /**
+         * keeps record of user answers
+         */
+        function get_attempt_results_array($eurid) {
+            $exerciseResult = array();
+            $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1", $eurid);
+            foreach ($results as $row) {
+                $objQuestionTmp = new Question();
+                // reads question informations
+                $objQuestionTmp->read($row->question_id);               
+                $question_type = $objQuestionTmp->selectType();
+                if ($question_type == FREE_TEXT) {
+                    $exerciseResult[$row->question_id] = $row->answer;
+                } elseif ($question_type == MATCHING){
+                    $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
+                } elseif ($question_type == FILL_IN_BLANKS){
+                    $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                } elseif ($question_type == MULTIPLE_ANSWER){
+                    $exerciseResult[$row->question_id][$row->answer_id] = 1;                    
+                } else {
+                    $exerciseResult[$row->question_id] = $row->answer_id;
+                }
+            }
+            return $exerciseResult;
+        }        
+        /**
+         * Save User Unanswered Questions either as answered (default behaviour)
+         * or as unanswered by passing parameter 0 to the function
+         * (Used for sequential exercises on time expiration 
+         * and when student wants to temporary save his answers)
+         */
+        function save_unanswered($as_answered = 1) {
+            $id = $this->id;
+            $eurid = $_SESSION['exerciseUserRecordID'][$id];
+            $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1', $eurid);
+            if (count($question_ids) > 0) {
+                foreach ($question_ids as $row) {
+                    $answered_question_ids[] = $row->question_id;
+                }
+            } else {
+                $answered_question_ids = array();
+            }
+            $questionList = $_SESSION['questionList'][$id];
+            $unanswered_questions = array_diff($questionList, $answered_question_ids);
+            foreach ($unanswered_questions as $question_id) {
+                // construction of the Question object
+                
+                $objQuestionTmp = new Question();
+                // reads question informations
+                $objQuestionTmp->read($question_id);               
+                $question_type = $objQuestionTmp->selectType();
+                if ($question_type == MATCHING) {
+                    // construction of the Answer object
+                    $objAnswerTmp = new Answer($question_id);
+                    $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+                    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                        //must get answer id ONLY where correct value existS
+                        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                        if ($answerCorrect) {
+                            $value[$answerId] = 0;
+                        }
+                    }
+                    unset($objAnswerTmp);
+                } else if ($question_type == FILL_IN_BLANKS) {  
+                    // construction of the Answer object
+                    $objAnswerTmp = new Answer($question_id);
+                    $answer = $objAnswerTmp->selectAnswer(1);
+                    // construction of the Answer object
+                    list($answer, $answerWeighting) = explode('::', $answer);
+                    $answerWeighting = explode(',', $answerWeighting);
+                    $nbrAnswers = count($answerWeighting);
+                    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                        $value[$answerId] = '';
+                    }
+                } elseif ($question_type == FREE_TEXT) {
+                    $value = '';
+                } else {
+                    $value = 0;
+                }
+                $this->insert_answer_records($question_id, $value, $as_answered);
+                unset($value);
+            }
+        }        
+        /**
+         * Insert user answers
+         */
+        private function insert_answer_records($key, $value, $as_answered = 1) {
+            // construction of the Question object
+           $objQuestionTmp = new Question(); 
+           // reads question informations
+           $objQuestionTmp->read($key);
+           $question_type = $objQuestionTmp->selectType();
+           $id = $this->id;
+           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           if ($objQuestionTmp->selectType() == FREE_TEXT) {
+               if (!empty($value)) {
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, is_answered)
+                           VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 1, $as_answered);
+               } else {
+                   $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unswered give 0 weight else give NULL
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                           VALUES (?d, ?d, ?s, ?d, ?d, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);                                    
+               }                              
+           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS) {
+               $objAnswersTmp = new Answer($key);
+               $answer_field = $objAnswersTmp->selectAnswer(1);
+               //splits answer string from weighting string
+               list($answer, $answerWeighting) = explode('::', $answer_field);
+               // splits weightings that are joined with a comma
+               $rightAnswerWeighting = explode(',', $answerWeighting);
+               //getting all matched strings between [ and ] delimeters
+               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               foreach ($value as $row_key => $row_choice) {
+                   //if user's choice is right assign rightAnswerWeight else 0
+                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                               VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $row_choice, $row_key, $weight, $as_answered);
+
+               }
+           } elseif ($objQuestionTmp->selectType() == MULTIPLE_ANSWER) {
+               if ($value == 0) {
+                   $row_key = 0;
+                   $answer_weight = 0;
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                                   VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);    
+               } else {
+                   $objAnswersTmp = new Answer($key);
+                   foreach ($value as $row_key => $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                       Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                               VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $answer_weight, $as_answered);
+
+                       unset($answer_weight);
+                   }
+                   unset($objAnswersTmp);                                                                    
+               }
+           } elseif ($objQuestionTmp->selectType() == MATCHING) {
+               $objAnswersTmp = new Answer($key);
+               foreach ($value as $row_key => $row_choice) {
+                   // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
+                   $correct_match = $objAnswersTmp->isCorrect($row_key);                              
+                   if ($correct_match == $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                   } else {
+                       $answer_weight = 0;
+                   }
+
+                   Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
+                           VALUES (?d, ?d, ?d, ?d, ?f, ?d)", $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered);
+                   unset($answer_weight);
+               }                                
+           } else {
+               if ($value!=0) {
+                   $objAnswersTmp = new Answer($key);
+                   $answer_weight = $objAnswersTmp->selectWeighting($value);
+               } else {
+                   $answer_weight = 0;
+               }
+               Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                       VALUES (?d, ?d, ?d, ?f, ?d)", $eurid, $key, $value, $answer_weight, $as_answered);
+           }
+           unset($objQuestionTmp);           
+        }        
+        /**
+         * Update user answers
+         */
+        private function update_answer_records($key, $value) {
+            
+            // construction of the Question object
+           $objQuestionTmp = new Question(); 
+           // reads question informations
+           $objQuestionTmp->read($key);
+           $question_type = $objQuestionTmp->selectType();
+           $id = $this->id;
+           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           if ($question_type == FREE_TEXT) {
+               if (!empty($value)) {                 
+                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
+                                          is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
+               } else {
+                   Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, 
+                                          answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);                                           
+               }                              
+           } elseif ($question_type == FILL_IN_BLANKS) {
+               $objAnswersTmp = new Answer($key);
+               $answer_field = $objAnswersTmp->selectAnswer(1);
+               //splits answer string from weighting string
+               list($answer, $answerWeighting) = explode('::', $answer_field);
+               // splits weightings that are joined with a comma
+               $rightAnswerWeighting = explode(',', $answerWeighting);
+               //getting all matched strings between [ and ] delimeters
+               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               foreach ($value as $row_key => $row_choice) {
+                   //if user's choice is right assign rightAnswerWeight else 0
+                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1 
+                                              WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $row_choice, $weight, $eurid, $key, $row_key);
+               }
+           } elseif ($question_type == MULTIPLE_ANSWER) {
+               if ($value == 0) {
+                   $row_key = 0;
+                   $answer_weight = 0;
+                   Database::get()->query("UPDATE exercise_answer_record SET is_answered= 1 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+               } else {
+                   $objAnswersTmp = new Answer($key);
+                   $i=1;
+                   // the first time in the loop we should update in order to keep question position in the DB
+                   // and then insert a new record if there are more than one answers
+                   foreach ($value as $row_key => $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                       if ($i==1) {
+                           Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $row_key, $answer_weight, $eurid, $key);
+                       } else {
+                           Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
+                                    VALUES (?d, ?d, ?d, ?f, 1)", $eurid, $key, $row_key, $answer_weight);
+                       }
+                       unset($answer_weight);
+                       $i++;
+                   }
+                   unset($objAnswersTmp);                                                                    
+               }
+           } elseif ($question_type == MATCHING) {
+               $objAnswersTmp = new Answer($key);
+               foreach ($value as $row_key => $row_choice) {
+                   // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position 
+                   $correct_match = $objAnswersTmp->isCorrect($row_key);                              
+                   if ($correct_match == $row_choice) {
+                       $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                   } else {
+                       $answer_weight = 0;
+                   }
+                   Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1
+                                        WHERE eurid = ?d AND question_id = ?d AND answer = ?d", $row_choice, $answer_weight, $eurid, $key, $row_key);
+                   unset($answer_weight);
+               }                                
+           } else {
+               if ($value!=0) {
+                   $objAnswersTmp = new Answer($key);
+                   $answer_weight = $objAnswersTmp->selectWeighting($value);
+               } else {
+                   $answer_weight = 0;
+               }
+               Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1
+                                        WHERE eurid = ?d AND question_id = ?d", $value, $answer_weight, $eurid, $key);
+           }
+           unset($objQuestionTmp);           
+        }                
         /**
          * Purge exercise user results
          */
         function purge() {
             $id = $this->id;
-
-            $sql = "DELETE FROM exercise_user_record WHERE eid = $id";
-            db_query($sql);
+            
+            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN ("
+                    . "SELECT eurid FROM exercise_user_record WHERE eid = ?d"
+                    . ")", $id);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
 
     }

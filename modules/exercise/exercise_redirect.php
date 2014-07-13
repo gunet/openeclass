@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -56,7 +56,6 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
     unset($_SESSION['exercise_begin_time']);
-    unset($_SESSION['exercise_end_time']);
 }
 
 $tool_content_extra = "<br/>

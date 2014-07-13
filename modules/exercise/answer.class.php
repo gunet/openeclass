@@ -95,16 +95,12 @@ if (!class_exists('Answer')):
          * @author - Olivier Brouckaert
          */
         function read() {
-            global $TBL_ANSWER;
-
             $questionId = $this->questionId;
-
-            $sql = "SELECT answer, correct, comment, weight, r_position
-			FROM `$TBL_ANSWER` WHERE question_id = '$questionId' ORDER BY r_position";
-            $result = db_query($sql) or die("Error : SELECT in file " . __FILE__ . " at line " . __LINE__);
+            $result = Database::get()->queryArray("SELECT answer, correct, comment, weight, r_position
+                            FROM exercise_answer WHERE question_id = ?d ORDER BY r_position", $questionId);
             $i = 1;
-            // while a record is found
-            while ($object = mysql_fetch_object($result)) {
+            // foreach record found
+            foreach ($result as $object) {
                 $this->answer[$i] = $object->answer;
                 $this->correct[$i] = $object->correct;
                 $this->comment[$i] = $object->comment;
@@ -223,26 +219,25 @@ if (!class_exists('Answer')):
          * @author - Olivier Brouckaert
          */
         function save() {
-            global $TBL_ANSWER;
 
             $questionId = intval($this->questionId);
             // removes old answers before inserting of new ones
-            $sql = "DELETE FROM `$TBL_ANSWER` WHERE question_id = $questionId";
-            db_query($sql);
+            Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);
             // inserts new answers into data base
-            $sql = "INSERT INTO `$TBL_ANSWER` (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
+            $sql = "INSERT INTO exercise_answer (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
 
             for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-                $answer = quote(standard_text_escape($this->new_answer[$i]));
-                $correct = intval($this->new_correct[$i]);
-                $comment = quote(standard_text_escape($this->new_comment[$i]));
-                $weighting = floatval($this->new_weighting[$i]);
-                $position = intval($this->new_position[$i]);
-                $sql .= "('$i', $questionId, $answer, $correct, $comment, $weighting, $position),";
+                  $data_array[] = $i;
+                  $data_array[] = $questionId;
+                  $data_array[] = $this->new_answer[$i];
+                  $data_array[] = $this->new_correct[$i];
+                  $data_array[] = $this->new_comment[$i];
+                  $data_array[] = $this->new_weighting[$i];
+                  $data_array[] = $this->new_position[$i];
+                $sql .= "(?d, ?d, ?s, ?d, ?s, ?f, ?d),";
             }
-
             $sql = substr($sql, 0, -1);
-            db_query($sql);
+            Database::get()->query($sql,$data_array);
 
             // moves $new_* arrays
             $this->answer = $this->new_answer;
@@ -264,24 +259,26 @@ if (!class_exists('Answer')):
          * @param - integer $newQuestionId - ID of the new question
          */
         function duplicate($newQuestionId) {
-            global $TBL_ANSWER;
 
             // if at least one answer
             if ($this->nbrAnswers) {
                 // inserts new answers into data base
-                $sql = "INSERT INTO `$TBL_ANSWER` (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
+                $sql = "INSERT INTO exercise_answer (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
 
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    $answer = addslashes($this->answer[$i]);
-                    $correct = $this->correct[$i];
-                    $comment = addslashes($this->comment[$i]);
-                    $weighting = $this->weighting[$i];
-                    $position = $this->position[$i];
-                    $sql .= "('$i', $newQuestionId, '$answer', '$correct', '$comment', '$weighting', '$position'),";
+                    $data_array[] = $i;
+                    $data_array[] = $newQuestionId;
+                    $data_array[] = $this->answer[$i];
+                    $data_array[] = $this->correct[$i];
+                    $data_array[] = $this->comment[$i];
+                    $data_array[] = $this->weighting[$i];
+                    $data_array[] = $this->position[$i];  
+                    
+                    $sql .= "(?d, ?d, ?s, ?d, ?s, ?f, ?d),";
                 }
 
                 $sql = substr($sql, 0, -1);
-                db_query($sql) or die("Error : INSERT in file " . __FILE__ . " at line " . __LINE__);
+                Database::get()->query($sql,$data_array);
             }
         }
 

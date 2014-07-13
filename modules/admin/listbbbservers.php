@@ -50,7 +50,7 @@ function get_connected_users($salt,$bbb_url)
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array( 'id','hostname', 'ip', 'enabled','server_key','api_url','max_users' );
+$aColumns = array( 'id','hostname','ip','enabled','server_key','api_url','max_users','weight');
 	
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = "hostname";
@@ -103,7 +103,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 	{
 		if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" )
 		{
-			$sWhere .= "`".$aColumns[$i]."` LIKE '%".quote( $_GET['sSearch'] )."%' OR ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE ".quote('%'. $_GET['sSearch'] .'%')." OR ";                        
 		}
 	}
 	$sWhere = substr_replace( $sWhere, "", -3 );
@@ -123,7 +123,7 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
 			$sWhere .= " AND ";
 		}
-		$sWhere .= "`".$aColumns[$i]."` LIKE '%".quote($_GET['sSearch_'.$i])."%' ";
+		$sWhere .= "`".$aColumns[$i]."` LIKE ".quote('%'.$_GET['sSearch_'.$i.'%'])." ";
 	}
 }
 
@@ -191,9 +191,11 @@ while ( $aRow = mysql_fetch_array( $rResult ) )
         unset($row[4]);
         unset($row[5]);
         unset($row[6]);
-        
+        $order = $row[7];
+        unset($row[7]);
         array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
         array_push($row, "$connected_users");
+        array_push($row,$order);
         array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>Remove server</a>");
         array_shift($row);
         $output['aaData'][] = $row;

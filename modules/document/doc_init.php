@@ -35,6 +35,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $navigation[] = array('url' => $urlAppend . 'modules/group/group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
     $groupset = "group_id=$group_id&amp;";
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
+    $upload_target_url = 'document.php?course=' . $course_code;
     $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
     $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
     $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;
@@ -47,12 +48,14 @@ if (defined('GROUP_DOCUMENTS')) {
     $subsystem_id = $ebook_id;
     $groupset = "ebook_id=$ebook_id&amp;";
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
+    $upload_target_url = 'document.php?course=' . $course_code;
     $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
     $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
     $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
 } elseif (defined('COMMON_DOCUMENTS')) {
     $subsystem = COMMON;
     $base_url = $_SERVER['SCRIPT_NAME'] . '?';
+    $upload_target_url = 'commondocs.php';
     $subsystem_id = 'NULL';
     $groupset = '';
     $group_sql = "course_id = -1 AND subsystem = $subsystem";
@@ -75,6 +78,7 @@ if (defined('GROUP_DOCUMENTS')) {
 } else {
     $subsystem = MAIN;
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';
+    $upload_target_url = 'index.php?course=' . $course_code;
     $subsystem_id = 'NULL';
     $groupset = '';
     $group_sql = "course_id = $course_id AND subsystem = $subsystem";

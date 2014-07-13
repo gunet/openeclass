@@ -6,14 +6,24 @@
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
     
     <instructor>
-        <firstName lang="el">Διδάσκων</firstName>
-        <firstName lang="en">Instructor</firstName>
+        <firstName lang="el">Διδάσκων1</firstName>
+        <firstName lang="en">Instructor1</firstName>
         
-        <lastName lang="el">Διδάσκων</lastName>
-        <lastName lang="en">Instructor</lastName>
+        <lastName lang="el">Διδάσκων1</lastName>
+        <lastName lang="en">Instructor1</lastName>
         
-        <fullName lang="el">Διδάσκων</fullName>
-        <fullName lang="en">Instructor</fullName>
+        <fullName lang="el">Διδάσκων1</fullName>
+        <fullName lang="en">Instructor1</fullName>
+    </instructor>
+    <instructor>
+        <firstName lang="el">Διδάσκων2</firstName>
+        <firstName lang="en">Instructor2</firstName>
+        
+        <lastName lang="el">Διδάσκων2</lastName>
+        <lastName lang="en">Instructor2</lastName>
+        
+        <fullName lang="el">Διδάσκων2</fullName>
+        <fullName lang="en">Instructor2</fullName>
     </instructor>
     
     <title lang="el">Course 1</title>
@@ -37,7 +47,7 @@
     <coTeachingAutonomousDepartment>true</coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours>10</coTeachingDepartmentCreditHours>
     
-    <language>greek</language>
+    <language lang="en">greek</language>
     
     <targetGroup lang="el">Ομάδα στόχος.</targetGroup>
     <targetGroup lang="en">Just a target group.</targetGroup>

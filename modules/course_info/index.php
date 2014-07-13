@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 // if we come from the home page
-if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
+if (isset($_GET['from_home']) and ( $_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
     session_start();
     $_SESSION['dbname'] = $_GET['cid'];
 }
@@ -125,9 +125,9 @@ if (isset($_POST['submit'])) {
     if (empty($_POST['title'])) {
         $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-    } else {        
+    } else {
         // update course settings
-        if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
+        if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
             $password = "";
@@ -172,16 +172,17 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
                                       <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
-            db_query("UPDATE course
-                            SET title = " . quote($_POST['title']) . ",
-                                public_code =" . quote($_POST['fcode']) . ",
-                                keywords = " . quote($_POST['course_keywords']) . ",
-                                visible = " . intval($_POST['formvisible']) . ",
-                                course_license = $course_license,
-                                prof_names = " . quote($_POST['titulary']) . ",
-                                lang = " . quote($session->language) . ",
-                                password = " . quote($password) . "
-                            WHERE id = $course_id");
+            Database::get()->query("UPDATE course
+                            SET title = ?s,
+                                public_code = ?s,
+                                keywords = ?s,
+                                visible = ?d,
+                                course_license = ?d,
+                                prof_names = ?s,
+                                lang = ?s,
+                                password = ?s
+                            WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], 
+                                            $course_license, $_POST['titulary'], $session->language, $password, $course_id);            
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
@@ -202,35 +203,36 @@ if (isset($_POST['submit'])) {
 	    <li><a href='archive_course.php?course=$course_code'>$langBackupCourse</a></li>
 	    <li><a href='delete_course.php?course=$course_code'>$langDelCourse</a></li>
 	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>";
-    if (get_config('course_metadata'))
+    if (get_config('course_metadata')) {
         $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
-    if (get_config('opencourses_enable') && $is_opencourses_reviewer)
+    }
+    if (get_config('opencourses_enable') && $is_opencourses_reviewer) {
         $tool_content .= "<li><a href='../course_metadata/control.php?course=$course_code'>$langCourseMetadataControlPanel</a></li>";
+    }
     $tool_content .= "
 	  </ul>
 	</div>";
          
-    $result = db_query("SELECT title, keywords, visible, public_code, prof_names, lang,
+    $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
                 	       course_license, password, id
-                      FROM course WHERE code = '$course_code'");
-    $c = mysql_fetch_array($result);
-    $title = q($c['title']);
-    $visible = $c['visible'];
+                      FROM course WHERE code = ?s", $course_code);    
+    $title = q($c->title);
+    $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
-    $public_code = q($c['public_code']);
-    $titulary = q($c['prof_names']);
-    $languageCourse = $c['lang'];
-    $course_keywords = q($c['keywords']);
-    $password = q($c['password']);
-    $course_license = $c['course_license'];
+    $public_code = q($c->public_code);
+    $titulary = q($c->prof_names);
+    $languageCourse = $c->lang;
+    $course_keywords = q($c->keywords);
+    $password = q($c->password);
+    $course_license = $c->course_license;
     if ($course_license > 0 and $course_license < 10) {
         $cc_checked = ' checked';
     } else {
         $cc_checked = '';
     }
     foreach ($license as $id => $l_info) {
-        $license_checked[$id] = ($course_license == $id)? ' checked': '';
+        $license_checked[$id] = ($course_license == $id) ? ' checked' : '';
         if ($id and $id < 10) {
             $cc_license[$id] = $l_info['title'];
         }
@@ -257,7 +259,7 @@ if (isset($_POST['submit'])) {
                 <th>$langFaculty:</th>
                 <td>";
             $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allow_only_defaults' => $allow_only_defaults));
             $head_content .= $js;
             $tool_content .= $html;
             @$tool_content .= "</td></tr>
@@ -286,7 +288,7 @@ if (isset($_POST['submit'])) {
             </td>
             </tr>
             <tr id = 'cc'><td>
-                ".selection($cc_license, 'cc_use', $course_license, $disabledVisibility)."
+                " . selection($cc_license, 'cc_use', $course_license, $disabledVisibility) . "
              </td></tr>
              </table>
         </fieldset>
@@ -326,7 +328,7 @@ if (isset($_POST['submit'])) {
 	    <tr>
 		<th width='170'>$langOptions:</th>
 		<td width='1'>";
-    $language = $c['lang'];
+    $language = $c->lang;
     $tool_content .= lang_select_options('localize');
     $tool_content .= "
 	        </td>

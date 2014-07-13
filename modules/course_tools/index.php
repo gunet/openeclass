@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,30 +61,29 @@ if (isset($_REQUEST['toolStatus'])) {
         $i++;
     }
     //reset all tools
-    db_query("UPDATE course_module SET `visible` = 0
-                         WHERE course_id = $course_id");
+    Database::get()->query("UPDATE course_module SET visible = 0
+                         WHERE course_id = ?d", $course_id);
     //and activate the ones the professor wants active, if any
     if ($loopCount > 0) {
-        db_query("UPDATE course_module SET visible = 1
+        Database::get()->query("UPDATE course_module SET visible = 1
                                  WHERE $tool_id AND
-                                 course_id = $course_id");
+                                 course_id = ?d", $course_id);        
     }
 }
 
 if (isset($_POST['delete'])) {
-    $delete = intval($_POST['delete']);
-    $r = mysql_fetch_array(db_query("SELECT url, title, category FROM link WHERE `id` = $delete"));
-    if ($r['category'] == -2) { // if we want to delete html page also delete file
-        $link = explode(" ", $r['url']);
+    $delete = intval($_POST['delete']);    
+    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);
+    if ($r->category == -2) { //  backward compatibility ----- if we want to delete html page also delete file
+        $link = explode(" ", $r->url);
         $path = substr($link[0], 6);
         $file2Delete = $webDir . "/" . $path;
         unlink($file2Delete);
     }
-    db_query("DELETE FROM link WHERE `id` = $delete");
+    Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);    
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
-        'link' => $r['url'],
-        'name_link' => $r['title']));
-    unset($sql);
+                                                                   'link' => $r->url,
+                                                                   'name_link' => $r->title));    
     $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
 
@@ -101,13 +100,13 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    db_query("INSERT INTO link (course_id, url, title, category)
-                            VALUES (" . $course_id . ", " . quote($link) . ", " . quote($name_link) . ", -1)");
-    $id = mysql_insert_id();
+    $sql = Database::get()->query("INSERT INTO link (course_id, url, title, category, description)
+                            VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
+    $id = $sql->lastInsertID;
     $tool_content .= "<p class='success'>$langLinkAdded</p>";
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
-        'link' => $link,
-        'name_link' => $name_link));
+                                                                   'link' => $link,
+                                                                   'name_link' => $name_link));
 } elseif (isset($_GET['action'])) { // add external link
     $nameTools = $langAddExtLink;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
@@ -168,14 +167,14 @@ $tool_content .= <<<tForm
 </tr>
 <tr>
 <td class="center">
-<select name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
+<select name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[1]</select>
 </td>
 <td class="center">
 <input type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br/>
 <input type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
 </td>
 <td class="center">
-<select name="toolStatActive[]" id='active_box' size='17' multiple>\n$toolSelection[0]</select>
+<select name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[0]</select>
 </td>
 </tr>
 <tr>
@@ -191,9 +190,7 @@ tForm;
 // ------------------------------------------------
 // display table to edit/delete external links
 // ------------------------------------------------
-$sql = db_query("SELECT id, title FROM link
-                        WHERE category IN(-1,-2) AND
-                        course_id = $course_id");
+
 $tool_content .= "<br/>
 <table class='tbl_alt' width='100%'>
 <tr>
@@ -205,23 +202,26 @@ $tool_content .= "<br/>
   <th><div align='left'>$langTitle</div></th>
   <th width='20'>$langDelete</th>
 </tr>";
+$q = Database::get()->queryArray("SELECT id, title FROM link
+                        WHERE category IN(-1,-2) AND
+                        course_id = ?d", $course_id);
 $i = 0;
-while ($externalLinks = mysql_fetch_array($sql)) {
+foreach ($q as $externalLinks) {
     if ($i % 2 == 0) {
-        $tool_content .= "<tr class='even'>\n";
+        $tool_content .= "<tr class='even'>";
     } else {
-        $tool_content .= "<tr class='odd'>\n";
+        $tool_content .= "<tr class='odd'>";
     }
     $tool_content .= "<th width='1'>
         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
-        <td class='left'>$externalLinks[title]</td>
+        <td class='left'>$externalLinks->title</td>
         <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-           <input type='hidden' name='delete' value='$externalLinks[id]' />
+           <input type='hidden' name='delete' value='$externalLinks->id' />
            <input type='image' src='$themeimg/delete.png' name='delete_button'
-                  onClick=\"return confirmation('" . js_escape("$langConfirmDeleteLink {$externalLinks['title']}") . "');\" title='$langDelete' /></form></td>
-     </tr>\n";
+                  onClick=\"return confirmation('" . js_escape("$langConfirmDeleteLink {$externalLinks->title}") . "');\" title='$langDelete' /></form></td>
+     </tr>";
     $i++;
 }
-$tool_content .= "</table>\n";
+$tool_content .= "</table>";
 
 draw($tool_content, 2, null, $head_content);

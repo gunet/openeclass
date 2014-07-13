@@ -58,7 +58,7 @@ if (!empty($u)) {
                            JOIN hierarchy ON course_department.department = hierarchy.id
                            LEFT JOIN course_user AS b ON a.id = b.course_id
                            WHERE b.user_id = ?d
-                           ORDER BY b.status, hierarchy.name", function($logs) use (&$foundUsers, &$k, $langCourseCode, $langProperty, $langTeacher, $langStudent, $langVisitor ) {
+                           ORDER BY b.status, hierarchy.name", function($logs) use (&$foundUsers, &$k, &$tool_content, $langCourseCode, $langProperty, $langTeacher, $langStudent, $langVisitor ) {
         if (!$foundUsers) {
             $foundUsers = true;
             $tool_content .= "
@@ -128,7 +128,7 @@ if (!empty($u)) {
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
-    $tool_content .= "<p>$langLastUserVisits $info[username]</p>\n";
+    $tool_content .= "<p>$langLastUserVisits $info</p>\n";
     $tool_content .= "
 	      <table class='tbl_alt' width='99%'>
 	      <tr>
@@ -139,7 +139,7 @@ if (!empty($u)) {
     $Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
 
     $i = 0;
-    Database::get()->queryFunc("SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15", function($r) use (&$i, $Action) {
+    Database::get()->queryFunc("SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15", function($r) use (&$i, &$tool_content, $Action) {
         $when = $r->when;
         $action = $r->action;
         if ($i % 2 == 0) {

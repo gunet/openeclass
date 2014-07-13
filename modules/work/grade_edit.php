@@ -43,7 +43,6 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
 function get_assignment_details($id) {
     global $course_id;
     return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-//    return mysql_fetch_array(db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = '$id'"));
 }
 
 // Show to professor details of a student's submission and allow editing of fields

@@ -46,19 +46,9 @@
   ==============================================================================
  */
 
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
-
-$TABLECOURSUSER = 'course_user';
-$TABLEUSER = 'user';
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
-
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
@@ -72,15 +62,13 @@ if (empty($_REQUEST['uInfo'])) {
 }
 
 // check if user is in this course
-$sql = "SELECT `u`.`surname`,`u`.`givenname`, `u`.`email`
-			FROM `" . $TABLECOURSUSER . "` as `cu` , `" . $TABLEUSER . "` as `u`
-			WHERE `cu`.`user_id` = `u`.`id`
-			AND `cu`.`course_id` = $course_id
-			AND `u`.`id` = '" . (int) $_REQUEST['uInfo'] . "'";
+$rescnt = Database::get()->querySingle("SELECT COUNT(*) AS count
+            FROM `course_user` as `cu` , `user` as `u`
+            WHERE `cu`.`user_id` = `u`.`id`
+            AND `cu`.`course_id` = ?d
+            AND `u`.`id` = ?d", $course_id, $_REQUEST['uInfo'])->count;
 
-$results = db_query_fetch_all($sql);
-
-if (empty($results)) {
+if ($rescnt == 0) {
     header("Location: ./detailsAll.php?course=$course_code");
     exit();
 }
@@ -101,15 +89,13 @@ $nameTools = $trackedUser['surname'] . " " . $trackedUser['givenname'];
   .'</ul>'."\n"
   .'</p>'."\n";
  */
-mysql_select_db($mysqlMainDb);
+
 // get list of learning paths of this course
 // list available learning paths
-$sql = "SELECT LP.`name`, LP.`learnPath_id`
-			FROM `" . $TABLELEARNPATH . "` AS LP
-			WHERE LP.`course_id` = $course_id
-			ORDER BY LP.`rank`";
-
-$lpList = db_query_fetch_all($sql);
+$lpList = Database::get()->queryArray("SELECT name, learnPath_id
+			 FROM lp_learnPath 
+                        WHERE course_id = ?d
+		     ORDER BY `rank`", $course_id);
 
 // table header
 $tool_content .= '<table width="99%" class="tbl_alt">' . "\n"
@@ -118,7 +104,7 @@ $tool_content .= '<table width="99%" class="tbl_alt">' . "\n"
         . '        <th align="left"><div align="left">' . $langLearningPath . '</div></th>' . "\n"
         . '        <th colspan="2">' . $langProgress . '</th>' . "\n"
         . '      </tr>' . "\n";
-if (sizeof($lpList) == 0) {
+if (count($lpList) == 0) {
     $tool_content .= '    <tr>' . "\n"
             . '        <td colspan="3" align="center">' . $langNoLearningPath . '</td>' . "\n"
             . '      </tr>' . "\n";
@@ -131,10 +117,10 @@ if (sizeof($lpList) == 0) {
         } else {
             $tool_content .= "      <tr class=\"odd\">";
         }
-        $lpProgress = get_learnPath_progress($lpDetails['learnPath_id'], $_GET['uInfo']);
+        $lpProgress = get_learnPath_progress($lpDetails->learnPath_id, $_GET['uInfo']);
         $tool_content .= '' . "\n"
                 . "        <td width='1'><img src='$themeimg/arrow.png' alt='' /></td>\n"
-                . '        <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $_GET['uInfo'] . '&amp;path_id=' . $lpDetails['learnPath_id'] . '">' . htmlspecialchars($lpDetails['name']) . '</a></td>' . "\n"
+                . '        <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $_GET['uInfo'] . '&amp;path_id=' . $lpDetails->learnPath_id . '">' . htmlspecialchars($lpDetails->name) . '</a></td>' . "\n"
                 . '        <td align="right" width="120">' . ""
                 . disp_progress_bar($lpProgress, 1)
                 . '</td>' . "\n"

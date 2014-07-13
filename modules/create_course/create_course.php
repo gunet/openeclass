@@ -28,9 +28,6 @@ require_once '../../include/baseTheme.php';
 if ($session->status !== USER_TEACHER) { // if we are not teachers
     redirect_to_home_page();
 }
-if (get_config('betacms')) { // added support for betacms
-    require_once 'modules/betacms_bridge/include/bcms.inc.php';
-}
 
 $TBL_USER_DEPARTMENT = 'user_department';
 
@@ -151,11 +148,6 @@ if (empty($prof_names)) {
 }
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
-
-if (get_config("betacms")) { // added support for betacms
-    // Import from BetaCMS Bridge
-    doImportFromBetaCMSBeforeCourseCreation();
-}
 
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
@@ -377,7 +369,7 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     $description = purify($_POST['description']);
-    $unit_id = description_unit_id($new_course_id);
+    $unit_id = description_unit_id($new_course_id);    
     if (!empty($description)) {
         add_unit_resource($unit_id, 'description', -1, $langDescription, $description);
     }
@@ -386,12 +378,7 @@ if (!isset($_POST['create_course'])) {
     course_index($code);
     
     $_SESSION['courses'][$code] = USER_TEACHER;
-
-    // ----------- Import from BetaCMS Bridge -----------
-    if (get_config('betacms')) {
-        $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
-    }
-    // --------------------------------------------------
+    
     $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
                         <span class='smaller'>$langEnterMetadata</span></p>
                         <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
@@ -403,3 +390,4 @@ if (!isset($_POST['create_course'])) {
                                             'visible' => $_POST['formvisible']));
 } // end of submit
 draw($tool_content, 1, null, $head_content);
+

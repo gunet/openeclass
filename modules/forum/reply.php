@@ -41,17 +41,15 @@ if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
 
-$sql = "SELECT f.name, t.title
+$myrow = Database::get()->querySingle("SELECT f.name, t.title
             FROM forum f, forum_topic t
             WHERE f.id = $forum
             AND t.id = $topic
             AND t.forum_id = f.id
-            AND f.course_id = $course_id";
-$result = db_query($sql);
-$myrow = mysql_fetch_array($result);
+            AND f.course_id = ?d", $course_id);
 
-$forum_name = $myrow["name"];
-$topic_title = $myrow["title"];
+$forum_name = $myrow->name;
+$topic_title = $myrow->title;
 $forum_id = $forum;
 
 $is_member = false;
@@ -84,21 +82,17 @@ if (isset($_POST['submit'])) {
     $surname = addslashes($_SESSION['surname']);
     $givenname = addslashes($_SESSION['givenname']);
 
-    $sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
-			VALUES ($topic, " . autoquote($message) . " , $uid, '$time', '$poster_ip')";
-    $result = db_query($sql);
-    $this_post = mysql_insert_id();
+    $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s , ?d, ?t, ?s)"
+                    , $topic, $message, $uid, $time, $poster_ip)->lastInsertID;
     $fpdx->store($this_post);
-    $sql = "UPDATE forum_topic SET topic_time = '$time',
+    Database::get()->query("UPDATE forum_topic SET topic_time = ?t,
                     num_replies = num_replies+1,
-                    last_post_id = $this_post
-		WHERE id = $topic AND forum_id = $forum_id";
-    $result = db_query($sql);
-    $sql = "UPDATE forum SET num_posts = num_posts+1,
-                    last_post_id = $this_post
-		WHERE id = $forum_id
-                    AND course_id = $course_id";
-    $result = db_query($sql);
+                    last_post_id = ?d
+		WHERE id = ?d AND forum_id = ?d", $time, $this_post, $topic, $forum_id);
+    $result = Database::get()->query("UPDATE forum SET num_posts = num_posts+1,
+                    last_post_id = ?d
+		WHERE id = ?d
+                    AND course_id = ?d", $this_post, $forum_id, $course_id);
     if (!$result) {
         $tool_content .= $langErrorUpadatePostCount;
         draw($tool_content, 2, null, $head_content);
@@ -111,9 +105,10 @@ if (isset($_POST['submit'])) {
     $subject_notify = "$logo - $langSubjectNotify";
     $category_id = forum_category($forum_id);
     $cat_name = category_name($category_id);
-    $sql = db_query("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id)
-			AND notify_sent = 1 AND course_id = $course_id AND user_id != $uid", $mysqlMainDb);
+    $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (topic_id = ?d OR forum_id = ?d OR cat_id = ?d)
+			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d"
+            , $topic, $forum_id, $category_id, $course_id, $uid);
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
     $forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
@@ -127,9 +122,9 @@ if (isset($_POST['submit'])) {
     $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
     $plain_body_topic_notify .= $unsubscribe . $linkhere;
     $body_topic_notify .= $unsubscribe . $linkhere;
-    while ($r = mysql_fetch_array($sql)) {
-        if (get_user_email_notification($r['user_id'], $course_id)) {
-            $emailaddr = uid_to_email($r['user_id']);
+    foreach ($sql as $r) {
+        if (get_user_email_notification($r->user_id, $course_id)) {
+            $emailaddr = uid_to_email($r->user_id);
             send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
         }
     }

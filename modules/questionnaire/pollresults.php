@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
@@ -33,12 +34,17 @@ $total_answers = 0;
 $questions = array();
 $answer_total = 0;
 
+if (!$is_editor) {
+    Session::set_flashdata($langPollResultsAccess, 'alert1');
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+}
+load_js('jquery');
+
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     header("Location: $urlServer");
 }
 $pid = intval($_GET['pid']);
-$current_poll = db_query("SELECT * FROM poll WHERE course_id = $course_id AND pid=$pid ORDER BY pid");
-$thePoll = mysql_fetch_array($current_poll);
+$thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
 
 $tool_content .= "
 <div class='info'>
@@ -51,66 +57,105 @@ $tool_content .= "
 <table class='tbl_border'>
 <tr>
         <th width='150'>$langTitle:</th>
-        <td>" . $thePoll["name"] . "</td>
+        <td>" . $thePoll->name . "</td>
 </tr>
 <tr>
         <th>$langPollCreation:</th>
-        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll["creation_date"])), true) . "</td>
+        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll->creation_date)), true) . "</td>
 </tr>
 <tr>
         <th>$langPollStart:</th>
-        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll["start_date"])), true) . "</td>
+        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll->start_date)), true) . "</td>
 </tr>
 <tr>
         <th>$langPollEnd:</th>
-        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll["end_date"])), true) . "</td>
+        <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll->end_date)), true) . "</td>
 </tr>
 </table>
 <p class='sub_title1'>$langAnswers</p>";
-$tool_content .= "<table class='tbl'>";
+$tool_content .= "<table class='tbl' width='100%'>";
 
-$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
-while ($theQuestion = mysql_fetch_array($questions)) {
+$questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
+foreach ($questions as $theQuestion) {
     $tool_content .= "
         <tr>
                 <td width='50'><b>$langQuestion:</b></td>
-                <td>$theQuestion[question_text]</td>
+                <td>$theQuestion->question_text</td>
         </tr>
         <tr>
-                <td>&nbsp;</td>
-                <td>";
-    if ($theQuestion['qtype'] == 'multiple') {
-        $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
+            <td colspan='2'>";
+    if ($theQuestion->qtype == 'multiple') {
+        $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                         FROM poll_answer_record LEFT JOIN poll_question_answer
                         ON poll_answer_record.aid = poll_question_answer.pqaid
-                        WHERE qid = $theQuestion[pqid] GROUP BY aid");
+                        WHERE qid = ?d GROUP BY aid", $theQuestion->pqid);
         $answer_counts = array();
         $answer_text = array();
-        while ($theAnswer = mysql_fetch_array($answers)) {
-            $answer_counts[] = $theAnswer['count'];
-            $answer_total += $theAnswer['count'];
-            if ($theAnswer['aid'] < 0) {
-                $answer_text[] = $langPollUnknown;
+        foreach ($answers as $theAnswer) {
+            $answer_counts[$theAnswer->aid] = $theAnswer->count;
+            $answer_total += $theAnswer->count;
+            if ($theAnswer->aid < 0) {
+                $answer_text[$theAnswer->aid] = $langPollUnknown;
             } else {
-                $answer_text[] = $theAnswer['answer'];
+                $answer_text[$theAnswer->aid] = $theAnswer->answer;
             }
         }
         $chart = new Plotter(500, 300);
+        $answers_table = "
+            <table class='tbl_border' width='100%'>
+                <tr>
+                    <th width='30%'>$langAnswer</th>
+                    <th width='30%'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized==1)?'':'<th>'.$langStudents.'</th>')."</tr>";
         foreach ($answer_counts as $i => $count) {
-            $percentage = 100 * ($count / $answer_total);
+            $percentage = round(100 * ($count / $answer_total),2);
             $chart->addPoint($answer_text[$i], $percentage);
+            
+            if ($thePoll->anonymized!=1) {
+            $names = Database::get()->queryArray("SELECT CONCAT(b.givenname, ' ', b.surname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = ?d AND a.user_id = b.id", $i);
+            $names_str = implode(', ', array_map(function($n) {
+                return $n->fullname;
+            }, $names));            
+
+            }
+            $answers_table .= "
+                <tr>
+                        <td>$answer_text[$i]</th>
+                        <td>$count</td>".(($thePoll->anonymized==1)?'':'<td>'.$names_str.'</td>')."</tr>";  
         }
+        $answers_table .= "</table><br>";
         $chart->normalize();
         $tool_content .= $chart->plot();
+        $tool_content .= $answers_table;
     } else {
-        $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
-                                WHERE qid = $theQuestion[pqid]", $mysqlMainDb);
-        $tool_content .= '<dl>';
-        $answer_total = mysql_num_rows($answers);
-        while ($theAnswer = mysql_fetch_array($answers)) {
-            $tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
+        $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
+                                WHERE qid = ?d", $theQuestion->pqid);
+        $answer_total = count($answers);
+        $tool_content .= "<table class='tbl_border' width='100%'>
+                <tbody>
+                <tr>
+                        <th width='20%'>$langUser</th>
+                        <th width='80%'>$langAnswer</th>
+                </tr>";       
+        if ($thePoll->anonymized==1) {
+            $i=1;
+             foreach ($answers as $theAnswer) {     
+                $tool_content .= "
+                <tr>
+                        <td>$langMetaLearner $i</th>
+                        <td>$theAnswer->answer_text</td>
+                </tr>";                
+                $i++;    
+            }           
+        } else {
+            foreach ($answers as $theAnswer) {
+                $tool_content .= "
+                <tr>
+                        <td>" . q(uid_to_name($theAnswer->user_id)) ."</th>
+                        <td>$theAnswer->answer_text</td>
+                </tr>";                     
+            }
         }
-        $tool_content .= '</dl><br />';
+        $tool_content .= '</tbody></table><br>';
     }
     $tool_content .= "</td></tr>";
 }

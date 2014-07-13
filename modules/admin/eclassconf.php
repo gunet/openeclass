@@ -137,8 +137,7 @@ if (isset($_POST['submit'])) {
         'dropbox_allow_student_to_student' => true,
         'block_username_change' => true,
         'display_captcha' => true,
-        'insert_xml_metadata' => true,
-        'betacms' => true,
+        'insert_xml_metadata' => true,        
         'enable_mobileapi' => true,
         'doc_quota' => true,
         'group_quota' => true,
@@ -376,8 +375,7 @@ else {
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
-    $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';
-    $cbox_betacms = get_config('betacms') ? 'checked' : '';
+    $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';    
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
@@ -416,10 +414,7 @@ else {
         </tr>
         <tr>		
                 <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
-        </tr>
+        </tr>        
         <tr>		
                 <td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
         </tr>

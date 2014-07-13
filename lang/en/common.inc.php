@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-12-14 15:34:03
+// Generated 2014-05-09 10:56:47
 
 $langEclass = "Open eClass - Asynchronous Teleteaching Platform";
 $langYes = "Yes";
@@ -38,6 +38,6 @@ $langothers = "Other";
 $langpre = "Undergraduate";
 $langpost = "Postgraduate";
 $langother = "Other";
-$langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.";
+$langInfoAbout = "The <strong>$siteName</strong> platform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.";
 $langExtrasLeft = '';
 $langExtrasRight = '&nbsp;';

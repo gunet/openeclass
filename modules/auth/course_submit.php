@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,25 +37,26 @@ if (isset($_POST['cid']) and isset($_POST['state'])) {
     die('invalid');
 }
 
-$q = db_query("SELECT visible, password FROM course WHERE id = $cid");
-if ($q and mysql_num_rows($q)) {
-    list($visible, $course_password) = mysql_fetch_row($q);
+$q = Database::get()->querySingle("SELECT visible, password FROM course WHERE id = ?d", $cid);
+if ($q) {
+    //list($visible, $course_password) = mysql_fetch_row($q);
+    $visible = $q->visible;
+    $course_password = $q->password;
     if ($state == 'true') {
         if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
-                $password == $course_password) {
-            db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                         VALUES ($cid, $uid, " . USER_STUDENT . ", CURDATE())");
+                $password === $course_password) {
+            Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
+                                         VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $cid, $uid);
             Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => 5));
-
             die('registered');
         } else {
             die('unauthorized');
         }
     } else {
-        db_query("DELETE FROM group_members
-                                 WHERE user_id = $uid AND
-                                       group_id IN (SELECT id FROM `group` WHERE course_id = $cid)");
-        db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
+        Database::get()->query("DELETE FROM group_members
+                                 WHERE user_id = ?d AND
+                                       group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $uid, $cid);
+        Database::get()->query("DELETE FROM `course_user` WHERE course_id = ?d AND user_id = ?d", $cid, $uid);       
         Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
         die('unregistered');
     }

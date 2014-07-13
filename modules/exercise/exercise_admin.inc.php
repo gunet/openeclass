@@ -43,6 +43,7 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->updateType($exerciseType);
             $objExercise->updateStartDate($exerciseStartDate);
             $objExercise->updateEndDate($exerciseEndDate);
+            $objExercise->updateTempSave($exerciseTempSave);
             $objExercise->updateTimeConstraint($exerciseTimeConstraint);
             $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
             $objExercise->setRandom($randomQuestions);
@@ -62,6 +63,7 @@ if (isset($_POST['submitExercise'])) {
     $exerciseType = $objExercise->selectType();
     $exerciseStartDate = $objExercise->selectStartDate();
     $exerciseEndDate = $objExercise->selectEndDate();
+    $exerciseTempSave = $objExercise->selectTempSave();
     $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
     $randomQuestions = $objExercise->isRandom();
@@ -123,6 +125,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_PO
 	  <th>" . $langExerciseEnd . ":</th>
 	  <td>$end_cal_Excercise</td>
 	</tr>
+        <tr>
+            <th>$langTemporarySave:</th>
+            <td>
+                <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)?'checked':'')."> $langDeactivate <br>
+                <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)?'checked':'')."> $langActivate
+            </td>
+        </tr>
 	<tr>
 	  <th>" . $langExerciseConstrain . ":</th>
 	  <td><input type=\"text\" name=\"exerciseTimeConstraint\" size=\"3\" maxlength=\"3\" " .

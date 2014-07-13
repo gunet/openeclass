@@ -142,31 +142,18 @@ class IMSCPExport
      */
     function fetch()
     {
-        global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $course_code,
-               $mysqlMainDb, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
+        global $webDir, $course_code, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
 
         /* Get general infos about the learning path */
-        $sql = 'SELECT `name`, `comment`
-                FROM `'.$TABLELEARNPATH.'`
-                WHERE `learnPath_id` = '. $this->id .'
-        		AND `course_id` = '. $course_id;
-
-        $result = db_query($sql, $mysqlMainDb);
-        if ( empty($result) )
-        {
+        $lp = Database::get()->querySingle("SELECT `name`, `comment` FROM `lp_learnPath`
+                WHERE `learnPath_id` = ?d AND `course_id` = ?d", $this->id, $course_id);
+        if (!$lp) {
             $this->error[] = $langLearningPathNotFound;
             return false;
         }
 
-        $list = mysql_fetch_array($result, MYSQL_ASSOC);
-        if ( empty($list) )
-        {
-            $this->error[] = $langLearningPathNotFound;
-            return false;
-        }
-
-        $this->name = $list['name'];
-        $this->comment = $list['comment'];
+        $this->name = $lp->name;
+        $this->comment = $lp->comment;
 
         /* Build various directories' names */
 
@@ -182,30 +169,44 @@ class IMSCPExport
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`,
                         LPM.`parent`, LPM.`raw_to_pass`, LPM.`specificComment` itemComment,
                         M.`name`, M.`contentType`, M.`comment` resourceComment, A.`path`
-                FROM `'.$TABLELEARNPATHMODULE.'` AS LPM
-                LEFT JOIN `'.$TABLEMODULE.'` AS M
+                FROM `lp_rel_learnPath_module` AS LPM
+                LEFT JOIN `lp_module` AS M
                        ON LPM.`module_id` = M.`module_id`
-                LEFT JOIN `'.$TABLEASSET.'` AS A
+                LEFT JOIN `lp_asset` AS A
                        ON M.`startAsset_id` = A.`asset_id`
-                WHERE LPM.`learnPath_id` = '. $this->id.'
-                AND M.`course_id` = '. $course_id .'
-                ORDER BY LPM.`parent`, LPM.`rank`
-               ';
+                WHERE LPM.`learnPath_id` = ?d
+                AND M.`course_id` = ?d
+                ORDER BY LPM.`parent`, LPM.`rank`';
 
-        $result = db_query($sql);
-        if ( empty($result) )
-        {
-            $this->error = $langLearningPathEmpty;
+        $result = Database::get()->queryArray($sql, $this->id, $course_id);
+        if (!$result) {
+            $this->error[] = $langLearningPathEmpty;
             return false;
         }
-
-        while ($module = mysql_fetch_array($result, MYSQL_ASSOC))
-        {
+        
+        $module = array();
+        foreach ($result as $modobj) {
+            $module['ID'] = $modobj->ID;
+            $module['lock'] = $modobj->lock;
+            $module['visible'] = $modobj->visible;
+            $module['rank'] = $modobj->rank;
+            $module['parent'] = $modobj->parent;
+            $module['raw_to_pass'] = $modobj->raw_to_pass;
+            $module['itemComment'] = $modobj->itemComment;
+            $module['name'] = $modobj->name;
+            $module['contentType'] = $modobj->contentType;
+            $module['resourceComment'] = $modobj->resourceComment;
+            $module['path'] = $modobj->path;
+            
             // Check for SCORM content. If at least one module is SCORM, we need to export the existing SCORM package
-            if ( $module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET' ) $this->fromScorm = true;
+            if ( $module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET' ) {
+                $this->fromScorm = true;
+            }
 
             // If it is an exercise, create a filename for it.
-            if ( $module['contentType'] == 'EXERCISE' )    $module['fileName'] = 'quiz_' . $module['path'] . '.html';
+            if ( $module['contentType'] == 'EXERCISE' ) {
+                $module['fileName'] = 'quiz_' . $module['path'] . '.html';
+            }
 
             // Only for clarity :
             $id = $module['ID'];
@@ -229,7 +230,6 @@ class IMSCPExport
                 }
             }
         }
-
 
         return true;
     }
@@ -282,7 +282,7 @@ class IMSCPExport
         $quiz = new Exercise();
         if (! $quiz->read($quizId))
         {
-            $this->error[] = $langErrorLoadingExercise;
+            $this->error[] = $GLOBALS['langErrorLoadingExercise'];
             return false;
         }
 
@@ -310,7 +310,7 @@ class IMSCPExport
             $question = new Question();
             if (!$question->read($questionId))
             {
-                $this->error[] = $langErrorLoadingQuestion;
+                $this->error[] = $GLOBALS['langErrorLoadingQuestion'];
                 return false;
             }
             $qtype        = $question->selectType();
@@ -332,13 +332,15 @@ class IMSCPExport
                 // copy the attached file
                 if ( !claro_copy_file($this->srcDirExercise . '/' . $attachedFile, $this->destDir . '/Exercises') )
                 {
-                    $this->error[] = $langErrorCopyAttachedFile . $attachedFile;
+                    $this->error[] = $GLOBALS['langErrorCopyAttachedFile'] . $attachedFile;
                     return false;
                 }
 
                 // Ok, if it was an mp3, we need to copy the flash mp3-player too.
                 $extension=substr(strrchr($attachedFile, '.'), 1);
-                if ( $extension == 'mp3')   $this->mp3Found = true;
+                if ($extension == 'mp3') {
+                    $this->mp3Found = true;
+                }
 
                 $pageBody .= '<tr><td colspan="2">' . display_attached_file($attachedFile) . '</td></tr>' . "\n";
             }
@@ -635,7 +637,7 @@ class IMSCPExport
 
         if (! $f = fopen($this->destDir . '/' . $filename, 'w') )
         {
-            $this->error[] = $langErrorCreatingFile . $filename;
+            $this->error[] = $GLOBALS['langErrorCreatingFile'] . $filename;
             return false;
         }
         fwrite($f, $pageContent);
@@ -776,8 +778,12 @@ class IMSCPExport
          */
         function makeCAMetaData($title, $description, $language)
         {
-            if(empty($language)) $language = "en";
-            if ( empty($title) and empty($description) ) return ' ';
+            if(empty($language)) {
+                $language = "en";
+            }
+            if ( empty($title) and empty($description) ) {
+                return ' ';
+            }
 
             $out = "<metadata>"."\n"
                     ."<schema>IMS Content</schema>"."\n"
@@ -840,7 +846,9 @@ class IMSCPExport
             global $blocking;
             $out = "";
             $ident = "";
-            for ($i=0; $i<$depth; $i++) $ident .= "    ";
+            for ($i=0; $i<$depth; $i++) {
+                $ident .= "    ";
+            }
             foreach ($itemlist as $item)
             {
                 $identifier = "I_".$item['ID'];
@@ -910,7 +918,7 @@ class IMSCPExport
          */
         function createDescFrameFile($fileName)
         {
-            global $langErrorCreatingFrame, $langErrorCreatingManifest, $langThisCourseDescriptionIsEmpty, $charset;
+            global $langErrorCreatingFrame, $course_id, $langThisCourseDescriptionIsEmpty, $charset;
 
             if ( !($f = fopen($fileName, 'w')) )
             {
@@ -919,27 +927,25 @@ class IMSCPExport
             }
 
             $course_description = "";
-			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-			$res = db_query($sql);
-			if (mysql_num_rows($res) >0 )
-			{
-				$course_description .= "
-					<hr noshade size=\"1\">";
-				while ($bloc = mysql_fetch_array($res))
-				{
-					$course_description .= "
-					<H4>
-						".$bloc["title"]."
-					</H4>
-					<font size=2 face='arial, helvetica'>
-						".make_clickable(nl2br($bloc["content"]))."
-					</font>";
-				}
-			}
-			else
-			{
-				$course_description .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
-			}
+            $blocs = Database::get()->queryArray("SELECT `id`, `title`, `comments` FROM `course_description` WHERE course_id = ?d ORDER BY id", $course_id);
+            if (count($blocs) > 0) {
+                    $course_description .= "
+                            <hr noshade size=\"1\">";
+                    foreach ($blocs as $bloc)
+                    {
+                            $course_description .= "
+                            <H4>
+                                    " . $bloc->title . "
+                            </H4>
+                            <font size=2 face='arial, helvetica'>
+                                    " . make_clickable(nl2br($bloc->comments)) . "
+                            </font>";
+                    }
+            }
+            else
+            {
+                    $course_description .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+            }
 
             fwrite($f, '<html>'."\n"
             	.'<head>'."\n"
@@ -985,7 +991,9 @@ class IMSCPExport
         $manifest_resources = "<resources>\n";
         foreach ( $this->resourceMap as $module )
         {
-            if ( $module['contentType'] == 'LABEL' ) continue;
+            if ( $module['contentType'] == 'LABEL' ) {
+                continue;
+            }
 
             switch ( $module['contentType'] )
             {
@@ -1082,7 +1090,7 @@ class IMSCPExport
         $manifestPath = $this->destDir . '/imsmanifest.xml';
         if ( ! $f = fopen($manifestPath, 'w') )
         {
-            $this->error[] = $langErrorCreatingManifest;
+            $this->error[] = $GLOBALS['langErrorCreatingManifest'];
             return false;
         }
 
@@ -1090,7 +1098,6 @@ class IMSCPExport
         $metadata = makeCAMetaData($this->name, $this->comment, $this->language);
 
         // Write header
-        global $charset;
         fwrite($f, '<?xml version = "1.0" encoding = "UTF-8"?>
                     <manifest xmlns = "http://www.imsglobal.org/xsd/imscp_v1p1" 
                     	xmlns:imsmd = "http://www.imsglobal.org/xsd/imsmd_v1p2" 

@@ -437,7 +437,7 @@ function parse_backup_php($file) {
               if ($id != T_WHITESPACE) {
               echo token_name($id), ": ", q($text), '<br>';
               }
-              } */
+            } */
         }
     }
     return $info;

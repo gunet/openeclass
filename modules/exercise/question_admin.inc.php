@@ -92,6 +92,7 @@ if (isset($usedInSeveralExercises)) {
     $questionName = $objQuestion->selectTitle();
     $questionDescription = $objQuestion->selectDescription();
     $questionId = $objQuestion->selectId();
+    $questionType = $objQuestion->selectType();
     // is picture set ?
     $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
     $tool_content .= "
@@ -112,8 +113,10 @@ if (isset($usedInSeveralExercises)) {
     if ($okPicture) {
         $tool_content .= "<br/><center><img src='../../$picturePath/quiz-$questionId' /></center><br/>";
     }
+    $tool_content .= "</fieldset>";
+    
+    if ($questionType !=6) {
     $tool_content .= "
-	</fieldset>
 	<table width='100%' class='tbl'>
 	<tr>
 	<th><b><u>$langQuestionAnswers</u>:</b>";
@@ -126,6 +129,8 @@ if (isset($usedInSeveralExercises)) {
     $tool_content .= "<br/></th>
 	</tr>
 	</table>
-	<br/>
-	<div class='right'><a href='admin.php?course=$course_code&amp;exerciseId=$exerciseId'>$langBackExerciseManagement</a></div>";
-}
+	<br/>";
+    }
+    $tool_content .= "<div class='right'><a href='admin.php?course=$course_code&amp;exerciseId=$exerciseId'>$langBackExerciseManagement</a></div>";
+    
+    }

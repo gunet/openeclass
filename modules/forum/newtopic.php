@@ -48,11 +48,10 @@ if (isset($_GET['topic'])) {
     $topic = '';
 }
 
-$result = db_query("SELECT id, name FROM forum WHERE id = $forum AND course_id = $course_id");
-$myrow = mysql_fetch_array($result);
+$myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d AND course_id = ?d", $forum, $course_id);
 
-$forum_name = $myrow["name"];
-$forum_id = $myrow["id"];
+$forum_name = $myrow->name;
+$forum_id = $myrow->id;
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
@@ -78,30 +77,25 @@ if (isset($_POST['submit'])) {
     $poster_ip = $_SERVER['REMOTE_ADDR'];
     $time = date("Y-m-d H:i");
 
-    $sql = "INSERT INTO forum_topic (title, poster_id, forum_id, topic_time)
-			VALUES (" . autoquote($subject) . ", $uid, $forum_id, '$time')";
-    $result = db_query($sql);
+    $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
+                    , $subject, $uid, $forum_id, $time)->lastInsertID;
 
-    $topic_id = mysql_insert_id();
     $ftdx->store($topic_id);
 
-    $sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
-			VALUES ($topic_id, " . autoquote($message) . ", $uid, '$time', '$poster_ip')";
-    $result = db_query($sql);
-
-    $post_id = mysql_insert_id();
+    $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
+                    , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
     $fpdx->store($post_id);
 
-    db_query("UPDATE forum_topic
-                    SET last_post_id = $post_id
-                WHERE id = $topic_id
-                AND forum_id = $forum_id");
+    Database::get()->query("UPDATE forum_topic
+                    SET last_post_id = ?d
+                WHERE id = ?d
+                AND forum_id = ?d", $post_id, $topic_id, $forum_id);
 
-    db_query("UPDATE forum
+    Database::get()->query("UPDATE forum
                     SET num_topics = num_topics+1,
                     num_posts = num_posts+1,
-                    last_post_id = $post_id
-		WHERE id = $forum_id");
+                    last_post_id = ?d
+		WHERE id = ?d", $post_id, $forum_id);
 
     $topic = $topic_id;
     $total_forum = get_total_topics($forum_id);
@@ -113,9 +107,6 @@ if (isset($_POST['submit'])) {
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
     $cat_name = category_name($category_id);
-    $sql = db_query("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (forum_id = $forum_id OR cat_id = $category_id)
-			AND notify_sent = 1 AND course_id = $course_id AND user_id != $uid");
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
     $forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";
@@ -128,9 +119,13 @@ if (isset($_POST['submit'])) {
     $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
     $plain_body_topic_notify .= $unsubscribe . $linkhere;
     $body_topic_notify .= $unsubscribe . $linkhere;
-    while ($r = mysql_fetch_array($sql)) {
-        if (get_user_email_notification($r['user_id'], $course_id)) {
-            $emailaddr = uid_to_email($r['user_id']);
+
+    $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (forum_id = ?d OR cat_id = ?d)
+			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
+    foreach ($sql as $r) {
+        if (get_user_email_notification($r->user_id, $course_id)) {
+            $emailaddr = uid_to_email($r->user_id);
             send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
         }
     }

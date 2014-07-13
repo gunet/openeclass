@@ -179,11 +179,8 @@ draw($tool_content, 2, null, $head_content);
 function showmedia() {
     global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
 
-    $sqlMedia = "SELECT * FROM video ORDER BY title";
-    $sqlMediaLinks = "SELECT * FROM videolink ORDER BY title";
-
-    $resultMedia = db_query($sqlMedia);
-    $resultMediaLinks = db_query($sqlMediaLinks);
+    $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY title";
+    $sqlMediaLinks = "SELECT * FROM videolink WHERE visible = 1 ORDER BY title";
 
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <table width='100%' class='tbl_alt'>
@@ -194,27 +191,29 @@ function showmedia() {
                <tbody>";
 
     $i = 1;
-    while ($myrow = mysql_fetch_array($resultMedia)) {
+    $resultMedia = Database::get()->queryArray($sqlMedia);
+    foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
-                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow['id'] . "' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow->description) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";
         $i++;
     }
 
     $j = 1;
-    while ($myrow = mysql_fetch_array($resultMediaLinks)) {
+    $resultMediaLinks = Database::get()->queryArray($sqlMediaLinks);
+    foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
-                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow['id'] . "' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow->description) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow->id . "' /></div></td></tr>";
         $j++;
     }
 

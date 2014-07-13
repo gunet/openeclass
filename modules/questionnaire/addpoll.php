@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,11 +32,24 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 // -------------- jscalendar -----------------
-require_once 'include/jscalendar/calendar.php';
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js'); 
+global $themeimg;
 
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
-
+$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+    <script>
+    $(function() {
+        $('input[name=PollStart], input[name=PollEnd]').datetimepicker({
+            showOn: 'both',
+            buttonImage: '{$themeimg}/calendar.png',
+            buttonImageOnly: true,
+            dateFormat: 'dd-mm-yy', 
+            timeFormat: 'HH:mm'
+        });
+    });
+    </script>";
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
@@ -79,47 +92,29 @@ draw($tool_content, 2, null, $head_content);
 
 function fill_questions($pid) {
     global $course_id;
-    $poll = mysql_fetch_array(db_query("SELECT * FROM poll WHERE course_id = $course_id AND pid=$pid"));
-    $_POST['PollName'] = $poll['name'];
-    $_POST['PollStart'] = $poll['start_date'];
-    $_POST['PollEnd'] = $poll['end_date'];
-    $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid ORDER BY pqid");
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+    $_POST['PollName'] = $poll->name;
+    $_POST['PollStart'] = $poll->start_date;
+    $_POST['PollEnd'] = $poll->end_date;
+    $_POST['PollAnonymize'] = $poll->anonymized;
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY pqid", $pid);
     $_POST['question'] = array();
     $qnumber = 0;
-    while ($theQuestion = mysql_fetch_array($questions)) {
-        $_POST['question'][$qnumber] = $theQuestion['question_text'];
-        $qtype = ($theQuestion['qtype'] == 'multiple') ? 1 : 2;
-        $pqid = $theQuestion['pqid'];
+    foreach ($questions as $theQuestion) {
+        $_POST['question'][$qnumber] = $theQuestion->question_text;
+        $qtype = ($theQuestion->qtype == 'multiple') ? 1 : 2;
+        $pqid = $theQuestion->pqid;
         $_POST['question_type'][$qnumber] = $qtype;
         if ($qtype == 1) {
-            $answers = db_query("SELECT * FROM poll_question_answer
-					WHERE pqid=$pqid ORDER BY pqaid");
+            $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
+					WHERE pqid = ?d ORDER BY pqaid", $pqid);
             $_POST['answer' . $qnumber] = array();
-            while ($theAnswer = mysql_fetch_array($answers)) {
-                $_POST['answer' . $qnumber][] = $theAnswer['answer_text'];
+            foreach ($answers as $theAnswer) {
+                $_POST['answer' . $qnumber][] = $theAnswer->answer_text;
             }
         }
         $qnumber++;
     }
-}
-
-/* * ***************************************************************************
-  Create the HTML for a jscalendar field
- * **************************************************************************** */
-
-function jscal_html($name, $u_date = FALSE) {
-    global $jscalendar;
-    if (!$u_date) {
-        $u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
-    }
-
-    $cal = $jscalendar->make_input_field(
-            array('showsTime' => true,
-        'showOthers' => true,
-        'ifFormat' => '%Y-%m-%d %H:%M'), array('style' => '',
-        'name' => $name,
-        'value' => $u_date));
-    return $cal;
 }
 
 /* * ***************************************************************************
@@ -129,23 +124,14 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
     global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
     $langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-    $nameTools, $pid, $langSurvey, $langSelection, $course_code;
+    $nameTools, $pid, $langSurvey, $langSelection, $langPollAnonymize, $course_code;
 
     if (isset($_POST['PollName'])) {
         $PollName = htmlspecialchars($_POST['PollName']);
     } else {
         $PollName = '';
     }
-    if (isset($_POST['PollStart'])) {
-        $PollStart = jscal_html('PollStart', $_POST['PollStart']);
-    } else {
-        $PollStart = jscal_html('PollStart');
-    }
-    if (isset($_POST['PollEnd'])) {
-        $PollEnd = jscal_html('PollEnd', $_POST['PollEnd']);
-    } else {
-        $PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
-    }
+   
     if (isset($pid)) {
         $pidvar = "<input type='hidden' name='pid' value='$pid'>";
     } else {
@@ -171,11 +157,15 @@ function printPollCreationForm() {
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
-	  <td>$PollStart</td></tr>
+	  <td><input type='text' size='47' name='PollStart' value='".(isset($_POST['PollStart'])? date('d-m-Y H:i',strtotime($_POST['PollStart'])) :date('d-m-Y H:i', strtotime('now')))."'></td></tr>
 	<tr>
 	  <th>$langPollEnd:</th>
-	  <td>$PollEnd</td>
+	  <td><input type='text' size='47' name='PollEnd' value='".(isset($_POST['PollEnd'])? date('d-m-Y H:i',strtotime($_POST['PollEnd'])) :date('d-m-Y H:i', strtotime('now +1 year')))."'></td>
 	</tr>
+	<tr>
+	  <th>$langPollAnonymize:</th>
+	  <td><input type='checkbox' name='PollAnonymize' value='1' ".((isset($_POST['PollAnonymize']) && $_POST['PollAnonymize']==1)?'checked':'')."></td>
+	</tr>        
 	</table>
         <br />";
 
@@ -240,10 +230,8 @@ function insertPollQuestions($pid, $questions, $question_types) {
         $QuestionText = trim($QuestionText);
         if (!empty($QuestionText)) {
             $qtype = ($question_types[$i] == 1) ? 'multiple' : 'fill';
-            db_query("INSERT INTO poll_question (pid, question_text, qtype) VALUES ('" .
-                    mysql_real_escape_string($pid) . "','" .
-                    mysql_real_escape_string($QuestionText) . "', '$qtype')");
-            $pqid = mysql_insert_id();
+            $pqid = Database::get()->query("INSERT INTO poll_question (pid, question_text, qtype) "
+                    . "VALUES (?d, ?s, ?s)", $pid, $QuestionText, $qtype)->lastInsertID;
             if ($question_types[$i] == 1) {
                 if (isset($_POST['answer' . $i])) {
                     $answers = $_POST['answer' . $i];
@@ -253,8 +241,8 @@ function insertPollQuestions($pid, $questions, $question_types) {
                 foreach ($answers as $j => $AnswerText) {
                     $AnswerText = trim($AnswerText);
                     if (!empty($AnswerText)) {
-                        db_query("INSERT INTO poll_question_answer (pqid, answer_text)
-							VALUES ($pqid, '" . mysql_real_escape_string($AnswerText) . "')");
+                        Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
+							VALUES (?d, ?s)", $pqid, $AnswerText);
                     }
                 }
             }
@@ -270,22 +258,14 @@ function createPoll($questions, $question_types) {
 
     $CreationDate = date("Y-m-d H:i");
     $PollName = $_POST['PollName'];
-    $StartDate = $_POST['PollStart'];
-    $EndDate = $_POST['PollEnd'];
+    $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
+    $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
     $PollActive = 1;
-
-    mysql_select_db($GLOBALS['mysqlMainDb']);
-    $result = db_query("INSERT INTO poll
-		(course_id, creator_id, name, creation_date, start_date, end_date, active)
-		VALUES ('" .
-            $GLOBALS['course_id'] . "','" .
-            $GLOBALS['uid'] . "','" .
-            mysql_real_escape_string($PollName) . "','" .
-            mysql_real_escape_string($CreationDate) . "','" .
-            mysql_real_escape_string($StartDate) . "','" .
-            mysql_real_escape_string($EndDate) . "','" .
-            mysql_real_escape_string($PollActive) . "')");
-    $pid = mysql_insert_id();
+    $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
+    
+    $pid = Database::get()->query("INSERT INTO poll
+		(course_id, creator_id, name, creation_date, start_date, end_date, active, anonymized)
+		VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?d)", $GLOBALS['course_id'], $GLOBALS['uid'], $PollName, $StartDate, $EndDate, $PollActive, $PollAnonymize)->lastInsertID;
     insertPollQuestions($pid, $questions, $question_types);
     $tool_content .= "<p class='success'>" . $langPollCreated . "</p><a href='index.php?course=$course_code'>" . $langBack . "</a>";
 }
@@ -297,15 +277,14 @@ function editPoll($pid, $questions, $question_types) {
     global $pid, $tool_content, $course_id, $course_code, $langPollEdited, $langBack;
 
     $PollName = $_POST['PollName'];
-    $StartDate = $_POST['PollStart'];
-    $EndDate = $_POST['PollEnd'];
-
-    mysql_select_db($GLOBALS['mysqlMainDb']);
-    $result = db_query("UPDATE poll SET name = '$PollName',
-		start_date = '$StartDate', end_date = '$EndDate' WHERE course_id = $course_id AND pid='$pid'");
-    db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid='$pid')");
-    db_query("DELETE FROM poll_question WHERE pid='$pid'");
+    $StartDate = date('Y-m-d H:i', strtotime($_POST['PollStart']));
+    $EndDate = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
+    $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
+    Database::get()->query("UPDATE poll SET name = ?s,
+		start_date = ?t, end_date = ?t, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $StartDate, $EndDate, $PollAnonymize, $course_id, $pid);
+    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
+		(SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+    Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
     insertPollQuestions($pid, $questions, $question_types);
     $tool_content .= "<p class='success'>" . $langPollEdited . "</p><a href='index.php?course=$course_code'>" . $langBack . "</a>";
 }
@@ -384,10 +363,9 @@ function add_fill_text_question($i, $text) {
  * ******************************************************* */
 
 function check_poll_participants($pid) {
-    global $mysqlMainDb;
-
-    $sql = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-    if (mysql_num_rows($sql) > 0)
+    $participants = Database::get()->querySingle("SELECT COUNT(*) AS participants "
+            . "FROM poll_answer_record WHERE pid = ?d", $pid)->participants;
+    if ($participants > 0)
         return true;
     else
         return false;

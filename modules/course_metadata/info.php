@@ -24,9 +24,10 @@ define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
 $nameTools = $langCourseMetadata;
 require_once 'modules/course_metadata/CourseXML.php';
+require_once 'modules/course_metadata/CourseXMLConfig.php';
 
 // exit if feature disabled or no metadata present
-if (!get_config('course_metadata') || !file_exists(CourseXMLElement::getCourseXMLPath($course_code))) {
+if (!get_config('course_metadata') || !file_exists(CourseXMLConfig::getCourseXMLPath($course_code))) {
     header("Location: {$urlServer}courses/$course_code/index.php");
     exit();
 }

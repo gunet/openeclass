@@ -33,7 +33,7 @@ class Debug {
         Debug::$default_level = abs(intval($level));
     }
 
-    public static function message($message, $level = null, $backtrace_file = null, $backtrace_line = 0) {
+    public static function message($message, $level = null, $backtrace_file = null, $backtrace_line = 'unknown') {
         if (is_null($level))
             $level = Debug::$default_level;
         if ($level >= Debug::$level) {

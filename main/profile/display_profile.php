@@ -44,25 +44,25 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     $id = $uid;
 }
 
-$userdata = db_query_get_single_row("SELECT user.surname, user.givenname, user.email, user.phone, user.am,
-                                            user.has_icon, user.description,
-                                            user.email_public, user.phone_public, user.am_public
+$userdata = Database::get()->querySingle("SELECT surname, givenname, email, phone, am,
+                                            has_icon, description,
+                                            email_public, phone_public, am_public
                                         FROM user
-                                        WHERE user.id = $id");
+                                        WHERE id = ?d", $id);
 
-if ($userdata !== false) {
+if ($userdata) {
     $tool_content .= "<table class='tbl'>
             <tr>
-                <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
-                <td><b>" . q("$userdata[givenname] $userdata[surname]") . "</b><br>";
-    if (!empty($userdata['email']) and allow_access($userdata['email_public'])) {
-        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
+                <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata->has_icon) . "</td>
+                <td><b>" . q("$userdata->givenname $userdata->surname") . "</b><br>";
+    if (!empty($userdata->email) and allow_access($userdata->email_public)) {
+        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata->email) . "<br>";
     }
-    if (!empty($userdata['am']) and allow_access($userdata['am_public'])) {
-        $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
+    if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+        $tool_content .= "<b>$langAm:</b> " . q($userdata->am) . "<br>";
     }
-    if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
-        $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
+    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
+        $tool_content .= "<b>$langPhone:</b> " . q($userdata->phone) . "<br>";
     }
     $tool_content .= "<b>$langFaculty:</b> ";
 
@@ -75,8 +75,8 @@ if ($userdata !== false) {
     }
 
     $tool_content .= "<br>";
-    if (!empty($userdata['description'])) {
-        $tool_content .= standard_text_escape($userdata['description']);
+    if (!empty($userdata->description)) {
+        $tool_content .= standard_text_escape($userdata->description);
     }
     $tool_content .= "</td></tr></table>";
 }

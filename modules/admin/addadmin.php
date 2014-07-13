@@ -45,8 +45,7 @@ if (isset($_POST['submit']) and !empty($username)) {
                 break;
         }
 
-        if (isset($privilege)) {
-            $user_id = intval($user_id);
+        if (isset($privilege)) {            
             if (Database::get()->querySingle("SELECT * FROM admin WHERE user_id = ?d", $user_id)) {
                 $affected = Database::get()->query("UPDATE admin SET privilege = ?d
                                 WHERE user_id = ?d", $privilege, $user_id)->affectedRows;
@@ -66,10 +65,10 @@ if (isset($_POST['submit']) and !empty($username)) {
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
-            $tool_content .= "<center><br />$langDeleteAdmin" . q($aid) . " $langNotFeasible  <br /></center>";
-        } else {
+        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {            
             $tool_content .= "<p class='success'>$langNotAdmin</p>";
+        } else {
+            $tool_content .= "<p class='caution'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
         }
     } else {
         $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";

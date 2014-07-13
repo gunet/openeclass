@@ -108,7 +108,7 @@
     <coTeachingAutonomousDepartment>true</coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours>10</coTeachingDepartmentCreditHours>
     
-    <language>greek</language>
+    <language lang="en">greek</language>
     
     <targetGroup lang="el">Ομάδα στόχος.</targetGroup>
     <targetGroup lang="en">Just a target group.</targetGroup>
@@ -293,8 +293,7 @@
     <thematic lang="el">Θεματική επιστημονική περιοχή</thematic>
     <thematic lang="en">Thematic scientific area</thematic>
     
-    <license>GPL</license>
-    <license>CC</license>
+    <license lang="en">GPL</license>
     
     <institution lang="el">Ίδρυμα</institution>
     <institution lang="en">Institution</institution>

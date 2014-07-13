@@ -19,36 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Index, Course Description
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This module displays the course description of every course. If the user
- * is the course's professor, he/she is shown of a link to add/edit the contents of
- * the module. Description text is kept in a special course unit with order=-1
- *
- */
-
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
-require_once 'modules/units/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.php';
-/* * ** The following is added for statistics purposes ** */
+
+// track stats
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
-/* * *********************************** */
-$nameTools = $langCourseDescription;
 
+$nameTools = $langCourseDescription;
 $unit_id = description_unit_id($course_id);
 
 ModalBoxHelper::loadModalBox();
@@ -61,49 +48,42 @@ if ($is_editor) {
 	  </ul>
 	</div>";
 
-    process_actions();
+    processActions();
 
-    if (isset($_POST['edIdBloc'])) {
+    if (isset($_POST['saveCourseDescription'])) {
+        if (isset($_POST['editId'])) {
+            updateCourseDescription($_POST['editId'], $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+        } else {
+            updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+        }
+    } else if (isset($_POST['submit']) && isset($_POST['edIdBloc'])) {
         // Save results from block edit (save action)
         $res_id = intval($_POST['edIdBloc']);
-        add_unit_resource($unit_id, 'description', $res_id, autounquote($_POST['edTitleBloc']), autounquote($_POST['edContentBloc']));
-        $id = mysql_insert_id();
-
-        // update index
-        require_once 'modules/search/courseindexer.class.php';
-        $idx = new CourseIndexer();
-        $idx->store($course_id);
-
-        $log_action = ($id > 0) ? LOG_INSERT : LOG_MODIFY;
-        Log::record($course_id, MODULE_ID_DESCRIPTION, $log_action, array('id' => $id,
-            'title' => $_POST['edTitleBloc'],
-            'content' => $_POST['edContentBloc']));
         if ($res_id == -1) {
+            $unit_id = description_unit_id($course_id);
+            add_unit_resource($unit_id, 'description', $res_id, autounquote($_POST['edTitleBloc']), autounquote($_POST['edContentBloc']));
             header("Location: {$urlServer}courses/$course_code");
             exit;
         }
     }
 }
 
-$q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
-                        unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
-if ($q and mysql_num_rows($q) > 0) {
-    list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
-                                        WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-    while ($row = mysql_fetch_array($q)) {
+$q = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
+if ($q && count($q) > 0) {
+    $i = 0;
+    foreach ($q as $row) {
         $tool_content .= "
-                <table width='100%' class='tbl_border'>
-                <tr class='odd'>
-                 <td class='bold'>" . q($row['title']) . "</td>\n" .
-                actions('description', $row['id'], $row['visible'], $row['res_id']) . "
-                </tr>
-                <tr>";
-        if ($is_editor) {
-            $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
-        } else {
-            $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
-        }
-        $tool_content .= "</tr></table><br />\n";
+        <table width='100%' class='tbl_border'>
+        <tr class='odd'>
+         <td class='bold'>" . q($row->title) . "</td>" .
+                handleActions($row->id, $row->visible, $i, count($q)) . "
+        </tr>";
+        $tool_content .= handleType($row->type);
+        $tool_content .= "<tr>";
+        $colspan = ($is_editor) ? "colspan='6'" : "";
+        $tool_content .= "<td $colspan>" . standard_text_escape($row->comments) . "</td>";
+        $tool_content .= "</tr></table><br />";
+        $i++;
     }
 } else {
     $tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
@@ -111,3 +91,128 @@ if ($q and mysql_num_rows($q) > 0) {
 
 add_units_navigation(true);
 draw($tool_content, 2, null, $head_content);
+
+// Helper Functions
+
+function handleActions($cDescId, $visible, $counter, $total) {
+    global $is_editor, $langEdit, $langDelete,
+    $langAddToCourseHome, $langDown, $langUp,
+    $langConfirmDelete, $course_code, $themeimg;
+
+    if (!$is_editor) {
+        return '';
+    }
+
+    $cDescId = intval($cDescId);
+    $counter = intval($counter);
+    $total = intval($total);
+    $icon_vis = (intval($visible) === 1) ? 'publish.png' : 'unpublish.png';
+    $edit_link = "edit.php?course=$course_code&amp;id=$cDescId";
+
+    // edit
+    $content = "<td width='3'><a href='$edit_link'>" .
+            "<img src='$themeimg/edit.png' title='" . q($langEdit) . "' alt='" . q($langEdit) . "' /></a></td>";
+
+    // delete
+    $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$cDescId'" .
+            " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
+            "<img src='$themeimg/delete.png' " .
+            "title='" . q($langDelete) . "' alt='" . q($langDelete) . "'></a></td>";
+
+    // visibility
+    $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$cDescId'>" .
+            "<img src='$themeimg/$icon_vis' " .
+            "title='" . q($langAddToCourseHome) . "' alt='" . q($langAddToCourseHome) . "'></a></td>";
+
+    // down
+    if ($counter + 1 < $total) {
+        $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$cDescId'>" .
+                "<img src='$themeimg/down.png' title='" . q($langDown) . "' alt='" . q($langDown) . "'></a></div></td>";
+    } else {
+        $content .= "\n          <td width='12'>&nbsp;</td>";
+    }
+
+    // up
+    if ($counter > 0) {
+        $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$cDescId'>" .
+                "<img src='$themeimg/up.png' title='" . q($langUp) . "' alt='" . q($langUp) . "'></a></div></td>";
+    } else {
+        $content .= "\n          <td width='12'>&nbsp;</td>";
+    }
+
+    return $content;
+}
+
+function handleType($typeId) {
+    global $is_editor, $language;
+
+    $typeId = intval($typeId);
+    if ($typeId <= 0) {
+        return '';
+    }
+    $colspan = ($is_editor) ? "colspan='6'" : "";
+
+    $res = Database::get()->querySingle("SELECT title FROM course_description_type WHERE id = ?d", $typeId);
+
+    $title = $titles = @unserialize($res->title);
+    if ($titles !== false) {
+        if (isset($titles[$language]) && !empty($titles[$language])) {
+            $title = $titles[$language];
+        } else if (isset($titles['en']) && !empty($titles['en'])) {
+            $title = $titles['en'];
+        } else {
+            $title = array_shift($titles);
+        }
+    }
+
+    return "<tr><td $colspan><em>$title</em></td></tr>";
+}
+
+function processActions() {
+    global $tool_content, $langResourceCourseUnitDeleted, $course_id, $course_code;
+
+    if (isset($_REQUEST['del'])) { // delete resource from course unit
+        $res_id = intval($_REQUEST['del']);
+        Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+        $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+    } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
+        $res_id = intval($_REQUEST['vis']);
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
+        $newvis = (intval($vis->visible) === 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_description SET `visible` = ?d, update_dt = NOW() WHERE id = ?d AND course_id = ?d", $newvis, $res_id, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    } elseif (isset($_REQUEST['down'])) { // change order down
+        $res_id = intval($_REQUEST['down']);
+        move_order('course_description', 'id', $res_id, 'order', 'down', "course_id = $course_id");
+    } elseif (isset($_REQUEST['up'])) { // change order up
+        $res_id = intval($_REQUEST['up']);
+        move_order('course_description', 'id', $res_id, 'order', 'up', "course_id = $course_id");
+    }
+}
+
+function updateCourseDescription($cdId, $title, $comments, $type) {
+    global $course_id, $course_code;
+    $type = (isset($type)) ? intval($type) : null;
+
+    if ($cdId !== null) {
+        Database::get()->query("UPDATE course_description SET
+                title = ?s,
+                comments = ?s,
+                type = ?d,
+                update_dt = NOW()
+                WHERE id = ?d", $title, $comments, $type, intval($cdId));
+    } else {
+        $res = Database::get()->querySingle("SELECT MAX(`order`) AS max FROM course_description WHERE course_id = ?d", $course_id);
+        $maxorder = ($res->max !== false) ? intval($res->max) + 1 : 1;
+
+        Database::get()->query("INSERT INTO course_description SET
+                course_id = ?d,
+                title = ?s,
+                comments = ?s,
+                type = ?d,
+                `order` = ?d,
+                update_dt = NOW()", $course_id, $title, purify($comments), $type, $maxorder);
+    }
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+}

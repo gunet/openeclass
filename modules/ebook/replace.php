@@ -20,9 +20,9 @@ if (isset($_GET['id'])) {
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $id, 'name' => $langEBookEdit);
 }
-$r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
+$r = Database::get()->querySingle("SELECT title FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
-if (!$is_editor or mysql_num_rows($r) == 0) {
+if (!$is_editor or !$r) {
     redirect_to_home_page();
 } elseif (isset($_FILES['file'])) {
 
@@ -39,7 +39,7 @@ if (!$is_editor or mysql_num_rows($r) == 0) {
     }
     $tool_content .= "<p><a href='edit.php?course=$course_code&amp;id=$id'>$langBack</a></p>\n";
 } else {
-    list($title) = mysql_fetch_row($r);
+    $title = $r->title;
     $tool_content .= "<form method='post' action='replace.php?course=$course_code&amp;id=$id' enctype='multipart/form-data'>
                              <fieldset><legend>$langUpload</legend>
                                 <table width='99%' class='tbl'>

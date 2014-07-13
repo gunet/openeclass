@@ -46,9 +46,7 @@ $activate = isset($_GET['activate']) ? $_GET['activate'] : ''; //variable of dec
 if ((!empty($activate)) && ($activate == 1)) {
     // do the update
     $newtime = time() + 15552000;
-    $qry = "UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time();
-    $sql = db_query($qry);
-    if ($sql) {
+    if (Database::get()->query("UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time())->affectedRows > 0) {
         $countinactive = mysql_affected_rows();
         if ($countinactive > 0) {
             $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";

@@ -38,11 +38,10 @@ function table_row($title, $content, $html = false) {
 function work_secret($id) {
     global $course_id, $workPath, $coursePath;
 
-    $res = db_query("SELECT secret_directory FROM assignment WHERE course_id = " . intval($course_id) . " AND id = " . intval($id));
+    $res =  Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($res) {
-        $secret = mysql_fetch_row($res);
-        if (!empty($secret[0])) {
-            $s = $secret[0];
+        if (!empty($res->secret_directory)) {
+            $s = $res->secret_directory;
         } else {
             $s = $id;
         }
@@ -63,10 +62,9 @@ function work_secret($id) {
 function is_group_assignment($id) {
     global $course_id;
 
-    $res = db_query("SELECT group_submissions FROM assignment WHERE course_id = $course_id AND id = '$id'");
+    $res = Database::get()->querySingle("SELECT group_submissions FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($res) {
-        $row = mysql_fetch_row($res);
-        if ($row[0] == 0) {
+        if ($res->group_submissions == 0) {
             return FALSE;
         } else {
             return TRUE;
@@ -82,21 +80,21 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     global $m;
 
     $return = '';
-    $res = db_query("SELECT id, file_path, file_name, uid, group_id
+    $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
 				FROM assignment_submit
-                                WHERE assignment_id = $id AND
-				      (uid = $uid OR group_id = $gid)");
-    while ($row = mysql_fetch_array($res)) {
-        if ($row['file_path'] != $new_filename) {
-            @unlink("$GLOBALS[workPath]/$row[file_path]");
+                                WHERE assignment_id = ?d AND
+				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
+    foreach ($res as $row) {
+        if ($row->file_path != $new_filename) {
+            @unlink("$GLOBALS[workPath]/$row->file_path");
         }
-        db_query("DELETE FROM assignment_submit WHERE id = $row[id]");
-        if ($GLOBALS['uid'] == $row['uid']) {
+        Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
+        if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
             $return .= $m['deleted_work_by_group'];
         }
-        $return .= ' "<i>' . q($row['file_name']) . '</i>". ';
+        $return .= ' "<i>' . q($row->file_name) . '</i>". ';
     }
     return $return;
 }
@@ -106,19 +104,19 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
 
     if ($is_group_assignment AND count($gids)) {
         $groups_sql = join(', ', array_keys($gids));
-        $res = db_query("SELECT id, uid, group_id, submission_date,
+        $res = Database::get()->queryArray("SELECT id, uid, group_id, submission_date,
 					file_path, file_name, comments, grade,
 					grade_comments, grade_submission_date
 					FROM assignment_submit
-                                        WHERE assignment_id = $id AND
-                                              group_id IN ($groups_sql)");
+                                        WHERE assignment_id = ?d AND
+                                        group_id IN ($groups_sql)", $id);
     } else {
-        $res = db_query("SELECT id, grade FROM assignment_submit
-                                        WHERE assignment_id = '$id' AND uid = '$uid'");
+        $res = Database::get()->queryArray("SELECT id, grade FROM assignment_submit
+                                        WHERE assignment_id = ?d AND uid = ?d", $id ,$uid);
     }
     $subs = array();
-    if ($res and mysql_num_rows($res)) {
-        while ($row = mysql_fetch_array($res)) {
+    if ($res) {
+        foreach ($res as $row) {
             $subs[] = $row;
         }
     }
@@ -131,14 +129,14 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
 function submission_grade($subid) {
     global $m;
 
-    $res = mysql_fetch_row(db_query("SELECT grade, grade_comments
+    $res = Database::get()->querySingle("SELECT grade, grade_comments
                                                 FROM assignment_submit
-                                                WHERE id = '$subid'"));
+                                                WHERE id = ?d", $subid);
     if ($res) {
-        $grade = trim($res[0]);
+        $grade = trim($res->grade);
         if (!empty($grade)) {
             return $grade;
-        } elseif (!empty($res[1])) {
+        } elseif (!empty($res->grade_comments)) {
             return $m['yes'];
         } else {
             return FALSE;
@@ -154,22 +152,19 @@ function submission_grade($subid) {
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE) {
     global $course_id;
-
-    $res = db_query("SELECT * FROM assignment_submit
-                                  WHERE assignment_id = '$id'
-                                        AND (uid = '$uid' OR
-                                        group_id IN (SELECT group_id FROM `group` AS grp,
-                                                                          group_members AS members
-                                                            WHERE grp.id = members.group_id AND
-                                                                  user_id = $uid AND
-                                                                  course_id = $course_id))");
+    $res =Database::get()->queryArray("SELECT * FROM assignment_submit
+                                  WHERE assignment_id = ?d AND (uid = ?d OR
+                                    group_id IN (SELECT group_id FROM `group` AS grp,
+                                        group_members AS members
+                                        WHERE grp.id = members.group_id AND
+                                        user_id = ?d AND course_id = ?d))", $id, $uid, $uid, $course_id);
     if ($res) {
-        while ($row = mysql_fetch_array($res)) {
-            if ($row['grade']) {
+        foreach ($res as $row) {
+            if ($row->grade) {
                 if ($ret_val) {
                     return $row;
                 } else {
-                    return $row['id'];
+                    return $row->id;
                 }
             }
         }
@@ -181,13 +176,11 @@ function was_graded($uid, $id, $ret_val = FALSE) {
 // Show details of a submission
 function show_submission_details($id) {
     global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code;
-
-    $sub = mysql_fetch_array(
-            db_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
+    $sub = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
         die("Error: submission $id doesn't exist.");
     }
-    if (!empty($sub['grade']) or !empty($sub['grade_comment'])) {
+    if (!empty($sub->grade) or !empty($sub->grade_comment)) {
         $graded = TRUE;
         $notice = $langSubmittedAndGraded;
     } else {
@@ -195,14 +188,14 @@ function show_submission_details($id) {
         $notice = $GLOBALS['langSubmitted'];
     }
 
-    if ($sub['uid'] != $uid) {
+    if ($sub->uid != $uid) {
         $notice .= "<br>$m[submitted_by_other_member] " .
-                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>" .
-                "$m[your_group] " . gid_to_name($sub['group_id']) . "</a> (" . display_user($sub['uid']) . ")";
-    } elseif ($sub['group_id']) {
+                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
+                "$m[your_group] " . gid_to_name($sub->group_id) . "</a> (" . display_user($sub->uid) . ")";
+    } elseif ($sub->group_id) {
         $notice .= "<br>$m[groupsubmit] " .
-                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>" .
-                "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>";
+                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
+                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
     }
 
     $tool_content .= "
@@ -215,21 +208,21 @@ function show_submission_details($id) {
 	</tr>
         <tr>
           <th>" . $m['grade'] . ":</th>
-          <td>" . $sub['grade'] . "</td>
+          <td>" . $sub->grade . "</td>
         </tr>
         <tr>
           <th valign='top'>" . $m['gradecomments'] . ":</th>
-          <td>" . $sub['grade_comments'] . "</td>
+          <td>" . $sub->grade_comments . "</td>
         </tr>
         <tr>
           <th>" . $m['sub_date'] . ":</th>
-          <td>" . $sub['submission_date'] . "</td>
+          <td>" . $sub->submission_date . "</td>
         </tr>
         <tr>
           <th>" . $m['filename'] . ":</th>
-          <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub[id]'>" . q($sub['file_name']) . "</a></td>
+          <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a></td>
         </tr>";
-    table_row($m['comments'], $sub['comments'], true);
+    table_row($m['comments'], $sub->comments, true);
     $tool_content .= "
         </table>
         </fieldset>";
@@ -239,19 +232,18 @@ function show_submission_details($id) {
 // for assignment id. Returns 'user' if by user, 'group' if by group
 function was_submitted($uid, $gid, $id) {
 
-    $q = db_query("SELECT uid, group_id
+    $q = Database::get()->querySingle("SELECT uid, group_id
 			      FROM assignment_submit
-			      WHERE assignment_id = $id AND
-				    (uid = $uid or group_id = $gid)");
-    if (mysql_num_rows($q) == 0) {
-        return false;
-    } else {
-        $row = mysql_fetch_row($q);
-        if ($row[0] == $uid) {
+			      WHERE assignment_id = ?d AND
+				    (uid = ?d or group_id = ?d)", $id, $uid, $gid);
+    if ($q) {
+        if ($q->uid == $uid) {
             return 'user';
         } else {
             return 'group';
-        }
+        }        
+    } else {
+        return false;
     }
 }
 

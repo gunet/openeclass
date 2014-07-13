@@ -48,7 +48,7 @@ $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 
 if (isset($_POST['submit'])) {
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
-        'phone_public' => true), 'all', 'intval');    
+        'phone_public' => true), 'all', 'intval');
     $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
     $unparsed_lines = '';
     $new_users_info = array();
@@ -82,8 +82,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or
-                        !email_seems_valid($info['email'])) {
+                if (!isset($info['email']) or ! email_seems_valid($info['email'])) {
                     $info['email'] = '';
                 }
 
@@ -131,10 +130,9 @@ if (isset($_POST['submit'])) {
     }
     $tool_content .= "</table>\n";
 } else {
-    $req = db_query("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name");
-    while ($n = mysql_fetch_array($req)) {
-        $facs[$n['id']] = $n['name'];
-    }
+    Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
+        $facs[$n->id] = $n->name;
+    });
     $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
         ACCESS_PROFS => $langProfileInfoProfs,
         ACCESS_USERS => $langProfileInfoUsers);
@@ -208,11 +206,10 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $type_message = $langAsProf;
     } else {
         $message = $usersuccess;
-        $type_message = '';        
+        $type_message = '';
     }
 
-    $req = db_query('SELECT * FROM user WHERE username = ' . quote($uname));
-    if ($req and mysql_num_rows($req) > 0) {
+    if (Database::get()->querySingle('SELECT * FROM user WHERE username = ?s', $uname)) {
         $GLOBALS['error'] = "$GLOBALS[langMultiRegUsernameError] ($uname)";
         return false;
     }
@@ -225,7 +222,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                  status, registered_at, expires_at, lang, am, phone,
                  email_public, phone_public, am_public, description, whitelist)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'','')"
-            , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+                    , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
 
@@ -252,10 +249,7 @@ $langEmail : $emailhelpdesk
 
 function create_username($status, $departments, $nom, $givenname, $prefix) {
     $wildcard = str_pad('', SUFFIX_LEN, '_');
-    $req = db_query("SELECT username FROM user
-                             WHERE username LIKE " . quote($prefix . $wildcard) . "
-                             ORDER BY username DESC LIMIT 1");
-    if ($req and mysql_num_rows($req) > 0) {
+    if (Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard)) {
         list($last_uname) = mysql_fetch_row($req);
         $lastid = 1 + str_replace($prefix, '', $last_uname);
     } else {
@@ -269,13 +263,11 @@ function create_username($status, $departments, $nom, $givenname, $prefix) {
 }
 
 function register($uid, $course_code) {
-    $code = quote($course_code);
-    $req = db_query("SELECT code, id FROM course WHERE code=$code OR public_code=$code");
-    if ($req and mysql_num_rows($req) > 0) {
-        list($code, $cid) = mysql_fetch_row($req);
-        db_query("INSERT INTO course_user
-                                 SET course_id = $cid, user_id = $uid, status = 5,
-                                     team = 0, tutor = 0, reg_date = NOW()");
+    $result = Database::get()->querySingle("SELECT code, id FROM course WHERE code= ?s OR public_code=?s", $course_code);
+    if ($result) {
+        Database::get()->query("INSERT INTO course_user
+                                 SET course_id = ?d, user_id = ?d, status = 5,
+                                     team = 0, tutor = 0, reg_date = NOW()", $result->id, $uid);
         return true;
     }
     return false;

@@ -47,9 +47,9 @@ if (isset($_REQUEST['post_id'])) {
 if (isset($_POST['submit'])) {
     $message = $_POST['message'];
 
-    $sql = "UPDATE forum_post SET post_text = " . autoquote(purify($message)) . "
-                        WHERE id = $post_id";
-    if (!$result = db_query($sql)) {
+    $result = Database::get()->query("UPDATE forum_post SET post_text = ?s
+                        WHERE id = ?d", purify($message), $post_id);
+    if (!$result) {
         $tool_content .= $langUnableUpdatePost;
         draw($tool_content, 2, null, $head_content);
         exit();
@@ -58,10 +58,10 @@ if (isset($_POST['submit'])) {
 
     if (isset($_POST['subject'])) {
         $subject = $_POST['subject'];
-        $sql = "UPDATE forum_topic
-                                SET title = " . autoquote(trim($subject)) . "
-                        WHERE id = $topic_id";
-        if (!$result = db_query($sql)) {
+        $result = Database::get()->query("UPDATE forum_topic
+                                SET title = ?s
+                        WHERE id = ?d", trim($subject), $topic_id);
+        if (!$result) {
             $tool_content .= $langUnableUpdateTopic;
             draw($tool_content, 2, null, $head_content);
             exit();
@@ -71,33 +71,29 @@ if (isset($_POST['submit'])) {
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
     exit;
 } else {
-    $sql = "SELECT f.name, t.title
+    $myrow = Database::get()->querySingle("SELECT f.name, t.title
                         FROM forum f, forum_topic t
-                        WHERE f.id = $forum_id
-                                AND t.id = $topic_id
-                                AND t.forum_id = f.id";
+                        WHERE f.id = ?d
+                                AND t.id = ?d
+                                AND t.forum_id = f.id", $forum_id, $topic_id);
 
-    if (!$result = db_query($sql)) {
+    if (!$myrow) {
         $tool_content .= $langTopicInformation;
         draw($tool_content, 2, null, $head_content);
         exit();
     }
-    $myrow = mysql_fetch_array($result);
 
     $nameTools = $langReply;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $myrow['name']);
-    $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow['title']);
+    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $myrow->name);
+    $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow->title);
 
-    $sql = "SELECT p.post_text, p.post_time, t.title
+    $myrow = Database::get()->querySingle("SELECT p.post_text, p.post_time, t.title
                         FROM forum_post p, forum_topic t
-                        WHERE p.id = $post_id
-                        AND p.topic_id = t.id";
-    $result = db_query($sql);
-    $myrow = mysql_fetch_array($result);
-    $message = $myrow["post_text"];
-    $message = str_replace('{', '&#123;', $message);
-    list($day, $time) = explode(' ', $myrow["post_time"]);
+                        WHERE p.id = ?d
+                        AND p.topic_id = t.id", $post_id);
+    $message = str_replace('{', '&#123;', $myrow->post_text);
+    list($day, $time) = explode(' ', $myrow->post_time);
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
                 <legend>$langReplyEdit </legend>
@@ -105,7 +101,7 @@ if (isset($_POST['submit'])) {
     $first_post = is_first_post($topic_id, $post_id);
     if ($first_post) {
         $tool_content .= "<tr><th>$langSubject:<br /><br />
-                <input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["title"]) . "'  class='FormData_InputText' /></th>
+                <input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow->title) . "'  class='FormData_InputText' /></th>
                 </tr>";
     }
     $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />" .

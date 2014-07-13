@@ -77,26 +77,25 @@ foreach (array('title', 'lang_admin_ann') as $var) {
 if (isset($_GET['vis'])) {
     $id = q($_GET['id']);
     $vis = q($_GET['vis']);
-    db_query("UPDATE admin_announcement SET visible = '$vis' WHERE id = $id");
+    Database::get()->query("UPDATE admin_announcement SET visible = ?b WHERE id = ?d", $vis, $id);
 }
 
 if (isset($_GET['delete'])) {
     // delete announcement command
     $id = intval($_GET['delete']);
-    $result = db_query("DELETE FROM admin_announcement WHERE id = $id");
+    Database::get()->query("DELETE FROM admin_announcement WHERE id = ?d", $id)->affectedRows;
     $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
     // modify announcement command
     $id = intval($_GET['modify']);
-    $result = db_query("SELECT * FROM admin_announcement WHERE id = $id");
-    $myrow = mysql_fetch_array($result);
+    $myrow = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ?d", $id);
     if ($myrow) {
-        $titleToModify = q($myrow['title']);
-        $contentToModify = standard_text_escape($myrow['body']);
+        $titleToModify = q($myrow->title);
+        $contentToModify = standard_text_escape($myrow->body);
         $displayAnnouncementList = true;
-        $begindate = $myrow['begin'];
-        $enddate = $myrow['end'];
-    }    
+        $begindate = $myrow->begin;
+        $enddate = $myrow->end;
+    }
 } elseif (isset($_POST['submitAnnouncement'])) {
     // submit announcement command
     $start_sql = 'begin = ' . ((isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date']) ? autoquote($_POST['start_date']) : 'NULL');
@@ -105,29 +104,28 @@ if (isset($_GET['delete'])) {
     if (isset($_POST['id'])) {
         // modify announcement
         $id = intval($_POST['id']);
-        db_query("UPDATE admin_announcement
-                        SET title = " . autoquote($title) . ", body = " . autoquote($newContent) . ",
-			lang = " . autoquote($lang_admin_ann) . ",
+        Database::get()->query("UPDATE admin_announcement
+                        SET title = ?s, body = ?s,
+			lang = ?s,
 			`date` = NOW(), $start_sql, $end_sql
-                        WHERE id = $id");
+                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $id);
         $message = $langAdminAnnModify;
     } else {
         // add new announcement
         // order
-        $result = db_query("SELECT MAX(`order`) FROM admin_announcement");
-        list($orderMax) = mysql_fetch_row($result);
+        $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
         $order = $orderMax + 1;
-        db_query("INSERT INTO admin_announcement
-                        SET title = " . quote($title) . ", 
-                        body = " . quote($newContent) . ",
+        Database::get()->query("INSERT INTO admin_announcement
+                        SET title = ?s, 
+                        body = ?s,
                         visible = 1, 
                         visible_t = 1,
                         visible_s = 1,
-                        lang = " . quote($lang_admin_ann) . ",
+                        lang = ?s,
                         `date` = NOW(), 
-                        `order` = $order, 
+                        `order` = ?d, 
                         $start_sql, 
-                        $end_sql");
+                        $end_sql", $title, $newContent, $lang_admin_ann, $order);
         $message = $langAdminAnnAdd;
     }
 }
@@ -170,8 +168,8 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             rich_text_editor('newContent', 5, 40, $contentToModify)
             . "</td></tr>";
     $tool_content .= "<tr><td><b>$langLanguage:</b><br />";
-    if (isset($_GET['modify'])) {        
-        if (isset($begindate)) {            
+    if (isset($_GET['modify'])) {
+        if (isset($begindate)) {
             $start_checkbox = 'checked';
             $start_date = $begindate;
         } else {
@@ -184,7 +182,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         } else {
             $end_checkbox = '';
             $end_date = date("Y-n-j", time());
-        }        
+        }
         $tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
     } else {
         $start_checkbox = $end_checkbox = $end_date = $start_date = '';
@@ -192,30 +190,30 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     }
     $tool_content .= "<span class='smaller'> $langTipLangAdminAnn</span></td></tr>";
 
-    /*$lang_jscalendar = langname_to_code($language);
-    $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-    $head_content .= $jscalendar->get_load_files_code(); */
+    /* $lang_jscalendar = langname_to_code($language);
+      $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+      $head_content .= $jscalendar->get_load_files_code(); */
 
     //$datetoday = date("Y-n-j", time());
 
-/*    function make_calendar($id, $label, $name, $checkbox, $datetoday) {
-        global $jscalendar, $langActivate;
+    /*    function make_calendar($id, $label, $name, $checkbox, $datetoday) {
+      global $jscalendar, $langActivate;
 
-        return "<tr><td><b>" . $label . ":</b><br />" .
-                $jscalendar->make_input_field(
-                        array('showOthers' => true,
-                    'showsTime' => true,
-                    'align' => 'Tl',
-                    'ifFormat' => '%Y-%m-%d %H:%m'), array('name' => $name,
-                    'value' => $datetoday,
-                    'style' => '')) .
-                "&nbsp;<span class='smaller'><input type='checkbox' name='{$name}_active' $checkbox onClick=\"toggle($id,this,'$name')\"/>&nbsp;" .
-                $langActivate . "</span></td></tr>";
-    }
+      return "<tr><td><b>" . $label . ":</b><br />" .
+      $jscalendar->make_input_field(
+      array('showOthers' => true,
+      'showsTime' => true,
+      'align' => 'Tl',
+      'ifFormat' => '%Y-%m-%d %H:%m'), array('name' => $name,
+      'value' => $datetoday,
+      'style' => '')) .
+      "&nbsp;<span class='smaller'><input type='checkbox' name='{$name}_active' $checkbox onClick=\"toggle($id,this,'$name')\"/>&nbsp;" .
+      $langActivate . "</span></td></tr>";
+      }
 
-    $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
-            make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) . */
-            
+      $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
+      make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) . */
+
     $tool_content .= "<tr><td><b>$langStartDate:</b><br />
             <input type='text' name='start_date' value='$start_date'>";
     $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='start_date_active' $end_checkbox onClick=\"toggle(1,this,'start_date')\" />
@@ -223,7 +221,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<tr><td><b>$langEndDate:</b><br />
             <input type='text' name='end_date' value='$end_date'>";
     $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='end_date_active' $end_checkbox onClick=\"toggle(2,this,'end_date')\" />
-                    &nbsp;$langActivate</span></td></tr>";                
+                    &nbsp;$langActivate</span></td></tr>";
     $tool_content .= "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
             "</td></tr></table></fieldset></form>";
 }
@@ -239,34 +237,32 @@ if (isset($_GET['up'])) {
 }
 
 // if there are announcements without ordering -> order by id, latest is first
-$result = db_query("SELECT id, `order` FROM admin_announcement WHERE `order`=0");
-$no_order = mysql_fetch_row($result);
-if (!empty($no_order)) {
-    db_query("UPDATE admin_announcement SET `order`=`id`+1");
+$no_order = Database::get()->querySingle("SELECT id, `order` FROM admin_announcement WHERE `order`=0");
+if ($no_order) {
+    Database::get()->query("UPDATE admin_announcement SET `order`=`id`+1");
 }
 
 if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-    $result = db_query("SELECT id, `order` FROM admin_announcement ORDER BY `order` $sortDirection");
-
-    while (list($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
+    Database::get()->queryFunc("SELECT id, `order` FROM admin_announcement ORDER BY `order` $sortDirection",
+    function ($announcement) use(&$thisAnnouncementOrderFound, &$nextAnnouncementId, &$nextAnnouncementOrder, &$thisAnnouncementOrder, &$thisAnnouncementId){
         if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
-            $nextAnnouncementId = $announcementId;
-            $nextAnnouncementOrder = $announcementOrder;
-            db_query("UPDATE admin_announcement SET `order` = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'");
-            db_query("UPDATE admin_announcement SET `order` = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'");
-            break;
+            $nextAnnouncementId = $announcement->id;
+            $nextAnnouncementOrder = $announcement->order;
+            Database::get()->query("UPDATE admin_announcement SET `order` = ?s WHERE id = ?d", $nextAnnouncementOrder, $thisAnnouncementId);
+            Database::get()->query("UPDATE admin_announcement SET `order` = ?s WHERE id = ?d", $thisAnnouncementOrder, $nextAnnouncementId);
+            return true;
         }
         // find the order
-        if ($announcementId == $thisAnnouncementId) {
-            $thisAnnouncementOrder = $announcementOrder;
+        if ($announcement->id == $thisAnnouncementId) {
+            $thisAnnouncementOrder = $announcement->order;
             $thisAnnouncementOrderFound = true;
         }
-    }
+    });
 }
 
 // display admin announcements
-if ($displayAnnouncementList == true) {
-    $result = db_query("SELECT * FROM admin_announcement ORDER BY `order` DESC");
+if ($displayAnnouncementList == true) {    
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     // announcement order taken from announcements.php
     $iterator = 1;
     $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
@@ -280,9 +276,9 @@ if ($displayAnnouncementList == true) {
         $tool_content .= "<table class='tbl_alt' width='100%'>
                         <tr><th colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langTitle</th>
                             <th>$langAnnouncement</th>
-                            <th colspan='2'><div align='center'>$langActions</div></th>";        
-        while ($myrow = mysql_fetch_array($result)) {
-            if ($myrow['visible'] == 1) {
+                            <th colspan='2'><div align='center'>$langActions</div></th>";
+        foreach ($result as $myrow ){
+            if ($myrow->visible == 1) {
                 $visibility = 0;
                 $classvis = 'visible';
                 if ($iterator % 2 == 0) {
@@ -296,29 +292,29 @@ if ($displayAnnouncementList == true) {
                 $classvis = 'invisible';
                 $icon = 'invisible.png';
             }
-            $myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
+            $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>\n";
             $tool_content .= "<td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>";
-            $tool_content .= "<td width='180'><b>" . q($myrow['title']) . "</b><br><span class='smaller'>$myrow[date]</span></td>\n";
-            $tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>\n";
+            $tool_content .= "<td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>\n";
+            $tool_content .= "<td>" . standard_text_escape($myrow->body) . "</td>\n";
             $tool_content .= "<td width='60'>
-			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow[id]'>
+			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow->id'>
 			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
 			</a>
-			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick=\"return confirmation('$langConfirmDelete');\">
+			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow->id' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
 
-			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow[id]&amp;vis=$visibility'>
+			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility'>
 			<img src='$themeimg/$icon' title='$langVisibility'/></a>";
             if ($announcementNumber > 1) {
                 $tool_content .= "<td align='right' width='40'>";
             }
             if ($iterator != 1) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=" . $myrow["id"] . "'>
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=" . $myrow->id . "'>
 				<img class='displayed' src='$themeimg/up.png' title='" . $langUp . "' /></a>";
             }
             if ($iterator < $bottomAnnouncement) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow["id"] . "'>
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow->id . "'>
 				<img class='displayed' src='$themeimg/down.png' title='" . $langDown . "' /></a>";
             }
             $tool_content .= "</td></tr>";

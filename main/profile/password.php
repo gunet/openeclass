@@ -78,17 +78,15 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    //all checks ok. Change password!
-    $sql = "SELECT `password` FROM `user` WHERE `id`=" . $_SESSION["uid"] . " ";
-    $result = db_query($sql);
-    $myrow = mysql_fetch_array($result);
-
+    //all checks ok. Change password!    
+    $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);        
+    
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_REQUEST['password_form']);
 
-    if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow['password'])) {
-        db_query("UPDATE `user` SET `password` = '$new_pass'
-                                 WHERE `id` = " . $_SESSION["uid"]);
+    if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
+        Database::get()->query("UPDATE user SET password = ?s
+                                 WHERE id = ?d", $new_pass, $_SESSION['uid']);        
         Log::record(0, 0, LOG_PROFILE, array('uid' => $_SESSION['uid'],
                                              'pass_change' => 1));
         header("Location:" . $passurl . "?msg=4");

@@ -65,8 +65,9 @@ if (!add_units_navigation()) {
     $navigation[] = array("url" => "learningPath.php?course=$course_code", "name" => $langAdm);
 }
 
-if (!isset($titlePage))
+if (!isset($titlePage)) {
     $titlePage = '';
+}
 if (!empty($nameTools)) {
     $titlePage .= $nameTools . ' - ';
 }

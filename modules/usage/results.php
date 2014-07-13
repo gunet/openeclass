@@ -81,39 +81,37 @@ switch ($u_interval) {
 $chart = new Plotter(300, 300);
 
 switch ($u_stats_value) {
-    case "visits":
-        $query = "SELECT " . $date_what . " SUM(hits) AS cnt FROM actions_daily
-                         WHERE $date_where
-                         AND $mod_where
-                         AND course_id = $course_id
-                        $date_group ORDER BY `day` ASC";
-
-        $result = db_query($query);
+    case "visits":        
+        $result = Database::get()->queryArray("SELECT  $date_what SUM(hits) AS cnt FROM actions_daily
+                                            WHERE $date_where
+                                            AND $mod_where
+                                            AND course_id = ?d
+                                           $date_group ORDER BY `day` ASC", $course_id);
 
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($langSummary, $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($langSummary, $row->cnt);
                 }
                 break;
             case "daily":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['date'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->date, $row->cnt);
                 }
                 break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['week_start'] . ' - ' . $row['week_end'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
                 }
                 break;
             case "monthly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($langMonths[$row['month']], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($langMonths[$row->month], $row->cnt);
                 }
                 break;
             case "yearly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->growWithPoint($row['year'], $row['cnt']);
+                foreach ($result as $row) {
+                    $chart->growWithPoint($row->year, $row->cnt);
                 }
                 break;
         }
@@ -129,36 +127,41 @@ switch ($u_stats_value) {
                 AND course_id = $course_id
                 $date_group ORDER BY day ASC";
 
-        $result = db_query($query);
+        $result = Database::get()->queryArray("SELECT $date_what SUM(duration) AS tot_dur
+                                                FROM actions_daily
+                                                WHERE $date_where
+                                                AND $mod_where
+                                                AND course_id = ?d
+                                                $date_group ORDER BY day ASC", $course_id);
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $row['tot_dur'] = round($row['tot_dur'] / 60);
-                    $chart->growWithPoint($langSummary, $row['tot_dur']);
+                foreach ($result as $row) {
+                    $row->tot_dur = round($row->tot_dur / 60);
+                    $chart->growWithPoint($langSummary, $row->tot_dur);
                 }
                 break;
             case "daily":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $row['tot_dur'] = round($row['tot_dur'] / 60);
-                    $chart->growWithPoint($row['date'], $row['tot_dur']);
+                foreach ($result as $row) {
+                    $row->tot_dur = round($row->tot_dur / 60);
+                    $chart->growWithPoint($row->date, $row->tot_dur);
                 }
                 break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $row['tot_dur'] = round($row['tot_dur'] / 60);
-                    $chart->growWithPoint($row['week_start'] . ' - ' . $row['week_end'], $row['tot_dur']);
+                foreach ($result as $row) {
+                    $row->tot_dur = round($row->tot_dur / 60);
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->tot_dur);
                 }
                 break;
             case "monthly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $row['tot_dur'] = round($row['tot_dur'] / 60);
-                    $chart->growWithPoint($langMonths[$row['month']], $row['tot_dur']);
+                foreach ($result as $row) {
+                    $row->tot_dur = round($row->tot_dur / 60);
+                    $chart->growWithPoint($langMonths[$row->month], $row->tot_dur);
                 }
                 break;
             case "yearly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $row['tot_dur'] = round($row['tot_dur'] / 60);
-                    $chart->growWithPoint($row['year'], $row['tot_dur']);
+                foreach ($result as $row) {
+                    $row->tot_dur = round($row->tot_dur / 60);
+                    $chart->growWithPoint($row->year, $row->tot_dur);
                 }
                 break;
         }
@@ -168,7 +171,6 @@ switch ($u_stats_value) {
 
         break;
 }
-mysql_free_result($result);
 
 $errorMsg = '<p class="alert1">' . $langNoStatistics . '</p>';
 $tool_content .= $chart->plot($errorMsg);

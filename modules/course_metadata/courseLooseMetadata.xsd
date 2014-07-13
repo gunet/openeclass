@@ -237,11 +237,13 @@
             <xs:element name="coTeachingDepartmentCreditHours" type="t_integer"/>
             <xs:element name="confirmCurriculum"               type="t_boolean"/>
             <xs:element name="confirmVideolectures"            type="t_boolean"/>
+            <xs:element name="videolectures"                   type="t_integer"/>
             <xs:element name="confirmAMinusLevel"              type="t_boolean"/>
             <xs:element name="confirmALevel"                   type="t_boolean"/>
             <xs:element name="confirmAPlusLevel"               type="t_boolean"/>
             <xs:element name="lastLevelConfirmation"           type="t_dateTime"/>
-            <xs:element name="language"                        type="t_string"/>
+            <xs:element name="firstCreateDate"                 type="t_dateTime"/>
+            <xs:element name="language"                        type="t_langString"/>
             <xs:element name="targetGroup"                     type="t_langString"/>
             <xs:element name="credits"                         type="t_integer"/>
             <xs:element name="description"                     type="t_langString"/>
@@ -278,7 +280,8 @@
             <xs:element name="eudoxusURL"  type="t_url"/>
             <xs:element name="kalliposURL" type="t_url"/>
             <xs:element name="thematic"    type="t_langString"/>
-            <xs:element name="license"     type="t_string"/>
+            <xs:element name="subthematic" type="t_langString"/>
+            <xs:element name="license"     type="t_langString"/>
         </xs:choice>
     </xs:group>
 

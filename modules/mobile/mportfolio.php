@@ -47,6 +47,7 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 
             $t->appendChild(new DOMAttr('name', $tool->name));
             $t->appendChild(new DOMAttr('link', $tool->link));
+            $t->appendChild(new DOMAttr('redirect', $tool->redirect));
             $t->appendChild(new DOMAttr('type', $tool->type));
             $t->appendChild(new DOMAttr('active', $tool->active));
         }
@@ -67,35 +68,40 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langMyAnnouncements;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/announcements/myannouncements.php');
+    $tool->redirect = $urlMobile . 'modules/announcements/myannouncements.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myannouncements';
     $tool->active = "true";
     $toolsArr[] = $tool;
 
     $tool = new stdClass();
     $tool->name = $langMyPersoDeadlines;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/work/mydeadlines.php');
+    $tool->redirect = $urlMobile . 'modules/work/mydeadlines.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'mydeadlines';
     $tool->active = "true";
     $toolsArr[] = $tool;
 
     $tool = new stdClass();
     $tool->name = $langMyAgenda;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/agenda/myagenda.php');
+    $tool->redirect = $urlMobile . 'modules/agenda/myagenda.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myagenda';
     $tool->active = "true";
     $toolsArr[] = $tool;
 
     $tool = new stdClass();
     $tool->name = $langModifyProfile;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/profile/profile.php');
+    $tool->redirect = $urlMobile . 'main/profile/profile.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myprofile';
     $tool->active = "true";
     $toolsArr[] = $tool;
 
     $tool = new stdClass();
     $tool->name = $langRegCourses;
-    $tool->link = $baseurl . urlencode($urlMobile . 'modules/auth/courses.php');
+    $tool->redirect = $urlMobile . 'modules/auth/courses.php';
+    $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'coursesubscribe';
     $tool->active = "true";
     $toolsArr[] = $tool;

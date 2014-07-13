@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -57,9 +57,12 @@ if (!visible_module(MODULE_ID_ANNOUNCE)) {
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $course_id)->title, ENT_NOQUOTES);
 
-$lastbuilddate = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+$q = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
                 FROM announcement WHERE course_id = ?d AND visible = 1
-                ORDER BY `order` DESC", $course_id)->dateformat;
+                ORDER BY `order` DESC", $course_id);
+if ($q) {
+    $lastbuilddate = $q->dateformat;
+}
 
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";

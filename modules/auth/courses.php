@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,8 +61,8 @@ if (isset($_POST['submit'])) {
         $cid = intval($value);
         if (!in_array($cid, $selectCourse)) {
             Database::get()->query("DELETE FROM course_user "
-                    . " WHERE status <> ?d AND stats <> ?d AND user_id = ?d "
-                    . " AND course_id = ?d", USER_TEACHER, USER_GUEST, intval($uid), intval($cid));
+                    . " WHERE status <> ?d AND status <> ?d AND user_id = ?d "
+                    . " AND course_id = ?d", USER_TEACHER, USER_GUEST, $uid, $cid);
             // logging
             Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
         }
@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
         if ($course_info) {
             if (($course_info->visible == COURSE_REGISTRATION or 
                     $course_info->visible == COURSE_OPEN) and !empty($course_info->password) and 
-                    $course_info->password != autounquote($_POST['pass' . $cid])) {
+                    $course_info->password !== autounquote($_POST['pass' . $cid])) {
                 $errorExists = true;
                 $restrictedCourses[] = $course_info->public_code;
                 continue;

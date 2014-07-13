@@ -42,11 +42,9 @@ initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-    if (isset($uid) and !$is_member and $status != USER_GUEST) {
+    if (isset($uid) and ! $is_member and $status != USER_GUEST) {
         if ($max_members == 0 or $member_count < $max_members) {
-            $sqlReg = db_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id, description = ''");
-
-            $id = mysql_insert_id();
+            $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
                 'uid' => $uid,
@@ -61,7 +59,7 @@ if (isset($_GET['selfReg'])) {
         exit;
     }
 }
-if (!$is_member and !$is_editor and (!$self_reg or $member_count >= $max_members)) {
+if (!$is_member and ! $is_editor and ( !$self_reg or $member_count >= $max_members)) {
     $tool_content .= $langForbidden;
     draw($tool_content, 2);
     exit;
@@ -70,7 +68,7 @@ if (!$is_member and !$is_editor and (!$self_reg or $member_count >= $max_members
 $tool_content .= "<div id='operations_container'><ul id='opslist'>";
 if ($is_editor or $is_tutor) {
     $tool_content .= "<li><a href='group_edit.php?course=$course_code&amp;group_id=$group_id'>$langEditGroup</a></li>\n";
-} elseif ($self_reg and isset($uid) and !$is_member) {
+} elseif ($self_reg and isset($uid) and ! $is_member) {
     if ($max_members == 0 or $member_count < $max_members) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
     }
@@ -211,7 +209,7 @@ function loadGroupTools() {
         $group_tools .= "<li><a href='document.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
     }
     if ($wiki) {
-    	$group_tools .= "<li><a href='../wiki/?course=$course_code&amp;gid=$group_id'>$langWiki</a></li>";
+        $group_tools .= "<li><a href='../wiki/?course=$course_code&amp;gid=$group_id'>$langWiki</a></li>";
     }
     if ($is_editor or $is_tutor) {
         $group_tools .= "<li><a href='group_email.php?course=$course_code&amp;group_id=$group_id'>$langEmailGroup</a></li>

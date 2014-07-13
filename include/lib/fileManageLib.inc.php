@@ -52,31 +52,34 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
     global $course_id, $group_sql, $subsystem;
 
     if ($action == "delete") {
-        db_query("DELETE FROM `$dbTable`
+        // db_query check argument
+        Database::get()->query("DELETE FROM `$dbTable`
                                  WHERE $group_sql AND
                                        path LIKE " . quote($oldPath . '%'));
         if ($subsystem == COMMON) {
             // For common documents, delete all references
-            db_query("DELETE FROM `$dbTable`
+            // db_query check argument
+            Database::get()->query("DELETE FROM `$dbTable`
                                          WHERE extra_path LIKE " . quote('common:' . $oldPath . '%'));
         }
         Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
             'filename' => $filename));
     } elseif ($action == "update") {
-        db_query("UPDATE `$dbTable`
+        // db_query check argument
+        Database::get()->query("UPDATE `$dbTable`
                                  SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
                                  WHERE $group_sql AND path LIKE " . quote($oldPath . '%'));
         if ($subsystem == COMMON) {
             // For common documents, update all references
-            db_query("UPDATE `$dbTable`
+            Database::get()->query("UPDATE `$dbTable`
                                          SET extra_path = CONCAT('common:$newPath',
                                                                  SUBSTRING(extra_path, LENGTH('common:$oldPath')+1))
                                          WHERE extra_path LIKE " . quote('common:' . $oldPath . '%'));
         }
-        list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath'))
-                                FROM $dbTable WHERE path='$newPath'"));
-        list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
-                                        WHERE path = '$newencodepath'"));
+        $newencodepath = Database::get()->querySingle("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath')) as value
+                                FROM $dbTable WHERE path=?s", $newPath)->value;
+        $newpath = Database::get()->querySingle("SELECT filename FROM $dbTable
+                                        WHERE path = ?s", $newencodepath)->filename;
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
             'newencpath' => $newPath,
             'newpath' => $newpath,
@@ -212,15 +215,18 @@ function move_dir($src, $dest) {
         if ($element == "." || $element == "..") {
             continue; // skip the current and parent directories
         } elseif (is_file($file)) {
+            if (is_file("$dest/$element")) {
+                unlink("$dest/$element");
+            }
             copy($file, "$dest/$element") or
                     die("Error copying $src/$element to $dest");
             unlink($file);
         } elseif (is_dir($file)) {
             move_dir($file, "$dest/$element");
-            rmdir($file);
         }
     }
     closedir($handle);
+    removeDir($src);
 }
 
 /*
@@ -271,9 +277,9 @@ function directory_list() {
 
     $dirArray = array();
 
-    $r = db_query("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY filename");
-    while ($row = mysql_fetch_array($r)) {
-        $dirArray[$row['path']] = $row['filename'];
+    $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY filename");
+    foreach ($r as $row) {
+        $dirArray[$row->path] = $row->filename;
     }
     return $dirArray;
 }
@@ -338,10 +344,12 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         die("error: " . $zipfile->errorInfo(true));
     }
     $real_paths = array();
-    foreach ($GLOBALS['common_docs'] as $path => $real_path) {
-        $filename = $GLOBALS['map_filenames'][$path];
-        $GLOBALS['common_filenames'][$real_path] = $filename;
-        $real_paths[] = $real_path;
+    if (isset($GLOBALS['common_docs'])) {
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+            $filename = $GLOBALS['map_filenames'][$path];
+            $GLOBALS['common_filenames'][$real_path] = $filename;
+            $real_paths[] = $real_path;
+        }
     }
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
     if (!$v) {
@@ -358,24 +366,24 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $encoded_filenames = $decoded_filenames = $filename = array();
 
     $hidden_dirs = array();
-    $sql = db_query("SELECT path, filename, visible, format, extra_path FROM document
+    // db_query check argument
+    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
-    while ($files = mysql_fetch_assoc($sql)) {
-        if ($cpath = common_doc_path($files['extra_path'], true)) {
-            if ($GLOBALS['common_doc_visible'] and
-                    ($include_invisible or $files['visible'] == 1)) {
-                $GLOBALS['common_docs'][$files['path']] = $cpath;
+    foreach ($sql as $files) {
+        if ($cpath = common_doc_path($files->extra_path, true)) {
+            if ($GLOBALS['common_doc_visible'] and ( $include_invisible or $files->visible == 1)) {
+                $GLOBALS['common_docs'][$files->path] = $cpath;
             }
         }
-        $GLOBALS['path_visibility'][$files['path']] = ($include_invisible or $files['visible'] == 1);
-        array_push($encoded_filenames, $files['path']);
-        array_push($filename, $files['filename']);
-        if (!$include_invisible and $files['format'] == '.dir' and $files['visible'] != 1) {
-            $parentdir = preg_replace('|/[^/]+$|', '', $files['path']);
+        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or $files->visible == 1);
+        array_push($encoded_filenames, $files->path);
+        array_push($filename, $files->filename);
+        if (!$include_invisible and $files->format == '.dir' and $files->visible != 1) {
+            $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
             // Don't need to check lower-level hidden dir if parent is there
             if (array_search($parentdir, $hidden_dirs) === false) {
-                array_push($hidden_dirs, $files['path']);
+                array_push($hidden_dirs, $files->path);
             }
         }
     }
@@ -421,10 +429,10 @@ function common_doc_path($extra_path, $full = false) {
     global $webDir, $common_doc_visible;
     if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
         $cpath = $matches[1];
-        $q = db_query("SELECT visible FROM document
-                                      WHERE path = " . quote($cpath) . " AND
-                                            subsystem = " . COMMON);
-        if ($q and list($vis) = mysql_fetch_row($q) and $vis) {
+        $q = Database::get()->querySingle("SELECT visible FROM document
+                                      WHERE path = ?s AND
+                                            subsystem = " . COMMON, $cpath);
+        if ($q and $q->visible) {
             $common_doc_visible = true;
         } else {
             $common_doc_visible = false;
@@ -440,9 +448,7 @@ function convert_to_real_filename($p_event, &$p_header) {
     global $map_filenames, $path_visibility, $basedir_length;
 
     $filename = substr($p_header['filename'], $basedir_length);
-    if (!isset($path_visibility[$filename]) or
-            !$path_visibility[$filename] or
-            !isset($map_filenames[$filename])) {
+    if (!isset($path_visibility[$filename]) or ! $path_visibility[$filename] or ! isset($map_filenames[$filename])) {
         return 0;
     }
 
