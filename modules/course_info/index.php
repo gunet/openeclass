@@ -202,8 +202,15 @@ if (isset($_POST['submit'])) {
             setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
         }
         
-        setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
-        setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
+        if (isset($_POST['r_radio'])) {
+            setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
+        }
+        if (isset($_POST['ran_radio'])) {
+            setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $_POST['ran_radio'], $course_id);
+        }
+        if (isset($_POST['c_radio'])) {
+            setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
+        }
     }
 } else {
     $tool_content .= "
@@ -388,8 +395,30 @@ if (isset($_POST['submit'])) {
         <legend>$langRating</legend>
             <table class='tbl' width='100%'>
                 <tr><td colspan='2'><input type='radio' value='1' name='r_radio' $checkEn />$langRatingEn</td></td></tr>
-                <tr><td colspan='2'><input type='radio' value='0' name='r_radio' $checkDis />$langRatingDis</td></tr>
-            </table>
+                <tr><td colspan='2'><input type='radio' value='0' name='r_radio' $checkDis />$langRatingDis</td></tr>";
+    
+    if (course_status($course_id) != COURSE_OPEN) {
+        $radio_dis = " disabled";
+        $rating_dis_label = "<tr><td><em>".$langRatingAnonDisCourse."</em></td></tr>";
+    } else {
+        $radio_dis = "";
+        $rating_dis_label = "";
+    }
+    
+    if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<tr><td colspan='2'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis/>$langRatingAnonEn</td></td></tr>
+                      <tr><td colspan='2'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis/>$langRatingAnonDis</td></tr>
+                      <tr><td colspan='2'>$rating_dis_label</tr></td>";
+    
+    
+    $tool_content .= "</table>
     </fieldset>";
     
     if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {

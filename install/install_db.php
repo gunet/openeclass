@@ -603,6 +603,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `rating` (
                 `widget` VARCHAR(30) NOT NULL,
                 `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `rating_source` VARCHAR(50) NOT NULL,
                 INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
                 INDEX `rating_index_2` (`rid`, `rtype`, `widget`, `user_id`)) $charset_spec");
 

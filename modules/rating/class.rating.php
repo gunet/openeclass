@@ -97,36 +97,57 @@ Class Rating {
      */
     public function castRating($value, $user_id) {
         if ($this->widget == 'up_down') {
-            $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
-            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+            if ($user_id == 0) {//anonymous user
+                $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+            } else {
+                $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+            }
             
             if ($res->c > 0) {//clicking again the same icon deletes the rating
-                $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+                if ($user_id == 0) {//anonymous user
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                } else {
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
+                }
                 
                 $action = "del";
             } else {//either casting a new rating or changing the rating
-                //delete old rating of the same user on this resource if it exists
-                $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+                if ($user_id == 0) {//anonymous user
+                    //delete old rating of the same user on this resource if it exists
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+                } else {
+                    //delete old rating of the same user on this resource if it exists
+                    $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+                }
                 
                 //cast new rating
-                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`) VALUES(?d,?s,?s,?d,?d)";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id);
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
                 
                 $action = "ins";
             } 
         } elseif ($this->widget == 'fivestar') {
-            //Delete old ratings       
-            $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
-            Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+            //Delete old ratings
+            if ($user_id == 0) {//anonymous user
+                $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+            } else {
+                $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+            }       
          
             if ($value == 0) {//reset vote
                 $action = "del";
             } else {
                 //cast new rating
-                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`) VALUES(?d,?s,?s,?d,?d)";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id);
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`, `rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
                 
                 $action = "ins";
             }
@@ -242,8 +263,14 @@ Class Rating {
      * @return boolean
      */
     public function userHasRated($user_id) {
-        $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
-        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+        if ($user_id == 0) {//anonymous users
+            $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+        } else {
+            $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id);
+        }
+        
         if ($res->c > 0) {
             return true;
         } else {
@@ -274,7 +301,7 @@ Class Rating {
             $onclick_up = $onclick_down = "";
             
             //disable icons when user hasn't permission to vote
-            if (Rating::permRate($isEditor, $uid, $courseId)) {
+            if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
                 $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
                 $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
             }
@@ -297,7 +324,7 @@ Class Rating {
             
             $num_ratings = $this->getRatingsNum();
             
-            if (Rating::permRate($isEditor, $uid, $courseId)) {
+            if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
                 $userRating = "";
                 if ($this->userHasRated($uid)) {
                     $userRating = 'data-rateit-value="'.$this->getFivestarUserRating($uid).'"';
@@ -382,7 +409,14 @@ Class Rating {
      * @param courseId the course id
      * @return boolean
      */
-    public static function permRate($isEditor, $uid, $courseId) {
+    public static function permRate($isEditor, $uid, $courseId, $rtype) {
+        
+        if ($rtype == 'course') {
+            if ((course_status($courseId) == COURSE_OPEN) AND (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $courseId) == 1)) {
+                return true;
+            }
+        }
+        
         if ($isEditor) {//teacher is always allowed to rate
         	return true;
         } else {
