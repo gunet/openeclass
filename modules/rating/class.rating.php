@@ -350,8 +350,14 @@ Class Rating {
      * @return int
      */
     public function getFivestarUserRating($user_id) {
-        $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
-        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id);
+        if ($user_id == 0) {//anonymous user
+            $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id, $_SERVER['REMOTE_ADDR']);
+        } else {
+            $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id);
+        }
+        
         return round($res->value,1);
     }
     
