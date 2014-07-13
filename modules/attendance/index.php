@@ -38,13 +38,42 @@ load_js('tools.js');
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
+load_js('datatables');
+load_js('datatables_filtering_delay');
 
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
 <script type='text/javascript'>
 $(function() {
-$('input[name=date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
+    $('input[name=date]').datetimepicker({
+        dateFormat: 'yy-mm-dd', 
+        timeFormat: 'hh:mm'
+        });
+    var oTable = $('#users_table{$course_id}').DataTable ({
+        'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],
+               'sPaginationType': 'full_numbers',              
+                'bSort': true,
+                'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '".$langNoResult."',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '".$langSearch."',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
     });
 });
 </script>";
@@ -68,6 +97,9 @@ if ($is_editor) {
 
     // Admin attendance, booking (list of users), Add new attendance activity
     $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+    if(!isset($_GET['editUsers'])){
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langAdminUsers</a></li>";
+    }
     if(isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
     }
@@ -82,6 +114,7 @@ if ($is_editor) {
 
     //FLAG: flag to show the activities
     $showAttendanceActivities = 1;       
+    
     //EDIT DB: edit users only semester
     if(isset($_POST['submitAttendanceActiveUsers'])) {
         $attendance_users_limit = intval($_POST['usersLimit']);
@@ -582,7 +615,119 @@ if ($is_editor) {
         //do not show activities list
         $showAttendanceActivities = 0;
     }
+    
+    //EDIT DB: display all the attendance users (reset the list, remove users)
+    elseif(isset($_GET['editUsers'])){
+        
+        //delete users from attendance list
+        if (isset($_POST['deleteSelectedUsers'])) {
+            foreach ($_POST['recID'] as $value) {
+                $value = intval($value);
+                //delete users from attendance users table
+                Database::get()->query("DELETE FROM attendance_users WHERE id=?d ", $value);
+            }
+        }
+        
+        //query to reset users in attedance list
+        if (isset($_POST['resetAttendance'])) {
+            $usersLimit = intval($_POST['usersLimit']);
+            
+            if($usersLimit == 1){
+                $limitDate = date('Y-m-d', strtotime(' -6 month'));
+            }elseif($usersLimit == 2){
+                $limitDate = date('Y-m-d', strtotime(' -3 month'));
+            }elseif($usersLimit == 3){
+                $limitDate = "0000-00-00";
+            }
+            
+            //update the main attendance table
+            Database::get()->querySingle("UPDATE attendance SET `students_semester` = ?d WHERE id = ?d ", $usersLimit, $attendance_id);
+            //clear attendance users table
+            Database::get()->querySingle("DELETE FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
+            
+            //check the rest value and rearrange the table
+            $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
+                               WHERE `user`.id = `course_user`.`user_id`
+                               AND `user`.id = actions_daily.user_id
+                               AND actions_daily.day > ?t
+                               AND `course_user`.`course_id` = ?d
+                               AND user.status = ?d 
+                               GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
+            
+            if($newUsersQuery){
+                foreach ($newUsersQuery as $newUsers){
+                    Database::get()->querySingle("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $newUsers->userID);
+                }
+            }else{
+                $tool_content .= "<div class='alert1'>Δεν υπάρχουν φοιτητές στο διάστημα που επιλέξατε</div>";
+            }
+            
+        }
+        
+        
+        //section to reset the attendance users list
+        $tool_content .= "
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+            <fieldset>
+            <h3>Ανανέωση της λίστας μαθητών (reset)</h3>
+            <select name='usersLimit'>
+                <option value=''>$langChoice</option>
+                <option value='1'>$langAttendanceActiveUsersSemester</option>
+                <option value='2'>Φοιτητές μόνο τελευταίου τριμήνου</option>
+                <option value='3'>Όλοι οι εγγεγραμμένοι φοιτητές</option>
+            </select>
+            <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
+            </fieldset>
+        </form>";
+        
+        
+        //attendance users
+        $tool_content .= "<h3>Μαθητές παρουσιολογίου</h3><br><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">";
+        
+        $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
+        
+        if($resultUsers){
+            //table to display the users
+            $tool_content .= "
+            <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+                <thead>
+                    <tr>
+                      <th width='1'>$langID</th>
+                      <th><div align='left' width='100'>$langName $langSurname</div></th>
+                      <th class='center' width='80'>$langRegistrationDateShort</th>
+                      <th class='center' width='100'>$langSelect</th>
+                    </tr>
+                </thead>
+                <tbody>";
+            
+            $cnt = 0;
+            foreach ($resultUsers as $resultUser) {  
+                $cnt++;
+                $tool_content .= "
+                    <tr>
+                        <td>$cnt</td>
+                        <td>$resultUser->name $resultUser->surname ($langAm: $resultUser->am)</td>
+                        <td>" . nice_format($resultUser->reg_date) . "</td>
+                        <td class='center'><input type='checkbox' name='recID[]' value='$resultUser->recID'></td>
+                    </tr>";
+            }
+                    
+            $tool_content .= "
+                </tbody>
+            </table>";
 
+            $tool_content .= "<input type='Submit' name='deleteSelectedUsers' value='Διαγραφή επιλεγμένων'>";
+
+            $tool_content .= "</form>";
+        }else{
+            $tool_content .= "<div class='alert1'>Δεν υπάρχουν μαθητές στο παρουσιολόγιο</div>";
+        }
+        
+        
+        //do not show activities list 
+        $showAttendanceActivities = 0;
+    }
+    
     //DISPLAY: list of attendance activities
     if($showAttendanceActivities == 1){
         
