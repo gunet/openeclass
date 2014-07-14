@@ -320,6 +320,7 @@ function createPoll($questions, $question_types) {
         $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
+        $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
 	$CreationDate = date("Y-m-d H:i");
 	$result = db_query("INSERT INTO poll
                             SET creator_id = $uid,
