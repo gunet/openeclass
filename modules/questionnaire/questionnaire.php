@@ -169,7 +169,7 @@ function printPolls() {
                                 $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
                                 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
                                 $pid = $thepoll['pid'];
-                                $countAnswers = db_query_get_single_value("SELECT COUNT(*) FROM poll_answer_record WHERE pid = $pid", $currentCourse);
+                                $countAnswers = db_query_get_single_value("SELECT COUNT(DISTINCT(user_id)) FROM poll_answer_record WHERE pid = $pid", $currentCourse);
                                 // check if user has participated
                                 $has_participated = db_query_get_single_value("SELECT COUNT(*) FROM poll_answer_record
                                                         WHERE user_id = $uid AND pid = $pid");

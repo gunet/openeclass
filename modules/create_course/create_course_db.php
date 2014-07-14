@@ -590,6 +590,7 @@ db_query("CREATE TABLE poll (
       active int(11) NOT NULL default 0,
       description MEDIUMTEXT NOT NULL,
       end_message MEDIUMTEXT NOT NULL,
+      anonymized INT(1) NOT NULL DEFAULT 0,
       PRIMARY KEY  (pid))
      $charset_spec");
 

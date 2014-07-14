@@ -1885,8 +1885,6 @@ $langPollMC = "Opción múltiple";
 $langPollFillText = "Rellena con texto";
 $langPollContinue = "Continua";
 $langPollMoreAnswers = "Más respuestas";
-$langPollAddMultiple = "Nueva cuestión de selección múltiple";
-$langPollAddFill = "Nueva cuestión de campo rellenable";
 $langPollCreated = "El cuestionario fue creado con éxito.<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollEdited = "El cuestionario fue editado con éxito.<br><br> <a href=\"questionnaire.php\">Back</a>.";
 $langPollCreator = "Creador";

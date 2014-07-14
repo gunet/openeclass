@@ -59,13 +59,13 @@ draw($tool_content, 2);
 function printPollForm() {
     global $currentCourse, $code_cours, $tool_content, $langPollStart, 
         $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
-        $langPollAlreadyParticipated, $langBack, $is_editor;
+        $langPollAlreadyParticipated, $langBack, $is_editor, $dbname;
 	
     $pid = intval($_REQUEST['pid']);
 	
     // check if user has participated
     $has_participated = mysql_fetch_array(db_query("SELECT COUNT(*) FROM poll_answer_record
-        WHERE user_id = $uid AND pid = $pid"));
+        WHERE user_id = $uid AND pid = $pid", $dbname));
     if ($has_participated[0] > 0){
         $tool_content .= "<p class='alert1'>".$langPollAlreadyParticipated."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
         draw($tool_content, 2, null);
@@ -144,25 +144,29 @@ function submitPoll() {
 	mysql_select_db($code_cours);
 	$answer = $_POST['answer'];
 	foreach ($_POST['question'] as $pqid => $qtype) {
-        $pqid = intval($pqid);
-        if ($qtype == QTYPE_MULTIPLE) {
-            foreach ($answer[$pqid] as $aid) {
-                $aid = intval($aid);
-                db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
-                    VALUES ($pid, $pqid, $aid, '', $user_id , NOW())");
+            $pqid = intval($pqid);
+            if ($qtype == QTYPE_MULTIPLE) {
+                foreach ($answer[$pqid] as $aid) {
+                    $aid = intval($aid);
+                    db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
+                        VALUES ($pid, $pqid, $aid, '', $user_id , NOW())");
+                }
+                continue;
+            } elseif ($qtype == QTYPE_SINGLE) {
+                            $aid = intval($answer[$pqid]);
+                            $answer_text = "''";
+                    } elseif ($qtype == QTYPE_FILL) {
+                            $answer_text = quote($answer[$pqid]);
+                            $aid = 0;
+                    } else {
+                continue;
             }
-            continue;
-        } elseif ($qtype == QTYPE_SINGLE) {
-			$aid = intval($answer[$pqid]);
-			$answer_text = "''";
-		} elseif ($qtype == QTYPE_FILL) {
-			$answer_text = quote($answer[$pqid]);
-			$aid = 0;
-		} else {
-            continue;
-        }
-		db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
-			VALUES ($pid, $pqid, $aid, $answer_text, $user_id, NOW())");
+            db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
+                    VALUES ($pid, $pqid, $aid, $answer_text, $user_id, NOW())");           
 	}
+        $end_message = db_query_get_single_value("SELECT end_message FROM poll WHERE pid = $pid");
+        if (!empty($end_message)) {
+            $tool_content .=  $end_message;
+        }
 	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
 }

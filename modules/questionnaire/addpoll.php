@@ -45,6 +45,16 @@ $head_content .= $jscalendar->get_load_files_code() .
         langPollNumAnswers  = '" . js_escape($langPollNumAnswers) . "',
         themeimg = '" . js_escape($themeimg) . "';
     $(poll_init);
+    $(document).ready(function(){
+      $('a.new_question').click(function(){
+        var question_type = $(this).attr('id');
+        $('<input />').attr('type', 'hidden')
+            .attr('name', question_type)
+            .attr('value', 1)
+            .appendTo('#poll');         
+         $('#poll').submit();
+      });
+    });  
 </script>";
 
 $navigation[] = array('url' => "questionnaire.php?course=$code_cours", 'name' => $langQuestionnaire);
@@ -70,7 +80,7 @@ if (isset($_POST['PollCreate'])) {
 	if (isset($_POST['question']) and questions_exist()) {
         register_posted_variables(array(
             'PollName' => true, 'PollStart' => true, 'PollEnd' => true,
-            'PollDescription' => true, 'PollEndMessage' => true));
+            'PollAnonymized' => true, 'PollDescription' => true, 'PollEndMessage' => true));
         $PollDescription = purify($PollDescription);
         $PollEndMessage = purify($PollEndMessage);
 
@@ -98,6 +108,7 @@ function fill_questions($pid)
 	$_POST['PollName'] = $poll['name'];
 	$_POST['PollStart'] = $poll['start_date'];
 	$_POST['PollEnd'] = $poll['end_date'];
+        $_POST['PollAnonymized'] = $poll['anonymized'];
 	$_POST['PollDescription'] = $poll['description'];
 	$_POST['PollEndMessage'] = $poll['end_message'];
 	$questions = db_query("SELECT * FROM poll_question WHERE pid = $pid ORDER BY pqid");
@@ -144,14 +155,13 @@ function jscal_html($name, $u_date = FALSE) {
 		Prints the new poll creation form
 ******************************************************************************/
 function printPollCreationForm() {
-	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
-        $langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-        $langPollAddLabel, $langDescription, $langPollEndMessage, $langPollEndMessageText,
-        $nameTools, $pid, $langSurvey, $langDelete, $langSelection, $code_cours,
-        $PollName, $PollDescription, $PollEndMessage, $PollStart, $PollEnd;
+	global $tool_content, $langTitle, $langPollStart, $langDescription, $langPollEnd, $langPollEndMessage, $langPollEndMessageText,
+        $nameTools, $pid, $langSurvey, $langDelete, $langNewQu, $code_cours,
+        $PollName, $PollDescription, $PollEndMessage, $PollStart, $PollEnd, $PollAnonymized, $langPollAnonymize, $langUniqueSelect,
+        $langMultipleSelect, $langFreeText, $langLabel, $langComment;
 
     register_posted_variables(array('PollName' => true, 'PollDescription' => true, 'PollEndMessage' => true,
-                                    'PollStart' => true, 'PollEnd' => true));
+                                    'PollStart' => true, 'PollEnd' => true, 'PollAnonymized' => true));
     if (!$PollEndMessage) {
         $PollEndMessage = $langPollEndMessageText;
     }
@@ -164,10 +174,11 @@ function printPollCreationForm() {
 	$tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-           <li>$langSelection:&nbsp;
-               <input type='submit' name='MoreMultiple' value='".q($langPollAddMultiple)."'>&nbsp;&nbsp;
-	           <input type='submit' size='5' name='MoreFill' value='".q($langPollAddFill)."'>&nbsp;&nbsp;
-               <input type='submit' size='5' name='MoreLabel' value='".q($langPollAddLabel)."'>
+          $langNewQu:&nbsp;
+            <li><a id='MoreSingle' class='new_question'>".$langUniqueSelect."</a></li>
+            <li><a id='MoreMultiple' class='new_question'>".$langMultipleSelect."</a></li>
+            <li><a id='MoreFill' class='new_question'>".$langFreeText."</a></li>
+            <li><a id='MoreLabel' class='new_question'>".$langLabel."/".$langComment."</a></li>
            </li>
 	  </ul>
 	</div>
@@ -187,6 +198,10 @@ function printPollCreationForm() {
 	  <td>$PollEnd</td>
 	</tr>
 	<tr>
+	  <th>$langPollAnonymize:</th>
+	  <td><input type='checkbox' name='PollAnonymized' value='1' ".((isset($PollAnonymized) && $PollAnonymized==1)?'checked':'')."></td>
+	</tr>          
+	<tr>
 	  <th>$langDescription:</th>
 	  <td>".rich_text_editor('PollDescription', 4, 52, $PollDescription)."</td>
 	</tr>
@@ -204,9 +219,12 @@ function printPollCreationForm() {
 		$questions = array();
 		$question_types = array();
 	}
-	if (isset($_POST['MoreMultiple'])) {
+        if (isset($_POST['MoreSingle'])) {
 		$questions[] = '';
-		$question_types[] = QTYPE_SINGLE;
+		$question_types[] = QTYPE_SINGLE;            
+        } elseif (isset($_POST['MoreMultiple'])) {
+		$questions[] = '';
+		$question_types[] = QTYPE_MULTIPLE;
 	} elseif (isset($_POST['MoreFill'])) {
 		$questions[] = '';
 		$question_types[] = QTYPE_FILL;
@@ -299,7 +317,7 @@ function insertPollQuestions($pid, $questions, $question_types)
 // ----------------------------------------
 function createPoll($questions, $question_types) {
     global $tool_content, $code_cours, $cours_id, $uid, $langPollCreated, $langBack,
-        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage;
+        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
 	$CreationDate = date("Y-m-d H:i");
@@ -312,6 +330,7 @@ function createPoll($questions, $question_types) {
                                 end_date = " . quote($PollEnd) . ",
                                 description = " . quote($PollDescription) . ",
                                 end_message = " . quote($PollEndMessage) . ",
+                                anonymized = " . quote($PollAnonymized) . ",    
                                 active = 1");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
@@ -324,7 +343,7 @@ function createPoll($questions, $question_types) {
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
     global $pid, $tool_content, $code_cours, $langPollEdited, $langBack,
-        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage;
+        $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
     $result = db_query("UPDATE poll
@@ -332,7 +351,8 @@ function editPoll($pid, $questions, $question_types) {
                                 start_date = " . quote($PollStart) . ",
                                 end_date = " . quote($PollEnd) . ",
                                 description = " . quote($PollDescription) . ",
-                                end_message = " . quote($PollEndMessage) . "
+                                end_message = " . quote($PollEndMessage) . ",
+                                anonymized = " . quote($PollAnonymized) . "
 		                    WHERE pid='$pid'");
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
 		(SELECT pqid FROM poll_question WHERE pid = $pid)");
@@ -352,14 +372,6 @@ function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE)
            $langPollAddAnswer, $langDelete,
            $langUniqueSelect, $langMultipleSelect;
 
-    if ($qtype == QTYPE_SINGLE) {
-        $qs_single = ' selected';
-        $qs_multiple = '';
-    } else {
-        $qs_single = '';
-        $qs_multiple = ' selected';
-    }
-
 	$tool_content .= "
         <hr />
         <table width=\"100%\" class='tbl poll_item'>
@@ -367,10 +379,7 @@ function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE)
 	  <td width='150'><b>$langQuestion #$number</b>" . toolbar($i) . "</td>
       <td>
 	    <input type='text' name='question[$i]' value='$text' size='52' />" ."
-        <select name='question_type[$i]'>
-          <option value='".QTYPE_SINGLE."'$qs_single>$langUniqueSelect</option>
-          <option value='".QTYPE_MULTIPLE."'$qs_multiple>$langMultipleSelect</option>
-        </select>
+            <input type='hidden' name='question_type[$i]' value='$qtype' />
 	  </td>
 	</tr>";
 	if (isset($_POST['answer'.$i])) {
@@ -392,9 +401,12 @@ function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE)
           <td><ul class='poll_answers'>";
 
 	foreach ($answers as $j => $answertext) {
-        $tool_content .= "<li><input type='text' name='answer${i}[]' value='$answertext' size='50'></li>";
+            $tool_content .= "<li><input type='text' name='answer${i}[]' value='$answertext' size='50'></li>";
 	}
-    $tool_content .= "<li>$langPollUnknown</li>
+        if ($qtype == QTYPE_SINGLE) {
+            $tool_content .= "<li id='unknown'>$langPollUnknown</li>";
+        }
+        $tool_content .= "
             </ul>
           </td>
           <td>&nbsp;</td>

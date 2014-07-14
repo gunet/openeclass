@@ -350,7 +350,8 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
 
     if (!mysql_field_exists(null, 'poll', 'description')) {
         db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
-                                   ADD end_message MEDIUMTEXT NOT NULL');
+                                   ADD end_message MEDIUMTEXT NOT NULL,
+                                   ADD anonymized INT(1) NOT NULL DEFAULT 0');
         db_query('ALTER TABLE poll_question
                     CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL,
                     ADD qorder int(11) NOT NULL DEFAULT 0');
