@@ -1020,11 +1020,8 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
-Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
-                 VALUES (" . quote($nameForm) . ", '', " .
-                             quote($loginForm) . ", '$password_encrypted', " .
-                             quote($emailForm) . ", 1, " . DBHelper::timeAfter() .", ". DBHelper::timeAfter(5*365*24*60*60).", 1, '*,,', 'Administrator')");
-$admin_uid = mysql_insert_id();
+$admin_uid = Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
+                 VALUES (?s, '', ?s, ?s, ?s, 1, ?t, ?t, 1, '*,,', 'Administrator')", $nameForm, $loginForm, $password_encrypted, $emailForm, DBHelper::timeAfter(), DBHelper::timeAfter(5*365*24*60*60))->lastInsertID;
 Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                  VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 Database::get()->query("INSERT INTO admin VALUES ($admin_uid, 0)");
