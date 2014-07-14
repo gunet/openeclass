@@ -2272,8 +2272,8 @@ $langPollCreationError = "<p class='caution'>Σφάλμα κατά την δημ
 $langPollDeleted ="Το Ερωτηματολόγιο διαγράφηκε με επιτυχία.";
 $langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης στα αποτελέσματα του Ερωτηματολογίου.";
 $langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο ερωτηματολόγιο";
-$langPollDeactivated ="<p class='success'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
-$langPollActivated ="<p class='success'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
+$langPollDeactivated ="Το ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
+$langPollActivated ="Το ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
 $langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!";
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";

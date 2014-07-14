@@ -57,12 +57,12 @@ if ($is_editor) {
             case 'activate':
                 $sql = "UPDATE poll SET active = 1 WHERE pid = $pid";
                 $result = db_query($sql, $currentCourseID);
-                $GLOBALS["tool_content"] .= "<p class='success'>" . q($langPollActivated) . "</p>";
+                $tool_content .= "<p class='success'>" . q($langPollActivated) . "</p>";
                 break;
             case 'deactivate':
                 $sql = "UPDATE poll SET active = 0 WHERE pid = $pid";
                 $result = db_query($sql, $currentCourseID);
-                $GLOBALS["tool_content"] .= "<p class='success'>" . q($langPollDeactivated) . "</p>";
+                $tool_content .= "<p class='success'>" . q($langPollDeactivated) . "</p>";
                 break;
         }
     } elseif (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
