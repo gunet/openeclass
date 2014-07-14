@@ -3997,3 +3997,8 @@ $langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλ�
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του μαθήματος.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρετητή";
+
+$langBBBRecord = "Καταγραφή Τηλεδιάσκεψης";
+$langBBBRecordTrue = "Ναί";
+$langBBBRecordFalse = "Όχι";
+
