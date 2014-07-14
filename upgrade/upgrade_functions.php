@@ -348,7 +348,7 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
 
-    if (!mysql_field_exists(null, 'poll', 'description')) {
+    if (!mysql_field_exists($code, 'poll', 'description')) {
         db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
                                    ADD end_message MEDIUMTEXT NOT NULL,
                                    ADD anonymized INT(1) NOT NULL DEFAULT 0');
@@ -367,7 +367,7 @@ function upgrade_course_2_9($code, $lang, $extramessage = '') {
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
     flush();
     
-    if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
+    if (!mysql_field_exists($code, 'dropbox_file', 'real_filename')) {
             db_query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
             db_query("UPDATE dropbox_file SET real_filename = filename");
     }            
@@ -381,15 +381,15 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
 	flush();                
         
-        mysql_field_exists(null, 'exercices', 'public') or
+        mysql_field_exists($code, 'exercices', 'public') or
            db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
-        mysql_field_exists(null, 'video', 'visible') or
+        mysql_field_exists($code, 'video', 'visible') or
             db_query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-        mysql_field_exists(null, 'video', 'public') or
+        mysql_field_exists($code, 'video', 'public') or
             db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-        mysql_field_exists(null, 'videolinks', 'visible') or
+        mysql_field_exists($code, 'videolinks', 'visible') or
             db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
-        mysql_field_exists(null, 'videolinks', 'public') or
+        mysql_field_exists($code, 'videolinks', 'public') or
             db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
         if (mysql_index_exists('dropbox_file', 'UN_filename')) {
             db_query("ALTER TABLE dropbox_file DROP index UN_filename");
