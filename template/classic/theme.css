@@ -1942,6 +1942,10 @@ div.tagsinput div { display:block; float: left; }
     background-position: 0 -16px;
 }
 
+.hideratewidget {
+	display:none;
+}
+
 /*-------------------*/
 
 .sharingcontainer {

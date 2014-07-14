@@ -3136,6 +3136,7 @@ $langRatingVotes = " ratings";
 $langRatingAnonEn = "Anonymous rating allowed";
 $langRatingAnonDis = "Anonymous rating not allowed";
 $langRatingAnonDisCourse = "Anonymous rating is disabled for non-open courses.";
+$langRateIt = "Rate it!";
 $langSharing = "Social sharing";
 $langSharingEn = "Social sharing enabled";
 $langSharingDis = "Social sharing disabled";

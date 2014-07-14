@@ -65,6 +65,9 @@ if (setting_get($setting_id, $course_id) == 1) {
             if ($num_ratings['fivestar'] != 0) {
                 $avg = $rating->getFivestarRating();
                 $response[0] .= $langRatingAverage.$avg.', ';
+                $response[1] = $avg;
+            } else {
+                $response[1] = 0;
             }
             
             if ($num_ratings['fivestar'] == 1) {

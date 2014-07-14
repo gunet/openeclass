@@ -362,7 +362,7 @@ Class Rating {
     }
     
     public function put($isEditor, $uid, $courseId) {
-        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage, $urlServer;
+        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage, $langRateIt, $urlServer;
         
         $this->rating_add_js();
         
@@ -417,14 +417,17 @@ Class Rating {
             $num_ratings = $this->getRatingsNum();
             
             if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
-                $userRating = "";
-                if ($this->userHasRated($uid)) {
-                    $userRating = 'data-rateit-value="'.$this->getFivestarUserRating($uid).'"';
-                }
-                $out .= '<div class="rateit" id="rateit-'.$this->rtype.'-'.$this->rid.'" '.$userRating.'></div>';
-                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+                $avg_datavalue = "";
                 if ($num_ratings['fivestar'] != 0) {
-                    $out .= $langRatingAverage.$this->getFivestarRating().', ';
+                    $avg = $this->getFivestarRating();
+                    $avg_datavalue = 'data-rateit-value="'.$avg.'" data-rateit-ispreset="true" data-rateit-readonly="true"';
+                }
+                $out .= '<div class="rateit" id="rateit-avg-'.$this->rtype.'-'.$this->rid.'" '.$avg_datavalue.'></div>';
+                
+                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+                
+                if ($num_ratings['fivestar'] != 0) {
+                    $out .= $langRatingAverage.$avg.', ';
                 }
                 
                 if ($num_ratings['fivestar'] == 1) {
@@ -432,7 +435,19 @@ Class Rating {
                 } else {
                     $out .= $num_ratings['fivestar'].$langRatingVotes.'</div>';
                 }
+                
+                $out .= '<div id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" ><a href="javascript:void(0)">'.$langRateIt.'</a></div>';
+                
+                $userRating = "";
+                if ($this->userHasRated($uid)) {
+                    $userRating = 'data-rateit-value="'.$this->getFivestarUserRating($uid).'"';
+                }
+                $out .= '<div class="hideratewidget" id="rateitwidgetdiv-'.$this->rtype.'-'.$this->rid.'">';
+                $out .= '<div class="rateit" id="rateit-'.$this->rtype.'-'.$this->rid.'" '.$userRating.'></div>';
+                $out .= '</div>';
+                
                 $out .= '<script type="text/javascript">';
+                $out .= ' $("#rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'").click(function() {$("#rateitwidgetdiv-'.$this->rtype.'-'.$this->rid.'").toggle()});';
                 $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'rated\', function (event, value) { 
                     $.ajax({
                          url: \''.$urlServer.'modules/rating/rate.php\',
@@ -441,9 +456,11 @@ Class Rating {
                          success: function (data) {
                              response = JSON.parse(data);
                              $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                             $("#rateit-avg-'.$this->rtype.'-'.$this->rid.'").rateit("value",response[1]);
                          },
                      });
                 });';
+                
                 $out .= ' $("#rateit-'.$this->rtype.'-'.$this->rid.'").bind(\'reset\', function (event, value) {
                     $.ajax({
                          url: \''.$urlServer.'modules/rating/rate.php\',
@@ -452,6 +469,7 @@ Class Rating {
                          success: function (data) {
                              response = JSON.parse(data);
                              $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                             $("#rateit-avg-'.$this->rtype.'-'.$this->rid.'").rateit("value",response[1]);
                          },
                      });
                 });';
