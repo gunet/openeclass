@@ -94,7 +94,7 @@ if ($is_editor) {
         if (isset($_POST['submit_config'])) {
                 $expand_glossary = isset($_POST['expand'])? 1: 0;
                 db_query("UPDATE cours SET expand_glossary = $expand_glossary,
-                                           glossary_index = " . (isset($_POST['index'])? 1: 0));
+                                           glossary_index = " . (isset($_POST['index'])? 1: 0) . " WHERE cours_id = $cours_id");
                 invalidate_glossary_cache();
                 $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
         }
