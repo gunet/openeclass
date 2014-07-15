@@ -79,15 +79,33 @@ $(function() {
 </script>";
 
 
-//attendance_id for the course: check if there is an attendance module for the course. If not insert it
+//attendance_id for the course: check if there is an attendance module for the course. If not insert it and create list of users
 $attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester` FROM attendance WHERE course_id = ?d ", $course_id);
 if ($attendance) {
     $attendance_id = $attendance->id;
     $attendance_limit = $attendance->limit;
-    $showSemesterParticipants = $attendance->students_semester;
-    if(!$attendance_id){
-        $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;
+    $showSemesterParticipants = $attendance->students_semester;  
+    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
+}else{
+    //new attendance
+    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;
+    
+    //create attendance users (default the last six months)
+    $limitDate = date('Y-m-d', strtotime(' -6 month'));
+    $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
+                               WHERE `user`.id = `course_user`.`user_id`
+                               AND `user`.id = actions_daily.user_id
+                               AND actions_daily.day > ?t
+                               AND `course_user`.`course_id` = ?d
+                               AND user.status = ?d 
+                               GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
+
+    if ($newUsersQuery) {
+        foreach ($newUsersQuery as $newUsers) {
+            Database::get()->querySingle("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $newUsers->userID);
+        }
     }
+    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
 }
 
 //===================
@@ -95,15 +113,17 @@ if ($attendance) {
 //===================
 if ($is_editor) {  
 
-    // Admin attendance, booking (list of users), Add new attendance activity
+    // TOP MENU
     $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+    if(isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
+    }
     if(!isset($_GET['editUsers'])){
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langAdminUsers</a></li>";
     }
-    if(isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
-    }
+    if(!isset($_GET['attendanceBook'])) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
+    }
     if(!isset($_GET['addActivity'])) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
     }
@@ -116,6 +136,7 @@ if ($is_editor) {
     $showAttendanceActivities = 1;       
     
     //EDIT DB: edit users only semester
+    /*
     if(isset($_POST['submitAttendanceActiveUsers'])) {
         $attendance_users_limit = intval($_POST['usersLimit']);
         if($attendance_users_limit ==1 || $attendance_users_limit == 0){
@@ -126,7 +147,7 @@ if ($is_editor) {
         //update value for the check box and the users query
         $showSemesterParticipants = $attendance_users_limit;
     }
-
+    
     //number of students for this attendance book (depends on the limit of the last semester selection)
     if ($showSemesterParticipants) {
         //six months limit
@@ -136,7 +157,8 @@ if ($is_editor) {
         $limitDate = "0000-00-00";
         $participantsNumber = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
     }
-
+    */
+    
     //DISPLAY: new (or edit) activity form to attendance module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
 
@@ -353,7 +375,7 @@ if ($is_editor) {
                 }
 
                 $tool_content .= "
-                <td width='70' class='center'>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $showSemesterParticipants, $course_id, $limitDate). "</td>";
+                <td width='70' class='center'>" . userAttendTotalActivityStats($announce->id, $participantsNumber). "</td>";
                 $k++;
             } // end of while
         }
@@ -504,6 +526,45 @@ if ($is_editor) {
         //======================
         //show all the students
         //======================
+        
+        $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
+
+        if ($resultUsers) {
+            //table to display the users
+            $tool_content .= "
+            <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+                <thead>
+                    <tr>
+                      <th width='1'>$langID</th>
+                      <th><div align='left' width='100'>$langName $langSurname</div></th>
+                      <th class='center' width='80'>$langRegistrationDateShort</th>
+                      <th class='center'>$langAttendanceΑbsences</th>
+                      <th class='center'>$langActions</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
+            $cnt = 0;
+            foreach ($resultUsers as $resultUser) {
+                $cnt++;
+                $tool_content .= "
+                    <tr>
+                        <td>$cnt</td>
+                        <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
+                        <td>" . nice_format($resultUser->reg_date) . "</td>
+                        <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
+                        <td class='center'>". icon('edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"). "</td>
+                    </tr>";
+            }
+
+            $tool_content .= "
+                </tbody>
+            </table>";
+
+        }
+
+
+        /*
         $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
         
         //Count only students base on their initial record (not the course)
@@ -611,7 +672,10 @@ if ($is_editor) {
                         <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
                         2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
         </div>";
-                
+        
+        */
+        
+        
         //do not show activities list
         $showAttendanceActivities = 0;
     }
@@ -912,6 +976,7 @@ if ($is_editor) {
         //=======================
         //show active users limit
         //=======================
+        /*
         $tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
@@ -930,6 +995,7 @@ if ($is_editor) {
             </table>
             </fieldset>
             </form>";
+         */
     }
 
     
@@ -1036,8 +1102,23 @@ function userAttendTotal ($attendance_id, $userID){
 }
 
 //Function to get the total attend number for a user in a course attendance
-function userAttendTotalActivityStats ($activityID, $participantsNumber, $showSemesterParticipants, $courseID, $limitDate){
+function userAttendTotalActivityStats ($activityID, $participantsNumber){
     
+    $sumAtt = "";
+    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid", $activityID);
+    foreach ($userAttTotalActivity as $module) {
+        $sumAtt += $module->attend;
+    }
+
+    //check if participantsNumber is zero
+    if ($participantsNumber) {
+        $mean = round(100 * $sumAtt / $participantsNumber, 2);
+        return $sumAtt . " (" . $mean . "%)";
+    } else {
+        return "-";
+    }
+
+    /*
     if($showSemesterParticipants){
         $sumAtt = "";
         $userAttTotalActivity = Database::get()->queryArray("SELECT attend, uid FROM attendance_book WHERE attendance_activity_id = ?d ", $activityID);
@@ -1050,14 +1131,8 @@ function userAttendTotalActivityStats ($activityID, $participantsNumber, $showSe
     }else{
         $sumAtt = Database::get()->querySingle("SELECT SUM(attend) as count FROM attendance_book WHERE attendance_activity_id = ?d ", $activityID)->count;
     }
-
-    //check if participantsNumber is zero
-    if($participantsNumber){
-        $mean = round(100 * $sumAtt/$participantsNumber, 2);
-        return $sumAtt . " (" . $mean . "%)";
-    }else{
-        return "-";
-    }       
+    */
+          
 }
 
 //Display content in template
