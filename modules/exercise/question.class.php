@@ -316,8 +316,6 @@ if (!class_exists('Question')):
         function save($exerciseId = 0) {
             global $TBL_QUESTION, $mysqlMainDb, $course_id;
 
-            mysql_select_db($mysqlMainDb);
-
             $id = $this->id;
             $question = addslashes($this->question);
             $description = addslashes($this->description);
