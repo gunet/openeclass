@@ -77,10 +77,11 @@ if (isset($_GET['edit']) and isset($pid)) {
 }
 
 if (isset($_POST['PollCreate'])) {
-	if (isset($_POST['question']) and questions_exist()) {
+	if (isset($_POST['question']) and questions_exist()) {            
         register_posted_variables(array(
             'PollName' => true, 'PollStart' => true, 'PollEnd' => true,
             'PollAnonymized' => true, 'PollDescription' => true, 'PollEndMessage' => true));
+        
         $PollDescription = purify($PollDescription);
         $PollEndMessage = purify($PollEndMessage);
 
@@ -320,7 +321,7 @@ function createPoll($questions, $question_types) {
         $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized;
 
 	mysql_select_db($GLOBALS['currentCourseID']);
-        $PollAnonymize = (isset($_POST['PollAnonymize'])) ? $_POST['PollAnonymize'] : 0;
+        $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
 	$CreationDate = date("Y-m-d H:i");
 	$result = db_query("INSERT INTO poll
                             SET creator_id = $uid,
@@ -346,7 +347,8 @@ function editPoll($pid, $questions, $question_types) {
     global $pid, $tool_content, $code_cours, $langPollEdited, $langBack,
         $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized;
 
-	mysql_select_db($GLOBALS['currentCourseID']);
+    $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
+    mysql_select_db($GLOBALS['currentCourseID']);
     $result = db_query("UPDATE poll
                             SET name = " . quote($PollName) . ",
                                 start_date = " . quote($PollStart) . ",
