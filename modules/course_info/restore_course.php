@@ -114,14 +114,15 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 	include("$restoreThis/backup.php");
 
         load_global_messages();
-
-        if (mysql_table_exists($new_course_code, 'dropbox_file')) {
-                mysql_select_db($new_course_code);
+        mysql_select_db($new_course_code);
+        if (mysql_table_exists($new_course_code, 'dropbox_file')) {                
                 map_db_field('dropbox_file', 'uploaderId', $userid_map);
                 map_db_field('dropbox_person', 'personId', $userid_map);
                 map_db_field('dropbox_post', 'recipientId', $userid_map);
         }
         
+        map_db_field('poll_answer_record', 'user_id', $userid_map);
+        map_db_field('exercise_user_record', 'uid', $userid_map);
         if (!isset($eclass_version)) {
                 // if we come from older versions, do all upgrades
                 upgrade_course($new_course_code, $course_lang);

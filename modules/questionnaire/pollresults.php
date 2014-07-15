@@ -175,7 +175,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
             $tool_content .= $answers_table;
         } elseif ($theQuestion['qtype'] == QTYPE_FILL) {
             $answers = db_query("SELECT answer_text, user_id FROM poll_answer_record
-                                    WHERE qid = $theQuestion[pqid]");
+                                    WHERE qid = $theQuestion[pqid]", $currentCourseID);
             $tool_content .= "<table class='tbl_border' width='100%'>
                     <tbody>
                     <tr>
