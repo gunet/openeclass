@@ -139,6 +139,7 @@ if ($is_editor) {
 $paused_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
         . "JOIN exercise b ON a.eid = b.id WHERE a.uid = ?d "
         . "AND a.attempt_status = ?d AND b.course_id = ?d", $uid, ATTEMPT_PAUSED, $course_id);
+
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
 $nbrExercises = count($result); //Getting number of limited (offset and limit) exercises of the course (active and inactive)
 if (count($paused_exercises) > 0) {
@@ -148,11 +149,11 @@ if (count($paused_exercises) > 0) {
     }
 }
 if ($is_editor) {
-    $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
-            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d", ATTEMPT_PENDING, $course_id);
+    $pending_exercises = Database::get()->queryArray("SELECT eid, title , COUNT(*) AS counter FROM exercise_user_record a "
+            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid, title", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
         foreach ($pending_exercises as $row) {           
-            $tool_content .="<div class='info'>$langPendingExercise $row->title. (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
+            $tool_content .="<div class='info'>".sprintf($langPendingExercise, $row->counter, $row->title) ."(<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }    
     $tool_content .= "<div align='left' id='operations_container'>
