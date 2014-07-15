@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -1021,10 +1021,10 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
 $admin_uid = Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
-                 VALUES (?s, '', ?s, ?s, ?s, 1, ?t, ?t, 1, '*,,', 'Administrator')", $nameForm, $loginForm, $password_encrypted, $emailForm, DBHelper::timeAfter(), DBHelper::timeAfter(5*365*24*60*60))->lastInsertID;
+                 VALUES (?s, '', ?s, ?s, ?s, 1, " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(5*365*24*60*60) . ", 1, '*,,', 'Administrator')", $nameForm, $loginForm, $password_encrypted, $emailForm)->lastInsertID;
 Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                 VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-Database::get()->query("INSERT INTO admin VALUES ($admin_uid, 0)");
+                 VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
+Database::get()->query("INSERT INTO admin (user_id, privilege) VALUES ($admin_uid, 0)");
 
 #
 # Table structure for table `user_request`
@@ -1071,26 +1071,6 @@ Database::get()->query("INSERT INTO `auth` VALUES
                 (6, 'shibboleth', '', '', 0),
                 (7, 'cas', '', '', 0)");
 
-$dont_display_login_form = intval($dont_display_login_form);
-$email_required = intval($email_required);
-$email_verification_required = intval($email_verification_required);
-$dont_mail_unverified_mails = intval($dont_mail_unverified_mails);
-$email_from = intval($email_from);
-$am_required = intval($am_required);
-$dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
-$block_username_change = intval($block_username_change);
-$display_captcha = intval($display_captcha);
-$insert_xml_metadata = intval($insert_xml_metadata);
-$enable_mobileapi = intval($enable_mobileapi);
-$eclass_stud_reg = intval($eclass_stud_reg);
-$eclass_prof_reg = intval($eclass_prof_reg);
-$course_multidep = intval($course_multidep);
-$user_multidep = intval($user_multidep);
-$restrict_owndep = intval($restrict_owndep);
-$restrict_teacher_owndep = intval($restrict_teacher_owndep);
-$student_upload_whitelist = quote($student_upload_whitelist);
-$teacher_upload_whitelist = quote($teacher_upload_whitelist);
-
 // restrict_owndep and restrict_teacher_owndep are interdependent
 if ($restrict_owndep == 0) {
 	$restrict_teacher_owndep = 0;
@@ -1100,60 +1080,69 @@ Database::get()->query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
                  `value` TEXT NOT NULL,
                  PRIMARY KEY (`key`))");
-db_query("INSERT INTO `config` (`key`, `value`) VALUES
-                ('base_url', ".quote($urlForm)."),
-                ('default_language', '$lang'),
-                ('dont_display_login_form', $dont_display_login_form),
-                ('email_required', $email_required),
-                ('email_from', $email_from),
-                ('email_verification_required', $email_verification_required),
-                ('dont_mail_unverified_mails', $dont_mail_unverified_mails),
-                ('am_required', $am_required),
-                ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
-                ('block_username_change', $block_username_change),                
-                ('enable_mobileapi', $enable_mobileapi),
-                ('code_key', '" . generate_secret_key(32) . "'),
-                ('display_captcha', $display_captcha),
-                ('insert_xml_metadata', $insert_xml_metadata),
-                ('doc_quota', $doc_quota),
-                ('video_quota', $video_quota),
-                ('group_quota', $group_quota),
-                ('dropbox_quota', $dropbox_quota),
-                ('user_registration', 1),
-                ('alt_auth_stud_reg', 2),
-                ('alt_auth_prof_reg', 2),
-                ('eclass_stud_reg', $eclass_stud_reg),
-                ('eclass_prof_reg', $eclass_prof_reg),
-                ('course_multidep', $course_multidep),
-                ('user_multidep', $user_multidep),
-                ('restrict_owndep', $restrict_owndep),
-                ('restrict_teacher_owndep', $restrict_teacher_owndep),
-                ('max_glossary_terms', '250'),                
-                ('phpSysInfoURL', ".quote($phpSysInfoURL)."),
-                ('email_sender', ".quote($emailForm)."),
-                ('admin_name', ".quote($nameForm)."),
-                ('email_helpdesk', ".quote($helpdeskmail)."),
-                ('site_name', ".quote($campusForm)."),
-                ('phone', ".quote($helpdeskForm)."),
-                ('fax', ".quote($faxForm)."),
-                ('postaddress', ".quote($postaddressForm)."),
-                ('institution', ".quote($institutionForm)."),
-                ('institution_url', ".quote($institutionUrlForm)."),
-                ('account_duration', '126144000'),
-                ('language', ".quote($lang)."),
-                ('active_ui_languages', ".quote($active_ui_languages)."),
-                ('student_upload_whitelist', $student_upload_whitelist),
-                ('teacher_upload_whitelist', $teacher_upload_whitelist),
-                ('login_fail_check', 1),
-                ('login_fail_threshold', 15),
-                ('login_fail_deny_interval', 5),
-                ('login_fail_forgive_interval', 24),
-                ('actions_expire_interval', 12),
-                ('log_expire_interval', 5),
-                ('log_purge_interval', 12),
-                ('course_metadata', 0),
-                ('opencourses_enable', 0),
-                ('version', '" . ECLASS_VERSION ."')");
+Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES
+                            ('base_url', ?s),
+                            ('default_language', ?s),
+                            ('dont_display_login_form', ?d),
+                            ('email_required', ?d),
+                            ('email_from', ?d),
+                            ('email_verification_required', ?d),
+                            ('dont_mail_unverified_mails', ?d),
+                            ('am_required', ?d),
+                            ('dropbox_allow_student_to_student', ?d),
+                            ('block_username_change', ?d),                
+                            ('enable_mobileapi', ?d),
+                            ('code_key', '" . generate_secret_key(32) . "'),
+                            ('display_captcha', ?d),
+                            ('insert_xml_metadata', ?d),
+                            ('doc_quota', ?s),
+                            ('video_quota', ?s),
+                            ('group_quota', ?s),
+                            ('dropbox_quota', ?s),
+                            ('user_registration', 1),
+                            ('alt_auth_stud_reg', 2),
+                            ('alt_auth_prof_reg', 2),
+                            ('eclass_stud_reg', ?d),
+                            ('eclass_prof_reg', ?d),
+                            ('course_multidep', ?d),
+                            ('user_multidep', ?d),
+                            ('restrict_owndep', ?d),
+                            ('restrict_teacher_owndep', ?d),
+                            ('max_glossary_terms', '250'),                
+                            ('phpSysInfoURL', ?s),
+                            ('email_sender', ?s),
+                            ('admin_name', ?s),
+                            ('email_helpdesk', ?s),
+                            ('site_name', ?s),
+                            ('phone', ?s),
+                            ('fax', ?s),
+                            ('postaddress', ?s),
+                            ('institution', ?s),
+                            ('institution_url', ?s),
+                            ('account_duration', '126144000'),
+                            ('language', ?s),
+                            ('active_ui_languages', ?s),
+                            ('student_upload_whitelist', ?s),
+                            ('teacher_upload_whitelist', ?s),
+                            ('login_fail_check', 1),
+                            ('login_fail_threshold', 15),
+                            ('login_fail_deny_interval', 5),
+                            ('login_fail_forgive_interval', 24),
+                            ('actions_expire_interval', 12),
+                            ('log_expire_interval', 5),
+                            ('log_purge_interval', 12),
+                            ('course_metadata', 0),
+                            ('opencourses_enable', 0),
+                            ('version', '" . ECLASS_VERSION ."')",
+                        $urlForm, $lang, $dont_display_login_form, $email_required, $email_from,
+                        $email_verification_required, $dont_mail_unverified_mails, $am_required, $dropbox_allow_student_to_student,
+                        $block_username_change, $enable_mobileapi, $display_captcha, $insert_xml_metadata,
+                        $doc_quota, $video_quota, $group_quota, $dropbox_quota,
+                        $eclass_stud_reg, $eclass_prof_reg, $course_multidep, $user_multidep,   
+                        $restrict_owndep, $restrict_teacher_owndep, $phpSysInfoURL, 
+                        $emailForm, $nameForm, $helpdeskmail, $campusForm, $helpdeskForm, $faxForm, $postaddressForm, 
+                        $institutionForm, $institutionUrlForm, $lang, $active_ui_languages, 
+                        $student_upload_whitelist, $teacher_upload_whitelist);
 
 // table for cron parameters
 Database::get()->query("CREATE TABLE `cron_params` (
