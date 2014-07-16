@@ -33,18 +33,6 @@ require_once '../../exercise/answer.class.php';
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-
-$TBL_EXERCISE = 'exercise';
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -344,21 +332,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 } // end foreach()
 // update db with results
 $eid = $objExercise->selectId();
-mysql_select_db($mysqlMainDb);
 
-$sql = "SELECT record_start_date FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
-$result = db_query($sql);
-$attempt = count($result);
-
-$sql = "SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
-$result = db_query($sql);
-$row = mysql_fetch_row($result);
-$eurid = $row[0];
+$attempt = Database::get()->query("SELECT COUNT(record_start_date) AS count FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->count;
+$eurid = Database::get()->query("SELECT MAX(eurid) AS max FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->max;
 
 // record results of exercise
-$sql = "UPDATE exercise_user_record SET total_score = '$totalScore', total_weighting = '$totalWeighting',
-       attempt = '$attempt' WHERE eurid = '$eurid'";
-db_query($sql);
+Database::get()->query("UPDATE exercise_user_record SET total_score = ?d, total_weighting = ?d, attempt = ?d WHERE eurid = ?d", $totalScore, $totalWeighting, $attempt, $eurid);
 
 if ($displayScore == 1) {
     echo ("
@@ -393,38 +372,37 @@ if ($uid) {
     $scoreMax = $totalWeighting;
     // need learningPath_module_id and raw_to_pass value
     $sql = "SELECT LPM.`raw_to_pass`, LPM.`learnPath_module_id`, UMP.`total_time`, UMP.`raw`
-			FROM `" . $TABLELEARNPATHMODULE . "` AS LPM, `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
-			WHERE LPM.`learnPath_id` = '" . (int) $_SESSION['path_id'] . "'
-			AND LPM.`module_id` = '" . (int) $_SESSION['lp_module_id'] . "'
+			FROM `lp_rel_learnPath_module` AS LPM, `lp_user_module_progress` AS UMP
+			WHERE LPM.`learnPath_id` = ?d
+			AND LPM.`module_id` = ?d
 			AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-			AND UMP.`user_id` = " . (int) $uid;
-    $query = db_query($sql, $mysqlMainDb);
-    $row = mysql_fetch_array($query);
+			AND UMP.`user_id` = ?d";
+    $row = Database::get()->querySingle($sql, $_SESSION['path_id'], $_SESSION['lp_module_id'], $uid);
 
     $scormSessionTime = seconds_to_scorm_time($timeToCompleteExe);
 
     // build sql query
-    $sql = "UPDATE `" . $TABLEUSERMODULEPROGRESS . "` SET ";
+    $sqlupd = "UPDATE `lp_user_module_progress` SET ";
     // if recorded score is less then the new score => update raw, credit and status
 
-    if ($row['raw'] < $totalScore) {
+    if ($row->raw < $totalScore) {
         // update raw
-        $sql .= "`raw` = $totalScore,";
+        $sqlupd .= "`raw` = $totalScore,";
         // update credit and status if needed ( score is better than raw_to_pass )
-        if ($newRaw >= $row['raw_to_pass']) {
-            $sql .= "`credit` = 'CREDIT',`lesson_status` = 'PASSED',";
+        if ($newRaw >= $row->raw_to_pass) {
+            $sqlupd .= "`credit` = 'CREDIT',`lesson_status` = 'PASSED',";
         } else { // minimum raw to pass needed to get credit
-            $sql .= "`credit` = 'NO-CREDIT',`lesson_status` = 'FAILED',";
+            $sqlupd .= "`credit` = 'NO-CREDIT',`lesson_status` = 'FAILED',";
         }
     }// else don't change raw, credit and lesson_status
     // default query statements
-    $sql .= "	`scoreMin` 	= " . (int) $scoreMin . ",
-				`scoreMax` 	= " . (int) $scoreMax . ",
-				`total_time`	= '" . addScormTime($row['total_time'], $scormSessionTime) . "',
-				`session_time`	= '" . $scormSessionTime . "'
-				WHERE `learnPath_module_id` = " . (int) $row['learnPath_module_id'] . "
-				AND `user_id` = " . (int) $uid . "";
-    db_query($sql, $mysqlMainDb);
+    $sqlupd .= " `scoreMin` 	= ?d,
+                 `scoreMax` 	= ?d,
+                 `total_time`	= ?s,
+                 `session_time`	= ?s
+           WHERE `learnPath_module_id` = ?d
+             AND `user_id` = ?d";
+    Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row['total_time'], $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid);
 }
 
 echo "</div></body></html>" . "\n";

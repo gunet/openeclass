@@ -128,10 +128,10 @@ if (isset($_POST['welcomeScreen'])) {
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
     $institutionUrlForm = 'http://www.gunet.gr/';
-    $doc_quota = 200;
-    $video_quota = 100;
-    $group_quota = 100;
-    $dropbox_quota = 100;
+    $doc_quota = 500;
+    $video_quota = 500;
+    $group_quota = 500;
+    $dropbox_quota = 500;
     $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
     $email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
     $display_captcha = $block_username_change = $insert_xml_metadata = $enable_mobileapi = '';
