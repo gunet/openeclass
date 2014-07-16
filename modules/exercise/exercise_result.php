@@ -113,6 +113,10 @@ $head_content .= "<script type='text/javascript'>
                     $('.questionGradeBox').keyup(function (e) {
                         if (e.keyCode == 13) {
                             save_grade(this);
+                            var countnotgraded = $('input.questionGradeBox').not(':disabled').length;
+                            if (countnotgraded == 0) {
+                                $('a#submitButton').parent().hide();
+                            }                        
                         }
                     });
                     $('a#submitButton').click(function(e){
