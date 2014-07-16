@@ -463,6 +463,18 @@ function process_extracted_file($p_event, &$p_header) {
     if (!isset($uploadPath)) {
         $uploadPath = '';
     }
+    if (empty($file_category)) {
+        $file_category = 0;
+    }
+    if (empty($file_author)) {
+        $file_author = '';
+    }
+    if (empty($file_language)) {
+        $file_language = '';
+    }
+    if (empty($file_copyrighted)) {
+        $file_copyrighted = '';
+    }
     $realFileSize += $p_header['size'];
     $stored_filename = $p_header['stored_filename'];
     if (invalid_utf8($stored_filename)) {
@@ -482,12 +494,11 @@ function process_extracted_file($p_event, &$p_header) {
         $didx->store($r->id);
         return 0;
     } else {
-        // Check if file already exists
-        // db_query check argument
+        // Check if file already exists        
         $result = Database::get()->querySingle("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
-                                                 path REGEXP " . quote("^$path/[^/]+$") . " AND
-                                                 filename = ?s LIMIT 1", $filename);
+                                                 path REGEXP ?s AND
+                                                 filename = ?s LIMIT 1", ("^$path/[^/]+$"), $filename);
         $format = get_file_extension($filename);
         if ($result) {
             $old_id = $result->id;
@@ -506,12 +517,11 @@ function process_extracted_file($p_event, &$p_header) {
                 $backup_n = 1;
                 do {
                     $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
-                            '_backup_' . $backup_n . '.' . $format;
-                    // db_query check argument
+                            '_backup_' . $backup_n . '.' . $format;                    
                     $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
                                                               WHERE $group_sql AND
-                                                                    path REGEXP " . quote("^$path/[^/]+$") . " AND
-                                                                    filename = ?s LIMIT 1", $backup)->count;
+                                                                    path REGEXP ?s AND
+                                                                    filename = ?s LIMIT 1", ("^$path/[^/]+$"), $backup)->count;
                     $backup_n++;
                 } while ($n > 0);
                 Database::get()->query("UPDATE document SET filename = ?s
@@ -521,7 +531,7 @@ function process_extracted_file($p_event, &$p_header) {
             }
         }
 
-        $path .= '/' . safe_filename($format);
+        $path .= '/' . safe_filename($format);        
         Database::get()->query("INSERT INTO document SET
                                  course_id = ?d,
 				 subsystem = ?d,
@@ -567,14 +577,13 @@ function make_path($path, $path_components) {
 
     $path_already_exists = true;
     $depth = 1 + substr_count($path, '/');
-    foreach ($path_components as $component) {
-        // db_query check argument
+    foreach ($path_components as $component) {        
         $q = Database::get()->querySingle("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
                                             filename = ?s AND
-                                            path LIKE " . quote($path . '%') . " HAVING depth = $depth", $component);
+                                            path LIKE ?s HAVING depth = $depth", $component, ($path . '%'));
         if ($q) {
             // Path component already exists in database
             $path = $q->path;
