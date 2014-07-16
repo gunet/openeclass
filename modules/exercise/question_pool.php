@@ -228,7 +228,7 @@ if ($is_editor) {
 				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>
 				<td class='center'><div align='center'>
 				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;recup=" . $row->id .
-                        "&amp;fromExercise=" . $fromExercise . "\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
+                        "&amp;fromExercise=" . $fromExercise . "&amp;exerciseId=".$exerciseId."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
 				</td>";
             }
             //$tool_content .= "</td>";
