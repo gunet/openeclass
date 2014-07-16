@@ -261,9 +261,15 @@ do {
         $rate_str = $rating->put($is_editor, $uid, $course_code);
     }
     
+    if (isset($start)) {
+       $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>"; 
+    } else {
+        $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>";
+    }
+    
     $tool_content .= "<td>
 	  <div>
-	    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>
+	    <a name='".$myrow["id"]."'></a>$anchor_link
 	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
 	  <br />$message<br />".$rate_str."
