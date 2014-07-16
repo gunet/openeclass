@@ -2276,7 +2276,7 @@ $langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης 
 $langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο ερωτηματολόγιο";
 $langPollDeactivated ="Το ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
 $langPollActivated ="Το ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
-$langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!";
+$langPollSubmitted ="Το ερωτηματολόγιο καταχωρήθηκε με επιτυχία!";
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
 $langPollInactive = "<p class='caution'>Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.</p>";

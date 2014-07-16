@@ -157,7 +157,7 @@ function jscal_html($name, $u_date = FALSE) {
 ******************************************************************************/
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langDescription, $langPollEnd, $langPollEndMessage, $langPollEndMessageText,
-        $nameTools, $pid, $langSurvey, $langDelete, $langNewQu, $code_cours,
+        $nameTools, $pid, $langSurvey, $langDelete, $langAddQ, $code_cours, $langBack, 
         $PollName, $PollDescription, $PollEndMessage, $PollStart, $PollEnd, $PollAnonymized, $langPollAnonymize, $langUniqueSelect,
         $langMultipleSelect, $langFreeText, $langLabel, $langComment;
 
@@ -171,15 +171,11 @@ function printPollCreationForm() {
         empty($PollEnd)? strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')): $PollEnd);
     $pidvar = isset($pid)? "<input type='hidden' name='pid' value='$pid'>": '';
 
-	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post' onsubmit=\"return checkrequired(this, 'PollName');\">";
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours#end_poll' id='poll' method='post' onsubmit=\"return checkrequired(this, 'PollName');\">";
 	$tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-          $langNewQu:&nbsp;
-            <li><a id='MoreSingle' class='new_question'>".$langUniqueSelect."</a></li>
-            <li><a id='MoreMultiple' class='new_question'>".$langMultipleSelect."</a></li>
-            <li><a id='MoreFill' class='new_question'>".$langFreeText."</a></li>
-            <li><a id='MoreLabel' class='new_question'>".$langLabel."/".$langComment."</a></li>
+            <li><a href='questionnaire.php?course=$code_cours'>".$langBack."</a></li>
            </li>
 	  </ul>
 	</div>
@@ -238,20 +234,30 @@ function printPollCreationForm() {
 	    $tool_content .= "
         <input type='hidden' name='pid' value='$pid'>";
 	}
-    	$tool_content .= '
+    	$tool_content .= "
         <hr />
-        <table width="100%" class="tbl">
-	<tr>
-	  <th>&nbsp;</th>
-	  <td class="right">
-	  <input type="submit" name="PollCreate" value="'.q($nameTools).'">
+        <table width='100%' class='tbl'>
+        <tr>
+	  <th id='end_poll'>
+          $langAddQ:&nbsp;
+              <ul>
+            <li><a id='MoreSingle' class='new_question'>".$langUniqueSelect."</a> </li>
+            <li><a id='MoreMultiple' class='new_question'>".$langMultipleSelect."</a></li>
+            <li><a id='MoreFill' class='new_question'>".$langFreeText."</a></li>
+            <li><a id='MoreLabel' class='new_question'>".$langLabel."/".$langComment."</a></li>
+                </ul>
+          </th>
+	</tr>
+        <tr>
+	  <td class='right'>
+	  <input type='submit' name='PollCreate' value='".q($nameTools)."'>
 	  </td>
 	</tr>
 	</table>
         </fieldset>
 	</form>
-    <div id="deleteIcon" style="display: none">&nbsp;' .
-        icon('delete', $langDelete) . '</div>';
+    <div id='deleteIcon' style='display: none'>&nbsp;" .
+        icon('delete', $langDelete) . "</div>";
 }
 
 /*****************************************************************************

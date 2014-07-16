@@ -85,9 +85,6 @@ function printPollForm() {
 	$temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
 	$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
 	
-    if ($thePoll['description']) {
-        $tool_content .= $thePoll['description'];
-    }
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
 	<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post'>
@@ -96,11 +93,14 @@ function printPollForm() {
 
         <p class='title1'>".q($thePoll['name'])."</p>\n";
 
+        if ($thePoll['description']) {
+        $tool_content .= $thePoll['description'];
+        }
 		//*****************************************************************************
 		//		Get answers + questions
 		//******************************************************************************/
 		$questions = db_query("SELECT * FROM poll_question 
-			WHERE pid = " . intval($pid) . " ORDER BY qorder", $currentCourse);
+			WHERE pid = " . intval($pid) . " ORDER BY pqid desc", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {
 			$pqid = $theQuestion['pqid'];
 			$qtype = $theQuestion['qtype'];
@@ -164,8 +164,10 @@ function submitPoll() {
                     VALUES ($pid, $pqid, $aid, $answer_text, $user_id, NOW())");           
 	}
         $end_message = db_query_get_single_value("SELECT end_message FROM poll WHERE pid = $pid");
+        $tool_content .= "<p class='success'>".$langPollSubmitted."</p>";
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }
-	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+        $tool_content .= "<br /><p class=\"right\"><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+	
 }
