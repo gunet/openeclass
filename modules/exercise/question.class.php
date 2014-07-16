@@ -317,8 +317,8 @@ if (!class_exists('Question')):
             global $TBL_QUESTION, $mysqlMainDb, $course_id;
 
             $id = $this->id;
-            $question = addslashes($this->question);
-            $description = addslashes($this->description);
+            $question = $this->question;
+            $description = $this->description;
             $weighting = $this->weighting;
             $position = $this->position;
             $type = $this->type;
@@ -448,8 +448,8 @@ if (!class_exists('Question')):
         function duplicate() {
             global $TBL_QUESTION, $picturePath, $course_id;
 
-            $question = addslashes($this->question);
-            $description = addslashes($this->description);
+            $question = $this->question;
+            $description = $this->description;
             $weighting = $this->weighting;
             $position = $this->position;
             $type = $this->type;
