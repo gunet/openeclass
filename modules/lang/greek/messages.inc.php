@@ -2244,6 +2244,8 @@ $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langQQuestionNotGiven ="Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs ="Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langPollPurged = "Τα αποτελέσματα του ερωτηματολογίου διαγράφτηκαν.";
+$langCreateDuplicate = "Δημιουργία Αντιγράφου";
+$langCopy2 = "Αντίγραφο";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";

@@ -105,24 +105,23 @@ function printPollForm() {
 			$pqid = $theQuestion['pqid'];
 			$qtype = $theQuestion['qtype'];
 			$tool_content .= "
-                <p class='sub_title1'><b>".$theQuestion['question_text']."</b></p>
-                <p>
-                <input type='hidden' name='question[$pqid]' value='$qtype' />";
+                        <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".$theQuestion['question_text']."</b></div>
+                        <p><input type='hidden' name='question[$pqid]' value='$qtype' />";
 			if ($qtype == QTYPE_SINGLE or $qtype == QTYPE_MULTIPLE) {
-                $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
-                $type_attr = ($qtype == QTYPE_SINGLE)? "type='radio'": "type='checkbox'";
-				$answers = db_query("SELECT * FROM poll_question_answer 
+                            $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+                            $type_attr = ($qtype == QTYPE_SINGLE)? "type='radio'": "type='checkbox'";
+                            $answers = db_query("SELECT * FROM poll_question_answer 
 					WHERE pqid=$pqid ORDER BY pqaid", $currentCourse);
-				while ($theAnswer = mysql_fetch_array($answers)) {
-					$tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
-				}
-                if ($qtype == QTYPE_SINGLE) {
-    				$tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
-                }
-			} elseif ($qtype == QTYPE_FILL) {
-				$tool_content .= "<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
-			}
-			$tool_content .= "<br /><br />";
+                            while ($theAnswer = mysql_fetch_array($answers)) {
+                                $tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
+                            }
+                    if ($qtype == QTYPE_SINGLE) {
+                        $tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
+                    }
+                    } elseif ($qtype == QTYPE_FILL) {
+                        $tool_content .= "<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
+                    }
+                    $tool_content .= "<br /><br />";
 		}
         if ($is_editor) {
             $tool_content .= "<p><a href='questionnaire.php?course=$code_cours'>".q($langBack)."</a></p>";

@@ -1504,3 +1504,8 @@ dt {
     padding-left: 1em;
     float: right;
 }
+.q_comments{
+    font-size: 12px;
+    padding: 5px 5px 5px 5px;
+    background-color: #f8f8f8;
+}

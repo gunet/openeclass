@@ -123,7 +123,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
             <td colspan='2'>";
             $j++;
         } else {
-           $tool_content .= "<tr><td colspan='2'><br><div class='info'>$theQuestion[question_text]</div><br><hr></td></tr>"; 
+           $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>$theQuestion[question_text]</div><br><hr></td></tr>"; 
         }
         if ($theQuestion['qtype'] == QTYPE_MULTIPLE || $theQuestion['qtype'] == QTYPE_SINGLE) {
             $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
@@ -187,7 +187,7 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                 while ($theAnswer = mysql_fetch_array($answers)) {     
                     $tool_content .= "
                     <tr>
-                            <td>$langMetaLearner $i</th>
+                            <td>$langStudent $k</th>
                             <td>$theAnswer[answer_text]</td>
                     </tr>";                
                     $k++;    

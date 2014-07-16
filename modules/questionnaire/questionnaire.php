@@ -77,6 +77,35 @@ if ($is_editor) {
         // purge poll results
         db_query("DELETE FROM poll_answer_record WHERE pid = $pid");
         $tool_content .= "<p class='success'>".q($langPollPurged)."</p>";
+    } elseif (isset($_GET['clone']) and $_GET['clone'] == 'yes') {
+        $poll = db_query_get_single_row("SELECT * FROM poll WHERE pid = $pid");
+        $questions = db_query("SELECT * FROM poll_question WHERE pid = $pid");
+        $poll['name'] .= " ($langCopy2)";
+	db_query("INSERT INTO poll
+                            SET creator_id = $poll[creator_id],
+                                course_id = $poll[course_id],
+                                name = " . quote($poll['name']) . ",
+                                creation_date = " . quote($poll['creation_date']) .",
+                                start_date = " . quote($poll['start_date']) .",
+                                end_date = " . quote($poll['end_date']) .",
+                                description = " . quote($poll['description']) .",
+                                end_message = " . quote($poll['end_message']) .",
+                                anonymized = $poll[anonymized],    
+                                active = 1");
+	$new_pid = mysql_insert_id();
+        while ($question = mysql_fetch_array($questions)) {
+            db_query("INSERT INTO poll_question
+                                       SET pid = $new_pid,
+                                           question_text = " . quote($question['question_text']) .",
+                                           qtype = $question[qtype]");
+            $new_pqid = mysql_insert_id();
+            $answers = db_query("SELECT * FROM poll_question_answer WHERE pqid = $question[pqid]");
+            while ($answer = mysql_fetch_array($answers)) {
+                db_query("INSERT INTO poll_question_answer
+                                        SET pqid = $new_pqid,
+                                            answer_text = " . quote($answer['answer_text']));
+            }
+        }        
     }
 
     $tool_content .= "
@@ -103,7 +132,7 @@ function printPolls() {
                $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, 
                $langParticipate, $langVisible, $user_id, $langHasParticipated,
                $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
-               $langConfirmPurgeExercises, $langAnswers, $langSee;
+               $langConfirmPurgeExercises, $langAnswers, $langSee, $langCreateDuplicate;
 
         $poll_check = 0;
         $result = db_query("SHOW TABLES FROM `$currentCourse`", $currentCourse);
@@ -216,6 +245,9 @@ function printPolls() {
                                             "&nbsp;" .
                                             icon($visibility_gif, $langVisible,
                                                 "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}") .
+                                            "&nbsp;" .
+                                            icon('duplicate', $langCreateDuplicate,
+                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;clone=yes&amp;pid={$pid}") .
                                             "</td></tr>";
                                 } else {
                                         $tool_content .= "
