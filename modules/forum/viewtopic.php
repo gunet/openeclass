@@ -263,6 +263,7 @@ do {
     
     $tool_content .= "<td>
 	  <div>
+	    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>
 	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
 	  <br />$message<br />".$rate_str."
