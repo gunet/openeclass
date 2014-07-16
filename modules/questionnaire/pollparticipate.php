@@ -91,16 +91,16 @@ function printPollForm() {
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 
-        <p class='title1'>".q($thePoll['name'])."</p>\n";
+        <p class='title1'>".q($thePoll['name'])."</p><br>\n";
 
         if ($thePoll['description']) {
-        $tool_content .= $thePoll['description'];
+        $tool_content .= $thePoll['description'].'<br>';
         }
 		//*****************************************************************************
 		//		Get answers + questions
 		//******************************************************************************/
 		$questions = db_query("SELECT * FROM poll_question 
-			WHERE pid = " . intval($pid) . " ORDER BY pqid desc", $currentCourse);
+			WHERE pid = " . intval($pid) . " ORDER BY pqid asc", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {
 			$pqid = $theQuestion['pqid'];
 			$qtype = $theQuestion['qtype'];

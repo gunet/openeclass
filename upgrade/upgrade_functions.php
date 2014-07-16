@@ -353,9 +353,7 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
                                    ADD end_message MEDIUMTEXT NOT NULL,
                                    ADD anonymized INT(1) NOT NULL DEFAULT 0');
         db_query('ALTER TABLE poll_question
-                    CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL,
-                    ADD qorder int(11) NOT NULL DEFAULT 0');
-        db_query('UPDATE poll_question SET qorder = pqid');
+                    CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
     }
 }
 

@@ -610,7 +610,6 @@ db_query("CREATE TABLE poll (
       pid int(11) NOT NULL DEFAULT 0,
       question_text varchar(250) NOT NULL default '',
       qtype tinyint(3) UNSIGNED NOT NULL,
-      qorder int(11) NOT NULL DEFAULT 0,
       PRIMARY KEY  (pqid))
      $charset_spec");
 
