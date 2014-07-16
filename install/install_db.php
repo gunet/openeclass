@@ -1358,3 +1358,13 @@ Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, co
 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
 Database::get()->query('CREATE INDEX `cid` ON videolink (course_id)');
 Database::get()->query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+
+//exercises
+Database::get()->query('CREATE INDEX `exer_index` ON exercise (course_id)');
+Database::get()->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
+Database::get()->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
+Database::get()->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
+Database::get()->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
+Database::get()->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
+Database::get()->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
+Database::get()->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');

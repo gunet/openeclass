@@ -137,8 +137,8 @@ if ($is_editor) {
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 $paused_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
-        . "JOIN exercise b ON a.eid = b.id WHERE a.uid = ?d "
-        . "AND a.attempt_status = ?d AND b.course_id = ?d", $uid, ATTEMPT_PAUSED, $course_id);
+        . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
+        . "AND a.attempt_status = ?d", $course_id, $uid, ATTEMPT_PAUSED);
 
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
 $nbrExercises = count($result); //Getting number of limited (offset and limit) exercises of the course (active and inactive)
