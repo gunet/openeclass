@@ -157,7 +157,7 @@ function jscal_html($name, $u_date = FALSE) {
 ******************************************************************************/
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langDescription, $langPollEnd, $langPollEndMessage, $langPollEndMessageText,
-        $nameTools, $pid, $langSurvey, $langDelete, $langAddQ, $code_cours, $langBack, 
+        $nameTools, $pid, $langSurvey, $langDelete, $langAddQ, $code_cours, $langBack, $langMove,
         $PollName, $PollDescription, $PollEndMessage, $PollStart, $PollEnd, $PollAnonymized, $langPollAnonymize, $langUniqueSelect,
         $langMultipleSelect, $langFreeText, $langLabel, $langComment;
 
@@ -257,7 +257,9 @@ function printPollCreationForm() {
         </fieldset>
 	</form>
     <div id='deleteIcon' style='display: none'>&nbsp;" .
-        icon('delete', $langDelete) . "</div>";
+        icon('delete', $langDelete) . "</div>"
+    . "<div id='moveIcon' style='display: none'>&nbsp;" .
+        icon('move_order', $langMove, null, 'id="moveIconImg"') . "</div>";
 }
 
 /*****************************************************************************

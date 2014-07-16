@@ -313,16 +313,18 @@ function secondsToHms(d) {
 
 function poll_init() {
     var deleteIcon = $('#deleteIcon').html();
+    var moveIcon = $('#moveIcon').html();
     $('input[type=submit][value="+"]').on('click', function (event) {
         var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
         $(this).closest('tr').next().find('li').last()
             .before('<li><input type="text" name="answer' +
-                qid + '[]" value="" size="50">' + deleteIcon + '</li>');
+                qid + '[]" value="" size="50">' + deleteIcon + moveIcon +'</li>');
         event.preventDefault();
     });
     $('.poll_answers').sortable({items: "li:not(#unknown)"});
-    $('.poll_answers li:not(#unknown)').css('cursor', 'move').append(deleteIcon);
-    $('.poll_answers img').css('cursor', 'pointer').on('click', function () {
+    $('.poll_answers li:not(#unknown)').append(deleteIcon).css('cursor', 'move').append(moveIcon);
+    $('.poll_answers li:not(#unknown)').find('#moveIconImg').css('cursor', 'move');
+    $('.poll_answers img').not('#moveIconImg').css('cursor', 'pointer').on('click', function () {
         $(this).closest('li').remove();
     });
     $('.poll_toolbar img').css('cursor', 'pointer').on('click', function () {
