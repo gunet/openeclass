@@ -29,9 +29,11 @@ require_once 'config.php';
 require_once 'functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/course_settings.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/search/forumtopicindexer.class.php';
 require_once 'modules/search/forumpostindexer.class.php';
+require_once 'modules/rating/class.rating.php';
 
 ModalBoxHelper::loadModalBox();
 
@@ -252,11 +254,18 @@ do {
     } else {
         $postTitle = "";
     }
+    
+    $rate_str = "";
+    if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id)) {
+        $rating = new Rating('thumbs_up', 'forum_post', $myrow["id"]);
+        $rate_str = $rating->put($is_editor, $uid, $course_code);
+    }
+    
     $tool_content .= "<td>
 	  <div>
 	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
-	  <br />$message<br />
+	  <br />$message<br />".$rate_str."
 	</td>";
     if ($is_editor) {
         $tool_content .= "<td width='40' valign='top'>

@@ -34,6 +34,7 @@ define('SETTING_COURSE_SHARING_ENABLE', 5);
 define('SETTING_COURSE_RATING_ENABLE', 6);
 define('SETTING_COURSE_COMMENT_ENABLE', 7);
 define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
+define('SETTING_FORUM_RATING_ENABLE', 9);
 
 /** Get the default value of a course setting.
  * 
@@ -49,7 +50,8 @@ function setting_default($setting_id) {
         SETTING_COURSE_SHARING_ENABLE => 0,
         SETTING_COURSE_RATING_ENABLE => 0,
         SETTING_COURSE_COMMENT_ENABLE => 0,
-        SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0);
+        SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0,
+        SETTING_FORUM_RATING_ENABLE => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

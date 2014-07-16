@@ -28,6 +28,8 @@ if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_RATING_ENABLE;
+} elseif ($_GET['rtype'] == 'forum_post') {
+    $setting_id = SETTING_FORUM_RATING_ENABLE;
 }
 
 if (setting_get($setting_id, $course_id) == 1) {

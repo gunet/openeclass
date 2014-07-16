@@ -30,6 +30,7 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/search/forumindexer.class.php';
@@ -275,6 +276,38 @@ elseif (isset($_GET['forumgodel'])) {
     }
     $tool_content .= "<p class='success'>$langForumDelete</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+} elseif (isset($_GET['settings'])) {
+    if (isset($_POST['submitSettings'])) {
+        setting_set(SETTING_FORUM_RATING_ENABLE, $_POST['r_radio'], $course_id);
+        $message = "<p class='success'>$langRegDone</p>";
+    }
+    
+    if (isset($message) && $message) {
+        $tool_content .= $message . "<br/>";
+        unset($message);
+    }
+    
+    if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
+        <fieldset>
+        <legend>$langRating</legend>
+        <table class='tbl' width='100%'>
+        <tbody>
+        <tr><td><input type=\"radio\" value=\"1\" name=\"r_radio\" $checkEn/>$langRatingEn</td></tr>
+        <tr><td><input type=\"radio\" value=\"0\" name=\"r_radio\" $checkDis/>$langRatingDis</td></tr>
+        <tr><td><input type=\"submit\" name=\"submitSettings\" value=\"$langSubmit\" /></td></tr>
+        </tbody>
+        </table>
+        </fieldset>
+        </form>";
 } else {
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">

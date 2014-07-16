@@ -56,6 +56,8 @@ if ($is_editor) {
 	<ul id='opslist'>
 	<li><a href='forum_admin.php?course=$course_code'>$langAddCategory</a>
 	</li>
+	<li><a href='forum_admin.php?course=$course_code&amp;settings=yes'>$langConfig</a>
+	</li>
 	</ul>
 	</div>";
 }
