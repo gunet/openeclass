@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,8 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* @version $Id: forum_admin.php,v 1.10 2011-06-24 13:40:34 adia Exp $
+/**
+ * @file forum_admin.php  
  */
 
 $require_current_course = TRUE;
@@ -129,10 +129,10 @@ elseif (isset($_GET['forumgoedit'])) {
                 <th>$langChangeCat</th>
                 <td>
                 <select name='cat_id'>";
-    $resut = Database::get()->queryArray("SELECT id, cat_title FROM forum_category WHERE course_id = ?d", $course_id);
+    $result = Database::get()->queryArray("SELECT id, cat_title FROM forum_category WHERE course_id = ?d", $course_id);
     foreach ($result as $result_row) {
-        $cat_id = $result->id;
-        $cat_title = $result->cat_title;
+        $cat_id = $result_row->id;
+        $cat_title = $result_row->cat_title;
         if ($cat_id == $cat_id_1) {
             $tool_content .= "<option value='$cat_id' selected>$cat_title</option>";
         } else {
@@ -183,7 +183,7 @@ elseif (isset($_GET['forumcatsave'])) {
 // Save forum
 elseif (isset($_GET['forumgosave'])) {
     $nameTools = $langDelete;
-    $navigation[] = array("url" => "../forum_admin/forum_admin.php?course=$course_code", "name" => $langCatForumAdmin);
+    $navigation[] = array("url" => "../forum/forum_admin.php?course=$course_code", "name" => $langCatForumAdmin);
     Database::get()->query("UPDATE forum SET name = ?s,
                                    `desc` = ?s,
                                    cat_id = ?d
@@ -207,7 +207,7 @@ elseif (isset($_GET['forumcatadd'])) {
 // forum go add
 elseif (isset($_GET['forumgoadd'])) {
     $nameTools = $langAdd;
-    $navigation[] = array('url' => "../forum_admin/forum_admin.php?course=$course_code",
+    $navigation[] = array('url' => "../forum/forum_admin.php?course=$course_code",
         'name' => $langCatForumAdmin);
     $ctg = category_name($cat_id);
     Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
@@ -267,8 +267,8 @@ elseif (isset($_GET['forumcatdel'])) {
 elseif (isset($_GET['forumgodel'])) {
     $nameTools = $langDelete;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langCatForumAdmin);
-    $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-    foreach ($result as $$result_row) {
+    $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);    
+    foreach ($result as $result_row) {
         $forum_id = $result_row->id;
         $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
         foreach ($result2 as $$result_row2) {
@@ -276,15 +276,15 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             $fpdx->removeByTopic($topic_id);
         }
-        Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-        $ftdx->removeByForum($forum_id);
-        Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
-        Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-        $fidx->remove($forum_id);
-        Database::get()->query("UPDATE `group` SET forum_id = 0
-                        WHERE forum_id = ?d
-                        AND course_id = ?d", $forum_id, $course_id);
     }
+    Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
+    $ftdx->removeByForum($forum_id);
+    Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
+    Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
+    $fidx->remove($forum_id);
+    Database::get()->query("UPDATE `group` SET forum_id = 0
+                    WHERE forum_id = ?d
+                    AND course_id = ?d", $forum_id, $course_id);    
     $tool_content .= "<p class='success'>$langForumDelete</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
 } else {
