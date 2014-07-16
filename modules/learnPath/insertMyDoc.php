@@ -45,12 +45,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -84,44 +78,43 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langL
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
-mysql_select_db($mysqlMainDb);
-
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 // 1)  We select first the modules that must not be displayed because
 // as they are already in this learning path
 
 function buildRequestModules() {
-
-    global $TABLELEARNPATHMODULE;
-    global $TABLEMODULE;
     global $course_id;
 
-    $firstSql = "SELECT `module_id` FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
-              WHERE LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
+    $firstSql = "SELECT `module_id` FROM `lp_rel_learnPath_module` AS LPM
+              WHERE LPM.`learnPath_id` = ?d";
 
-    $firstResult = db_query($firstSql);
+    $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
+    
     // 2) We build the request to get the modules we need
     $sql = "SELECT M.*
-         FROM `" . $TABLEMODULE . "` AS M
-         WHERE 1 = 1 AND M.`course_id` = $course_id ";
+         FROM `lp_module` AS M
+         WHERE 1 = 1 AND M.`course_id` = " . intval($course_id);
 
-    while ($list = mysql_fetch_array($firstResult)) {
-        $sql .=" AND M.`module_id` != " . (int) $list['module_id'];
+    foreach ($firstResult as $list) {
+        $sql .=" AND M.`module_id` != " . intval($list->module_id);
     }
     return $sql;
 }
 
 // -------------------------- documents list ----------------
 // evaluate how many form could be sent
-if (!isset($dialogBox))
+if (!isset($dialogBox)) {
     $dialogBox = '';
-if (!isset($style))
+}
+if (!isset($style)) {
     $style = '';
+}
 
 $iterator = 0;
 
-if (!isset($_REQUEST['maxDocForm']))
+if (!isset($_REQUEST['maxDocForm'])) {
     $_REQUEST['maxDocForm'] = 0;
+}
 
 while ($iterator <= $_REQUEST['maxDocForm']) {
     $iterator++;
@@ -133,49 +126,40 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
         if (check_name_exist($sourceDoc)) { // source file exists ?
             // check if a module of this course already used the same document
             $sql = "SELECT *
-                    FROM `$TABLEMODULE` AS M, `$TABLEASSET` AS A
+                    FROM `lp_module` AS M, `lp_asset` AS A
                     WHERE A.`module_id` = M.`module_id`
-                      AND A.`path` LIKE " . autoquote($insertDocument) . "
-                      AND M.`contentType` = '" . CTDOCUMENT_ . "'
-                      AND M.`course_id` = $course_id";
-            $query = db_query($sql);
-            $num = mysql_num_rows($query);
+                      AND A.`path` LIKE ?s
+                      AND M.`contentType` = ?s
+                      AND M.`course_id` = ?d";
+            $thisDocumentModule = Database::get()->queryArray($sql, $insertDocument, CTDOCUMENT_, $course_id);
+            $num = count($thisDocumentModule);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
 
             if ($num == 0) {
                 // create new module
-                $sql = "INSERT INTO `$TABLEMODULE`
+                $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ($course_id, " . autoquote($filenameDocument) . ", '" . addslashes($langDefaultModuleComment) . "', '" . CTDOCUMENT_ . "','')";
-                $query = db_query($sql);
-                $insertedModule_id = mysql_insert_id();
+                        VALUES (?d, ?s, ?s, ?s, '')", $course_id, $filenameDocument, $langDefaultModuleComment, CTDOCUMENT_)->lastInsertID;
 
                 // create new asset
-                $sql = "INSERT INTO `" . $TABLEASSET . "`
+                $insertedAsset_id = Database::get()->query("INSERT INTO `lp_asset`
                         (`path` , `module_id` , `comment`)
-                        VALUES ('" . addslashes($insertDocument) . "', " . (int) $insertedModule_id . ", '')";
-                $query = db_query($sql);
-                $insertedAsset_id = mysql_insert_id();
+                        VALUES (?s, ?d, '')", $insertDocument, $insertedModule_id)->lastInsertID;
 
-                $sql = "UPDATE `" . $TABLEMODULE . "`
-                        SET `startAsset_id` = " . (int) $insertedAsset_id . "
-                        WHERE `module_id` = " . (int) $insertedModule_id . "
-                        AND `course_id` = $course_id";
-                $query = db_query($sql);
+                Database::get()->query("UPDATE `lp_module`
+                        SET `startAsset_id` = ?d
+                        WHERE `module_id` = ?d
+                        AND `course_id` = ?d", $insertedAsset_id, $insertedModule_id, $course_id);
 
                 // determine the default order of this Learning path
-                $sql = "SELECT MAX(`rank`)
-                        FROM `" . $TABLELEARNPATHMODULE . "`
-                        WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-                $result = db_query($sql);
-                list($orderMax) = mysql_fetch_row($result);
-                $order = $orderMax + 1;
+                $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                        FROM `lp_rel_learnPath_module`
+                        WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
                 // finally : insert in learning path
-                $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+                Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-                        VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $insertedModule_id . "','" . addslashes($langDefaultModuleAddedComment) . "', " . (int) $order . ", 'OPEN', 1)";
-                $query = db_query($sql);
+                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
                 $addedDoc = $filenameDocument;
                 $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
                 $style = "success";
@@ -185,31 +169,25 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 $tool_content .= "<br />";
             } else {
                 // check if this is this LP that used this document as a module
-                $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-                             `" . $TABLEMODULE . "` AS M,
-                             `" . $TABLEASSET . "` AS A
+                $sql = "SELECT * FROM `lp_rel_learnPath_module` AS LPM,
+                             `lp_module` AS M,
+                             `lp_asset` AS A
                         WHERE M.`module_id` =  LPM.`module_id`
                           AND M.`startAsset_id` = A.`asset_id`
-                          AND A.`path` = '" . addslashes($insertDocument) . "'
-                          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                          AND M.`course_id` = $course_id";
-                $query2 = db_query($sql);
-                $num = mysql_num_rows($query2);
-                if ($num == 0) {     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                    $thisDocumentModule = mysql_fetch_array($query);
+                          AND A.`path` = ?s
+                          AND LPM.`learnPath_id` = ?d
+                          AND M.`course_id` = ?d";
+                $num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
+                if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     // determine the default order of this Learning path
-                    $sql = "SELECT MAX(`rank`)
-                            FROM `" . $TABLELEARNPATHMODULE . "`
-                            WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-                    $result = db_query($sql);
-
-                    list($orderMax) = mysql_fetch_row($result);
-                    $order = $orderMax + 1;
+                    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                            FROM `lp_rel_learnPath_module`
+                            WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
+                    
                     // finally : insert in learning path
-                    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+                    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-                            VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $thisDocumentModule['module_id'] . "','" . addslashes($langDefaultModuleAddedComment) . "', " . (int) $order . ",'OPEN', 1)";
-                    $query = db_query($sql);
+                            VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
                     $addedDoc = $filenameDocument;
                     $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
                     $style = "success";
@@ -244,9 +222,8 @@ if ($curDirPath == '/' or $curDirPath == '\\' or strstr($curDirPath, '..')) {
     $curDirPath = ''; // manage the root directory problem
 }
 
-$d = mysql_fetch_array(db_query("SELECT filename FROM `$mysqlMainDb`.document
-                                                 WHERE $group_sql AND path=" . autoquote($curDirPath)));
-$curDirName = $d['filename'];
+$d = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $curDirPath);
+$curDirName = $d->filename;
 $parentDir = dirname($curDirPath);
 
 if ($parentDir == '/' or $parentDir == '\\') {
@@ -263,18 +240,18 @@ if ($parentDir == '/' or $parentDir == '\\') {
   -------------------------------------- */
 
 /* Search infos in the DB about the current directory the user is in */
-$sql = "SELECT * FROM `$mysqlMainDb`.document
+$sql = "SELECT * FROM document
                  WHERE $group_sql AND
                        path LIKE " . autoquote($curDirPath . '/%') . " AND
                        path NOT LIKE " . autoquote($curDirPath . '/%/%');
-$result = db_query($sql);
+$result = Database::get()->queryArray($sql);
 $attribute = array();
 
-while ($row = mysql_fetch_assoc($result)) {
-    $attribute['path'][] = $row['path'];
-    $attribute['visible'][] = $row['visible'];
-    $attribute['comment'][] = $row['comment'];
-    $attribute['filename'][] = $row['filename'];
+foreach ($result as $row) {
+    $attribute['path'][] = $row->path;
+    $attribute['visible'][] = $row->visible;
+    $attribute['comment'][] = $row->comment;
+    $attribute['filename'][] = $row->filename;
 }
 
 /* --------------------------------------
@@ -311,8 +288,9 @@ while ($file = readdir($handle)) {
      * and info given by the DB
      */
 
-    if (!isset($dirNameList))
+    if (!isset($dirNameList)) {
         $dirNameList = array();
+    }
     $keyDir = sizeof($dirNameList) - 1;
 
     if (isset($attribute)) {
