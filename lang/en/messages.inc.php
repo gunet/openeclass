@@ -3187,5 +3187,5 @@ $langCMeta['hisarch'] = "History and Archaeology";
 $langCMeta['langlit'] = "Languages and Literature";
 $langCMeta['philosophy'] = "Philosophy, Ethics and Religion";
 $langCMeta['arts'] = "Arts";
-$langCMeta['paidagogy'] = "Paidagogy";
+$langCMeta['pedagogy'] = "Pedagogy";
 $langCMeta['instructor_add'] = "Add instructor";

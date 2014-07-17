@@ -3940,7 +3940,7 @@ $langCMeta['hisarch'] = "Ιστορία & Αρχαιολογία";
 $langCMeta['langlit'] = "Γλώσσα & Λογοτεχνία";
 $langCMeta['philosophy'] = "Φιλοσοφία, Ηθική, Θρησκεία";
 $langCMeta['arts'] = "Τέχνες";
-$langCMeta['paidagogy'] = "Παιδαγωγική";
+$langCMeta['pedagogy'] = "Παιδαγωγική";
 $langCMeta['instructor_add'] = "Προσθήκη διδάσκοντος";
 
 /* * ******************************************
