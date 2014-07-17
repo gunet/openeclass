@@ -240,12 +240,12 @@ function printPollCreationForm() {
         <tr>
 	  <th id='end_poll'>
           $langAddQ:&nbsp;
-              <ul>
+           <ul>
             <li><a id='MoreSingle' class='new_question'>".$langUniqueSelect."</a> </li>
             <li><a id='MoreMultiple' class='new_question'>".$langMultipleSelect."</a></li>
             <li><a id='MoreFill' class='new_question'>".$langFreeText."</a></li>
             <li><a id='MoreLabel' class='new_question'>".$langLabel."/".$langComment."</a></li>
-                </ul>
+           </ul>
           </th>
 	</tr>
         <tr>
@@ -319,7 +319,6 @@ function insertPollQuestions($pid, $questions, $question_types)
 		}
 	}
 }
-
 
 // ----------------------------------------
 // Create a Poll

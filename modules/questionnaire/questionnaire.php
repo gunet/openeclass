@@ -243,11 +243,11 @@ function printPolls() {
                                                 "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid",
                                                 "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") .
                                             "&nbsp;" .
-                                            icon($visibility_gif, $langVisible,
-                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}") .
-                                            "&nbsp;" .
                                             icon('duplicate', $langCreateDuplicate,
                                                 "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;clone=yes&amp;pid={$pid}") .
+                                            "&nbsp;" .               
+                                            icon($visibility_gif, $langVisible,
+                                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}") .                                          
                                             "</td></tr>";
                                 } else {
                                         $tool_content .= "
