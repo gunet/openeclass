@@ -222,8 +222,6 @@ if ($curDirPath == '/' or $curDirPath == '\\' or strstr($curDirPath, '..')) {
     $curDirPath = ''; // manage the root directory problem
 }
 
-$d = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $curDirPath);
-$curDirName = $d->filename;
 $parentDir = dirname($curDirPath);
 
 if ($parentDir == '/' or $parentDir == '\\') {

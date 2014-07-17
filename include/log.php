@@ -68,10 +68,10 @@ class Log {
                                 user_id = ?d,
                                 course_id = ?d,
                                 module_id = ?d,
-                                details = " . quote(serialize($details)) . ",
-                                action_type = $action_type,
+                                details = ?s,
+                                action_type = ?d,
                                 ts = " . DBHelper::timeAfter() . ",
-                                ip = ?s", $userid, $course_id, $module_id, $_SERVER['SERVER_ADDR']);
+                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['SERVER_ADDR']);
         return;
     }
 

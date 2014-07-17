@@ -39,7 +39,6 @@ require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langCourseProgram;
 
-$unit_id = description_unit_id($course_id);
 ?>
 <html>
     <head>
@@ -51,25 +50,21 @@ $unit_id = description_unit_id($course_id);
         <div id="content">
 
             <?php
-            $q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
-                        unit_id = $unit_id ORDER BY `order`");
+            $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
 
-            if ($q and mysql_num_rows($q) > 0) {
-                list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
-			WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-
-                while ($row = mysql_fetch_array($q)) {
+            if ($q && count($q) > 0) {
+                foreach ($q as $row) {
                     echo "
 			<table width='100%' class='tbl_border'>
 			<tr class='odd'>
-			<td class='bold'>" . q($row['title']) . "</td>\n
+			<td class='bold'>" . q($row->title) . "</td>\n
 			</tr>
 			<tr>";
 
                     if ($is_editor) {
-                        echo "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+                        echo "\n<td colspan='6'>" . standard_text_escape($row->comments) . "</td>";
                     } else {
-                        echo "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+                        echo "\n<td>" . standard_text_escape($row->comments) . "</td>";
                     }
                     echo "</tr></table><br />\n";
                 }

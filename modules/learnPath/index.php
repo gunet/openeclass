@@ -235,7 +235,7 @@ if ($is_editor) {
 						AND `course_id` = ?d", $_POST['newPathName'], $course_id)->count;
                     if ($num == 0) { // "name" doesn't already exist
                         // determine the default order of this Learning path
-                        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
+                        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
                         // create new learning path
                         $lp_id = Database::get()->query("INSERT INTO `lp_learnPath` (`course_id`, `name`, `comment`, `visible`, `rank`)
 							VALUES (?d, ?s, ?s, 1, ?d)", $course_id, $_POST['newPathName'], $_POST['newComment'], $order)->lastInsertID;
