@@ -1862,16 +1862,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
         mysql_index_exists('dropbox_attachment', 'drop_att_index') or
                 Database::get()->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
-        mysql_index_exists('dropbox_file', 'drop_file_index') or
-                Database::get()->query("CREATE INDEX `drop_file_index` ON dropbox_file(course_id, uploader_id)");
         mysql_index_exists('dropbox_index', 'drop_index') or
                 Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
         mysql_index_exists('drobox_msg', 'drop_msg_index') or
                 Database::get()->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
-        mysql_index_exists('dropbox_person', 'drop_per_index') or
-                Database::get()->query("CREATE INDEX `drop_per_index` ON dropbox_person(fileId, personId)");
-        mysql_index_exists('dropbox_post', 'drop_post_index') or
-                Database::get()->query("CREATE INDEX `drop_post_index` ON dropbox_post(fileId, recipientId)");
         mysql_index_exists('ebook', 'ebook_index') or
                 Database::get()->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
         mysql_index_exists('ebook_section', 'ebook_sec_index') or
@@ -1921,7 +1915,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         mysql_index_exists('group_properties', 'gr_prop_index') or
                 Database::get()->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
         mysql_index_exists('hierarchy', 'hier_index') or
-                Database::get()->query("CREATE INDEX `hier_index` ON hierarchy(code,name)");
+                Database::get()->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
         mysql_index_exists('link', 'link_index') or
                 Database::get()->query("CREATE INDEX `link_index` ON link(course_id)");
         mysql_index_exists('link_category', 'link_cat_index') or
