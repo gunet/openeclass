@@ -1811,7 +1811,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query('CREATE INDEX `cid` ON videolink (course_id)');
                 mysql_index_exists('log', 'cmid') or
                         Database::get()->query('CREATE INDEX `cmid` ON log (course_id, module_id)');
-
+                //exercise indexes
+                mysql_index_exists('exercise', 'exer_index') or
+                    Database::get()->query('CREATE INDEX `exer_index` ON exercise (course_id)');
+                mysql_index_exists('exercise_user_record', 'eur_index1') or
+                    Database::get()->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
+                mysql_index_exists('exercise_user_record', 'eur_index2') or
+                    Database::get()->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
+                mysql_index_exists('exercise_answer_record', 'ear_index1') or
+                    Database::get()->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
+                mysql_index_exists('exercise_answer_record', 'ear_index2') or
+                    Database::get()->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
+                mysql_index_exists('exercise_with_questions', 'ewq_index') or
+                    Database::get()->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
+                mysql_index_exists('exercise_question', 'eq_index') or
+                    Database::get()->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
+                mysql_index_exists('exercise_answer', 'ea_index') or
+                    Database::get()->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
+                              
                 Database::get()->query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,
                         `user_id` int(11) NOT NULL,
