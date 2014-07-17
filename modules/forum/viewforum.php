@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -150,13 +150,13 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 }
 
 // modify topic notification
-if (isset($_GET['topicnotify'])) {
+if (isset($_GET['topicnotify'])) {    
     if (isset($_GET['topic_id'])) {
-        $topic_id = intval($_GET['topic_id']);
+        $topic_id = $_GET['topic_id'];
     }
-    $rows = Database::get()->querySingle("SELECT COUNT(*) as count FROM forum_notify
+    $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
 		WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
-    if ($rows > 0) {
+    if ($rows->count > 0) {
         Database::get()->query("UPDATE forum_notify SET notify_sent = ?d
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $_GET['topicnotify'], $uid, $topic_id, $course_id);
     } else {
@@ -233,8 +233,11 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td class='center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
         $tool_content .= "<td class='center'>$myrow->num_views</td>";
         $tool_content .= "<td class='center'>" . q(uid_to_name($myrow->poster_id)) . "<br />$last_post_datetime</td>";
-        $topic_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+        $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
+        if ($sql) {
+            $topic_action_notify = $sql->notify_sent;
+        }
         if (!isset($topic_action_notify)) {
             $topic_link_notify = FALSE;
             $topic_icon = '_off';
@@ -254,12 +257,12 @@ if (count($result) > 0) { // topics found
 			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
-        } else {
+        } else {            
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
         }
-        $tool_content .= "</td>\n</tr>";
+        $tool_content .= "</td></tr>";
         $i++;
     } // end of while
     $tool_content .= "</table>";

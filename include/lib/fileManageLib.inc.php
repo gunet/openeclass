@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -52,38 +52,38 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
     global $course_id, $group_sql, $subsystem;
 
     if ($action == "delete") {
-        // db_query check argument
         Database::get()->query("DELETE FROM `$dbTable`
                                  WHERE $group_sql AND
-                                       path LIKE " . quote($oldPath . '%'));
+                                       path LIKE ?s", ($oldPath . '%'));
         if ($subsystem == COMMON) {
-            // For common documents, delete all references
-            // db_query check argument
+            // For common documents, delete all references            
             Database::get()->query("DELETE FROM `$dbTable`
-                                         WHERE extra_path LIKE " . quote('common:' . $oldPath . '%'));
+                                         WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
         }
         Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
-            'filename' => $filename));
-    } elseif ($action == "update") {
-        // db_query check argument
+                                                                  'filename' => $filename));
+    } elseif ($action == "update") {        
         Database::get()->query("UPDATE `$dbTable`
                                  SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-                                 WHERE $group_sql AND path LIKE " . quote($oldPath . '%'));
+                                 WHERE $group_sql AND path LIKE ?s", ($oldPath . '%'));
         if ($subsystem == COMMON) {
             // For common documents, update all references
             Database::get()->query("UPDATE `$dbTable`
                                          SET extra_path = CONCAT('common:$newPath',
                                                                  SUBSTRING(extra_path, LENGTH('common:$oldPath')+1))
-                                         WHERE extra_path LIKE " . quote('common:' . $oldPath . '%'));
+                                         WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
         }
         $newencodepath = Database::get()->querySingle("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath')) as value
                                 FROM $dbTable WHERE path=?s", $newPath)->value;
         $newpath = Database::get()->querySingle("SELECT filename FROM $dbTable
-                                        WHERE path = ?s", $newencodepath)->filename;
+                                        WHERE path = ?s", $newencodepath);
+        if ($newpath) {
+            $newpath = $newpath->filename;
+        }
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
-            'newencpath' => $newPath,
-            'newpath' => $newpath,
-            'filename' => $filename));
+                                                                  'newencpath' => $newPath,
+                                                                  'newpath' => $newpath,
+                                                                  'filename' => $filename));
     }
 }
 
@@ -291,7 +291,7 @@ function directory_list() {
 
 function directory_selection($source_value, $command, $entryToExclude) {
     global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
-    global $tool_content, $groupset;
+    global $groupset;
 
     if (!empty($groupset)) {
         $groupset = '?' . $groupset;
@@ -322,7 +322,7 @@ function directory_selection($source_value, $command, $entryToExclude) {
     $dialogBox .= "
             </select>
           </td>
-          <td class='right'><input type=\"submit\" value=\"$langMove\"></td>
+          <td class='right'><input type='submit' value='$langMove'></td>
         </tr>
         </table>
         </fieldset>
@@ -330,7 +330,15 @@ function directory_selection($source_value, $command, $entryToExclude) {
     return $dialogBox;
 }
 
-// Create a zip file with the contents of documents path $downloadDir
+
+/**
+ * @brief Create a zip file with the contents of documents path $downloadDir
+ * @global type $basedir
+ * @global type $group_sql
+ * @param type $zip_filename
+ * @param type $downloadDir
+ * @param type $include_invisible
+ */
 function zip_documents_directory($zip_filename, $downloadDir, $include_invisible = false) {
     global $basedir, $group_sql;
 
@@ -357,7 +365,13 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     }
 }
 
-// Creates mapping between encoded filenames and real filenames
+
+/**
+ * @brief Creates mapping between encoded filenames and real filenames
+ * @global type $group_sql
+ * @param type $downloadDir
+ * @param type $include_invisible
+ */
 function create_map_to_real_filename($downloadDir, $include_invisible) {
 
     global $group_sql;

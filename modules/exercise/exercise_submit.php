@@ -396,7 +396,7 @@ if (!$questionList) {
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
-    if ($exerciseTempSave) {
+    if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
         $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
     $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>

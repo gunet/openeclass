@@ -85,10 +85,10 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>                             
     		$(document).ready(function(){
                     function save_grade(elem){
-                        grade = parseInt($(elem).val());
+                        var grade = parseInt($(elem).val());
                         var element_name = $(elem).attr('name');
                         var questionId = parseInt(element_name.substring(14,element_name.length - 1));
-                        questionMaxGrade = parseInt($(elem).next().val());
+                        var questionMaxGrade = parseInt($(elem).next().val());
                         if (grade > questionMaxGrade) {
                             alert('$langGradeTooBig');
                             return false;
@@ -104,8 +104,8 @@ $head_content .= "<script type='text/javascript'>
                             $(elem).parent().prev().hide();
                             $(elem).prop('disabled', true);
                             $(elem).css({'border-color':'#dfdfdf'});
-                            prev_grade = parseInt($('span#total_score').html());
-                            updated_grade = prev_grade + grade;
+                            var prev_grade = parseInt($('span#total_score').html());
+                            var updated_grade = prev_grade + grade;
                             $('span#total_score').html(updated_grade);
                             return true;
                         }                    
@@ -113,6 +113,10 @@ $head_content .= "<script type='text/javascript'>
                     $('.questionGradeBox').keyup(function (e) {
                         if (e.keyCode == 13) {
                             save_grade(this);
+                            var countnotgraded = $('input.questionGradeBox').not(':disabled').length;
+                            if (countnotgraded == 0) {
+                                $('a#submitButton').parent().hide();
+                            }                        
                         }
                     });
                     $('a#submitButton').click(function(e){
