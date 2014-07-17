@@ -2971,6 +2971,7 @@ $langDeleteTable = "Διαγραφή πίνακα";
 $langMergeTables = "Ενοποίηση των πινάκων";
 $langIndexExists = "Υπάρχει ήδη κάποιο index στον πίνακα";
 $langIndexAdded = "Προστέθηκε index";
+$langIndexCreation = "Δημιουργία indexes";
 $langNotTablesList = "Πρόβλημα με την Β.Δ. Δεν ήταν δυνατή η εύρεση των πινάκων";
 $langNotMovedDir = "Προσοχή: Δεν ήταν δυνατή η μεταφορά του υποκαταλόγου";
 $langToDir = "στο φάκελο";
