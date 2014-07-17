@@ -65,9 +65,7 @@ class Hierarchy {
         $ret = null;
 
         if ($this->useProcedures()) {
-            db_query("CALL add_node(" . quote($name) . ", $parentlft, " . quote($code) . ", $allow_course, $allow_user, $order_priority)");
-            $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
-            $ret = $r[0];
+            $ret = Database::get()->query("CALL add_node(?s, ?d, ?s, ?d, ?d, ?d)", $name, $parentlft, $code, $allow_course, $allow_user, $order_priority)->lastInsertID;
         } else {
             $lft = $parentlft + 1;
             $rgt = $parentlft + 2;
@@ -75,9 +73,8 @@ class Hierarchy {
             $this->shiftRight($parentlft);
 
             $query = "INSERT INTO " . $this->dbtable . " (name, lft, rgt, code, allow_course, allow_user, order_priority) "
-                    . "VALUES (" . quote($name) . ", $lft, $rgt, " . quote($code) . ", $allow_course, $allow_user, $order_priority)";
-            db_query($query);
-            $ret = mysql_insert_id();
+                    . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d)";
+            $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority)->lastInsertID;
         }
 
         return $ret;
@@ -100,9 +97,7 @@ class Hierarchy {
         $ret = null;
 
         if ($this->useProcedures()) {
-            db_query("CALL add_node_ext(" . quote($name) . ", $parentlft, " . quote($code) . ", $number, $generator, $allow_course, $allow_user, $order_priority)");
-            $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
-            $ret = $r[0];
+            $ret = Database::get()->query("CALL add_node_ext(?s, ?d, ?s, ?d, ?d, ?d, ?d, ?d)", $name, $parentlft, $code, $number, $generator, $allow_course, $allow_user, $order_priority)->lastInsertID;
         } else {
             $lft = $parentlft + 1;
             $rgt = $parentlft + 2;
@@ -110,9 +105,8 @@ class Hierarchy {
             $this->shiftRight($parentlft);
 
             $query = "INSERT INTO " . $this->dbtable . " (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
-                    . "VALUES (" . quote($name) . ", $lft, $rgt, " . quote($code) . ", $number, $generator, $allow_course, $allow_user, $order_priority)";
-            db_query($query);
-            $ret = mysql_insert_id();
+                    . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d, ?d)";
+            $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $number, $generator, $allow_course, $allow_user, $order_priority)->lastInsertID;
         }
 
         return $ret;
@@ -134,12 +128,12 @@ class Hierarchy {
      */
     public function updateNode($id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority) {
         if ($this->useProcedures()) {
-            db_query("CALL update_node($id, " . quote($name) . ", $nodelft, $lft, $rgt, $parentlft, " . quote($code) . ", $allow_course, $allow_user, $order_priority)");
+            Database::get()->query("CALL update_node(?d, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d)", $id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority);
         } else {
-            $query = "UPDATE " . $this->dbtable . " SET name = " . quote($name) . ",  lft = $lft, rgt = $rgt,
-                    code = " . quote($code) . ", allow_course = $allow_course, allow_user = $allow_user, 
-                    order_priority = $order_priority WHERE id = $id";
-            db_query($query);
+            $query = "UPDATE " . $this->dbtable . " SET name = ?s, lft = ?d, rgt = ?d,
+                    code = ?s, allow_course = ?d, allow_user = ?d, 
+                    order_priority = ?d WHERE id = ?d";
+            Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $id);
 
             if ($nodelft != $parentlft) {
                 $this->moveNodes($nodelft, $lft, $rgt);
@@ -154,18 +148,11 @@ class Hierarchy {
      */
     public function deleteNode($id) {
         if ($this->useProcedures()) {
-            db_query("CALL delete_node($id)");
+            Database::get()->query("CALL delete_node(?d)", $id);
         } else {
-            $result = db_query("SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = $id");
-
-            $row = mysql_fetch_assoc($result);
-
-            $lft = $row['lft'];
-            $rgt = $row['rgt'];
-
-            db_query("DELETE FROM " . $this->dbtable . " WHERE id = $id");
-
-            $this->delete($lft, $rgt);
+            $row = Database::get()->querySingle("SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = ?d", $id);
+            Database::get()->query("DELETE FROM " . $this->dbtable . " WHERE id = ?d", $id);
+            $this->delete($row->lft, $row->rgt);
         }
     }
 
@@ -199,8 +186,8 @@ class Hierarchy {
      * @param int $maxrgt - Maximum rgt value in the tree
      */
     public function shiftEnd($lft, $rgt, $maxrgt) {
-        $query = "UPDATE " . $this->dbtable . " SET  lft = (lft - " . ($lft - 1) . ")+" . $maxrgt . ", rgt = (rgt - " . ($lft - 1) . ")+" . $maxrgt . " WHERE lft BETWEEN " . $lft . " AND " . $rgt;
-        db_query($query);
+        $query = "UPDATE " . $this->dbtable . " SET  lft = (lft - ?d) + ?d, rgt = (rgt - ?d) + ?d WHERE lft BETWEEN ?d AND ?d";
+        Database::get()->query($query, ($lft - 1), $maxrgt, ($lft - 1), $maxrgt, $lft, $rgt);
     }
 
     /**
@@ -212,11 +199,11 @@ class Hierarchy {
      * @param int    $maxrgt - Maximum rgt value in the tree
      */
     public function shift($action, $node, $shift = 2, $maxrgt = 0) {
-        $query = "UPDATE " . $this->dbtable . " SET rgt = rgt " . $action . " " . $shift . " WHERE rgt > " . $node . ($maxrgt > 0 ? " AND rgt<=" . $maxrgt : '');
-        db_query($query);
+        $query = "UPDATE " . $this->dbtable . " SET rgt = rgt " . $action . " ?d WHERE rgt > ?d" . ($maxrgt > 0 ? " AND rgt <= " . $maxrgt : '');
+        Database::get()->query($query, $shift, $node);
 
-        $query = "UPDATE " . $this->dbtable . " SET lft = lft " . $action . " " . $shift . " WHERE lft > " . $node . ($maxrgt > 0 ? " AND lft<=" . $maxrgt : '');
-        db_query($query);
+        $query = "UPDATE " . $this->dbtable . " SET lft = lft " . $action . " ?d WHERE lft > ?d" . ($maxrgt > 0 ? " AND lft <= " . $maxrgt : '');
+        Database::get()->query($query, $shift, $node);
     }
 
     /**
@@ -225,10 +212,7 @@ class Hierarchy {
      * @return int
      */
     public function getMaxRgt() {
-        $result = db_query("SELECT rgt FROM " . $this->dbtable . " ORDER BY rgt desc limit 1");
-        $row = mysql_fetch_assoc($result);
-
-        return $row['rgt'];
+        return Database::get()->querySingle("SELECT rgt FROM " . $this->dbtable . " ORDER BY rgt desc limit 1")->rgt;
     }
 
     /**
@@ -236,13 +220,10 @@ class Hierarchy {
      *
      * @param  int   $lft - lft of child node
      * @param  int   $rgt - rgt of child node
-     * @return array - the object/array of the mysql query result
+     * @return object     - the object of the PDO query result
      */
     public function getParent($lft, $rgt) {
-        $query = "SELECT * FROM " . $this->dbtable . " WHERE lft < " . $lft . " AND rgt > " . $rgt . " ORDER BY lft DESC LIMIT 1";
-        $result = db_query($query);
-
-        return mysql_fetch_assoc($result);
+        return Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE lft < ?d AND rgt > ?d ORDER BY lft DESC LIMIT 1", $lft, $rgt);
     }
 
     /**
@@ -250,13 +231,10 @@ class Hierarchy {
      *
      * @param  int   $lft - lft of child node
      * @param  int   $rgt - rgt of child node
-     * @return array - the object/array of the mysql query result
+     * @return object     - the object of the PDO query result
      */
     public function getRootParent($lft, $rgt) {
-        $query = "SELECT * FROM " . $this->dbtable . " WHERE lft < " . $lft . " AND rgt > " . $rgt . " ORDER BY lft ASC LIMIT 1";
-        $result = db_query($query);
-
-        return mysql_fetch_assoc($result);
+        return Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC LIMIT 1", $lft, $rgt);
     }
 
     /**
@@ -266,37 +244,28 @@ class Hierarchy {
      * @return int
      */
     public function getNodeLft($id) {
-        $query = "SELECT lft FROM " . $this->dbtable . " WHERE id = " . $id;
-        $res = mysql_fetch_assoc(db_query($query));
-
-        return intval($res['lft']);
+        return intval(Database::get()->querySingle("SELECT lft FROM " . $this->dbtable . " WHERE id = ?d", $id)->lft);
     }
 
     /**
      * Get a node's lft and rgt value.
      *
      * @param  int $id - The id of the node
-     * @return array
+     * @return object
      */
     public function getNodeLftRgt($id) {
-        $query = "SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = " . $id;
-        $res = mysql_fetch_assoc(db_query($query));
-
-        return array(intval($res['lft']), intval($res['rgt']));
+        return Database::get()->querySingle("SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = ?d", $id);
     }
 
     /**
      * Get a node's (unserialized) name value.
      *
-     * @param  string $key    - The db query search pattern
+     * @param  int    $key    - The db query search pattern
      * @param  string $useKey - Match against either the id or the lft during the db query
      * @return string         - The (unserialized) node's name
      */
     public function getNodeName($key, $useKey = 'id') {
-        $query = "SELECT name FROM " . $this->dbtable . " WHERE " . $useKey . " = " . $key;
-        $res = mysql_fetch_assoc(db_query($query));
-
-        return self::unserializeLangField($res['name']);
+        return self::unserializeLangField(Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key)->name);
     }
 
     /**
@@ -307,15 +276,9 @@ class Hierarchy {
      */
     public function delete($lft, $rgt) {
         $nodeWidth = $rgt - $lft + 1;
-
-        $query = "DELETE FROM " . $this->dbtable . "  WHERE lft BETWEEN " . $lft . " AND " . $rgt;
-        db_query($query);
-
-        $query = "UPDATE " . $this->dbtable . "  SET rgt = rgt - " . $nodeWidth . " WHERE rgt > " . $rgt;
-        db_query($query);
-
-        $query = "UPDATE " . $this->dbtable . "  SET lft = lft - " . $nodeWidth . " WHERE lft > " . $lft;
-        db_query($query);
+        Database::get()->query("DELETE FROM " . $this->dbtable . " WHERE lft BETWEEN ?d AND ?d", $lft, $rgt);
+        Database::get()->query("UPDATE " . $this->dbtable . "  SET rgt = rgt - ?d WHERE rgt > ?d", $nodeWidth, $rgt);
+        Database::get()->query("UPDATE " . $this->dbtable . "  SET lft = lft - ?d WHERE lft > ?d", $nodeWidth, $lft);
     }
 
     /**
@@ -342,11 +305,8 @@ class Hierarchy {
 
             $this->shiftRight($nodelft, $nodeWidth, $maxrgt);
 
-            $query = "UPDATE " . $this->dbtable . " SET rgt = (rgt - " . $maxrgt . ") + " . $nodelft . " WHERE rgt > " . $maxrgt;
-            db_query($query);
-
-            $query = "UPDATE " . $this->dbtable . " SET lft = (lft - " . $maxrgt . ") + " . $nodelft . " WHERE lft > " . $maxrgt;
-            db_query($query);
+            Database::get()->query("UPDATE " . $this->dbtable . " SET rgt = (rgt - ?d) + ?d WHERE rgt > ?d", $maxrgt, $nodelft, $maxrgt);
+            Database::get()->query("UPDATE " . $this->dbtable . " SET lft = (lft - ?d) + ?d WHERE lft > ?d", $maxrgt, $nodelft, $maxrgt);
         }
     }
 
@@ -364,14 +324,13 @@ class Hierarchy {
      */
     public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = false) {
         if ($exclude != null) {
-            $result = db_query("SELECT * FROM " . $this->dbtable . " WHERE id = $exclude");
-            $row = mysql_fetch_assoc($result);
+            $row = Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE id = ?d", $exclude);
 
             $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user,
                              node.order_priority, COUNT(parent.id) - 1 AS depth
                      FROM " . $this->dbtable . " AS node, " . $this->dbtable . " AS parent
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    AND (node.lft < " . $row['lft'] . " OR node.lft > " . $row['rgt'] . ")
+                    AND (node.lft < " . $row->lft . " OR node.lft > " . $row->rgt . ")
                     $where
                     GROUP BY node.id
                     ORDER BY node.lft";
@@ -385,7 +344,7 @@ class Hierarchy {
                     ORDER BY node.lft";
         }
 
-        $result = db_query($query);
+        $result = Database::get()->queryArray($query);
 
         $idmap = array();
         $depthmap = array();
@@ -402,177 +361,25 @@ class Hierarchy {
         $allowusermap[0] = 1;
         $orderingmap[0] = 999999;
 
-        while ($row = mysql_fetch_assoc($result)) {
+        foreach ($result as $row) {
             $prefix = '';
             if ($dashprefix) {
-                for ($i = 0; $i < $row['depth']; $i++) {
+                for ($i = 0; $i < $row->depth; $i++) {
                     $prefix .= '&nbsp;-&nbsp;';
                 }
             }
 
-            $tree_array[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
-            $idmap[$row[$useKey]] = $row['id'];
-            $depthmap[$row[$useKey]] = $row['depth'];
-            $codemap[$row[$useKey]] = $row['code'];
-            $allowcoursemap[$row[$useKey]] = $row['allow_course'];
-            $allowusermap[$row[$useKey]] = $row['allow_user'];
-            $orderingmap[$row[$useKey]] = intval($row['order_priority']);
+            $tree_array[$row->$useKey] = $prefix . self::unserializeLangField($row->name);
+            $idmap[$row->$useKey] = $row->id;
+            $depthmap[$row->$useKey] = $row->depth;
+            $codemap[$row->$useKey] = $row->code;
+            $allowcoursemap[$row->$useKey] = $row->allow_course;
+            $allowusermap[$row->$useKey] = $row->allow_user;
+            $orderingmap[$row->$useKey] = intval($row->order_priority);
         }
 
         return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap);
     }
-
-    /**
-     * DEPRECATED due to performance loss, sorting moved to jstree
-     * Build an ArrayMap containing the tree nodes (customly ordered per depth level).
-     *
-     * This is the entry-point method for building ordered ArrayMaps using recursion (each depth level is a different recursion step).
-     * See also the utilized recursive method appendOrdered(). For each recursion step, the nodes are ordered and appended to the
-     * tree ArrayMap.
-     *
-     * @param  array   $tree_array - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap>.
-     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>,
-     *                               <node key, node depth>, <node key, node code>, <node key, allow_course> and <node key, allow_user>.
-     */
-    /* public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
-      {
-      $res = null;
-      $swhere = '';
-      $excwhere = '';
-      $excnwhere = '';
-      $idmap = array();
-      $depthmap = array();
-      $codemap = array();
-      $allowcoursemap = array();
-      $allowusermap = array();
-      $this->ordermap = array();
-      $level = array();
-      $mindepth = array();
-
-      if (strstr($where, 'allow_course') !== false)
-      $swhere = ' WHERE allow_course = true ';
-      else if (strstr($where, 'allow_user') !== false)
-      $swhere = ' WHERE allow_user  = true ';
-
-      if ($exclude != null)
-      {
-      $excnode = mysql_fetch_array(db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude"));
-      $excwhere = ' AND (lft < '. $excnode['lft'] .' OR lft > '. $excnode['rgt'] .') ';
-      $excnwhere = ' AND (node.lft < '. $excnode['lft'] .' OR node.lft > '. $excnode['rgt'] .') ';
-      }
-
-      if ($this->useProcedures())
-      {
-      $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->dbdepth . $swhere));
-      $res = db_query("SELECT id, lft, name, depth, code, allow_course, allow_user, order_priority FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
-      }
-      else
-      {
-      $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->view . $swhere));
-      $res = db_query("SELECT id, lft, name, depth, code, allow_course, allow_user, order_priority FROM ". $this->view ." WHERE depth = ". $mindepth[0] . $excwhere);
-      }
-
-      while ($row = mysql_fetch_assoc($res))
-      {
-      $prefix = '';
-      if ($dashprefix)
-      for ($i = 0; $i < $mindepth[0]; $i++)
-      $prefix .= '&nbsp;-&nbsp;';
-
-      $level[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
-      $idmap[$row[$useKey]] = $row['id'];
-      $depthmap[$row[$useKey]] = $row['depth'];
-      $codemap[$row[$useKey]] = $row['code'];
-      $allowcoursemap[$row[$useKey]] = $row['allow_course'];
-      $allowusermap[$row[$useKey]] = $row['allow_user'];
-      $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
-      }
-      $this->ordering_copy = $level; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
-      uksort($level, array($this, 'orderCmp'));
-
-      $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
-
-      return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap);
-      } */
-
-    /**
-     * DEPRECATED due to performance loss, sorting moved to jstree
-     * Recursively append customly ordered entries to an existing tree ArrayMap.
-     *
-     * Designed to be used in combination with special entry-point methods such as buildOrdered().
-     *
-     * It requires as input the byproducts of buildOrdered(), passed by reference. The extra arguments are mainly for excluding
-     * parts of the subtree already excluded at a previous recursion step (or the entry-point itself).
-     */
-    /* public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, &$allowcoursemap, &$allowusermap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
-      {
-      foreach ($level as $key => $value)
-      {
-      $final[$key] = $value;
-
-      $res = db_query("SELECT node.* FROM ". $this->dbtable ." AS node
-      LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft =
-      (SELECT MAX(S.lft)
-      FROM ". $this->dbtable ." AS S
-      WHERE node.lft > S.lft
-      AND node.lft < S.rgt)
-      WHERE parent.id = ". $idmap[$key] ." ". $where . $excwhere);
-
-      if (mysql_num_rows($res) > 0)
-      {
-      $tmp = array();
-      $this->ordermap = array();
-
-      while($row = mysql_fetch_assoc($res))
-      {
-      $prefix = '';
-      if ($dashprefix)
-      for ($i = 0; $i < $depth; $i++)
-      $prefix .= '&nbsp;-&nbsp;';
-
-      $tmp[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
-      $idmap[$row[$useKey]] = $row['id'];
-      $depthmap[$row[$useKey]] = $depth;
-      $codemap[$row[$useKey]] = $row['code'];
-      $allowcoursemap[$row[$useKey]] = $row['allow_course'];
-      $allowusermap[$row[$useKey]] = $row['allow_user'];
-      $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
-      }
-      $this->ordering_copy = $tmp; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
-      uksort($tmp, array($this, 'orderCmp'));
-
-      $this->appendOrdered($final, $tmp, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $depth+1, $useKey, $where, $excwhere, $dashprefix);
-      } else
-      continue;
-      }
-      } */
-
-    /**
-     * DEPRECATED due to performance loss, sorting moved to jstree
-     * Custom comparison function for ordering/sorting the tree nodes primarily according to their order priority
-     * and secondarily alphabetically. To be used in conjustion with uksort()
-     *
-     * @param  int $a - arraymap key of node a
-     * @param  int $b - arraymap key of node b
-     * @return int    - < 0 if node a is less than node b, > 0 if node a is greater than node b, and 0 if they are equal.
-     */
-    /* private function orderCmp($a, $b)
-      {
-      if ($this->ordermap[$a] == $this->ordermap[$b])
-      {
-      // alphabetical compare
-      return strcasecmp($this->ordering_copy[$a], $this->ordering_copy[$b]);
-      }
-      else
-      {
-      return ($this->ordering_copy[$a] > $this->ordering_copy[$b]) ? -1 : 1;
-      }
-      } */
 
     /**
      * Represent the tree using XML or HTML unordered list tags (<ul> and <li>) data source. Used for JSTree representation (GUI).
@@ -619,9 +426,9 @@ class Hierarchy {
         $start_depth = null;
 
         foreach ($tree_array as $key => $value) {
-            if ($i == 0)
+            if ($i == 0) {
                 $start_depth = $current_depth = ($key != 0) ? $depthmap[$key] : 0;
-            else {
+            } else {
                 if ($depthmap[$key] > $current_depth) {
                     $out = ($xmlout) ? substr($out, 0, -8) : substr($out, 0, -6);
                     $out .= ($xmlout) ? '' : '<ul>' . "\n";
@@ -644,39 +451,45 @@ class Hierarchy {
                     ($mark_allow_user && !$allowusermap[$key]) ||
                     ($allow_only_defaults && !in_array($idmap[$key], $subdefs) ) ||
                     ($suballowed != null && !in_array($idmap[$key], $suballowed) )
-            )
+            ) {
                 $rel = 'nosel';
+            }
             if (!empty($rel)) {
                 $rel = "rel='" . $rel . "'";
                 $class = "class='nosel'";
             }
 
             $valcode = '';
-            if ($codesuffix && strlen($codemap[$key]) > 0)
+            if ($codesuffix && strlen($codemap[$key]) > 0) {
                 $valcode = ' (' . $codemap[$key] . ')';
+            }
 
             // valid HTML requires ids starting with letters.
             // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
-            if ($xmlout)
+            if ($xmlout) {
                 $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . $value . $valcode . '<\/name><\/content><\/item>';
-            else
+            } else {
                 $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . $value . $valcode . "</a></li>" . "\n";
+            }
 
             $i++;
         }
 
-        if (!$xmlout)
+        if (!$xmlout) {
             $out .= '</ul>';
+        }
 
         // close remaining open tags
         $remain_depth = $current_depth - $start_depth;
-        if ($remain_depth > 0)
+        if ($remain_depth > 0) {
             for ($j = 0; $j < $remain_depth; $j++) {
                 $out .= ($xmlout) ? '<\/item>' : '</li></ul>';
             }
+        }
 
-        if ($xmlout)
+        if ($xmlout) {
             $out .= '<\/root>';
+        }
 
         return $out;
     }
@@ -688,9 +501,9 @@ class Hierarchy {
      */
     public function buildRootsArray() {
         $ret = array();
-        $res = ($this->useProcedures()) ? db_query("SELECT id FROM " . $this->dbdepth . " WHERE depth = 0") : db_query("SELECT id FROM " . $this->view . " WHERE depth = 0");
-        while ($row = mysql_fetch_assoc($res)) {
-            $ret[] = $row['id'];
+        $res = ($this->useProcedures()) ? Database::get()->queryArray("SELECT id FROM " . $this->dbdepth . " WHERE depth = 0") : Database::get()->queryArray("SELECT id FROM " . $this->view . " WHERE depth = 0");
+        foreach ($res as $row) {
+            $ret[] = $row->id;
         }
         return $ret;
     }
@@ -736,12 +549,14 @@ class Hierarchy {
         $xmlout = (isset($options['xmlout']) && is_bool($options['xmlout'])) ? $options['xmlout'] : true;
 
         $xmldata = '';
-        if ($xmlout)
+        if ($xmlout) {
             $xmldata = $this->buildTreeDataSource($options);
+        }
         $initopen = $this->buildJSTreeInitOpen();
 
-        if ($offset > 0)
-            $offset -=1;
+        if ($offset > 0) {
+            $offset -= 1;
+        }
 
         $js = <<<jContent
 <script type="text/javascript">
@@ -793,7 +608,7 @@ $(function() {
 
 jContent;
 
-        if ($xmlout)
+        if ($xmlout) {
             $js .= <<<jContent
         "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort"],
         "xml_data" : {
@@ -801,10 +616,11 @@ jContent;
             "xsl" : "nest"
         },
 jContent;
-        else
+        } else {
             $js .= <<<jContent
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
 jContent;
+        }
 
         $js .= <<<jContent
         "core" : {
@@ -919,10 +735,11 @@ jContent;
             $html .= '<input id="dialog-set-value" type="hidden" />';
         } else {
             if (isset($defs[0])) {
-                if (isset($tree_array[$defs[0]]))
+                if (isset($tree_array[$defs[0]])) {
                     $def = $tree_array[$defs[0]];
-                else
+                } else {
                     $def = $this->getNodeName($defs[0], $useKey);
+                }
             }
             else {
                 $defs[0] = '';
@@ -930,8 +747,9 @@ jContent;
             }
 
             // satisfy JS code: getElementById().onchange()
-            if (stristr($params, 'onchange') === false)
+            if (stristr($params, 'onchange') === false) {
                 $params .= ' onchange="" ';
+            }
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . $defs[0] . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . $defs[0] . '\', true, null);' : '';
@@ -939,8 +757,9 @@ jContent;
         }
 
         $html .= '<div id="dialog-form" title="' . $langNodeAdd . '"><fieldset><div id="js-tree">';
-        if (!$xmlout)
+        if (!$xmlout) {
             $html .= $this->buildTreeDataSource($options);
+        }
         $html .= '</div></fieldset></div>';
 
         return $html;
@@ -1051,12 +870,12 @@ jContent;
      * @return array  $nodes - The return tree ArrayMap in the form of <node id, node name>
      */
     public function buildSimple($where = null) {
-        $result = db_query("SELECT id, name FROM $this->dbtable " . $where . " order by id");
+        $result = Database::get()->queryArray("SELECT id, name FROM $this->dbtable " . $where . " order by id");
 
         $nodes = array();
 
-        while ($row = mysql_fetch_assoc($result)) {
-            $nodes[$row['id']] = self::unserializeLangField($row['name']);
+        foreach ($result as $row) {
+            $nodes[$row->id] = self::unserializeLangField($row->name);
         }
 
         return $nodes;
@@ -1073,30 +892,32 @@ jContent;
     public function getFullPath($nodeid, $skipfirst = true, $href = '') {
         $ret = "";
 
-        if ($nodeid == null)
+        if ($nodeid == null) {
             return $ret;
+        }
 
-        $node = mysql_fetch_assoc(db_query("SELECT * FROM $this->dbtable WHERE id = " . $nodeid));
-        if (!$node)
+        $node = Database::get()->querySingle("SELECT * FROM $this->dbtable WHERE id = ?d", $nodeid);
+        if (!$node) {
             return $ret;
+        }
 
-        $result = db_query("SELECT * FROM $this->dbtable WHERE lft < " . $node['lft'] . " AND rgt > " . $node['rgt'] . " ORDER BY lft ASC");
+        $result = Database::get()->queryArray("SELECT * FROM $this->dbtable WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC", $node->lft, $node->rgt);
 
         $c = 0;
         $skip = 0;
-        while ($parent = mysql_fetch_assoc($result)) {
+        foreach ($result as $parent) {
             if ($skipfirst && $skip == 0) {
                 $skip++;
                 continue;
             }
 
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= (empty($href)) ? self::unserializeLangField($parent['name']) . ' ' : "<a href='" . $href . $parent['id'] . "'>" . self::unserializeLangField($parent['name']) . "</a> ";
+            $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
             $c++;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
-        $ret .= self::unserializeLangField($node['name']) . ' ';
+        $ret .= self::unserializeLangField($node->name) . ' ';
 
         return $ret;
     }
@@ -1115,12 +936,13 @@ jContent;
         $values = @unserialize($value);
 
         if ($values !== false) {
-            if (isset($values[$language]) && !empty($values[$language]))
+            if (isset($values[$language]) && !empty($values[$language])) {
                 return $values[$language];
-            else if (isset($values['en']) && !empty($values['en']))
+            } else if (isset($values['en']) && !empty($values['en'])) {
                 return $values['en'];
-            else
+            } else {
                 return array_shift($values);
+            }
         } else {
             return $value;
         }
@@ -1163,9 +985,9 @@ jContent;
                  GROUP BY node.id
                  ORDER BY node.lft";
 
-        $result = db_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $subs[] = $row['id'];
+        $result = Database::get()->queryArray($sql);
+        foreach ($result as $row) {
+            $subs[] = $row->id;
         }
 
         return $subs;
@@ -1178,10 +1000,8 @@ jContent;
      */
     private function useProcedures() {
         global $mysqlMainDb;        
-        $res = db_query("SHOW PROCEDURE STATUS WHERE Db = '" . $mysqlMainDb . "' AND Name = 'add_node'");
-        if (mysql_num_rows($res) > 0)
-            return true;        
-        return false;
+        $res = Database::get()->querySingle("SHOW PROCEDURE STATUS WHERE Db = '" . $mysqlMainDb . "' AND Name = 'add_node'");
+        return ($res) ? true : false;
     }
 
     /**
@@ -1205,38 +1025,38 @@ jContent;
         global $langAvCours, $langAvCourses;
 
         $ret = '';
-        $res = db_query("SELECT node.id, node.code, node.name 
+        $res = Database::get()->queryArray("SELECT node.id, node.code, node.name 
                           FROM " . $this->dbtable . " AS node
                          WHERE node.id IN (" . implode(', ', $nodes) . ")");
 
-        if (mysql_num_rows($res) > 0) {
+        if (count($res) > 0) {
             $ret .= "<table width='100%' class='tbl_border'>";
             $nodenames = array();
             $nodecodes = array();
 
-            while ($node = mysql_fetch_array($res)) {
-                $nodenames[$node['id']] = self::unserializeLangField($node['name']);
-                $nodecodes[$node['id']] = $node['code'];
+            foreach ($res as $node) {
+                $nodenames[$node->id] = self::unserializeLangField($node->name);
+                $nodecodes[$node->id] = $node->code;
             }
             asort($nodenames);
 
             foreach ($nodenames as $key => $value) {
                 $ret .= "<tr><td><a href='$url.php?fc=" . intval($key) . "'>" .
                         q($value) . "</a>&nbsp;&nbsp;<small>";
-                if (strlen(q($nodecodes[$key])) > 0)
+                if (strlen(q($nodecodes[$key])) > 0) {
                     $ret .= "(" . q($nodecodes[$key]) . ")";
+                }
 
                 $count = 0;
                 foreach ($this->buildSubtrees(array(intval($key))) as $subnode) {
                     if ($countCallback !== null && is_callable($countCallback)) {
                         $count += $countCallback($subnode);
                     } else {
-                        $n = db_query("SELECT COUNT(*)
+                        $n = Database::get()->querySingle("SELECT COUNT(*) AS count
                                          FROM course, course_department
                                         WHERE course.id = course_department.course
-                                          AND course_department.department = " . intval($subnode));
-                        $r = mysql_fetch_array($n);
-                        $count += $r[0];
+                                          AND course_department.department = ?d", intval($subnode))->count;
+                        $count += $n;
                     }
                 }
 
@@ -1259,17 +1079,17 @@ jContent;
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null) {
         // select subnodes of the next depth level
-        $res = db_query("SELECT node.id FROM " . $this->dbtable . " AS node
+        $res = Database::get()->queryArray("SELECT node.id FROM " . $this->dbtable . " AS node
                 LEFT OUTER JOIN " . $this->dbtable . " AS parent ON parent.lft =
                                 (SELECT MAX(S.lft)
                                 FROM " . $this->dbtable . " AS S WHERE node.lft > S.lft
                                     AND node.lft < S.rgt)
-                          WHERE parent.id = " . intval($depid));
+                          WHERE parent.id = ?d", intval($depid));
 
-        if (mysql_num_rows($res) > 0) {
+        if (count($res) > 0) {
             $nodes = array();
-            while ($node = mysql_fetch_assoc($res)) {
-                $nodes[] = $node['id'];
+            foreach ($res as $node) {
+                $nodes[] = $node->id;
             }
 
             return $this->buildNodesNavigationHtml($nodes, $url, $countCallback);
@@ -1286,21 +1106,21 @@ jContent;
      */
     public function buildRootsSelection($currentNode, $params = '') {
         // select root nodes
-        $res = db_query("SELECT node.id, node.name 
+        $res = Database::get()->queryArray("SELECT node.id, node.name 
                           FROM " . $this->dbtable . " AS node
                          WHERE node.id IN (" . implode(', ', $this->buildRootsArray()) . ")");
 
         $ret = '';
-        if (mysql_num_rows($res) > 0) {
+        if (count($res) > 0) {
             // locate root parent of current Node
-            list($lft, $rgt) = $this->getNodeLftRgt($currentNode);
-            $parent = $this->getRootParent($lft, $rgt);
-            $parentId = ($parent != null) ? $parent['id'] : $currentNode;
+            $node0 = $this->getNodeLftRgt($currentNode);
+            $parent = $this->getRootParent($node0->lft, $node0->rgt);
+            $parentId = ($parent) ? $parent->id : $currentNode;
 
             // construct array with names
             $nodenames = array();
-            while ($node = mysql_fetch_array($res)) {
-                $nodenames[$node['id']] = self::unserializeLangField($node['name']);
+            foreach ($res as $node) {
+                $nodenames[$node->id] = self::unserializeLangField($node->name);
             }
             asort($nodenames);
 

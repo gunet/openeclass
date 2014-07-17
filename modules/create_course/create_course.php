@@ -29,8 +29,6 @@ if ($session->status !== USER_TEACHER) { // if we are not teachers
     redirect_to_home_page();
 }
 
-$TBL_USER_DEPARTMENT = 'user_department';
-
 require_once 'include/log.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
