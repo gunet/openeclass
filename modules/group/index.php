@@ -19,13 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr> 
- *
- * @abstract This module is responsible for the user groups of each lesson
- *
+/**
+ * 
+ * @brief display groups
+ * @file index.php
  */
 
 $require_current_course = TRUE;
@@ -88,7 +85,7 @@ if ($is_editor) {
         } else {
             $group_max = 0;
         }
-        $group_num = Database::get()->querySingle("SELECT COUNT(*) as count FROM `group` WHERE course_id = ?d", $course_id)->count;
+        $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
         // Create a hidden category for group forums
         $req = Database::get()->querySingle("SELECT id FROM forum_category
@@ -97,16 +94,15 @@ if ($is_editor) {
         if ($req) {
             $cat_id = $req->id;
         } else {
-            $cat_id = Database::get()->query("INSERT INTO forum_category (cat_title,  cat_order, course_id)
+            $cat_id = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
                                          VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
         }
 
-        for ($i = 1; $i <= $group_quantity; $i++) {
-            do {
+        for ($i = 1; $i <= $group_quantity; $i++) {                        
+            $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_num . "'");
+            if ($res) {
                 $group_num++;
-                $res = db_query("SELECT id FROM `group` WHERE name = '$langGroup $group_num'");
-            } while (mysql_num_rows($res) > 0);
-
+            }
             $forum_id = Database::get()->query("INSERT INTO forum (name, `desc`, num_topics, num_posts, last_post_id, cat_id, course_id)
                                   VALUES (?s, '', 0, 0, 1, ?d, ?d)", ($langForumGroup . $group_num), $cat_id, $course_id)->lastInsertID;
 
@@ -122,11 +118,11 @@ if ($is_editor) {
 
             $id = Database::get()->query("INSERT INTO `group` SET
                                          course_id = ?d,
-                                         name = ?s,
+                                         name = '$langGroup $group_num',
                                          forum_id =  ?d,
                                          max_members = ?d,
-                                         secret_directory = ?s"
-                            , $course_id, ($langGroup . $group_num), $forum_id, $group_max, $secretDirectory)->lastInsertID;
+                                         secret_directory = ?s", 
+                                $course_id, $forum_id, $group_max, $secretDirectory)->lastInsertID;
 
             /*             * ********Create Group Wiki*********** */
             //Set ACL
@@ -155,9 +151,9 @@ if ($is_editor) {
             /*             * ************************************ */
 
             Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
-                'name' => "$langGroup $group_num",
-                'max_members' => $group_max,
-                'secret_directory' => $secretDirectory));
+                                                                        'name' => "$langGroup $group_num",
+                                                                        'max_members' => $group_max,
+                                                                        'secret_directory' => $secretDirectory));
         }
         if ($group_quantity == 1) {
             $message = "$group_quantity $langGroupAdded";
@@ -171,15 +167,15 @@ if ($is_editor) {
             'private_forum' => true,
             'has_forum' => true,
             'documents' => true,
-            'wiki' => true), 'all', 'intval');
+            'wiki' => true), 'all');
         Database::get()->query("UPDATE group_properties SET
                                  self_registration = ?d,
                                  multiple_registration = ?d,
                                  private_forum = ?d,
                                  forum = ?d,
                                  documents = ?d,
-                                 wiki = ?d WHERE course_id = ?d"
-                , $self_reg, $multi_reg, $private_forum, $has_forum, $documents, $wiki, $course_id);
+                                 wiki = ?d WHERE course_id = ?d", 
+                    $self_reg, $multi_reg, $private_forum, $has_forum, $documents, $wiki, $course_id);
         $message = $langGroupPropertiesModified;
     } elseif (isset($_REQUEST['delete_all'])) {
         /*         * ************Delete All Group Wikis********** */
@@ -199,13 +195,12 @@ if ($is_editor) {
 
         Database::get()->query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $course_id);
         Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $course_id);
-        Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1", $course_id);
-        // FIXME db_query("DELETE FROM forums WHERE cat_id='1'");
+        Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1", $course_id);        
         // Move all groups to garbage collector and re-create an empty work directory
         $groupGarbage = uniqid(20);
 
         @mkdir("../../courses/garbage");
-        touch("../../courses/garbage/index.htm");
+        @touch("../../courses/garbage/index.htm");
         rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
         mkdir("../../courses/$course_code/group", 0777);
         touch("../../courses/$course_code/group/index.htm");
@@ -217,27 +212,22 @@ if ($is_editor) {
         // Move group directory to garbage collector
         $groupGarbage = uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
-        rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");
-        // FIXME db_query("DELETE FROM forums WHERE forum_id = $myDir[forum_id]");
+        rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
 
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1 AND subsystem_id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM group_members WHERE group_id = ?d", $id);
         Database::get()->query("DELETE FROM `group` WHERE id = ?d", $id);
 
-        /*         * ********Delete Group Wiki*********** */
-        $sql = "SELECT id "
-                . "FROM wiki_properties "
-                . "WHERE group_id = ?";
-
-        $result = Database::get()->querySingle($sql, $id);
-        if (is_object($result)) {
+        /*         * ********Delete Group Wiki*********** */        
+        $result = Database::get()->querySingle("SELECT id FROM wiki_properties WHERE group_id = ?d", $id);
+        if ($result) {
             $wikiStore = new WikiStore();
             $wikiStore->deleteWiki($result->id);
         }
         /*         * *********************************** */
 
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
-            'name' => $myDir->name));
+                                                                    'name' => $myDir->name));
 
         $message = $langGroupDel;
     } elseif (isset($_REQUEST['empty'])) {
@@ -247,7 +237,7 @@ if ($is_editor) {
         $message = $langGroupsEmptied;
     } elseif (isset($_REQUEST['fill'])) {
         $resGroups = Database::get()->queryArray("SELECT id, max_members -
-                                                      (SELECT count(*) from group_members WHERE group_members.group_id = id)
+                                                      (SELECT COUNT(*) FROM group_members WHERE group_members.group_id = id)
                                                   AS remaining
                                               FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
         foreach ($resGroups as $resGroupsItem) {
@@ -258,25 +248,22 @@ if ($is_editor) {
             }
         }
         // Course members not registered to any group
-        $resUserSansGroupe = db_query("SELECT u.id, u.surname, u.givenname
+        $resUserSansGroupe = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname
                                 FROM (user u, course_user cu)
-                                WHERE cu.course_id = $course_id AND
+                                WHERE cu.course_id = ?d AND
                                       cu.user_id = u.id AND
                                       cu.status = 5 AND
                                       cu.tutor = 0 AND
                                       u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                   WHERE `group`.id = group_members.group_id AND
-                                                                        `group`.course_id = $course_id)
+                                                                        `group`.course_id = ?d)
                                 GROUP BY u.id
-                                ORDER BY u.surname, u.givenname");
-        while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and ( !empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe)) {
+                                ORDER BY u.surname, u.givenname", $course_id, $course_id);
+        foreach ($resUserSansGroupe as $idUser) {        
             $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
             $idGroupChoisi = $idGroupChoisi[0];
-            $userOfGroups[$idGroupChoisi][] = $idUser;
-            $placeAvailableInGroups[$idGroupChoisi] --;
-            if ($placeAvailableInGroups[$idGroupChoisi] <= 0) {
-                unset($placeAvailableInGroups[$idGroupChoisi]);
-            }
+            $userOfGroups[$idGroupChoisi][] = $idUser->id;
+            $placeAvailableInGroups[$idGroupChoisi] --;            
         }
 
         // NOW we have $userOfGroups containing new affectation. We must write this in database
@@ -295,7 +282,6 @@ if ($is_editor) {
     if (isset($message)) {
         $tool_content .= "<p class='success'>$message</p><br />";
     }
-
     $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
@@ -307,11 +293,11 @@ if ($is_editor) {
         </div>";
 
     // ---------- display properties ------------------------
-    $tool_content .= "
-        <table class='tbl_courseid' width='100%'>
+    $tool_content .= "<table class='tbl_courseid' width='100%'>
         <tr>
           <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php?course=$course_code' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+              <a href='group_properties.php?course=$course_code' title='$langPropModify'>
+            <img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'><a href='../user/?course=$course_code'>$langGroupUsersList</a></td>
@@ -328,13 +314,12 @@ if ($is_editor) {
                               cu.status = " . USER_STUDENT . " AND
                               cu.tutor = 0 AND
                               u.id NOT IN (SELECT user_id
-                                                  FROM group_members, `group`
-                                                  WHERE `group`.id = group_members.group_id AND
-                                                        `group`.course_id = ?d)", $course_id, $course_id)->count;
+                                            FROM group_members, `group`
+                                            WHERE `group`.id = group_members.group_id AND
+                                                  `group`.course_id = ?d)", $course_id, $course_id)->count;
 
 
     $registered_students = $total_students - $unregistered_students;
-
     $tool_content .= "
         <tr>
           <td colspan='2'><u>$langGroupPrefs</u></td>
@@ -442,8 +427,11 @@ if ($is_editor) {
             $tool_content .= "<td width='16'>
                         <img src='$themeimg/arrow.png' alt='' /></td><td>
                         <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a></td>";
-            $tool_content .= "<td>" . display_user($tutors) . "</td>" . "
-                                          <td class='center'>$member_count</td>";
+            $tool_content .= "<td class='center'>";
+            foreach ($tutors as $t) {                
+                $tool_content .= display_user($t->user_id) . "<br />";
+            }
+            $tool_content .= "</td><td class='center'>$member_count</td>";
             if ($max_members == 0) {
                 $tool_content .= "<td>-</td>";
             } else {
@@ -468,17 +456,13 @@ if ($is_editor) {
     if (count($q) == 0) {
         $tool_content .= "<p class='alert1'>$langNoGroup</p>";
     } else {
-        $tool_content .= "
-                <table width='100%' align='left' class='tbl_alt'>
+        $tool_content .= "<table width='100%' align='left' class='tbl_alt'>
                 <tr>
                   <th colspan='2'><div align='left'>$langGroupName</div></th>
                   <th width='250'>$langGroupTutor</th>";
         $tool_content .= "<th width='50'>$langRegistration</th>";
 
-        $tool_content .= "
-                  <th width='50'>$langRegistered</th>
-                  <th width='50'>$langMax</th>
-                </tr>";
+        $tool_content .= "<th width='50'>$langRegistered</th><th width='50'>$langMax</th></tr>";
         $k = 0;
         foreach ($q as $row) {
             $group_id = $row->id;
@@ -505,7 +489,11 @@ if ($is_editor) {
                 $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td class='center'>" . display_user($tutors) . "</td>";
+            $tool_content .= "<td class='center'>";
+            foreach ($tutors as $t) {                
+                $tool_content .= display_user($t->user_id) . "<br />";
+            }
+            $tool_content .= "</td>";
 
             // If self-registration and multi registration allowed by admin and group is not full
             $tool_content .= "<td class='center'>";

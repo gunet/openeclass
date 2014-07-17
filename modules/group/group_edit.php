@@ -19,15 +19,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id: group_edit.php,v 1.44 2011-06-24 13:40:33 adia Exp $
- *
- * @abstract This module is responsible for the user groups of each lesson
+/**
+ *  
+ * @file group_edit.php
+ * @brief group editing
  *
  */
+
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -70,18 +68,18 @@ $message = '';
 // Once modifications have been done, the user validates and arrives here
 if (isset($_POST['modify'])) {
     // Update main group settings
-    register_posted_variables(array('name' => true, 'description' => true), 'all', 'autoquote');
-    register_posted_variables(array('maxStudent' => true), 'all', 'intval');
+    register_posted_variables(array('name' => true, 'description' => true), 'all');
+    register_posted_variables(array('maxStudent' => true), 'all');
     $student_members = $member_count - count($tutors);
     if ($maxStudent != 0 and $student_members > $maxStudent) {
         $maxStudent = $student_members;
         $message .= "<p class='alert1'>$langGroupMembersUnchanged</p>";
     }
-    Database::get()->query("UPDATE `$mysqlMainDb`.`group`
-                                               SET name = ?s,
-                                                   description = ?s,
-                                                   max_members = ?d
-                                               WHERE id = ?d", $name, $description . $maxStudent, $group_id);
+    Database::get()->query("UPDATE `group`
+                                    SET name = ?s,
+                                        description = ?s,
+                                        max_members = ?d
+                                    WHERE id = ?d", $name, $description, $maxStudent, $group_id);
 
     Database::get()->query("UPDATE forum SET name = ?s WHERE id =
                         (SELECT forum_id FROM `group` WHERE id = ?d)
@@ -111,15 +109,14 @@ if (isset($_POST['modify'])) {
             $message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
         } else {
             // Delete all members of this group
-            Database::get()->query("DELETE FROM `$mysqlMainDb`.group_members
-                                                          WHERE group_id = ?d AND is_tutor = 0", $group_id);
+            Database::get()->query("DELETE FROM group_members
+                                        WHERE group_id = ?d AND is_tutor = 0", $group_id);
             $numberMembers--;
 
             for ($i = 0; $i <= $numberMembers; $i++) {
-                Database::get()->query("INSERT IGNORE INTO `$mysqlMainDb`.group_members (user_id, group_id)
+                Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
                                           VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
             }
-
             $message .= "<p class='success'>$langGroupSettingsModified</p>";
         }
     }

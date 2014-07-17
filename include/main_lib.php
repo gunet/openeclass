@@ -332,7 +332,7 @@ function display_user($user, $print_email = false, $icon = true) {
     }
 
     if ($print_email) {
-        $email = trim($user['email']);
+        $email = trim($user->email);
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {

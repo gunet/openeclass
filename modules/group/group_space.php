@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,11 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id: group_space.php,v 1.50 2011-05-16 12:36:35 adia Exp $
- * @abstract This module is responsible for the user groups of each lesson
+/**
+ * 
+ * @file group_space.php
+ * @brief Display user group info
  */
 
 $require_login = true;
@@ -88,15 +87,15 @@ $tool_content .= "<br />
 
 $tutors = array();
 $members = array();
-$q = db_query("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
+$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
 		      group_members.description
                       FROM group_members, user
-                      WHERE group_members.group_id = $group_id AND
+                      WHERE group_members.group_id = ?d AND
                             group_members.user_id = user.id
-                      ORDER BY user.surname, user.givenname");
-while ($user = mysql_fetch_array($q)) {
-    if ($user['is_tutor']) {
-        $tutors[] = display_user($user, true);
+                      ORDER BY user.surname, user.givenname", $group_id);
+foreach ($q as $user) {
+    if ($user->is_tutor) {       
+        $tutors[] = display_user($user->id, true);
     } else {
         $members[] = $user;
     }
@@ -108,11 +107,8 @@ if ($tutors) {
     $tool_content_tutor = $langGroupNoTutor;
 }
 
-$tool_content .= "
-    <tr>
-      <th class='left'>$langGroupTutor:</th>
-      <td>$tool_content_tutor</td>
-    </tr>";
+$tool_content .= "<tr><th class='left'>$langGroupTutor:</th>
+                <td>$tool_content_tutor</td></tr>";
 
 $group_description = trim($group_description);
 if (empty($group_description)) {
@@ -121,11 +117,8 @@ if (empty($group_description)) {
     $tool_content_description = q($group_description);
 }
 
-$tool_content .= "
-    <tr>
-      <th class='left'>$langDescription:</th>
-      <td>$tool_content_description</td>
-    </tr>";
+$tool_content .= "<tr><th class='left'>$langDescription:</th>
+      <td>$tool_content_description</td></tr>";
 
 // members
 $tool_content .= "
@@ -139,34 +132,34 @@ $tool_content .= "
           <th class='center' width='150'>$langEmail</th>
         </tr>";
 
-if ($members) {
-    $myIndex = 0;
+if (count($members) > 0) {
+    $i = 0;    
     foreach ($members as $member) {
-        $user_group_description = $member['description'];
-        if ($myIndex % 2 == 0) {
+        $user_group_description = $member->description;
+        if ($i % 2 == 0) {
             $tool_content .= "<tr class='even'>";
         } else {
             $tool_content .= "<tr class='odd'>";
         }
-        $tool_content .= "<td>" . display_user($member);
+        $tool_content .= "<td>" . display_user($member->id);
         if ($user_group_description) {
             $tool_content .= "<br />" . q($user_group_description);
         }
         $tool_content .= "</td><td class='center'>";
-        if (!empty($member['am'])) {
-            $tool_content .= q($member['am']);
+        if (!empty($member->am)) {
+            $tool_content .= q($member->am);
         } else {
             $tool_content .= '-';
         }
         $tool_content .= "</td><td class='center'>";
-        $email = q(trim($member['email']));
+        $email = q(trim($member->email));
         if (!empty($email)) {
             $tool_content .= "<a href='mailto:$email'>$email</a>";
         } else {
             $tool_content .= '-';
         }
         $tool_content .= "</td></tr>";
-        $myIndex++;
+        $i++;
     }
 } else {
     $tool_content .= "<tr><td colspan='3'>$langGroupNoneMasc</td></tr>";
