@@ -1243,6 +1243,7 @@ Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
   `unlock_interval` int(11) DEFAULT NULL,
   `external_users` varchar(255) DEFAULT NULL,
   `participants` varchar(255) DEFAULT NULL,
+  `record` enum("true","false") DEFAULT "false",
   PRIMARY KEY (`id`)
 )');
 
