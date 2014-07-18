@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,20 +48,20 @@ class LinkIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a link db row.
      * 
      * @global string $urlServer
-     * @param  array  $link
+     * @param  object  $link
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($link) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'link_' . $link['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'link_' . $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'link', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $link['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link['description'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $link['url'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $link->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link->description)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $link->url, $encoding));
 
         return $doc;
     }
@@ -70,11 +70,10 @@ class LinkIndexer implements ResourceIndexerInterface {
      * Fetch a Link from DB.
      * 
      * @param  int $linkId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($linkId) {
-        $res = db_query("SELECT * FROM link WHERE id = " . intval($linkId));
-        $link = mysql_fetch_assoc($res);
+        $link = Database::get()->querySingle("SELECT * FROM link WHERE id = ?d", $linkId);        
         if (!$link)
             return null;
 
@@ -141,9 +140,10 @@ class LinkIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the links back to the index
-        $res = db_query("SELECT * FROM link WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -181,9 +181,10 @@ class LinkIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all links from db
-        $res = db_query("SELECT * FROM link");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM link");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

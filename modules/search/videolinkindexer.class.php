@@ -48,20 +48,20 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a VideoLink db row.
      * 
      * @global string $urlServer
-     * @param  array  $vlink
+     * @param  object  $vlink
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($vlink) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'vlink_' . $vlink['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $vlink['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'vlink_' . $vlink->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $vlink->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'vlink', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $vlink['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($vlink['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($vlink['description']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $vlink['url'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $vlink->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($vlink->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($vlink->description), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $vlink->url, $encoding));
 
         return $doc;
     }
@@ -70,11 +70,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * Fetch a VideoLink from DB.
      * 
      * @param  int $vlinkId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($vlinkId) {
-        $res = db_query("SELECT * FROM videolink WHERE id = " . intval($vlinkId));
-        $vlink = mysql_fetch_assoc($res);
+        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);        
         if (!$vlink)
             return null;
 
@@ -140,9 +139,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the videolinks back to the index
-        $res = db_query("SELECT * FROM videolink WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -180,9 +180,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all videolinks from db
-        $res = db_query("SELECT * FROM videolink");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM videolink");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -55,29 +55,26 @@ if (isset($uid) and $uid) {
 
     if ($uid == 0)
         $hits = array_merge($hits1, $hits2); // admin has access to all
-    else {
-        $res = db_query("SELECT course.id 
+    else {        
+        $res = Database::get()->queryArray("SELECT course.id 
                            FROM course 
                            JOIN course_user ON course.id = course_user.course_id 
-                            AND course_user.user_id = " . $uid);
+                            AND course_user.user_id = ?d", $uid);
         $subscribed = array();
-        while ($row = mysql_fetch_assoc($res))
-            $subscribed[] = $row['id'];
-
+        foreach ($res as $row) {
+            $subscribed[] = $row->id;
+        }
         $hits3 = array();
         foreach ($hits2 as $hit2) {
             if (in_array($hit2->pkid, $subscribed))
                 $hits3[] = $hit2;
         }
-
         $hits = array_merge($hits1, $hits3); // eponymous user can also search for his subscribed courses
     }
 } else
     $hits = $hits1;                          // anonymous can only access with visible 1 or 2
 
-
-
-    
+ 
 // exit if not results
 if (count($hits) <= 0) {
     $tool_content .= "<p class='alert1'>$langNoResult</p>";
@@ -85,10 +82,8 @@ if (count($hits) <= 0) {
     exit();
 }
 
-
 //////// PRINT RESULTS ////////
-$tool_content .= "
-    <div id='operations_container'>
+$tool_content .= "<div id='operations_container'>
       <ul id='opslist'>
          <li><a href='search.php'>$langNewSearch</a></li>
       </ul>
@@ -106,9 +101,8 @@ $tool_content .= "
     </tr>";
 
 $k = 0;
-foreach ($hits as $hit) {
-    $res = db_query("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = " . intval($hit->pkid));
-    $course = mysql_fetch_assoc($res);
+foreach ($hits as $hit) {    
+    $course = Database::get()->querySingle("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ?d", $hit->pkid);
 
     // search in-course
     $urlParam = '';
@@ -118,16 +112,23 @@ foreach ($hits as $hit) {
     $class = ($k % 2) ? 'odd' : 'even';
     $tool_content .= "<tr class='$class'>
                       <td><img src='$themeimg/arrow.png' alt='' /></td><td>
-                      <a href='../../courses/" . q($course['code']) . "/" . $urlParam . "'>" . q($course['title']) . "
-                      </a> (" . q($course['public_code']) . ")</td>
-                      <td>" . q($course['prof_names']) . "</td>
-                      <td>" . q($course['keywords']) . "</td></tr>";
+                      <a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "
+                      </a> (" . q($course->public_code) . ")</td>
+                      <td>" . q($course->prof_names) . "</td>
+                      <td>" . q($course->keywords) . "</td></tr>";
     $k++;
 }
 $tool_content .= "</table>";
 draw($tool_content, 0);
 
-// search in-course
+/**
+ * @brief search in course
+ * @global Indexer $idx
+ * @param type $searchTerms
+ * @param type $courseId
+ * @param type $anonymous
+ * @return boolean
+ */
 function search_in_course($searchTerms, $courseId, $anonymous) {
     global $idx;
 

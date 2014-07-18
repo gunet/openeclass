@@ -48,7 +48,7 @@ class UnitIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a unit db row.
      * 
      * @global string $urlServer
-     * @param  array  $unit
+     * @param  object  $unit
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($unit) {
@@ -56,15 +56,15 @@ class UnitIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unit_' . $unit['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $unit['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unit_' . $unit->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $unit->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'unit', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $unit['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($unit['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit['comments'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $unit['visible'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $unit->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($unit->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit->comments)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $unit->visible, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/units/index.php?course=' . course_id_to_code($unit['course_id']) . '&amp;id=' . $unit['id'], $encoding));
+                        . 'modules/units/index.php?course=' . course_id_to_code($unit->course_id) . '&amp;id=' . $unit->id, $encoding));
 
         return $doc;
     }
@@ -73,11 +73,10 @@ class UnitIndexer implements ResourceIndexerInterface {
      * Fetch a Unit from DB.
      * 
      * @param  int $unitId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($unitId) {
-        $res = db_query("SELECT * FROM course_units WHERE id = " . intval($unitId));
-        $unit = mysql_fetch_assoc($res);
+        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);        
         if (!$unit)
             return null;
 
@@ -141,11 +140,11 @@ class UnitIndexer implements ResourceIndexerInterface {
     public function storeByCourse($courseId, $optimize = false) {
         // delete existing units from index
         $this->removeByCourse($courseId);
-
         // add the units back to the index
-        $res = db_query("SELECT * FROM course_units WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM course_units WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -183,9 +182,10 @@ class UnitIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all units from db
-        $res = db_query("SELECT * FROM course_units");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM course_units");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,7 +48,7 @@ class VideoIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a video db row.
      * 
      * @global string $urlServer
-     * @param  array  $video
+     * @param  object  $video
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($video) {
@@ -56,13 +56,13 @@ class VideoIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'video_' . $video['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'video_' . $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'video', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video['description']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/video/file.php?course=' . course_id_to_code($video['course_id']) . '&amp;id=' . $video['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video->description), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/video/file.php?course=' . course_id_to_code($video->course_id) . '&amp;id=' . $video->id, $encoding));
 
         return $doc;
     }
@@ -71,11 +71,10 @@ class VideoIndexer implements ResourceIndexerInterface {
      * Fetch a Video from DB.
      * 
      * @param  int $videoId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($videoId) {
-        $res = db_query("SELECT * FROM video WHERE id = " . intval($videoId));
-        $video = mysql_fetch_assoc($res);
+        $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d", $videoId);        
         if (!$video)
             return null;
 
@@ -141,9 +140,10 @@ class VideoIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the videos back to the index
-        $res = db_query("SELECT * FROM video WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -181,9 +181,10 @@ class VideoIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all videos from db
-        $res = db_query("SELECT * FROM video");
-        while ($row = mysql_fetch_assoc($res))
-            $this->__index->addDocument(self::makeDoc($row));
+        $res = Database::get()->queryArray("SELECT * FROM video");
+        foreach ($res as $row) {
+             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
