@@ -218,11 +218,9 @@ function new_bbb_session() {
             $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
             $res = Database::get()->queryArray($sql,$course_code);
             $tool_content .= "<option value=0>" . $langAllUsers . "</option>";
-            if(count($r)>0){
                 foreach ($res as $r) {
                     $tool_content .= "<option value=" . $r->id . ">" . q($r->name) . "</option>";
                 }
-            }
         $tool_content .= "</select></td>";
         $tool_content .="</th>
         </tr>
@@ -530,7 +528,6 @@ function edit_bbb_session($session_id) {
                                         $tool_content.="selected ";
                                     }
                         $tool_content .=">" . $langAllUsers . "</option>";
-                        if (count($r)){
                             foreach ($res as $r) {
                                 $tool_content .= "<option "; 
                                     if(in_array($r->id,$r_group))
@@ -539,7 +536,6 @@ function edit_bbb_session($session_id) {
                                     }
                                     $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
                             }
-                        }
                     $tool_content .= "</select></td>";
                     $tool_content .="</th>
                     </tr>	

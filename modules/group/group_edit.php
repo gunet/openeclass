@@ -81,7 +81,7 @@ if (isset($_POST['modify'])) {
                                                SET name = ?s,
                                                    description = ?s,
                                                    max_members = ?d
-                                               WHERE id = ?d", $name, $description . $maxStudent, $group_id);
+                                               WHERE id = ?d", $name, $description , $maxStudent, $group_id);
 
     Database::get()->query("UPDATE forum SET name = ?s WHERE id =
                         (SELECT forum_id FROM `group` WHERE id = ?d)
