@@ -39,18 +39,16 @@ require_once("../../include/baseTheme.php");
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
-mysql_select_db($course_code);
-
 if (isset($_POST) && isset($_POST['selectedDocument'])) {
-    require_once("./importLearningPathLib.php");
+    require_once("modules/learnPath/importLearningPathLib.php");
 
     $filename = basename($_POST['selectedDocument']);
-    $srcFile = "../../courses/" . $course_code . "/document/" . $_POST['selectedDocument'];
-    $destFile = "../../courses/" . $course_code . "/temp/" . $filename;
+    $srcFile = $webDir . "/courses/" . $course_code . "/document/" . $_POST['selectedDocument'];
+    $destFile = $webDir . "/courses/" . $course_code . "/temp/" . $filename;
 
     copy($srcFile, $destFile);
 
-    list($messages, $lpid) = doImport($course_code, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
+    list($messages, $lpid) = doImport($course_code, $webDir, filesize($destFile), $filename, true);
     $tool_content .= $messages;
     $tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$course_code\">$langBack</a></p>";
 

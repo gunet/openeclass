@@ -135,14 +135,14 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                if (is_dir($webDir . "courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
+                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
                     $findsql = "SELECT M.`module_id`
 						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
 						WHERE LPM.`learnPath_id` = ?d
 						AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
 						AND LPM.`module_id` = M.`module_id`
 						AND M.`course_id` = ?d";
-                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTSCORM_, CTSCORMASSET_, CTLABEL_, course_id);
+                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
 
                     // Delete the startAssets
                     $delAssetSql = "DELETE FROM `lp_asset` WHERE 1=0";
@@ -160,10 +160,9 @@ if ($is_editor) {
                     Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
 
                     // DELETE the directory containing the package and all its content
-                    $real = realpath($webDir . "courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
+                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
                     claro_delete_file($real);
-                }   // end of dealing with the case of a scorm learning path.
-                else {
+                } else { // end of dealing with the case of a scorm learning path.
                     $findsql = "SELECT M.`module_id`
 						FROM  `lp_rel_learnPath_module` AS LPM,
 						`lp_module` AS M
@@ -303,7 +302,7 @@ if (isset($sortDirection) && $sortDirection) {
             Database::get()->query("UPDATE `lp_learnPath`
                      SET `rank` = ?d
                      WHERE `learnPath_id` = ?d
-                     AND `course_id` = ?D", $thisLPOrder, $nextLPId, $course_id);
+                     AND `course_id` = ?d", $thisLPOrder, $nextLPId, $course_id);
 
             // move 1 to previous rank of 2
             Database::get()->query("UPDATE `lp_learnPath`
@@ -566,7 +565,7 @@ foreach ($result as $list) { // while ... learning path list
                 . "</a>\n";
 
         // DELETE link
-        $real = realpath($webDir . "courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id);
+        $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id);
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {

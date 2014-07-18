@@ -637,14 +637,16 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false) {
             $dirTrail .= empty($dirTrail) ? $thisDir : '/' . $thisDir;
 
             if (file_exists($dirTrail)) {
-                if (is_dir($dirTrail))
+                if (is_dir($dirTrail)) {
                     continue;
-                else
+                } else {
                     return false;
+                }
             }
             else {
-                if (!mkdir($dirTrail, $mode))
+                if (!mkdir($dirTrail, $mode)) {
                     return false;
+                }
             }
         }
         return true;

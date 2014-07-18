@@ -115,7 +115,7 @@ if ($module->startAsset_id == 0) {
 $learnpath_module = Database::get()->querySingle("SELECT `specificComment`
         FROM `lp_rel_learnPath_module`
         WHERE `module_id` = ?d
-        AND `learnPath_id` = ?d'", $_SESSION['lp_module_id'], $_SESSION['path_id']);
+        AND `learnPath_id` = ?d", $_SESSION['lp_module_id'], $_SESSION['path_id']);
 
 if (empty($learnpath_module->specificComment) || $learnpath_module->specificComment == $langDefaultModuleAddedComment) {
     $noModuleSpecificComment = true;
