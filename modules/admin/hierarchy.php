@@ -37,10 +37,6 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$TBL_HIERARCHY = 'hierarchy';
-$TBL_USER_DEPARTMENT = 'user_department';
-$TBL_COURSE_DEPARTMENT = 'course_department';
-
 $tree = new Hierarchy();
 $user = new User();
 
@@ -67,8 +63,9 @@ if (isset($_GET['action'])) {
 }
 
 // handle current lang missing from active langs
-if (!in_array($language, $session->active_ui_languages))
+if (!in_array($language, $session->active_ui_languages)) {
     array_unshift($session->active_ui_languages, $language);
+}
 
 // link to add a new node
 $tool_content .= "
@@ -358,8 +355,9 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $is_serialized = false;
         $names = @unserialize($mynode->name);
-        if ($names !== false)
+        if ($names !== false) {
             $is_serialized = true;
+        }
 
         $i = 0;
         foreach ($session->active_ui_languages as $key => $langcode) {
@@ -377,9 +375,9 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
            <th class='left'>" . $langNodeParent . ":</th>
            <td>";
         if ($is_admin)
-            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
         else
-            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= " <i>" . $langNodeParent2 . "</i></td>
@@ -399,7 +397,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
        <tr>
            <th>&nbsp;</th>
            <td class='right'><input type='hidden' name='id' value='$id' />
-           <input type='hidden' name='parentLft' value='" . $parentLft['lft'] . "'/>
+           <input type='hidden' name='parentLft' value='" . $parentLft->lft . "'/>
            <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
            <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
            <input type='submit' name='edit' value='$langAcceptChanges' />

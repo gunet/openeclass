@@ -80,7 +80,7 @@ function buildRequestModules() {
               FROM `lp_rel_learnPath_module` AS LPM
               WHERE LPM.`learnPath_id` = ?d";
 
-    $firstResult = Database::get()->querySingle($firstSql, $_SESSION['path_id']);
+    $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
 
     // 2) We build the request to get the modules we need
 

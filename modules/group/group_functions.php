@@ -71,14 +71,20 @@ function initialize_group_info($group_id = false) {
     }
 }
 
+/**
+ * @brief find group tutors
+ * @param type $group_id
+ * @return type
+ */
 function group_tutors($group_id) {
+    
     $tutors = array();
-    $res = db_query("SELECT user.id AS user_id, surname, givenname, has_icon FROM group_members, user
-			 WHERE group_id = $group_id AND
+    $res = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname, has_icon FROM group_members, user
+			 WHERE group_id = ?d AND
 			       is_tutor = 1 AND
 			       group_members.user_id = user.id
-			 ORDER BY surname, givenname");
-    while ($tutor = mysql_fetch_array($res)) {
+			 ORDER BY surname, givenname", $group_id);    
+    foreach ($res as $tutor) {
         $tutors[] = $tutor;
     }
     return $tutors;

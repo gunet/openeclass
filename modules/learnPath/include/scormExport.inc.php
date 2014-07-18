@@ -939,7 +939,7 @@ if (!class_exists('ScormExport')):
                 }
 
                 $course_description = "";
-                $blocs = Database::get()->queryArray("SELECT `id`, `title`, `comments` FROM `course_description` WHERE course_id = ?d ORDER BY id", $course_id);
+                $blocs = Database::get()->queryArray("SELECT `id`, `title`, `comments` FROM `course_description` WHERE course_id = ?d ORDER BY `order`", $course_id);
                 if (count($blocs) > 0) {
                     $course_description .= "
 					<hr noshade size=\"1\">";

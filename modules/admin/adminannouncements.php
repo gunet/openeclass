@@ -117,15 +117,13 @@ if (isset($_GET['delete'])) {
         $order = $orderMax + 1;
         Database::get()->query("INSERT INTO admin_announcement
                         SET title = ?s, 
-                        body = ?s,
-                        visible = 1, 
-                        visible_t = 1,
-                        visible_s = 1,
-                        lang = ?s,
-                        `date` = NOW(), 
-                        `order` = ?d, 
-                        $start_sql, 
-                        $end_sql", $title, $newContent, $lang_admin_ann, $order);
+                            body = ?s,
+                            visible = 1, 
+                            lang = ?s,
+                            `date` = NOW(), 
+                            `order` = ?d, 
+                            $start_sql, 
+                            $end_sql", $title, $newContent, $lang_admin_ann, $order);
         $message = $langAdminAnnAdd;
     }
 }
@@ -183,47 +181,24 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $end_checkbox = '';
             $end_date = date("Y-n-j", time());
         }
-        $tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
+        $tool_content .= lang_select_options('lang_admin_ann', '', $myrow->lang);
     } else {
         $start_checkbox = $end_checkbox = $end_date = $start_date = '';
         $tool_content .= lang_select_options('lang_admin_ann');
     }
-    $tool_content .= "<span class='smaller'> $langTipLangAdminAnn</span></td></tr>";
-
-    /* $lang_jscalendar = langname_to_code($language);
-      $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-      $head_content .= $jscalendar->get_load_files_code(); */
-
-    //$datetoday = date("Y-n-j", time());
-
-    /*    function make_calendar($id, $label, $name, $checkbox, $datetoday) {
-      global $jscalendar, $langActivate;
-
-      return "<tr><td><b>" . $label . ":</b><br />" .
-      $jscalendar->make_input_field(
-      array('showOthers' => true,
-      'showsTime' => true,
-      'align' => 'Tl',
-      'ifFormat' => '%Y-%m-%d %H:%m'), array('name' => $name,
-      'value' => $datetoday,
-      'style' => '')) .
-      "&nbsp;<span class='smaller'><input type='checkbox' name='{$name}_active' $checkbox onClick=\"toggle($id,this,'$name')\"/>&nbsp;" .
-      $langActivate . "</span></td></tr>";
-      }
-
-      $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
-      make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) . */
-
-    $tool_content .= "<tr><td><b>$langStartDate:</b><br />
-            <input type='text' name='start_date' value='$start_date'>";
-    $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='start_date_active' $end_checkbox onClick=\"toggle(1,this,'start_date')\" />
-                    &nbsp;$langActivate</span></td></tr>";
-    $tool_content .= "<tr><td><b>$langEndDate:</b><br />
-            <input type='text' name='end_date' value='$end_date'>";
-    $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='end_date_active' $end_checkbox onClick=\"toggle(2,this,'end_date')\" />
-                    &nbsp;$langActivate</span></td></tr>";
-    $tool_content .= "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
-            "</td></tr></table></fieldset></form>";
+    $tool_content .= "<span class='smaller'>$langTipLangAdminAnn</span></td></tr>
+        <tr><td><b>$langStartDate:</b><br />
+            <input type='text' name='start_date' value='$start_date'>&nbsp;" .
+                "<span class='smaller'><input type='checkbox' name='start_date_active' " .
+                "$end_checkbox onClick=\"toggle(1,this,'start_date')\">&nbsp;" .
+                "$langActivate</span></td></tr>
+        <tr><td><b>$langEndDate:</b><br />
+            <input type='text' name='end_date' value='$end_date'>&nbsp;" .
+                "<span class='smaller'><input type='checkbox' name='end_date_active' " .
+                "$end_checkbox onClick=\"toggle(2,this,'end_date')\">&nbsp;" .
+                "$langActivate</span></td></tr>
+        <tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit'></td></tr>
+    </table></fieldset></form>";
 }
 
 // modify order taken from announcements.php
@@ -265,7 +240,7 @@ if ($displayAnnouncementList == true) {
     $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     // announcement order taken from announcements.php
     $iterator = 1;
-    $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
+    $bottomAnnouncement = $announcementNumber = count($result);
     if (!isset($_GET['addAnnounce'])) {
         $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
@@ -277,7 +252,7 @@ if ($displayAnnouncementList == true) {
                         <tr><th colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langTitle</th>
                             <th>$langAnnouncement</th>
                             <th colspan='2'><div align='center'>$langActions</div></th>";
-        foreach ($result as $myrow ){
+        foreach ($result as $myrow){
             if ($myrow->visible == 1) {
                 $visibility = 0;
                 $classvis = 'visible';
@@ -286,40 +261,35 @@ if ($displayAnnouncementList == true) {
                 } else {
                     $classvis = 'odd';
                 }
-                $icon = 'visible.png';
+                $icon = 'visible';
             } else {
                 $visibility = 1;
                 $classvis = 'invisible';
-                $icon = 'invisible.png';
+                $icon = 'invisible';
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
-            $tool_content .= "<tr class='$classvis'>\n";
-            $tool_content .= "<td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>";
-            $tool_content .= "<td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>\n";
-            $tool_content .= "<td>" . standard_text_escape($myrow->body) . "</td>\n";
-            $tool_content .= "<td width='60'>
-			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow->id'>
-			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
-			</a>
-			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow->id' onClick=\"return confirmation('$langConfirmDelete');\">
-			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
-
-			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility'>
-			<img src='$themeimg/$icon' title='$langVisibility'/></a>";
-            if ($announcementNumber > 1) {
-                $tool_content .= "<td align='right' width='40'>";
-            }
+            $tool_content .= "<tr class='$classvis'>
+                <td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' alt=''></td>
+                <td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
+                <td>" . standard_text_escape($myrow->body) . "</td>
+                <td width='60'>" .
+                    icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?modify=$myrow->id") . ' ' .
+                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?delete=$myrow->id", 
+                         "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") . ' ' .
+                    icon($icon, $langVisibility, "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility") . "
+                <td class='right' width='40'>";
             if ($iterator != 1) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=" . $myrow->id . "'>
-				<img class='displayed' src='$themeimg/up.png' title='" . $langUp . "' /></a>";
+                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?up=$myrow->id");
+            } else {
+                $tool_content .= "&nbsp;&nbsp;";
             }
+            $tool_content .= "&nbsp;";
             if ($iterator < $bottomAnnouncement) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow->id . "'>
-				<img class='displayed' src='$themeimg/down.png' title='" . $langDown . "' /></a>";
+                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?down=$myrow->id");
             }
             $tool_content .= "</td></tr>";
-            $iterator ++;
-        } // end of while
+            $iterator++;
+        }
         $tool_content .= "</table>";
     }
 }

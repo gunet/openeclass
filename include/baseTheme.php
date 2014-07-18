@@ -135,9 +135,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('template_base', $urlAppend . 'template/' . $theme);
     $t->set_var('img_base', $themeimg);
 
-    $current_module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $_SERVER['REQUEST_URI']);
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     if (is_array($toolArr)) {
-
         for ($i = 0; $i < $numOfToolGroups; $i ++) {
             $t->set_var ( 'NAV_BLOCK_CLASS', $toolArr[$i][0]['class'] );
             if ($toolArr [$i] [0] ['type'] == 'none') {
@@ -156,12 +155,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
             $numOfTools = count($toolArr[$i][1]);
             for ($j = 0; $j < $numOfTools; $j++) {
-                $module_dir = preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $toolArr[$i][2][$j]);
-                if ($module_dir == $current_module_dir) {
-                    $tool_class = 'active';
-                } else {
-                    $tool_class = '';
-                }
                 $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
                 $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                 if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
@@ -178,6 +171,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $img_class = $icon_map[$img_class];
                 }
                 $t->set_var('IMG_CLASS', $img_class);
+                $module_dir = module_path($toolArr[$i][2][$j]);
+                if ($module_dir == $current_module_dir) {
+                    $t->set_var('TOOL_CLASS', 'current');
+                }
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
 
@@ -581,4 +578,28 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     }
 
     return selection($session->native_language_names, $name, $default_langcode, $onchange_js);
+}
+
+/*
+ * Function module_path
+ *
+ * Returns a canonicalized form of the current request path to use in matching
+ * the current module
+ *
+ */
+function module_path($path) {
+    if (strpos($path, '/course_info/restore_course.php') !== false) {
+        return 'course_info/restore_course.php';
+    } elseif (strpos($path, '/info/') !== false) {
+        return preg_replace('|^.*(info/.*\.php)|', '\1', $path);
+    } elseif (strpos($path, '/admin/') !== false) {
+        return preg_replace('|^.*(/admin/.*)|', '\1', $path);
+    } elseif (strpos($path, '/main/unreguser.php') !== false or
+              (strpos($path, '/main/profile') !== false and
+               strpos($path, 'personal_stats') === false)) {
+        return 'main/profile';
+    } elseif (strpos($path, '/main/') !== false) {
+        return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
+    }
+    return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
