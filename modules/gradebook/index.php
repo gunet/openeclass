@@ -115,7 +115,7 @@ if ($is_editor) {
 
     // Top menu
     $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if(isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])){
+    if(isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])){
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langGradebookManagement</a></li>";
     }
     if(!isset($_GET['editUsers'])){
@@ -145,6 +145,8 @@ if ($is_editor) {
         }
     }
     
+    
+    /*
     //UPDATE/INSERT DB: edit users display number 
     if (isset($_POST['submitGradebookActiveUsers'])) {
         $gradebook_users_limit = intval($_POST['usersLimit']);
@@ -166,7 +168,8 @@ if ($is_editor) {
         $limitDate = "0000-00-00";
         $participantsNumber = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
     }
-
+    */
+    
     //FORM: new activity (or edit) form to gradebook module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
 
@@ -190,6 +193,7 @@ if ($is_editor) {
                 $auto = $modifyActivity->auto;
                 $weight = $modifyActivity->weight;
                 $activity_type = $modifyActivity->activity_type;
+                $visible = $modifyActivity->visible;
             } else {
                 $activity_type = '';
             }
@@ -225,6 +229,15 @@ if ($is_editor) {
             <tr><th>$langGradebookActivityWeight:</th></tr>
             <tr>
               <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, $id) . " % $langGradebookActivityWeightLeft)</td>
+            </tr>
+            <tr>
+                <td><label for='visible'>Ορατό στους μαθητές:</label>
+                <input type='checkbox' id='visible' name='visible' value='1'";
+                if($visible){
+                    $tool_content .= " checked ";
+                }
+            $tool_content .= "    
+                ></td>
             </tr>
             <tr><th>$langGradebookDesc:</th></tr>
             <tr>
@@ -332,6 +345,7 @@ if ($is_editor) {
         $weight = intval($_POST['weight']);
         $type = intval($_POST['activity_type']);
         $actDate = $_POST['date'];
+        $visible = $_POST['visible'];
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
@@ -340,7 +354,7 @@ if ($is_editor) {
             if ($_POST['id']) {
                 //update
                 $id = intval($_POST['id']);
-                Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $id);
+                Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
                 $langAnnDel = "$langGradebookEdit";
                 $message = "<p class='success'>$langAnnDel</p>";
                 $tool_content .= $message . "<br/>";
@@ -1190,13 +1204,16 @@ if ($is_editor) {
     
     $userID = $uid;
     
+    //visible flag
+    $visible = 1;
+    
     //check if there are grade records for the user, otherwise alert message that there is no input
-    $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
+    $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.visible = ?d AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $visible, $userID, $gradebook_id)->count;
     if (!$checkForRecords) {
         $tool_content .="<div class='alert1'>$langGradebookTotalGradeNoInput</div>";
     }
 
-    $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
+    $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_activities.visible = ?d AND gradebook_id = ?d  ORDER BY `DATE` DESC", $visible, $gradebook_id);
     $announcementNumber = count($result);
 
     if ($announcementNumber > 0) {
