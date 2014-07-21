@@ -248,20 +248,24 @@ function accueil_tool_missing($define_var) {
     }
 }
 
-// convert database and all tables to UTF-8
+
+/**
+ * @brief convert database and all tables to UTF-8
+ * @global type $langNotTablesList
+ * @param type $database
+ */
 function convert_db_utf8($database) {
     global $langNotTablesList;
 
     Database::get()->query("ALTER DATABASE `$database` DEFAULT CHARACTER SET=utf8");
-    $result = db_query("SHOW TABLES FROM `$database`");
+    $result = Database::get()->queryArray("SHOW TABLES FROM `openeclass30`");
     if (!$result) {
-        echo "$langNotTablesList $database. ",
-        'MySQL Error: ', mysql_error();
+        die("$langNotTablesList $database");             
     }
-    while ($row = mysql_fetch_row($result)) {
-        Database::get()->query("ALTER TABLE `$database`.`$row[0]` CONVERT TO CHARACTER SET utf8");
-    }
-    mysql_free_result($result);
+    foreach ($result as $row) {
+        $value = "Tables_in_$database";
+        Database::get($database)->query("ALTER TABLE " . $row->$value . " CONVERT TO CHARACTER SET utf8");
+    }    
 }
 
 // -------------------------------------
