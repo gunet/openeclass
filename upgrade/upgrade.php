@@ -884,8 +884,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         }
                     }
                     Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
+                    
+                    if (!mysql_field_exists($mysqlMainDb, 'document', 'editable')) {
+                        db_query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
+                                                         ADD lock_user_id INT(11) NOT NULL DEFAULT 0");
+                    }
                 }
-
 
                 if (version_compare($oldversion, '3', '<')) {
                     // Check whether new tables already exist and delete them if empty, 
