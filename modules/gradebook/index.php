@@ -400,6 +400,7 @@ if ($is_editor) {
                             <table width='100%' class='sortable' id='t2'>";
             $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
             $tool_content .= "<th width='10' class='center'>$langGradebookMEANS</th>";
+            $tool_content .= "<th width='10' class='center'>Ορατό</th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
@@ -466,7 +467,15 @@ if ($is_editor) {
                 $tool_content .= "<td width='' class='center'>" . $activity->weight . "%</td>";
                 
                 $tool_content .= "
-                <td width='70' class='center'>" . userGradebookTotalActivityStats($activity->id, $participantsNumber, $showSemesterParticipants, $course_id, $limitDate) . "</td>";
+                <td width='70' class='center'>" . userGradebookTotalActivityStats($activity->id, $gradebook_id) . "</td>";
+                
+                $tool_content .= "<td width='' class='center'>" ;
+                if($activity->visible){
+                    $tool_content .= $langYes;
+                }else{
+                    $tool_content .= $langNo;
+                }
+                $tool_content .= "</td>";
                 $k++;
             } // end of while
         }
@@ -623,6 +632,55 @@ if ($is_editor) {
         //========================
         //show all the students
         //========================
+        
+        
+        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
+
+        if ($resultUsers) {
+            //table to display the users
+            $tool_content .= "
+            <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+                <thead>
+                    <tr>
+                      <th width='1'>$langID</th>
+                      <th><div align='left' width='100'>$langName $langSurname</div></th>
+                      <th class='center' width='80'>$langRegistrationDateShort</th>
+                      <th class='center'>$langGradebookGrade</th>
+                      <th class='center'>$langActions</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
+            $cnt = 0;
+            foreach ($resultUsers as $resultUser) {
+                $cnt++;
+                $tool_content .= "
+                    <tr>
+                        <td>$cnt</td>
+                        <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
+                        <td>" . nice_format($resultUser->reg_date) . "</td>
+                        <td>";
+                            if(weightleft($gradebook_id, 0) == 0) {
+                                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID);
+                            } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
+                                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . "<div class='alert1'>" . $langGradebookGradeAlert . "</div>";
+                            }
+                            if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
+                                $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
+                            }
+                $tool_content .=
+                        "</td>    
+                        <td class='center'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID'>$langGradebookBook</a></td>
+                    </tr>";
+            }
+
+            $tool_content .= "
+                </tbody>
+            </table>";
+
+        }
+        
+        /*
         $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
         
         //Count only students base on their initial record (not the course)
@@ -742,6 +800,8 @@ if ($is_editor) {
            2. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id&amp;enc=1253'>$langcsvenc1</a>
       </div>";
         //========================
+         
+        */
         
         //do not show activities list
         $showGradebookActivities = 0;
@@ -812,7 +872,7 @@ if ($is_editor) {
 
 
         //gradebook users
-        $tool_content .= "<h3>Μαθητές παρουσιολογίου</h3><br><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">";
+        $tool_content .= "<h3>Μαθητές βαθμολογίου</h3><br><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">";
 
         $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
 
@@ -879,6 +939,7 @@ if ($is_editor) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t2'>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookDesc</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<th width='60' class='center'>Ορατό</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
@@ -953,6 +1014,13 @@ if ($is_editor) {
                 }
                 
                 $tool_content .= "<td class='center'>" . $announce->weight . "%</td>";
+                $tool_content .= "<td width='' class='center'>";
+                    if ($announce->visible) {
+                        $tool_content .= $langYes;
+                    } else {
+                        $tool_content .= $langNo;
+                    }
+                $tool_content .= "</td>";
                 
                 $tool_content .= "
                 <td width='70' class='right'>
@@ -1145,6 +1213,7 @@ if ($is_editor) {
         //==============================================
         //show active users limit
         //==============================================
+        /*
         $tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
@@ -1164,7 +1233,7 @@ if ($is_editor) {
             </table>
             </fieldset>
             </form>";
-        
+        */
         //==============================================
         //show degree range
         //==============================================
@@ -1374,44 +1443,20 @@ function userGradeTotal ($gradebook_id, $userID){
 
 
 //function to get the total gradebook number 
-function userGradebookTotalActivityStats ($activityID, $participantsNumber, $showSemesterParticipants, $courseID, $limitDate) {
+function userGradebookTotalActivityStats ($activityID, $gradebook_id) {
     
     global $langUsers, $langMeanValue, $langMinValue, $langMaxValue;
     
-    //check who to include in the stats
-    if ($showSemesterParticipants) {        
-        $sumGrade = "";
-        $userGradebookTotalActivity = Database::get()->queryArray("SELECT grade, uid FROM gradebook_book WHERE gradebook_activity_id = ?d ", $activityID);
-        foreach ($userGradebookTotalActivity as $module) {
-            $check = Database::get()->querySingle("SELECT id FROM actions_daily WHERE actions_daily.day > ?t AND actions_daily.`course_id` = ?d AND actions_daily.user_id =?d ", $limitDate, $courseID, $module->uid);
-            if($check){
-                $sumGrade += $module->grade;
-            }
-        }
-        
-        $userGradebookTotalActivityMin = Database::get()->querySingle("SELECT grade
-                FROM gradebook_book,course_user, user, actions_daily
-                WHERE uid = `user`.id 
-                AND `user`.id = `course_user`.`user_id`
-                AND `user`.id = actions_daily.user_id
-                AND actions_daily.day > ?t
-                AND `course_user`.`course_id` = ?d
-                AND gradebook_activity_id = ?d 
-                GROUP BY actions_daily.user_id ORDER BY grade ASC limit 1 ", $limitDate, $courseID, $activityID)->grade;
-        $userGradebookTotalActivityMax = Database::get()->querySingle("SELECT grade
-                FROM gradebook_book,course_user, user, actions_daily
-                WHERE uid = `user`.id 
-                AND `user`.id = `course_user`.`user_id`
-                AND `user`.id = actions_daily.user_id
-                AND actions_daily.day > ?t
-                AND `course_user`.`course_id` = ?d
-                AND gradebook_activity_id = ?d 
-                GROUP BY actions_daily.user_id ORDER BY grade DESC limit 1", $limitDate, $courseID, $activityID)->grade;
-    } else {
-        $sumGrade = Database::get()->querySingle("SELECT SUM(grade) as count FROM gradebook_book WHERE gradebook_activity_id = ?d ", $activityID)->count;
-        $userGradebookTotalActivityMin = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade ASC limit 1", $activityID)->grade;
-        $userGradebookTotalActivityMax = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d ORDER BY grade DESC limit 1", $activityID)->grade;
-    }
+    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) as users FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ", $activityID, $gradebook_id);
+    
+    $sumGrade = $users->count;
+    //this is different than global participants number (it is limited to those that have taken degree)
+    $participantsNumber = $users->users;
+    
+
+    $userGradebookTotalActivityMin = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activityID, $gradebook_id)->grade;
+
+    $userGradebookTotalActivityMax = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade DESC limit 1 ", $activityID, $gradebook_id)->grade;
     
 //check if participantsNumber is zero
     if ($participantsNumber) {
