@@ -140,7 +140,7 @@ if ($is_editor) {
             $log_action = LOG_INSERT;
             $success_message = $langGlossaryAdded;
         }
-        $id = mysql_insert_id();
+        $id = $q->lastInsertID;
         Log::record($course_id, MODULE_ID_GLOSSARY, $log_action, array('id' => $id,
             'term' => $_POST['term'],
             'definition' => $_POST['definition'],
