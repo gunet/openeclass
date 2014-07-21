@@ -886,7 +886,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
                     
                     if (!mysql_field_exists($mysqlMainDb, 'document', 'editable')) {
-                        db_query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
+                        Database::get()->query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
                                                          ADD lock_user_id INT(11) NOT NULL DEFAULT 0");
                     }
                 }
@@ -2033,10 +2033,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("DROP TABLE IF EXISTS `actions`");
         }
         // convert tables to InnoDB storage engine                
-        $result = db_query("SHOW FULL TABLES");
-        while ($table = mysql_fetch_array($result)) {
-            if ($table['Table_type'] === 'BASE TABLE')
-                Database::get()->query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
+        $result = Database::get()->queryArray("SHOW FULL TABLES");
+        foreach ($result as $table) {
+            $value = "Tables_in_$mysqlMainDb";
+            if ($table->Table_type === 'BASE TABLE') {
+                Database::get()->query("ALTER TABLE " . $table->$value . " ENGINE = InnoDB");
+            }
         }                
         // update eclass version
         Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
