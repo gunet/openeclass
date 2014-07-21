@@ -131,7 +131,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     // end filter/criteria
     if ($c) { // users per course
-        $qry_base = "FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id WHERE b.course_id = $c";
+        $qry_base = "FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id WHERE b.cours_id = $c";
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
         }    
