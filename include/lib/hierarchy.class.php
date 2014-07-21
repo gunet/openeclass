@@ -264,8 +264,11 @@ class Hierarchy {
      * @param  string $useKey - Match against either the id or the lft during the db query
      * @return string         - The (unserialized) node's name
      */
-    public function getNodeName($key, $useKey = 'id') {
-        return self::unserializeLangField(Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key)->name);
+    public function getNodeName($key, $useKey = 'id') {       
+        $q = Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        if ($q) {
+            return self::unserializeLangField($q->name);
+        }
     }
 
     /**
