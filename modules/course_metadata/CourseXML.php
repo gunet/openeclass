@@ -1196,14 +1196,10 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer, $license, $webDir, $siteName, $Institution, $InstitutionUrl;
+        global $urlServer, $license, $webDir;
         $data = array();
 
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
-        if (!$course) {
-            return array();
-        }
-
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);
         // course language
         $clang = $course->lang;
         $data['course_language'] = $clang;
