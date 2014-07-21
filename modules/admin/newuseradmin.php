@@ -224,10 +224,11 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
     $depid = (isset($pt)) ? $pt : null;
-    if (isDepartmentAdmin())
+    if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
-    else
+    } else {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+    }
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</td></tr>
