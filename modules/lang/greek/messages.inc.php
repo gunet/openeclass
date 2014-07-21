@@ -959,7 +959,7 @@ $langMultiCourseData = 'Στοιχεία Μαθημάτων';
 * document.php
 ******************************************************/
 $langUpload = "Αποστολή αρχείου";
-$langDownloadFile= "Ανέβασμα αρχείου στον εξυπηρέτη";
+$langDownloadFile= "Ανέβασμα αρχείου";
 $langPathUploadFile= "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir="Δημιουργία καταλόγου";
 $langCreateDoc='Δημιουργία εγγράφου';
