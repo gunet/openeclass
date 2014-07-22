@@ -248,7 +248,7 @@ foreach ($result as $myrow) {
     
     $rate_str = "";
     if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id)) {
-        $rating = new Rating('thumbs_up', 'forum_post', $myrow["id"]);
+        $rating = new Rating('thumbs_up', 'forum_post', $myrow->id);
         $rate_str = $rating->put($is_editor, $uid, $course_code);
     }
     
