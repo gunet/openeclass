@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,15 +19,20 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file link.php
+ * @brief redirect user to external link
+ */
 
 require_once '../../include/init.php';
 $course_id = course_code_to_id($_GET['c']);
-$id = intval($_GET['id']);
+
+$id = $_GET['id'];
 if ($course_id !== false) {
-    db_query("UPDATE link SET hits = hits + 1 WHERE course_id = $course_id AND id = $id");
-    $q = db_query("SELECT url FROM link WHERE course_id = $course_id AND id = $id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($url) = mysql_fetch_row($q);
+    Database::get()->query("UPDATE link SET hits = hits + 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $q = Database::get()->querySingle("SELECT url FROM link WHERE course_id = ?d AND id = ?d",  $course_id, $id);
+    if ($q) {
+        $url = $q->url;
         header('Location: ' . $url);
         exit;
     }

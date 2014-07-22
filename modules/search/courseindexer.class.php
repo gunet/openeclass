@@ -48,7 +48,7 @@ class CourseIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a course db row.
      * 
      * @global string $urlServer
-     * @param  array  $course
+     * @param  object  $course
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($course) {
@@ -56,18 +56,18 @@ class CourseIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course['code']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course['keywords']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course['prof_names']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course['units'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/' . $course['code'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course->code), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course->keywords), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course->prof_names), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course->public_code), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course->units)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course->created, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/' . $course->code, $encoding));
 
         return $doc;
     }
@@ -76,54 +76,55 @@ class CourseIndexer implements ResourceIndexerInterface {
      * Fetch a Course from DB.
      * 
      * @param  int $courseId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($courseId) {
-        $res = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
-        $course = mysql_fetch_assoc($res);
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);        
         if (!$course)
             return null;
 
         // visible units
-        $course['units'] = '';
-        $res = db_query("SELECT id, title, comments
-                           FROM course_units
-                          WHERE visible > 0
-                            AND course_id = " . intval($courseId));
+        $course->units = '';
+        $res = Database::get()->queryArray("SELECT id, title, comments
+                                            FROM course_units
+                                           WHERE visible > 0
+                                             AND course_id = ?d", $courseId);
         $unitIds = array();
-        while ($row = mysql_fetch_assoc($res)) {
-            $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
-            $unitIds[] = $row['id'];
+        foreach ($res as $row) {
+            $course->units .= $row->title . ' ' . $row->comments . ' ';
+            $unitIds[] = $row->id;
         }
 
         // visible unit resources
         foreach ($unitIds as $unitId) {
-            $res = db_query("SELECT title, comments
-                               FROM unit_resources
-                              WHERE visible > 0
-                                AND unit_id = " . intval($unitId));
-            while ($row = mysql_fetch_assoc($res))
-                $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
+            $res = Database::get()->queryArray("SELECT title, comments
+                                                FROM unit_resources
+                                               WHERE visible > 0
+                                                 AND unit_id = ?d", $unitId);
+            foreach ($res as $row) {
+                $course->units .= $row->title . ' ' . $row->comments . ' ';
+            }
         }
 
         // invisible but useful units and resources
-        $res = db_query("SELECT id
-                           FROM course_units
-                          WHERE visible = 0
-                            AND `order` = -1
-                            AND course_id  = " . intval($courseId));
+        $res = Database::get()->queryArray("SELECT id
+                                            FROM course_units
+                                           WHERE visible = 0
+                                             AND `order` = -1
+                                             AND course_id  = ?d", $courseId);
         $unitIds = array();
-        while ($row = mysql_fetch_assoc($res))
-            $unitIds[] = $row['id'];
-        foreach ($unitIds as $unitId) {
-            $res = db_query("SELECT comments
-                               FROM unit_resources
-                              WHERE visible >= 0
-                                AND unit_id = " . intval($unitId));
-            while ($row = mysql_fetch_assoc($res))
-                $course['units'] .= $row['comments'] . ' ';
+        foreach ($res as $row) {
+            $unitIds[] = $row->id;
         }
-
+        foreach ($unitIds as $unitId) {
+            $res = Database::get()->queryArray("SELECT comments
+                                                FROM unit_resources
+                                               WHERE visible >= 0
+                                                 AND unit_id = ?d", $unitId);
+            foreach ($res as $row) {
+                $course->units .= $row->comments . ' ';
+            }
+        }
         return $course;
     }
 
@@ -188,9 +189,9 @@ class CourseIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all courses from db
-        $res = db_query("SELECT id FROM course");
-        while ($row = mysql_fetch_assoc($res)) {
-            $course = $this->fetch($row['id']);
+        $res = Database::get()->queryArray("SELECT id FROM course");
+        foreach ($res as $row) {
+            $course = $this->fetch($row->id);
             $this->__index->addDocument(self::makeDoc($course));
         }
 

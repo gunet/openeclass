@@ -49,23 +49,15 @@
  * @package CLLNP
  *
  */
-// document browser vars
-$TABLEDOCUMENT = "document";
-
-
 // Update infos about asset
-$sql = "SELECT `path`
-         FROM `" . $TABLEASSET . "`
-        WHERE `module_id` = " . (int) $_SESSION['lp_module_id'];
-$assetPath = db_query_get_single_value($sql, $mysqlMainDb);
+$assetPath = Database::get()->querySingle("SELECT `path` FROM `lp_asset`
+        WHERE `module_id` = ?d", $_SESSION['lp_module_id'])->path;
 
-$sql = "SELECT `filename`
-         FROM `" . $TABLEDOCUMENT . "`
-        WHERE `path` LIKE \"" . addslashes($assetPath) . "\"";
-$fileName = db_query_get_single_value($sql, $mysqlMainDb);
+$fileName = Database::get()->querySingle("SELECT `filename` FROM `document`
+        WHERE `path` LIKE ?s", $assetPath)->filename;
 
 $baseServDir = $webDir;
-$courseDir = "courses/" . $course_code . "/document";
+$courseDir = "/courses/" . $course_code . "/document";
 $baseWorkDir = $baseServDir . $courseDir;
 $file = $baseWorkDir . $assetPath;
 $fileSize = format_file_size(filesize($file));

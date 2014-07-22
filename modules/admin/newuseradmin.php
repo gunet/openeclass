@@ -108,12 +108,11 @@ if ($submit) {
         validateNode(intval($depid), isDepartmentAdmin());
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
-        Database::get()->query("INSERT INTO user
+        $uid = Database::get()->query("INSERT INTO user
                                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s , " . DBHelper::timeAfter() . "
                  , " . DBHelper::timeAfter(get_config('account_duration')) . "
-                 , ?s, '', ?s, '')", $surname_form, $givenname_form, $uname, $password_encrypted, $email_form, $pstatus, $phone, $am, $proflanguage, $verified_mail);
-        $uid = mysql_insert_id();
+                 , ?s, '', ?s, '')", $surname_form, $givenname_form, $uname, $password_encrypted, $email_form, $pstatus, $phone, $am, $proflanguage, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
 
         // close request if needed
@@ -225,10 +224,11 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
     $depid = (isset($pt)) ? $pt : null;
-    if (isDepartmentAdmin())
+    if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
-    else
+    } else {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+    }
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</td></tr>

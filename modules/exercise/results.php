@@ -97,10 +97,10 @@ foreach ($result as $row) {
     $sid = $row->uid;
     $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
 
-    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
-                TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
-                AS time_duration, total_score, total_weighting, eurid, attempt_status
-                FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d $extra_sql", $sid, $exerciseId);
+    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, a.record_end_date,
+                CASE b.time_constraint WHEN 0 THEN TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date))
+                ELSE b.time_constraint*60-a.secs_remaining END AS time_duration, a.total_score, a.total_weighting, a.eurid, a.attempt_status
+                FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id $extra_sql", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<table class='tbl_alt' width='100%'>";
         $tool_content .= "<tr><td colspan='4'>";
@@ -139,7 +139,7 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            if ($row2->attempt_status == ATTEMPT_COMPLETED || $row2->attempt_status == ATTEMPT_PAUSED && $is_editor) {
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a>";
             } else {
                 if ($row2->attempt_status == ATTEMPT_PAUSED) {

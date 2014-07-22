@@ -47,21 +47,12 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = "Path";
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 define('CLARO_FILE_PERMISSIONS', 0777);
 
 include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-
-
-
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -144,99 +135,85 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                if (is_dir($webDir . "courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
+                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
                     $findsql = "SELECT M.`module_id`
-						FROM  `" . $TABLELEARNPATHMODULE . "` AS LPM, `" . $TABLEMODULE . "` AS M
-						WHERE LPM.`learnPath_id` = " . (int) $_GET['del_path_id'] . "
-						AND ( M.`contentType` = '" . CTSCORM_ . "' OR M.`contentType` = '" . CTSCORMASSET_ . "' OR M.`contentType` = '" . CTLABEL_ . "')
+						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
+						WHERE LPM.`learnPath_id` = ?d
+						AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
 						AND LPM.`module_id` = M.`module_id`
-						AND M.`course_id` = $course_id";
-                    $findResult = db_query($findsql);
+						AND M.`course_id` = ?d";
+                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
 
                     // Delete the startAssets
-                    $delAssetSql = "DELETE FROM `" . $TABLEASSET . "` WHERE 1=0";
-
-                    while ($delList = mysql_fetch_array($findResult)) {
-                        $delAssetSql .= " OR `module_id`=" . (int) $delList['module_id'];
-                    }
-                    db_query($delAssetSql);
-
+                    $delAssetSql = "DELETE FROM `lp_asset` WHERE 1=0";
                     // DELETE the SCORM modules
-                    $delModuleSql = "DELETE FROM `" . $TABLEMODULE . "`
-					WHERE (`contentType` = '" . CTSCORM_ . "' OR `contentType` = '" . CTSCORMASSET_ . "' OR `contentType` = '" . CTLABEL_ . "') AND (1=0";
+                    $delModuleSql = "DELETE FROM `lp_module`
+					WHERE (`contentType` = ?s OR `contentType` = ?s OR `contentType` = ?s) AND (1=0";
 
-                    if (mysql_num_rows($findResult) > 0) {
-                        mysql_data_seek($findResult, 0);
+                    foreach ($findResult as $delList) {
+                        $delAssetSql .= " OR `module_id`= " . intval($delList->module_id);
+                        $delModuleSql .= " OR (`module_id`= " . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
                     }
-                    while ($delList = mysql_fetch_array($findResult)) {
-                        $delModuleSql .= " OR (`module_id`=" . (int) $delList['module_id'] . " AND `course_id` = $course_id )";
-                    }
+                    Database::get()->query($delAssetSql);
+                    
                     $delModuleSql .= ")";
-                    db_query($delModuleSql);
+                    Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
 
                     // DELETE the directory containing the package and all its content
-                    $real = realpath($webDir . "courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
+                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
                     claro_delete_file($real);
-                }   // end of dealing with the case of a scorm learning path.
-                else {
+                } else { // end of dealing with the case of a scorm learning path.
                     $findsql = "SELECT M.`module_id`
-						FROM  `" . $TABLELEARNPATHMODULE . "` AS LPM,
-						`" . $TABLEMODULE . "` AS M
-						WHERE LPM.`learnPath_id` = " . (int) $_GET['del_path_id'] . "
-						AND M.`contentType` = '" . CTLABEL_ . "'
+						FROM  `lp_rel_learnPath_module` AS LPM,
+						`lp_module` AS M
+						WHERE LPM.`learnPath_id` = ?d
+						AND M.`contentType` = ?s
 						AND LPM.`module_id` = M.`module_id`
-						AND M.`course_id` = $course_id";
-                    $findResult = db_query($findsql);
+						AND M.`course_id` = ?d";
+                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTLABEL_, $course_id);
                     // delete labels of non scorm learning path
-                    $delLabelModuleSql = "DELETE FROM `" . $TABLEMODULE . "` WHERE 1=0";
+                    $delLabelModuleSql = "DELETE FROM `lp_module` WHERE 1=0";
 
-                    while ($delList = mysql_fetch_array($findResult)) {
-                        $delLabelModuleSql .= " OR (`module_id`=" . (int) $delList['module_id'] . " AND `course_id` = $course_id )";
+                    foreach ($findResult as $delList) {
+                        $delLabelModuleSql .= " OR (`module_id`=" . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
                     }
-                    $query = db_query($delLabelModuleSql);
+                    Database::get()->query($delLabelModuleSql);
                 }
 
                 // delete everything for this path (common to normal and scorm paths) concerning modules, progress and path
                 // delete all user progression
-                $sql1 = "DELETE FROM `" . $TABLEUSERMODULEPROGRESS . "`
-					WHERE `learnPath_id` = " . (int) $_GET['del_path_id'];
-                $query = db_query($sql1);
+                Database::get()->query("DELETE FROM `lp_user_module_progress` WHERE `learnPath_id` = ?d", $_GET['del_path_id']);
                 // delete all relation between modules and the deleted learning path
-                $sql2 = "DELETE FROM `" . $TABLELEARNPATHMODULE . "`
-						WHERE `learnPath_id` = " . (int) $_GET['del_path_id'];
-                $query = db_query($sql2);
+                Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $_GET['del_path_id']);
 
                 // delete the learning path
-                $lp_name = db_query_get_single_value("SELECT name FROM `" . $TABLELEARNPATH . "` 
-                                                                WHERE `learnPath_id` = " . intval($_GET['del_path_id']) . "
-                                                                AND `course_id` = $course_id");
-                $sql3 = "DELETE FROM `" . $TABLELEARNPATH . "` 
-                                                WHERE `learnPath_id` = " . intval($_GET['del_path_id']) . " 
-                                                AND `course_id` = $course_id";
-                $query = db_query($sql3);
+                $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath` 
+                                                                WHERE `learnPath_id` = ?d
+                                                                AND `course_id` = ?d", $_GET['del_path_id'], $course_id)->name;
+                Database::get()->query("DELETE FROM `lp_learnPath` 
+                                                WHERE `learnPath_id` = ?d
+                                                AND `course_id` = ?d", $_GET['del_path_id'], $course_id);
                 Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
 
                 break;
             // ACCESSIBILITY COMMAND
             case "mkBlock" :
             case "mkUnblock" :
-                $_REQUEST['cmd'] == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
-                $sql = "UPDATE `" . $TABLELEARNPATH . "` SET `lock` = '$blocking'
-					WHERE `learnPath_id` = " . (int) $_GET['cmdid'] . "
-					AND `lock` != '$blocking'
-					AND `course_id` = $course_id";
-                $query = db_query($sql);
+                $blocking = ($_REQUEST['cmd'] == "mkBlock") ? 'CLOSE' : 'OPEN';
+                Database::get()->query("UPDATE `lp_learnPath` SET `lock` = ?s
+					WHERE `learnPath_id` = ?d
+					AND `lock` != ?s
+					AND `course_id` = ?d", $blocking, $_GET['cmdid'], $blocking, $course_id);
                 break;
             // VISIBILITY COMMAND
             case "mkVisibl" :
             case "mkInvisibl" :
-                $_REQUEST['cmd'] == "mkVisibl" ? $visibility = 1 : $visibility = 0;
-                $sql = "UPDATE `" . $TABLELEARNPATH . "`
-					SET `visible` = '$visibility'
-					WHERE `learnPath_id` = " . intval($_GET['visibility_path_id']) . "
-					AND `visible` != '$visibility'
-					AND `course_id` = $course_id";
-                $query = db_query($sql);
+                $visibility = ($_REQUEST['cmd'] == "mkVisibl") ? 1 : 0;
+                Database::get()->query("UPDATE `lp_learnPath`
+					SET `visible` = ?d
+					WHERE `learnPath_id` = ?d
+					AND `visible` != ?d
+					AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
                 break;
             // ORDER COMMAND
             case "moveUp" :
@@ -252,20 +229,15 @@ if ($is_editor) {
                 // create form sent
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
-                    $sql = "SELECT `name` FROM `" . $TABLELEARNPATH . "`
-						WHERE `name` = " . quote($_POST['newPathName']) . "
-						AND `course_id` = $course_id";
-                    $query = db_query($sql);
-                    $num = mysql_num_rows($query);
+                    $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`
+						WHERE `name` = ?s
+						AND `course_id` = ?d", $_POST['newPathName'], $course_id)->count;
                     if ($num == 0) { // "name" doesn't already exist
                         // determine the default order of this Learning path
-                        $result = db_query("SELECT MAX(`rank`) FROM `" . $TABLELEARNPATH . "` WHERE `course_id` = $course_id");
-                        list($orderMax) = mysql_fetch_row($result);
-                        $order = $orderMax + 1;
+                        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
                         // create new learning path
-                        $sql = "INSERT INTO `" . $TABLELEARNPATH . "` (`course_id`, `name`, `comment`, `visible`, `rank`)
-							VALUES ($course_id, " . quote($_POST['newPathName']) . "," . quote($_POST['newComment']) . ", 1, " . intval($order) . ")";
-                        $lp_id = db_query($sql);
+                        $lp_id = Database::get()->query("INSERT INTO `lp_learnPath` (`course_id`, `name`, `comment`, `visible`, `rank`)
+							VALUES (?d, ?s, ?s, 1, ?d)", $course_id, $_POST['newPathName'], $_POST['newComment'], $order)->lastInsertID;
                         Log::record($course_id, MODULE_ID_LP, LOG_INSERT, array('id' => $lp_id,
                                                                                 'name' => $_POST['newPathName'],
                                                                                 'comment' => $_POST['newComment']));
@@ -306,47 +278,43 @@ if ($is_editor) {
 // IF ORDER COMMAND RECEIVED
 // CHANGE ORDER
 if (isset($sortDirection) && $sortDirection) {
-    $sql = "SELECT `learnPath_id`, `rank`
-            FROM `" . $TABLELEARNPATH . "`
-            WHERE `course_id` = $course_id
-            ORDER BY `rank` $sortDirection";
-    $result = db_query($sql);
+    $result = Database::get()->queryArray("SELECT `learnPath_id`, `rank`
+            FROM `lp_learnPath`
+            WHERE `course_id` = ?d
+            ORDER BY `rank` $sortDirection", $course_id);
 
     // LP = learningPath
-    while (list ($LPId, $LPOrder) = mysql_fetch_row($result)) {
+    foreach ($result as $LP) {
         // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
         //          COMMIT ORDER SWAP ON THE DB
 
         if (isset($thisLPOrderFound) && $thisLPOrderFound == true) {
-            $nextLPId = $LPId;
-            $nextLPOrder = $LPOrder;
+            $nextLPId = $LP->learnPath_id;
+            $nextLPOrder = $LP->rank;
 
             // move 1 to a temporary rank
-            $sql = "UPDATE `$TABLELEARNPATH`
+            Database::get()->query("UPDATE `lp_learnPath`
                     SET `rank` = '-1337'
-                    WHERE `learnPath_id` = " . intval($thisLearningPathId) . "
-                    AND `course_id` = $course_id";
-            db_query($sql);
+                    WHERE `learnPath_id` = ?d
+                    AND `course_id` = ?d", $thisLearningPathId, $course_id);
 
             // move 2 to the previous rank of 1
-            $sql = "UPDATE `$TABLELEARNPATH`
-                     SET `rank` = " . intval($thisLPOrder) . "
-                     WHERE `learnPath_id` = " . intval($nextLPId) . "
-                     AND `course_id` = $course_id";
-            db_query($sql);
+            Database::get()->query("UPDATE `lp_learnPath`
+                     SET `rank` = ?d
+                     WHERE `learnPath_id` = ?d
+                     AND `course_id` = ?d", $thisLPOrder, $nextLPId, $course_id);
 
             // move 1 to previous rank of 2
-            $sql = "UPDATE `$TABLELEARNPATH`
-                     SET `rank` = " . intval($nextLPOrder) . "
-                     WHERE `learnPath_id` = " . intval($thisLearningPathId) . "
-                     AND `course_id` = $course_id";
-            db_query($sql);
+            Database::get()->query("UPDATE `lp_learnPath`
+                     SET `rank` = ?d
+                     WHERE `learnPath_id` = ?d
+                     AND `course_id` = ?d", $nextLPOrder, $thisLearningPathId, $course_id);
             break;
         }
 
         // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-        if ($LPId == $thisLearningPathId) {
-            $thisLPOrder = $LPOrder;
+        if ($LP->learnPath_id == $thisLearningPathId) {
+            $thisLPOrder = $LP->rank;
             $thisLPOrderFound = true;
         }
     }
@@ -373,11 +341,11 @@ if ($is_editor) {
 }
 
 // check if there are learning paths available
-$l = db_query("SELECT * FROM `$TABLELEARNPATH` WHERE `course_id` = $course_id");
-if ((mysql_num_rows($l) == 0)) {
+$l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
+if ($l == 0) {
     $tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
     draw($tool_content, 2, null, $head_content);
-    exit;
+    exit();
 }
 
 $tool_content .= "
@@ -411,35 +379,35 @@ if ($uid) {
 
 // list available learning paths
 $sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
-           FROM `$TABLELEARNPATH` AS LP
-     LEFT JOIN `$TABLELEARNPATHMODULE` AS LPM
+           FROM `lp_learnPath` AS LP
+     LEFT JOIN `lp_rel_learnPath_module` AS LPM
             ON LPM.`learnPath_id` = LP.`learnPath_id`
-     LEFT JOIN `$TABLEUSERMODULEPROGRESS` AS UMP
+     LEFT JOIN `lp_user_module_progress` AS UMP
             ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
             $uidCheckString
          WHERE 1=1
              $visibility
-         AND LP.`course_id` = $course_id
+         AND LP.`course_id` = ?d
       GROUP BY LP.`learnPath_id`
       ORDER BY LP.`rank`";
 
-$result = db_query($sql);
+$result = Database::get()->queryArray($sql, $course_id);
 
 // used to know if the down array (for order) has to be displayed
-$LPNumber = mysql_num_rows($result);
+$LPNumber = count($result);
 
 $iterator = 1;
 
 $is_blocked = false;
 $ind = 1;
-while ($list = mysql_fetch_array($result)) { // while ... learning path list
+foreach ($result as $list) { // while ... learning path list
     if ($ind % 2 == 0) {
         $style = 'class="even"';
     } else {
         $style = 'class="odd"';
     }
 
-    if ($list['visible'] == 0) {
+    if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='invisible'";
             $image_bullet = "arrow.png";
@@ -463,57 +431,57 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
     if (!$is_blocked) {
         // locate 1st module of current learning path
         $modulessql = "SELECT M.`module_id`
-                FROM (`$TABLEMODULE` AS M,
-                      `$TABLELEARNPATHMODULE` AS LPM)
+                FROM (`lp_module` AS M,
+                      `lp_rel_learnPath_module` AS LPM)
                 WHERE M.`module_id` = LPM.`module_id`
-                  AND LPM.`learnPath_id` = " . intval($list['learnPath_id']) . "
-                  AND M.`contentType` <> \"LABEL\"
-                  AND M.`course_id` = $course_id
+                  AND LPM.`learnPath_id` = ?d
+                  AND M.`contentType` <> ?s
+                  AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
-        $resultmodules = db_query($modulessql);
+        $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
 
         $play_img = "<img src='$themeimg/$image_bullet' alt='' />";
 
-        if (mysql_num_rows($resultmodules) > 0) {
-            $firstmodule = mysql_fetch_array($resultmodules, MYSQL_ASSOC);
-            $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list['learnPath_id'] . "&amp;module_id=" . $firstmodule['module_id'] . "'>$play_img</a>";
+        if (count($resultmodules) > 0) {
+            $firstmodule = $resultmodules[0];
+            $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $firstmodule->module_id . "'>$play_img</a>";
         } else {
             $play_button = $play_img;
         }
 
         $tool_content .= "
       <td width='20'>$play_button</td>
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list['learnPath_id'] . "'>" . htmlspecialchars($list['name']) . "</a></td>\n";
+      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
         // step 1. find last visible module of the current learning path in DB
 
         $blocksql = "SELECT `learnPath_module_id`
-                     FROM `$TABLELEARNPATHMODULE`
-                     WHERE `learnPath_id` = " . intval($list['learnPath_id']) . "
+                     FROM `lp_rel_learnPath_module`
+                     WHERE `learnPath_id` = ?d
                      AND `visible` = 1
                      ORDER BY `rank` DESC
                      LIMIT 1";
-        $resultblock = db_query($blocksql);
+        $resultblock = Database::get()->queryArray($blocksql, $list->learnPath_id);
 
         // step 2. see if there is a user progression in db concerning this module of the current learning path
-        $number = mysql_num_rows($resultblock);
+        $number = count($resultblock);
         if ($number != 0) {
-            $listblock = mysql_fetch_array($resultblock);
+            $listblock = $resultblock[0];
             $blocksql2 = "SELECT `credit`
-                          FROM `$TABLEUSERMODULEPROGRESS`
-                          WHERE `learnPath_module_id`= " . intval($listblock['learnPath_module_id']) . "
-                          AND `learnPath_id` = " . intval($list['learnPath_id']) . "
-                          AND `user_id` =" . intval($uid);
-            $resultblock2 = db_query($blocksql2);
-            $moduleNumber = mysql_num_rows($resultblock2);
+                          FROM `lp_user_module_progress`
+                          WHERE `learnPath_module_id`= ?d
+                          AND `learnPath_id` = ?d
+                          AND `user_id` = ?d";
+            $resultblock2 = Database::get()->queryArray($blocksql2, $listblock->learnPath_module_id, $list->learnPath_id, $uid);
+            $moduleNumber = count($resultblock2);
         } else {
             $moduleNumber = 0;
         }
 
         //2.1 no progression found in DB
-        if (($moduleNumber == 0) && ($list['lock'] == 'CLOSE')) {
+        if (($moduleNumber == 0) && ($list->lock == 'CLOSE')) {
             //must block next path because last module of this path never tried!
             if ($uid) {
                 if (!$is_editor) {
@@ -527,8 +495,8 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
 
         //2.2. deal with progression found in DB if at leats one module in this path
         if ($moduleNumber != 0) {
-            $listblock2 = mysql_fetch_array($resultblock2);
-            if (($listblock2['credit'] == "NO-CREDIT") && ($list['lock'] == 'CLOSE')) {
+            $listblock2 = $resultblock2[0];
+            if (($listblock2->credit == "NO-CREDIT") && ($list->lock == 'CLOSE')) {
                 //must block next path because last module of this path not credited yet!
                 if ($uid) {
                     if (!$is_editor) {
@@ -540,7 +508,7 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
             }
         }
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td width='20'><img src='$themeimg/arrow.png' alt='' /></td><td>" . $list['name']/* .$list['minRaw'] */ . "</td>\n";
+        $tool_content .= "      <td width='20'><img src='$themeimg/arrow.png' alt='' /></td><td>" . $list->name/* .$list['minRaw'] */ . "</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -550,67 +518,67 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
 
         $tool_content .= "      <td class='center' width='1'>";
 
-        if ($list['lock'] == 'OPEN') {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list['learnPath_id'] . "'>"
+        if ($list->lock == 'OPEN') {
+            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id . "'>"
                     . "<img src='$themeimg/bullet_unblock.png' alt='$langBlock' title='$langBlock' />"
                     . "</a>";
         } else {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list['learnPath_id'] . "'>"
+            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id . "'>"
                     . "<img src='$themeimg/bullet_block.png' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' />"
                     . "</a>";
         }
         $tool_content .= "</td>\n";
 
         // EXPORT links
-        $tool_content .= '      <td class="center" width="50"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+        $tool_content .= '      <td class="center" width="50"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id . '" >'
                 . '<img src="' . $themeimg . '/export.png" alt="' . $langExport2004 . '" title="' . $langExport2004 . '" /></a>' . ""
-                . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
+                . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list->learnPath_id . '" >'
                 . '<img src="' . $themeimg . '/export.png" alt="' . $langExport12 . '" title="' . $langExport12 . '" /></a>' . ""
-            .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=exportIMSCP&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id . '" >'
             .'<img src="'.$themeimg.'/export.png" alt="'.$langExportIMSCP.'" title="'.$langExportIMSCP.'" /></a>' .""
                 . '</td>' . "\n";
 
         // statistics links
-        $tool_content .= "<td class='center' width='1'><a href='details.php?course=$course_code&amp;path_id=" . $list['learnPath_id'] . "'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
+        $tool_content .= "<td class='center' width='1'><a href='details.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
 
         // VISIBILITY link
         $tool_content .= "<td class='center' width='60'>";
-        if ($list['visible'] == 0) {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list['learnPath_id'] . "'>"
+        if ($list->visible == 0) {
+            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id . "'>"
                     . "<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' />"
                     . "</a>";
         } else {
-            if ($list['lock'] == 'CLOSE') {
+            if ($list->lock == 'CLOSE') {
                 $onclick = "onClick=\"return confirm('" . clean_str_for_javascript($langAlertBlockingPathMadeInvisible) . "');\"";
             } else {
                 $onclick = "";
             }
 
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list['learnPath_id'] . "' " . $onclick . " >"
+            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id . "' " . $onclick . " >"
                     . "<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' />"
                     . "</a>";
         }
 
         // Modify command / go to other page
-        $tool_content .= "&nbsp;&nbsp;<a href='learningPathAdmin.php?course=$course_code&amp;path_id=" . $list['learnPath_id'] . "'>"
+        $tool_content .= "&nbsp;&nbsp;<a href='learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>"
                 . "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
                 . "</a>\n";
 
         // DELETE link
-        $real = realpath($webDir . "courses/" . $course_code . "/scormPackages/path_" . $list['learnPath_id']);
+        $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id);
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
             $tool_content .=
-                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list['learnPath_id'] . "' "
-                    . "onClick=\"return scormConfirmation('" . clean_str_for_javascript($list['name']) . "');\">"
+                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id . "' "
+                    . "onClick=\"return scormConfirmation('" . clean_str_for_javascript($list->name) . "');\">"
                     . "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
                     . "</a>"
                     . "</td>\n";
         } else {
             $tool_content .=
-                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list['learnPath_id'] . "' "
-                    . "onClick=\"return confirmation('" . clean_str_for_javascript($list['name']) . "');\">"
+                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id . "' "
+                    . "onClick=\"return confirmation('" . clean_str_for_javascript($list->name) . "');\">"
                     . "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
                     . "</a>"
                     . "</td>\n";
@@ -619,7 +587,7 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
         // DISPLAY MOVE UP COMMAND only if it is not the top learning path
         if ($iterator != 1) {
             $tool_content .= "      <td class='right' width='1'>"
-                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list['learnPath_id'] . "'>"
+                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id . "'>"
                     . "<img src='$themeimg/up.png' alt='$langUp' title='$langUp' />"
                     . "</a>"
                     . "</td>\n";
@@ -630,7 +598,7 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
         if ($iterator < $LPNumber) {
             $tool_content .= "      <td width='1'>"
-                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list['learnPath_id'] . "'>"
+                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list->learnPath_id . "'>"
                     . "<img src='$themeimg/down.png' alt='$langDown' title='$langDown' />"
                     . "</a>"
                     . "</td>";
@@ -639,7 +607,7 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
         }
     } elseif ($uid) {
         // % progress
-        $prog = get_learnPath_progress($list['learnPath_id'], $uid);
+        $prog = get_learnPath_progress($list->learnPath_id, $uid);
         if (!isset($globalprog)) {
             $globalprog = 0;
         }

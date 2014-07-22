@@ -53,21 +53,19 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
-$sql = "SELECT f.id, f.name FROM forum f, forum_topic t
-            WHERE f.id = $forum
-            AND t.id = $topic
+$myrow = Database::get()->querySingle("SELECT f.id, f.name FROM forum f, forum_topic t
+            WHERE f.id = ?d
+            AND t.id = ?d
             AND t.forum_id = f.id
-            AND f.course_id = $course_id";
+            AND f.course_id = ?d", $forum, $topic, $course_id);
 
-$result = db_query($sql);
-
-if (!$myrow = mysql_fetch_array($result)) {
+if (!$myrow) {
     $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
     draw($tool_content, 2);
     exit();
 }
-$forum_name = $myrow['name'];
-$forum = $myrow['id'];
+$forum_name = $myrow->name;
+$forum = $myrow->id;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && $is_editor) {
@@ -78,38 +76,35 @@ if (isset($_GET['delete']) && $is_editor) {
     $post_id = intval($_GET['post_id']);
     $last_post_in_thread = get_last_post($topic);
 
-    $result = db_query("SELECT post_time FROM forum_post
-                            WHERE id = $post_id");
+    $myrow = Database::get()->querySingle("SELECT post_time FROM forum_post
+                            WHERE id = ?d", $post_id);
 
-    $myrow = mysql_fetch_array($result);
-    $this_post_time = $myrow["post_time"];
+    $this_post_time = $myrow->post_time;
 
-    db_query("DELETE FROM forum_post WHERE id = $post_id");
+    Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     $fpdx->remove($post_id);
 
     if ($total == 1) { // if exists one post in topic
-        db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
+        Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ", $topic, $forum);
         $ftdx->remove($topic);
-        db_query("UPDATE forum SET num_topics = 0,
+        Database::get()->query("UPDATE forum SET num_topics = 0,
                             num_posts = 0
-                            WHERE id = $forum
-                            AND course_id = $course_id");
+                            WHERE id = ?d
+                            AND course_id = ?d", $forum, $course_id);
         header("Location: viewforum.php?course=$course_code&forum=$forum");
     } else {
-        $sql = "SELECT MAX(id) AS last_post FROM forum_post
-                                WHERE topic_id = $topic";
-        $last_post = db_query_get_single_value($sql);
+        $last_post = Database::get()->querySingle("SELECT MAX(id) AS last_post FROM forum_post WHERE topic_id = ?d", $topic)->last_post;
 
-        db_query("UPDATE forum SET
+        Database::get()->query("UPDATE forum SET
                         `num_posts` = `num_posts`-1,
-                        last_post_id = $last_post
-                        WHERE id = $forum
-                        AND course_id = $course_id");
+                        last_post_id = ?d
+                        WHERE id = ?d
+                        AND course_id = ?d", $last_post, $forum, $course_id);
 
-        db_query("UPDATE forum_topic SET
+        Database::get()->query("UPDATE forum_topic SET
                                 `num_replies` = `num_replies`-1,
-                                last_post_id = $last_post
-                        WHERE id = $topic");
+                                last_post_id = ?d
+                        WHERE id = ?d", $last_post, $topic);
     }
     if ($last_post_in_thread == $this_post_time) {
         $topic_time_fixed = $last_post_in_thread;
@@ -130,10 +125,7 @@ if ($paging and $total > $posts_per_page) {
     $pages = $times;
 }
 
-$result = db_query("SELECT title FROM forum_topic WHERE id = $topic");
-$myrow = mysql_fetch_array($result);
-
-$topic_subject = $myrow["title"];
+$topic_subject = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $topic)->title;
 
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -223,30 +215,29 @@ if ($is_editor) {
 $tool_content .= "</tr>";
 
 if (isset($_GET['all'])) {
-    $sql = "SELECT * FROM forum_post WHERE topic_id = $topic ORDER BY id";
+    $result = Database::get()->queryArray("SELECT * FROM forum_post WHERE topic_id = ?d ORDER BY id", $topic);
 } elseif (isset($_GET['start'])) {
     $start = intval($_GET['start']);
-    $sql = "SELECT * FROM forum_post
-		WHERE topic_id = $topic
+    $result = Database::get()->queryArray("SELECT * FROM forum_post
+		WHERE topic_id = ?d
 		ORDER BY id
-                LIMIT $start, $posts_per_page";
+                LIMIT $start, $posts_per_page", $topic);
 } else {
-    $sql = "SELECT * FROM forum_post
-		WHERE topic_id = '$topic'
+    $result = Database::get()->queryArray("SELECT * FROM forum_post
+		WHERE topic_id = ?d
 		ORDER BY id
-                LIMIT $posts_per_page";
+                LIMIT $posts_per_page", $topic);
 }
-$result = db_query($sql);
-$myrow = mysql_fetch_array($result);
+
 $count = 0;
-do {
+foreach ($result as $myrow) {
     if ($count % 2 == 1) {
         $tool_content .= "<tr class='odd'>";
     } else {
         $tool_content .= "<tr class='even'>";
     }
-    $tool_content .= "<td valign='top'>" . display_user($myrow['poster_id']) . "</td>";
-    $message = $myrow["post_text"];
+    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . "</td>";
+    $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
     if ($count == 0) {
@@ -262,33 +253,32 @@ do {
     }
     
     if (isset($start)) {
-       $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>"; 
+       $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow->id."'>#".$myrow->id."</a><br/>"; 
     } else {
-        $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum#".$myrow["id"]."'>#".$myrow["id"]."</a><br/>";
+        $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum#".$myrow->id."'>#".$myrow->id."</a><br/>";
     }
     
     $tool_content .= "<td>
 	  <div>
-	    <a name='".$myrow["id"]."'></a>$anchor_link
-	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
+	    <a name='".$myrow->id."'></a>$anchor_link
+	    <b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
 	  </div>
 	  <br />$message<br />".$rate_str."
 	</td>";
     if ($is_editor) {
         $tool_content .= "<td width='40' valign='top'>
-                    <a href='editpost.php?course=$course_code&amp;post_id=" . $myrow["id"] . "&amp;topic=$topic&amp;forum=$forum'>" .
+                    <a href='editpost.php?course=$course_code&amp;post_id=" . $myrow->id . "&amp;topic=$topic&amp;forum=$forum'>" .
                 "<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>" .
-                "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=" . $myrow['id'] .
+                "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=" . $myrow->id .
                 "&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick=\"return confirmation('$langConfirmDelete');\">" .
                 "<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a></td>";
     }
     $tool_content .= "</tr>";
     $count++;
-} while ($myrow = mysql_fetch_array($result));
+}
 
-$sql = "UPDATE forum_topic SET num_views = num_views + 1
-            WHERE id = $topic AND forum_id = $forum";
-db_query($sql);
+Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
+            WHERE id = ?d AND forum_id = ?d", $topic, $forum);
 
 $tool_content .= "</table>";
 

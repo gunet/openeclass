@@ -138,7 +138,7 @@ if (isset($_GET['stats'])) {
 			<th colspan='2'>$langNbLogin</th>
 			</tr>
 			<tr>
-			<td>$langFrom " . Database::get()->querySingle("SELECT loginout.when as when FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</td>
+			<td>$langFrom " . Database::get()->querySingle("SELECT loginout.when as `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</td>
 			<td class='right' width='200'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
 				WHERE loginout.action ='LOGIN'")->cnt . "</b></td>
 			</tr>
@@ -200,29 +200,29 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td class='left'>$langNumCourses</td>
-			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM course")->cnt . "</b></td>
+			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course")->cnt . "</b></td>
 			</tr>
 			<tr>
 			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*)
-				FROM course GROUP BY visible ")) . "
+			</tr>" . tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*) AS nb
+				FROM course GROUP BY visible ", 'visible')) . "
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*)
+			</tr>" . tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*) AS nb
 				FROM course, course_department, hierarchy
                                 WHERE course.id = course_department.course
-                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id", true)) . "
+                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id", 'faculte')) . "
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course
-					GROUP BY lang DESC")) . "			
+			</tr>" . tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) AS nb FROM course 
+					GROUP BY lang DESC", 'lang')) . "			
 			</tr>
 			</table>";
             break;
         case 'musers':
             $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>";
             $loginDouble = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
-				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
+				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC", 'username');
             $tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
 			</tr>";
@@ -241,8 +241,8 @@ if (isset($_GET['stats'])) {
             foreach (Database::get()->queryArray("SELECT id, code, title, prof_names FROM course ORDER BY title") as $row) {
                 $cu_key = q("$row->title ($row->code) -- $row->prof_names");
                 foreach (Database::get()->queryArray("SELECT user.id, course_user.status FROM course_user, user, course
-                                                        WHERE course.id = ?d 
-                                                        AND course_user.user_id = user.id", $row->id) as $numrows) {
+                                                        WHERE course.id = ?d AND course_user.course_id = ?d
+                                                        AND course_user.user_id = user.id", $row->id, $row->id) as $numrows) {                    
                     switch ($numrows->status) {
                         case USER_TEACHER: $teachers++;
                             break;
@@ -254,13 +254,14 @@ if (isset($_GET['stats'])) {
                     }
                 }
                 $cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
+                $teachers = $students = $visitors = 0;
             }
             $tool_content .= "</tr>" . tablize($cu) . "</table>";
             break;
         case 'memail':
             $sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email
 				HAVING nb > 1 ORDER BY nb DESC";
-            $loginDouble = list_ManyResult($sqlLoginDouble);
+            $loginDouble = list_ManyResult($sqlLoginDouble, 'email');
             $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr>
 			<th><b>$langMultipleAddr e-mail</b></th>
@@ -281,7 +282,7 @@ if (isset($_GET['stats'])) {
         case 'mlogins':
             $sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS paire,
 				COUNT(*) AS nb FROM user GROUP BY BINARY paire HAVING nb > 1 ORDER BY nb DESC";
-            $loginDouble = list_ManyResult($sqlLoginDouble);
+            $loginDouble = list_ManyResult($sqlLoginDouble, 'paire');
             $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 				<tr>
 				<th><b>$langMultiplePairs LOGIN - PASS</b></th>
@@ -304,13 +305,13 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
                                     <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
                                     <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt . "</b></td></tr>
+                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
                                     <td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt . "</b></td></tr>
                             </table>";
@@ -379,29 +380,42 @@ function tablize($table) {
     return $ret;
 }
 
+/**
+ * @brief ok message 
+ * @global type $langNotExist
+ * @return type
+ */
 function ok_message() {
     global $langNotExist;
 
     return "<b><span style='color: #00FF00'>$langNotExist</span></b>";
 }
 
+/**
+ * @brief error message
+ * @global type $langExist
+ * @return type
+ */
 function error_message() {
     global $langExist;
 
     return "<b><span style='color: #FF0000'>$langExist</span></b>";
 }
 
-function list_ManyResult($sql, $deserialize = false) {
+function list_ManyResult($sql, $fieldname) {
     // require hierarchy
-    if ($deserialize)
+    if ($fieldname == 'faculte') {
         require_once 'include/lib/hierarchy.class.php';
-
+    }
     $resu = array();
-
-    $res = db_query($sql);
-    while ($resA = mysql_fetch_array($res)) {
-        $name = ($deserialize) ? hierarchy::unserializeLangField($resA[0]) : $resA[0];
-        $resu[$name] = $resA[1];
+    $res = Database::get()->queryArray($sql);
+    foreach ($res as $resA) {
+        if ($fieldname == 'faculte') {
+            $name = hierarchy::unserializeLangField($resA->faculte);
+        } else {
+            $name = $resA->$fieldname;
+        }
+        $resu[$name] = $resA->nb;
     }
     return $resu;
 }

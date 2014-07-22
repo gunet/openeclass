@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -58,20 +58,18 @@ $tool_content = "";
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 // professor registration
 if ($submit) {
-
+    $rid = $_POST['rid'];
     $pn = $_POST['pn'];
     $ps = $_POST['ps'];
     $pu = $_POST['pu'];
-    $pe = $_POST['pe'];
+    $pe = $_POST['pe'];    
     $department = $_POST['department'];
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
     
-
     // check if user name exists
-    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=" . quote($pu));
-
-    if (mysql_num_rows($username_check) > 0) {
+    $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);    
+    if ($username_check) {
         $tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
         draw($tool_content, 3);
@@ -99,28 +97,28 @@ if ($submit) {
     $expires_at = time() + get_config('account_duration');
     $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-    $sql = db_query("INSERT INTO user
-                    (surname, givenname, username, password, email, status,
-                    am, registered_at, expires_at, lang, verified_mail)
-                    VALUES (" .
-            quote($ps) . ', ' .
-            quote($pn) . ', ' .
-            quote($pu) . ', ' .
-            quote($password) . ', ' .
-            quote($pe) . ', 1, ' .
-            quote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
+    $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status,
+                                                    am, registered_at, expires_at, lang, verified_mail)
+                                VALUES (?s, ?s, ?s, ?s, ?s, 1, ?s, 
+                                " . DBHelper::timeAfter() . ",
+                                " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d)", 
+                    $ps, $pn, $pu, $password, $pe, $comment, $lang, $verified_mail);
 
-    $last_id = mysql_insert_id();
+    $last_id = $sql->lastInsertID;
     $userObj->refresh($last_id, array(intval($department)));
-
+    
+    $telephone = get_config('phone');
+    $administratorName = get_config('admin_name');
+    $emailhelpdesk = get_config('email_helpdesk');
     // Close user request
-    $rid = intval($_POST['rid']);
-    db_query("UPDATE user_request set state = 2, date_closed = NOW(), verified_mail = $verified_mail WHERE id = $rid");
+    Database::get()->query("UPDATE user_request SET state = 2,
+                            date_closed = " . DBHelper::timeAfter() . ",
+                            verified_mail = ?d WHERE id = ?d", $verified_mail, $rid);
     $emailbody = "$langDestination $pn $ps\n" .
             "$langYouAreReg $siteName $langSettings $pu\n" .
             "$langPass: $langPassSameAuth\n$langAddress $siteName: " .
             "$urlServer\n$langProblem\n$langFormula" .
-            "$administratorName $administratorSurname\n" .
+            "$administratorName\n" .
             "$langManager $siteName \n$langTel $telephone \n" .
             "$langEmail: $emailhelpdesk";
 
@@ -134,9 +132,8 @@ if ($submit) {
     }
 
     // user message
-    $tool_content .= "
-	<p class='success'>$profsuccess<br><br>
-	<a href='../admin/listreq.php'>$langBackRequests</a></p>";
+    $tool_content .= "<p class='success'>$profsuccess<br><br>
+                     <a href='../admin/listreq.php'>$langBackRequests</a></p>";
 } else {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request
@@ -147,24 +144,23 @@ if ($submit) {
 		<li><a href='../admin/listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
 		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
         if (isset($_GET['id'])) {
-            $tool_content .= "
-                <li><a href='../admin/listreq.php'>$langBackRequests</a>";
+                $tool_content .= "<li><a href='../admin/listreq.php'>$langBackRequests</a>";
         }
-        $tool_content .= "
-		</ul></div>";
-        $res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email,
-			faculty_id, comment, lang, date_open, phone, am, verified_mail FROM user_request WHERE id = $id"));
-        $ps = $res['surname'];
-        $pn = $res['givenname'];
-        $pu = $res['username'];
-        $pe = $res['email'];
-        $pt = intval($res['faculty_id']);
-        $pcom = $res['comment'];
-        $pam = $res['am'];
-        $pphone = $res['phone'];
-        $lang = $res['lang'];
-        $pvm = intval($res['verified_mail']);
-        $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
+        $tool_content .= "</ul></div>";
+        $res = Database::get()->querySingle("SELECT givenname, surname, username, email,
+                                                    faculty_id, comment, lang, date_open, phone, am, verified_mail 
+                                                    FROM user_request WHERE id = ?d", $id);
+        $ps = $res->surname;
+        $pn = $res->givenname;
+        $pu = $res->username;
+        $pe = $res->email;
+        $pt = $res->faculty_id;
+        $pcom = $res->comment;
+        $pam = $res->am;
+        $pphone = $res->phone;
+        $lang = $res->lang;
+        $pvm = $res->verified_mail;
+        $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
     }
 
     @$tool_content .= "
@@ -194,8 +190,8 @@ if ($submit) {
 
     $verified_mail_data = array();
     $verified_mail_data[0] = $m['pending'];
-    $verified_mail_data[1] = $m['yes'];
-    $verified_mail_data[2] = $m['no'];
+    $verified_mail_data[1] = $langYes;
+    $verified_mail_data[2] = $langNo;
 
     $tool_content .= selection($verified_mail_data, "verified_mail", $pvm);
 
@@ -208,9 +204,7 @@ if ($submit) {
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</td></tr>";
-    $tool_content .= "<tr>
-	<th class='left'>$langLanguage</th>
-	<td>";
+    $tool_content .= "<tr><th class='left'>$langLanguage</th><td>";
     $tool_content .= lang_select_options('language', '', $lang);
     $tool_content .= "</td></tr>";
     $tool_content .= "<tr><th class='left'><b>$langPhone</b></th>

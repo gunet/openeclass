@@ -26,7 +26,6 @@ include '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/group/group_functions.php';
 
-
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
 } else {
@@ -49,23 +48,22 @@ $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 $usersList = get_limited_list($sql, 500000);
 foreach ($usersList as $user) {
     echo "$crlf";
-    $sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP WHERE LP.`course_id` = $course_id";
-    $learningPathList = db_query_fetch_all($sql);
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
     $globalprog = 0;
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
+        $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
-    echo csv_escape(uid_to_name($user['id'])) .
-    ";" . csv_escape(uid_to_am($user['id'])) .
-    ";" . csv_escape(user_groups($course_id, $user['id'], 'csv')) .
+    echo csv_escape(uid_to_name($user->id)) .
+    ";" . csv_escape(uid_to_am($user->id)) .
+    ";" . csv_escape(user_groups($course_id, $user->id, 'csv')) .
     ";" . $total . "%";
 }
 echo $crlf;

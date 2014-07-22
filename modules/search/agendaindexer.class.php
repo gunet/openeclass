@@ -48,7 +48,7 @@ class AgendaIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of an agenda db row.
      * 
      * @global string $urlServer
-     * @param  array  $agenda
+     * @param  object  $agenda
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($agenda) {
@@ -56,14 +56,14 @@ class AgendaIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'agenda_' . $agenda['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $agenda['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'agenda_' . $agenda->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $agenda->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'agenda', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $agenda['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($agenda['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($agenda['content'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $agenda['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/agenda/index.php?course=' . course_id_to_code($agenda['course_id']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $agenda->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($agenda->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($agenda->content)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $agenda->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/agenda/index.php?course=' . course_id_to_code($agenda->course_id), $encoding));
 
         return $doc;
     }
@@ -72,11 +72,10 @@ class AgendaIndexer implements ResourceIndexerInterface {
      * Fetch an Agenda from DB.
      * 
      * @param  int $agendaId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($agendaId) {
-        $res = db_query("SELECT * FROM agenda WHERE id = " . intval($agendaId));
-        $agenda = mysql_fetch_assoc($res);
+        $agenda = Database::get()->querySingle("SELECT * FROM agenda WHERE id = ?d", $agendaId);        
         if (!$agenda)
             return null;
 
@@ -142,10 +141,10 @@ class AgendaIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the agendas back to the index
-        $res = db_query("SELECT * FROM agenda WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM agenda WHERE course_id = ?d", $courseId);        
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
-
+        }
         if ($optimize)
             $this->__index->optimize();
         else
@@ -182,9 +181,10 @@ class AgendaIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all agendas from db
-        $res = db_query("SELECT * FROM agenda");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM agenda");
+        foreach ($res as $row) {        
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

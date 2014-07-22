@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,30 +19,43 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * display available forums (if any)
+ * @global type $id
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $course_id
+ * @global type $langComments
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoForums
+ * @global type $langForums
+ * @global type $course_code
+ */
 function list_forums() {
-    global $id, $tool_content, $urlServer, $course_id,
+    global $id, $tool_content, $urlServer, $course_id, $themeimg,
     $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
 
-    $result = db_query("SELECT * FROM forum WHERE course_id = $course_id");
+    $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d", $course_id);
     $foruminfo = array();
-    while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    foreach ($result as $row) {
         $foruminfo[] = array(
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'comment' => $row['desc'],
-            'topics' => $row['num_topics']);
+            'id' => $row->id,
+            'name' => $row->name,
+            'comment' => $row->desc,
+            'topics' => $row->num_topics);
     }
     if (count($foruminfo) == 0) {
-        $tool_content .= "\n  <p class='alert1'>$langNoForums</p>";
+        $tool_content .= "<p class='alert1'>$langNoForums</p>";
     } else {
-        $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>" .
-                "\n  <input type='hidden' name='id' value='$id' />" .
-                "\n  <table class='tbl_alt' width='99%'>" .
-                "\n  <tr>" .
-                "\n    <th>$langForums</th>" .
-                "\n    <th>$langComments</th>" .
-                "\n    <th width='80'>$langChoice</th>" .
-                "\n  </tr>";
+        $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='id' value='$id' />" .
+                "<table class='tbl_alt' width='99%'>" .
+                "<tr>" .
+                "<th>$langForums</th>" .
+                "<th>$langComments</th>" .
+                "<th width='80'>$langChoice</th>" .
+                "</tr>";
 
         foreach ($foruminfo as $entry) {
             $tool_content .= "<tr class='odd'>";
@@ -51,28 +64,28 @@ function list_forums() {
             $tool_content .= "<td>$entry[comment]</td>";
             $tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
             $tool_content .= "</tr>";
-            $r = db_query("SELECT * FROM forum_topic WHERE forum_id = $entry[id]");
-            if (mysql_num_rows($r) > 0) { // if forum topics found
+            $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d", $entry['id']);
+            if (count($r) > 0) { // if forum topics found
                 $topicinfo = array();
-                while ($topicrow = mysql_fetch_array($r, MYSQL_ASSOC)) {
+                foreach ($r as $topicrow) {
                     $topicinfo[] = array(
-                        'topic_id' => $topicrow['id'],
-                        'topic_title' => $topicrow['title'],
-                        'topic_time' => $topicrow['topic_time']);
+                        'topic_id' => $topicrow->id,
+                        'topic_title' => $topicrow->title,
+                        'topic_time' => $topicrow->topic_time);
                 }
                 foreach ($topicinfo as $topicentry) {
-                    $tool_content .= "\n  <tr class='even'>";
-                    $tool_content .= "\n    <td>&nbsp;<img src='../../modules/forum/images/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
-                    $tool_content .= "\n    <td>&nbsp;</td>";
-                    $tool_content .= "\n    <td class='center'><input type='checkbox' name='forum[]'  value='$entry[id]:$topicentry[topic_id]' /></td>";
-                    $tool_content .= "\n  </tr>";
+                    $tool_content .= "<tr class='even'>";
+                    $tool_content .= "<td>&nbsp;<img src='$themeimg/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
+                    $tool_content .= "<td>&nbsp;</td>";
+                    $tool_content .= "<td class='center'><input type='checkbox' name='forum[]'  value='$entry[id]:$topicentry[topic_id]' /></td>";
+                    $tool_content .= "</tr>";
                 }
             }
         }
-        $tool_content .= "\n  <tr>" .
-                "\n    <th colspan='3'><div align='right'><input type='submit' name='submit_forum' value='$langAddModulesButton' /></div></th>";
-        $tool_content .= "\n  </tr>" .
-                "\n  </table>" .
-                "\n  </form>\n";
+        $tool_content .= "<tr>" .
+                "<th colspan='3'><div align='right'><input type='submit' name='submit_forum' value='$langAddModulesButton' /></div></th>";
+        $tool_content .= "</tr>" .
+                "</table>" .
+                "</form>";
     }
 }

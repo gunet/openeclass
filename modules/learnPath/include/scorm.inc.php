@@ -36,11 +36,11 @@
 
 // change raw if value is a number between 0 and 100
 if (isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0) {
-    $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-			SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
-			WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
-			AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-    db_query($sql, $mysqlMainDb);
+    $sql = "UPDATE `lp_rel_learnPath_module`
+			SET `raw_to_pass` = ?d
+			WHERE `module_id` = ?d
+			AND `learnPath_id` = ?d";
+    Database::get()->query($sql, $_POST['newRaw'], $_SESSION['lp_module_id'], $_SESSION['path_id']);
 
     $dialogBox = $langRawHasBeenChanged;
 }
@@ -55,18 +55,17 @@ if (!empty($dialogBox)) {
 
 // form to change raw needed to pass the exercise
 $sql = "SELECT `lock`, `raw_to_pass`
-        FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
-       WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
-         AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
+        FROM `lp_rel_learnPath_module` AS LPM
+       WHERE LPM.`module_id` = ?d
+         AND LPM.`learnPath_id` = ?d";
 
-$learningPath_module = db_query_fetch_all($sql);
+$learningPath_module = Database::get()->querySingle($sql, $_SESSION['lp_module_id'], $_SESSION['path_id']);
 
-if (isset($learningPath_module[0]['lock']) && $learningPath_module[0]['lock'] == 'CLOSE' && isset($learningPath_module[0]['raw_to_pass'])) { // this module blocks the user if he doesn't complete
+if (isset($learningPath_module->lock) && $learningPath_module->lock == 'CLOSE' && isset($learningPath_module->raw_to_pass)) { // this module blocks the user if he doesn't complete
     $tool_content .= "\n\n" . '<hr noshade="noshade" size="1" />' . "\n"
             . '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n"
             . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
-            . '<input type="text" value="' . htmlspecialchars($learningPath_module[0]['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
+            . '<input type="text" value="' . htmlspecialchars($learningPath_module->raw_to_pass) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
             . '<input type="submit" value="' . $langOk . '" />' . "\n"
-            . '</form>' . "\n\n"
-    ;
+            . '</form>' . "\n\n";
 }

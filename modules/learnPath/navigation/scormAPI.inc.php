@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* * ===========================================================================
   scromAPI.inc.php
   @last update: 28-08-2009 by Thanos Kyritsis
@@ -44,37 +43,23 @@
   ==============================================================================
  */
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
-$TABLEUSERS = "user";
-
-
 if ($uid) {
-    mysql_select_db($mysqlMainDb);
     // Get user first and last name
-    $sql = "SELECT surname, givenname
-              FROM `" . $TABLEUSERS . "` AS U
-             WHERE U.`id` = " . (int) $uid;
-    $userDetails = db_query_get_single_row($sql);
+    $userDetails = Database::get()->querySingle("SELECT surname, givenname
+              FROM `user` AS U WHERE U.`id` = ?d", $uid);
 
     // Get general information to generate the right API inmplementation
     $sql = "SELECT *
-              FROM `" . $TABLEUSERMODULEPROGRESS . "` AS UMP,
-                   `" . $TABLELEARNPATHMODULE . "` AS LPM,
-                   `" . $TABLEMODULE . "` AS M
-             WHERE UMP.`user_id` = " . (int) $uid . "
+              FROM `lp_user_module_progress` AS UMP,
+                   `lp_rel_learnPath_module` AS LPM,
+                   `lp_module` AS M
+             WHERE UMP.`user_id` = ?d
                AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
                AND M.`module_id` = LPM.`module_id`
-               AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-               AND LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
-               AND M.`course_id` = $course_id";
-    $userProgressionDetails = db_query_get_single_row($sql);
-    $userProgressionDetails['surname'] = $userDetails['surname'];
-    $userProgressionDetails['givenname'] = $userDetails['givenname'];
+               AND LPM.`learnPath_id` = ?d
+               AND LPM.`module_id` = ?d
+               AND M.`course_id` = ?d";
+    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id);
 }
 
 if (!$uid || !$userProgressionDetails) {
@@ -94,17 +79,17 @@ if (!$uid || !$userProgressionDetails) {
 } else { // authenticated user and no error in query
     // set vars
     $sco['student_id'] = $uid;
-    $sco['student_name'] = $userProgressionDetails['surname'] . ', ' . $userProgressionDetails['givenname'];
-    $sco['lesson_location'] = $userProgressionDetails['lesson_location'];
-    $sco['credit'] = strtolower($userProgressionDetails['credit']);
-    $sco['lesson_status'] = strtolower($userProgressionDetails['lesson_status']);
-    $sco['entry'] = strtolower($userProgressionDetails['entry']);
-    $sco['raw'] = ($userProgressionDetails['raw'] == -1) ? "" : "" . $userProgressionDetails['raw'];
-    $sco['scoreMin'] = ($userProgressionDetails['scoreMin'] == -1) ? "" : "" . $userProgressionDetails['scoreMin'];
-    $sco['scoreMax'] = ($userProgressionDetails['scoreMax'] == -1) ? "" : "" . $userProgressionDetails['scoreMax'];
-    $sco['total_time'] = $userProgressionDetails['total_time'];
-    $sco['suspend_data'] = $userProgressionDetails['suspend_data'];
-    $sco['launch_data'] = stripslashes($userProgressionDetails['launch_data']);
+    $sco['student_name'] = $userDetails->surname . ', ' . $userDetails->givenname;
+    $sco['lesson_location'] = $userProgressionDetails->lesson_location;
+    $sco['credit'] = strtolower($userProgressionDetails->credit);
+    $sco['lesson_status'] = strtolower($userProgressionDetails->lesson_status);
+    $sco['entry'] = strtolower($userProgressionDetails->entry);
+    $sco['raw'] = ($userProgressionDetails->raw == -1) ? "" : "" . $userProgressionDetails->raw;
+    $sco['scoreMin'] = ($userProgressionDetails->scoreMin == -1) ? "" : "" . $userProgressionDetails->scoreMin;
+    $sco['scoreMax'] = ($userProgressionDetails->scoreMax == -1) ? "" : "" . $userProgressionDetails->scoreMax;
+    $sco['total_time'] = $userProgressionDetails->total_time;
+    $sco['suspend_data'] = $userProgressionDetails->suspend_data;
+    $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
     $sco['lesson_mode'] = "normal";
 }
 
@@ -1016,7 +1001,7 @@ $sco['session_time'] = "0000:00:00.00";
         // target form is in a hidden frame
         cmiform = upFrame.document.forms[0];
         // user module progress id
-        cmiform.ump_id.value = "<?php echo $userProgressionDetails['user_module_progress_id'] ?>";
+        cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
         // values to set in DB
 		
 		if (isSCORM2004) {

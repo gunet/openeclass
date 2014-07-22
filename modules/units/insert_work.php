@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,51 +19,67 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
+/**
+ * @brief display list of available assignments (if any)
+ * @global type $id
+ * @global type $tool_content
+ * @global type $langTitle
+ * @global type $langChoice
+ * @global type $m
+ * @global type $langAddModulesButton
+ * @global type $langNoAssign
+ * @global type $langActive
+ * @global type $langInactive
+ * @global type $langVisible
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ */
 function list_assignments() {
     global $id, $tool_content, $langTitle, $langChoice, $m,
     $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
     $langVisible, $course_id, $course_code, $themeimg;
 
-    $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY active, title");
-    if (mysql_num_rows($result) == 0) {
-        $tool_content .= "\n  <p class='alert1'>$langNoAssign</p>";
+    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY active, title", $course_id);
+    if (count($result) == 0) {
+        $tool_content .= "<p class='alert1'>$langNoAssign</p>";
     } else {
-        $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>" .
-                "\n  <input type='hidden' name='id' value='$id' />\n" .
-                "\n    <table width='99%' class='tbl_alt'>" .
-                "\n    <tr>" .
-                "\n      <th class='left'>&nbsp;$langTitle</th>" .
-                "\n      <th width='110'>$langVisible</th>" .
-                "\n      <th width='120'>$m[deadline]</th>" .
-                "\n      <th width='80'>$langChoice</th>" .
-                "\n    </tr>\n";
-        $i = 0;
-        while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $visible = $row['active'] ?
+        $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='id' value='$id' />" .
+                "<table width='99%' class='tbl_alt'>" .
+                "<tr>" .
+                "<th class='left'>&nbsp;$langTitle</th>" .
+                "<th width='110'>$langVisible</th>" .
+                "<th width='120'>$m[deadline]</th>" .
+                "<th width='80'>$langChoice</th>" .
+                "</tr>";
+        $i = 0;        
+        foreach ($result as $row) {
+            $visible = $row->active ?
                     "<img title='$langActive' src='$themeimg/visible.png' />" :
                     "<img title='$langInactive' src='$themeimg/invisible.png' />";
-            $description = empty($row['description']) ? '' :
-                    "<div>$row[description]</div>";
+            $description = empty($row->description) ? '' :
+                    "<div>$row->description</div>";
             if ($i % 2) {
                 $rowClass = "class='odd'";
             } else {
                 $rowClass = "class='even'";
             }
-
-            $tool_content .= "\n    <tr $rowClass>" .
-                    "\n      <td>&laquo; $row[title]$description</td>" .
-                    "\n      <td class='center'>$visible</td>" .
-                    "\n      <td class='center'>$row[submission_date]</td>" .
-                    "\n      <td class='center'><input name='work[]' value='$row[id]' type='checkbox' /></td>" .
-                    "\n    </tr>";
+            $tool_content .= "<tr $rowClass>" .
+                    "<td>&laquo; $row->title $description</td>" .
+                    "<td class='center'>$visible</td>" .
+                    "<td class='center'>$row->submission_date</td>" .
+                    "<td class='center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
+                    "</tr>";
             $i++;
         }
-        $tool_content .= "\n    <tr>" .
-                "\n        <th colspan='4'><div align='right'>" .
+        $tool_content .= "<tr>" .
+                "<th colspan='4'><div align='right'>" .
                 "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
                 "</div></th>" .
-                "\n    </tr>" .
-                "\n    </table>" .
-                "\n  </form>";
+                "</tr>" .
+                "</table>" .
+                "</form>";
     }
 }

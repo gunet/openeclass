@@ -170,60 +170,6 @@ function email_seems_valid($email) {
     return (preg_match('#^[0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}$#i', $email) and !preg_match('#@.*--#', $email));
 }
 
-// Eclass SQL query wrapper returning only a single result value.
-// Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_value($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result) {
-        list($value) = mysql_fetch_row($result);
-        mysql_free_result($result);
-        return $value;
-    } else {
-        return false;
-    }
-}
-
-// Claroline SQL query wrapper returning only the first row of the result
-// Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_row($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result) {
-        $row = mysql_fetch_array($result, MYSQL_ASSOC);
-        mysql_free_result($result);
-        return $row;
-    } else {
-        return false;
-    }
-}
-
-// Eclass SQL fetch array returning all the result rows
-// in an associative array. Compared to the PHP mysql_fetch_array(),
-// it proceeds in a single pass.
-function db_fetch_all($sqlResultHandler, $resultType = MYSQL_ASSOC) {
-    $rowList = array();
-
-    while ($row = mysql_fetch_array($sqlResultHandler, $resultType)) {
-        $rowList [] = $row;
-    }
-
-    mysql_free_result($sqlResultHandler);
-
-    return $rowList;
-}
-
-// Eclass SQL query and fetch array wrapper. It returns all the result rows
-// in an associative array.
-function db_query_fetch_all($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result)
-        return db_fetch_all($result);
-    else
-        return false;
-}
-
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------
@@ -351,9 +297,9 @@ function display_user($user, $print_email = false, $icon = true) {
         }
         return $html;
     } elseif (!is_array($user)) {
-        $r = db_query("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = $user");
-        if ($r and mysql_num_rows($r) > 0) {
-            $user = mysql_fetch_array($r);
+        $r = Database::get()->querySingle("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = ?d", $user);
+        if ($r) {
+            $user = $r;
         } else {
             if ($icon) {
                 return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;' . $langAnonymous;
@@ -364,21 +310,21 @@ function display_user($user, $print_email = false, $icon = true) {
     }
 
     if ($print_email) {
-        $email = trim($user['email']);
+        $email = trim($user->email);
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        if ($user['has_icon']) {
-            $icon = profile_image($user['id'], IMAGESIZE_SMALL) . '&nbsp;';
+        if ($user->has_icon) {
+            $icon = profile_image($user->id, IMAGESIZE_SMALL) . '&nbsp;';
         } else {
-            $icon = profile_image($user['id'], IMAGESIZE_SMALL, true) . '&nbsp;';
+            $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
         }
     }
 
-    $token = token_generate($user['id'], true);
-    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
-            q($user['givenname']) . " " .  q($user['surname']) . "</a>" .
-            ($print_email ? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')') : '');
+    $token = token_generate($user->id, true);
+    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
+            q($user->givenname) . " " .  q($user->surname) . "</a>" .
+            ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 
 // Translate uid to givenname , surname, fullname or nickname
@@ -428,57 +374,24 @@ function uid_to_am($uid) {
     }
 }
 
-/* * ***********************************************************
-  Show a selection box with departments.
-
-  The function returns a value( a formatted select box with departments)
-  and their values as keys in the array/select box
-
-  $department_value: the predefined/selected department value
-  return $departments_select : string (a formatted select box)
- * ************************************************************** */
-
-function list_departments($department_value) {
-    $qry = "SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name";
-    $dep = db_query($qry);
-    if ($dep) {
-        $departments_select = "";
-        $departments = array();
-        while ($row = mysql_fetch_array($dep)) {
-            $id = $row['id'];
-            $name = $row['name'];
-            $departments[$id] = $name;
-        }
-        $departments_select = selection($departments, "department", $department_value);
-        return $departments_select;
-    } else {
-        return 0;
-    }
-}
-
-/* * ******************************************
-  // only for http://eclass.uoa.gr
-  /*************************************************************
-  /*************************************************************
+/**
+ * @brief only for http://eclass.uoa.gr  
+ * do we need this ???
   Show a selection box with division of departments.
-
   The function returns a value( a formatted select box with division of departments)
   and their values as keys in the array/select box
-
-  $division_value: the predefined/selected department value
-  return $divisions_select : string (a formatted select box)
- * ************************************************************** */
-
+ * @param type $department_value the predefined/selected department value
+ * @return int string (a formatted select box)
+ */
 function list_divisions($department_value) {
-
-    $qry = "SELECT id, name FROM division WHERE faculte_id = $department_value ORDER BY name";
-    $div = db_query($qry);
+     
+    $div = Database::get()->queryArray("SELECT id, name FROM division WHERE faculte_id = ?d ORDER BY name", $department_value);
     if ($div) {
         $divisions_select = "";
         $divisions = array();
-        while ($row = mysql_fetch_array($div)) {
-            $id = $row['id'];
-            $name = $row['name'];
+        foreach ($div as $row) {
+            $id = $row->id;
+            $name = $row->name;
             $divisions[$id] = $name;
         }
         $divisions_select = selection($divisions, "division");
@@ -488,37 +401,45 @@ function list_divisions($department_value) {
     }
 }
 
-// Display links to the groups a user is member of
+
+/**
+ * @brief Display links to the groups a user is member of
+ * @global type $urlAppend
+ * @param type $course_id
+ * @param type $user_id
+ * @param type $format
+ * @return string
+ */
 function user_groups($course_id, $user_id, $format = 'html') {
     global $urlAppend;
 
     $groups = '';
-    $q = db_query("SELECT `group`.id, `group`.name FROM `group`, group_members
-                       WHERE `group`.course_id = $course_id AND
+    $q = Database::get()->queryArray("SELECT `group`.id, `group`.name FROM `group`, group_members
+                       WHERE `group`.course_id = ?d AND
                              `group`.id = group_members.group_id AND
-                             `group_members`.user_id = $user_id
-                       ORDER BY `group`.name");
-    $count = mysql_num_rows($q);
-    if (!$count) {
+                             `group_members`.user_id = ?d
+                       ORDER BY `group`.name", $course_id, $user_id);
+    
+    if (!$q) {
         if ($format == 'html') {
             return "<div style='padding-left: 15px'>-</div>";
         } else {
             return '-';
         }
     }
-    while ($r = mysql_fetch_array($q)) {
+    foreach ($q as $r) {
         if ($format == 'html') {
-            $groups .= (($count > 1) ? '<li>' : '') .
-                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r[id]' title='" .
-                    q($r['name']) . "'>" .
-                    q(ellipsize($r['name'], 20)) . "</a>" .
-                    (($count > 1) ? '</li>' : '');
+            $groups .= ((count($q) > 1) ? '<li>' : '') .
+                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' title='" .
+                    q($r->name) . "'>" .
+                    q(ellipsize($r->name, 20)) . "</a>" .
+                    ((count($q) > 1) ? '</li>' : '');
         } else {
-            $groups .= (empty($groups) ? '' : ', ') . $r['name'];
+            $groups .= (empty($groups) ? '' : ', ') . $r->name;
         }
     }
     if ($format == 'html') {
-        if ($count > 1) {
+        if (count($q) > 1) {
             return "<ol>$groups</ol>";
         } else {
             return "<div style='padding-left: 15px'>$groups</div>";
@@ -622,9 +543,14 @@ function selection3($entries, $name, $default = '') {
  * @global type $uid
  * @return boolean
  */
-function check_guest() {
-    global $uid;
+function check_guest($id = FALSE) {
+    //global $uid;
 
+    if ($id) {
+        $uid = $id;
+    } else {
+        $uid = $GLOBALS['uid'];
+    }
     if (isset($uid) and $uid) {
         $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;        
         if ($status == USER_GUEST) {
@@ -668,17 +594,19 @@ function check_opencourses_reviewer() {
     if (isset($uid) and $uid) {
         if ($is_power_user) {
             return TRUE;
-        }        
+        }
         $r = Database::get()->querySingle("SELECT reviewer FROM course_user
                                     WHERE user_id = ?d
-                                    AND course_id = ?d", $uid, $course_id)->reviewer;                        
-        if ($r == 1) {
-            return TRUE;
+                                    AND course_id = ?d", $uid, $course_id);
+        if ($r) {
+            if ($r->reviewer == 1) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
         } else {
             return FALSE;
         }
-    } else {
-        return FALSE;
     }
 }
 
@@ -704,38 +632,53 @@ function check_uid() {
     }
 }
 
-// -------------------------------------------------------
-// Check if a user with username $login already exists
-// ------------------------------------------------------
+
+/**
+ * @brief Check if a user with username $login already exists
+ * @param type $login
+ * @return boolean
+ */
 function user_exists($login) {
-    $qry = "SELECT id FROM user WHERE username";
+       
     if (get_config('case_insensitive_usernames')) {
-        $qry .= " COLLATE utf8_general_ci = " . quote($login);
+        $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry .= " = " . quote($login);
+        $qry = "= ?s";
     }
-    $username_check = db_query($qry);
-
-    return ($username_check and mysql_num_rows($username_check) > 0);
+    $username_check = Database::get()->querySingle("SELECT id FROM user WHERE username $qry", $login);
+    if ($username_check) {
+        return true;
+    } else {
+        return false;
+    }    
 }
 
-// ----------------------------------------------------------------
-// Check if a user with username $login already applied for account
-// ----------------------------------------------------------------
+
+/**
+ * @brief Check if a user with username $login already applied for account
+ * @param type $login
+ * @return boolean
+ */
 function user_app_exists($login) {
-    $qry = "SELECT id FROM user_request WHERE state = 1 AND username";
+    
     if (get_config('case_insensitive_usernames')) {
-        $qry .= " COLLATE utf8_general_ci = = " . quote($login);
+        $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry .= " = " . quote($login);
+        $qry = "= ?s";
     }
-    $username_check = db_query($qry);
-
-    return ($username_check && mysql_num_rows($username_check) > 0);
+    $username_check = Database::get()->querySingle("SELECT id FROM user_request WHERE state = 1 AND username $qry", $login);
+    if ($username_check) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-// Convert HTML to plain text
-
+/**
+ * @brief Convert HTML to plain text
+ * @param type $string
+ * @return type
+ */
 function html2text($string) {
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
@@ -1011,7 +954,7 @@ function mkpath($path) {
             if (!is_dir($path)) {
                 return false;
             }
-        } elseif (!mkdir($path, 0775)) {
+        } elseif (!mkdir($path, 0755)) {
             return false;
         }
     }
@@ -1155,11 +1098,6 @@ function get_file_extension($filename) {
     } else {
         return '';
     }
-}
-
-// Wrap each $item with single quote
-function wrap_each(&$item) {
-    $item = "'$item'";
 }
 
 // Remove whitespace from start and end of string, convert
@@ -1320,21 +1258,22 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
         $desc = 'DESC';
     }
     
-    $sql = db_query("SELECT `$order_field` FROM `$table`
-                         WHERE `$id_field` = '$id'");
-    if (!$sql or mysql_num_rows($sql) == 0) {
+    $sql = Database::get()->querySingle("SELECT `$order_field` FROM `$table`
+                         WHERE `$id_field` = ?d", $id);
+    if (!$sql) {
         return false;
     }
-    list($current) = mysql_fetch_row($sql);
-    $sql = db_query("SELECT `$id_field`, `$order_field` FROM `$table`
-                        WHERE `order` $op '$current' $condition
+    $current = $sql->$order_field;
+    $sql = Database::get()->querySingle("SELECT `$id_field`, `$order_field` FROM `$table`
+                        WHERE `$order_field` $op '$current' $condition
                         ORDER BY `$order_field` $desc LIMIT 1");
-    if ($sql and mysql_num_rows($sql) > 0) {
-        list($next_id, $next) = mysql_fetch_row($sql);
-        db_query("UPDATE `$table` SET `$order_field` = $next
-                          WHERE `$id_field` = $id");
-        db_query("UPDATE `$table` SET `$order_field` = $current
-                          WHERE `$id_field` = $next_id");
+    if ($sql) {
+        $next_id = $sql->$id_field;
+        $next = $sql->$order_field;        
+        Database::get()->query("UPDATE `$table` SET `$order_field` = $next
+                          WHERE `$id_field` = $id");        
+        Database::get()->query("UPDATE `$table` SET `$order_field` = $current
+                          WHERE `$id_field` = $next_id");        
         return true;
     }
     return false;
@@ -1714,21 +1653,24 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  */
 function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
     global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+    static $init_done = false;
 
-    $filebrowser = $url = '';
-    $activemodule = 'document/index.php';
-    if (isset($course_code) && !empty($course_code)) {
-        $filebrowser = "file_browser_callback : 'openDocsPicker',";
-        if (!$is_editor) {
-            $cid = course_code_to_id($course_code);
-            $module = Database::get()->querySingle("SELECT * FROM course_module
+    if (!$init_done) {
+        $init_done = true;
+        $filebrowser = $url = '';
+        $activemodule = 'document/index.php';
+        if (isset($course_code) && !empty($course_code)) {
+            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            if (!$is_editor) {
+                $cid = course_code_to_id($course_code);
+                $module = Database::get()->querySingle("SELECT * FROM course_module
                             WHERE course_id = ?d
                               AND (module_id =" . MODULE_ID_DOCS . " OR module_id =" . MODULE_ID_VIDEO . " OR module_id =" . MODULE_ID_LINKS . ")
                               AND VISIBLE = 1 ORDER BY module_id", $cid);
-            if ($module === false) {
-                $filebrowser = '';
-            } else {
-                switch ($module->module_id) {
+                if ($module === false) {
+                    $filebrowser = '';
+                } else {
+                    switch ($module->module_id) {
                     case MODULE_ID_LINKS:
                         $activemodule = 'link/index.php';
                         break;
@@ -1741,16 +1683,16 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
                     default:
                         $filebrowser = '';
                         break;
+                    }
                 }
             }
+            $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
+        } elseif ($is_admin) { /* special case for admin announcements */
+            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-        $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
-    } elseif ($is_admin) { /* special case for admin announcements */
-        $filebrowser = "file_browser_callback : 'openDocsPicker',";
-        $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
-    }
-    load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
-    $head_content .= "
+        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        $head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
         plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
@@ -1816,6 +1758,7 @@ function openDocsPicker(field_name, url, type, win) {
     return false;
 }
 </script>";
+    }
 
     /* $text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
       array('[m]', '[/m]', '[m]', '[/m]'),
@@ -2088,28 +2031,27 @@ function glossary_expand_callback($matches) {
 }
 
 function get_glossary_terms($course_id) {
-    
-    
+        
     $expand = Database::get()->querySingle("SELECT glossary_expand FROM course
                                                          WHERE id = ?d", $course_id)->glossary_expand;    
     if (!$expand) {
         return false;
     }
 
-    $q = db_query("SELECT term, definition, url FROM glossary
+    $q = Database::get()->queryArray("SELECT term, definition, url FROM glossary
                               WHERE course_id = $course_id GROUP BY term");
-
-    if (mysql_num_rows($q) > intval(get_config('max_glossary_terms'))) {
+    
+    if (count($q) > intval(get_config('max_glossary_terms'))) {
         return false;
     }
 
     $_SESSION['glossary'] = array();
     $_SESSION['glossary_url'] = array();
-    while ($row = mysql_fetch_array($q)) {
-        $term = mb_strtolower($row['term'], 'UTF-8');
-        $_SESSION['glossary'][$term] = $row['definition'];
-        if (!empty($row['url'])) {
-            $_SESSION['glossary_url'][$term] = $row['url'];
+    foreach ($q as $row) {
+        $term = mb_strtolower($row->term, 'UTF-8');
+        $_SESSION['glossary'][$term] = $row->definition;
+        if (!empty($row->url)) {
+            $_SESSION['glossary_url'][$term] = $row->url;
         }
     }
     $_SESSION['glossary_course_id'] = $course_id;

@@ -39,14 +39,7 @@
   ==============================================================================
  */
 
-
 $require_current_course = TRUE;
-
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
@@ -71,9 +64,8 @@ if (isset($_GET['path_id'])) {
     exit();
 }
 
-$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '" . (int) $_SESSION['path_id'] . "' AND `course_id` = $course_id");
-$lp = mysql_fetch_array($q);
-$nameTools = $lp['name'];
+$lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
+$nameTools = $lp->name;
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
@@ -85,19 +77,19 @@ if ($is_editor) {
         header("Location: ./learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
         exit();
 } else {
-        if ($lp['visible'] == 0) {
+        if ($lp->visible == 0) {
             // if the learning path is invisible, don't allow users in it
             header("Location: ./index.php?course=$course_code");
             exit();
         }
 
         // check for blocked learning path        
-	$lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM $TABLELEARNPATH 
-                            WHERE learnPath_id = $_SESSION[path_id] AND course_id = $course_id ORDER BY `rank`");        
-         $q = db_query("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE course_id = $course_id AND `rank` < $lps[rank]");
-        while ($lp = mysql_fetch_array($q)) {
-                if ($lp['lock'] == 'CLOSE') {
-                    $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                    
+	$lps = Database::get()->querySingle("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
+                            WHERE learnPath_id = ?d AND course_id = $course_id ORDER BY `rank`", $_SESSION['path_id']);
+        $lpaths = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE course_id = ?d AND `rank` < ?d", $course_id, $lps->rank);
+        foreach ($lpaths as $lp) {
+                if ($lp->lock == 'CLOSE') {
+                    $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);                    
                     if ($prog < 100) {                                                    
                         header("Location: ./index.php?course=$course_code");
                     }
@@ -107,7 +99,7 @@ if ($is_editor) {
 
 // main page
 if ($uid) {
-    $uidCheckString = "AND UMP.`user_id` = " . $uid;
+    $uidCheckString = "AND UMP.`user_id` = " . intval($uid);
 } else { // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
@@ -117,30 +109,46 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 	M.`contentType`, M.`name`,
 	UMP.`lesson_status`, UMP.`raw`,
 	UMP.`scoreMax`, UMP.`credit`, A.`path`
-        FROM (`" . $TABLEMODULE . "` AS M,
-	`" . $TABLELEARNPATHMODULE . "` AS LPM)
-     LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
+        FROM (`lp_module` AS M,
+	`lp_rel_learnPath_module` AS LPM)
+     LEFT JOIN `lp_user_module_progress` AS UMP
              ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
              " . $uidCheckString . "
-     LEFT JOIN `" . $TABLEASSET . "` AS A
+     LEFT JOIN `lp_asset` AS A
             ON M.`startAsset_id` = A.`asset_id`
           WHERE LPM.`module_id` = M.`module_id`
-            AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
+            AND LPM.`learnPath_id` = ?d
             AND LPM.`visible` = 1
             AND LPM.`module_id` = M.`module_id`
-            AND M.`course_id` = $course_id
+            AND M.`course_id` = ?d
        GROUP BY LPM.`module_id`
        ORDER BY LPM.`rank`";
 
-if (mysql_num_rows(db_query($sql)) == 0) {
+$fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
+
+if (count($fetchedList) == 0) {
     $tool_content .= "<p class='alert1'>$langNoModule</p>";
     add_units_navigation();
     draw($tool_content, 2);
-    exit;
+    exit();
 }
 
-
-$extendedList = db_query_fetch_all($sql);
+$extendedList = array();
+$modar = array();
+foreach ($fetchedList as $module) {
+    $modar['learnPath_module_id'] = $module->learnPath_module_id;
+    $modar['parent'] = $module->parent;
+    $modar['lock'] = $module->lock;
+    $modar['module_id'] = $module->module_id;
+    $modar['contentType'] = $module->contentType;
+    $modar['name'] = $module->name;
+    $modar['lesson_status'] = $module->lesson_status;
+    $modar['raw'] = $module->raw;
+    $modar['scoreMax'] = $module->scoreMax;
+    $modar['credit'] = $module->credit;
+    $modar['path'] = $module->path;
+    $extendedList[] = $modar;
+}
 
 // build the array of modules
 // build_element_list return a multi-level array, where children is an array with all nested modules
@@ -154,8 +162,9 @@ $moduleNb = 0;
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
 for ($i = 0; $i < sizeof($flatElementList); $i++) {
-    if ($flatElementList[$i]['children'] > $maxDeep)
+    if ($flatElementList[$i]['children'] > $maxDeep) {
         $maxDeep = $flatElementList[$i]['children'];
+    }
 }
 
 /* ================================================================
@@ -189,8 +198,9 @@ if ($uid) {
 $tool_content .= "</tr>\n";
 
 // ------------------ module table list display -----------------------------------
-if (!isset($globalProg))
+if (!isset($globalProg)) {
     $globalProg = 0;
+}
 
 $ind = 1;
 foreach ($flatElementList as $module) {
@@ -229,8 +239,9 @@ foreach ($flatElementList as $module) {
     }
 
     $colspan = $maxDeep - $module['children'] + 1;
-    if ($module['contentType'] == CTLABEL_)
+    if ($module['contentType'] == CTLABEL_) {
         $colspan++;
+    }
 
     $tool_content .= "<tr $style>" . $spacingString . "
       <td colspan=\"" . $colspan . "\" align='left'>";
@@ -241,16 +252,17 @@ foreach ($flatElementList as $module) {
     }
     //-- if user can access module
     elseif (!$is_blocked) {
-        if ($module['contentType'] == CTEXERCISE_)
+        if ($module['contentType'] == CTEXERCISE_) {
             $moduleImg = 'exercise_on';
-        else if ($module['contentType'] == CTLINK_)
+        } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "links_on";
-        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+        } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
             $moduleImg = "description_on";
-        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+        } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
             $moduleImg = "videos_on";
-        else
+        } else {
             $moduleImg = choose_image(basename($module['path']));
+        }
 
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<span style="vertical-align: middle;">' .
@@ -270,16 +282,17 @@ foreach ($flatElementList as $module) {
     }
     //-- user is blocked by previous module, don't display link
     else {
-        if ($module['contentType'] == CTEXERCISE_)
+        if ($module['contentType'] == CTEXERCISE_) {
             $moduleImg = 'exercise_on';
-        else if ($module['contentType'] == CTLINK_)
+        } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "links_on";
-        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+        } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
             $moduleImg = "description_on";
-        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+        } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
             $moduleImg = "videos_on";
-        else
+        } else {
             $moduleImg = choose_image(basename($module['path']));
+        }
 
         $tool_content .= '<span style="vertical-align: middle;">' . icon($moduleImg, $contentType_alt) . '</span> ' .
             htmlspecialchars($module['name']);
@@ -288,12 +301,14 @@ foreach ($flatElementList as $module) {
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
-        if (!$is_blocked || !$first_blocked)
+        if (!$is_blocked || !$first_blocked) {
             $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('monitor', $langTracking) . "</a></td>";
-        else
+        } else {
             $tool_content .= "<td></td>";
-        if ($is_blocked)
+        }
+        if ($is_blocked) {
             $first_blocked = true;
+        }
         // display the progress value for current module
         $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n"
                 . '      <td align="left" width="10">'
@@ -308,8 +323,9 @@ foreach ($flatElementList as $module) {
         $globalProg = $globalProg + $progress;
     }
 
-    if ($module['contentType'] != CTLABEL_)
+    if ($module['contentType'] != CTLABEL_) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
+    }
 
     $tool_content .= "</tr>";
     $ind++;

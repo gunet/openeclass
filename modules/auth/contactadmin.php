@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,14 +39,12 @@ $nameTools = $langContactAdmin;
 
 $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-if ($userid and isset($_GET['h']) and
-        token_validate("userid=$userid", $_GET['h'])) {
-    $q = db_query("SELECT * FROM user WHERE id = " . $userid);
-    if ($q and mysql_num_rows($q) > 0) {
-        $info = mysql_fetch_assoc($q);
-        $firstname = $info['givenname'];
-        $lastname = $info['surname'];
-        $email = $info['email'];
+if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'])) {    
+    $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $userid);
+    if ($info) {      
+        $firstname = $info->givenname;
+        $lastname = $info->surname;
+        $email = $info->email;
     } else {
         $firstname = $lastname = $email = '';
     }

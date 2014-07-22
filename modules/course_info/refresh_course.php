@@ -60,8 +60,7 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['delannounces'])) {
         $output[] = delete_announcements();
     }
-
-    mysql_select_db($course_code);
+    
     if (isset($_POST['delagenda'])) {
         $output[] = delete_agenda();
     }
@@ -154,15 +153,15 @@ function delete_users($date = '') {
     global $course_id, $langUsersDeleted;
 
     if (isset($date)) {
-        db_query("DELETE FROM course_user WHERE course_id = $course_id AND
+        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND
                                 status != ". USER_TEACHER ." AND
-                                reg_date < '$date'");
+                                reg_date < ?t", $course_id, $date);
     } else {
-        db_query("DELETE FROM course_user WHERE course_id = $course_id AND status != " . USER_TEACHER);
+        Database::get()->query("DELETE FROM course_user WHERE course_id = ?d AND status != " . USER_TEACHER . "", $course_id);
     }
-    db_query("DELETE FROM group_members
-                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
-                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)");
+    Database::get()->query("DELETE FROM group_members
+                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d) AND
+                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = ?d)", $course_id, $course_id);
     return "<p>$langUsersDeleted</p>";
 }
 
@@ -175,7 +174,7 @@ function delete_users($date = '') {
 function delete_announcements() {
     global $course_id, $langAnnDeleted;
 
-    db_query("DELETE FROM announcement WHERE course_id = $course_id");
+    Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $course_id);
     return "<p>$langAnnDeleted</p>";
 }
 
@@ -188,7 +187,7 @@ function delete_announcements() {
 function delete_agenda() {
     global $langAgendaDeleted, $course_id;
 
-    db_query("DELETE FROM agenda WHERE course_id = $course_id");
+    Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $course_id);
     return "<p>$langAgendaDeleted</p>";
 }
 
@@ -201,7 +200,7 @@ function delete_agenda() {
 function hide_doc() {
     global $langDocsDeleted, $course_id;
 
-    db_query("UPDATE document SET visible=0, public=0 WHERE course_id = $course_id");
+    Database::get()->query("UPDATE document SET visible=0, public=0 WHERE course_id = ?d", $course_id);
     return "<p>$langDocsDeleted</p>";
 }
 
@@ -214,7 +213,7 @@ function hide_doc() {
 function hide_work() {
     global $langWorksDeleted, $course_id;
 
-    db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
+    Database::get()->query("UPDATE assignment SET active=0 WHERE course_id = ?d", $course_id);
     return "<p>$langWorksDeleted</p>";
 }
 /**
@@ -249,7 +248,7 @@ function del_work_subs()  {
 function purge_exercises() {
     global $langPurgedExerciseResults;
 
-    db_query("TRUNCATE exercise_user_record");
+    Database::get()->query("TRUNCATE exercise_user_record");
     return "<p>$langPurgedExerciseResults</p>";
 }
 

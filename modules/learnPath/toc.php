@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /* ===========================================================================
   toc.php
   @authors list: Yannis Exidaridis <jexi@noc.uoa.gr>
@@ -38,11 +37,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head><title>-</title>
@@ -53,7 +47,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <div class='menu_left'>";
 
 if ($uid) {
-    $uidCheckString = "AND UMP.`user_id` = " . (int) $uid;
+    $uidCheckString = "AND UMP.`user_id` = " . intval($uid);
 } else {
     // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
@@ -61,27 +55,46 @@ if ($uid) {
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
-        FROM (`" . $TABLEMODULE . "` AS M,
-             `" . $TABLELEARNPATHMODULE . "` AS LPM)
-        LEFT JOIN `" . $TABLEASSET . "` AS A ON M.`startAsset_id` = A.`asset_id`
-        LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
+        FROM (`lp_module` AS M,
+             `lp_rel_learnPath_module` AS LPM)
+        LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
+        LEFT JOIN `lp_user_module_progress` AS UMP
            ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
            " . $uidCheckString . "
         WHERE M.`module_id` = LPM.`module_id`
-          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-          AND M.`course_id` = $course_id
+          AND LPM.`learnPath_id` = ?d
+          AND M.`course_id` = ?d
         ORDER BY LPM.`rank` ASC";
+$result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
-$result = db_query($sql);
-
-if (mysql_num_rows($result) == 0) {
+if (count($result) == 0) {
     echo "<p class='alert1'>$langNoModule</p>";
-    exit;
+    exit();
 }
 
 $extendedList = array();
-while ($list = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    $extendedList[] = $list;
+$modar = array();
+foreach ($result as $list) {
+    $modar['module_id'] = $list->module_id;
+    $modar['course_id'] = $list->course_id;
+    $modar['name'] = $list->name;
+    $modar['comment'] = $list->comment;
+    $modar['accessibility'] = $list->accessibility;
+    $modar['startAsset_id'] = $list->startAsset_id;
+    $modar['contentType'] = $list->contentType;
+    $modar['launch_data'] = $list->launch_data;
+    $modar['learnPath_module_id'] = $list->learnPath_module_id;
+    $modar['learnPath_id'] = $list->learnPath_id;
+    $modar['lock'] = $list->lock;
+    $modar['visible'] = $list->visible;
+    $modar['specificComment'] = $list->specificComment;
+    $modar['rank'] = $list->rank;
+    $modar['parent'] = $list->parent;
+    $modar['raw_to_pass'] = $list->raw_to_pass;
+    $modar['path'] = $list->path;
+    $modar['lesson_status'] = $list->lesson_status;
+    $modar['credit'] = $list->credit;
+    $extendedList[] = $modar;
 }
 
 // build the array of modules
@@ -95,8 +108,9 @@ $is_blocked = false;
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
 for ($i = 0; $i < sizeof($flatElementList); $i++) {
-    if ($flatElementList[$i]['children'] > $maxDeep)
+    if ($flatElementList[$i]['children'] > $maxDeep) {
         $maxDeep = $flatElementList[$i]['children'];
+    }
 }
 
 // -------------------------- learning path list header ----------------------------
@@ -119,26 +133,28 @@ foreach ($flatElementList as $module) {
 
     // indent a child based on label ownership
     $marginIndent = 0;
-    for ($i = 0; $i < $module['children']; $i++)
+    for ($i = 0; $i < $module['children']; $i++) {
         $marginIndent += 10;
+    }
 
     if ($module['contentType'] == CTLABEL_) { // chapter head
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
-        if ($module['contentType'] == CTEXERCISE_)
+        if ($module['contentType'] == CTEXERCISE_) {
             $moduleImg = "exercise_$image_bullet";
-        elseif ($module['contentType'] == CTLINK_)
+        } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "links_$image_bullet";
-        elseif ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+        } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
             $moduleImg = "description_$image_bullet";
-        elseif ($module['contentType'] == CTDOCUMENT_) {
+        } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
-        } elseif ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
+        } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
             $moduleImg = "lp_check";
-        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+        } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
             $moduleImg = "videos_on";
-        else
+        } else {
             $moduleImg = choose_image(basename($module['path']));
+        }
 
         $contentType_alt = selectAlt($module['contentType']);
 
@@ -159,17 +175,18 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg, '');
 
         // emphasize currently displayed module or not
-        if ($_SESSION['lp_module_id'] == $module['module_id'])
+        if ($_SESSION['lp_module_id'] == $module['module_id']) {
             echo "<em>" . htmlspecialchars($module['name']) . "</em>";
-        else
+        } else {
             echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
-        if (isset($imagePassed))
+        }
+        if (isset($imagePassed)) {
             echo "&nbsp;&nbsp;" . $imagePassed;
+        }
         echo "</li>";
 
-        if (($module['lock'] == 'CLOSE') 
-            and ($module['credit'] != 'CREDIT' or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
-                    $is_blocked = true;
+        if (($module['lock'] == 'CLOSE') && ($module['credit'] != 'CREDIT' || ($module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED'))) {
+            $is_blocked = true;
         }
     }
 } // end of foreach

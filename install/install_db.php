@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,15 +31,12 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-Database::get()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
-Database::get()->query("SET NAMES utf8");
+Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::core()->query("SET storage_engine = InnoDB");
 // create eclass database
-Database::get()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
-
-mysql_select_db($mysqlMainDb);
+Database::core()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
 
 // drop old tables if they exist
 Database::get()->query("DROP TABLE IF EXISTS admin");
@@ -49,6 +46,7 @@ Database::get()->query("DROP TABLE IF EXISTS announcements");
 Database::get()->query("DROP TABLE IF EXISTS auth");
 Database::get()->query("DROP TABLE IF EXISTS course");
 Database::get()->query("DROP TABLE IF EXISTS course_user");
+Database::get()->query("DROP TABLE IF EXISTS course_description");
 Database::get()->query("DROP TABLE IF EXISTS course_review");
 Database::get()->query("DROP TABLE IF EXISTS faculte");
 Database::get()->query("DROP TABLE IF EXISTS institution");
@@ -58,6 +56,7 @@ Database::get()->query("DROP TABLE IF EXISTS monthly_summary");
 Database::get()->query("DROP TABLE IF EXISTS user_request");
 Database::get()->query("DROP TABLE IF EXISTS prof_request");
 Database::get()->query("DROP TABLE IF EXISTS user");
+Database::get()->query("DROP TABLE IF EXISTS oai_record");
 Database::get()->query("DROP TABLE IF EXISTS bbb_servers");
 Database::get()->query("DROP TABLE IF EXISTS bbb_session");
 
@@ -181,9 +180,56 @@ Database::get()->query("CREATE TABLE course_user (
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
 
+//
+// table `course_description_type`
+//
+
+Database::get()->query("CREATE TABLE `course_description_type` (
+    `id` smallint(6) NOT NULL AUTO_INCREMENT,
+    `title` mediumtext,
+    `syllabus` tinyint(1) DEFAULT 0,
+    `objectives` tinyint(1) DEFAULT 0,
+    `bibliography` tinyint(1) DEFAULT 0,
+    `teaching_method` tinyint(1) DEFAULT 0,
+    `assessment_method` tinyint(1) DEFAULT 0,
+    `prerequisites` tinyint(1) DEFAULT 0,
+    `featured_books` tinyint(1) DEFAULT 0,
+    `instructors` tinyint(1) DEFAULT 0,
+    `target_group` tinyint(1) DEFAULT 0,
+    `active` tinyint(1) DEFAULT 1,
+    `order` int(11) NOT NULL,
+    `icon` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `syllabus`, `order`, `icon`) VALUES (1, 'a:2:{s:2:\"el\";s:41:\"Περιεχόμενο μαθήματος\";s:2:\"en\";s:15:\"Course Syllabus\";}', 1, 1, '0.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `objectives`, `order`, `icon`) VALUES (2, 'a:2:{s:2:\"el\";s:33:\"Μαθησιακοί στόχοι\";s:2:\"en\";s:23:\"Course Objectives/Goals\";}', 1, 2, '1.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `bibliography`, `order`, `icon`) VALUES (3, 'a:2:{s:2:\"el\";s:24:\"Βιβλιογραφία\";s:2:\"en\";s:12:\"Bibliography\";}', 1, 3, '2.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `teaching_method`, `order`, `icon`) VALUES (4, 'a:2:{s:2:\"el\";s:37:\"Μέθοδοι διδασκαλίας\";s:2:\"en\";s:21:\"Instructional Methods\";}', 1, 4, '3.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `assessment_method`, `order`, `icon`) VALUES (5, 'a:2:{s:2:\"el\";s:37:\"Μέθοδοι αξιολόγησης\";s:2:\"en\";s:18:\"Assessment Methods\";}', 1, 5, '4.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `prerequisites`, `order`, `icon`) VALUES (6, 'a:2:{s:2:\"el\";s:28:\"Προαπαιτούμενα\";s:2:\"en\";s:29:\"Prerequisites/Prior Knowledge\";}', 1, 6, '5.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `instructors`, `order`, `icon`) VALUES (7, 'a:2:{s:2:\"el\";s:22:\"Διδάσκοντες\";s:2:\"en\";s:11:\"Instructors\";}', 1, 7, '6.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`, `order`, `icon`) VALUES (8, 'a:2:{s:2:\"el\";s:23:\"Ομάδα στόχος\";s:2:\"en\";s:12:\"Target Group\";}', 1, 8, '7.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
+Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
 
 //
-// Tabe `course_review`
+// table `course_description`
+//
+
+Database::get()->query("CREATE TABLE IF NOT EXISTS `course_description` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `comments` mediumtext,
+    `type` smallint(6),
+    `visible` tinyint(4) DEFAULT 0,
+    `order` int(11) NOT NULL,
+    `update_dt` datetime NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+
+//
+// Table `course_review`
 //
 
 Database::get()->query("CREATE TABLE course_review (
@@ -193,7 +239,8 @@ Database::get()->query("CREATE TABLE course_review (
     `level` TINYINT(4) NOT NULL DEFAULT 0,
     `last_review` DATETIME NOT NULL,
     `last_reviewer` INT(11) NOT NULL,
-    PRIMARY KEY (id)) $charset_spec");
+    PRIMARY KEY (id),
+    UNIQUE KEY cid (course_id)) $charset_spec");
 
 
 #
@@ -212,10 +259,7 @@ Database::get()->query("CREATE TABLE user (
       am VARCHAR(20) NOT NULL DEFAULT '',
       registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
       expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
-      lang VARCHAR(16) NOT NULL DEFAULT 'el',
-      announce_flag date NOT NULL DEFAULT '1000-01-01',
-      doc_flag DATE NOT NULL DEFAULT '1000-01-01',
-      forum_flag DATE NOT NULL DEFAULT '1000-01-01',
+      lang VARCHAR(16) NOT NULL DEFAULT 'el',      
       description TEXT NOT NULL,
       has_icon TINYINT(1) NOT NULL DEFAULT 0,
       verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
@@ -288,7 +332,9 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
                 `format` VARCHAR(32) NOT NULL DEFAULT '',
                 `language` VARCHAR(16) NOT NULL DEFAULT 'el',
-                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+                `editable` TINYINT(4) NOT NULL DEFAULT 0,
+                `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
@@ -338,6 +384,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `course_id` INT(11) NOT NULL,
                `limit` TINYINT(4) NOT NULL DEFAULT 0,
                `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+ 
  Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
@@ -347,12 +394,18 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ 
  Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                `uid` int(11) NOT NULL DEFAULT 0,
                `attend` TINYINT(4) NOT NULL DEFAULT 0,
                `comments` TEXT NOT NULL) $charset_spec");
+ 
+ Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
   
 Database::get()->query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -692,6 +745,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1,
                 `start_date` DATETIME DEFAULT NULL,
                 `end_date` DATETIME DEFAULT NULL,
+                `temp_save` TINYINT(1) NOT NULL DEFAULT 0,
                 `time_constraint` INT(11) DEFAULT 0,
                 `attempts_allowed` INT(11) DEFAULT 0,
                 `random` SMALLINT(6) NOT NULL DEFAULT 0,
@@ -707,7 +761,7 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `record_end_date` DATETIME DEFAULT NULL,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
-                `attempt` INT(11) NOT NULL DEFAULT 0),
+                `attempt` INT(11) NOT NULL DEFAULT 0,
                 `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
                 `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
 Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
@@ -1007,14 +1061,11 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `user_department` (
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
-Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
-                 VALUES (" . quote($nameForm) . ", '', " .
-                             quote($loginForm) . ", '$password_encrypted', " .
-                             quote($emailForm) . ", 1, " . DBHelper::timeAfter() .", ". DBHelper::timeAfter(5*365*24*60*60).", 1, '*,,', 'Administrator')");
-$admin_uid = mysql_insert_id();
+$admin_uid = Database::get()->query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
+                 VALUES (?s, '', ?s, ?s, ?s, 1, " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(5*365*24*60*60) . ", 1, '*,,', 'Administrator')", $nameForm, $loginForm, $password_encrypted, $emailForm)->lastInsertID;
 Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                 VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-Database::get()->query("INSERT INTO admin VALUES ($admin_uid, 0)");
+                 VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
+Database::get()->query("INSERT INTO admin (user_id, privilege) VALUES ($admin_uid, 0)");
 
 #
 # Table structure for table `user_request`
@@ -1061,27 +1112,6 @@ Database::get()->query("INSERT INTO `auth` VALUES
                 (6, 'shibboleth', '', '', 0),
                 (7, 'cas', '', '', 0)");
 
-$dont_display_login_form = intval($dont_display_login_form);
-$email_required = intval($email_required);
-$email_verification_required = intval($email_verification_required);
-$dont_mail_unverified_mails = intval($dont_mail_unverified_mails);
-$email_from = intval($email_from);
-$am_required = intval($am_required);
-$dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
-$block_username_change = intval($block_username_change);
-$display_captcha = intval($display_captcha);
-$insert_xml_metadata = intval($insert_xml_metadata);
-$betacms = intval($betacms);
-$enable_mobileapi = intval($enable_mobileapi);
-$eclass_stud_reg = intval($eclass_stud_reg);
-$eclass_prof_reg = intval($eclass_prof_reg);
-$course_multidep = intval($course_multidep);
-$user_multidep = intval($user_multidep);
-$restrict_owndep = intval($restrict_owndep);
-$restrict_teacher_owndep = intval($restrict_teacher_owndep);
-$student_upload_whitelist = quote($student_upload_whitelist);
-$teacher_upload_whitelist = quote($teacher_upload_whitelist);
-
 // restrict_owndep and restrict_teacher_owndep are interdependent
 if ($restrict_owndep == 0) {
 	$restrict_teacher_owndep = 0;
@@ -1091,61 +1121,69 @@ Database::get()->query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
                  `value` TEXT NOT NULL,
                  PRIMARY KEY (`key`))");
-db_query("INSERT INTO `config` (`key`, `value`) VALUES
-                ('base_url', ".quote($urlForm)."),
-                ('default_language', '$lang'),
-                ('dont_display_login_form', $dont_display_login_form),
-                ('email_required', $email_required),
-                ('email_from', $email_from),
-                ('email_verification_required', $email_verification_required),
-                ('dont_mail_unverified_mails', $dont_mail_unverified_mails),
-                ('am_required', $am_required),
-                ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
-                ('block_username_change', $block_username_change),
-                ('betacms', $betacms),
-                ('enable_mobileapi', $enable_mobileapi),
-                ('code_key', '" . generate_secret_key(32) . "'),
-                ('display_captcha', $display_captcha),
-                ('insert_xml_metadata', $insert_xml_metadata),
-                ('doc_quota', $doc_quota),
-                ('video_quota', $video_quota),
-                ('group_quota', $group_quota),
-                ('dropbox_quota', $dropbox_quota),
-                ('user_registration', 1),
-                ('alt_auth_stud_reg', 2),
-                ('alt_auth_prof_reg', 2),
-                ('eclass_stud_reg', $eclass_stud_reg),
-                ('eclass_prof_reg', $eclass_prof_reg),
-                ('course_multidep', $course_multidep),
-                ('user_multidep', $user_multidep),
-                ('restrict_owndep', $restrict_owndep),
-                ('restrict_teacher_owndep', $restrict_teacher_owndep),
-                ('max_glossary_terms', '250'),                
-                ('phpSysInfoURL', ".quote($phpSysInfoURL)."),
-                ('email_sender', ".quote($emailForm)."),
-                ('admin_name', ".quote($nameForm)."),
-                ('email_helpdesk', ".quote($helpdeskmail)."),
-                ('site_name', ".quote($campusForm)."),
-                ('phone', ".quote($helpdeskForm)."),
-                ('fax', ".quote($faxForm)."),
-                ('postaddress', ".quote($postaddressForm)."),
-                ('institution', ".quote($institutionForm)."),
-                ('institution_url', ".quote($institutionUrlForm)."),
-                ('account_duration', '126144000'),
-                ('language', ".quote($lang)."),
-                ('active_ui_languages', ".quote($active_ui_languages)."),
-                ('student_upload_whitelist', $student_upload_whitelist),
-                ('teacher_upload_whitelist', $teacher_upload_whitelist),
-                ('login_fail_check', 1),
-                ('login_fail_threshold', 15),
-                ('login_fail_deny_interval', 5),
-                ('login_fail_forgive_interval', 24),
-                ('actions_expire_interval', 12),
-                ('log_expire_interval', 5),
-                ('log_purge_interval', 12),
-                ('course_metadata', 0),
-                ('opencourses_enable', 0),
-                ('version', '" . ECLASS_VERSION ."')");
+Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES
+                            ('base_url', ?s),
+                            ('default_language', ?s),
+                            ('dont_display_login_form', ?d),
+                            ('email_required', ?d),
+                            ('email_from', ?d),
+                            ('email_verification_required', ?d),
+                            ('dont_mail_unverified_mails', ?d),
+                            ('am_required', ?d),
+                            ('dropbox_allow_student_to_student', ?d),
+                            ('block_username_change', ?d),                
+                            ('enable_mobileapi', ?d),
+                            ('code_key', '" . generate_secret_key(32) . "'),
+                            ('display_captcha', ?d),
+                            ('insert_xml_metadata', ?d),
+                            ('doc_quota', ?s),
+                            ('video_quota', ?s),
+                            ('group_quota', ?s),
+                            ('dropbox_quota', ?s),
+                            ('user_registration', 1),
+                            ('alt_auth_stud_reg', 2),
+                            ('alt_auth_prof_reg', 2),
+                            ('eclass_stud_reg', ?d),
+                            ('eclass_prof_reg', ?d),
+                            ('course_multidep', ?d),
+                            ('user_multidep', ?d),
+                            ('restrict_owndep', ?d),
+                            ('restrict_teacher_owndep', ?d),
+                            ('max_glossary_terms', '250'),                
+                            ('phpSysInfoURL', ?s),
+                            ('email_sender', ?s),
+                            ('admin_name', ?s),
+                            ('email_helpdesk', ?s),
+                            ('site_name', ?s),
+                            ('phone', ?s),
+                            ('fax', ?s),
+                            ('postaddress', ?s),
+                            ('institution', ?s),
+                            ('institution_url', ?s),
+                            ('account_duration', '126144000'),
+                            ('language', ?s),
+                            ('active_ui_languages', ?s),
+                            ('student_upload_whitelist', ?s),
+                            ('teacher_upload_whitelist', ?s),
+                            ('login_fail_check', 1),
+                            ('login_fail_threshold', 15),
+                            ('login_fail_deny_interval', 5),
+                            ('login_fail_forgive_interval', 24),
+                            ('actions_expire_interval', 12),
+                            ('log_expire_interval', 5),
+                            ('log_purge_interval', 12),
+                            ('course_metadata', 0),
+                            ('opencourses_enable', 0),
+                            ('version', '" . ECLASS_VERSION ."')",
+                        $urlForm, $lang, $dont_display_login_form, $email_required, $email_from,
+                        $email_verification_required, $dont_mail_unverified_mails, $am_required, $dropbox_allow_student_to_student,
+                        $block_username_change, $enable_mobileapi, $display_captcha, $insert_xml_metadata,
+                        $doc_quota, $video_quota, $group_quota, $dropbox_quota,
+                        $eclass_stud_reg, $eclass_prof_reg, $course_multidep, $user_multidep,   
+                        $restrict_owndep, $restrict_teacher_owndep, $phpSysInfoURL, 
+                        $emailForm, $nameForm, $helpdeskmail, $campusForm, $helpdeskForm, $faxForm, $postaddressForm, 
+                        $institutionForm, $institutionUrlForm, $lang, $active_ui_languages, 
+                        $student_upload_whitelist, $teacher_upload_whitelist);
 
 // table for cron parameters
 Database::get()->query("CREATE TABLE `cron_params` (
@@ -1263,7 +1301,8 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
         `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
         `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
         `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-        `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+        `auto` TINYINT(4) NOT NULL DEFAULT 0,
+        `visible` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
 
 Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
         `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1272,12 +1311,154 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
         `grade` FLOAT NOT NULL DEFAULT -1,
         `comments` TEXT NOT NULL) $charset_spec");
 
+Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `gradebook_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+
+Database::get()->query("CREATE TABLE `oai_record` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL UNIQUE,
+    `oai_identifier` varchar(255) DEFAULT NULL,
+    `oai_metadataprefix` varchar(255) DEFAULT 'oai_dc',
+    `oai_set` varchar(255) DEFAULT 'class:course',
+    `datestamp` datetime DEFAULT NULL,
+    `deleted` tinyint(1) NOT NULL DEFAULT 0,
+    `dc_title` text DEFAULT NULL,
+    `dc_description` text DEFAULT NULL,
+    `dc_syllabus` text DEFAULT NULL,
+    `dc_subject` text DEFAULT NULL,
+    `dc_subsubject` text DEFAULT NULL,
+    `dc_objectives` text DEFAULT NULL,
+    `dc_level` text DEFAULT NULL,
+    `dc_prerequisites` text DEFAULT NULL,
+    `dc_instructor` text DEFAULT NULL,
+    `dc_department` text DEFAULT NULL,
+    `dc_institution` text DEFAULT NULL,
+    `dc_coursephoto` text DEFAULT NULL,
+    `dc_coursephotomime` text DEFAULT NULL,
+    `dc_instructorphoto` text DEFAULT NULL,
+    `dc_instructorphotomime` text DEFAULT NULL,
+    `dc_url` text DEFAULT NULL,
+    `dc_identifier` text DEFAULT NULL,
+    `dc_language` text DEFAULT NULL,
+    `dc_date` datetime DEFAULT NULL,
+    `dc_format` text DEFAULT NULL,
+    `dc_rights` text DEFAULT NULL,
+    `dc_videolectures` text DEFAULT NULL,
+    `dc_code` text DEFAULT NULL,
+    `dc_keywords` text DEFAULT NULL,
+    `dc_contentdevelopment` text DEFAULT NULL,
+    `dc_formattypes` text DEFAULT NULL,
+    `dc_recommendedcomponents` text DEFAULT NULL,
+    `dc_assignments` text DEFAULT NULL,
+    `dc_requirements` text DEFAULT NULL,
+    `dc_remarks` text DEFAULT NULL,
+    `dc_acknowledgments` text DEFAULT NULL,
+    `dc_coteaching` text DEFAULT NULL,
+    `dc_coteachingcolleagueopenscourse` text DEFAULT NULL,
+    `dc_coteachingautonomousdepartment` text DEFAULT NULL,
+    `dc_coteachingdepartmentcredithours` text DEFAULT NULL,
+    `dc_yearofstudy` text DEFAULT NULL,
+    `dc_semester` text DEFAULT NULL,
+    `dc_coursetype` text DEFAULT NULL,
+    `dc_credithours` text DEFAULT NULL,
+    `dc_credits` text DEFAULT NULL,
+    `dc_institutiondescription` text DEFAULT NULL,
+    `dc_curriculumtitle` text DEFAULT NULL,
+    `dc_curriculumdescription` text DEFAULT NULL,
+    `dc_outcomes` text DEFAULT NULL,
+    `dc_curriculumkeywords` text DEFAULT NULL,
+    `dc_sector` text DEFAULT NULL,
+    `dc_targetgroup` text DEFAULT NULL,
+    `dc_curriculumtargetgroup` text DEFAULT NULL,
+    `dc_featuredbooks` text DEFAULT NULL,
+    `dc_structure` text DEFAULT NULL,
+    `dc_teachingmethod` text DEFAULT NULL,
+    `dc_assessmentmethod` text DEFAULT NULL,
+    `dc_eudoxuscode` text DEFAULT NULL,
+    `dc_eudoxusurl` text DEFAULT NULL,
+    `dc_kalliposurl` text DEFAULT NULL,
+    `dc_numberofunits` text DEFAULT NULL,
+    `dc_unittitle` text DEFAULT NULL,
+    `dc_unitdescription` text DEFAULT NULL,
+    `dc_unitkeywords` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
+
 // create indexes
+Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
+Database::get()->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
+Database::get()->query("CREATE INDEX `admin_index` ON admin(user_id)");
+Database::get()->query("CREATE INDEX `agenda_index` ON agenda(course_id)");
+Database::get()->query("CREATE INDEX `ann_index` ON announcement(course_id)");
+Database::get()->query("CREATE INDEX `assignment_index` ON assignment(course_id)");
+Database::get()->query("CREATE INDEX `assign_submit_index` ON assignment_submit(uid, assignment_id)");
+Database::get()->query("CREATE INDEX `assign_spec_index` ON assignment_to_specific(user_id)");
+Database::get()->query("CREATE INDEX `att_index` ON attendance(course_id)");
+Database::get()->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
+Database::get()->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
+Database::get()->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
+Database::get()->query("CREATE INDEX `course_index` ON course(code)");
+Database::get()->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
+Database::get()->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
+Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
+Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
+Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
+Database::get()->query("CREATE INDEX `crev_index` ON course_review(course_id)");
+Database::get()->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order`)");
+Database::get()->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
-Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
-Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)');
+Database::get()->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
+Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
+Database::get()->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
+Database::get()->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
+Database::get()->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");
+Database::get()->query("CREATE INDEX `ebook_sub_sec_index` ON ebook_subsection(section_id)");
+Database::get()->query('CREATE INDEX `exer_index` ON exercise (course_id)');
+Database::get()->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
+Database::get()->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
+Database::get()->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
+Database::get()->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
+Database::get()->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
+Database::get()->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
+Database::get()->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
+Database::get()->query("CREATE INDEX `for_index` ON forum(course_id)");
+Database::get()->query("CREATE INDEX `for_cat_index` ON forum_category(course_id)");
+Database::get()->query("CREATE INDEX `for_not_index` ON forum_notify(course_id)");
+Database::get()->query("CREATE INDEX `for_post_index` ON forum_post(topic_id)");
+Database::get()->query("CREATE INDEX `for_topic_index` ON forum_topic(forum_id)");
+Database::get()->query("CREATE INDEX `glos_index` ON glossary(course_id)");
+Database::get()->query("CREATE INDEX `glos_cat_index` ON glossary_category(course_id)");
+Database::get()->query("CREATE INDEX `grade_index` ON gradebook(course_id)");
+Database::get()->query("CREATE INDEX `grade_act_index` ON gradebook_activities(gradebook_id)");
+Database::get()->query("CREATE INDEX `grade_book_index` ON gradebook_book(gradebook_activity_id)");
+Database::get()->query("CREATE INDEX `group_index` ON `group`(course_id)");
+Database::get()->query("CREATE INDEX `gr_mem_index` ON group_members(group_id,user_id)");
+Database::get()->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
+Database::get()->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
+Database::get()->query("CREATE INDEX `link_index` ON link(course_id)");
+Database::get()->query("CREATE INDEX `link_cat_index` ON link_category(course_id)");
+Database::get()->query("CREATE INDEX `cmid` ON log (course_id, module_id)");
+Database::get()->query("CREATE INDEX `logins_id` ON logins(user_id, course_id)");
+Database::get()->query("CREATE INDEX `loginout_id` ON loginout(id_user)");
+Database::get()->query("CREATE INDEX `lp_as_id` ON lp_asset(module_id)");
+Database::get()->query("CREATE INDEX `lp_id` ON lp_learnPath(course_id)");
+Database::get()->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
+Database::get()->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
 Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
-Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
-Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
-Database::get()->query('CREATE INDEX `cid` ON videolink (course_id)');
-Database::get()->query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
+Database::get()->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
+Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
+Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
+Database::get()->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
+Database::get()->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
+Database::get()->query("CREATE INDEX `u_id` ON user(username)");
+Database::get()->query("CREATE INDEX `udep_id` ON user_department(user, department)");
+Database::get()->query("CREATE INDEX `cid` ON video (course_id)");
+Database::get()->query("CREATE INDEX `cid` ON videolink (course_id)");
+Database::get()->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
+Database::get()->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
+Database::get()->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
+Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");

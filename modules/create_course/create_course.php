@@ -28,11 +28,6 @@ require_once '../../include/baseTheme.php';
 if ($session->status !== USER_TEACHER) { // if we are not teachers
     redirect_to_home_page();
 }
-if (get_config('betacms')) { // added support for betacms
-    require_once 'modules/betacms_bridge/include/bcms.inc.php';
-}
-
-$TBL_USER_DEPARTMENT = 'user_department';
 
 require_once 'include/log.php';
 require_once 'include/lib/course.class.php';
@@ -151,11 +146,6 @@ if (empty($prof_names)) {
 }
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
-
-if (get_config("betacms")) { // added support for betacms
-    // Import from BetaCMS Bridge
-    doImportFromBetaCMSBeforeCourseCreation();
-}
 
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
@@ -349,10 +339,12 @@ if (!isset($_POST['create_course'])) {
                         dropbox_quota = ?f,
                         password = ?s,
                         keywords = '',
-                        created = NOW()", $code, $language, $title, intval($_POST['formvisible']), 
-            intval($course_license), $prof_names, $code, floatval($doc_quota * 1024 * 1024), 
-            floatval($video_quota * 1024 * 1024), floatval($group_quota * 1024 * 1024), 
-            floatval($dropbox_quota * 1024 * 1024), $password);
+                        created = " . DBHelper::timeAfter() . ",
+                        glossary_expand = 0,
+                        glossary_index = 1", $code, $language, $title, $_POST['formvisible'], 
+            intval($course_license), $prof_names, $code, $doc_quota * 1024 * 1024, 
+            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024, 
+            $dropbox_quota * 1024 * 1024, $password);
     $new_course_id = $result->lastInsertID;
 
     // create course  modules              
@@ -386,12 +378,7 @@ if (!isset($_POST['create_course'])) {
     course_index($code);
     
     $_SESSION['courses'][$code] = USER_TEACHER;
-
-    // ----------- Import from BetaCMS Bridge -----------
-    if (get_config('betacms')) {
-        $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
-    }
-    // --------------------------------------------------
+    
     $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
                         <span class='smaller'>$langEnterMetadata</span></p>
                         <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";

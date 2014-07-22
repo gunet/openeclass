@@ -176,13 +176,13 @@ if ($is_editor) {
                         <tr><th>$langCategory:</th>
                         <td><select name='selectcategory'>
                         <option value='0'>--</option>";
-        $resultcategories = db_query("SELECT * FROM link_category WHERE course_id = $course_id ORDER BY `order`");
-        while ($myrow = mysql_fetch_array($resultcategories)) {
-            $tool_content .= "<option value='$myrow[id]'";
-            if (isset($category) and $myrow['id'] == $category) {
+        $resultcategories = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
+        foreach ($resultcategories as $myrow) {
+            $tool_content .= "<option value='$myrow->id'";
+            if (isset($category) and $myrow->id == $category) {
                 $tool_content .= " selected='selected'";
             }
-            $tool_content .= '>' . q($myrow['name']) . "</option>\n";
+            $tool_content .= '>' . q($myrow->name) . "</option>\n";
         }
         $tool_content .= "</select></td></tr>
                         <tr><th>&nbsp;</th>
@@ -223,17 +223,16 @@ if (isset($_GET['down'])) {
     move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
 }
 
-$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $course_id ORDER BY `order`");
+$resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
 
-if (mysql_num_rows($resultcategories) > 0) {
+if (count($resultcategories) > 0) {
     // Starting the table which contains the categories
     // displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-    $result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND (category = 0 OR category IS NULL)");
-    $numberofzerocategory = mysql_num_rows($result);
+    $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND (category = 0 OR category IS NULL)", $course_id));
     // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
     // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-    $resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $course_id ORDER BY `order`");
-    $aantalcategories = mysql_num_rows($resultcategories);
+    $resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
+    $aantalcategories = count($resultcategories);
 
     if ($aantalcategories > 0) {
         $more_less = "
@@ -267,7 +266,7 @@ if (mysql_num_rows($resultcategories) > 0) {
     $tool_content .= "<br />$more_less<table width='100%' class='tbl_alt'>";
     $i = 0;
     $catcounter = 1;
-    while ($myrow = mysql_fetch_array($resultcategories)) {
+    foreach ($resultcategories as $myrow) {
         if (empty($urlview)) {
             // No $view set in the url, thus for each category link it should be all zeros except it's own
             $view = makedefaultviewcode($i);
@@ -277,35 +276,35 @@ if (mysql_num_rows($resultcategories) > 0) {
         }
         // if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
         // - instead of a +, the category is no longer clickable and all the links of this category are displayed
-        $description = standard_text_escape($myrow['description']);
+        $description = standard_text_escape($myrow->description);
         if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
             $newurlview = $urlview;
             $newurlview[$i] = '0';
             $tool_content .= "<tr>
                         <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' alt='$shownone'></th>
-                        <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>" . q($myrow['name']) . "</a>";
+                        <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>" . q($myrow->name) . "</a>";
             if (!empty($description)) {
                 $tool_content .= "<br />$description</th>";
             }
             if ($is_editor && !$is_in_tinymce) {
-                showcategoryadmintools($myrow["id"]);
+                showcategoryadmintools($myrow->id);
             } else {
                 $tool_content .= "</tr>";
             }
-            showlinksofcategory($myrow["id"]);
+            showlinksofcategory($myrow->id);
         } else {
             $tool_content .= "
                         <tr>
                           <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' alt='$showall'></th>
                           <th colspan='2' valign='top' class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
             $tool_content .= is_array($view) ? implode('', $view) : $view;
-            $tool_content .= $tinymce_params . "'>" . q($myrow['name']) . "</a>";
-            $description = standard_text_escape($myrow['description']);
+            $tool_content .= $tinymce_params . "'>" . q($myrow->name) . "</a>";
+            $description = standard_text_escape($myrow->description);
             if (!empty($description)) {
                 $tool_content .= "<br />$description</th>";
             }
             if ($is_editor && !$is_in_tinymce) {
-                showcategoryadmintools($myrow["id"]);
+                showcategoryadmintools($myrow->id);
             } else {
                 $tool_content .= "</tr>";
             }

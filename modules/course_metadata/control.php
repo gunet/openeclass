@@ -38,7 +38,8 @@ $xmlData = $xml->asFlatArray();
 $visible = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
 $hasOpenAccess = ($visible == 2);
 $hasMandatoryMetadata = $xml->hasMandatoryMetadata();
-$hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license']));
+$clang = langname_to_code($currentCourseLanguage);
+$hasLicense = (isset($xmlData['course_license_' . $clang]) && !empty($xmlData['course_license_' . $clang]));
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
 $numDocs = Database::get()->querySingle("SELECT count(id) as count FROM document WHERE course_id = ?d", $course_id)->count;
 $numUnits = Database::get()->querySingle("SELECT count(id) as count FROM course_units WHERE course_id = ?d AND `order` >= 1 AND visible = 1", $course_id)->count;
@@ -50,23 +51,29 @@ $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xm
 // auto detect level
 $looksAMinus = false;
 if ($hasOpenAccess && $hasMandatoryMetadata && $hasLicense &&
-        $hasTeacherConfirm && ($numDocs > 0) && ($numUnits > 0))
+        $hasTeacherConfirm && ($numDocs > 0) && ($numUnits > 0)) {
     $looksAMinus = true;
+}
 $looksA = false;
-if ($looksAMinus && ($numMedia > 0))
+if ($looksAMinus && ($numMedia > 0)) {
     $looksA = true;
+}
 $looksAPlus = false;
-if ($looksA && $hasTeacherConfirmVideo)
+if ($looksA && $hasTeacherConfirmVideo) {
     $looksAPlus = true;
+}
 
 if (isset($_POST['submit'])) {
     // default fallback is false
-    if (!isset($_POST['course_confirmAMinusLevel']))
+    if (!isset($_POST['course_confirmAMinusLevel'])) {
         $_POST['course_confirmAMinusLevel'] = 'false';
-    if (!isset($_POST['course_confirmALevel']))
+    }
+    if (!isset($_POST['course_confirmALevel'])) {
         $_POST['course_confirmALevel'] = 'false';
-    if (!isset($_POST['course_confirmAPlusLevel']))
+    }
+    if (!isset($_POST['course_confirmAPlusLevel'])) {
         $_POST['course_confirmAPlusLevel'] = 'false';
+    }
 
     // validation
     if ($_POST['course_confirmAMinusLevel'] == 'true') {
@@ -115,7 +122,7 @@ if (isset($_POST['submit'])) {
     $_POST['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP");
     $last_review = date('Y-m-d H:i:s');
     $xml->populate($_POST);
-    CourseXMLElement::save($course_code, $xml);
+    CourseXMLElement::save($course_id, $course_code, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
     // insert or update db
     $exists = ($exres = Database::get()->querySingle("SELECT 1 as `exists` FROM course_review WHERE course_id = ?d", $course_id)) ? $exres->exists : false;

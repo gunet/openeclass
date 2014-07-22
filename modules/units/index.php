@@ -20,9 +20,11 @@
  * ======================================================================== */
 
 
-/*
-  Units display module
+/**
+ * @file index.php
+ * @brief Units display module
  */
+
 define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
 $require_help = TRUE;
@@ -55,11 +57,13 @@ if (isset($_REQUEST['edit_submit'])) {
 $form = process_actions();
 
 // check if we are trying to access a protected resource directly
-$access = db_query_get_single_value("SELECT public FROM course_units WHERE id = $id");
-if (!resource_access(1, $access)) {
-    $tool_content .= "<p class='caution'>$langForbidden</p>";
-    draw($tool_content, 2, null, $head_content);
-    exit;    
+$access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);
+if ($access) {
+    if (!resource_access(1, $access->public)) {
+        $tool_content .= "<p class='caution'>$langForbidden</p>";
+        draw($tool_content, 2, null, $head_content);
+        exit;    
+    }
 }
 
 if ($is_editor) {
@@ -76,7 +80,8 @@ if ($is_editor) {
 			<option value='forum'>$langInsertForum</option>
 			<option value='ebook'>$langInsertEBook</option>
 			<option value='work'>$langInsertWork</option>
-			<option value='wiki'>$langInsertWiki</option>
+                        <option value='poll'>$langInsertPoll</option>
+			<option value='wiki'>$langInsertWiki</option>                            
 		</select>
 		<input type='hidden' name='id' value='$id'>
 		<input type='hidden' name='course' value='$course_code'>
@@ -91,19 +96,17 @@ if ($is_editor) {
     $visibility_check = "AND visible=1";
 }
 if (isset($id) and $id !== false) {
-    $q = db_query("SELECT * FROM course_units WHERE id = $id AND course_id=$course_id " . $visibility_check);
-} else {
-    $q = false;
+    $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
 }
-if (!$q or mysql_num_rows($q) == 0) {
+if (!$info) {
     $nameTools = $langUnitUnknown;
     $tool_content .= "<p class='caution'>$langUnknownResType</p>";
     draw($tool_content, 2, null, $head_content);
     exit;
+} else {
+    $nameTools = htmlspecialchars($info->title);
+    $comments = trim($info->comments);
 }
-$info = mysql_fetch_array($q);
-$nameTools = htmlspecialchars($info['title']);
-$comments = trim($info['comments']);
 
 // Links for next/previous unit
 foreach (array('previous', 'next') as $i) {
@@ -125,18 +128,18 @@ foreach (array('previous', 'next') as $i) {
         $access_check = "AND public = 1";
     }
         
-    $q = db_query("SELECT id, title, public FROM course_units
-                       WHERE course_id = $course_id
-                             AND id <> $id
-                             AND `order` $op $info[order]
+    $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
+                       WHERE course_id = ?d
+                             AND id <> ?d
+                             AND `order` $op $info->order
                              AND `order` >= 0
                              $visibility_check
                              $access_check
                        ORDER BY `order` $dir
-                       LIMIT 1");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($q_id, $q_title) = mysql_fetch_row($q);
-        $q_title = htmlspecialchars($q_title);
+                       LIMIT 1", $course_id, $id);
+    if ($q) {
+        $q_id = $q->id;
+        $q_title = htmlspecialchars($q->title);                
         $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$q_title</a>$arrow2";
     } else {
         $link[$i] = '&nbsp;';
@@ -151,8 +154,7 @@ if ($is_editor) {
     $comment_edit_link = '';
 }
 
-$tool_content .= "
-    <table class='$units_class' width='99%'>";
+$tool_content .= "<table class='$units_class' width='99%'>";
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "
     <tr class='odd'>
@@ -160,8 +162,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
       <td class="right">' . $link['next'] . "</td>
     </tr>";
 }
-$tool_content .= "<tr><td colspan='2' class='unit_title'>$nameTools</td></tr>
-    </table>";
+$tool_content .= "<tr><td colspan='2' class='unit_title'>$nameTools</td></tr></table>";
 
 
 if (!empty($comments)) {
@@ -182,14 +183,15 @@ $tool_content .="
        <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
        <td width='50' class='right'>" .
         "<select name='id' onChange='document.unitselect.submit();'>";
-$q = db_query("SELECT id, title FROM course_units
-               WHERE course_id = $course_id AND `order` > 0
+
+$q = Database::get()->queryArray("SELECT id, title FROM course_units
+               WHERE course_id = ?d AND `order` > 0
                      $visibility_check
-               ORDER BY `order`");
-while ($info = mysql_fetch_array($q)) {
-    $selected = ($info['id'] == $id) ? ' selected ' : '';
-    $tool_content .= "<option value='$info[id]'$selected>" .
-            htmlspecialchars(ellipsize($info['title'], 40)) .
+               ORDER BY `order`", $course_id);
+foreach ($q as $info) {
+    $selected = ($info->id == $id) ? ' selected ' : '';
+    $tool_content .= "<option value='$info->id'$selected>" .
+            htmlspecialchars(ellipsize($info->title, 40)) .
             '</option>';
 }
 $tool_content .= "</select>
@@ -199,4 +201,3 @@ $tool_content .= "</select>
  </form>";
 
 draw($tool_content, 2, null, $head_content);
-

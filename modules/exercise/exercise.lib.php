@@ -36,7 +36,7 @@ function showQuestion($questionId, $onlyAnswers = false, $exerciseResult = array
     if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        $questionDescription_temp = standard_text_escape($questionDescription);
+        $questionDescription_temp = $questionDescription;
         $tool_content .= "
                   <tr class='even'>
                     <td colspan='2'>

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -88,7 +88,7 @@ if (user_exists(autounquote($username))) {
     $all_set = false;
 }
 
-// check if the username has allready applied
+// check if exists user request with the same username
 if (user_app_exists(autounquote($username))) {
     $errors[] = $langUserFree3;
     $all_set = false;
@@ -120,31 +120,17 @@ if ($all_set) {
 
     // register user request
     $status = $prof ? USER_TEACHER : USER_STUDENT;
-    $res = db_query('INSERT INTO user_request SET
-			givenname = ' . autoquote($givenname) . ',
-			surname = ' . autoquote($surname) . ',
-			username = ' . autoquote($username) . ',
-			email = ' . autoquote($usermail) . ',
-			am = ' . autoquote($am) . ',
-			faculty_id = ' . intval($department) . ',
-			phone = ' . autoquote($userphone) . ",
-			state = 1,
-			status = $status,
-			verified_mail = $verified_mail,
-			date_open = NOW(),
-			comment = " . autoquote($usercomment) . ',
-			lang = ' . quote($language) . ",
-			request_ip = " . autoquote($_SERVER['REMOTE_ADDR']));
-
-    if (!$res) {
-        $request_id = '';
-    } else {
-        $request_id = mysql_insert_id();
-    }
-
+    $res = Database::get()->query("INSERT INTO user_request SET
+			givenname = ?s, surname = ?s, username = ?s, email = ?s,
+			am = ?s, faculty_id = ?d, phone = ?s,
+			state = 1, status = $status,
+			verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
+			comment = ?s, lang = ?s, request_ip = ?s",
+            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);   
+    $request_id = $res->lastInsertID;
+    
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
-
         //----------------------------- Email Request Message --------------------------
         $dep_body = $tree->getFullPath($department);
         $subject = $prof ? $mailsubject : $mailsubject2;
@@ -157,15 +143,13 @@ if ($all_set) {
                 "$contactphone: $userphone\n\n\n$logo\n\n";
 
         if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
-            $tool_content .= "
-				<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
+            $tool_content .= "<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
         }
 
         // User Message
         $tool_content .= "<div class='success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
-                "!<br />$success</div>
-			<p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+                "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
     // email needs verification -> mail user
     else {
@@ -177,7 +161,6 @@ if ($all_set) {
         if (!send_mail('', $emailhelpdesk, '', $usermail, $subject, $MailMessage, $charset)) {
             $mail_ver_error = sprintf("<p class='alert1'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
             $tool_content .= $mail_ver_error;
-
             draw($tool_content, 0);
             exit;
         }
@@ -222,29 +205,23 @@ if ($all_set) {
             <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100'>&nbsp;&nbsp;(*)</td>
           </tr>";
     if (!$prof) {
-        $tool_content .= "
-                <tr>
+        $tool_content .= "<tr>
                 <th>$langAm</th>
                 <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20'>" .
                 ($am_required ? '&nbsp;&nbsp;(*)' : '') . "</td>
                 </tr>";
     }
-    $tool_content .= "
-          <tr>
+    $tool_content .= "<tr>
             <th>$langComments</th>
             <td><textarea name='usercomment' cols='30' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
-          </tr>
-          <tr>
+            </tr>
+            <tr>
             <th>$langFaculty&nbsp;</th>
             <td>";
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
-    $tool_content .= "\n</td>
-        </tr>
-        <tr>
-        <th>$langLanguage</th>
-        <td>";
+    $tool_content .= "</td></tr><tr><th>$langLanguage</th><td>";
     $tool_content .= lang_select_options('localize');
     $tool_content .= "</td></tr>";
     if (get_config("display_captcha")) {

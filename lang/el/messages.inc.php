@@ -757,8 +757,17 @@ $langAddCat = "Κατηγορία";
 $langBackAndForget = "Ακύρωση και επιστροφή";
 $langBlockDeleted = "Η περιγραφή διαγράφηκε!";
 
-$titreBloc = array("Περιεχόμενο μαθήματος (Syllabus)", "Αντικειμενικοί στόχοι", "Συνιστώμενη Βιβλιογραφία",
-    "Διδακτικές και μαθησιακές μέθοδοι", "Μέθοδοι αξιολόγησης / βαθμολόγησης", "Προαπαιτήσεις", "Συμπληρωματικά Στοιχεία");
+$titreBloc = array(
+    'Περιεχόμενο μαθήματος',
+    'Μαθησιακοί στόχοι',
+    'Βιβλιογραφία',
+    'Μέθοδοι διδασκαλίας',
+    'Μέθοδοι αξιολόγησης',
+    'Προαπαιτούμενα',
+    'Διδάσκοντες',
+    'Ομάδα στόχος',
+    'Προτεινόμενα συγγράμματα',
+    'Περισσότερα');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 
 /* * ******************************************************
@@ -845,7 +854,8 @@ $langNotAvailable = "Μη διαθέσιμα";
 $langLeaveExerciseWarning = "ΠΡΟΣΟΧΗ! Με την έξοδο σας από την άσκηση η προσπάθεια σας καταγράφεται σαν να μην έχετε δώσει καμία απάντηση. Για μην συμβεί αυτό ολοκληρώστε την άσκηση ή κάντε προσωρινή αποθήκευση (αν αυτό επιτρέπεται).";
 $langTemporarySave = "Προσωρινή Αποθήκευση";
 $langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά μια προσπάθεια της άσκησης";
-$langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
+$langTemporarySaveNotice2 = "Υπάρχει μια προσωρινά αποθηκευμένη προσπάθεια προς ολοκλήρωση η οποια θα εκτελεστεί αν συνεχίσετε. Θέλετε να συνεχίσετε?";
+$langPendingExercise = "Υπάρχουν %s υποβολές προς βαθμολόγηση στην άσκηση «%s».";
 $landAttemptCanceled = "Η προσπάθεια ακυρώθηκε.";
 /* * ***************************************************
  * contact.php
@@ -1880,7 +1890,6 @@ $lang_dont_display_login_form = "Να μην εμφανίζεται στην α�
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_display_captcha = "Να εμφανίζεται κωδικός ασφαλείας κατά την εγγραφή των χρηστών";
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
-$lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tablets)";
 $lang_course_multidep = "Να επιτρέπεται τα μαθήματα να ανήκουν σε πολλά τμήματα-σχολές";
 $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλά τμήματα-σχολές";
@@ -2440,15 +2449,19 @@ $langPollCreation = "Ημ/νία Δημιουργίας";
 $langPollCreateDate = "Το Ερωτηματολόγιο δημιουργήθηκε την";
 $langPollCreationError = "<p class='caution'>Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.</p>";
 $langPollDeleted = "Το Ερωτηματολόγιο διαγράφηκε με επιτυχία.";
-$langPollDeactivated = "<p class='success'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
-$langPollActivated = "<p class='success'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
+$langPollResultsDeleted = "Τα αποτελέσματα του Ερωτηματολογίου διαγράφηκαν με επιτυχία.";
+$langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης στα αποτελέσματα του Ερωτηματολογίου.";
+$langPollAlreadyParticipated = "Έχετε ήδη συμμετάσχει στο ερωτηματολόγιο";
+$langPollDeactivated = "Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
+$langPollActivated = "Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
 $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
-$langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
+$langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
 $langPollInactive = "<p class='caution'>Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.</p>";
 $langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
+$langPollAnonymize = "Ανωνυμοποίηση";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
@@ -2958,6 +2971,7 @@ $langDeleteTable = "Διαγραφή πίνακα";
 $langMergeTables = "Ενοποίηση των πινάκων";
 $langIndexExists = "Υπάρχει ήδη κάποιο index στον πίνακα";
 $langIndexAdded = "Προστέθηκε index";
+$langIndexCreation = "Δημιουργία indexes";
 $langNotTablesList = "Πρόβλημα με την Β.Δ. Δεν ήταν δυνατή η εύρεση των πινάκων";
 $langNotMovedDir = "Προσοχή: Δεν ήταν δυνατή η μεταφορά του υποκαταλόγου";
 $langToDir = "στο φάκελο";
@@ -3427,8 +3441,8 @@ $langGroupWorkIntro = '
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.';
 
-$langGroupWorkSubmitted = "Έχει&nbsp;υποβληθεί";
-$langGroupWorkSubmitted1 = "ΔΕΝ έχει&nbsp;αποσταλεί";
+$langGroupWorkSubmitted = "Έχει υποβληθεί";
+$langGroupWorkNotSubmitted = "ΔΕΝ έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
 $langEditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
@@ -3552,6 +3566,7 @@ $langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
+$langInsertPoll = "ερωτηματολογίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
 $langAddToCourseHome = "Εμφάνιση / Απόκρυψη στην κεντρική σελίδα του μαθήματος";
@@ -3579,49 +3594,6 @@ $langVerifiedMail = "Επιβεβαιωμένη διεύθυνση email";
 $langMailNotVerified = "Το email σας δεν είναι επιβεβαιωμένο. Δεν θα μπορείτε να λαμβάνετε emails από τα μαθήματα έως ότου το επιβεβαιώσετε.
                 Για να το επιβεβαιώσετε κάντε κλικ";
 
-/* * ********************************************************************
-  BetaCMS Bridge
- * ********************************************************************* */
-$langBrowseBCMSRepo = "Γέφυρα BetaCMS";
-$langNeedAllowUrlInclude = "Πρέπει να ενεργοποιήσετε το PHP option allow_url_include για να λειτουργήσει η γέφυρα BetaCMS";
-$langNeedAllowUrlFopen = "Πρέπει να ενεργοποιήσετε το PHP option allow_url_fopen για να λειτουργήσει η γέφυρα BetaCMS";
-$langFailConnectBetaCMSBridge = "Αποτυχία: αδυναμία σύνδεσης με το απομακρυσμένο αποθετήριο BetaCMS";
-$langBetaCMSLogout = "Έξοδος από το BetaCMS";
-$langBetaCMSCreateNewLesson = "Δημιουργία νέου μαθήματος στο BetaCMS";
-$langBetaCMSId = "Id Μαθήματος";
-$langBetaCMSTitle = "Τίτλος Μαθήματος";
-$langBetaCMSDescription = "Περιγραφή Μαθήματος";
-$langBetaCMSKeywords = "Λέξεις-Κλειδιά Μαθήματος";
-$langBetaCMSCopyright = "Πνευματικά Δικαιώματα Μαθήματος";
-$langBetaCMSAuthors = "Συγγραφική Ομάδα Μαθήματος";
-$langBetaCMSProject = "Έργο Μαθήματος";
-$langBetaCMSComments = "Σχόλια Μαθήματος";
-$langBetaCMSActions = "Ενέργειες";
-$langBetaCMSLoginProperties = "Ιδιότητα Αποθετηρίου BetaCMS και της Γέφυρας PHP";
-$langBetaCMSBridgeHost = "Bridge Host";
-$langBetaCMSContext = "Bridge Context";
-$langBetaCMSHost = "BetaCMS Host";
-$langBetaCMSRepository = "BetaCMS Repository";
-$langBetaCMSUsername = "BetaCMS Username";
-$langBetaCMSPassword = "BetaCMS Password";
-$langBetaCMSLessonCreatedOK = "Το μάθημα δημιουργήθηκε επιτυχώς!";
-$langBetaCMSLessonCreateFail = "Αποτυχία δημιουργίας μαθήματος";
-$langBetaCMSRedirectAfterImport = "Παρακαλώ χρησιμοποιήστε το εργαλείο δημιουργίας μαθήματος για να εισαγάγετε το επιλεγμένο μάθημα. Αν ο περιηγητής ιστού δε σας ανακατευθύνει αυτόματα, πατήστε";
-$langBetaCMSRedirectHere = "εδώ";
-$langBetaCMSEclassLessonObjectView = "Προεπισκόπηση Ψηφιακού Αντικειμένου Μαθήματος";
-$langBetaCMSTotalNumber = "συνολικός αριθμός";
-$langBetaCMSUnits = "Ενότητες";
-$langBetaCMSUnitTitle = "Τίτλος Ενότητας";
-$langBetaCMSUnitDescription = "Περιγραφή Ενότητας";
-$langBetaCMSScormFiles = "Αρχεία Scorm";
-$langBetaCMSSourceFilename = "Όνομα Αρχείου";
-$langBetaCMSMimeType = "Mime Type";
-$langBetaCMSCalculatedSize = "Μέγεθος Αρχείου";
-$langBetaCMSFiles = "Έγγραφα";
-$langBetaCMSUnitScormFiles = "Αρχεία Scorm Eνότητας";
-$langBetaCMSUnitDocumentFiles = "Έγγραφα Ενότητας";
-$langBetaCMSUnitTexts = "Κείμενα Ενότητας";
-$langBetaCMSText = "Κείμενο";
 $langNoCookies = 'Προσοχή! Έχετε απενεργοποιημένα τα cookies στο πρόγραμμα πλοήγησης που χρησιμοποιείτε. Η σύνδεση δεν είναι δυνατή.';
 
 /* * ***********************************
@@ -3746,10 +3718,10 @@ $langCMeta['podcasts'] = "Podcasts";
 $langCMeta['audio material'] = "Ηχητικό υλικό";
 $langCMeta['multimedia material'] = "Πολυμεσικό υλικό";
 $langCMeta['interactive exercises'] = "Διαδραστικές ασκήσεις";
-$langCMeta['course_instructor_firstName'] = "Όνομα διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_lastName'] = "Επώνυμο διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκοντος/διδασκόντων";
-$langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον/τους διδάσκοντες";
+$langCMeta['course_instructor_firstName'] = "Όνομα διδάσκοντος";
+$langCMeta['course_instructor_lastName'] = "Επώνυμο διδάσκοντος";
+$langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκοντος";
+$langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον διδάσκοντα";
 $langCMeta['course_instructor_cv'] = "Σύνδεσμος σε βιογραφικό ή σύντομο βιογραφικό (έως 10 γραμμές)";
 $langCMeta['course_instructor_photo'] = "Φωτογραφία διδάσκοντος";
 $langCMeta['course_title'] = "Τίτλος Μαθήματος";
@@ -3861,6 +3833,7 @@ $langCMeta['course_thematic'] = "Θεματική επιστημονική πε�
 $langCMeta['help_course_thematic'] = "Θεματική ταξινόμηση σύμφωνα με πρότυπα βιβλιοθηκονομίας. Θα υπάρχουν συγκεκριμένες επιλογές. 
     Η συμπλήρωση πιθανόν να γίνει σε συνεργασία με την αντίστοιχη βιβλιοθήκη του τμήματος ή της σχολής. Θα υπάρξουν διευκρινήσεις 
     σε επόμενη έκδοση.";
+$langCMeta['course_subthematic'] = "Θεματική επιστημονική υπο-περιοχή";
 $langCMeta['course_license'] = "Άδεια χρήσης Creative Commons (CC)";
 $langCMeta['help_course_license'] = "Θα πρέπει να πραγματοποιηθεί η επιλογή άδειας χρήσης CC σε συνεργασία με το μέλος ΔΕΠ και σε 
     συμφωνία με την αντίστοιχη πολιτική του ιδρύματος.";
@@ -3880,6 +3853,95 @@ $langCMeta['course_unit_description'] = "Αναλυτική περιγραφή �
 $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ενότητα";
 $langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
 $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
+$langCMeta['asfa'] = "Ανωτάτη Σχολή Καλών Τεχνών";
+$langCMeta['auth'] = "Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης";
+$langCMeta['aua'] = "Γεωπονικό Πανεπιστήμιο Αθηνών";
+$langCMeta['duth'] = "Δημοκρίτειο Πανεπιστήμιο Θράκης";
+$langCMeta['ihu'] = "Διεθνές Πανεπιστήμιο της Ελλάδος";
+$langCMeta['uoa'] = "Εθνικό Καποδιστριακό Πανεπιστήμιο Αθηνών";
+$langCMeta['ntua'] = "Εθνικό Μετσόβιο Πολυτεχνείο";
+$langCMeta['eap'] = "Ελληνικό Ανοικτό Πανεπιστήμιο";
+$langCMeta['ionio'] = "Ιόνιο Πανεπιστήμιο";
+$langCMeta['aueb'] = "Οικονομικό Πανεπιστήμιο Αθηνών";
+$langCMeta['aegean'] = "Πανεπιστήμιο Αιγαίου";
+$langCMeta['uowm'] = "Πανεπιστήμιο Δυτικής Μακεδονίας";
+$langCMeta['uth'] = "Πανεπιστήμιο Θεσσαλίας";
+$langCMeta['uoi'] = "Πανεπιστήμιο Ιωαννίνων";
+$langCMeta['uoc'] = "Πανεπιστήμιο Κρήτης";
+$langCMeta['uom'] = "Πανεπιστήμιο Μακεδονίας";
+$langCMeta['upatras'] = "Πανεπιστήμιο Πάτρας";
+$langCMeta['unipi'] = "Πανεπιστήμιο Πειραιά";
+$langCMeta['upelop'] = "Πανεπιστήμιο Πελοποννήσου";
+$langCMeta['panteion'] = "Πάντειον Πανεπιστήμιο";
+$langCMeta['tuc'] = "Πολυτεχνείο Κρήτης";
+$langCMeta['hua'] = "Χαροκόπειο Πανεπιστήμιο";
+$langCMeta['teiath'] = "ΤΕΙ Αθήνας";
+$langCMeta['teikoz'] = "ΤΕΙ Δυτικής Μακεδονίας";
+$langCMeta['teiep'] = "ΤΕΙ Ηπείρου";
+$langCMeta['teithe'] = "ΤΕΙ Θεσσαλονίκης";
+$langCMeta['teiion'] = "ΤΕΙ Ιονίων Νήσων";
+$langCMeta['teikav'] = "ΤΕΙ Αν. Μακεδονίας και Θράκης";
+$langCMeta['teikal'] = "ΤΕΙ Πελοποννήσου";
+$langCMeta['teicrete'] = "ΤΕΙ Κρήτης";
+$langCMeta['teiste'] = "ΤΕΙ Στερεάς Ελλάδας";
+$langCMeta['teilar'] = "ΤΕΙ Θεσσαλίας";
+$langCMeta['teiwest'] = "ΤΕΙ Δυτικής Ελλάδας";
+$langCMeta['teipir'] = "ΤΕΙ Πειραιά";
+$langCMeta['teiser'] = "ΤΕΙ Κεντρικής Μακεδονίας";
+$langCMeta['aspete'] = "Ανώτατη Σχολή Παιδαγωγικής και Τεχνολογικής Εκπαίδευσης";
+$langCMeta['otherinst'] = "Άλλο Ίδρυμα";
+$langCMeta['othersubj'] = "Άλλο Επιστημονικό Πεδίο";
+$langCMeta['natural'] = "Θετικές και Φυσικές Επιστήμες";
+$langCMeta['agricultural'] = "Γεωργικές Επιστήμες";
+$langCMeta['engineering'] = "Μηχανική και Τεχνολογία";
+$langCMeta['social'] = "Κοινωνικές Επιστήμες";
+$langCMeta['medical'] = "Ιατρική και Επιστήμες Υγείας";
+$langCMeta['humanities'] = "Ανθρωπιστικές Επιστήμες";
+$langCMeta['othersubsubj'] = "Άλλο Επιστημονικό Υπο-Πεδίο";
+$langCMeta['othernatural'] = "Άλλες Φυσικές Επιστήμες";
+$langCMeta['maths'] = "Μαθηματικά";
+$langCMeta['cis'] = "Επιστήμες Ηλεκτρονικών Υπολογιστών & Πληροφορικής";
+$langCMeta['phys'] = "Φυσική";
+$langCMeta['chem'] = "Χημεία";
+$langCMeta['environ'] = "Γεωεπιστήμες & Επιστήμες Περιβάλλοντος";
+$langCMeta['biology'] = "Βιολογικές Επιστήμες";
+$langCMeta['otheragri'] = "Άλλες Γεωργικές Επιστήμες";
+$langCMeta['agrifor'] = "Γεωργία, Δασοκομία, και Αλιεία";
+$langCMeta['animal'] = "Επιστήμες Ζωικής Παραγωγής";
+$langCMeta['veterin'] = "Κτηνιατρική";
+$langCMeta['agribio'] = "Γεωργική Βιοτεχνολογία";
+$langCMeta['othereng'] = "Άλλες Επιστήμες Μηχανικού & Τεχνολογίας";
+$langCMeta['civil'] = "Επιστήμες Πολιτικού Μηχανικού";
+$langCMeta['eeeeie'] = "Επιστήμες Ηλεκτρολόγου Μηχανικού, Ηλεκτρονικού Μηχανικού & Μηχανικού Η/Υ";
+$langCMeta['mechan'] = "Επιστήμες Μηχανολόγου Μηχανικού";
+$langCMeta['chemic'] = "Επιστήμες Χημικού Μηχανικού";
+$langCMeta['mateng'] = "Μηχανική Υλικών";
+$langCMeta['medeng'] = "Βιοϊατρική Μηχανική";
+$langCMeta['enveng'] = "Μηχανική Περιβάλλοντος";
+$langCMeta['envbio'] = "Περιβαλλοντική Βιοτεχνολογία";
+$langCMeta['indbio'] = "Βιομηχανική Βιοτεχνολογία";
+$langCMeta['nanotech'] = "Νανοτεχνολογία";
+$langCMeta['othersoc'] = "Άλλες Κοινωνικές Επιστήμες";
+$langCMeta['psych'] = "Ψυχολογία";
+$langCMeta['ecobi'] = "Οικονομικά και Διοίκηση Επιχειρήσεων";
+$langCMeta['edusoc'] = "Εκπαίδευση";
+$langCMeta['sociology'] = "Κοινωνιολογία";
+$langCMeta['law'] = "Νομική Επιστήμη - Δίκαιο";
+$langCMeta['political'] = "Πολιτικές Επιστήμες";
+$langCMeta['ecogeosoc'] = "Κοινωνική & Οικονομική Γεωγραφία";
+$langCMeta['mediacomm'] = "ΜΜΕ και Επικοινωνίες";
+$langCMeta['othermed'] = "Άλλες Ιατρικές Επιστήμες";
+$langCMeta['basicmed'] = "Βασική Ιατρική";
+$langCMeta['clinicalmed'] = "Κλινική Ιατρικη";
+$langCMeta['healthsci'] = "Επιστήμες Υγείας";
+$langCMeta['medbio'] = "Ιατρική Βιοτεχνολογία";
+$langCMeta['otherhum'] = "Άλλες Ανθρωπιστικές Επιστήμες";
+$langCMeta['hisarch'] = "Ιστορία & Αρχαιολογία";
+$langCMeta['langlit'] = "Γλώσσα & Λογοτεχνία";
+$langCMeta['philosophy'] = "Φιλοσοφία, Ηθική, Θρησκεία";
+$langCMeta['arts'] = "Τέχνες";
+$langCMeta['pedagogy'] = "Παιδαγωγική";
+$langCMeta['instructor_add'] = "Προσθήκη διδάσκοντος";
 
 /* * ******************************************
   Messages for Big Blue Button

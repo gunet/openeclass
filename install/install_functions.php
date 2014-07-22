@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,17 +18,24 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-// Functions for the new installer
+/**
+ * @file install_functions.php
+ * @brief Functions for the installation wizard
+ */
 
 require_once '../template/template.inc.php';
 
+/**
+ * draws installation screens
+ * @global type $urlServer
+ * @global type $langStep
+ * @global type $langStepTitle
+ * @global type $langTitleInstall
+ * @global type $langInstallProgress
+ * @param type $toolContent
+ */
 function draw($toolContent){
-	global $langUser, $langLogout, $nameTools, $langHelp, $langAnonUser;
-	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
-	global $relPath, $urlServer;
-	global $langChangeLang, $switchLangURL;
-	global $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
+	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
 	//display the left column (installation steps)
 	$toolArr = installerMenu();
@@ -94,8 +101,18 @@ function draw($toolContent){
 	}
 }
 
+/**
+ * @brief installation right menu 
+ * @global type $langRequirements
+ * @global type $langLicence
+ * @global type $langDBSetting
+ * @global type $langBasicCfgSetting
+ * @global type $langOptionalCfgSetting
+ * @global type $langLastCheck
+ * @global type $langInstallEnd
+ * @return array
+ */
 function installerMenu(){
-	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
 	global $langRequirements, $langLicence, $langDBSetting;
 	global $langBasicCfgSetting, $langOptionalCfgSetting, $langLastCheck, $langInstallEnd;
 

@@ -5,26 +5,36 @@
     xmlns='http://www.openeclass.org'
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
     
-    
     <title lang="el"></title>
     <title lang="en"></title>
-    <code lang="el"></code>
     <level></level>
     <description lang="el"></description>
     <description lang="en"></description>
     <contents lang="el"></contents>
+    <contents lang="en"></contents>
     <objectives lang="el"></objectives>
-    <keywords lang="el"></keywords>
-    <keywords lang="en"></keywords>
-    <thematic lang="el"></thematic>
-    <thematic lang="en"></thematic>
+    <objectives lang="en"></objectives>
+    <thematic>othersubj</thematic>
+    <subthematic>othersubsubj</subthematic>
     <prerequisites lang="el"></prerequisites>
-    <literature lang="el"></literature>
-    
     <prerequisites lang="en"></prerequisites>
+    <literature lang="el"></literature>
     <literature lang="en"></literature>
     <url></url>
-    <license></license>
+    <license lang="el"></license>
+    <license lang="en"></license>
+    <confirmAMinusLevel>false</confirmAMinusLevel>
+    <confirmALevel>false</confirmALevel>
+    <confirmAPlusLevel>false</confirmAPlusLevel>
+    <lastLevelConfirmation></lastLevelConfirmation>
+    <firstCreateDate></firstCreateDate>
+    <confirmCurriculum></confirmCurriculum>
+    <confirmVideolectures></confirmVideolectures>
+    <videolectures>0</videolectures>
+    
+    <code lang="el"></code>
+    <keywords lang="el"></keywords>
+    <keywords lang="en"></keywords>
     <coursePhoto mime=""></coursePhoto>
     <contentDevelopment lang="el"></contentDevelopment>
     <contentDevelopment lang="en"></contentDevelopment>
@@ -43,9 +53,9 @@
     
     <instructor>
         <firstName lang="el"></firstName>
-        <firstName lang="en"></firstName>
-        
         <lastName lang="el"></lastName>
+        
+        <firstName lang="en"></firstName>
         <lastName lang="en"></lastName>
         
         <fullName lang="el"></fullName>
@@ -56,30 +66,27 @@
         <cv></cv>
         <photo mime=""></photo>
     </instructor>
+    
     <coTeaching></coTeaching>
     <coTeachingColleagueOpensCourse></coTeachingColleagueOpensCourse>
     <coTeachingAutonomousDepartment></coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours></coTeachingDepartmentCreditHours>
-    <confirmAMinusLevel>false</confirmAMinusLevel>
-    <confirmALevel>false</confirmALevel>
-    <confirmAPlusLevel>false</confirmAPlusLevel>
-    <lastLevelConfirmation></lastLevelConfirmation>
-    <confirmVideolectures></confirmVideolectures>
-    <confirmCurriculum></confirmCurriculum>
 
 
     <curriculumLevel></curriculumLevel>
+    <institution>otherinst</institution>
+    <department lang="el"></department>
+    <department lang="en"></department>
+    <language lang="el"></language>
+    <language lang="en"></language>
+    
     <yearOfStudy></yearOfStudy>
     <semester></semester>
     <type></type>
     <credithours></credithours>
     <credits></credits>
-    <institution lang="el"></institution>
-    <institution lang="en"></institution>
     <institutionDescription lang="el"></institutionDescription>
     <institutionDescription lang="en"></institutionDescription>
-    <department lang="el"></department>
-    <department lang="en"></department>
     <curriculumTitle lang="el"></curriculumTitle>
     <curriculumTitle lang="en"></curriculumTitle>
     <curriculumDescription lang="el"></curriculumDescription>
@@ -88,10 +95,8 @@
     <outcomes lang="en"></outcomes>
     <curriculumKeywords lang="el"></curriculumKeywords>
     <curriculumKeywords lang="en"></curriculumKeywords>
-        
     <sector lang="el"></sector>
     <sector lang="en"></sector>
-    <language></language>
     <targetGroup lang="el"></targetGroup>
     <targetGroup lang="en"></targetGroup>
     <curriculumTargetGroup lang="el"></curriculumTargetGroup>

@@ -411,6 +411,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             $wiki_map,
             $assignments_map,
             $exercise_map)));
+    
+    restore_table($restoreThis, 'course_description', array('set' => array('course_id' => $course_id),
+        'delete' => array('id')));
 
     removeDir($restoreThis);
     $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>$langBack</a></p></center>";

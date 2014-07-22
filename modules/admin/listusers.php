@@ -104,9 +104,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (!empty($auth_type)) {
         if ($auth_type >= 2) {
             $criteria[] = 'password = ' . quote($auth_ids[$auth_type]);
-        } elseif ($auth_type == 1) {
-            $criteria[] = 'password NOT IN (' .
-                    implode(', ', $auth_ids) . ')';
+        } elseif ($auth_type == 1) {                        
+            $q1 = "'". implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN ('.$q1.')';
         }
         add_param('auth_type');
     }
@@ -180,9 +180,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail' .
                 $qry_base;
     }
-
-    //$pagination_link = '&amp;' . implode('&amp;', $params);
- 
+  
     // internal search
     if (!empty($_GET['sSearch'])) {
         $keyword = quote('%' . $_GET['sSearch'] . '%');

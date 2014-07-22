@@ -23,12 +23,7 @@
  */
 
 function get_total_topics($forum_id) {
-
-    $sql = db_query("SELECT COUNT(*) AS total FROM forum_topic
-                        WHERE forum_id = $forum_id");
-    $myrow = mysql_fetch_array($sql);
-
-    return $myrow["total"];
+    return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
 }
 
 /*
@@ -36,12 +31,7 @@ function get_total_topics($forum_id) {
  */
 
 function get_total_posts($id) {
-
-    $sql = db_query("SELECT COUNT(*) AS total FROM forum_post
-                WHERE topic_id = $id");
-    $myrow = mysql_fetch_array($sql);
-
-    return $myrow["total"];
+    return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_post WHERE topic_id = ?d", $id)->total;
 }
 
 /*
@@ -49,14 +39,9 @@ function get_total_posts($id) {
  */
 
 function get_last_post($topic_id) {
-
-    $sql = "SELECT post_time FROM forum_post
-                WHERE topic_id = $topic_id                
-                ORDER BY post_time DESC LIMIT 1";
-
-    $val = db_query_get_single_value($sql);
-
-    return $val;
+    return Database::get()->querySingle("SELECT post_time FROM forum_post
+                WHERE topic_id = ?d                
+                ORDER BY post_time DESC LIMIT 1", $topic_id)->post_time;
 }
 
 /*
@@ -69,20 +54,19 @@ function does_exists($id, $type) {
     global $course_id;
     switch ($type) {
         case 'forum':
-            $sql = "SELECT id FROM forum
-                                WHERE id = $id
-                                AND course_id = $course_id";
+            $sql = Database::get()->querySingle("SELECT id FROM forum
+                                WHERE id = ?d
+                                AND course_id = ?d", $id, $course_id);
             break;
         case 'topic':
-            $sql = "SELECT id FROM forum_topic
-                                WHERE id = $id";
+            $sql = Database::get()->querySingle("SELECT id FROM forum_topic
+                                WHERE id = ?d", $id);
             break;
     }
-    if (!$result = db_query($sql))
-        return(0);
-    if (!$myrow = mysql_fetch_array($result))
-        return(0);
-    return(1);
+    if (!$sql)
+        return 0;
+    else
+        return 1;
 }
 
 /*
@@ -91,16 +75,13 @@ function does_exists($id, $type) {
 
 function is_first_post($topic_id, $post_id) {
 
-    $sql = "SELECT id FROM forum_post
-                WHERE topic_id = $topic_id
-                ORDER BY id LIMIT 1";
-    if (!$r = db_query($sql)) {
+    $sql = Database::get()->querySingle("SELECT id FROM forum_post
+                WHERE topic_id = ?d
+                ORDER BY id LIMIT 1", $topic_id);
+    if (!$sql) {
         return(0);
     }
-    if (!$m = mysql_fetch_array($r)) {
-        return(0);
-    }
-    if ($m["id"] == $post_id) {
+    if ($sql->id == $post_id) {
         return(1);
     } else {
         return(0);
@@ -132,10 +113,11 @@ function forum_category($id) {
 
     global $course_id;
 
-    if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forum
-                    WHERE id = $id
-                    AND course_id = $course_id"))) {
-        return $r[0];
+    $r = Database::get()->querySingle("SELECT cat_id FROM forum
+                    WHERE id = ?d
+                    AND course_id = ?d", $id, $course_id);
+    if ($r) {
+        return $r->cat_id;
     } else {
         return FALSE;
     }
@@ -146,10 +128,11 @@ function category_name($id) {
 
     global $course_id;
 
-    if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_category
-                    WHERE id = $id
-                    AND course_id = $course_id"))) {
-        return $r[0];
+    $r = Database::get()->querySingle("SELECT cat_title FROM forum_category
+                    WHERE id = ?d
+                    AND course_id = ?d", $id, $course_id);
+    if ($r) {
+        return $r->cat_title;
     } else {
         return FALSE;
     }
@@ -158,10 +141,10 @@ function category_name($id) {
 function init_forum_group_info($forum_id) {
     global $course_id, $group_id, $can_post, $is_member, $is_editor;
 
-    $q = db_query("SELECT id FROM `group`
-			WHERE course_id = $course_id AND forum_id = $forum_id");
-    if ($q and mysql_num_rows($q) > 0) {
-        list($group_id) = mysql_fetch_row($q);
+    $q = Database::get()->querySingle("SELECT id FROM `group`
+			WHERE course_id = ?d AND forum_id = ?d", $course_id, $forum_id);
+    if ($q) {
+        $group_id = $q->id;
         initialize_group_info($group_id);
     } else {
         $group_id = false;

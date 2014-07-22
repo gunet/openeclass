@@ -164,10 +164,10 @@ $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_Curren
 if (!$is_editor) {
     $error = FALSE;
     // check if exercise has expired or is active
-    $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-                                                  WHERE eid='$eid_temp' AND uid='$uid'", $course_code));
-    ++$currentAttempt[0];
-    if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
+    $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record
+                                                  WHERE eid = ?d AND uid = ?d", $eid_temp, $uid)->count;
+    ++$currentAttempt;
+    if ($exerciseAllowedAttempts > 0 and $currentAttempt > $exerciseAllowedAttempts) {
         $message = $langExerciseMaxAttemptsReached;
         $error = TRUE;
     }

@@ -85,13 +85,16 @@ if ($myrow) {
 }
 
 // Find admin's last login
-$lastadminlogin = Database::get()->querySingle("SELECT `when` FROM loginout WHERE id_user = ?d AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1", $uid)->when;
-
-// Count profs registered after last login
-$lastregisteredprofs = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ?t", $lastadminlogin)->cnt;
-
-// Count studs registered after last login
-$lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ?t", $lastadminlogin)->cnt;
+$lastadminloginres = Database::get()->querySingle("SELECT `when` FROM loginout WHERE id_user = ?d AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1", $uid);
+$lastregisteredprofs = 0;
+$lastregisteredstuds = 0;
+if ($lastadminloginres && $lastadminloginres->when) {
+    $lastadminlogin = $lastadminloginres->when;
+    // Count profs registered after last login
+    $lastregisteredprofs = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ?t", $lastadminlogin)->cnt;
+    // Count studs registered after last login
+    $lastregisteredstuds = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ?t", $lastadminlogin)->cnt;
+}
 
 
 $tool_content .= "

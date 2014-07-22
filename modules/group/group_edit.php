@@ -19,15 +19,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id: group_edit.php,v 1.44 2011-06-24 13:40:33 adia Exp $
- *
- * @abstract This module is responsible for the user groups of each lesson
+/**
+ *  
+ * @file group_edit.php
+ * @brief group editing
  *
  */
+
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -70,36 +68,36 @@ $message = '';
 // Once modifications have been done, the user validates and arrives here
 if (isset($_POST['modify'])) {
     // Update main group settings
-    register_posted_variables(array('name' => true, 'description' => true), 'all', 'autoquote');
-    register_posted_variables(array('maxStudent' => true), 'all', 'intval');
+    register_posted_variables(array('name' => true, 'description' => true), 'all');
+    register_posted_variables(array('maxStudent' => true), 'all');
     $student_members = $member_count - count($tutors);
     if ($maxStudent != 0 and $student_members > $maxStudent) {
         $maxStudent = $student_members;
         $message .= "<p class='alert1'>$langGroupMembersUnchanged</p>";
     }
-    $updateStudentGroup = db_query("UPDATE `$mysqlMainDb`.`group`
-                                               SET name = $name,
-                                                   description = $description,
-                                                   max_members = $maxStudent
-                                               WHERE id = $group_id");
+    Database::get()->query("UPDATE `group`
+                                    SET name = ?s,
+                                        description = ?s,
+                                        max_members = ?d
+                                    WHERE id = ?d", $name, $description, $maxStudent, $group_id);
 
-    db_query("UPDATE forum SET name = $name WHERE id =
-                        (SELECT forum_id FROM `group` WHERE id = $group_id)
-                            AND course_id = $course_id");
+    Database::get()->query("UPDATE forum SET name = ?s WHERE id =
+                        (SELECT forum_id FROM `group` WHERE id = ?d)
+                            AND course_id = ?d", $name, $group_id, $course_id);
 
     if ($is_editor) {
-            if (isset($_POST['tutor'])) {
-                    db_query("DELETE FROM group_members
-                                     WHERE group_id = $group_id AND is_tutor = 1");                
-                    foreach ($_POST['tutor'] as $tutor_id) {
-                            $tutor_id = intval($tutor_id);
-                            db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
-                    }
-                } else {
-                        db_query("UPDATE group_members SET is_tutor = 0 WHERE group_id = $group_id");
-                }
+        if (isset($_POST['tutor'])) {
+            Database::get()->query("DELETE FROM group_members
+                                     WHERE group_id = ?d AND is_tutor = 1", $group_id);
+            foreach ($_POST['tutor'] as $tutor_id) {
+                $tutor_id = intval($tutor_id);
+                Database::get()->query("REPLACE INTO group_members SET group_id = ?d, user_id = ?d, is_tutor = 1", $group_id, $tutor_id);
+            }
+        } else {
+            Database::get()->query("UPDATE group_members SET is_tutor = 0 WHERE group_id = ?d", $group_id);
         }
-            
+    }
+
     // Count number of members
     $numberMembers = @count($_POST['ingroup']);
 
@@ -111,15 +109,14 @@ if (isset($_POST['modify'])) {
             $message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
         } else {
             // Delete all members of this group
-            $delGroupUsers = db_query("DELETE FROM `$mysqlMainDb`.group_members
-                                                          WHERE group_id = $group_id AND is_tutor = 0");
+            Database::get()->query("DELETE FROM group_members
+                                        WHERE group_id = ?d AND is_tutor = 0", $group_id);
             $numberMembers--;
 
             for ($i = 0; $i <= $numberMembers; $i++) {
-                db_query("INSERT IGNORE INTO `$mysqlMainDb`.group_members (user_id, group_id)
-                                          VALUES (" . intval($_POST['ingroup'][$i]) . ", $group_id)");
+                Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
+                                          VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
             }
-
             $message .= "<p class='success'>$langGroupSettingsModified</p>";
         }
     }
@@ -130,19 +127,19 @@ $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
     $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>\n";
-    $q = db_query("SELECT user.id AS user_id, surname, givenname,
+    $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
-                                                              WHERE group_id = $group_id AND
+                                                              WHERE group_id = ?d AND
                                                                     is_tutor = 1) AS is_tutor
                               FROM course_user, user
                               WHERE course_user.user_id = user.id AND
                                     course_user.tutor = 1 AND
-                                    course_user.course_id = $course_id
-                              ORDER BY surname, givenname, user_id");
-    while ($row = mysql_fetch_array($q)) {
-        $selected = $row['is_tutor'] ? ' selected="selected"' : '';
-        $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['surname']) .
-                ' ' . q($row['givenname']) . "</option>\n";
+                                    course_user.course_id = ?d
+                              ORDER BY surname, givenname, user_id", $group_id, $course_id);
+    foreach ($q as $row) {
+        $selected = $row->is_tutor ? ' selected="selected"' : '';
+        $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
+                ' ' . q($row->givenname) . "</option>\n";
     }
     $tool_content_tutor .= '</select>';
 } else {
@@ -155,45 +152,44 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
     // Students registered to the course but not members of this group
-    $sqll = "SELECT u.id, u.surname, u.givenname
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname
                         FROM user u, course_user cu
-                        WHERE cu.course_id = $course_id AND
+                        WHERE cu.course_id = ?d AND
                               cu.user_id = u.id AND
-                              u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
-                              cu.status = ".USER_STUDENT."
+                              u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = ?d) AND
+                              cu.status = " . USER_STUDENT . "
                         GROUP BY u.id
-                        ORDER BY u.surname, u.givenname";
+                        ORDER BY u.surname, u.givenname", $course_id, $group_id);
 } else {
     // Students registered to the course but members of no group
-    $sqll = "SELECT u.id, u.surname, u.givenname
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.id AND
-                              cu.status = ".USER_STUDENT." AND
+                              cu.status = " . USER_STUDENT . " AND
                               u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                WHERE `group`.id = group_members.group_id AND
-                                                               `group`.course_id = $course_id)
+                                                               `group`.course_id = ?d)
                         GROUP BY u.id
-                        ORDER BY u.surname, u.givenname";
+                        ORDER BY u.surname, u.givenname", $course_id);
 }
 
 $tool_content_not_Member = '';
-$resultNotMember = db_query($sqll);
-while ($myNotMember = mysql_fetch_array($resultNotMember)) {
-    $tool_content_not_Member .= "<option value='$myNotMember[id]'>" .
-            q("$myNotMember[surname] $myNotMember[givenname]") . "</option>";
+foreach ($resultNotMember as $myNotMember) {
+    $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
+            q("$myNotMember->surname $myNotMember->givenname") . "</option>";
 }
 
-$q = db_query("SELECT user.id, user.surname, user.givenname
+$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
                FROM user, group_members
                WHERE group_members.user_id = user.id AND
-                     group_members.group_id = $group_id AND
+                     group_members.group_id = ?d AND
                      group_members.is_tutor = 0
-               ORDER BY user.surname, user.givenname");
+               ORDER BY user.surname, user.givenname", $group_id);
 
 $tool_content_group_members = '';
-while ($member = mysql_fetch_array($q)) {
-    $tool_content_group_members .= "<option value='$member[id]'>" . q("$member[surname] $member[givenname]") .
+foreach ($q as $member) {
+    $tool_content_group_members .= "<option value='$member->id'>" . q("$member->surname $member->givenname") .
             "</option>";
 }
 

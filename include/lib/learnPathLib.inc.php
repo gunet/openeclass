@@ -77,11 +77,7 @@ function commentBox($type, $mode) {
     global $is_editor, $themeimg, $langModify, $langSubmit,
     $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
     $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
-    $mysqlMainDb, $course_id;
-
-    $tbl_lp_learnPath = 'lp_learnPath';
-    $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
-    $tbl_lp_module = 'lp_module';
+    $course_id;
 
     // will be set 'true' if the comment has to be displayed
     $dsp = false;
@@ -92,26 +88,25 @@ function commentBox($type, $mode) {
         case MODULE_ :
             $defaultTxt = $langDefaultModuleComment;
             $col_name = 'comment';
-            $tbl_name = $tbl_lp_module;
+            $tbl_name = 'lp_module';
             if (isset($_REQUEST['module_id'])) {
                 $module_id = $_REQUEST['module_id'];
             } else {
                 $module_id = $_SESSION['lp_module_id'];
             }
-            $where_cond = "`module_id` = " . (int) $module_id . " AND `course_id` = $course_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $where_cond = "`module_id` = " . intval($module_id) . " AND `course_id` = " . intval($course_id);
             break;
         case LEARNINGPATH_ :
             $defaultTxt = $langDefaultLearningPathComment;
             $col_name = 'comment';
-            $tbl_name = $tbl_lp_learnPath;
-            $where_cond = '`learnPath_id` = ' . (int) $_SESSION['path_id'] . " AND `course_id` = $course_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $tbl_name = 'lp_learnPath';
+            $where_cond = '`learnPath_id` = ' . intval($_SESSION['path_id']) . " AND `course_id` = " . intval($course_id);
             break;
         case LEARNINGPATHMODULE_ :
             $defaultTxt = $langDefaultModuleAddedComment;
             $col_name = 'specificComment';
-            $tbl_name = $tbl_lp_rel_learnPath_module;
-            $where_cond = "`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-              	AND `module_id` = " . (int) $_SESSION['lp_module_id'];
+            $tbl_name = 'lp_rel_learnPath_module';
+            $where_cond = "`learnPath_id` = " . intval($_SESSION['path_id']) . " AND `module_id` = " . intval($_SESSION['lp_module_id']);
             break;
     }
 
@@ -124,19 +119,19 @@ function commentBox($type, $mode) {
             $sql = "UPDATE `" . $tbl_name . "`
                            SET `" . $col_name . "` = \"" . addslashes($_POST['insertCommentBox']) . "\"
                          WHERE " . $where_cond;
-            db_query($sql, $mysqlMainDb);
+            Database::get()->query($sql);
 
-            if ($mode == UPDATE_)
+            if ($mode == UPDATE_) {
                 $dsp = true;
-            elseif ($mode == UPDATENOTSHOWN_)
+            } else if ($mode == UPDATENOTSHOWN_) {
                 $dsp = false;
-        }
-        else { // display form
+            }
+        } else { // display form
             // get info to fill the form in
             $sql = "SELECT `" . $col_name . "`
                        FROM `" . $tbl_name . "`
                       WHERE " . $where_cond;
-            $oldComment = db_query_get_single_value($sql);
+            $oldComment = Database::get()->querySingle($sql)->$col_name;
 
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 " . rich_text_editor('insertCommentBox', 1, 50, $oldComment) . "
@@ -150,7 +145,7 @@ function commentBox($type, $mode) {
         $sql = "UPDATE `" . $tbl_name . "`
                  SET `" . $col_name . "` = ''
                  WHERE " . $where_cond;
-        db_query($sql);
+        Database::get()->query($sql);
         $dsp = TRUE;
     }
 
@@ -160,18 +155,13 @@ function commentBox($type, $mode) {
                 FROM `" . $tbl_name . "`
                 WHERE " . $where_cond;
 
-        $result = db_query($sql, $mysqlMainDb);
-        if ($result) {
-            list($value) = mysql_fetch_row($result);
-            mysql_free_result($result);
-            $currentComment = $value;
-        } else {
-            $currentComment = false;
-        }
+        $result = Database::get()->querySingle($sql);
+        $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
 
         // display nothing if this is default comment and not an admin
-        if (($currentComment == $defaultTxt) && !$is_editor)
+        if (($currentComment == $defaultTxt) && !$is_editor) {
             return $output;
+        }
 
         if (empty($currentComment)) {
             // if no comment and user is admin : display link to add a comment
@@ -212,13 +202,8 @@ function commentBox($type, $mode) {
  */
 
 function nameBox($type, $mode, $formlabel = FALSE) {
-    $tbl_lp_learnPath = "lp_learnPath";
-    $tbl_lp_module = "lp_module";
-
     // globals
-    global $is_editor, $themeimg, $urlAppend, $langLearningPath1,
-    $langModify, $langOk, $langErrorNameAlreadyExists, $course_code,
-    $mysqlMainDb, $course_id;
+    global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists, $course_code, $course_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
     $dsp = FALSE;
@@ -228,13 +213,13 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     switch ($type) {
         case MODULE_ :
             $col_name = 'name';
-            $tbl_name = $tbl_lp_module;
-            $where_cond = '`module_id` = ' . (int) $_SESSION['lp_module_id'];
+            $tbl_name = "lp_module";
+            $where_cond = '`module_id` = ' . intval($_SESSION['lp_module_id']);
             break;
         case LEARNINGPATH_ :
             $col_name = 'name';
-            $tbl_name = $tbl_lp_learnPath;
-            $where_cond = '`learnPath_id` = ' . (int) $_SESSION['path_id'];
+            $tbl_name = "lp_learnPath";
+            $where_cond = '`learnPath_id` = ' . intval($_SESSION['path_id']);
             break;
     }
 
@@ -243,39 +228,35 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
         if (isset($_POST['newName']) && !empty($_POST['newName'])) {
 
-            $sql = "SELECT COUNT(`" . $col_name . "`)
+            $num = Database::get()->querySingle("SELECT COUNT(`" . $col_name . "`) AS count
                                  FROM `" . $tbl_name . "`
-                                WHERE `" . $col_name . "` = '" . addslashes($_POST['newName']) . "'
-                                  AND !(" . $where_cond . ") AND `course_id` = $course_id";
-            $num = db_query_get_single_value($sql, $mysqlMainDb);
+                                WHERE `" . $col_name . "` = ?s
+                                  AND !(" . $where_cond . ") AND `course_id` = ?d", $_POST['newName'], $course_id)->count;
 
             if ($num == 0) {  // name doesn't already exists
-                $sql = "UPDATE `" . $tbl_name . "`
-                            SET `" . $col_name . "` = '" . addslashes($_POST['newName']) . "'
-                            WHERE " . $where_cond . " AND `course_id` = $course_id";
-
-                db_query($sql, $mysqlMainDb);
+                Database::get()->query("UPDATE `" . $tbl_name . "`
+                            SET `" . $col_name . "` = ?s
+                            WHERE " . $where_cond . " AND `course_id` = ?d", $_POST['newName'], $course_id);
                 $dsp = TRUE;
             } else {
                 $output .= $langErrorNameAlreadyExists . '<br />';
                 $dsp = TRUE;
             }
         } else { // display form
-            $sql = "SELECT `name`
+            $oldName = Database::get()->querySingle("SELECT `name`
                     FROM `" . $tbl_name . "`
-                    WHERE " . $where_cond . " AND `course_id` = $course_id";
-
-            $oldName = db_query_get_single_value($sql, $mysqlMainDb);
+                    WHERE " . $where_cond . " AND `course_id` = ?d", $course_id)->name;
 
             $output .= '
       <form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
 
-            if ($formlabel != FALSE)
-            //$output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
+            if ($formlabel != FALSE) {
+                // $output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
                 $output .= '<input type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '" / class="FormData_InputText">' . "\n"
                         . '        <input type="hidden" name="cmd" value="updateName" />' . "\n"
                         . '        <input type="submit" value="' . $langOk . '" />' . "\n"
                         . '      </form>';
+            }
         }
     }
 
@@ -283,23 +264,18 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     if ($mode == DISPLAY_ || $dsp == true) {
         $sql = "SELECT `name`
                 FROM `" . $tbl_name . "`
-                WHERE " . $where_cond . " AND `course_id` = $course_id";
+                WHERE " . $where_cond . " AND `course_id` = ?d";
 
-        $result = db_query($sql, $mysqlMainDb);
-        if ($result) {
-            list($value) = mysql_fetch_row($result);
-            mysql_free_result($result);
-            $currentName = $value;
-        } else {
-            $currentName = false;
-        }
+        $result = Database::get()->querySingle($sql, $course_id);
+        $currentName = ($result && !empty($result->name)) ? $result->name : false;
 
         //$output .= '<strong>'
         $output .= $currentName;
 
-        if ($is_editor)
+        if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName">'
                     . "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
+        }
     }
 
     return $output;
@@ -377,10 +353,11 @@ function is_num($var) {
         $ascii = ord($var[$i]);
 
         // 48 to 57 are decimal ascii values for 0 to 9
-        if ($ascii >= 48 && $ascii <= 57)
+        if ($ascii >= 48 && $ascii <= 57) {
             continue;
-        else
+        } else {
             return FALSE;
+        }
     }
 
     return TRUE;
@@ -392,13 +369,7 @@ function is_num($var) {
  */
 
 function display_path_content() {
-    $tbl_lp_learnPath = 'lp_learnPath';
-    $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
-    $tbl_lp_user_module_progress = 'lp_user_module_progress';
-    $tbl_lp_module = 'lp_module';
-    $tbl_lp_asset = 'lp_asset';
-
-    global $_cid, $langModule, $themeimg, $mysqlMainDb, $course_id;
+    global $langModule, $course_id;
 
     $style = '';
     $output = '';
@@ -406,21 +377,27 @@ function display_path_content() {
     $sql = "SELECT M.`name`, M.`contentType`,
                    LPM.`learnPath_module_id`, LPM.`parent`,
                    A.`path`
-            FROM `" . $tbl_lp_learnPath . "` AS LP,
-                 `" . $tbl_lp_rel_learnPath_module . "` AS LPM,
-                 `" . $tbl_lp_module . "` AS M
-            LEFT JOIN `" . $tbl_lp_asset . "` AS A
+            FROM `lp_learnPath` AS LP,
+                 `lp_rel_learnPath_module` AS LPM,
+                 `lp_module` AS M
+            LEFT JOIN `lp_asset` AS A
               ON M.`startAsset_id` = A.`asset_id`
-            WHERE LP.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
+            WHERE LP.`learnPath_id` = ?d
               AND LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`module_id` = M.`module_id`
-              AND LP.`course_id` = $course_id
+              AND LP.`course_id` = ?d
             ORDER BY LPM.`rank`";
-    $moduleList = db_query_fetch_all($sql, $mysqlMainDb);
+    $moduleList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
     $extendedList = array();
+    $modar = array();
     foreach ($moduleList as $module) {
-        $extendedList[] = $module;
+        $modar['name'] = $module->name;
+        $modar['contentType'] = $module->contentType;
+        $modar['learnPath_module_id'] = $module->learnPath_module_id;
+        $modar['parent'] = $module->parent;
+        $modar['path'] = $module->path;
+        $extendedList[] = $modar;
     }
     // build the array of modules
     // build_element_list return a multi-level array, where children is an array with all nested modules
@@ -430,50 +407,49 @@ function display_path_content() {
     // look for maxDeep
     $maxDeep = 1; // used to compute colspan of <td> cells
     for ($i = 0; $i < sizeof($flatElementList); $i++) {
-        if ($flatElementList[$i]['children'] > $maxDeep)
+        if ($flatElementList[$i]['children'] > $maxDeep) {
             $maxDeep = $flatElementList[$i]['children'];
+        }
     }
 
     $output .= "\n" . '<table width="99%">' . "\n\n"
             . '<tr align="center" valign="top">' . "\n"
             . '<th colspan="' . ($maxDeep + 1) . '">' . $langModule . '</th>' . "\n"
-            . '</tr>' . "\n"
-    ;
+            . '</tr>' . "\n";
 
     foreach ($flatElementList as $module) {
         $spacingString = '';
-        for ($i = 0; $i < $module['children']; $i++)
+        for ($i = 0; $i < $module['children']; $i++) {
             $spacingString .= '<td width="5">&nbsp;</td>' . "\n";
+        }
         $colspan = $maxDeep - $module['children'] + 1;
 
         $output .= '<tr align="center" ' . $style . '>' . "\n"
                 . $spacingString
-                . '<td colspan="' . $colspan . '" align="left">'
-        ;
+                . '<td colspan="' . $colspan . '" align="left">';
 
         if ($module['contentType'] == CTLABEL_) { // chapter head
             $output .= '<b>' . $module['name'] . '</b>';
         } else { // module
-            if ($module['contentType'] == CTEXERCISE_)
+            if ($module['contentType'] == CTEXERCISE_) {
                 $moduleImg = 'exercise_on';
-            else if ($module['contentType'] == CTLINK_)
+            } else if ($module['contentType'] == CTLINK_) {
                 $moduleImg = 'links_on';
-            else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+            } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
                 $moduleImg = 'description_on';
-            else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+            } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
                 $moduleImg = 'videos_on';
-            else
+            } else {
                 $moduleImg = choose_image(basename($module['path']));
+            }
 
             $contentType_alt = selectAlt($module['contentType']);
 
             $output .= icon($moduleImg, $contentType_alt) . $module['name'];
         }
-        $output .= '</td>' . "\n"
-                . '</tr>' . "\n\n";
+        $output .= '</td>' . "\n" . '</tr>' . "\n\n";
     }
     $output .= '     </table>' . "\n\n";
-
     return $output;
 }
 
@@ -486,45 +462,38 @@ function display_path_content() {
  * @return integer percentage of progression os user $mpUid in the learning path $lpid
  */
 function get_learnPath_progress($lpid, $lpUid) {
-    global $mysqlMainDb, $course_id;
+    global $course_id;
 
     // find progression for this user in each module of the path
-
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
-             FROM `$mysqlMainDb`.`lp_learnPath` AS LP,
-                  `$mysqlMainDb`.`lp_rel_learnPath_module` AS LPM,
-                  `$mysqlMainDb`.`lp_user_module_progress` AS UMP,
-                  `$mysqlMainDb`.`lp_module` AS M
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
             WHERE LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-              AND UMP.`user_id` = " . (int) $lpUid . "
-              AND LP.`learnPath_id` = " . (int) $lpid . "
-              AND LP.`course_id` = $course_id
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
               AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != '" . CTLABEL_ . "'";
+              AND M.`contentType` != ?s";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
 
-    $result = db_query($sql);
-    $modules = array();
-
-    while ($row = mysql_fetch_array($result)) {
-        $modules [] = $row;
-    }
-    mysql_free_result($result);
     $progress = 0;
     if (!is_array($modules) || empty($modules)) {
         $progression = 0;
     } else {
         // progression is calculated in pourcents
         foreach ($modules as $module) {
-            if ($module['SMax'] <= 0) {
+            if ($module->SMax <= 0) {
                 $modProgress = 0;
             } else {
-                $modProgress = @round($module['R'] / $module['SMax'] * 100);
+                $modProgress = @round($module->R / $module->SMax * 100);
             }
 
             // in case of scorm module, progression depends on the lesson status value
-            if (($module['CTYPE'] == "SCORM") && ($module['SMax'] <= 0) && (( $module['STATUS'] == 'COMPLETED') || ($module['STATUS'] == 'PASSED'))) {
+            if (($module->CTYPE == "SCORM") && ($module->SMax <= 0) && (( $module->STATUS == 'COMPLETED') || ($module->STATUS == 'PASSED'))) {
                 $modProgress = 100;
             }
 
@@ -533,28 +502,22 @@ function get_learnPath_progress($lpid, $lpUid) {
             }
         }
         // find number of visible modules in this path
-        $sqlnum = "SELECT COUNT(M.`module_id`)
+        $sqlnum = "SELECT COUNT(M.`module_id`) AS count
                     FROM `lp_rel_learnPath_module` AS LPM,
                          `lp_module` AS M
-                    WHERE LPM.`learnPath_id` = " . (int) $lpid . "
+                    WHERE LPM.`learnPath_id` = ?d
                     AND LPM.`visible` = 1
-                    AND M.`contentType` != '" . CTLABEL_ . "'
+                    AND M.`contentType` != ?s
                     AND M.`module_id` = LPM.`module_id`
-                    AND M.`course_id` = $course_id
-                    ";
-        $result = db_query($sqlnum);
-        if ($result) {
-            list($value) = mysql_fetch_row($result);
-            mysql_free_result($result);
-            $nbrOfVisibleModules = $value;
-        } else {
-            $nbrOfVisibleModules = false;
-        }
+                    AND M.`course_id` = ?d";
+        $result = Database::get()->querySingle($sqlnum, $lpid, CTLABEL_, $course_id);
+        $nbrOfVisibleModules = ($result && !empty($result->count)) ? $result->count : false;
 
-        if (is_numeric($nbrOfVisibleModules))
+        if (is_numeric($nbrOfVisibleModules)) {
             $progression = @round($progress / $nbrOfVisibleModules);
-        else
+        } else {
             $progression = 0;
+        }
     }
     return $progression;
 }
@@ -570,21 +533,13 @@ function get_learnPath_progress($lpid, $lpUid) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function display_my_exercises($dialogBox, $style) {
-    $tbl_quiz_test = "exercise";
-
-    global $langAddModule;
-    global $langAddModulesButton;
-    global $langExercise;
-    global $langNoEx;
-    global $langAddOneModuleButton;
-    global $themeimg, $langComment, $langSelection, $course_code, $mysqlMainDb, $course_id;
+    global $langAddModulesButton, $langExercise, $langNoEx, $themeimg, $langSelection, $course_code, $course_id;
     $output = "";
 
     $output .= '<!-- display_my_exercises output -->' . "\n\n";
     /* --------------------------------------
       DIALOG BOX SECTION
       -------------------------------------- */
-    $colspan = 3;
     if (!empty($dialogBox)) {
         $output .= disp_message_box($dialogBox, $style) . '<br />' . "\n";
     }
@@ -597,17 +552,16 @@ function display_my_exercises($dialogBox, $style) {
             . '      <th width="10"><div align="center">'
             . $langSelection
             . '</div></th>' . "\n"
-            . '    </tr>' . "\n"
-    ;
+            . '    </tr>' . "\n";
 
     // Display available modules
     $atleastOne = FALSE;
     $sql = "SELECT `id`, `title`, `description`
-            FROM `" . $tbl_quiz_test . "`
-            WHERE course_id = $course_id
+            FROM `exercise`
+            WHERE course_id = ?d
             AND active = 1
-            ORDER BY  `title`, `id`";
-    $exercises = db_query_fetch_all($sql, $mysqlMainDb);
+            ORDER BY `title`, `id`";
+    $exercises = Database::get()->queryArray($sql, $course_id);
 
     if (is_array($exercises) && !empty($exercises)) {
         $ind = 1;
@@ -620,26 +574,22 @@ function display_my_exercises($dialogBox, $style) {
 
             $output .= '    <tr ' . $style . '>' . "\n"
                     . '      <td align="left">'
-                    . '<label for="check_' . $exercise['id'] . '" >'
+                    . '<label for="check_' . $exercise->id . '" >'
                     . '<img src="' . $themeimg . '/exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
-                    . q($exercise['title'])
+                    . q($exercise->title)
                     . '</label>'
                     . '<br />' . "\n";
             // COMMENT
-            if (!empty($exercise['description'])) {
-                $output .= '      <span class="comments">' . standard_text_escape($exercise['description']) . '</span>'
-                        . '</td>' . "\n"
-                ;
+            if (!empty($exercise->description)) {
+                $output .= '      <span class="comments">' . standard_text_escape($exercise->description) . '</span>'
+                        . '</td>' . "\n";
             } else {
-                $output .= '</td>' . "\n"
-                ;
+                $output .= '</td>' . "\n";
             }
             $output .= '      <td align="center">'
-                    . '<input type="checkbox" name="check_' . $exercise['id'] . '" id="check_' . $exercise['id'] . '" value="' . $exercise['id'] . '" />'
+                    . '<input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" />'
                     . '</td>' . "\n"
-                    . '    </tr>' . "\n"
-            ;
-
+                    . '    </tr>' . "\n";
 
             $atleastOne = true;
             $ind++;
@@ -652,8 +602,7 @@ function display_my_exercises($dialogBox, $style) {
                 . '      <td colspan="2" align="center">'
                 . $langNoEx
                 . '</td>' . "\n"
-                . '    </tr>' . "\n"
-        ;
+                . '    </tr>' . "\n";
     }
 
     // Display button to add selected modules
@@ -663,13 +612,11 @@ function display_my_exercises($dialogBox, $style) {
                 . '      <th colspan="2"><div class="right">'
                 . '<input type="submit" name="insertExercise" value="' . $langAddModulesButton . '" />'
                 . '</div></th>' . "\n"
-                . '    </tr>' . "\n"
-        ;
+                . '    </tr>' . "\n";
     }
     $output .= '    </table>' . "\n\n"
             . '    </form>' . "\n\n"
-            . '    <!-- end of display_my_exercises output -->' . "\n"
-    ;
+            . '    <!-- end of display_my_exercises output -->' . "\n";
 
     return $output;
 }
@@ -686,28 +633,26 @@ function display_my_exercises($dialogBox, $style) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 
-function display_my_documents($dialogBox, $style) {   
-    global $courseDir;
-    global $baseWorkDir;
+function display_my_documents($dialogBox, $style) {
     global $curDirName;
     global $curDirPath;
-    global $parentDir;    
+    global $parentDir;
     global $langUp;
     global $langName;
     global $langSize;
-    global $langDate;    
+    global $langDate;
     global $langAddModulesButton;
     global $fileList;
     global $themeimg;
-    global $secureDocumentDownload, $langSelection, $langDirectory, $course_code;
+    global $langSelection, $langDirectory, $course_code;
 
     $output = '';
     /*
      * DISPLAY
      */
-    
+
     $dspCurDirName = htmlspecialchars($curDirName);
-    $cmdCurDirPath = rawurlencode($curDirPath);
+    // $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir = rawurlencode($parentDir);
 
     $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
@@ -770,7 +715,7 @@ function display_my_documents($dialogBox, $style) {
             $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
 
-            if ($fileList['visible'][$fileKey] == 0) {                
+            if ($fileList['visible'][$fileKey] == 0) {
                 continue; // skip the display of this file                
             }
 
@@ -823,7 +768,6 @@ function display_my_documents($dialogBox, $style) {
         // form button
 
 
-        $colspan1 = $colspan - 1;
         $output .= '
     <tr>
       <th colspan="' . $colspan . '"><div class="right">
@@ -849,7 +793,7 @@ function display_my_documents($dialogBox, $style) {
  * Rows with a father id not existing in the array will be ignored
  *
  * @param $list modules of the learning path list
- * @param $paramField name of the field containing the parent id
+ * @param $parentField name of the field containing the parent id
  * @param $idField name of the field containing the current id
  * @param $id learnPath_module_id of the node to build
  * @return tree of the learning path
@@ -905,20 +849,20 @@ function build_display_element_list($elementList, $deepness = 0) {
         $count++;
 
         // temporary save the children before overwritten it
-        if (isset($thisElement['children']))
+        if (isset($thisElement['children'])) {
             $temp = $thisElement['children'];
-        else
+        } else {
             $temp = NULL; // re init temp value if there is nothing to put in it
+        }
 
-
-            
-// we use 'children' to calculate the deepness of the module, it will be displayed
+        // we use 'children' to calculate the deepness of the module, it will be displayed
         // using a spacing multiply by deepness
         $thisElement['children'] = $deepness;
 
         //--- up and down arrows displayed ?
-        if ($count == count($elementList))
+        if ($count == count($elementList)) {
             $last = true;
+        }
 
         $thisElement['up'] = $first ? false : true;
         $thisElement['down'] = $last ? false : true;
@@ -944,19 +888,17 @@ function build_display_element_list($elementList, $deepness = 0) {
  * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function set_module_tree_visibility($module_tree, $visibility) {
-
-    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
-
     foreach ($module_tree as $module) {
         if ($module['visible'] != $visibility) {
-            $sql = "UPDATE `" . $tbl_lp_rel_learnPath_module . "`
-                        SET `visible` = '" . addslashes($visibility) . "'
-                        WHERE `learnPath_module_id` = " . (int) $module['learnPath_module_id'] . "
-                          AND `visible` != '" . addslashes($visibility) . "'";
-            db_query($sql);
+            $sql = "UPDATE `lp_rel_learnPath_module`
+                       SET `visible` = ?s
+                     WHERE `learnPath_module_id` = ?d
+                       AND `visible` != ?s";
+            Database::get()->query($sql, $visibility, $module['learnPath_module_id'], $visibility);
         }
-        if (isset($module['children']) && is_array($module['children']))
+        if (isset($module['children']) && is_array($module['children'])) {
             set_module_tree_visibility($module['children'], $visibility);
+        }
     }
 }
 
@@ -968,38 +910,28 @@ function set_module_tree_visibility($module_tree, $visibility) {
  * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function delete_module_tree($module_tree) {
-    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
-    $tbl_lp_user_module_progress = "lp_user_module_progress";
-    $tbl_lp_module = "lp_module";
-    $tbl_lp_asset = "lp_asset";
-
     foreach ($module_tree as $module) {
         switch ($module['contentType']) {
             case CTSCORMASSET_ :
             case CTSCORM_ :
                 // delete asset if scorm
-                $delAssetSql = "DELETE
-                                    FROM `" . $tbl_lp_asset . "`
-                                    WHERE `module_id` =  " . (int) $module['module_id'] . "
-                                    ";
-                db_query($delAssetSql);
-            // no break; because we need to delete modul
+                Database::get()->query("DELETE FROM `lp_asset` WHERE `module_id` =  ?d", $module['module_id']);
+            // no break because we need to delete module
             case CTLABEL_ : // delete module if scorm && if label
-                $delModSql = "DELETE FROM `" . $tbl_lp_module . "`
-                                     WHERE `module_id` =  " . (int) $module['module_id'];
-                db_query($delModSql);
-            // no break; because we need to delete LMP and UMP
+                Database::get()->query("DELETE FROM `lp_module` WHERE `module_id` =  ?d", $module['module_id']);
+            // no break because we need to delete LMP and UMP
             default : // always delete LPM and UMP
-                db_query("DELETE FROM `" . $tbl_lp_rel_learnPath_module . "`
-                                        WHERE `learnPath_module_id` = " . (int) $module['learnPath_module_id']);
-                db_query("DELETE FROM `" . $tbl_lp_user_module_progress . "`
-                                        WHERE `learnPath_module_id` = " . (int) $module['learnPath_module_id']);
+                Database::get()->query("DELETE FROM `lp_rel_learnPath_module`
+                                              WHERE `learnPath_module_id` = ?d", $module['learnPath_module_id']);
+                Database::get()->query("DELETE FROM `lp_user_module_progress`
+                                              WHERE `learnPath_module_id` = ?d", $module['learnPath_module_id']);
 
                 break;
         }
     }
-    if (isset($module['children']) && is_array($module['children']))
+    if (isset($module['children']) && is_array($module['children'])) {
         delete_module_tree($module['children']);
+    }
 }
 
 /**
@@ -1007,7 +939,7 @@ function delete_module_tree($module_tree) {
  *
  *
  * @param $lpModules array the tree of all modules in a learning path
- * @param $iid node we are looking for
+ * @param $id node we are looking for
  * @param $field type of node we are looking for (learnPath_module_id, module_id,...)
  *
  * @return array the requesting node (with all its children)
@@ -1021,9 +953,9 @@ function get_module_tree($lpModules, $id, $field = 'module_id') {
             return $module;
         } elseif (isset($module['children']) && is_array($module['children'])) {
             $temp = get_module_tree($module['children'], $id, $field);
-            if (is_array($temp))
+            if (is_array($temp)) {
                 return $temp;
-            // else check next node
+            } // else check next node
         }
     }
 }
@@ -1065,7 +997,6 @@ function isScorm2004Time($time) {
     if (preg_match($mask, $time)) {
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -1081,7 +1012,6 @@ function isScormTime($time) {
     if (preg_match($mask, $time)) {
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -1335,9 +1265,7 @@ function clean_str_for_javascript($str) {
  */
 
 function parse_user_text($userText) {
-
     $userText = make_clickable($userText);
-
     if (strpos($userText, '<!-- content: html -->') === false) {
         // only if the content isn't HTML change new line to <br>
         // Note the '<!-- content: html -->' is introduced by HTML Area
@@ -1408,7 +1336,6 @@ function disp_message_box($message, $style = FALSE) {
     } else {
         $cell = "<td class=\"left\">";
     }
-
     return "$cell $message";
 }
 
@@ -1434,7 +1361,6 @@ function disp_message_box1($message, $style = FALSE) {
  */
 
 function disp_button($url, $text, $confirmMessage = '') {
-
     if (is_javascript_enabled() && !preg_match('~^Mozilla/4\.[1234567]~', $_SERVER['HTTP_USER_AGENT'])) {
         if ($confirmMessage != '') {
             $onClickCommand = "if(confirm('" . clean_str_for_javascript($confirmMessage) . "')){document.location='" . $url . "';return false}";
@@ -1444,8 +1370,7 @@ function disp_button($url, $text, $confirmMessage = '') {
 
         return '<button onclick="' . $onClickCommand . '">'
                 . $text
-                . '</button>&nbsp;' . "\n"
-        ;
+                . '</button>&nbsp;' . "\n";
     } else {
         return '[ <a href="' . $url . '">' . $text . '</a> ]';
     }
@@ -1472,18 +1397,19 @@ function disp_progress_bar($progress, $factor) {
     // origin of the bar
     $progressBar = "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
 
-    if ($progress != 0)
+    if ($progress != 0) {
         $progressBar .= "<img src='$themeimg/bar_1u.gif' width='$barwidth' height='12' alt='' />";
-    // display 100% bar
+    }
 
-    if ($progress != 100 && $progress != 0)
+    if ($progress != 100 && $progress != 0) {
         $progressBar .= "<img src='$themeimg/bar_1m.gif' width='1' height='12' alt='' />";
+    }
 
-    if ($progress != 100)
+    if ($progress != 100) {
         $progressBar .= "<img src='$themeimg/bar_1r.gif' width='" . ($maxSize - $barwidth) . "' height='12' alt='' />";
-    // end of the bar
-    $progressBar .= "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
+    }
 
+    $progressBar .= "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
     return $progressBar;
 }
 
@@ -1519,8 +1445,7 @@ function disp_progress_bar($progress, $factor) {
 function build_nested_select_menu($name, $elementList) {
     return '<select name="' . $name . '">' . "\n"
             . implode("\n", prepare_option_tags($elementList))
-            . '</select>' . "\n"
-    ;
+            . '</select>' . "\n";
 }
 
 /*
@@ -1539,13 +1464,11 @@ function prepare_option_tags($elementList, $deepness = 0) {
 
         $optionTagList[] = '<option value="' . $thisElement['value'] . '">'
                 . $tab . $thisElement['name']
-                . '</option>'
-        ;
+                . '</option>';
         if (isset($thisElement['children']) && sizeof($thisElement['children']) > 0) {
             $optionTagList = array_merge($optionTagList, prepare_option_tags($thisElement['children'], $deepness + 1));
         }
     }
-
     return $optionTagList;
 }
 
@@ -1566,7 +1489,7 @@ function prepare_option_tags($elementList, $deepness = 0) {
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage) {
     global $course_code;
 
-    $totalnum = mysql_num_rows(db_query($sql));
+    $totalnum = count(Database::get()->queryArray($sql));
     $firstpage = 1;
     $lastpage = ceil($totalnum / $limiter);
 
@@ -1640,8 +1563,7 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
  */
 
 function get_limited_list($sql, $limiter) {
-
-    $totalnum = mysql_num_rows(db_query($sql));
+    $totalnum = count(Database::get()->queryArray($sql));
     $firstpage = 1;
     $lastpage = ceil($totalnum / $limiter);
 
@@ -1658,7 +1580,7 @@ function get_limited_list($sql, $limiter) {
 
     $sql .= " LIMIT " . $limit . "," . $limiter;
 
-    return db_query_fetch_all($sql);
+    return Database::get()->queryArray($sql);
 }
 
 /*
@@ -1676,22 +1598,19 @@ function get_limited_list($sql, $limiter) {
  */
 
 function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extraDepth = false) {
-    
     global $course_id;
-    
+
     $depth = ($extraDepth) ? "../" : "./";
 
-    if (!isset($_SESSION['path_id']) or !isset($_SESSION['lp_module_id']) 
-                        or empty($_SESSION['path_id']) or empty($_SESSION['lp_module_id'])) {
+    if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id'])) {
         header("Location: " . $depth . "index.php?course=$course_code");
         exit();
     }
 
     if ($extraQuery) {
-        $q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '" . $_SESSION['path_id'] . "' AND `course_id` = $course_id");
-        $lp = mysql_fetch_array($q);
+        $lp = Database::get()->querySingle("SELECT visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
 
-        if (!$is_editor && $lp['visible'] == 0) {
+        if (!$is_editor && $lp->visible == 0) {
             // if the learning path is invisible, don't allow users in it
             header("Location: " . $depth . "index.php?course=$course_code");
             exit();
@@ -1699,46 +1618,46 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
         if (!$is_editor) {
             // check for blocked learning path
-                $lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
-                                    WHERE learnPath_id = $_SESSION[path_id] AND `course_id` = $course_id ORDER BY `rank`");
-                 $q = db_query("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id AND `rank` < $lps[rank]");
-                while ($lp = mysql_fetch_array($q)) {
-                    if ($lp['lock'] == 'CLOSE') {
-                        $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                                
-                        if ($prog < 100) {                                
-                            header("Location: ./index.php?course=$course_code");
-                        }
-                 }
+            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath 
+                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id)->rank;
+            $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0);
+            foreach ($lps as $lp) {
+                if ($lp->lock == 'CLOSE') {
+                    $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
+                    if ($prog < 100) {
+                        header("Location: ./index.php?course=$course_code");
+                    }
+                }
             }
         }
     }
 
-    $q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '" . $_SESSION['path_id'] . "' 
-                                AND module_id = '" . $_SESSION['lp_module_id'] . "'");
-    $lpm = mysql_fetch_array($q2);
-    if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
+    $visfrom = "FROM lp_rel_learnPath_module WHERE learnPath_id = ?d AND module_id = ?d";
+    $lpmcnt = Database::get()->querySingle("SELECT COUNT(visible) AS count " . $visfrom, $_SESSION['path_id'], $_SESSION['lp_module_id'])->count;
+    $lpm = Database::get()->querySingle("SELECT visible " . $visfrom, $_SESSION['path_id'], $_SESSION['lp_module_id']);
+    if ($lpmcnt <= 0 || (!$is_editor && $lpm->visible == 0)) {
         // if the combination path/module is invalid, don't allow users in it
         header("Location: " . $depth . "index.php?course=$course_code");
         exit();
     }
 
     if (!$is_editor) { // check if we try to overwrite a blocked module
-            $lpm_id = db_query_get_single_row("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
-                                    WHERE `learnPath_id` = ". $_SESSION['path_id']."
-                                    AND module_id = " . $_SESSION['lp_module_id']."");
-                    $q = db_query("SELECT learnPath_module_id FROM lp_rel_learnPath_module WHERE learnPath_id = " . $_SESSION['path_id'] . " 
-                                                    AND `rank` < " . $lpm_id['rank'] . "");
-                while ($m = mysql_fetch_array($q)) {
-                    $progress = db_query_get_single_row("SELECT credit, lesson_status FROM lp_user_module_progress 
-                                                        WHERE learnPath_module_id = $m[learnPath_module_id]
-                                                            AND learnPath_id = $_SESSION[path_id] 
-                                                            AND user_id= $_SESSION[uid]");
-                        if (($lpm_id['lock'] == 'CLOSE') 
-                            and ($progress['credit'] != 'CREDIT' 
-                            or ($progress['lesson_status'] != 'COMPLETED' and $progress['lesson_status'] != 'PASSED'))) {
-                                header("Location: ".$depth."index.php?course=$course_code");
-                                exit();
-                        }
-                }
+        $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
+                                WHERE `learnPath_id` = ?d AND module_id = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id']);
+        $q = Database::get()->queryArray("SELECT learnPath_module_id 
+                                            FROM lp_rel_learnPath_module 
+                                           WHERE learnPath_id = ?d 
+                                             AND `rank` < ?d", $_SESSION['path_id'], $lpm_id->rank);
+        foreach ($q as $m) {
+            $progress = Database::get()->querySingle("SELECT credit, lesson_status 
+                                                        FROM lp_user_module_progress 
+                                                       WHERE learnPath_module_id = ?d
+                                                         AND learnPath_id = ?d
+                                                         AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
+            if (($lpm_id->lock == 'CLOSE') && ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+                header("Location: " . $depth . "index.php?course=$course_code");
+                exit();
+            }
         }
+    }
 }

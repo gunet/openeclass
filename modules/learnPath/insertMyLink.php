@@ -38,12 +38,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -71,105 +65,79 @@ $nameTools = $langInsertMyLinkToolName;
 
 $iterator = 1;
 
-if (!isset($_POST['maxLinkForm']))
+if (!isset($_POST['maxLinkForm'])) {
     $_POST['maxLinkForm'] = 0;
+}
 
 while ($iterator <= $_POST['maxLinkForm']) {
     if (isset($_POST['submitInsertedLink']) && isset($_POST['insertLink_' . $iterator])) {
 
         // get from DB everything related to the link
-        $sql = "SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $course_id AND `id` = \""
-                . intval($_POST['insertLink_' . $iterator]) . "\"";
-        $row = db_query_get_single_row($sql);
+        $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND `id` = ?d", $course_id, $_POST['insertLink_' . $iterator]);
 
         // check if this link is already a module
-        $sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
+        $sql = "SELECT * FROM `lp_module` AS M, `lp_asset` AS A
         		WHERE A.`module_id` = M.`module_id`
-        		AND M.`name` LIKE \"" . addslashes($row['title']) . "\"
-        		AND M.`comment` LIKE \"" . addslashes($row['description']) . "\"
-        		AND A.`path` LIKE \"" . addslashes($row['url']) . "\"
-        		AND M.`contentType` = \"" . CTLINK_ . "\"
-        		AND M.`course_id` = $course_id";
-        $query0 = db_query($sql);
-        $num = mysql_num_rows($query0);
+        		AND M.`name` LIKE ?s
+        		AND M.`comment` LIKE ?s
+        		AND A.`path` LIKE ?s
+        		AND M.`contentType` = ?s
+        		AND M.`course_id` = ?d";
+        $thisLinkModule = Database::get()->querySingle($sql, $row->title, $row->description, $row->url, CTLINK_, $course_id);
 
-        if ($num == 0) {
+        if (!$thisLinkModule) {
             // create new module
-            $sql = "INSERT INTO `" . $TABLEMODULE . "`
+            $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
 					(`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-					VALUES ($course_id, '" . addslashes($row['title']) . "' , '"
-                    . addslashes($row['description']) . "', '" . CTLINK_ . "','')";
-            $query = db_query($sql);
-
-            $insertedModule_id = mysql_insert_id();
+					VALUES (?d, ?s, ?s, ?s,'')", $course_id, $row->title, $row->description, CTLINK_)->lastInsertID;
 
             // create new asset
-            $sql = "INSERT INTO `" . $TABLEASSET . "`
+            $insertedAsset_id = Database::get()->query("INSERT INTO `lp_asset`
 					(`path` , `module_id` , `comment`)
-					VALUES ('" . addslashes($row['url']) . "', "
-                    . (int) $insertedModule_id . ", '')";
-            $query = db_query($sql);
+					VALUES (?s, ?s, '')", $row->url, $insertedModule_id)->lastInsertID;
 
-            $insertedAsset_id = mysql_insert_id();
-
-            $sql = "UPDATE `" . $TABLEMODULE . "`
-				SET `startAsset_id` = " . (int) $insertedAsset_id . "
-				WHERE `module_id` = " . (int) $insertedModule_id . "
-				AND `course_id` = $course_id";
-            $query = db_query($sql);
+            Database::get()->query("UPDATE `lp_module`
+				SET `startAsset_id` = ?d
+				WHERE `module_id` = ?d
+				AND `course_id` = ?d", $insertedAsset_id, $insertedModule_id, $course_id);
 
             // determine the default order of this Learning path
-            $sql = "SELECT MAX(`rank`) FROM `" . $TABLELEARNPATHMODULE . "` WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-            $result = db_query($sql);
-
-            list($orderMax) = mysql_fetch_row($result);
-            $order = $orderMax + 1;
+            $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
             // finally : insert in learning path
-            $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+            Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-				VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $insertedModule_id . "','"
-                    . "', " . (int) $order . ", 'OPEN', 1)";
-            $query = db_query($sql);
+				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 
-            $dialogBox .= q($row['title']) . " : " . $langLinkInsertedAsModule . "<br />";
+            $dialogBox .= q($row->title) . " : " . $langLinkInsertedAsModule . "<br />";
             $style = "success";
         } else {
             // check if this is this LP that used this document as a module
-            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-				`" . $TABLEMODULE . "` AS M,
-				`" . $TABLEASSET . "` AS A
+            $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
+				`lp_module` AS M,
+				`lp_asset` AS A
 				WHERE M.`module_id` =  LPM.`module_id`
 				AND M.`startAsset_id` = A.`asset_id`
-				AND A.`path` = '" . addslashes($row['url']) . "'
-				AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-				AND M.`course_id` = $course_id";
-            $query2 = db_query($sql);
-            $num = mysql_num_rows($query2);
+				AND A.`path` = ?s
+				AND LPM.`learnPath_id` = ?d
+				AND M.`course_id` = ?d";
+            $num = Database::get()->querySingle($sql, $row->url, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                $thisLinkModule = mysql_fetch_array($query0);
                 // determine the default order of this Learning path
-                $sql = "SELECT MAX(`rank`)
-					FROM `" . $TABLELEARNPATHMODULE . "`
-					WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-                $result = db_query($sql);
-
-                list($orderMax) = mysql_fetch_row($result);
-                $order = $orderMax + 1;
+                $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+					FROM `lp_rel_learnPath_module`
+					WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
                 // finally : insert in learning path
-                $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+                Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-					VALUES ('" . (int) $_SESSION['path_id'] . "', '"
-                        . (int) $thisLinkModule['module_id'] . "','"
-                        . "', " . (int) $order . ",'OPEN', 1)";
-                $query = db_query($sql);
+					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
 
-                $dialogBox .= q($row['title']) . " : " . $langLinkInsertedAsModule . "<br />";
+                $dialogBox .= q($row->title) . " : " . $langLinkInsertedAsModule . "<br />";
                 $style = "success";
             } else {
-                $dialogBox .= q($row['title']) . " : " . $langLinkAlreadyUsed . "<br />";
+                $dialogBox .= q($row->title) . " : " . $langLinkAlreadyUsed . "<br />";
                 $style = "caution";
             }
         }
@@ -197,14 +165,9 @@ $tool_content .= "
 draw($tool_content, 2, null, $head_content);
 
 function showlinks() {
-    global $langComment, $langAddModule, $langName, $langSelection,
-    $langAddModulesButton, $course_id, $mysqlMainDb, $course_code,
-    $themeimg;
+    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code, $themeimg;
 
-    $sqlLinks = "SELECT * FROM `$mysqlMainDb`.link
-                              WHERE course_id = $course_id ORDER BY `order` DESC";
-    $result = db_query($sqlLinks);
-    $numberoflinks = mysql_num_rows($result);
+    $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
     $output = "
 <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
@@ -217,15 +180,15 @@ function showlinks() {
 
                       <tbody>";
     $i = 1;
-    while ($myrow = mysql_fetch_array($result)) {
+    foreach ($result as $myrow) {
         $output .= "
                 <tr>
                 <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
-                <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=" . $myrow[0] . "&amp;link_url=" . urlencode($myrow[1]) . "' target='_blank'>" . q($myrow[2]) . "</a>
+                <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=" . $myrow->id . "&amp;link_url=" . urlencode($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
                 <br />
-                <small class='comments'>" . q($myrow[3]) . "</small></td>";
+                <small class='comments'>" . q($myrow->description) . "</small></td>";
         $output .= "
-                <td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='$myrow[0]' /></div></td>
+                <td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
                 </tr>";
         $i++;
     }

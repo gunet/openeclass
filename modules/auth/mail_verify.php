@@ -42,45 +42,36 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
     if (!empty($req_id)) {
         $qry = "SELECT id, username, email, verified_mail, givenname, surname,
                        faculty_id, phone, am, state, status, comment, lang
-                    FROM `user_request` WHERE id = $req_id";
+                    FROM user_request WHERE id = $req_id";
         $id = $req_id;
     }
     // no user application. user account has been created with pending mail verification
     elseif (!empty($u_id)) {
-        $qry = "SELECT id, username, email, verified_mail FROM `user` WHERE id = $u_id";
+        $qry = "SELECT id, username, email, verified_mail FROM user WHERE id = $u_id";
         $id = $u_id;
     }
     // no id given
     else {
-        $user_error_msg = $langMailVerifyNoId;
-        continue;
+        $user_error_msg = $langMailVerifyNoId;        
     }
-
-    $res = db_query($qry);
-    if (!$res) {
-        $user_error_msg = $langMailVerifyNoDB;
-        continue;
-    } else {
-        $ar = mysql_fetch_array($res);
-        if (!empty($ar)) {
-            $username = $ar[1];
-            $email = $ar[2];
+    $res = Database::get()->querySingle($qry);
+    if ($res) {        
+            $username = $res->username;
+            $email = $res->email;
             // success
             if (token_validate($username . $email . $id, $code)) {
-                $verified_mail = intval($ar['verified_mail']);
+                $verified_mail = intval($res->verified_mail);
                 // update user's application
                 if (!empty($req_id) and ($verified_mail !== 1)) {
-                    $qry = "UPDATE `user_request` SET verified_mail=1 WHERE id = $req_id";
-                    db_query($qry);
-
-                    $department = find_faculty_by_id($ar['faculty_id']);
-                    $prof = isset($ar['status']) && intval($ar['status']) === 1 ? 1 : NULL;
-                    $givenname = $ar['givenname'];
-                    $surname = $ar['surname'];
-                    $am = $ar['am'];
-                    $usercomment = $ar['comment'];
-                    $usermail = $ar['email'];
-                    $userphone = $ar['phone'];
+                    Database::get()->query("UPDATE user_request SET verified_mail = 1 WHERE id = ?d", $req_id);
+                    $department = find_faculty_by_id($res->faculty_id);
+                    $prof = isset($res->status) && intval($res->status) === 1 ? 1 : NULL;
+                    $givenname = $res->givenname;
+                    $surname = $res->surname;
+                    $am = $res->am;
+                    $usercomment = $res->comment;
+                    $usermail = $res->email;
+                    $userphone = $res->phone;
 
                     $subject = $prof ? $mailsubject : $mailsubject2;
                     $MailMessage = $mailbody1 . $mailbody2 . "$givenname $surname\n\n" .
@@ -99,8 +90,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                 }
                 // update user's account
                 elseif (!empty($u_id) and ($verified_mail !== 1)) {
-                    $qry = "UPDATE `user` SET verified_mail = 1 WHERE id = $u_id";
-                    db_query($qry);
+                    Database::get()->query("UPDATE `user` SET verified_mail = 1 WHERE id = ?d", $u_id);                    
                     $user_msg = $langMailVerifySuccessU;
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);
@@ -142,17 +132,16 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
 					<p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
 					$langBackPage</p>";
             }
+    } else {
+        if (!empty($req_id)) {
+            $user_error_msg = $langMailVerifyNoApplication;
         } else {
-            if (!empty($req_id)) {
-                $user_error_msg = $langMailVerifyNoApplication;
-            } else {
-                $user_error_msg = $langMailVerifyNoAccount;
-            }
-            $tool_content = "<div class='caution'>$user_error_msg </div>
-				<p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
-				$langBackPage</p>";
+            $user_error_msg = $langMailVerifyNoAccount;
         }
-    }
+        $tool_content = "<div class='caution'>$user_error_msg </div>
+                            <p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
+                            $langBackPage</p>";
+    }    
 }
 // no code given and no id given
 else {
@@ -161,7 +150,4 @@ else {
 		<p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
 		$langBackPage</p>";
 }
-
 draw($tool_content, 0);
-exit;
-?>

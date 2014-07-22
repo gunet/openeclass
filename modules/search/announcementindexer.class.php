@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,7 +48,7 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of an announcement db row.
      * 
      * @global string $urlServer
-     * @param  array  $announce
+     * @param  object  $announce
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($announce) {
@@ -56,14 +56,14 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'announce_' . $announce['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'announce_' . $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'announce', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $announce['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce['content'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $announce['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce['course_id']) . '&amp;an_id=' . $announce['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $announce->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce->content)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $announce->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce->course_id) . '&amp;an_id=' . $announce->id, $encoding));
 
         return $doc;
     }
@@ -72,11 +72,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
      * Fetch an Announcement from DB.
      * 
      * @param  int $announceId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($announceId) {
-        $res = db_query("SELECT * FROM announcement WHERE id = " . intval($announceId));
-        $announce = mysql_fetch_assoc($res);
+        $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id = ?d", $announceId);        
         if (!$announce)
             return null;
 
@@ -142,9 +141,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the announcements back to the index
-        $res = db_query("SELECT * FROM announcement WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -182,9 +182,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all announcements from db
-        $res = db_query("SELECT * FROM announcement");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM announcement");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

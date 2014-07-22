@@ -83,6 +83,12 @@ if (isset($_GET['add_server']))
             <input type='radio' id='recorings_on' name='enable_recordings' value='yes' />
             <label for='recorings_on'>" . $m['yes'] . "</label></td>
         </th>";
+    $tool_content .= "<tr><th class='left' width='100'><b>$langActivate</b></th>
+            <td><input type='radio' id='enabled_false' name='enabled' checked='false' value='false' />
+            <label for='enabled_false'>" . $m['no'] . "</label><br />
+            <input type='radio' id='enabled_true' name='enabled' checked='true' value='true' />
+            <label for='enabled_true'>" . $m['yes'] . "</label></td>
+        </th>";
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
     $tool_content .= '</fieldset></form>';    
@@ -90,7 +96,7 @@ if (isset($_GET['add_server']))
 else if (isset($_GET['delete_server']))
 {
     $id = $_GET['delete_server'] ;
-    db_query("DELETE FROM bbb_servers WHERE id=".quote($id));
+    Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d",$id);
     // Display result message
     $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
     // Display link to go back to index.php
@@ -106,29 +112,24 @@ else if (isset($_POST['submit'])) {
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings =  $_POST['enable_recordings'] ;
+    $enabled =  $_POST['enabled'] ;
 
     if(isset($_POST['id_form'])) {
         $id = $_POST['id_form'] ;
-        db_query("UPDATE bbb_servers SET hostname = " . quote($hostname)
-            . ", ip = ". quote($ip) .""
-            . ", server_key = ". quote($key).""
-            . ", api_url = ". quote($api_url).""
-            . ", max_rooms =". quote($max_rooms) .""
-            . ", max_users =". quote($max_users) .""
-            . ", enable_recordings =". quote($enable_recordings) .""
-            . " WHERE id =".quote($id)."");
+        Database::get()->querySingle("UPDATE bbb_servers SET hostname = ?s,
+                ip = ?s,
+                server_key = ?s,
+                api_url = ?s,
+                max_rooms =?s,
+                max_users =?s,
+                enable_recordings =?s,
+                enabled = ?s
+                WHERE id =?d",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled,$id);
     }
     else
     {
-        db_query("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings) VALUES"
-                . "(".quote($hostname).""
-                . ",".quote($ip).""
-                . ",".quote($key).""
-                . ",".quote($api_url).""
-                . ",".quote($max_rooms).""
-                . ",".quote($max_users).""
-                . ",".quote($enable_recordings).")");
-        
+        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings,enabled) VALUES
+        (?s,?s,?s,?s,?s,?s,?s,?s)",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled);
         
     }
     
@@ -173,41 +174,60 @@ if (isset($_GET['edit_server'])) {
     $tool_content .=  $langUpdateBBBServer;
     $tool_content .='</legend>
     <table width="100%" align="left" class="tbl">';
-        $sql = db_query("SELECT * FROM bbb_servers WHERE id=$bbb_server");
-        while ($server = mysql_fetch_array($sql)) {
+            $server = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d",$bbb_server);
             $tool_content .= '<input class="FormData_InputText" type="hidden" name="id_form" value="'.$bbb_server.'" />';
             $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form" value="'.q($server['hostname']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form" value="'.$server->hostname.'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="ip_form" value="'.q($server['ip']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="ip_form" value="'.$server->ip.'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>Pre shared key:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="key_form" value="'.q($server['server_key']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="key_form" value="'.$server->server_key.'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>API URL:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="api_url_form" value="'.q($server['api_url']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="api_url_form" value="'.$server->api_url.'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>Max rooms:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form" value="'.q($server['max_rooms']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form" value="'.$server->max_rooms.'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="'.q($server['max_users']).'" />&nbsp;(*)</td></tr>';
+            <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="'.$server->max_users.'" />&nbsp;(*)</td></tr>';
             $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
-                <td><input type='radio' id='recorings_off' name='enable_recordings' ";
-            if($server['enable_recordings']=="no")
+            <td><input type='radio' id='recorings_off' name='enable_recordings' ";
+            
+            if($server->enable_recordings=="no")
             {
                 $tool_content .= " checked='true' ";
             }
             $tool_content .=" value='no'/>
                 <label for='recorings_off'>" . $m['no'] . "</label><br />
                 <input type='radio' id='recorings_on' name='enable_recordings' ";
-                        if($server['enable_recordings']=="yes")
+                        if($server->enable_recordings=="yes")
             {
                 $tool_content .= " checked='true' ";
             }
             $tool_content .= " value='yes' />
                 <label for='recorings_on'>" . $m['yes'] . "</label></td>
             </th>";
+            
+            $tool_content .= "<tr><th class='left' width='100'><b>$langActivate</b></th>
+            <td><input type='radio' id='enabled_false' name='enabled' ";
+            
+            if($server->enabled=="false")
+            {
+                $tool_content .= " checked='false' ";
+            }
+            $tool_content .=" value='false'/>
+                <label for='enabled_false'>" . $m['no'] . "</label><br />
+                <input type='radio' id='enabled_true' name='enabled' ";
+                        if($server->enabled=="true")
+            {
+                $tool_content .= " checked='true' ";
+            }
+            $tool_content .= " value='true' />
+                <label for='recorings_on'>" . $m['yes'] . "</label></td>
+            </th>";
+            
+            
             $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
             $tool_content .= '</fieldset></form>';    
-    }
     
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";

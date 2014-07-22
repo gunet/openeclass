@@ -54,12 +54,6 @@
 
 $require_current_course = TRUE;
 
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
-
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -97,16 +91,33 @@ switch ($cmd) {
     case "delModule" :
         //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
         $sql = "SELECT M.*, LPM.*
-                FROM `" . $TABLEMODULE . "` AS M, `" . $TABLELEARNPATHMODULE . "` AS LPM
+                FROM `lp_module` AS M, `lp_rel_learnPath_module` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
-                AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                AND M.`course_id` = $course_id
+                AND LPM.`learnPath_id` = ?d
+                AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
-        $result = db_query($sql);
+        $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
         $extendedList = array();
-        while ($list = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $extendedList[] = $list;
+        $modar = array();
+        foreach ($result as $list) {
+            $modar['module_id'] = $list->module_id;
+            $modar['course_id'] = $list->course_id;
+            $modar['name'] = $list->name;
+            $modar['comment'] = $list->comment;
+            $modar['accessibility'] = $list->accessibility;
+            $modar['startAsset_id'] = $list->startAsset_id;
+            $modar['contentType'] = $list->contentType;
+            $modar['launch_data'] = $list->launch_data;
+            $modar['learnPath_module_id'] = $list->learnPath_module_id;
+            $modar['learnPath_id'] = $list->learnPath_id;
+            $modar['lock'] = $list->lock;
+            $modar['visible'] = $list->visible;
+            $modar['specificComment'] = $list->specificComment;
+            $modar['rank'] = $list->rank;
+            $modar['parent'] = $list->parent;
+            $modar['raw_to_pass'] = $list->raw_to_pass;
+            $extendedList[] = $modar;
         }
 
         //-- delete module cmdid and his children if it is a label
@@ -121,19 +132,36 @@ switch ($cmd) {
     // VISIBILITY COMMAND
     case "mkVisibl" :
     case "mkInvisibl" :
-        $cmd == "mkVisibl" ? $visibility = 1 : $visibility = 0;
+        $visibility = ($cmd == "mkVisibl") ? 1 : 0;
         //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
         $sql = "SELECT M.*, LPM.*
-                FROM `" . $TABLEMODULE . "` AS M, `" . $TABLELEARNPATHMODULE . "` AS LPM
+                FROM `lp_module` AS M, `lp_rel_learnPath_module` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
-                AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                AND M.`course_id` = $course_id
+                AND LPM.`learnPath_id` = ?d
+                AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
-        $result = db_query($sql);
+        $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
         $extendedList = array();
-        while ($list = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $extendedList[] = $list;
+        $modar = array();
+        foreach ($result as $list) {
+            $modar['module_id'] = $list->module_id;
+            $modar['course_id'] = $list->course_id;
+            $modar['name'] = $list->name;
+            $modar['comment'] = $list->comment;
+            $modar['accessibility'] = $list->accessibility;
+            $modar['startAsset_id'] = $list->startAsset_id;
+            $modar['contentType'] = $list->contentType;
+            $modar['launch_data'] = $list->launch_data;
+            $modar['learnPath_module_id'] = $list->learnPath_module_id;
+            $modar['learnPath_id'] = $list->learnPath_id;
+            $modar['lock'] = $list->lock;
+            $modar['visible'] = $list->visible;
+            $modar['specificComment'] = $list->specificComment;
+            $modar['rank'] = $list->rank;
+            $modar['parent'] = $list->parent;
+            $modar['raw_to_pass'] = $list->raw_to_pass;
+            $extendedList[] = $modar;
         }
 
         //-- set the visibility for module cmdid and his children if it is a label
@@ -147,12 +175,11 @@ switch ($cmd) {
     // ACCESSIBILITY COMMAND
     case "mkBlock" :
     case "mkUnblock" :
-        $cmd == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
-        $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-                SET `lock` = '$blocking'
-                WHERE `learnPath_module_id` = " . (int) $_REQUEST['cmdid'] . "
-                AND `lock` != '$blocking'";
-        $query = db_query($sql);
+        $blocking = ($cmd == "mkBlock") ? 'CLOSE' : 'OPEN';
+        Database::get()->query("UPDATE `lp_rel_learnPath_module`
+                SET `lock` = ?s
+                WHERE `learnPath_module_id` = ?d
+                AND `lock` != ?s", $blocking, $_REQUEST['cmdid'], $blocking);
         break;
 
     // ORDER COMMAND
@@ -160,56 +187,66 @@ switch ($cmd) {
         // changePos form sent
         if (isset($_POST["newPos"]) && $_POST["newPos"] != "") {
             // get order of parent module
-            $sql = "SELECT *
-                    FROM `" . $TABLELEARNPATHMODULE . "`
-                    WHERE `learnPath_module_id` = " . (int) $_REQUEST['cmdid'];
-            $temp = db_query_fetch_all($sql);
-            $movedModule = $temp[0];
+            $movedModule = Database::get()->querySingle("SELECT *
+                    FROM `lp_rel_learnPath_module`
+                    WHERE `learnPath_module_id` = ?d LIMIT 1", $_REQUEST['cmdid']);
 
             // if origin and target are the same ... cancel operation
-            if ($movedModule['learnPath_module_id'] == $_POST['newPos']) {
+            if ($movedModule->learnPath_module_id == $_POST['newPos']) {
                 $dialogBox .= $langWrongOperation;
             } else {
                 //--
                 // select max order
                 // get the max rank of the children of the new parent of this module
-                $sql = "SELECT MAX(`rank`)
-                        FROM `" . $TABLELEARNPATHMODULE . "`
-                        WHERE `parent` = " . (int) $_POST['newPos'] . "
-                        AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-
-                $result = db_query($sql);
-
-                list($orderMax) = mysql_fetch_row($result);
-                $order = $orderMax + 1;
+                $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                        FROM `lp_rel_learnPath_module`
+                        WHERE `parent` = ?d
+                        AND `learnPath_id` = ?d", $_POST['newPos'], $_SESSION['path_id'])->max);
 
                 // change parent module reference in the moved module and set order (added to the end of target group)
-                $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-                        SET `parent` = " . (int) $_POST['newPos'] . ",
-                            `rank` = " . (int) $order . "
-                        WHERE `learnPath_module_id` = " . (int) $_REQUEST['cmdid'] . "
-                        AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-                $query = db_query($sql);
+                Database::get()->query("UPDATE `lp_rel_learnPath_module`
+                        SET `parent` = ?d,
+                            `rank` = ?d
+                        WHERE `learnPath_module_id` = ?d
+                        AND `learnPath_id` = ?d", $_POST['newPos'], $order, $_REQUEST['cmdid'], $_SESSION['path_id']);
                 $dialogBox .= "<p class=\"success\">$langModuleMoved</p>";
             }
         } else {  // create form requested
             // create elementList
             $sql = "SELECT M.*, LPM.*
-                    FROM `" . $TABLEMODULE . "` AS M, `" . $TABLELEARNPATHMODULE . "` AS LPM
+                    FROM `lp_module` AS M, `lp_rel_learnPath_module` AS LPM
                     WHERE M.`module_id` = LPM.`module_id`
-                      AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                      AND M.`contentType` = \"" . CTLABEL_ . "\"
-                      AND M.`course_id` = $course_id
+                      AND LPM.`learnPath_id` = ?d
+                      AND M.`contentType` = ?s
+                      AND M.`course_id` = ?d
                     ORDER BY LPM.`rank` ASC";
-            $result = db_query($sql);
-            $i = 0;
+            $result = Database::get()->queryArray($sql, $_SESSION['path_id'], CTLABEL_, $course_id);
+
             $extendedList = array();
-            while ($list = mysql_fetch_array($result)) {
+            $modar = array();
+            foreach ($result as $list) {
                 // this array will display target for the "move" command
                 // so don't add the module itself build_element_list will ignore all childre so that
                 // children of the moved module won't be shown, a parent cannot be a child of its own children
-                if ($list['learnPath_module_id'] != $_REQUEST['cmdid'])
-                    $extendedList[] = $list;
+                if ($list->learnPath_module_id != $_REQUEST['cmdid']) {
+                    $modar['module_id'] = $list->module_id;
+                    $modar['course_id'] = $list->course_id;
+                    $modar['name'] = $list->name;
+                    $modar['comment'] = $list->comment;
+                    $modar['accessibility'] = $list->accessibility;
+                    $modar['startAsset_id'] = $list->startAsset_id;
+                    $modar['contentType'] = $list->contentType;
+                    $modar['launch_data'] = $list->launch_data;
+                    $modar['learnPath_module_id'] = $list->learnPath_module_id;
+                    $modar['learnPath_id'] = $list->learnPath_id;
+                    $modar['lock'] = $list->lock;
+                    $modar['visible'] = $list->visible;
+                    $modar['specificComment'] = $list->specificComment;
+                    $modar['rank'] = $list->rank;
+                    $modar['parent'] = $list->parent;
+                    $modar['raw_to_pass'] = $list->raw_to_pass;
+                    $extendedList[] = $modar;
+                }
             }
 
             // build the array that will be used by thebuild_nested_select_menu function
@@ -218,19 +255,18 @@ switch ($cmd) {
 
             $topElement['name'] = $langRoot;
             $topElement['value'] = 0;    // value is required by claro_nested_build_select_menu
-            if (!is_array($elementList))
+            if (!is_array($elementList)) {
                 $elementList = array();
+            }
             array_unshift($elementList, $topElement);
 
             // get infos about the moved module
-            $sql = "SELECT M.`name`
-                    FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-                         `" . $TABLEMODULE . "` AS M
+            $moduleInfos = Database::get()->querySingle("SELECT M.`name`
+                    FROM `lp_rel_learnPath_module` AS LPM,
+                         `lp_module` AS M
                     WHERE LPM.`module_id` = M.`module_id`
-                      AND LPM.`learnPath_module_id` = " . (int) $_REQUEST['cmdid'] . "
-                      AND M.`course_id` = $course_id";
-            $temp = db_query_fetch_all($sql);
-            $moduleInfos = $temp[0];
+                      AND LPM.`learnPath_module_id` = ?d
+                      AND M.`course_id` = ?d", $_REQUEST['cmdid'], $course_id);
 
             $displayChangePosForm = true; // the form code comes after name and comment boxes section
         }
@@ -250,29 +286,21 @@ switch ($cmd) {
         // create form sent
         if (isset($_REQUEST["newLabel"]) && trim($_REQUEST["newLabel"]) != "") {
             // determine the default order of this Learning path ( a new label is a root child)
-            $sql = "SELECT MAX(`rank`)
-                    FROM `" . $TABLELEARNPATHMODULE . "`
+            $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                    FROM `lp_rel_learnPath_module`
                     WHERE `parent` = 0
-                    AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-            $result = db_query($sql);
-
-            list($orderMax) = mysql_fetch_row($result);
-            $order = $orderMax + 1;
+                    AND `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
             // create new module
-            $sql = "INSERT INTO `" . $TABLEMODULE . "`
-                   (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                   VALUES ($course_id, '" . addslashes($_POST['newLabel']) . "','', '" . CTLABEL_ . "','')";
-            $query = db_query($sql);
-
             // request ID of the last inserted row (module_id in $TABLEMODULE) to add it in $TABLELEARNPATHMODULE
-            $thisInsertedModuleId = mysql_insert_id();
+            $thisInsertedModuleId = Database::get()->query("INSERT INTO `lp_module`
+                   (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
+                   VALUES (?d, ?s, '', ?s, '')", $course_id, $_POST['newLabel'], CTLABEL_)->lastInsertID;
 
             // create new learning path module
-            $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+            Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                    (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`)
-                   VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $thisInsertedModuleId . "','', " . (int) $order . ", 0)";
-            $query = db_query($sql);
+                   VALUES (?d, ?d, '', ?d, 0)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
         } else {  // create form requested
             $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
         }
@@ -289,15 +317,15 @@ if (isset($sortDirection) && $sortDirection) {
 
     // get list of modules with same parent as the moved module
     $sql = "SELECT LPM.`learnPath_module_id`, LPM.`rank`
-            FROM (`" . $TABLELEARNPATHMODULE . "` AS LPM, `" . $TABLELEARNPATH . "` AS LP)
-              LEFT JOIN `" . $TABLELEARNPATHMODULE . "` AS LPM2 ON LPM2.`parent` = LPM.`parent`
-            WHERE LPM2.`learnPath_module_id` = " . (int) $thisLPMId . "
+            FROM (`lp_rel_learnPath_module` AS LPM, `lp_learnPath` AS LP)
+              LEFT JOIN `lp_rel_learnPath_module` AS LPM2 ON LPM2.`parent` = LPM.`parent`
+            WHERE LPM2.`learnPath_module_id` = ?d
               AND LPM.`learnPath_id` = LP.`learnPath_id`
-              AND LP.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-              AND LP.`course_id` = $course_id
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
             ORDER BY LPM.`rank` $sortDirection";
 
-    $listModules = db_query_fetch_all($sql);
+    $listModules = Database::get()->queryArray($sql, $thisLPMId, $_SESSION['path_id'], $course_id);
 
     // LP = learningPath
     foreach ($listModules as $module) {
@@ -306,39 +334,29 @@ if (isset($sortDirection) && $sortDirection) {
 
         if (isset($thisLPMOrderFound) && $thisLPMOrderFound == true) {
 
-            $nextLPMId = $module['learnPath_module_id'];
-            $nextLPMOrder = $module['rank'];
+            $nextLPMId = $module->learnPath_module_id;
+            $nextLPMOrder = $module->rank;
 
-            $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-                    SET `rank` = \"" . (int) $nextLPMOrder . "\"
-                    WHERE `learnPath_module_id` =  \"" . (int) $thisLPMId . "\"
-                    AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-            db_query($sql);
+            Database::get()->query("UPDATE `lp_rel_learnPath_module`
+                    SET `rank` = ?d
+                    WHERE `learnPath_module_id` =  ?d
+                    AND `learnPath_id` = ?d", $nextLPMOrder, $thisLPMId, $_SESSION['path_id']);
 
-            $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
-                    SET `rank` = \"" . (int) $thisLPMOrder . "\"
-                    WHERE `learnPath_module_id` =  \"" . (int) $nextLPMId . "\"
-                    AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-            db_query($sql);
+            Database::get()->query("UPDATE `lp_rel_learnPath_module`
+                    SET `rank` = ?d
+                    WHERE `learnPath_module_id` =  ?d
+                    AND `learnPath_id` = ?d", $thisLPMOrder, $nextLPMId, $_SESSION['path_id']);
 
             break;
         }
 
         // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-        if ($module['learnPath_module_id'] == $thisLPMId) {
-            $thisLPMOrder = $module['rank'];
+        if ($module->learnPath_module_id == $thisLPMId) {
+            $thisLPMOrder = $module->rank;
             $thisLPMOrderFound = true;
         }
     }
 }
-// select details of learning path to display
-
-$sql = "SELECT *
-        FROM `" . $TABLELEARNPATH . "`
-        WHERE `learnPath_id` = " . (int) $_SESSION['path_id'] . "
-        AND `course_id` = $course_id";
-$query = db_query($sql);
-$LPDetails = mysql_fetch_array($query);
 
 $tool_content .="<fieldset><legend>$langLearningPathData</legend><table width='100%' class='tbl'>";
 
@@ -348,10 +366,6 @@ $tool_content .="<tr><th width='70'>$langTitle:</th>";
 
 if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
-    $id = mysql_insert_id();
-    $lp_name = db_query_get_single_row("SELECT name FROM `" . $TABLELEARNPATH . "` 
-                                WHERE `learnPath_id` = " . intval($_SESSION['path_id']) . " 
-                                AND `course_id` = $course_id");
 } else {
     $tool_content .= "<td>" . nameBox(LEARNINGPATH_, DISPLAY_);
 }
@@ -435,7 +449,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
     <tr>
       <th>" . $langMove . ":</th>
       <td>
-        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos['name'] . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
+        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
     $dialogBox .= build_nested_select_menu("newPos", $elementList);
     $dialogBox .= "
@@ -464,25 +478,43 @@ $tool_content .="
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
-        FROM (`" . $TABLEMODULE . "` AS M,
-             `" . $TABLELEARNPATHMODULE . "` AS LPM)
-        LEFT JOIN `" . $TABLEASSET . "` AS A ON M.`startAsset_id` = A.`asset_id`
+        FROM (`lp_module` AS M,
+             `lp_rel_learnPath_module` AS LPM)
+        LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
         WHERE M.`module_id` = LPM.`module_id`
-          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-          AND M.`course_id` = $course_id
+          AND LPM.`learnPath_id` = ?d
+          AND M.`course_id` = ?d
         ORDER BY LPM.`rank` ASC";
 
-$result = db_query($sql);
+$result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
-if (mysql_num_rows($result) == 0) {
+if (count($result) == 0) {
     $tool_content .= "<p class='alert1'>$langNoModule</p>";
     draw($tool_content, 2, null, $head_content, $body_action);
-    exit;
+    exit();
 }
 
 $extendedList = array();
-while ($list = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    $extendedList[] = $list;
+$modar = array();
+foreach ($result as $list) {
+    $modar['module_id'] = $list->module_id;
+    $modar['course_id'] = $list->course_id;
+    $modar['name'] = $list->name;
+    $modar['comment'] = $list->comment;
+    $modar['accessibility'] = $list->accessibility;
+    $modar['startAsset_id'] = $list->startAsset_id;
+    $modar['contentType'] = $list->contentType;
+    $modar['launch_data'] = $list->launch_data;
+    $modar['learnPath_module_id'] = $list->learnPath_module_id;
+    $modar['learnPath_id'] = $list->learnPath_id;
+    $modar['lock'] = $list->lock;
+    $modar['visible'] = $list->visible;
+    $modar['specificComment'] = $list->specificComment;
+    $modar['rank'] = $list->rank;
+    $modar['parent'] = $list->parent;
+    $modar['raw_to_pass'] = $list->raw_to_pass;
+    $modar['path'] = $list->path;
+    $extendedList[] = $modar;
 }
 
 // build the array of modules
@@ -495,8 +527,9 @@ $i = 0;
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
 for ($i = 0; $i < sizeof($flatElementList); $i++) {
-    if ($flatElementList[$i]['children'] > $maxDeep)
+    if ($flatElementList[$i]['children'] > $maxDeep) {
         $maxDeep = $flatElementList[$i]['children'];
+    }
 }
 
 // -------------------------- learning path list header ----------------------------
@@ -525,9 +558,10 @@ foreach ($flatElementList as $module) {
         $image_bullet = "on";
     }
     $spacingString = "";
-    for ($i = 0; $i < $module['children']; $i++)
+    for ($i = 0; $i < $module['children']; $i++) {
         $spacingString .= "
       <td width='5'>&nbsp;</td>";
+    }
 
     $colspan = $maxDeep - $module['children'] + 1;
 
@@ -545,18 +579,19 @@ foreach ($flatElementList as $module) {
     if ($module['contentType'] == CTLABEL_) { // chapter head
         $tool_content .= "<font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font>";
     } else { // module
-        if ($module['contentType'] == CTEXERCISE_)
+        if ($module['contentType'] == CTEXERCISE_) {
             $moduleImg = "exercise_$image_bullet";
-        else if ($module['contentType'] == CTLINK_)
+        } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "links_$image_bullet";
-        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+        } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
             $moduleImg = "description_$image_bullet";
-        else if ($module['contentType'] == CTDOCUMENT_)
+        } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = "docs_$image_bullet";
-        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+        } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
             $moduleImg = "videos_$image_bullet";
-        else
+        } else {
             $moduleImg = choose_image(basename($module['path']));
+        }
 
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
@@ -610,12 +645,13 @@ foreach ($flatElementList as $module) {
       <td width='10'><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'] . "\" " .
             "onClick=\"return confirmation('" . clean_str_for_javascript($langAreYouSureToRemove . " " . $module['name']) . " ? ";
 
-    if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
+    if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveSCORM);
-    elseif ($module['contentType'] == CTLABEL_)
+    } else if ($module['contentType'] == CTLABEL_) {
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveLabel);
-    else
+    } else {
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
+    }
 
     $tool_content .= "');\"><img src=\"" . $themeimg . "/delete.png\" alt=\"" . $langRemove . "\" title=\"" . $langRemove . "\" /></a></td>";
 

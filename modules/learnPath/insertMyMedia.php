@@ -25,12 +25,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -61,99 +55,90 @@ EOF;
 
 $iterator = 1;
 
-if (!isset($_POST['maxMediaForm']))
+if (!isset($_POST['maxMediaForm'])) {
     $_POST['maxMediaForm'] = 0;
+}
 
 while ($iterator <= $_POST['maxMediaForm']) {
     if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMedia_' . $iterator])) {
         // get from DB everything related to the media
-        $sql = "SELECT * FROM video WHERE id = '" . intval($_POST['insertMedia_' . $iterator]) . "'";
-        $row = db_query_get_single_row($sql);
+        $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d", intval($_POST['insertMedia_' . $iterator]));
 
         // check if this media is already a module
-        $sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
+        $sql = "SELECT * FROM `lp_module` AS M, `lp_asset` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" . addslashes($row['title']) . "\"
-                           AND M.`comment` LIKE \"" . addslashes($row['description']) . "\"
-                           AND A.`path` LIKE \"" . addslashes($row['path']) . "\"
-                           AND M.`contentType` = \"" . CTMEDIA_ . "\"";
-        $query0 = db_query($sql);
-        $num = mysql_num_rows($query0);
+                           AND M.`name` LIKE ?s
+                           AND M.`comment` LIKE ?s
+                           AND A.`path` LIKE ?s
+                           AND M.`contentType` = ?s";
+        $thisLinkModule = Database::get()->querySingle($sql, $video->title, $video->description, $video->path, CTMEDIA_);
 
-        if ($num == 0) {
-            create_new_module($row['title'], $row['description'], $row['path'], CTMEDIA_);
-
-            $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
-            $style = "success";
-        } else {
+        if ($thisLinkModule) {
             // check if this is this LP that used this media as a module
-            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-                                  `" . $TABLEMODULE . "` AS M,
-                                  `" . $TABLEASSET . "` AS A
+            $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
+                                  `lp_module` AS M,
+                                  `lp_asset` AS A
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
-                               AND A.`path` = '" . addslashes($row['path']) . "'
-                               AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
-            $query2 = db_query($sql);
-            $num = mysql_num_rows($query2);
+                               AND A.`path` = ?s
+                               AND LPM.`learnPath_id` = ?d";
+            $num = Database::get()->querySingle($sql, $video->path, $_SESSION['path_id'])->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                $thisLinkModule = mysql_fetch_array($query0);
+                reuse_module($thisLinkModule->module_id);
 
-                reuse_module($thisLinkModule['module_id']);
-
-                $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
+                $dialogBox .= q($video->title) . " : " . $langMediaInsertedAsModule . "<br />";
                 $style = "success";
             } else {
-                $dialogBox .= q($row['title']) . " : " . $langMediaAlreadyUsed . "<br />";
+                $dialogBox .= q($video->title) . " : " . $langMediaAlreadyUsed . "<br />";
                 $style = "caution";
             }
+        } else {
+            create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
+
+            $dialogBox .= q($video->title) . " : " . $langMediaInsertedAsModule . "<br />";
+            $style = "success";
         }
     }
 
     if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMediaLink_' . $iterator])) {
         // get from DB everything related to the medialink
-        $sql = "SELECT * FROM videolink WHERE id = '" . intval($_POST['insertMediaLink_' . $iterator]) . "'";
-        $row = db_query_get_single_row($sql);
+        $videolink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", intval($_POST['insertMediaLink_' . $iterator]));
 
         // check if this medialink is already a module
-        $sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
+        $sql = "SELECT * FROM `lp_module` AS M, `lp_asset` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" . addslashes($row['title']) . "\"
-                           AND M.`comment` LIKE \"" . addslashes($row['description']) . "\"
-                           AND A.`path` LIKE \"" . addslashes($row['url']) . "\"
-                           AND M.`contentType` = \"" . CTMEDIALINK_ . "\"";
-        $query0 = db_query($sql);
-        $num = mysql_num_rows($query0);
+                           AND M.`name` LIKE ?s
+                           AND M.`comment` LIKE ?s
+                           AND A.`path` LIKE ?s
+                           AND M.`contentType` = ?s";
+        $thisLinkModule = Database::get()->querySingle($sql, $videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
 
-        if ($num == 0) {
-            create_new_module($row['title'], $row['description'], $row['url'], CTMEDIALINK_);
-
-            $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
-            $style = "success";
-        } else {
+        if ($thisLinkModule) {
             // check if this is this LP that used this medialink as a module
-            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-                                  `" . $TABLEMODULE . "` AS M,
-                                  `" . $TABLEASSET . "` AS A
+            $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
+                                  `lp_module` AS M,
+                                  `lp_asset` AS A
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
-                               AND A.`path` = '" . addslashes($row['url']) . "'
-                               AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
-            $query2 = db_query($sql);
-            $num = mysql_num_rows($query2);
+                               AND A.`path` = ?s
+                               AND LPM.`learnPath_id` = ?d";
+            $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'])->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                $thisLinkModule = mysql_fetch_array($query0);
+                reuse_module($thisLinkModule->module_id);
 
-                reuse_module($thisLinkModule['module_id']);
-
-                $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
+                $dialogBox .= q($videolink->title) . " : " . $langMediaInsertedAsModule . "<br />";
                 $style = "success";
             } else {
-                $dialogBox .= q($row['title']) . " : " . $langMediaAlreadyUsed . "<br />";
+                $dialogBox .= q($videolink->title) . " : " . $langMediaAlreadyUsed . "<br />";
                 $style = "caution";
             }
+        } else {
+            create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
+
+            $dialogBox .= q($videolink->title) . " : " . $langMediaInsertedAsModule . "<br />";
+            $style = "success";
         }
     }
 
@@ -182,9 +167,6 @@ function showmedia() {
     $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY title";
     $sqlMediaLinks = "SELECT * FROM videolink WHERE visible = 1 ORDER BY title";
 
-    $resultMedia = db_query($sqlMedia);
-    $resultMediaLinks = db_query($sqlMediaLinks);
-
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <table width='100%' class='tbl_alt'>
                <tr>
@@ -194,27 +176,29 @@ function showmedia() {
                <tbody>";
 
     $i = 1;
-    while ($myrow = mysql_fetch_array($resultMedia)) {
+    $resultMedia = Database::get()->queryArray($sqlMedia);
+    foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
-                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow['id'] . "' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow->description) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";
         $i++;
     }
 
     $j = 1;
-    while ($myrow = mysql_fetch_array($resultMediaLinks)) {
+    $resultMediaLinks = Database::get()->queryArray($sqlMediaLinks);
+    foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
-                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow['id'] . "' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow->description) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow->id . "' /></div></td></tr>";
         $j++;
     }
 
@@ -232,61 +216,37 @@ function showmedia() {
 }
 
 function create_new_module($title, $description, $path, $contentType) {
-    global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $course_id;
+    global $course_id;
 
     // create new module
-    $sql = "INSERT INTO `" . $TABLEMODULE . "`
+    $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ($course_id, '" . addslashes($title) . "' , '"
-            . addslashes($description) . "', '" . $contentType . "','')";
-    $query = db_query($sql);
-
-    $insertedModule_id = mysql_insert_id();
+                    VALUES (?d, ?s, ?s, ?s,'')", $course_id, $title, $description, $contentType)->lastInsertID;
 
     // create new asset
-    $sql = "INSERT INTO `" . $TABLEASSET . "`
+    $insertedAsset_id = Database::get()->query("INSERT INTO `lp_asset`
                     (`path` , `module_id` , `comment`)
-                    VALUES ('" . addslashes($path) . "', "
-            . (int) $insertedModule_id . ", '')";
-    $query = db_query($sql);
+                    VALUES (?s, ?d, '')", $path, $insertedModule_id)->lastInsertID;
 
-    $insertedAsset_id = mysql_insert_id();
-
-    $sql = "UPDATE `" . $TABLEMODULE . "`
-            SET `startAsset_id` = " . (int) $insertedAsset_id . "
-            WHERE `module_id` = " . (int) $insertedModule_id . "";
-    $query = db_query($sql);
+    Database::get()->query("UPDATE `lp_module`
+            SET `startAsset_id` = ?d
+            WHERE `module_id` = ?d", $insertedAsset_id, $insertedModule_id);
 
     // determine the default order of this Learning path
-    $sql = "SELECT MAX(`rank`) FROM `" . $TABLELEARNPATHMODULE . "`";
-    $result = db_query($sql);
-
-    list($orderMax) = mysql_fetch_row($result);
-    $order = $orderMax + 1;
+    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module`")->max);
 
     // finally : insert in learning path
-    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
             (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-            VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $insertedModule_id . "','"
-            . "', " . (int) $order . ", 'OPEN', 1)";
-    $query = db_query($sql);
+            VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 }
 
 function reuse_module($module_id) {
-    global $TABLELEARNPATHMODULE;
-
     // determine the default order of this Learning path
-    $sql = "SELECT MAX(`rank`) FROM `" . $TABLELEARNPATHMODULE . "`";
-    $result = db_query($sql);
-
-    list($orderMax) = mysql_fetch_row($result);
-    $order = $orderMax + 1;
+    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module`")->max);
 
     // finally : insert in learning path
-    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                     (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-                    VALUES ('" . (int) $_SESSION['path_id'] . "', '"
-            . (int) $module_id . "','"
-            . "', " . (int) $order . ",'OPEN', 1)";
-    $query = db_query($sql);
+                    VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $module_id, $order);
 }

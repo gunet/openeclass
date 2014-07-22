@@ -47,12 +47,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = 'lp_learnPath';
-$TABLEMODULE = 'lp_module';
-$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
-$TABLEASSET = 'lp_asset';
-$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
-
 require_once '../../include/baseTheme.php';
 require_once "include/lib/learnPathLib.inc.php";
 require_once 'include/lib/modalboxhelper.class.php';
@@ -87,37 +81,29 @@ switch ($cmd) {
             // used to physically delete the module  from server
             require_once "include/lib/fileManageLib.inc.php";
 
-            $moduleDir = "courses/" . $course_code . "/modules";
+            $moduleDir = "/courses/" . $course_code . "/modules";
             $moduleWorkDir = $webDir . $moduleDir;
 
             // delete all assets of this module
-            $sql = "DELETE FROM `" . $TABLEASSET . "`
-				WHERE `module_id` = " . (int) $_GET['cmdid'];
-            db_query($sql);
+            Database::get()->query("DELETE FROM `lp_asset` WHERE `module_id` = ?d", $_GET['cmdid']);
 
             // delete from all learning path of this course but keep there id before
-            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "`
-				WHERE `module_id` = " . (int) $_GET['cmdid'];
-            $result = db_query($sql);
+            $result = Database::get()->queryArray("SELECT * FROM `lp_rel_learnPath_module` WHERE `module_id` = ?d", $_GET['cmdid']);
 
-            $sql = "DELETE FROM `" . $TABLELEARNPATHMODULE . "`
-				WHERE `module_id` = " . (int) $_GET['cmdid'];
-            db_query($sql);
+            Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `module_id` = ?d", $_GET['cmdid']);
 
             // delete the module in modules table
-            $sql = "DELETE FROM `" . $TABLEMODULE . "`
-				WHERE `module_id` = " . (int) $_GET['cmdid'] . "
-				AND `course_id` = $course_id";
-            db_query($sql);
+            Database::get()->query("DELETE FROM `lp_module`
+				WHERE `module_id` = ?d
+				AND `course_id` = ?d", $_GET['cmdid'], $course_id);
 
             //delete all user progression concerning this module
-            $sql = "DELETE FROM `" . $TABLEUSERMODULEPROGRESS . "`
-				WHERE 1=0 ";
+            $sql = "DELETE FROM `lp_user_module_progress` WHERE 1=0 ";
 
-            while ($list = mysql_fetch_array($result)) {
-                $sql.=" OR `learnPath_module_id`=" . (int) $list['learnPath_module_id'];
+            foreach ($result as $list) {
+                $sql .= " OR `learnPath_module_id`=" . intval($list['learnPath_module_id']);
             }
-            db_query($sql);
+            Database::get()->query($sql);
 
             // delete directory and it content
             claro_delete_file($moduleWorkDir . "/module_" . (int) $_GET['cmdid']);
@@ -129,11 +115,9 @@ switch ($cmd) {
     case "rqRename" :
         if (isset($_GET['module_id']) && is_numeric($_GET['module_id'])) {
             //get current name from DB
-            $query = "SELECT `name` FROM `" . $TABLEMODULE . "`
-				WHERE `module_id` = '" . (int) $_GET['module_id'] . "'
-				AND `course_id` = $course_id";
-            $result = db_query($query);
-            $list = mysql_fetch_array($result);
+            $list = Database::get()->querySingle("SELECT `name` FROM `lp_module`
+				WHERE `module_id` = ?d
+				AND `course_id` = ?d", $_GET['module_id'], $course_id);
 
             $tool_content .= disp_message_box("
                         <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -141,7 +125,7 @@ switch ($cmd) {
                         <table width='100%' class='tbl'>
                         <tr>
                         <td class=\"odd\" width=\"160\"><label for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
-                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list['name']) . "\"></input>
+                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
                                 <input type=\"submit\" value=\"" . $langImport . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"" . (int) $_GET['module_id'] . "\">
@@ -158,22 +142,17 @@ switch ($cmd) {
         //check if newname is empty
         if (isset($_POST["newName"]) && is_string($_POST["newName"]) && $_POST["newName"] != "" && isset($_POST['module_id']) && is_numeric($_POST['module_id'])) {
             //check if newname is not already used in another module of the same course
-            $sql = "SELECT `name`
-                  FROM `" . $TABLEMODULE . "`
-                  WHERE `name` = '" . mysql_real_escape_string($_POST['newName']) . "'
-                    AND `module_id` != '" . (int) $_POST['module_id'] . "'
-                    AND `course_id` = $course_id";
-
-            $query = db_query($sql);
-            $num = mysql_num_rows($query);
+            $num = Database::get()->querySingle("SELECT COUNT(name) AS count
+                  FROM `lp_module`
+                  WHERE `name` = ?s
+                    AND `module_id` != ?d
+                    AND `course_id` = ?d", $_POST['newName'], $_POST['module_id'], $course_id)->count;
             if ($num == 0) { // "name" doesn't already exist
                 // if no error occurred, update module's name in the database
-                $query = "UPDATE `" . $TABLEMODULE . "`
-                        SET `name`= '" . mysql_real_escape_string($_POST['newName']) . "'
-                        WHERE `module_id` = '" . (int) $_POST['module_id'] . "'
-                        AND `course_id` = $course_id";
-
-                $result = db_query($query);
+                Database::get()->query("UPDATE `lp_module`
+                        SET `name`= ?s
+                        WHERE `module_id` = ?d
+                        AND `course_id` = ?d", $_POST['newName'], $_POST['module_id'], $course_id);
             } else {
                 $tool_content .= disp_message_box($langErrorNameAlreadyExists, "caution");
                 $tool_content .= "<br />";
@@ -189,17 +168,15 @@ switch ($cmd) {
         if (isset($_GET['module_id']) && is_numeric($_GET['module_id'])) {
             $module_id = intval($_GET['module_id']);
             //get current comment from DB
-            $query = "SELECT `comment`
-                    FROM `" . $TABLEMODULE . "`
-                    WHERE `module_id` = '" . (int) $_GET['module_id'] . "'
-                    AND `course_id` = $course_id";
-            $result = db_query($query);
-            $comment = mysql_fetch_array($result);
-            if (isset($comment['comment'])) {
+            $comment = Database::get()->querySingle("SELECT `comment`
+                    FROM `lp_module`
+                    WHERE `module_id` = ?d
+                    AND `course_id` = ?d", $_GET['module_id'], $course_id);
+            if ($comment && $comment->comment) {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                     <table width='99%' class='tbl'>
                     <tr><th class='left' colspan='2'>$langComments:</th></tr>
-                    <tr><td colspan='2'>" . rich_text_editor('comment', 2, 60, $comment['comment']) . "
+                    <tr><td colspan='2'>" . rich_text_editor('comment', 2, 60, $comment->comment) . "
                     <input type='hidden' name='cmd' value='exComment'>
                     <input type='hidden' name='module_id' value='$module_id'>
                     </td></tr>
@@ -223,31 +200,29 @@ switch ($cmd) {
     //make update to change the comment in the database for this module
     case "exComment":
         if (isset($_POST['comment']) && is_string($_POST['comment']) && isset($_POST['module_id']) && is_numeric($_POST['module_id'])) {
-            $sql = "UPDATE `" . $TABLEMODULE . "`
-                    SET `comment` = \"" . mysql_real_escape_string($_POST['comment']) . "\"
-                    WHERE `module_id` = '" . (int) $_POST['module_id'] . "'
-                    AND `course_id` = $course_id";
-            db_query($sql);
+            Database::get()->query("UPDATE `lp_module`
+                    SET `comment` = ?s
+                    WHERE `module_id` = ?d
+                    AND `course_id` = ?d", $_POST['comment'], $_POST['module_id'], $course_id);
         }
         break;
 }
 
 
 $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
-        FROM `" . $TABLEMODULE . "` AS M
-          LEFT JOIN `" . $TABLELEARNPATHMODULE . "` AS LPM ON LPM.`module_id` = M.`module_id`
-        WHERE M.`contentType` != \"" . CTSCORM_ . "\"
-          AND M.`contentType` != \"" . CTSCORMASSET_ . "\"
-          AND M.`contentType` != \"" . CTLABEL_ . "\"
-          AND M.`course_id` = $course_id
+        FROM `lp_module` AS M
+   LEFT JOIN `lp_rel_learnPath_module` AS LPM ON LPM.`module_id` = M.`module_id`
+        WHERE M.`contentType` != ?s
+          AND M.`contentType` != ?s
+          AND M.`contentType` != ?s
+          AND M.`course_id` = ?d
         GROUP BY M.`module_id`
         ORDER BY M.`name` ASC, M.`contentType`ASC, M.`accessibility` ASC";
 
-$result = db_query($sql);
+$result = Database::get()->queryArray($sql, CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
 $atleastOne = false;
 
-$query_num_results = db_query($sql);
-$num_results = mysql_num_rows($query_num_results);
+$num_results = count($result);
 
 if (!$num_results == 0) {
     $tool_content .= "
@@ -260,7 +235,7 @@ if (!$num_results == 0) {
 // Display modules of the pool of this course
 
 $ind = 1;
-while ($list = mysql_fetch_array($result)) {
+foreach ($result as $list) {
     if ($ind % 2 == 0) {
         $style = 'class="odd"';
     } else {
@@ -269,19 +244,19 @@ while ($list = mysql_fetch_array($result)) {
 
     //DELETE , RENAME, COMMENT
 
-    $contentType_img = selectImage($list['contentType']);
-    $contentType_alt = selectAlt($list['contentType']);
+    $contentType_img = selectImage($list->contentType);
+    $contentType_alt = selectAlt($list->contentType);
     $tool_content .= "
     <tr $style>
       <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"" . $themeimg . '/' . $contentType_img . "\" alt=\"" . $contentType_alt . "\" title=\"" . $contentType_alt . "\" /></td>
-      <td align=\"left\"><b>" . q($list['name']) . "</b>";
+      <td align=\"left\"><b>" . q($list->name) . "</b>";
 
-    if ($list['comment']) {
-        $tool_content .= "<br /><small style=\"color: #a19b99;\"><b>$langComments</b>: " . $list['comment'] . "</small>";
+    if ($list->comment) {
+        $tool_content .= "<br /><small style=\"color: #a19b99;\"><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
     $tool_content .= "</td>
-      <td><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=eraseModule&amp;cmdid=" . $list['module_id'] . "\" onClick=\"return confirmation('" . clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed']) . "');\"><img src=\"" . $themeimg . "/delete.png\" border=\"0\" alt=\"" . $langDelete . "\" title=\"" . $langDelete . "\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqRename&amp;module_id=" . $list['module_id'] . "\"><img src=\"" . $themeimg . "/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqComment&amp;module_id=" . $list['module_id'] . "\"><img src=\"" . $themeimg . "/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+      <td><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=eraseModule&amp;cmdid=" . $list->module_id . "\" onClick=\"return confirmation('" . clean_str_for_javascript($list->name . ': ' . $langUsedInLearningPaths . $list->timesUsed) . "');\"><img src=\"" . $themeimg . "/delete.png\" border=\"0\" alt=\"" . $langDelete . "\" title=\"" . $langDelete . "\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqRename&amp;module_id=" . $list->module_id . "\"><img src=\"" . $themeimg . "/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqComment&amp;module_id=" . $list->module_id . "\"><img src=\"" . $themeimg . "/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;

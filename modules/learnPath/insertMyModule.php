@@ -44,12 +44,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -80,29 +74,26 @@ $nameTools = $langInsertMyModulesTitle;
 // as they are already in this learning path
 
 function buildRequestModules() {
-
-    global $TABLELEARNPATHMODULE;
-    global $TABLEMODULE;
-    global $TABLEASSET, $langLearningModule, $langSelection, $langComments, $course_id;
+    global $course_id;
 
     $firstSql = "SELECT LPM.`module_id`
-              FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
-              WHERE LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
+              FROM `lp_rel_learnPath_module` AS LPM
+              WHERE LPM.`learnPath_id` = ?d";
 
-    $firstResult = db_query($firstSql);
+    $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
 
     // 2) We build the request to get the modules we need
 
     $sql = "SELECT M.*, A.`path`
-         FROM `" . $TABLEMODULE . "` AS M
-           LEFT JOIN `" . $TABLEASSET . "` AS A ON M.`startAsset_id` = A.`asset_id`
+         FROM `lp_module` AS M
+           LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
          WHERE M.`contentType` != \"SCORM\"
            AND M.`contentType` != \"SCORM_ASSET\"
            AND M.`contentType` != \"LABEL\"
-           AND M.`course_id` = $course_id";
+           AND M.`course_id` = " . intval($course_id);
 
-    while ($list = mysql_fetch_array($firstResult)) {
-        $sql .=" AND M.`module_id` != " . (int) $list['module_id'];
+    foreach ($firstResult as $list) {
+        $sql .=" AND M.`module_id` != " . intval($list->module_id);
     }
 
 
@@ -124,30 +115,22 @@ function buildRequestModules() {
 //COMMAND ADD SELECTED MODULE(S):
 
 if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
-
     // select all 'addable' modules of this course for this learning path
-
-    $result = db_query(buildRequestModules());
+    $result = Database::get()->queryArray(buildRequestModules());
     $atLeastOne = FALSE;
     $nb = 0;
-    while ($list = mysql_fetch_array($result)) {
+    foreach ($result as $list) {
         // see if check box was checked
-        if (isset($_REQUEST['check_' . $list['module_id']]) && $_REQUEST['check_' . $list['module_id']]) {
+        if (isset($_REQUEST['check_' . $list->module_id]) && $_REQUEST['check_' . $list->module_id]) {
             // find the order place where the module has to be put in the learning path
-            $sql = "SELECT MAX(`rank`)
-                    FROM `" . $TABLELEARNPATHMODULE . "`
-                    WHERE learnPath_id = " . (int) $_SESSION['path_id'];
-            $result2 = db_query($sql);
-
-            list($orderMax) = mysql_fetch_row($result2);
-            $order = $orderMax + 1;
+            $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                    FROM `lp_rel_learnPath_module`
+                    WHERE learnPath_id = ?d", $_SESSION['path_id'])->max);
 
             //create and call the insertquery on the DB to add the checked module to the learning path
-
-            $insertquery = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+            Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                           (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible` )
-                          VALUES (" . (int) $_SESSION['path_id'] . ", " . (int) $list['module_id'] . ", ''," . $order . ", 'OPEN', 1)";
-            db_query($insertquery);
+                          VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $list->module_id, $order);
 
             $atleastOne = TRUE;
             $nb++;
@@ -158,7 +141,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
 // this is the same SELECT as "select all 'addable' modules of this course for this learning path"
 // **BUT** normally there is less 'addable' modules here than in the first one
 
-$result = db_query(buildRequestModules());
+$result = Database::get()->queryArray(buildRequestModules());
 
 $tool_content .= '    <form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
 $tool_content .= '    <table width="100%" class="tbl_alt">' . "\n"
@@ -177,40 +160,40 @@ $tool_content .= '    <table width="100%" class="tbl_alt">' . "\n"
 $atleastOne = FALSE;
 
 $ind = 1;
-while ($list = mysql_fetch_array($result)) {
+foreach ($result as $list) {
     if ($ind % 2 == 0) {
         $style = 'class="even"';
     } else {
         $style = 'class="odd"';
     }
 
-
     //CHECKBOX, NAME, RENAME, COMMENT
-    if ($list['contentType'] == CTEXERCISE_)
+    if ($list->contentType == CTEXERCISE_) {
         $moduleImg = 'exercise_on';
-    else if ($list['contentType'] == CTLINK_)
+    } else if ($list->contentType == CTLINK_) {
         $moduleImg = 'links_on';
-    else if ($list['contentType'] == CTCOURSE_DESCRIPTION_)
+    } else if ($list->contentType == CTCOURSE_DESCRIPTION_) {
         $moduleImg = 'description_on';
-    else if ($list['contentType'] == CTMEDIA_ || $list['contentType'] == CTMEDIALINK_)
+    } else if ($list->contentType == CTMEDIA_ || $list->contentType == CTMEDIALINK_) {
         $moduleImg = 'videos_on';
-    else
-        $moduleImg = choose_image(basename($list['path']));
+    } else {
+        $moduleImg = choose_image(basename($list->path));
+    }
 
-    $contentType_alt = selectAlt($list['contentType']);
+    $contentType_alt = selectAlt($list->contentType);
 
     $tool_content .= '    <tr ' . $style . '>' . "\n"
             . '      <td align="left">' . "\n"
-            . '        <label for="check_' . $list['module_id'] . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list['name'] . '</b></label>' . "\n";
+            . '        <label for="check_' . $list->module_id . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list->name . '</b></label>' . "\n";
 
     // COMMENT
-    if ($list['comment'] != null) {
+    if ($list->comment != null) {
         $tool_content .= '     <br /> <br />' . "\n"
-                . '        <em>' . $langComments . '</em>: <br />' . $list['comment'] . '' . "\n";
+                . '        <em>' . $langComments . '</em>: <br />' . $list->comment . '' . "\n";
     }
     $tool_content .= '      </td>' . "\n"
             . '      <td align="center">' . "\n"
-            . '        <input type="checkbox" name="check_' . $list['module_id'] . '" id="check_' . $list['module_id'] . '">' . "\n"
+            . '        <input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
             . '      </td>' . "\n"
             . '    </tr>' . "\n";
 

@@ -147,7 +147,7 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= "<td align='center'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td align='center'>
-			<a href='$_SERVER[SCRIPT_NAME]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
+			<a href='$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
             $k++;
         }
     }
@@ -161,7 +161,7 @@ if (!empty($show) and $show == 'closed') {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         $tool_content = "
-		<p class=\"success\">$langReintroductionApplication</p>";
+		<p class='success'>$langReintroductionApplication</p>";
     } else {
         $tool_content .= "<table class'tbl_al' width='100%' align='left'>";
         $tool_content .= table_header(1, $langDateReject_small);
@@ -199,7 +199,7 @@ if (!empty($show) and $show == 'closed') {
 } elseif (!empty($close)) {
     switch ($close) {
         case '1':
-            Database::get()->query("UPDATE user_request SET state = 2, date_closed = NOW() WHERE id = ?d", $id);
+            Database::get()->query("UPDATE user_request SET state = 2, date_closed = " . DBHelper::timeAfter() . " WHERE id = ?d", $id);
             if ($list_status == 1) {
                 $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
             } else {
@@ -218,11 +218,13 @@ if (!empty($show) and $show == 'closed') {
                     if (Database::get()->query($sql)->affectedRows > 0) {
                         if (isset($_POST['sendmail']) and ( $_POST['sendmail'] == 1)) {
                             $telephone = get_config('phone');
+                            $administratorName = get_config('admin_name');
+                            $emailhelpdesk = get_config('email_helpdesk');
                             $emailsubject = $langemailsubjectBlocked;
                             $emailbody = "$langemailbodyBlocked
 $langComments:> $_POST[comment]
 $langManager $siteName
-$administratorName $administratorSurname
+$administratorName
 $langPhone: $telephone
 $langEmail: $emailhelpdesk";
                             send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
@@ -240,7 +242,7 @@ $langEmail: $emailhelpdesk";
 			<div class='alert1'>$warning</div>
 			<table width='100%' class='tbl_border'>
 			<tr><th class='left'>$langName</th>
-			<td>" . q($d->name) . "</td></tr>
+			<td>" . q($d->givenname) . "</td></tr>
 			<tr><th class='left'>$langSurname</th>
 			<td>" . q($d->surname) . "</td></tr>
 			<tr><th class='left'>$langEmail</th>
@@ -288,8 +290,8 @@ else {
             $tool_content .= "<td align='right' width='1'>
                         <img src='$themeimg/arrow.png' title='bullet'></td>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
-            $tool_content .= "<td>" . q($req->username) . "</td>";
-            $tool_content .= "<td>" . q(find_faculty_by_id($req->faculty_id)) . "</td>";
+            $tool_content .= "<td>" . q($req->username) . "</td>";            
+            $tool_content .= "<td>" . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . "</td>";
             $tool_content .= "<td align='center'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td align='center' class='smaller'>";
@@ -323,7 +325,7 @@ else {
                                                    $langElaboration</a>";
                     break;
             }
-            $tool_content .= "</td></tr>\n";
+            $tool_content .= "</td></tr>";
             $k++;
         }
         $tool_content .= "</table>";
@@ -341,13 +343,24 @@ $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3, null, $head_content);
 
-// --------------------------------------
-// function to display table header
-// --------------------------------------
+
+/**
+ * @brief function to display table header
+ * @global type $langName
+ * @global type $langSurname
+ * @global type $langFaculty
+ * @global type $langDate
+ * @global type $langActions
+ * @global type $langUsername
+ * @global type $langDateRequest_small
+ * @param type $addon
+ * @param type $message
+ * @return string
+ */
 function table_header($addon = FALSE, $message = FALSE) {
 
-    global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;
-    global $langDateRequest_small, $list_status;
+    global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langUsername;
+    global $langDateRequest_small;
 
     $string = '';
     if ($addon) {

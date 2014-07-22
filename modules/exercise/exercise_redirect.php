@@ -56,7 +56,6 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
     unset($_SESSION['exercise_begin_time']);
-    unset($_SESSION['exercise_end_time']);
 }
 
 $tool_content_extra = "<br/>
@@ -84,11 +83,9 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 // if there is an active attempt and it's time passed. Complete the record to finish attempt
-$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
-$tmp = mysql_fetch_row(db_query($sql));
-if ($tmp[0] > 0) {
-	$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid' AND record_end_date is NULL";
-	db_query($sql);
+$tmp = Database::get()->querySingle("SELECT COUNT(*) AS cnt, record_start_date FROM `$TBL_RECORDS` WHERE eid = ?d AND uid= ?d AND record_end_date is NULL", $exerciseId, $uid);
+if ($tmp->cnt > 0) {	
+    Database::get()->query("UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $exerciseId, $uid);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

@@ -32,7 +32,7 @@ require_once 'include/log.php';
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action']=='delete') {
             $unregister_gid = intval($_POST['value']);
-            $unregister_ok = true;
+            $unregister_ok = true;            
             // Security: don't remove myself except if there is another prof
             if ($unregister_gid == $uid) {
                     $result = Database::get()->querySingle("SELECT user_id FROM course_user
@@ -44,10 +44,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                             $unregister_ok = false;
                     }
             }
-            if ($unregister_ok) {
+            if ($unregister_ok) {                
                     Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
+                    if (check_guest($unregister_gid)) {
+                        Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
+                    }
                     Database::get()->query("DELETE FROM group_members
                                     WHERE user_id = ?d AND
                                           group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $unregister_gid, $course_id);

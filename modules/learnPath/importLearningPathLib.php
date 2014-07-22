@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,8 +22,9 @@
 
 /* ===========================================================================
   importLearningPath.php
-  @last update: 25-03-2010 by Thanos Kyritsis
+  @last update: 02-12-2013 by Sakis Agorastos
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+                 Sakis Agorastos <th_agorastos@hotmail.com>
 
   based on Claroline version 1.7 licensed under GPL
   copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
@@ -43,10 +44,10 @@
   ==============================================================================
  */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileManageLib.inc.php");
-require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once("include/lib/learnPathLib.inc.php");
+require_once("include/lib/fileManageLib.inc.php");
+require_once("include/lib/fileUploadLib.inc.php");
+require_once("include/lib/fileDisplayLib.inc.php");
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
@@ -76,50 +77,55 @@ $iterator = null;
  */
 
 function startElement($parser, $name, $attributes) {
-    global $elementsPile;
-    global $itemsPile;
-    global $manifestData;
-    global $flagTag;
-
+    global $elementsPile, $itemsPile, $manifestData, $flagTag;
 
     array_push($elementsPile, $name);
 
     switch ($name) {
         case "MANIFEST" :
-            if (isset($attributes['XML:BASE']))
+            if (isset($attributes['XML:BASE'])) {
                 $manifestData['xml:base']['manifest'] = $attributes['XML:BASE'];
+            }
             break;
         case "RESOURCES" :
-            if (isset($attributes['XML:BASE']))
+            if (isset($attributes['XML:BASE'])) {
                 $manifestData['xml:base']['resources'] = $attributes['XML:BASE'];
+            }
             $flagTag['type'] == "resources";
             break;
         case "RESOURCE" :
             if (isset($attributes['ADLCP:SCORMTYPE']) && $attributes['ADLCP:SCORMTYPE'] == 'sco') {
-                if (isset($attributes['HREF']))
+                if (isset($attributes['HREF'])) {
                     $manifestData['scos'][$attributes['IDENTIFIER']]['href'] = $attributes['HREF'];
-                if (isset($attributes['XML:BASE']))
+                }
+                if (isset($attributes['XML:BASE'])) {
                     $manifestData['scos'][$attributes['IDENTIFIER']]['xml:base'] = $attributes['XML:BASE'];
+                }
                 $flagTag['type'] = "sco";
                 $flagTag['value'] = $attributes['IDENTIFIER'];
             }
             elseif (isset($attributes['ADLCP:SCORMTYPE']) && $attributes['ADLCP:SCORMTYPE'] == 'asset') {
-                if (isset($attributes['HREF']))
+                if (isset($attributes['HREF'])) {
                     $manifestData['assets'][$attributes['IDENTIFIER']]['href'] = $attributes['HREF'];
-                if (isset($attributes['XML:BASE']))
+                }
+                if (isset($attributes['XML:BASE'])) {
                     $manifestData['assets'][$attributes['IDENTIFIER']]['xml:base'] = $attributes['XML:BASE'];
+                }
                 $flagTag['type'] = "asset";
-                if (isset($attributes['IDENTIFIER']))
+                if (isset($attributes['IDENTIFIER'])) {
                     $flagTag['value'] = $attributes['IDENTIFIER'];
+                }
             }
             else { // check in $manifestData['items'] if this ressource identifier is used
                 foreach ($manifestData['items'] as $itemToCheck) {
                     if (isset($itemToCheck['identifierref']) && $itemToCheck['identifierref'] == $attributes['IDENTIFIER']) {
-                        if (isset($attributes['HREF']))
+                        if (isset($attributes['HREF'])) {
                             $manifestData['scos'][$attributes['IDENTIFIER']]['href'] = $attributes['HREF'];
+                        }
 
-                        if (isset($attributes['XML:BASE']))
+                        if (isset($attributes['XML:BASE'])) {
                             $manifestData['scos'][$attributes['IDENTIFIER']]['xml:base'] = $attributes['XML:BASE'];
+                        }
 
                         // eidiko flag gia na anixneusoume osa scorm paketa einai typou assets
                         // dhladh osa den perilambanoun javascript gia thn parakolou8hsh ths proodou,
@@ -134,15 +140,19 @@ function startElement($parser, $name, $attributes) {
             if (isset($attributes['IDENTIFIER'])) {
                 $manifestData['items'][$attributes['IDENTIFIER']]['itemIdentifier'] = $attributes['IDENTIFIER'];
 
-                if (isset($attributes['IDENTIFIERREF']))
+                if (isset($attributes['IDENTIFIERREF'])) {
                     $manifestData['items'][$attributes['IDENTIFIER']]['identifierref'] = $attributes['IDENTIFIERREF'];
-                if (isset($attributes['PARAMETERS']))
+                }
+                if (isset($attributes['PARAMETERS'])) {
                     $manifestData['items'][$attributes['IDENTIFIER']]['parameters'] = $attributes['PARAMETERS'];
-                if (isset($attributes['ISVISIBLE']))
+                }
+                if (isset($attributes['ISVISIBLE'])) {
                     $manifestData['items'][$attributes['IDENTIFIER']]['isvisible'] = $attributes['ISVISIBLE'];
+                }
 
-                if (count($itemsPile) > 0)
+                if (count($itemsPile) > 0) {
                     $manifestData['items'][$attributes['IDENTIFIER']]['parent'] = $itemsPile[count($itemsPile) - 1];
+                }
 
                 array_push($itemsPile, $attributes['IDENTIFIER']);
 
@@ -158,10 +168,11 @@ function startElement($parser, $name, $attributes) {
             break;
 
         case "ORGANIZATIONS" :
-            if (isset($attributes['DEFAULT']))
+            if (isset($attributes['DEFAULT'])) {
                 $manifestData['defaultOrganization'] = $attributes['DEFAULT'];
-            else
+            } else {
                 $manifestData['defaultOrganization'] = '';
+            }
             break;
         case "ORGANIZATION" :
             $flagTag['type'] = "organization";
@@ -184,9 +195,7 @@ function startElement($parser, $name, $attributes) {
  * @param $name name of the element
  */
 function endElement($parser, $name) {
-    global $elementsPile;
-    global $itemsPile;
-    global $flagTag;
+    global $elementsPile, $itemsPile, $flagTag;
 
     switch ($name) {
         case "ITEM" :
@@ -236,8 +245,9 @@ function elementData($parser, $data) {
     $data = trim(($data));
     //$data = trim(iconv("utf-8", $charset, $data));
 
-    if (!isset($data))
+    if (!isset($data)) {
         $data = "";
+    }
 
     switch ($elementsPile[count($elementsPile) - 1]) {
 
@@ -247,8 +257,9 @@ function elementData($parser, $data) {
             // $data == '' (empty string) means that title tag contains elements (<langstring> for an exemple), so it's not the title we need
             if ($data != '') {
                 if ($flagTag['type'] == "item") { // item title check
-                    if (!isset($manifestData['items'][$flagTag['value']]['title']))
+                    if (!isset($manifestData['items'][$flagTag['value']]['title'])) {
                         $manifestData['items'][$flagTag['value']]['title'] = "";
+                    }
                     $manifestData['items'][$flagTag['value']]['title'] .= $data;
                 }
 
@@ -292,8 +303,9 @@ function elementData($parser, $data) {
                 }
 
                 if (!$errorFound) {
-                    if (!isset($cache))
+                    if (!isset($cache)) {
                         $cache = "";
+                    }
                     while ($readdata = str_replace("\n", "", fread($fp, 4096))) {
                         // fix for fread breaking thing
                         // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
@@ -337,8 +349,9 @@ function elementData($parser, $data) {
                     // DESCRIPTION
                     // if the langstring tag is a children of a description tag
                     if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (!isset($manifestData['items'][$flagTag['value']]['description']))
+                        if (!isset($manifestData['items'][$flagTag['value']]['description'])) {
                             $manifestData['items'][$flagTag['value']]['description'] = "";
+                        }
                         $manifestData['items'][$flagTag['value']]['description'] .= $data;
                     }
                     // title found in metadata of an item (only if we haven't already one title for this sco)
@@ -352,10 +365,11 @@ function elementData($parser, $data) {
                     // DESCRIPTION
                     // if the langstring tag is a children of a description tag
                     if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (isset($manifestData['scos'][$flagTag['value']]['description']))
+                        if (isset($manifestData['scos'][$flagTag['value']]['description'])) {
                             $manifestData['scos'][$flagTag['value']]['description'] .= $data;
-                        else
+                        } else {
                             $manifestData['scos'][$flagTag['value']]['description'] = $data;
+                        }
                     }
                     // title found in metadata of an item (only if we haven't already one title for this sco)
                     if (!isset($manifestData['scos'][$flagTag['value']]['title']) || $manifestData['scos'][$flagTag['value']]['title'] == '') {
@@ -368,18 +382,20 @@ function elementData($parser, $data) {
                     // DESCRIPTION
                     // if the langstring tag is a children of a description tag
                     if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (isset($manifestData['assets'][$flagTag['value']]['description']))
+                        if (isset($manifestData['assets'][$flagTag['value']]['description'])) {
                             $manifestData['assets'][$flagTag['value']]['description'] .= $data;
-                        else
+                        } else {
                             $manifestData['assets'][$flagTag['value']]['description'] = $data;
+                        }
                     }
                     // title found in metadata of an item (only if we haven't already one title for this sco)
                     if (!isset($manifestData['assets'][$flagTag['value']]['title']) || $manifestData['assets'][$flagTag['value']]['title'] == '') {
                         if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            if (isset($manifestData['assets'][$flagTag['value']]['title']))
+                            if (isset($manifestData['assets'][$flagTag['value']]['title'])) {
                                 $manifestData['assets'][$flagTag['value']]['title'] .= $data;
-                            else
+                            } else {
                                 $manifestData['assets'][$flagTag['value']]['title'] = $data;
+                            }
                         }
                     }
                     break;
@@ -387,8 +403,9 @@ function elementData($parser, $data) {
                     // DESCRIPTION
                     $posPackageDesc = array("MANIFEST", "METADATA", "LOM", "GENERAL", "DESCRIPTION");
                     if (compareArrays($posPackageDesc, $elementsPile)) {
-                        if (!isset($manifestData['packageDesc']))
+                        if (!isset($manifestData['packageDesc'])) {
                             $manifestData['packageDesc'] = "";
+                        }
                         $manifestData['packageDesc'] .= $data;
                     }
 
@@ -419,8 +436,9 @@ function elementData($parser, $data) {
 function compareArrays($array1, $array2) {
     // sizeof(array2) so we do not compare the last tag, this is the one we are in, so we not that already.
     for ($i = 0; $i < sizeof($array2) - 1; $i++) {
-        if ($array1[$i] != $array2[$i])
+        if ($array1[$i] != $array2[$i]) {
             return false;
+        }
     }
     return true;
 }
@@ -432,23 +450,25 @@ function compareArrays($array1, $array2) {
  */
 function seems_utf8($str) {
     for ($i = 0; $i < strlen($str); $i++) {
-        if (ord($str[$i]) < 0x80)
+        if (ord($str[$i]) < 0x80) {
             continue; // 0bbbbbbb
-        elseif ((ord($str[$i]) & 0xE0) == 0xC0)
+        } else if ((ord($str[$i]) & 0xE0) == 0xC0) {
             $n = 1; // 110bbbbb
-        elseif ((ord($str[$i]) & 0xF0) == 0xE0)
+        } else if ((ord($str[$i]) & 0xF0) == 0xE0) {
             $n = 2; // 1110bbbb
-        elseif ((ord($str[$i]) & 0xF8) == 0xF0)
+        } else if ((ord($str[$i]) & 0xF8) == 0xF0) {
             $n = 3; // 11110bbb
-        elseif ((ord($str[$i]) & 0xFC) == 0xF8)
+        } else if ((ord($str[$i]) & 0xFC) == 0xF8) {
             $n = 4; // 111110bb
-        elseif ((ord($str[$i]) & 0xFE) == 0xFC)
+        } else if ((ord($str[$i]) & 0xFE) == 0xFC) {
             $n = 5; // 1111110b
-        else
+        } else {
             return false; // Does not match any model
+        }
         for ($j = 0; $j < $n; $j++) { // n bytes matching 10bbbbbb follow ?
-            if (( ++$i == strlen($str)) || ((ord($str[$i]) & 0xC0) != 0x80))
+            if (( ++$i == strlen($str)) || ((ord($str[$i]) & 0xC0) != 0x80)) {
                 return false;
+            }
         }
     }
     return true;
@@ -465,7 +485,7 @@ function utf8_decode_if_is_utf8($str) {
   CLAROLINE MAIN
   ====================================== */
 
-function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
+function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
     global $langUnamedPath;
     global $langFileScormError;
     global $langNotice;
@@ -504,15 +524,10 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
     global $iterator;
     global $course_code;
     global $course_id;
+    global $langErrorValidatingManifest;
+    global $urlServer;
 
     $pwd = getcwd();
-    mysql_select_db($course_code);
-
-    $TABLELEARNPATH = "lp_learnPath";
-    $TABLEMODULE = "lp_module";
-    $TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-    $TABLEASSET = "lp_asset";
-    $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
     // init msg arays
     $okMsgs = array();
@@ -520,13 +535,14 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
 
     $maxFilledSpace = 100000000;
 
-    $courseDir = "courses/" . $course_code . "/scormPackages/";
-    $tempDir = "courses/" . $course_code . "/temp/";
+    $courseDir = "/courses/" . $course_code . "/scormPackages/";
+    $tempDir = "/courses/" . $course_code . "/temp/";
     $baseWorkDir = $webDir . $courseDir; // path_id
     $tempWorkDir = $webDir . $tempDir;
 
-    if (!is_dir($baseWorkDir))
+    if (!is_dir($baseWorkDir)) {
         claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+    }
 
     // arrays used to store inserted ids in case
     // will be used to build delete queries for mysql < 4.0.0
@@ -537,26 +553,20 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
 
     // we need a new path_id for this learning path so we prepare a line in DB
     // this line will be removed if an error occurs
-    $sql = "SELECT MAX(`rank`)
-            FROM `" . $TABLELEARNPATH . "` WHERE `course_id` = $course_id";
-    $result = db_query($sql, $mysqlMainDb);
+    $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+            FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
 
-    list($rankMax) = mysql_fetch_row($result);
-
-    $sql = "INSERT INTO `" . $TABLELEARNPATH . "`
+    $tempPathId = Database::get()->query("INSERT INTO `lp_learnPath`
             (`course_id`, `name`,`visible`,`rank`,`comment`)
-            VALUES ($cours_id, '" . addslashes($lpName) . "', 0, " . ($rankMax + 1) . ",'')";
-    db_query($sql, $mysqlMainDb);
-
-
-    $tempPathId = mysql_insert_id();
+            VALUES (?d, ?s, 0, ?d,'')", $course_id, $lpName, $rankMax)->lastInsertID;
     $baseWorkDir .= "path_" . $tempPathId;
 
-    if (!is_dir($baseWorkDir))
+    if (!is_dir($baseWorkDir)) {
         claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+    }
 
     // unzip package
-    require_once("../../include/pclzip/pclzip.lib.php");
+    require_once("include/pclzip/pclzip.lib.php");
 
     /*
      * Check the file size doesn't exceed
@@ -612,8 +622,9 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                 $realFileSize += $thisContent['size'];
             }
 
-            if (!isset($alreadyFilledSpace))
+            if (!isset($alreadyFilledSpace)) {
                 $alreadyFilledSpace = 0;
+            }
 
             if (($realFileSize + $alreadyFilledSpace) > $maxFilledSpace) { // check the real size.
                 $errorFound = true;
@@ -665,8 +676,9 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
             $errorFound = true;
             array_push($errorMsgs, $langErrorOpeningManifest);
         } else {
-            if (!isset($manifestPath))
+            if (!isset($manifestPath)) {
                 $manifestPath = "";
+            }
 
             array_push($okMsgs, $langOkManifestFound . $manifestPath . "imsmanifest.xml");
 
@@ -675,8 +687,9 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                 // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
                 // preg expression has been modified to match tag with inner attributes
 
-                if (!isset($cache))
+                if (!isset($cache)) {
                     $cache = "";
+                }
 
                 $data = $cache . $data;
                 if (!feof($fp)) {
@@ -706,6 +719,18 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
 
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorReadingManifest);
+                    // Since manifest.xml cannot be parsed, test versus IMS CP 1.4.4 XSD (compatible with all SCORM packages as well)
+                    require_once 'include/validateXML.php';
+                    libxml_use_internal_errors(true);
+                    
+                    $xml = new DOMDocument();
+                    $xml->load($manifestPath."imsmanifest.xml");
+                    
+                    if (!$xml->schemaValidate($urlServer . 'modules/learnPath/export/imscp_v1p2.xsd')) {
+                        $messages = libxml_display_errors();
+                        
+                        array_push($errorMsgs, $langErrorValidatingManifest . $messages);
+                    }
                     break;
                 }
             }
@@ -722,20 +747,22 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
         if (sizeof($manifestData['items']) > 0) {
             // if there is items in manifest we look for sco type resources referenced in idientifierref
             foreach ($manifestData['items'] as $item) {
-                if (!isset($item['identifierref']) || $item['identifierref'] == '')
+                if (!isset($item['identifierref']) || $item['identifierref'] == '') {
                     break; // skip if no ressource reference in item (item is probably a chapter head)
+                }
 
                     
 // find the file in the zip file
                 $scoPathFound = false;
 
                 for ($i = 0; $i < sizeof($zipContentArray); $i++) {
-                    if (isset($manifestData['scos'][$item['identifierref']]['xml:base']))
+                    if (isset($manifestData['scos'][$item['identifierref']]['xml:base'])) {
                         $extraPath = $manifestData['scos'][$item['identifierref']]['xml:base'];
-                    else if (isset($manifestData['assets'][$item['identifierref']]['xml:base']))
+                    } else if (isset($manifestData['assets'][$item['identifierref']]['xml:base'])) {
                         $extraPath = $manifestData['assets'][$item['identifierref']]['xml:base'];
-                    else
+                    } else {
                         $extraPath = "";
+                    }
 
                     if (isset($zipContentArray[$i]["filename"]) &&
                             ( ( isset($manifestData['scos'][$item['identifierref']]['href']) && $zipContentArray[$i]["filename"] == $pathToManifest . $extraPath . $manifestData['scos'][$item['identifierref']]['href']) || (isset($manifestData['assets'][$item['identifierref']]['href']) && $zipContentArray[$i]["filename"] == $pathToManifest . $extraPath . $manifestData['assets'][$item['identifierref']]['href'])
@@ -830,37 +857,31 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                     // add title as a module
                     $chapterTitle = $item['title'];
 
-                    $sql = "INSERT INTO `" . $TABLEMODULE . "`
+                    // array of all inserted module ids
+                    $insertedModule_id[$i] = Database::get()->query("INSERT INTO `lp_module`
                             (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                            VALUES ($course_id, '" . addslashes($chapterTitle) . "' , '', '" . CTLABEL_ . "','')";
-
-                    $query = db_query($sql, $mysqlMainDb);
-
-                    if (mysql_error()) {
+                            VALUES (?d, ?s, '', ?s,'')", $course_id, $chapterTitle, CTLABEL_)->lastInsertID;
+                    if (!$insertedModule_id[$i]) {
                         $errorFound = true;
                         array_push($errorMsgs, $langErrorSql);
                         break;
                     }
-                    $insertedModule_id[$i] = mysql_insert_id();  // array of all inserted module ids
                     // visibility
                     if (isset($item['isvisible']) && $item['isvisible'] != '') {
-                        ( $item['isvisible'] == "true" ) ? $visibility = 1 : $visibility = 0;
+                        $visibility = ($item['isvisible'] == "true") ? 1 : 0;
                     } else {
                         $visibility = 1; // IMS consider that the default value of 'isvisible' is true
                     }
 
                     // add title module in the learning path
                     // finally : insert in learning path
-                    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
-                            (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`)
-                            VALUES ('" . $tempPathId . "', '" . $insertedModule_id[$i] . "', " . $rank . ", '" . $visibility . "', " . $parent . ")";
-                    $query = db_query($sql, $mysqlMainDb);
-
                     // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
-                    $insertedLPMid[$item['itemIdentifier']]['LPMid'] = mysql_insert_id();
+                    $insertedLPMid[$item['itemIdentifier']]['LPMid'] = Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
+                            (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`)
+                            VALUES (?d, ?d, ?d, ?d, ?d)", $tempPathId, $insertedModule_id[$i], $rank, $visibility, $parent)->lastInsertID;
                     $insertedLPMid[$item['itemIdentifier']]['rank'] = 1;
 
-                    if (mysql_error()) {
+                    if (!$insertedLPMid[$item['itemIdentifier']]['LPMid']) {
                         $errorFound = true;
                         array_push($errorMsgs, $langErrorSql);
                         break;
@@ -897,50 +918,61 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                 // insert modules and their start asset
                 // create new module
 
-                if (!isset($item['datafromlms']))
+                if (!isset($item['datafromlms'])) {
                     $item['datafromlms'] = "";
+                }
 
                 // elegxoume an to contentType prepei na einai scorm h asset
-                if (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_)
+                if (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_) {
                     $contentType = CTSCORMASSET_;
-                else
+                } else {
                     $contentType = CTSCORM_;
+                }
 
-                $sql = "INSERT INTO `" . $TABLEMODULE . "`
+                // array of all inserted module ids
+                $insertedModule_id[$i] = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                        VALUES ($course_id, '" . addslashes($moduleName) . "' , '" . addslashes($description) . "', '" . $contentType . "', '" . addslashes($item['datafromlms']) . "')";
-                $query = db_query($sql, $mysqlMainDb);
-
-                if (mysql_error()) {
+                        VALUES (?d, ?s, ?s, ?s, ?s)", $course_id, $moduleName, $description, $contentType, $item['datafromlms'])->lastInsertID;
+                
+                if (!$insertedModule_id[$i]) {
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorSql);
                     break;
                 }
-
-                $insertedModule_id[$i] = mysql_insert_id();  // array of all inserted module ids
                 // build asset path
                 // a $manifestData['scos'][$item['identifierref']] __SHOULD__ not exist if a $manifestData['assets'][$item['identifierref']] exists
                 // so according to IMS we can say that one is empty if the other is filled, so we concat them without more verification than if the var exists.
 
-                if (!isset($manifestData['xml:base']['manifest']))
+                // suppress notices
+                if (!isset($manifestData['xml:base']['manifest'])) {
                     $manifestData['xml:base']['manifest'] = "";
-                if (!isset($manifestData['xml:base']['ressources']))
+                }
+                if (!isset($manifestData['xml:base']['ressources'])) {
                     $manifestData['xml:base']['ressources'] = "";
-                if (!isset($manifestData['scos'][$item['identifierref']]['href']))
+                }
+                if (!isset($manifestData['scos'][$item['identifierref']]['href'])) {
                     $manifestData['scos'][$item['identifierref']]['href'] = "";
-                if (!isset($manifestData['assets'][$item['identifierref']]['href']))
+                }
+                if (!isset($manifestData['assets'][$item['identifierref']]['href'])) {
                     $manifestData['assets'][$item['identifierref']]['href'] = "";
-                if (!isset($manifestData['scos'][$item['identifierref']]['parameters']))
+                }
+                if (!isset($manifestData['scos'][$item['identifierref']]['parameters'])) {
                     $manifestData['scos'][$item['identifierref']]['parameters'] = "";
-                if (!isset($manifestData['assets'][$item['identifierref']]['parameters']))
+                }
+                if (!isset($manifestData['assets'][$item['identifierref']]['parameters'])) {
                     $manifestData['assets'][$item['identifierref']]['parameters'] = "";
+                }
+                if (!isset($manifestData['items'][$item['itemIdentifier']]['parameters'])) {
+                    $manifestData['items'][$item['itemIdentifier']]['parameters'] = "";
+                }
 
-                if (isset($manifestData['scos'][$item['identifierref']]['xml:base']))
+                if (isset($manifestData['scos'][$item['identifierref']]['xml:base'])) {
                     $extraPath = $manifestData['scos'][$item['identifierref']]['xml:base'];
-                else if (isset($manifestData['assets'][$item['identifierref']]['xml:base']))
+                } else if (isset($manifestData['assets'][$item['identifierref']]['xml:base'])) {
                     $extraPath = $manifestData['assets'][$item['identifierref']]['xml:base'];
-                else
+                } else {
                     $extraPath = "";
+                }
 
                 $assetPath = "/"
                         . $manifestData['xml:base']['manifest']
@@ -949,33 +981,25 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                         . $manifestData['scos'][$item['identifierref']]['href']
                         . $manifestData['assets'][$item['identifierref']]['href']
                         . $manifestData['scos'][$item['identifierref']]['parameters']
-                        . $manifestData['assets'][$item['identifierref']]['parameters'];
+                        . $manifestData['assets'][$item['identifierref']]['parameters']
+                        . $manifestData['items'][$item['itemIdentifier']]['parameters'];
 
                 // create new asset
-                $sql = "INSERT INTO `" . $TABLEASSET . "`
+                // array of all inserted asset ids
+                $insertedAsset_id[$i] = Database::get()->query("INSERT INTO `lp_asset`
                         (`path` , `module_id` , `comment`)
-                        VALUES ('" . addslashes($assetPath) . "', " . $insertedModule_id[$i] . " , '')";
-
-                $query = db_query($sql, $mysqlMainDb);
-                if (mysql_error()) {
+                        VALUES (?s, ?d, '')", $assetPath, $insertedModule_id[$i])->lastInsertID;
+                
+                if (!$insertedAsset_id[$i]) {
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorSql);
                     break;
                 }
-
-                $insertedAsset_id[$i] = mysql_insert_id(); // array of all inserted asset ids
                 // update of module with correct start asset id
-                $sql = "UPDATE `" . $TABLEMODULE . "`
-                        SET `startAsset_id` = " . (int) $insertedAsset_id[$i] . "
-                        WHERE `module_id` = " . (int) $insertedModule_id[$i] . "
-                        AND `course_id` = $course_id";
-                $query = db_query($sql, $mysqlMainDb);
-
-                if (mysql_error()) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrorSql);
-                    break;
-                }
+                Database::get()->query("UPDATE `lp_module`
+                        SET `startAsset_id` = ?d
+                        WHERE `module_id` = ?d
+                        AND `course_id` = ?d", $insertedAsset_id[$i], $insertedModule_id[$i], $course_id);
 
                 // visibility
                 if (isset($item['isvisible']) && $item['isvisible'] != '') {
@@ -985,17 +1009,13 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
                 }
 
                 // finally : insert in learning path
-                $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
-                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visible`, `lock`, `parent`)
-                        VALUES ('" . $tempPathId . "', '" . $insertedModule_id[$i] . "','" . addslashes($langDefaultModuleAddedComment) . "', " . $rank . ", '" . $visibility . "', 'OPEN', " . $parent . ")";
-                $query = db_query($sql, $mysqlMainDb);
-
                 // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
-                $insertedLPMid[$item['itemIdentifier']]['LPMid'] = mysql_insert_id();
+                $insertedLPMid[$item['itemIdentifier']]['LPMid'] = Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
+                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visible`, `lock`, `parent`)
+                        VALUES (?d, ?d, ?s, ?d, ?d, 'OPEN', ?d)", $tempPathId, $insertedModule_id[$i], $langDefaultModuleAddedComment, $rank, $visibility, $parent)->lastInsertID;
                 $insertedLPMid[$item['itemIdentifier']]['rank'] = 1;
 
-
-                if (mysql_error()) {
+                if (!$insertedLPMid[$item['itemIdentifier']]['LPMid']) {
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorSql);
                     break;
@@ -1014,57 +1034,37 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
     // - update the learning path record
 
     if ($errorFound) {
-
         // delete all database entries of this "module"
-
-        /*
-          //this query should work with mysql > 4 to replace
-          $sql = "DELETE
-          FROM `".$TABLELEARNPATHMODULE."`,
-          `".$TABLELEARNPATH."`
-          WHERE `".$TABLELEARNPATHMODULE."`.`learnPath_id` = `".$TABLELEARNPATH."`.`learnPath_id`
-          AND `".$TABLELEARNPATH."`.`learnPath_id` = ".$_GET['path_id'] ;
-         */
-
-        // queries for mysql previous to 4.0.0
         // delete modules and assets (build query)
         // delete assets
-        $sqlDelAssets = "DELETE FROM `" . $TABLEASSET . "`
-                        WHERE 1 = 0";
+        $sqlDelAssets = "DELETE FROM `lp_asset` WHERE 1 = 0";
         foreach ($insertedAsset_id as $insertedAsset) {
-            $sqlDelAssets .= " OR `asset_id` = " . (int) $insertedAsset;
+            $sqlDelAssets .= " OR `asset_id` = " . intval($insertedAsset);
         }
-        db_query($sqlDelAssets, $mysqlMainDb);
+        Database::get()->query($sqlDelAssets);
 
         // delete modules
-        $sqlDelModules = "DELETE FROM `" . $TABLEMODULE . "`
-                          WHERE 1 = 0";
+        $sqlDelModules = "DELETE FROM `lp_module` WHERE 1 = 0";
         foreach ($insertedModule_id as $insertedModule) {
-            $sqlDelModules .= " OR ( `module_id` = " . (int) $insertedModule . " AND `course_id` = $course_id )";
+            $sqlDelModules .= " OR ( `module_id` = " . intval($insertedModule) . " AND `course_id` = " . intval($course_id) . " )";
         }
-        db_query($sqlDelModules, $mysqlMainDb);
+        Database::get()->query($sqlDelModules);
 
         // delete learningPath_module
-        $sqlDelLPM = "DELETE FROM `" . $TABLELEARNPATHMODULE . "`
-                      WHERE `learnPath_id` = " . (int) $tempPathId;
-        db_query($sqlDelLPM, $mysqlMainDb);
+        Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $tempPathId);
 
         // delete learning path
-        $sqlDelLP = "DELETE FROM `" . $TABLELEARNPATH . "`
-                     WHERE `learnPath_id` = " . (int) $tempPathId . "
-                     AND `course_id` = $course_id";
-        db_query($sqlDelLP, $mysqlMainDb);
+        Database::get()->query("DELETE FROM `lp_learnPath`
+                     WHERE `learnPath_id` = ?d
+                     AND `course_id` = ?d", $tempPathId, $course_id);
 
         // delete the directory (and files) of this learning path and all its content
         claro_delete_file($baseWorkDir);
     } else {
         // finalize insertion : update the empty learning path insert that was made to find its id
-        $sql = "SELECT MAX(`rank`)
-                FROM `" . $TABLELEARNPATH . "`
-                WHERE `course_id` = $course_id";
-        $result = db_query($sql, $mysqlMainDb);
-
-        list($rankMax) = mysql_fetch_row($result);
+        $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                FROM `lp_learnPath`
+                WHERE `course_id` = ?d", $course_id)->max);
 
         if (isset($manifestData['packageTitle'])) {
             $lpName = $manifestData['packageTitle'];
@@ -1079,14 +1079,13 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
             array_push($okMsgs, $langOkDefaultCommentUsed);
         }
 
-        $sql = "UPDATE `" . $TABLELEARNPATH . "`
-                SET `rank` = " . ($rankMax + 1) . ",
-                    `name` = '" . addslashes($lpName) . "',
-                    `comment` = '" . addslashes($lpComment) . "',
+        Database::get()->query("UPDATE `lp_learnPath`
+                SET `rank` = ?d,
+                    `name` = ?s,
+                    `comment` = ?s,
                     `visible` = 1
-                WHERE `learnPath_id` = " . (int) $tempPathId . "
-                AND `course_id` = $course_id";
-        db_query($sql, $mysqlMainDb);
+                WHERE `learnPath_id` = ?d
+                AND `course_id` = ?d", $rankMax, $lpName, $lpComment, $tempPathId, $course_id);
     }
 
     /* --------------------------------------
@@ -1107,8 +1106,9 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
     // installation completed or not message
     if (!$errorFound) {
         $importMessages .= "\n<br /><center><b>" . $langInstalled . "</b></center>";
-        if ($displayExtraMessages == true)
+        if ($displayExtraMessages == true) {
             $importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . $tempPathId . "\">" . $lpName . "</a></center>";
+        }        
         $importMessages .= "\n<br /><br >";
     }
     else {
@@ -1117,10 +1117,8 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
     //$importMessages .= "\n<br /><a href=\"index.php?course=$course_code\">$langBack</a></p>";
     $importMessages .= "\n<br /></p>";
 
-    mysql_select_db($mysqlMainDb);
     chdir($pwd);
 
     return array($importMessages, $tempPathId);
 }
 
-?>

@@ -38,12 +38,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
@@ -57,81 +51,58 @@ $nameTools = $langInsertMyDescToolName;
 // and if it is, use that instead of adding it as new
 // SQL Checks
 // check if a module of this course already used the same document
-$sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
+$thisDocumentModule = Database::get()->querySingle("SELECT * FROM `lp_module` AS M, `lp_asset` AS A
 	WHERE A.`module_id` = M.`module_id`
-	AND M.`course_id` = $course_id
-	AND M.`contentType` = \"" . CTCOURSE_DESCRIPTION_ . "\"";
-$query = db_query($sql);
-$num = mysql_num_rows($query);
+	AND M.`course_id` = ?d
+	AND M.`contentType` = ?s", $course_id, CTCOURSE_DESCRIPTION_);
 
-if ($num == 0) {
+if (!$thisDocumentModule) {
     // create new module
-    // TODO: name goes from langWhatever
-    $sql = "INSERT INTO `" . $TABLEMODULE . "`
+    $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
 		(`course_id`, `name`, `contentType`, `comment`, `launch_data`)
-		VALUES ($course_id, '" . $langCourseDescription . "', '" . CTCOURSE_DESCRIPTION_ . "', '', '')";
-    $query = db_query($sql);
-
-    $insertedModule_id = mysql_insert_id();
+		VALUES (?d, ?s, ?s, '', '')", $course_id, $langCourseDescription, CTCOURSE_DESCRIPTION_)->lastInsertID;
 
     // create new asset
-    $sql = "INSERT INTO `" . $TABLEASSET . "`
+    $insertedAsset_id = Database::get()->query("INSERT INTO `lp_asset`
 		(`path` , `module_id`, `comment` )
-		VALUES ('', " . (int) $insertedModule_id . ", '' )";
-    $query = db_query($sql);
+		VALUES ('', ?d, '' )", $insertedModule_id)->lastInsertID;
 
-    $insertedAsset_id = mysql_insert_id();
-
-    $sql = "UPDATE `" . $TABLEMODULE . "`
-	SET `startAsset_id` = " . (int) $insertedAsset_id . "
-	WHERE `module_id` = " . (int) $insertedModule_id . "
-	AND `course_id` = $course_id";
-    $query = db_query($sql);
+    Database::get()->query("UPDATE `lp_module`
+	SET `startAsset_id` = ?d
+	WHERE `module_id` = ?d
+	AND `course_id` = ?d", $insertedAsset_id, $insertedModule_id, $course_id);
 
     // determine the default order of this Learning path
-    $sql = "SELECT MAX(`rank`)
-		FROM `" . $TABLELEARNPATHMODULE . "`
-		WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-    $result = db_query($sql);
-
-    list($orderMax) = mysql_fetch_row($result);
-    $order = $orderMax + 1;
+    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+		FROM `lp_rel_learnPath_module`
+		WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
     // finally : insert in learning path
-    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 		(`learnPath_id`, `module_id`, `rank`, `lock`, `visible`, `specificComment`)
-		VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $insertedModule_id . "',
-		" . (int) $order . ", 'OPEN', 1, '')";
-    $query = db_query($sql);
+		VALUES (?d, ?d, ?d, 'OPEN', 1, '')", $_SESSION['path_id'], $insertedModule_id, $order);
 } else {
     // check if this is this LP that used this course description as a module
-    $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
-		`" . $TABLEMODULE . "` AS M,
-		`" . $TABLEASSET . "` AS A
+    $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
+		`lp_module` AS M,
+		`lp_asset` AS A
 		WHERE M.`module_id` =  LPM.`module_id`
 		AND M.`startAsset_id` = A.`asset_id`
-		AND M.`course_id` = $course_id
-		AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-		AND M.`contentType` = \"" . CTCOURSE_DESCRIPTION_ . "\"";
-    $query2 = db_query($sql);
-    $num = mysql_num_rows($query2);
+		AND M.`course_id` = ?d
+		AND LPM.`learnPath_id` = ?d
+		AND M.`contentType` = ?s";
+    $num = Database::get()->querySingle($sql, $course_id, $_SESSION['path_id'], CTCOURSE_DESCRIPTION_)->count;
 
     if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-        $thisDocumentModule = mysql_fetch_array($query);
         // determine the default order of this Learning path
-        $sql = "SELECT MAX(`rank`)
-			FROM `" . $TABLELEARNPATHMODULE . "`
-			WHERE `learnPath_id` = " . (int) $_SESSION['path_id'];
-        $result = db_query($sql);
-
-        list($orderMax) = mysql_fetch_row($result);
-        $order = $orderMax + 1;
+        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+			FROM `lp_rel_learnPath_module`
+			WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
+        
         // finally : insert in learning path
-        $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
+        Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 			(`learnPath_id`, `module_id`, `rank`, `lock`, `visible`, `specificComment`)
-			VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $thisDocumentModule['module_id'] . "',
-			" . (int) $order . ", 'OPEN', 1, '')";
-        $query = db_query($sql);
+			VALUES (?d, ?d, ?d, 'OPEN', 1, '')", $_SESSION['path_id'], $thisDocumentModule->module_id, $order);
     }
 }
 $tool_content = "<table width='100%' class='tbl'><tr><td class='success'>";

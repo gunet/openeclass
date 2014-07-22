@@ -32,7 +32,7 @@ function visibility_select($current) {
         $selected = ($type == $current) ? ' selected' : '';
         $ret .= "<option value='$type'$selected>" . q($text) . "</option>\n";
     }
-    $ret .= "</select>\n";
+    $ret .= "</select>";
     return $ret;
 }
 
@@ -232,7 +232,7 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                    <tr><th>$langCourseCode:</th>
                        <td><input type='text' name='course_code' value='" . q($code) . "' /></td></tr>
                    <tr><th>$langLanguage:</th>
-                       <td>" . lang_select_options('languages') . "</td>
+                       <td>" . lang_select_options('course_lang') . "</td>
                    <tr><th>$langTitle:</th>
                        <td><input type='text' name='course_title' value='" . q($title) . "' size='50' /></td></tr>
                    <tr><th>$langCourseDescription:</th>

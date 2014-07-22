@@ -23,7 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
 
-if (!isset($_GET['course']) || !isset($_GET['id']) ) {
+if (!isset($_GET['course']) || !isset($_GET['id'])) {
     header("Location: ${urlServer}");
     exit();
 }
@@ -35,10 +35,9 @@ if (strpos($_GET['course'], '..') !== false) {
 
 // locate course id
 $course_id = null;
-$res1 = db_query("SELECT course.id FROM course WHERE course.code = " . quote(q($_GET['course'])));
-$row1 = mysql_fetch_array($res1);
-if (!empty($row1))
-    $course_id = intval($row1['id']);
+$res1 = Database::get()->querySingle("SELECT course.id FROM course WHERE course.code = ?s", q($_GET['course']));
+if ($res1)
+    $course_id = intval($res1->id);
 
 if ($course_id == null) {
     header("Location: ${urlServer}");
@@ -54,13 +53,12 @@ if ($uid) {
 // ----------------------
 // download video
 // ----------------------
-$res2 = db_query("SELECT * 
+$res2 = Database::get()->querySingle("SELECT * 
                    FROM video 
                   WHERE course_id = $course_id
-                    AND id = " . intval($_GET['id']));
-$row2 = mysql_fetch_array($res2);
+                    AND id = ?d", $_GET['id']);
 
-if (empty($row2)) {
+if (!$res2) {
     header("Location: ${urlServer}");
     exit();
 }
@@ -71,6 +69,6 @@ if (!$valid) {
     exit();
 }
 
-$vObj = MediaResourceFactory::initFromVideo($row2);
+$vObj = MediaResourceFactory::initFromVideo($res2);
 $real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());
 send_file_to_client($real_file, my_basename(q($vObj->getUrl())), 'inline', true);

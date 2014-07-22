@@ -19,30 +19,43 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * display list of exercises
+ * @global type $id
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $langComments
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoExercises
+ * @global type $langExercices
+ * @global type $course_code
+ */
 function list_exercises() {
-    global $id, $mysqlMainDb, $course_id, $tool_content, $urlServer,
+    global $id, $course_id, $tool_content, $urlServer,
     $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $course_code;
 
 
-    $result = db_query("SELECT * FROM exercise WHERE course_id = $course_id", $mysqlMainDb);
+    $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
     $quizinfo = array();
-    while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    foreach ($result as $row) {
         $quizinfo[] = array(
-            'id' => $row['id'],
-            'name' => $row['title'],
-            'comment' => $row['description'],
-            'visibility' => $row['active']);
+            'id' => $row->id,
+            'name' => $row->title,
+            'comment' => $row->description,
+            'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "\n  <p class='alert1'>$langNoExercises</p>";
+        $tool_content .= "<p class='alert1'>$langNoExercises</p>";
     } else {
-        $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
-                "\n  <table width='99%' class='tbl_alt'>" .
-                "\n  <tr>" .
-                "\n    <th><div align='left'>&nbsp;$langExercices</div></th>" .
-                "\n    <th><div align='left'>$langComments</div></th>" .
-                "\n    <th width='100'>$langChoice</th>" .
-                "\n  </tr>";
+        $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
+                "<table width='99%' class='tbl_alt'>" .
+                "<tr>" .
+                "<th><div align='left'>&nbsp;$langExercices</div></th>" .
+                "<th><div align='left'>$langComments</div></th>" .
+                "<th width='100'>$langChoice</th>" .
+                "</tr>";
         $i = 0;
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
@@ -54,15 +67,15 @@ function list_exercises() {
                     $vis = 'odd';
                 }
             }
-            $tool_content .= "\n  <tr class='$vis'>";
-            $tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>$entry[name]</a></td>";
-            $tool_content .= "\n    <td><div align='left'>$entry[comment]</div></td>";
-            $tool_content .= "\n    <td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-            $tool_content .= "\n  </tr>";
+            $tool_content .= "<tr class='$vis'>";
+            $tool_content .= "<td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>$entry[name]</a></td>";
+            $tool_content .= "<td><div align='left'>$entry[comment]</div></td>";
+            $tool_content .= "<td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+            $tool_content .= "</tr>";
             $i++;
         }
-        $tool_content .= "\n  <tr>\n    <th colspan='3'><div align='right'>";
+        $tool_content .= "<tr><th colspan='3'><div align='right'>";
         $tool_content .= "<input type='submit' name='submit_exercise' value='$langAddModulesButton'></div></th>";
-        $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
+        $tool_content .= "</tr></table></form>";
     }
 }

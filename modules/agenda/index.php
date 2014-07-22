@@ -23,7 +23,6 @@
  * @description: agenda module
  * @file: index.php
  */
-
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
@@ -64,8 +63,8 @@ $('input[name=date]').datetimepicker({
 });
 </script>";
 
-if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
-   
+if ($is_editor and ( isset($_GET['addEvent']) or isset($_GET['id']))) {
+
     //--if add event
     $head_content .= <<<hContent
 <script type="text/javascript">
@@ -97,69 +96,59 @@ if ($is_editor) {
     $agdx = new AgendaIndexer();
     // modify visibility
     if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
-        db_query("UPDATE agenda SET visible = 0 WHERE course_id = $course_id AND id = $id");
+        Database::get()->query("UPDATE agenda SET visible = 0 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
-    } elseif (isset($_GET['mkVisibl']) and ($_GET['mkVisibl'] == true)) {
-        db_query("UPDATE agenda SET visible = 1 WHERE course_id = $course_id AND id = $id");
+    } elseif (isset($_GET['mkVisibl']) and ( $_GET['mkVisibl'] == true)) {
+        Database::get()->query("UPDATE agenda SET visible = 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
     }
     if (isset($_POST['submit'])) {
         register_posted_variables(array('date' => true, 'event_title' => true, 'content' => true, 'duration' => true));
-        $content = purify($content);        
-        if (isset($_POST['id']) and !empty($_POST['id'])) {
+        $content = purify($content);
+        if (isset($_POST['id']) and ! empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            db_query("UPDATE agenda
-                        SET title = " . autoquote($event_title) . ",
-                            content = " . autoquote($content) . ",
-                            start = " . autoquote($date) . ",
-                            duration = " . autoquote($duration) . "
-                        WHERE course_id = $course_id AND id = $id");
+            Database::get()->query("UPDATE agenda SET title = ?s, content = ?s, start = ?t, duration = ?s
+                        WHERE course_id = ?d AND id = ?d", $event_title, $content, $date, $duration, $course_id, $id);
             $log_type = LOG_MODIFY;
         } else {
-            db_query("INSERT INTO agenda
-                        SET course_id = $course_id,
-                            title = " . autoquote($event_title) . ",
-                            content = " . autoquote($content) . ",
-                            start = " . autoquote($date) . ",                                             
-                            duration = " . autoquote($duration) . ",
-                            visible = 1");
-            $id = mysql_insert_id();
+            $id = Database::get()->query("INSERT INTO agenda SET course_id = ?d, title = ?s, content = ?s , start = ?t, duration = ?s,
+                     visible = 1", $course_id, $event_title, $content, $date, $duration)->lastInsertID;
             $log_type = LOG_INSERT;
         }
         $agdx->store($id);
         $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
         Log::record($course_id, MODULE_ID_AGENDA, $log_type, array('id' => $id,
-                                                            'date' => $date,
-                                                            'duration' => $duration,
-                                                            'title' => $event_title,
-                                                            'content' => $txt_content));
+            'date' => $date,
+            'duration' => $duration,
+            'title' => $event_title,
+            'content' => $txt_content));
         unset($id);
         unset($content);
         unset($event_title);
         $tool_content .= "<p class='success'>$langStoredOK</p><br>";
         unset($addEvent);
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-        $row = mysql_fetch_array(db_query("SELECT title, content, start, duration
-                                        FROM agenda WHERE id = $id"));
-        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
-        db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
+        $row = Database::get()->querySingle("SELECT title, content, start, duration
+                                        FROM agenda WHERE id = ?d", $id);
+        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row->content)), 50, '+');
+        Database::get()->query("DELETE FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->remove($id);
         Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
-            'date' => $row['start'],
-            'duration' => $row['duration'],
-            'title' => $row['title'],
+            'date' => $row->start,
+            'duration' => $row->duration,
+            'title' => $row->title,
             'content' => $txt_content));
         $tool_content .= "<p class='success'>$langDeleteOK</p><br>";
         unset($addEvent);
     }
-        
+
     $tool_content .= "<div id='operations_container'><ul id='opslist'>";
     if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1'>" . $langAddEvent . "</a></li>";
     }
     $sens = " ASC";
-    $result = db_query("SELECT id FROM agenda WHERE course_id = $course_id");
-    if (mysql_num_rows($result) > 1) {
+    $result = Database::get()->queryArray("SELECT id FROM agenda WHERE course_id = ?d", $course_id);
+    if (count($result) > 1) {
         if (isset($_GET["sens"]) && $_GET["sens"] == "d") {
             $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sens=' >$langOldToNew</a></li>";
             $sens = " DESC ";
@@ -169,14 +158,16 @@ if ($is_editor) {
     }
     $tool_content .= "</ul></div>";
     if (isset($id) && $id) {
-        $sql = "SELECT id, title, content, start, duration FROM agenda WHERE course_id = $course_id AND id = $id";
-        $result = db_query($sql);
-        $myrow = mysql_fetch_array($result);
-        $id = $myrow['id'];
-        $event_title = $myrow['title'];
-        $content = $myrow['content'];        
-        $dayAncient = $myrow['start'];
-        $lastingAncient = $myrow['duration'];                
+        $myrow = Database::get()->querySingle("SELECT id, title, content, start, duration FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        if ($myrow) {
+            $id = $myrow->id;
+            $event_title = $myrow->title;
+            $content = $myrow->content;
+            $dayAncient = $myrow->start;
+            $lastingAncient = $myrow->duration;
+        } else {
+            $id = '';
+        }
     } else {
         $id = '';
     }
@@ -198,12 +189,12 @@ if ($is_editor) {
             <tr>
               <th>$langDate:</th>
               <td>
-               <input type='text' name='date' value='" . datetime_remove_seconds($myrow['start']) . "'>
+               <input type='text' name='date' value='" . datetime_remove_seconds($myrow->start) . "'>
               </td>
             </tr>
             <tr>
               <th>$langDuration <small> $langInHour</small>:</th>
-              <td><input type='text' name='duration' value='" . $myrow['duration'] . "' size='2' maxlength='3'></td>
+              <td><input type='text' name='duration' value='" . $myrow->duration . "' size='2' maxlength='3'></td>
             </tr>";
         if (!isset($content)) {
             $content = '';
@@ -231,14 +222,14 @@ if (!isset($sens))
     $sens = " ASC";
 
 if ($is_editor) {
-    $result = db_query("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = $course_id
-		ORDER BY start " . $sens);
+    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
+		ORDER BY start " . $sens, $course_id);
 } else {
-    $result = db_query("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = $course_id
-		AND visible = 1 ORDER BY start " . $sens);
+    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
+		AND visible = 1 ORDER BY start " . $sens, $course_id);
 }
 
-if (mysql_num_rows($result) > 0) {
+if (count($result) > 0) {
     $numLine = 0;
     $barMonth = '';
     $nowBarShowed = false;
@@ -251,13 +242,12 @@ if (mysql_num_rows($result) > 0) {
     }
     $tool_content .= "</tr>";
 
-    while ($myrow = mysql_fetch_array($result)) {
-        $content = standard_text_escape($myrow['content']);
-        $d = strtotime($myrow['start']);
+    foreach ($result as $myrow) {
+        $content = standard_text_escape($myrow->content);
+        $d = strtotime($myrow->start);
         if (!$nowBarShowed) {
             // Following order
-            if ((($d > time()) and ($sens == " ASC")) or
-                    (($d < time()) and ($sens == " DESC "))) {
+            if ((($d > time()) and ( $sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
                 if ($barMonth != date("m", time())) {
                     $barMonth = date("m", time());
                     $tool_content .= "<tr>";
@@ -270,9 +260,9 @@ if (mysql_num_rows($result) > 0) {
                 $tool_content .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
                 $tool_content .= "</tr>";
             }
-        }                        
+        }
         if ($barMonth != date("m", $d)) {
-            $barMonth = date("m", $d);            
+            $barMonth = date("m", $d);
             // month LABEL
             $tool_content .= "<tr>";
             if ($is_editor) {
@@ -287,9 +277,9 @@ if (mysql_num_rows($result) > 0) {
             $classvis = "class='even'";
         } else {
             $classvis = "class='odd'";
-        }                
+        }
         if ($is_editor) {
-            if ($myrow["visible"] == 0) {
+            if ($myrow->visible == 0) {
                 $classvis = 'class="invisible"';
             }
         }
@@ -298,35 +288,35 @@ if (mysql_num_rows($result) > 0) {
             $tool_content .= "<td valign='top'>";
         } else {
             $tool_content .= "<td valign='top' colspan='2'>";
-        }        
-        
+        }
+
         $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
-        if ($myrow['duration'] != '') {
-            if ($myrow['duration'] == 1) {
+        if ($myrow->duration != '') {
+            if ($myrow->duration == 1) {
                 $message = $langHour;
             } else {
                 $message = $langHours;
             }
-            $msg = "($langDuration: " . q($myrow['duration']) . " $message)";
+            $msg = "($langDuration: " . q($myrow->duration) . " $message)";
         } else {
             $msg = '';
         }
         $tool_content .= "<br><b><div class='event'>";
-        if ($myrow['title'] == '') {
+        if ($myrow->title == '') {
             $tool_content .= $langAgendaNoTitle;
         } else {
-            $tool_content .= q($myrow['title']);
+            $tool_content .= q($myrow->title);
         }
         $tool_content .= "</b> $msg $content</div></td>";
 
         if ($is_editor) {
             $tool_content .= "<td class='right' width='70'>                        
-                        ".icon('edit', $langModify, "?course=$course_code&amp;id=$myrow[id]&amp;edit=true"). "&nbsp;
-                        ".icon('delete', $langDelete, "?course=$course_code&amp;id=$myrow[id]&amp;delete=yes", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
-            if ($myrow['visible'] == 1) {
-                    $tool_content .= icon('visible', $langVisible, "?course=$course_code&amp;id=$myrow[id]&amp;mkInvisibl=true");                        
+                        " . icon('edit', $langModify, "?course=$course_code&amp;id=$myrow->id&amp;edit=true") . "&nbsp;
+                        " . icon('delete', $langDelete, "?course=$course_code&amp;id=$myrow->id&amp;delete=yes", "onClick=\"return confirmation('$langConfirmDelete');\"") . "&nbsp;";
+            if ($myrow->visible == 1) {
+                $tool_content .= icon('visible', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkInvisibl=true");
             } else {
-                    $tool_content .= icon('invisible', $langVisible, "?course=$course_code&amp;id=$myrow[id]&amp;mkVisibl=true");                    
+                $tool_content .= icon('invisible', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkVisibl=true");
             }
             $tool_content .= "</td>";
         }

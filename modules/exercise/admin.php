@@ -127,7 +127,7 @@ if (isset($_SESSION['objQuestion'][$exerciseId])) {
     $objQuestion = $_SESSION['objQuestion'][$exerciseId];
 }
 
-if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) { 
     // checks if the object exists
     if (is_object($objQuestion)) {
         // gets the question ID
