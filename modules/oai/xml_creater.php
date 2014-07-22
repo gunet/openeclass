@@ -186,8 +186,9 @@ class ANDS_XML {
    */
 
 	function addChild($mom_node,$name, $value='') {
-		$added_node = $this->doc->createElement($name,$value);
-		$added_node = $mom_node->appendChild($added_node);
+		$ele = $this->doc->createElement($name);
+		$ele->appendChild($this->doc->createTextNode($value));
+		$added_node = $mom_node->appendChild($ele);
 		return $added_node;
 	}
 
