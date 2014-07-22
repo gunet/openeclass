@@ -238,10 +238,16 @@ function is_admin($username, $password) {
     }
 }
 
-// Check whether an entry with the specified $define_var exists in the accueil table
-function accueil_tool_missing($define_var) {
-    $r = mysql_query("SELECT id FROM accueil WHERE define_var = '$define_var'");
-    if ($r and mysql_num_rows($r) > 0) {
+
+/**
+ * @brief Check whether an entry with the specified $define_var exists in the accueil table
+ * @param type $define_var
+ * @return boolean
+ */
+function accueil_tool_missing($db, $define_var) {
+        
+    $r = Database::get($db)->querySingle("SELECT id FROM accueil WHERE define_var = '$define_var'");
+    if ($r) {
         return false;
     } else {
         return true;
@@ -1363,7 +1369,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
     }
 
     // upgrade acceuil for glossary
-    if (accueil_tool_missing('MODULE_ID_GLOSSARY')) {
+    if (accueil_tool_missing($code, 'MODULE_ID_GLOSSARY')) {
         Database::get($code)->query("INSERT IGNORE INTO accueil VALUES (
                                 '17',
                                 '{$global_messages['langGlossary'][$lang]}',
@@ -1376,7 +1382,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
     }
 
     // upgrade acceuil for glossary
-    if (accueil_tool_missing('MODULE_ID_EBOOK')) {
+    if (accueil_tool_missing($code, 'MODULE_ID_EBOOK')) {
         Database::get($code)->query("INSERT IGNORE INTO accueil VALUES (
                                 '18',
                                 '{$global_messages['langEBook'][$lang]}',
@@ -1444,7 +1450,7 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
     // not needed anymore
     echo delete_table('mc_scoring');
 
-    if (accueil_tool_missing('MODULE_ID_UNITS')) {
+    if (accueil_tool_missing($code, 'MODULE_ID_UNITS')) {
         Database::get($code)->query("INSERT INTO accueil VALUES (
                                 '27',
                                 '" . $global_messages['langCourseUnits'][$lang] . "',
@@ -1533,18 +1539,17 @@ function convert_description_to_units($code, $course_id) {
     mysql_select_db($mysqlMainDb);
 
     $desc = $addon = '';
-    $qdesc = @mysql_query("SELECT description, course_addon FROM cours WHERE course_id = $course_id");
+    $qdesc = Database::get()->querySingle("SELECT description, course_addon FROM cours WHERE course_id = ?d", $course_id);
     if ($qdesc) {
-        list($desc, $addon) = mysql_fetch_row($qdesc);
-        $desc = trim($desc);
-        $addon = trim($addon);
+        $desc = trim($qdesc->description);
+        $addon = trim($qdesc->course_addon);        
     }
 
-    $q = @mysql_query("SELECT * FROM `$code`.course_description");
+    $q = Database::get()->queryArray("SELECT * FROM `$code`.course_description");
 
     // If old-style course description data don't exist and course description is
     // empty, don't do anything
-    if ((!$q or mysql_num_rows($q) == 0) and empty($desc) and empty($addon)) {
+    if ((!$q or count($q) == 0) and empty($desc) and empty($addon)) {
         return;
     }
 
@@ -1561,10 +1566,10 @@ function convert_description_to_units($code, $course_id) {
         Database::get()->query("UPDATE cours SET description = '', course_addon = '' WHERE course_id = $course_id");
     }
 
-    if ($q and mysql_num_rows($q) > 0) {
+    if ($q and count($q) > 0) {
         $error = false;
-        while ($row = mysql_fetch_array($q, MYSQL_ASSOC)) {
-            $error = add_unit_resource($id, 'description', $row['id'], $row['title'], html_cleanup($row['content']), 'i', $row['upDate']) && $error;
+        foreach ($q as $row) {
+            $error = add_unit_resource($id, 'description', $row->id, $row->title, html_cleanup($row->content), 'i', $row->upDate) && $error;
         }
         if (!$error) {
             Database::get()->query("DROP TABLE `$code`.course_description");
@@ -1592,15 +1597,16 @@ function move_group_documents_to_main_db($code, $course_id) {
     global $mysqlMainDb, $webDir, $group_document_upgrade_ok, $group_document_dir;
 
     $group_document_upgrade_ok = true;
-    if (!Database::get()->query("SELECT id, secretDirectory FROM student_group")) {
+    $q = Database::get()->queryArray("SELECT id, secretDirectory FROM student_group");
+    if (!$q) {
         // Group table doesn't exist in course database
         return false;
     }
-    while ($r = mysql_fetch_array($q)) {
-        $group_document_dir = $webDir . '/courses/' . $code . '/group/' . $r['secretDirectory'];
+    foreach ($q as $r) {
+        $group_document_dir = $webDir . '/courses/' . $code . '/group/' . $r->secretDirectory;
         $new_group_id = Database::get()->querySingle("SELECT id FROM `$mysqlMainDb`.`group`
-                                                                WHERE course_id = $course_id AND
-                                                                      secret_directory = '$r[secretDirectory]'")->id;
+                                                                WHERE course_id = ?d AND
+                                                                      secret_directory = '$r->secretDirectory'", $course_id)->id;
         if (!is_dir($group_document_dir)) {
             if (file_exists($group_document_dir)) {
                 unlink($group_document_dir);

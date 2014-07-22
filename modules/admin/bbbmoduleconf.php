@@ -42,7 +42,23 @@ $head_content .= <<<EOF
                     {
                         "bProcessing": true,
                         "bServerSide": true,
-                        "sAjaxSource": "./listbbbservers.php"
+                        "sAjaxSource": "./listbbbservers.php",
+                'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '$langNoResult',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '$langSearch',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
                      
                 }
             );    

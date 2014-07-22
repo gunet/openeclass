@@ -793,7 +793,7 @@ $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσει
  * course_info.php
  * ******************************************* */
 $langCourseIden = "Ταυτότητα Μαθήματος";
-$langBackupCourse = "Αντίγραφο ασφαλείας του μαθήματος";
+$langBackupCourse = "Αντίγραφο ασφαλείας";
 $langModifInfo = "Διαχείριση Μαθήματος";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
 $langHome = "Επιστροφή στην αρχική σελίδα";
@@ -1115,7 +1115,7 @@ $langMultiCourseData = 'Στοιχεία Μαθημάτων';
  * document.php
  * **************************************************** */
 $langUpload = "Ανέβασμα";
-$langDownloadFile = "Ανέβασμα αρχείου στον εξυπηρέτη";
+$langDownloadFile = "Ανέβασμα αρχείου";
 $langPathUploadFile = "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir = "Δημιουργία καταλόγου";
 $langName = "Όνομα";
