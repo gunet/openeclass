@@ -329,9 +329,9 @@ $tool_content .= "
         <tr>
           <th width='1'>$langID</th>
           <th><div align='left'>$langName $langSurname</div></th>
-          <th class='center' width='100'>$langGroup</th>
+          <th class='center' width='85'>$langGroup</th>
           <th class='center' width='85'>$langRegistrationDateShort</th>
-          <th class='center' width='85'>$langAddRole</th>
+          <th class='center' width='100'>$langAddRole</th>
         </tr>
     </thead>
     <tbody>
