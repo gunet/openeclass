@@ -213,7 +213,12 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $GLOBALS['error'] = "$GLOBALS[langMultiRegUsernameError] ($uname)";
         return false;
     }
-
+    if (empty($am)) {        
+        $am = ' ';
+    }
+    if (empty($phone)) {
+        $phone = ' ';
+    }
     $hasher = new PasswordHash(8, false);
     $password_encrypted = $hasher->HashPassword($password);
 
@@ -247,10 +252,21 @@ $langEmail : $emailhelpdesk
     return array($id, $surname, $givenname, $email, $phone, $am, $uname, $password);
 }
 
+/**
+ * @brief create username for new user
+ * @param type $status
+ * @param type $departments
+ * @param type $nom
+ * @param type $givenname
+ * @param type $prefix
+ * @return string
+ */
 function create_username($status, $departments, $nom, $givenname, $prefix) {
+    
     $wildcard = str_pad('', SUFFIX_LEN, '_');
-    if (Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard)) {
-        list($last_uname) = mysql_fetch_row($req);
+    $req = Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard);
+    if ($req) {
+        $last_uname = $req->username;        
         $lastid = 1 + str_replace($prefix, '', $last_uname);
     } else {
         $lastid = 1;
@@ -262,12 +278,19 @@ function create_username($status, $departments, $nom, $givenname, $prefix) {
     return $uname;
 }
 
+/**
+ * @brief register user to course
+ * @param type $uid
+ * @param type $course_code
+ * @return boolean
+ */
 function register($uid, $course_code) {
-    $result = Database::get()->querySingle("SELECT code, id FROM course WHERE code= ?s OR public_code=?s", $course_code);
+    
+    $result = Database::get()->querySingle("SELECT code, id FROM course WHERE code = ?s OR public_code = ?s", $course_code, $course_code);
     if ($result) {
         Database::get()->query("INSERT INTO course_user
-                                 SET course_id = ?d, user_id = ?d, status = 5,
-                                     team = 0, tutor = 0, reg_date = NOW()", $result->id, $uid);
+                                 SET course_id = ?d, user_id = ?d, status = "  . USER_STUDENT . ",
+                                     reg_date = " . DBHelper::timeAfter() . "", $result->id, $uid);
         return true;
     }
     return false;

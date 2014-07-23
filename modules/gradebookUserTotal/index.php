@@ -46,7 +46,7 @@ foreach ($courses as $course1) {
     $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d ", $course_id);
     $gradebook_id = $gradebook->id;
     
-    $tool_content .= "<tr><td>".$course1->title."</td><td>".userGradeTotal($gradebook_id, $userID)." (μέγιστο: ".$gradebook->range.")</td><td><a href='../gradebook/?course=".$course1->code."'>περισσότερα</a></td></tr>";
+    $tool_content .= "<tr><td>".$course1->title."</td><td>".userGradeTotal($gradebook_id, $userID)." (μέγιστο: ".$gradebook->range.")</td><td><a href='../gradebook/?course=".$course1->code."'>$langMore</a></td></tr>";
     
 }
 
@@ -56,8 +56,10 @@ $tool_content .= "</table><br><br>";
 
 //Function to get the total attend number for a user in a course gradebook
 function userGradeTotal ($gradebook_id, $userID){
-
-    $userGradeTotal = Database::get()->querySingle("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
+    
+    $visible = 1;
+    
+    $userGradeTotal = Database::get()->querySingle("SELECT SUM(grade * weight) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.gradebook_id = ?d AND gradebook_activities.visible = ?d", $userID, $gradebook_id, $visible)->count;
 
     if($userGradeTotal){
         return round($userGradeTotal/100, 2);

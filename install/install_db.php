@@ -332,7 +332,9 @@ Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
                 `format` VARCHAR(32) NOT NULL DEFAULT '',
                 `language` VARCHAR(16) NOT NULL DEFAULT 'el',
-                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+                `editable` TINYINT(4) NOT NULL DEFAULT 0,
+                `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,

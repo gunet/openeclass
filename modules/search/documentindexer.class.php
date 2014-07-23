@@ -48,7 +48,7 @@ class DocumentIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a document db row.
      * 
      * @global string $urlServer
-     * @param  array  $docu
+     * @param  object  $docu
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($docu) {
@@ -56,24 +56,24 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'doc_' . $docu['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $docu['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'doc_' . $docu->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $docu->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'doc', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $docu['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($docu['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($docu['description']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('filename', Indexer::phonetics($docu['filename']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('comment', Indexer::phonetics($docu['comment']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('creator', Indexer::phonetics($docu['creator']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('subject', Indexer::phonetics($docu['subject']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('author', Indexer::phonetics($docu['author']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $docu['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('public', $docu['public'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $docu->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($docu->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($docu->description), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('filename', Indexer::phonetics($docu->filename), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('comment', Indexer::phonetics($docu->comment), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('creator', Indexer::phonetics($docu->creator), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('subject', Indexer::phonetics($docu->subject), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('author', Indexer::phonetics($docu->author), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $docu->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('public', $docu->public, $encoding));
 
-        $urlAction = ($docu['format'] == '.dir') ? 'openDir' : 'download';
+        $urlAction = ($docu->format == '.dir') ? 'openDir' : 'download';
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/document/index.php?course=' . course_id_to_code($docu['course_id'])
-                        . '&amp;' . $urlAction . '=' . $docu['path'], $encoding));
+                        . 'modules/document/index.php?course=' . course_id_to_code($docu->course_id)
+                        . '&amp;' . $urlAction . '=' . $docu->path, $encoding));
 
         return $doc;
     }
@@ -82,12 +82,11 @@ class DocumentIndexer implements ResourceIndexerInterface {
      * Fetch a Document from DB.
      * 
      * @param  int $docId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($docId) {
         // exclude non-main subsystems and metadata
-        $res = db_query("SELECT * FROM document WHERE id = " . intval($docId) . " AND course_id >= 1 AND subsystem = 0 AND format <> \".meta\"");
-        $doc = mysql_fetch_assoc($res);
+        $doc = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id >= 1 AND subsystem = 0 AND format <> \".meta\"", $docId);
         if (!$doc)
             return null;
 
@@ -151,11 +150,11 @@ class DocumentIndexer implements ResourceIndexerInterface {
     public function storeByCourse($courseId, $optimize = false) {
         // delete existing documents from index
         $this->removeByCourse($courseId);
-
         // add the documents back to the index
-        $res = db_query("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\" AND course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\" AND course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -193,9 +192,10 @@ class DocumentIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all documents from db - exclude non-main subsystems and metadata
-        $res = db_query("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\"");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\"");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

@@ -363,7 +363,7 @@ class IMSCPExport
                 $answerCorrect = $answer->isCorrect($answerId);
 
                 // Unique answer
-                if ( $qtype == UNIQUE_ANSWER || $qtype == TRUEFALSE )
+                if ( $qtype == UNIQUE_ANSWER || $qtype == TRUE_FALSE )
                 {
                     // Construct the identifier
                     $htmlQuestionId = 'unique_' . $questionCount . '_x';

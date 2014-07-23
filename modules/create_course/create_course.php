@@ -339,10 +339,12 @@ if (!isset($_POST['create_course'])) {
                         dropbox_quota = ?f,
                         password = ?s,
                         keywords = '',
-                        created = NOW()", $code, $language, $title, intval($_POST['formvisible']), 
-            intval($course_license), $prof_names, $code, floatval($doc_quota * 1024 * 1024), 
-            floatval($video_quota * 1024 * 1024), floatval($group_quota * 1024 * 1024), 
-            floatval($dropbox_quota * 1024 * 1024), $password);
+                        created = " . DBHelper::timeAfter() . ",
+                        glossary_expand = 0,
+                        glossary_index = 1", $code, $language, $title, $_POST['formvisible'], 
+            intval($course_license), $prof_names, $code, $doc_quota * 1024 * 1024, 
+            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024, 
+            $dropbox_quota * 1024 * 1024, $password);
     $new_course_id = $result->lastInsertID;
 
     // create course  modules              

@@ -33,7 +33,7 @@ $action->record(MODULE_ID_VIDEO);
 // ----------------------
 // play video
 // ----------------------
-$row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $result, $_GET['id']);
+$row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
 if ($row) {
     $vObj = MediaResourceFactory::initFromVideo($row);

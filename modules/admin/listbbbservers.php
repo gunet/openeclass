@@ -133,31 +133,19 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ )
  * Get data to display
  */
 
-$rResult=db_query("SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
+$rResult = Database::get()->queryArray("SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
 	FROM   bbb_servers
 	$sWhere
 	$sOrder
 	$sLimit");
 
 /* Data set length after filtering */
-$sQuery = "
-	SELECT FOUND_ROWS()
-";
-
-$rResultFilterTotal = db_query($sQuery);
-$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
-$iFilteredTotal = $aResultFilterTotal[0];
+$aResultFilterTotal = Database::get()->querySingle("SELECT FOUND_ROWS() AS cnt");
+$iFilteredTotal = $aResultFilterTotal->cnt;
 
 /* Total data set length */
-$sQuery = "
-	SELECT COUNT(`".$sIndexColumn."`)
-	FROM   bbb_servers
-";
-
-$rResultTotal = db_query($sQuery);
-$aResultTotal = mysql_fetch_array($rResultTotal);
-$iTotal = $aResultTotal[0];
-
+$aResultTotal = Database::get()->querySingle("SELECT COUNT(`".$sIndexColumn."`) AS cnt FROM bbb_servers");
+$iTotal = $aResultTotal->cnt;
 
 /*
  * Output
@@ -169,20 +157,20 @@ $output = array(
 	"aaData" => array()
 );
 
-while ( $aRow = mysql_fetch_array( $rResult ) )
-{
+
+foreach ($rResult as $aRow) {
 	$row = array();
-	for ( $i=0 ; $i<count($aColumns) ; $i++ )
+	for ($i=0 ; $i<count($aColumns); $i++)
 	{
-            if ( $aColumns[$i] == "version" )
+            if ($aColumns[$i] == "version")
             {
                 /* Special output formatting for 'version' column */
-		$row[] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
+		$row[] = ($aRow->$aColumns[$i] =="0") ? '-' : $aRow->$aColumns[$i];
 		}
-            else if ( $aColumns[$i] != ' ' )
+            else if ($aColumns[$i] != ' ')
             {
                 /* General output */
-		$row[] = $aRow[ $aColumns[$i] ];
+		$row[] = $aRow->$aColumns[$i];
             }
 	}
         $connected_users = get_connected_users($row[4],$row[5]) . "/" . $row[6];
@@ -193,14 +181,10 @@ while ( $aRow = mysql_fetch_array( $rResult ) )
         unset($row[6]);
         $order = $row[7];
         unset($row[7]);
-        array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
         array_push($row, "$connected_users");
         array_push($row,$order);
-        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>Remove server</a>");
         array_shift($row);
         $output['aaData'][] = $row;
         
 }
-
 echo json_encode( $output );
-?>

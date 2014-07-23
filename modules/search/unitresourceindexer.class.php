@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,7 +48,7 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a unit resource db row.
      * 
      * @global string $urlServer
-     * @param  array  $ures
+     * @param  object  $ures
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($ures) {
@@ -56,17 +56,17 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unitresource_' . $ures['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ures['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unitresource_' . $ures->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ures->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'unitresource', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ures['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('unitid', $ures['unit_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ures['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($ures['comments'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $ures['visible'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ures->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('unitid', $ures->unit_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ures->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($ures->comments)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $ures->visible, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/units/index.php?course=' . course_id_to_code($ures['course_id'])
-                        . '&amp;id=' . $ures['unit_id'], $encoding));
+                        . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
+                        . '&amp;id=' . $ures->unit_id, $encoding));
 
         return $doc;
     }
@@ -75,14 +75,13 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
      * Fetch a Unit Resource from DB.
      * 
      * @param  int $uresId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($uresId) {
-        $res = db_query("SELECT ur.*, cu.course_id
-            FROM unit_resources ur 
-            JOIN course_units cu ON cu.id = ur.unit_id 
-            WHERE ur.id = " . intval($uresId));
-        $ures = mysql_fetch_assoc($res);
+        $ures = Database::get()->querySingle("SELECT ur.*, cu.course_id
+                                                FROM unit_resources ur 
+                                            JOIN course_units cu ON cu.id = ur.unit_id 
+                                                WHERE ur.id = ?d",  $uresId);        
         if (!$ures)
             return null;
 
@@ -146,13 +145,13 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
     public function storeByCourse($courseId, $optimize = false) {
         // delete existing unit resources from index
         $this->removeByCourse($courseId);
-
         // add the unit resources back to the index
-        $res = db_query("SELECT ur.*, cu.course_id
-            FROM unit_resources ur 
-            JOIN course_units cu ON cu.id = ur.unit_id AND cu.course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT ur.*, cu.course_id
+                                            FROM unit_resources ur 
+                                           JOIN course_units cu ON cu.id = ur.unit_id AND cu.course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -207,12 +206,12 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all unit resources from db
-        $res = db_query("SELECT ur.*, cu.course_id
-            FROM unit_resources ur 
-            JOIN course_units cu ON cu.id = ur.unit_id");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT ur.*, cu.course_id
+                                                FROM unit_resources ur 
+                                            JOIN course_units cu ON cu.id = ur.unit_id");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
-
+        }
         if ($optimize)
             $this->__index->optimize();
         else

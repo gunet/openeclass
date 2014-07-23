@@ -44,7 +44,7 @@ $archivedir = $basedir . '/' . $backup_date;
 mkpath($archivedir);
 
 $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
-$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'><ol>\n";
+$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'><ol>";
 
 // backup subsystems from main db
 $sql_course = "course_id = $course_id";
@@ -169,20 +169,19 @@ $tool_content .= "<p align='right'>
 
 draw($tool_content, 2);
 
+/**
+ * @brief back up a table
+ * @param type $basedir
+ * @param type $table
+ * @param type $condition
+ */
 function backup_table($basedir, $table, $condition) {
-    $q = db_query("SELECT * FROM `$table` WHERE $condition");
-    $backup = array();
-    $num_fields = mysql_num_fields($q);
-    while ($data = mysql_fetch_assoc($q)) {
-        for ($i = 0; $i < $num_fields; $i++) {
-            $type = mysql_field_type($q, $i);
-            if ($type == 'int') {
-                $name = mysql_field_name($q, $i);
-                $data[$name] = intval($data[$name]);
-            }
-        }
-        $backup[] = $data;
-    }
+    
+    $q = Database::get()->queryArray("SELECT * FROM `$table` WHERE $condition");
+    $backup = array();    
+    foreach ($q as $data) {
+        $backup[] = (array) $data;
+    }    
     file_put_contents("$basedir/$table", serialize($backup));
 }
 

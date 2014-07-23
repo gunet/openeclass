@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,18 +20,11 @@
  * ======================================================================== */
 
 
-/* ===========================================================================
-  search_incourse.php
-  @version $Id$
-  @authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-  ==============================================================================
-  @Description: Search function that searches data within a course.
-  Requires $dbname to point to the course DB
-
-  This is an example of the MySQL queries used for searching:
-  SELECT * FROM articles WHERE MATCH (title,body,more_fields) AGAINST ('database') OR ('Security') AND ('lala')
-  ============================================================================== */
-
+/**
+ * @file search_incourse.php
+ * @brief search inside a course
+ */
+ 
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -136,8 +129,7 @@ if (empty($search_terms)) {
         $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
 
         if (count($announceHits) > 0) {
-            $tool_content .= "
-              <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
               <table width='99%' class='sortable' id='t1' align='left'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
@@ -145,19 +137,16 @@ if (empty($search_terms)) {
 
             $numLine = 0;
             foreach ($announceHits as $annHit) {
-                $res = db_query("SELECT title, content, date FROM announcement WHERE id = " . intval($annHit->pkid));
-                $announce = mysql_fetch_assoc($res);
+                $announce = Database::get()->querySingle("SELECT title, content, date FROM announcement WHERE id = ?d", $annHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $tool_content .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                  <td><b><a href='" . $annHit->url . "'>" . q($announce['title']) . "</a></b>&nbsp;&nbsp;
-                                  <small>("
-                        . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce['date']))) . "
-                                  )</small><br />" . $announce['content'] . "</td></tr>";
+                                  <td><b><a href='" . $annHit->url . "'>" . q($announce->title) . "</a></b>&nbsp;&nbsp;
+                                  <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
+                                  </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -168,17 +157,15 @@ if (empty($search_terms)) {
         $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
 
         if (count($agendaHits) > 0) {
-            $tool_content .= "
-                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table width='99%' class='sortable' id='t2' align='left'>
 		  <tr>
-		    <th colspan='2' class=\"left\">$langAgenda:</th>
+		    <th colspan='2' class='left'>$langAgenda:</th>
                   </tr>";
 
             $numLine = 0;
             foreach ($agendaHits as $agHit) {
-                $res = db_query("SELECT title, content, day, hour, lasting FROM agenda WHERE id = " . intval($agHit->pkid));
-                $agenda = mysql_fetch_assoc($res);
+                $agenda = Database::get()->querySingle("SELECT title, content, start, duration FROM agenda WHERE id = ?d", $agHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $tool_content .= "
@@ -186,22 +173,20 @@ if (empty($search_terms)) {
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $message = $langUnknown;
-                if ($agenda["lasting"] != "") {
-                    if ($agenda["lasting"] == 1)
+                if ($agenda->duration != "") {
+                    if ($agenda->duration == 1)
                         $message = $langHour;
                     else
                         $message = $langHours;
                 }
                 $tool_content .= "<span class=day>" .
-                        ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda["day"]))) .
-                        "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda["hour"]))) . ")<br />"
-                        . q($agenda['title']) . " (" . $langDuration . ": " . q($agenda["lasting"]) . " $message) " . $agenda['content'] . "
+                        ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
+                        "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda->start))) . ")<br />"
+                        . q($agenda->title) . " (" . $langDuration . ": " . q($agenda->duration) . " $message) " . $agenda->content . "
                     </td>
                   </tr>";
-
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -212,8 +197,7 @@ if (empty($search_terms)) {
         $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
 
         if (count($documentHits) > 0) {
-            $tool_content .= "
-                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table width='99%' class='sortable' id='t3' align='left'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
@@ -221,20 +205,16 @@ if (empty($search_terms)) {
 
             $numLine = 0;
             foreach ($documentHits as $docHit) {
-                $res = db_query("SELECT filename, path, comment FROM document WHERE id = " . intval($docHit->pkid));
-                $document = mysql_fetch_assoc($res);
+                $document = Database::get()->querySingle("SELECT filename, path, comment FROM document WHERE id = ?d", $docHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                      <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $add_comment = (empty($document['comment'])) ? "" : "<br /><span class='smaller'> (" . $document['comment'] . ")</span>";
-                $tool_content .= "<a href='" . $docHit->url . "'>" . $document['filename'] . "</a> $add_comment </td></tr>";
-
+                $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . $document->comment . ")</span>";
+                $tool_content .= "<a href='" . $docHit->url . "'>" . $document->filename . "</a> $add_comment </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -243,31 +223,25 @@ if (empty($search_terms)) {
     // search in exercises
     if ($exercises) {
         $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
-
         if (count($exerciseHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width=\"99%\" class='sortable' id='t4' align='left'>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='100%' class='sortable' id='t4' align='left'>
 		<tr>
 		  <th colspan='2' class='left'>$langExercices:</th>
                 </tr>";
 
             $numLine = 0;
             foreach ($exerciseHits as $exerciseHit) {
-                $res = db_query("SELECT title, description FROM exercise WHERE id = " . intval($exerciseHit->pkid));
-                $exercise = mysql_fetch_assoc($res);
+                $exercise = Database::get()->querySingle("SELECT title, description FROM exercise WHERE id = ?d",$exerciseHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                        <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $desc_text = (empty($exercise['description'])) ? "" : "<br /> <span class='smaller'>" . $exercise['description'] . "</span>";
-                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . $exercise['title'] . "</a>$desc_text </td></tr>";
-
+                $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
+                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . $exercise->title . "</a>$desc_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -280,65 +254,52 @@ if (empty($search_terms)) {
         $forumPostHits = $idx->searchRaw(ForumPostIndexer::buildQuery($_POST));
 
         if (count($forumHits) > 0) {
-            $tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t5' align='left'>
                         <tr>
-                        <th colspan='2' class=\"left\">$langForum ($langCategories):</th>
+                        <th colspan='2' class='left'>$langForum ($langCategories):</th>
                         </tr>";
 
             $numLine = 0;
             foreach ($forumHits as $forumHit) {
-                $res = db_query("SELECT name, `desc` FROM forum WHERE id = " . intval($forumHit->pkid));
-                $forum = mysql_fetch_assoc($res);
+                $forum = Database::get()->querySingle("SELECT name, `desc` FROM forum WHERE id = ?d",$forumHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                        <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $desc_text = (empty($forum['desc'])) ? "" : "<br /><span class='smaller'>(" . $forum['desc'] . ")</span>";
-                $tool_content .= "<a href='" . $forumHit->url . "'>" . $forum['name'] . "</a> $desc_text </td></tr>";
-
+                $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . $forum->desc . ")</span>";
+                $tool_content .= "<a href='" . $forumHit->url . "'>" . $forum->name . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
 
         if (count($forumTopicHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable' id='t6' align='left'>
 		<tr>
-		  <th colspan='2' class=\"left\">$langForum ($langSubjects - $langMessages):</th>
+		  <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
                 </tr>";
 
             $numLine = 0;
             foreach ($forumTopicHits as $forumTopicHit) {
-                $res = db_query("SELECT title FROM forum_topic WHERE id = " . intval($forumTopicHit->pkid));
-                $ftopic = mysql_fetch_assoc($res);
-
+                $ftopic = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $forumTopicHit->pkid);                
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                  <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . $ftopic['title'] . "</a>";
+                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . $ftopic->title . "</a>";
                 if (count($forumPostHits) > 0) {
                     foreach ($forumPostHits as $forumPostHit) {
-                        $res2 = db_query("SELECT post_text FROM forum_post WHERE id = " . intval($forumPostHit->pkid));
-                        $fpost = mysql_fetch_assoc($res2);
-
-                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost['post_text'] . "</a>";
+                        $fpost = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $forumPostHit->pkid);                        
+                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost->post_text . "</a>";
                     }
                 }
                 $tool_content .= "</td></tr>";
-
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -347,31 +308,25 @@ if (empty($search_terms)) {
     // search in links
     if ($links) {
         $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
-
         if (count($linkHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t7' align='left'>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='100%' class='sortable' id='t7' align='left'>
 		<tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
 
             $numLine = 0;
             foreach ($linkHits as $linkHit) {
-                $res = db_query("SELECT title, description FROM link WHERE id = " . intval($linkHit->pkid));
-                $link = mysql_fetch_assoc($res);
+                $link = Database::get()->querySingle("SELECT title, description FROM link WHERE id = ?d", $linkHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                  <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $desc_text = (empty($link['description'])) ? "" : "<span class='smaller'>" . $link['description'] . "</span>";
-                $tool_content .= "<a href='" . $linkHit->url . "' target=_blank> " . $link['title'] . "</a> $desc_text </td></tr>";
-
+                $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
+                $tool_content .= "<a href='" . $linkHit->url . "' target=_blank> " . $link->title . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -381,38 +336,30 @@ if (empty($search_terms)) {
     if ($video) {
         $videoHits = $idx->searchRaw(VideoIndexer::buildQuery($_POST));
         $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
-
         if (count($videoHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable'  id='t8' align='left'>
 		<tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
-
             $numLine = 0;
             foreach ($videoHits as $videoHit) {
-                $res = db_query("SELECT title, description FROM video WHERE id = " . intval($videoHit->pkid));
-                $video = mysql_fetch_assoc($res);
+                $video = Database::get()->querySingle("SELECT title, description FROM video WHERE id = ?d", $videoHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                  <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $desc_text = (empty($video['description'])) ? "" : "<span class='smaller'>(" . $video['description'] . ")</span>";
-                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . $video['title'] . "</a> $desc_text </td></tr>";
-
+                $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . $video->description . ")</span>";
+                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . $video->title . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
 
         if (count($vlinkHits) > 0) {
-            $tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t9' align='left'>
                         <tr>
                         <th colspan='2' class='left'>$langLinks:</th>
@@ -420,19 +367,16 @@ if (empty($search_terms)) {
 
             $numLine = 0;
             foreach ($vlinkHits as $vlinkHit) {
-                $res = db_query("SELECT title, description FROM videolink WHERE id = " . intval($vlinkHit->pkid));
-                $vlink = mysql_fetch_assoc($res);
+                $vlink = Database::get()->querySingle("SELECT title, description FROM videolink WHERE id = ?d", $vlinkHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $desc_text = (empty($vlink['description'])) ? "" : "<span class='smaller'>(" . $vlink['description'] . ")</span>";
-                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . $vlink['title'] . "</a><br /> $desc_text </td></tr>";
-
+                $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . $vlink->description . ")</span>";
+                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . $vlink->title . "</a><br /> $desc_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -444,8 +388,7 @@ if (empty($search_terms)) {
         $uresHits = $idx->searchRaw(UnitResourceIndexer::buildQuery($_POST));
 
         if (count($unitHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable' id='t11' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
@@ -453,20 +396,15 @@ if (empty($search_terms)) {
 
             $numLine = 0;
             foreach ($unitHits as $unitHit) {
-                $res = db_query("SELECT title, comments FROM course_units WHERE id = " . intval($unitHit->pkid));
-                $unit = mysql_fetch_assoc($res);
-
+                $unit = Database::get()->querySingle("SELECT title, comments FROM course_units WHERE id = ?d", $unitHit->pkid);
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                    <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $comments_text = (empty($unit['comments'])) ? "" : " " . $unit['comments'];
-                $tool_content .= "<a href='" . $unitHit->url . "'>" . $unit['title'] . "</a> $comments_text </td></tr>";
-
+                $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
+                $tool_content .= "<a href='" . $unitHit->url . "'>" . $unit->title . "</a> $comments_text </td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
@@ -481,25 +419,20 @@ if (empty($search_terms)) {
 
             $numLine = 0;
             foreach ($uresHits as $uresHit) {
-                $res = db_query("SELECT title, comments FROM unit_resources WHERE id = " . intval($uresHit->pkid));
-                $ures = mysql_fetch_assoc($res);
+                $ures = Database::get()->querySingle("SELECT title, comments FROM unit_resources WHERE id = ?d", $uresHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
-                    <tr class='$class'>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $comments_text = (empty($ures['comments'])) ? "" : "<span class='smaller'>" . $ures['comments'] . "</span>";
-                $tool_content .= $ures['title'] . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
-
+                $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
+                $tool_content .= $ures->title . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
                 $numLine++;
             }
-
             $tool_content .= "</table>";
             $found = true;
         }
     }
-
     // else ... no results found
     if ($found == false) {
         $tool_content .= "<p class='alert1'>$langNoResult</p>";

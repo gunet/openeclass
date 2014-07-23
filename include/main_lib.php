@@ -115,83 +115,9 @@ define('MAX_IDLE_TIME', 10);
 
 require_once 'lib/session.class.php';
 
-/*
-  Debug MySQL queries
-  -------------------------------------------------------------------------
-  it is better to use the function below instead of the usual mysql_query()
-  first argument: the query
-  second argument (optional) : the name of the data base
-  If error happens just display the error and the code
-  -----------------------------------------------------------------------
- */
-
-function db_query($sql, $db_name = null) {
-    global $mysqlServer, $mysqlUser, $mysqlPassword;
-
-    if (!isset($db_name)) {
-        $db_name = $GLOBALS['mysqlMainDb'];
-    }
-    @mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
-    mysql_select_db($db_name);
-    mysql_query("SET NAMES utf8");
-
-    if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-        $f_sql = q(str_replace("\t", '        ', $sql));
-        $start_time = microtime(true);
-    }
-    $r = mysql_query($sql);
-    $printed_sql = false;
-    if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-        echo '<hr /><pre>', q($f_sql), '</pre><i>runtime: ',
-        sprintf('%0.3f', 1000 * (microtime(true) - $start_time)),
-        'ms</i><hr />';
-        $printed_sql = true;
-    }
-    if (mysql_errno()) {
-        if ((isset($GLOBALS['is_admin']) and $GLOBALS['is_admin']) or
-                (defined('DEBUG_MYSQL') and DEBUG_MYSQL)) {
-            echo '<hr />' . mysql_errno() . ': ' . q(mysql_error());
-            if (!$printed_sql) {
-                echo '<br /><pre>', q($sql), '</pre><hr />';
-            }
-        } else {
-            echo '<hr />Database error<hr />';
-        }
-    }
-    return $r;
-}
-
 // Check if a string looks like a valid email address
 function email_seems_valid($email) {
     return (preg_match('#^[0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}$#i', $email) and !preg_match('#@.*--#', $email));
-}
-
-// Eclass SQL query wrapper returning only a single result value.
-// Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_value($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result) {
-        list($value) = mysql_fetch_row($result);
-        mysql_free_result($result);
-        return $value;
-    } else {
-        return false;
-    }
-}
-
-// Claroline SQL query wrapper returning only the first row of the result
-// Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_row($sqlQuery, $db = false) {
-    $result = db_query($sqlQuery, $db);
-
-    if ($result) {
-        $row = mysql_fetch_array($result, MYSQL_ASSOC);
-        mysql_free_result($result);
-        return $row;
-    } else {
-        return false;
-    }
 }
 
 // ----------------------------------------------------------------------
@@ -284,6 +210,9 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
+    } elseif ($file == 'slick') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/slick-master/slick/slick.css'>";
+            $file = 'slick-master/slick/slick.min.js';
     } elseif ($file == 'datatables') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
         $file = 'datatables/media/js/jquery.dataTables.min.js';                
@@ -396,57 +325,24 @@ function uid_to_am($uid) {
     }
 }
 
-/* * ***********************************************************
-  Show a selection box with departments.
-
-  The function returns a value( a formatted select box with departments)
-  and their values as keys in the array/select box
-
-  $department_value: the predefined/selected department value
-  return $departments_select : string (a formatted select box)
- * ************************************************************** */
-
-function list_departments($department_value) {
-    $qry = "SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name";
-    $dep = db_query($qry);
-    if ($dep) {
-        $departments_select = "";
-        $departments = array();
-        while ($row = mysql_fetch_array($dep)) {
-            $id = $row['id'];
-            $name = $row['name'];
-            $departments[$id] = $name;
-        }
-        $departments_select = selection($departments, "department", $department_value);
-        return $departments_select;
-    } else {
-        return 0;
-    }
-}
-
-/* * ******************************************
-  // only for http://eclass.uoa.gr
-  /*************************************************************
-  /*************************************************************
+/**
+ * @brief only for http://eclass.uoa.gr  
+ * do we need this ???
   Show a selection box with division of departments.
-
   The function returns a value( a formatted select box with division of departments)
   and their values as keys in the array/select box
-
-  $division_value: the predefined/selected department value
-  return $divisions_select : string (a formatted select box)
- * ************************************************************** */
-
+ * @param type $department_value the predefined/selected department value
+ * @return int string (a formatted select box)
+ */
 function list_divisions($department_value) {
-
-    $qry = "SELECT id, name FROM division WHERE faculte_id = $department_value ORDER BY name";
-    $div = db_query($qry);
+     
+    $div = Database::get()->queryArray("SELECT id, name FROM division WHERE faculte_id = ?d ORDER BY name", $department_value);
     if ($div) {
         $divisions_select = "";
         $divisions = array();
-        while ($row = mysql_fetch_array($div)) {
-            $id = $row['id'];
-            $name = $row['name'];
+        foreach ($div as $row) {
+            $id = $row->id;
+            $name = $row->name;
             $divisions[$id] = $name;
         }
         $divisions_select = selection($divisions, "division");

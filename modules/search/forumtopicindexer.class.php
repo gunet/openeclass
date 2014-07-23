@@ -48,7 +48,7 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a forum topic db row.
      * 
      * @global string $urlServer
-     * @param  array  $ftopic
+     * @param  object  $ftopic
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($ftopic) {
@@ -56,14 +56,14 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'ftopic_' . $ftopic['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ftopic['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'ftopic_' . $ftopic->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ftopic->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'ftopic', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ftopic['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('forumid', $ftopic['forum_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ftopic['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($ftopic['course_id'])
-                        . '&amp;forum=' . intval($ftopic['forum_id']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ftopic->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('forumid', $ftopic->forum_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ftopic->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($ftopic->course_id)
+                        . '&amp;forum=' . intval($ftopic->forum_id), $encoding));
 
         return $doc;
     }
@@ -72,14 +72,14 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
      * Fetch a Forum Topic from DB.
      * 
      * @param  int $ftopicId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($ftopicId) {
-        $res = db_query("SELECT ft.*, f.course_id FROM forum_topic ft 
-            JOIN forum f ON ft.forum_id = f.id 
-            JOIN forum_category fc ON fc.id = f.cat_id 
-            WHERE fc.cat_order >= 0 AND ft.id = " . intval($ftopicId));
-        $ftopic = mysql_fetch_assoc($res);
+        $ftopic = Database::get()->querySingle("SELECT ft.*, f.course_id FROM forum_topic ft 
+                                                    JOIN forum f ON ft.forum_id = f.id 
+                                                    JOIN forum_category fc ON fc.id = f.cat_id 
+                                                WHERE fc.cat_order >= 0 AND ft.id = ?d", $ftopicId);
+        
         if (!$ftopic)
             return null;
 
@@ -145,12 +145,13 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the forum topics back to the index
-        $res = db_query("SELECT ft.*, f.course_id FROM forum_topic ft 
-            JOIN forum f ON ft.forum_id = f.id 
-            JOIN forum_category fc ON fc.id = f.cat_id 
-            WHERE fc.cat_order >= 0 AND f.course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT ft.*, f.course_id FROM forum_topic ft 
+                                                JOIN forum f ON ft.forum_id = f.id 
+                                                JOIN forum_category fc ON fc.id = f.cat_id 
+                                            WHERE fc.cat_order >= 0 AND f.course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -205,12 +206,13 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all forum topics from db
-        $res = db_query("SELECT ft.*, f.course_id FROM forum_topic ft 
-            JOIN forum f ON ft.forum_id = f.id 
-            JOIN forum_category fc ON fc.id = f.cat_id 
-            WHERE fc.cat_order >= 0");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT ft.*, f.course_id FROM forum_topic ft 
+                                            JOIN forum f ON ft.forum_id = f.id 
+                                            JOIN forum_category fc ON fc.id = f.cat_id 
+                                          WHERE fc.cat_order >= 0");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

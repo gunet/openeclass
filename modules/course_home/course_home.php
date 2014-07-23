@@ -32,6 +32,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
+require_once 'include/action.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -45,13 +46,21 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('jquery');
+load_js('slick');
 ModalBoxHelper::loadModalBox();
-$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
+$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+            $('.course_description').slick({
+                dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
+            });
+            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
+    })
+    </script>";         
 
 // For statistics: record login
-Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()", $uid, $course_id);
+Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
 
-require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 
@@ -73,6 +82,8 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)    
     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
+$main_extra .= "<div class = 'course_description' style='width: 520px;'>";
+$tool_content .= "<div style='display: none'>";
 foreach ($res as $row) {
     $desctype = intval($row->type) - 1;
     $descicon = (!empty($row->icon)) ? $row->icon : 'default.png';
@@ -85,8 +96,11 @@ foreach ($res as $row) {
     $main_extra .= "<div $element_id>" .
             "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
             q($row->title) .
-            "</a></div>\n";
+            "</a></div>";
 }
+$main_extra .= "</div>";    
+$tool_content .= "</div>";
+    
 if ($is_editor) {
     $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {

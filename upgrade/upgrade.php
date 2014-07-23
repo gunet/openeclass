@@ -884,8 +884,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         }
                     }
                     Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
+                    
+                    if (!mysql_field_exists($mysqlMainDb, 'document', 'editable')) {
+                        Database::get()->query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
+                                                         ADD lock_user_id INT(11) NOT NULL DEFAULT 0");
+                    }
                 }
-
 
                 if (version_compare($oldversion, '3', '<')) {
                     // Check whether new tables already exist and delete them if empty, 
@@ -1990,12 +1994,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.10', '<')) {
-                upgrade_course_2_10($code[0], $lang, "($i / $total)");
+                upgrade_course_2_10($row->code, "($i / $total)");
             }
             if ($oldversion < '3.0') {
                 upgrade_course_3_0($row->code, "($i / $total)");
             }
-            echo "</p>\n";
+            echo "</p>";
             $i++;
         }
         echo "<hr>";
@@ -2030,10 +2034,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("DROP TABLE IF EXISTS `actions`");
         }
         // convert tables to InnoDB storage engine                
-        $result = db_query("SHOW FULL TABLES");
-        while ($table = mysql_fetch_array($result)) {
-            if ($table['Table_type'] === 'BASE TABLE')
-                Database::get()->query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
+        $result = Database::get()->queryArray("SHOW FULL TABLES");
+        foreach ($result as $table) {
+            $value = "Tables_in_$mysqlMainDb";
+            if ($table->Table_type === 'BASE TABLE') {
+                Database::get()->query("ALTER TABLE " . $table->$value . " ENGINE = InnoDB");
+            }
         }                
         // update eclass version
         Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");

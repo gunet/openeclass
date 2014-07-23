@@ -48,7 +48,7 @@ class ForumIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of a forum db row.
      * 
      * @global string $urlServer
-     * @param  array  $forum
+     * @param  object  $forum
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($forum) {
@@ -56,14 +56,14 @@ class ForumIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'forum_' . $forum['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $forum['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'forum_' . $forum->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $forum->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'forum', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $forum['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($forum['name']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($forum['desc']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($forum['course_id'])
-                        . '&amp;forum=' . $forum['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $forum->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($forum->name), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($forum->desc), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($forum->course_id)
+                        . '&amp;forum=' . $forum->id, $encoding));
 
         return $doc;
     }
@@ -72,13 +72,12 @@ class ForumIndexer implements ResourceIndexerInterface {
      * Fetch a Forum from DB.
      * 
      * @param  int $forumId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($forumId) {
-        $res = db_query("SELECT f.* FROM forum f 
-            JOIN forum_category fc ON f.cat_id = fc.id 
-            WHERE fc.cat_order >= 0 AND f.id = " . intval($forumId));
-        $forum = mysql_fetch_assoc($res);
+        $forum = Database::get()->querySingle("SELECT f.* FROM forum f 
+                    JOIN forum_category fc ON f.cat_id = fc.id 
+                    WHERE fc.cat_order >= 0 AND f.id = ?d", $forumId);
         if (!$forum)
             return null;
 
@@ -144,9 +143,10 @@ class ForumIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the forums back to the index
-        $res = db_query("SELECT f.* FROM forum f JOIN forum_category fc ON f.cat_id = fc.id WHERE fc.cat_order >= 0 AND f.course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT f.* FROM forum f JOIN forum_category fc ON f.cat_id = fc.id WHERE fc.cat_order >= 0 AND f.course_id = ?d", $courseId);        
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -184,9 +184,10 @@ class ForumIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all forums from db
-        $res = db_query("SELECT f.* FROM forum f JOIN forum_category fc ON f.cat_id = fc.id WHERE fc.cat_order >= 0");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT f.* FROM forum f JOIN forum_category fc ON f.cat_id = fc.id WHERE fc.cat_order >= 0");
+        foreach ($res as $row) {        
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

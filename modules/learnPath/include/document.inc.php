@@ -57,7 +57,7 @@ $fileName = Database::get()->querySingle("SELECT `filename` FROM `document`
         WHERE `path` LIKE ?s", $assetPath)->filename;
 
 $baseServDir = $webDir;
-$courseDir = "courses/" . $course_code . "/document";
+$courseDir = "/courses/" . $course_code . "/document";
 $baseWorkDir = $baseServDir . $courseDir;
 $file = $baseWorkDir . $assetPath;
 $fileSize = format_file_size(filesize($file));

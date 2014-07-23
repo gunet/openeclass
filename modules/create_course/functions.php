@@ -40,7 +40,7 @@ function create_course($public_code, $lang, $title, $departments, $vis, $prof, $
     if (!$public_code) {
         $public_code = $code;
     }
-    if (Database::get()->query("INSERT INTO course
+    $q = Database::get()->query("INSERT INTO course
                          SET code = ?s,
                              lang = ?s,
                              title = ?s,
@@ -48,13 +48,15 @@ function create_course($public_code, $lang, $title, $departments, $vis, $prof, $
                              visible = ?d,
                              prof_names = ?s,
                              public_code = ?s,
-                             created = NOW(),
+                             created = " . DBHelper::timeAfter() . ",
                              password = ?s,
                              glossary_expand = 0,
-                             glossary_index = 1", $code, $lang, $title, $vis, $prof, $public_code, $password)->affectedRows != 0) {
+                             glossary_index = 1", $code, $lang, $title, $vis, $prof, $public_code, $password);
+    if ($q) {
+        $course_id = $q->lastInsertID;
+    } else {
         return false;
-    }
-    $course_id = mysql_insert_id();
+    }       
 
     require_once 'include/lib/course.class.php';
     $course = new Course();

@@ -348,9 +348,10 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
 
     $zipfile = new PclZip($zip_filename);
     $v = $zipfile->create($topdir, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
-    if (!$v) {
-        die("error: " . $zipfile->errorInfo(true));
+    if ($v === 0) {
+        die("error: ".$zipfile->errorInfo(true));
     }
+    
     $real_paths = array();
     if (isset($GLOBALS['common_docs'])) {
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
@@ -360,9 +361,9 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         }
     }
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
-    if (!$v) {
-        die("error: " . $zipfile->errorInfo(true));
-    }
+    if ($v === 0) {
+        die("error: ".$zipfile->errorInfo(true));
+    }    
 }
 
 
@@ -379,8 +380,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir)) - 1;
     $encoded_filenames = $decoded_filenames = $filename = array();
 
-    $hidden_dirs = array();
-    // db_query check argument
+    $hidden_dirs = array();    
     $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
@@ -637,14 +637,16 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false) {
             $dirTrail .= empty($dirTrail) ? $thisDir : '/' . $thisDir;
 
             if (file_exists($dirTrail)) {
-                if (is_dir($dirTrail))
+                if (is_dir($dirTrail)) {
                     continue;
-                else
+                } else {
                     return false;
+                }
             }
             else {
-                if (!mkdir($dirTrail, $mode))
+                if (!mkdir($dirTrail, $mode)) {
                     return false;
+                }
             }
         }
         return true;

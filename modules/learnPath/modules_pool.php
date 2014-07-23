@@ -81,7 +81,7 @@ switch ($cmd) {
             // used to physically delete the module  from server
             require_once "include/lib/fileManageLib.inc.php";
 
-            $moduleDir = "courses/" . $course_code . "/modules";
+            $moduleDir = "/courses/" . $course_code . "/modules";
             $moduleWorkDir = $webDir . $moduleDir;
 
             // delete all assets of this module
@@ -115,10 +115,9 @@ switch ($cmd) {
     case "rqRename" :
         if (isset($_GET['module_id']) && is_numeric($_GET['module_id'])) {
             //get current name from DB
-            $query = "SELECT `name` FROM `lp_module`
+            $list = Database::get()->querySingle("SELECT `name` FROM `lp_module`
 				WHERE `module_id` = ?d
-				AND `course_id` = ?d";
-            $list = Database::get()->querySingle($sql, $_GET['module_id'], $course_id);
+				AND `course_id` = ?d", $_GET['module_id'], $course_id);
 
             $tool_content .= disp_message_box("
                         <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>

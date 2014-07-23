@@ -80,16 +80,16 @@ if (!$uid || !$userProgressionDetails) {
     // set vars
     $sco['student_id'] = $uid;
     $sco['student_name'] = $userDetails->surname . ', ' . $userDetails->givenname;
-    $sco['lesson_location'] = $userProgressionDetails['lesson_location'];
-    $sco['credit'] = strtolower($userProgressionDetails['credit']);
-    $sco['lesson_status'] = strtolower($userProgressionDetails['lesson_status']);
-    $sco['entry'] = strtolower($userProgressionDetails['entry']);
-    $sco['raw'] = ($userProgressionDetails['raw'] == -1) ? "" : "" . $userProgressionDetails['raw'];
-    $sco['scoreMin'] = ($userProgressionDetails['scoreMin'] == -1) ? "" : "" . $userProgressionDetails['scoreMin'];
-    $sco['scoreMax'] = ($userProgressionDetails['scoreMax'] == -1) ? "" : "" . $userProgressionDetails['scoreMax'];
-    $sco['total_time'] = $userProgressionDetails['total_time'];
-    $sco['suspend_data'] = $userProgressionDetails['suspend_data'];
-    $sco['launch_data'] = stripslashes($userProgressionDetails['launch_data']);
+    $sco['lesson_location'] = $userProgressionDetails->lesson_location;
+    $sco['credit'] = strtolower($userProgressionDetails->credit);
+    $sco['lesson_status'] = strtolower($userProgressionDetails->lesson_status);
+    $sco['entry'] = strtolower($userProgressionDetails->entry);
+    $sco['raw'] = ($userProgressionDetails->raw == -1) ? "" : "" . $userProgressionDetails->raw;
+    $sco['scoreMin'] = ($userProgressionDetails->scoreMin == -1) ? "" : "" . $userProgressionDetails->scoreMin;
+    $sco['scoreMax'] = ($userProgressionDetails->scoreMax == -1) ? "" : "" . $userProgressionDetails->scoreMax;
+    $sco['total_time'] = $userProgressionDetails->total_time;
+    $sco['suspend_data'] = $userProgressionDetails->suspend_data;
+    $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
     $sco['lesson_mode'] = "normal";
 }
 

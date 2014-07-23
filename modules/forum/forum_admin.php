@@ -210,10 +210,9 @@ elseif (isset($_GET['forumgoadd'])) {
     $navigation[] = array('url' => "../forum/forum_admin.php?course=$course_code",
         'name' => $langCatForumAdmin);
     $ctg = category_name($cat_id);
-    Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
+    $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
-            , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id);
-    $forid = mysql_insert_id();
+            , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
     $fidx->store($forid);
     // --------------------------------
     // notify users

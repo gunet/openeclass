@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,7 +48,7 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * Construct a Zend_Search_Lucene_Document object out of an exercise db row.
      * 
      * @global string $urlServer
-     * @param  array  $exercise
+     * @param  object  $exercise
      * @return Zend_Search_Lucene_Document
      */
     private static function makeDoc($exercise) {
@@ -56,14 +56,14 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'exercise_' . $exercise['id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $exercise['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'exercise_' . $exercise->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $exercise->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'exercise', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $exercise['course_id'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($exercise['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($exercise['description'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $exercise['active'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise['course_id']) . '&amp;exerciseId=' . $exercise['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $exercise->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($exercise->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($exercise->description)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $exercise->active, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise->course_id) . '&amp;exerciseId=' . $exercise->id, $encoding));
 
         return $doc;
     }
@@ -72,11 +72,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * Fetch an Exercise from DB.
      * 
      * @param  int $exerciseId
-     * @return array - the mysql fetched row
+     * @return object - the mysql fetched row
      */
     private function fetch($exerciseId) {
-        $res = db_query("SELECT * FROM exercise WHERE id = " . intval($exerciseId));
-        $exercise = mysql_fetch_assoc($res);
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d", $exerciseId);        
         if (!$exercise)
             return null;
 
@@ -142,9 +141,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the exercises back to the index
-        $res = db_query("SELECT * FROM exercise WHERE course_id = " . intval($courseId));
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $courseId);
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();
@@ -182,9 +182,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
 
         // get/index all exercises from db
-        $res = db_query("SELECT * FROM exercise");
-        while ($row = mysql_fetch_assoc($res))
+        $res = Database::get()->queryArray("SELECT * FROM exercise");
+        foreach ($res as $row) {
             $this->__index->addDocument(self::makeDoc($row));
+        }
 
         if ($optimize)
             $this->__index->optimize();

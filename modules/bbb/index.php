@@ -339,7 +339,6 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
                 WHERE course_user.course_id = $course_id AND course_user.user_id = user.id");
 
         foreach($result as $row) {
-#        while ($row = mysql_fetch_array($result_users)) {
             $emailTo = $row->email;
             $user_id = $row->user_id;
             // we check if email notification are enabled for each user

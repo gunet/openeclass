@@ -132,7 +132,7 @@ switch ($cmd) {
     // VISIBILITY COMMAND
     case "mkVisibl" :
     case "mkInvisibl" :
-        $cmd == "mkVisibl" ? $visibility = 1 : $visibility = 0;
+        $visibility = ($cmd == "mkVisibl") ? 1 : 0;
         //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
         $sql = "SELECT M.*, LPM.*
                 FROM `lp_module` AS M, `lp_rel_learnPath_module` AS LPM
@@ -245,7 +245,7 @@ switch ($cmd) {
                     $modar['rank'] = $list->rank;
                     $modar['parent'] = $list->parent;
                     $modar['raw_to_pass'] = $list->raw_to_pass;
-                    $extendedList[] = $list;
+                    $extendedList[] = $modar;
                 }
             }
 
