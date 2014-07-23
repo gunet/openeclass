@@ -65,6 +65,7 @@ require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 require_once('../../include/lib/textLib.inc.php');
+require_once('../../include/lib/multimediahelper.class.php');
 
 
 $TBL_EXERCICES              = 'exercices';
@@ -1209,7 +1210,11 @@ class ScormExport
                  case 'LINK': 
                  case 'MEDIALINK': 
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
-                    $targetfile = $module['path'];
+                    if ($module['contentType'] == 'MEDIALINK') {
+                        $targetfile = urldecode(MultimediaHelper::makeEmbeddableMedialink($module['path']));
+                    } else {
+                        $targetfile = $module['path'];
+                    }
                     
                     // Create an html file with a frame for the document.
                     if ( !createFrameFile($framefile, $targetfile)) return false;
