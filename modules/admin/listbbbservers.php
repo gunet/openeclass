@@ -50,7 +50,7 @@ function get_connected_users($salt,$bbb_url)
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array( 'id','hostname', 'ip', 'enabled','server_key','api_url','max_users' );
+$aColumns = array( 'id','hostname','ip','enabled','server_key','api_url','max_users','weight');
 	
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = "hostname";
@@ -179,10 +179,10 @@ foreach ($rResult as $aRow) {
         unset($row[4]);
         unset($row[5]);
         unset($row[6]);
-
-        array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>$langModify</a>");
+        $order = $row[7];
+        unset($row[7]);
         array_push($row, "$connected_users");
-        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>$langDelete</a>");
+        array_push($row,$order);
         array_shift($row);
         $output['aaData'][] = $row;
         

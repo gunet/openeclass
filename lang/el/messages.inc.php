@@ -855,7 +855,7 @@ $langLeaveExerciseWarning = "ΠΡΟΣΟΧΗ! Με την έξοδο σας απ�
 $langTemporarySave = "Προσωρινή Αποθήκευση";
 $langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά μια προσπάθεια της άσκησης";
 $langTemporarySaveNotice2 = "Υπάρχει μια προσωρινά αποθηκευμένη προσπάθεια προς ολοκλήρωση η οποια θα εκτελεστεί αν συνεχίσετε. Θέλετε να συνεχίσετε?";
-$langPendingExercise = "Υπάρχουν %s υποβολές προς βαθμολόγηση στην άσκηση «%s».";
+$langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
 $landAttemptCanceled = "Η προσπάθεια ακυρώθηκε.";
 /* * ***************************************************
  * contact.php
@@ -3955,8 +3955,9 @@ $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlu
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
-$langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
+$langBBBConnectedUsers = 'Χρήστες';
 $langBBBRemoveServer = 'Κατάργηση';
+$langBBBServerOrderP = "Σειρά";
 
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
@@ -3996,3 +3997,9 @@ $langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλ�
 
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του μαθήματος.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
+$langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρετητή";
+
+$langBBBRecord = "Καταγραφή Τηλεδιάσκεψης";
+$langBBBRecordTrue = "Ναί";
+$langBBBRecordFalse = "Όχι";
+

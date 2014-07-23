@@ -168,8 +168,9 @@ if ($is_editor) {
                             question_id NOT IN (SELECT question_id FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = ?d))
                             GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
         } else {
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION`
-                            WHERE course_id = ?d ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
         }
         // forces the value to 0
         $exerciseId = 0;
