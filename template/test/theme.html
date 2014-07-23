@@ -4,33 +4,51 @@
 <head>
 <title>{%PAGE_TITLE%}</title>
 <link rel="stylesheet" type="text/css" href="{%template_base%}/css/global.css">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,300,600,700,800&subset=latin,greek' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/style.css">
+<link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/popup.css">
+<link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/modal/component.css">
+<link rel="stylesheet" type="text/css" href="{%template_base%}/js/datatables/media/css/demo_table.css">
+
+<script type="text/javascript" src="{%template_base%}/js/modal/modernizr.custom.js"></script>
+
+
 {%EXTRA_CSS%}
 {%TOOL_CSS%}
 {%HEAD_EXTRAS%}
 </head>
-<body>
+<body class="sidebar-opened">
 
-	<!-- Left Nav -->
-    <!-- BEGIN leftNavBlock -->
+<!-- Left Nav -->
+<!-- BEGIN leftNavBlock -->
 	<aside id="leftnav">
 		<div class="logo"></div>
-        <!-- BEGIN leftNavCategoryBlock -->
-        <!-- BEGIN leftNavCategoryTitleBlock -->
-        <!-- END leftNavCategoryTitleBlock -->
-		<ul class="navlist">
-            <!-- BEGIN leftNavLinkBlock -->
-            <li><a class="{%TOOL_CLASS%}" href="{%TOOL_LINK%}"><span class="leftnav-icon {%IMG_CLASS%}"></span><span class="leftnav-text">{%TOOL_TEXT%}</span></a></li>
-            <!-- END leftNavLinkBlock -->
+		<ul class="navlist accordion-first-active">
+			<!-- BEGIN leftNavCategoryBlock -->
+			<li>
+				<!-- BEGIN leftNavCategoryTitleBlock -->
+				<span class="title accordion-title">{%ACTIVE_TOOLS%}</span>
+				<!-- END leftNavCategoryTitleBlock -->
+				<ul>
+					<!-- BEGIN leftNavLinkBlock -->
+					<li><a class="{%TOOL_CLASS%}" href="{%TOOL_LINK%}"><i class="fa {%IMG_CLASS%}"></i><span class="leftnav-text">{%TOOL_TEXT%}</span></a></li>
+					<!-- END leftNavLinkBlock -->
+				</ul>
+			</li>
+			<!-- END leftNavCategoryBlock -->
 		</ul>
-        <!-- END leftNavCategoryBlock -->
 	</aside>
-    <!-- END leftNavBlock -->
 
-	<!-- Main section -->
+<!-- END leftNavBlock -->
+
+
+<!-- Main section -->
 	<section class="Frame">
 
-		<!-- header -->
+
+	<!-- Header -->
 	    <header id="header" class="Row">
 	    	<div class="header-content">
                 {%LANG_USER%} {%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a>

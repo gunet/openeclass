@@ -227,7 +227,7 @@ function load_js($file, $init = '') {
     }
 
     if ($file == 'jquery') {
-        $file = 'jquery-1.10.2.min.js';
+        $file = 'jquery-2.1.1.min.js';
     } elseif ($file == 'jquery-ui') {
         if ($theme == 'modern' || $theme == 'ocean')
             $uiTheme = 'redmond';

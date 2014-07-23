@@ -99,8 +99,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $forum_content = $perso_tool_content ['forum_content'];
     }
 
-
-
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
     unset($_SESSION['embedonce']);
@@ -109,10 +107,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $toolArr = ($is_mobile) ? array() : getSideMenu($menuTypeID);
     $numOfToolGroups = count($toolArr);
 
+    $GLOBALS['head_content'] = '';
     $template_settings = 'template/' . $theme . '/settings.php';
     if (file_exists($template_settings)) {
         require $template_settings;
     }
+    $head_content .= $GLOBALS['head_content'];
     $t = new Template('template/' . $theme);
 
     if ($is_mobile)
