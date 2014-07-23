@@ -75,6 +75,7 @@ if (!class_exists('ScormExport')):
     require_once 'modules/exercise/question.class.php';
     require_once 'modules/exercise/answer.class.php';
     require_once 'modules/exercise/exercise.lib.php';
+    require_once 'include/lib/multimediahelper.class.php';
 
     /**
      * Exports a Learning Path to a SCORM package.
@@ -968,7 +969,11 @@ if (!class_exists('ScormExport')):
                     case 'LINK':
                     case 'MEDIALINK':
                         $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
-                        $targetfile = $module['path'];
+                        if ($module['contentType'] == 'MEDIALINK') {
+                            $targetfile = urldecode(MultimediaHelper::makeEmbeddableMedialink($module['path']));
+                        } else {
+                            $targetfile = $module['path'];
+                        }
 
                         // Create an html file with a frame for the document.
                         if (!createFrameFile($framefile, $targetfile)) {
