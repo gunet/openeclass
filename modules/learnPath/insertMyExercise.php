@@ -43,6 +43,8 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/exercise/exercise.class.php';
+require_once 'modules/exercise/question.class.php';
 
 ModalBoxHelper::loadModalBox();
 $head_content .= <<<EOF
@@ -71,6 +73,24 @@ $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id 
 foreach ($resultex as $listex) {
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_' . $listex->id])) {  //add
         $insertedExercise = $listex->id;
+        
+        // check if the exercise is compatible with LP
+        $incompatible = false;
+        $objExercise = new Exercise();
+        $objExercise->read($insertedExercise);
+        $questionList = $objExercise->selectQuestionList();
+        foreach ($questionList as $questionId) {
+            $objQuestion = new Question();
+            $objQuestion->read($questionId);
+            if ($objQuestion->selectType() == 6) {
+                $incompatible = true;
+                break;
+            }
+        }
+        if ($incompatible) {
+            $messBox .= "<tr>" . disp_message_box(q($listex->title) . " : " . $langExIncompatibleWithLP . "<br>", "caution") . "</td></tr>";
+            continue;
+        }
 
         // check if a module of this course already used the same exercise
         $exerciseModuleFrom = "FROM lp_module AS M, lp_asset AS A

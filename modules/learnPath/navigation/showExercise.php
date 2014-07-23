@@ -45,11 +45,6 @@ ModalBoxHelper::loadModalBox();
 $nameTools = $langExercice;
 $picturePath = "courses/$course_code/image";
 
-$TBL_EXERCISE = 'exercise';
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-
 if (isset($_GET['course'])) {
     $course = intval($_GET['course']);
 }
@@ -69,7 +64,6 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
     $_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
-die('here');
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
     $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';

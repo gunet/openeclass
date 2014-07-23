@@ -64,12 +64,6 @@ if (!class_exists('ScormExport')):
 
     require_once 'include/pclzip/pclzip.lib.php';
     require_once 'include/lib/textLib.inc.php';
-
-    $TBL_EXERCISE = 'exercise';
-    $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-    $TBL_QUESTION = 'exercise_question';
-    $TBL_ANSWER = 'exercise_answer';
-
     require_once 'modules/exercise/exercise.class.php';
     require_once 'modules/exercise/question.class.php';
     require_once 'modules/exercise/answer.class.php';

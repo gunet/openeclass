@@ -22,10 +22,6 @@
  * @file index.php
  * @brief main exercise module script
  */
- $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
- $TBL_EXERCISE = 'exercise';
- $TBL_QUESTION = 'exercise_question';
- $TBL_RECORDS = 'exercise_user_record';
 
 require_once 'exercise.class.php';
 require_once 'question.class.php';

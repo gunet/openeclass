@@ -1987,6 +1987,7 @@ $langErrorSql = "Σφάλμα στη δήλωση SQL";
 $langErrorValuesInDouble = "Σφάλμα: μία ή δύο τιμές είναι διπλές";
 $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί απόσπασμα από το αρχείο zip.";
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
+$langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
 $langExercise = "Ασκήσεις";
 $langExerciseAsModule = "Χρήση Άσκησης";

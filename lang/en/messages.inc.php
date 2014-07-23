@@ -1296,6 +1296,7 @@ $langErrorSql = "Error in SQL statement";
 $langErrorValuesInDouble = "Error: One or more values are doubled";
 $langErrortExtractingManifest = "Cannot extract manifest from zip file (corrupted file ? ).";
 $langExAlreadyUsed = "This exercise is already used as a module in this learning path";
+$langExIncompatibleWithLP = "This exercise contains question types not compatible with the learning path module";
 $langExInsertedAsModule = "has been added as a module of the course and of this learning path";
 $langExercise = "Exercises";
 $langExerciseAsModule = "Use an exercise";

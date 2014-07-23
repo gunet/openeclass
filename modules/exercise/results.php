@@ -20,11 +20,6 @@
  * ======================================================================== */
 
 
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-
 require_once 'exercise.class.php';
 
 $require_current_course = true;
