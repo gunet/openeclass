@@ -1479,6 +1479,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `att_pw` varchar(255) DEFAULT NULL,
                       `unlock_interval` int(11) DEFAULT NULL,
                       `external_users` varchar(255) DEFAULT "",
+                      `participants` varchar(255) DEFAULT "",
                       PRIMARY KEY (`id`)
                     )');
 
@@ -2033,12 +2034,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.10', '<')) {
-                upgrade_course_2_10($code[0], $lang, "($i / $total)");
+                upgrade_course_2_10($row->code, "($i / $total)");
             }
             if ($oldversion < '3.0') {
                 upgrade_course_3_0($row->code, "($i / $total)");
             }
-            echo "</p>\n";
+            echo "</p>";
             $i++;
         }
         echo "<hr>";

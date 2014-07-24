@@ -28,11 +28,6 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-
 $nameTools = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 if (isset($_GET['fromExercise'])) {
@@ -88,14 +83,14 @@ if ($is_editor) {
     // get the number of available question (used for pagination)
     if (isset($exerciseId) and $exerciseId != 0) {
         if ($exerciseId > 0) {
-            $result = Database::get()->queryArray("SELECT * FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+            $result = Database::get()->queryArray("SELECT * FROM `exercise_with_questions`, `exercise_question`
 				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d", $course_id, $exerciseId);
         } elseif ($exerciseId == -1) {
-            $result = Database::get()->queryArray("SELECT * FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+            $result = Database::get()->queryArray("SELECT * FROM `exercise_question` LEFT JOIN `exercise_with_questions`
 				ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL", $course_id);            
         }
     } else {
-        $result = Database::get()->queryArray("SELECT * FROM `$TBL_QUESTION` WHERE course_id = ?d", $course_id);
+        $result = Database::get()->queryArray("SELECT * FROM `exercise_question` WHERE course_id = ?d", $course_id);
     }
     $num_of_questions = count($result);
 
@@ -130,9 +125,9 @@ if ($is_editor) {
     $tool_content .= ">-- " . $langOrphanQuestions . " --</option>\n";
 
     if (isset($fromExercise)) {
-        $result = Database::get()->queryArray("SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
+        $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
-        $result = Database::get()->queryArray("SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = ?d ORDER BY id", $course_id);
+        $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
     }
 
     // shows a list-box allowing to filter questions
@@ -150,26 +145,27 @@ if ($is_editor) {
 
     // if we have selected an exercise in the list-box 'Filter'
     if (isset($exerciseId) && $exerciseId > 0) {
-        $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+        $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
 			WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
 			ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE + 1);
     }
     // if we have selected the option 'Orphan questions' in the list-box 'Filter'
     elseif (isset($exerciseId) && $exerciseId == -1) {
-        $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+        $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
 			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL ORDER BY question
 			LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);
     }
     // if we have not selected any option in the list-box 'Filter'
     else {
         if (isset($fromExercise)) {
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION`
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
-                            question_id NOT IN (SELECT question_id FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = ?d))
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                             GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
         } else {
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `$TBL_QUESTION`
-                            WHERE course_id = ?d ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
         }
         // forces the value to 0
         $exerciseId = 0;

@@ -153,8 +153,7 @@ if (count($courses) > 0) {
 
     $tool_content .= "</tr>";
 
-    $k = 0;
-    //while ($mycours = mysql_fetch_array($result)) {
+    $k = 0;    
     foreach ($courses as $mycours) {
         if ($mycours->visible == 2) {
             $codelink = "<a href='../../courses/" . $mycours->k . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . $mycours->c . ")</small>";
@@ -163,15 +162,15 @@ if (count($courses) > 0) {
         }
 
         if ($k % 2 == 0) {
-            $tool_content .= "\n<tr class='even'>";
+            $tool_content .= "<tr class='even'>";
         } else {
-            $tool_content .= "\n<tr class='odd'>";
+            $tool_content .= "<tr class='odd'>";
         }
 
-        $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
-        $tool_content .= "\n<td>" . $codelink . "</td>";
-        $tool_content .= "\n<td>" . $mycours->t . "</td>";
-        $tool_content .= "\n<td align='center'>";
+        $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
+        $tool_content .= "<td>" . $codelink . "</td>";
+        $tool_content .= "<td>" . $mycours->t . "</td>";
+        $tool_content .= "<td align='center'>";
 
         if ($isInOpenCoursesMode) {
             // metadata are displayed in click-to-open modal dialogs
@@ -189,12 +188,10 @@ if (count($courses) > 0) {
                 }
             }
         }
-
-        $tool_content .= "</td>\n";
+        $tool_content .= "</td>";
         $tool_content .= "</tr>";
         $k++;
     }
-
     $tool_content .= "</table>";
 } else {
     $subTrees = $tree->buildSubtrees(array($fc));
@@ -202,8 +199,6 @@ if (count($courses) > 0) {
         $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
     }
 }
-
-$head_content = '';
 
 if ($isInOpenCoursesMode) {
     load_js('jquery');

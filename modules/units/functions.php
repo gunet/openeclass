@@ -215,8 +215,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         $status = 'del';
         $image = 'delete';
         $link = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
-    } else {
-        //$file = mysql_fetch_array($r, MYSQL_ASSOC);
+    } else {        
         $status = $file->visible;
         if (!$is_editor and ( !resource_access($file->visible, $file->public))) {
             return '';

@@ -160,12 +160,12 @@ hContent;
                                              WHERE id = ?d"
                         , $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
             } elseif ($table == 'videolink') {
-                Database::get()->query("UPDATE videolink SET url = " . quote(canonicalize_url($_POST['url'])) . ",
-                                                      title = " . quote($_POST['title']) . ",
-                                                      description = " . quote($_POST['description']) . ",
-                                                      creator = " . quote($_POST['creator']) . ",
-                                                      publisher = " . quote($_POST['publisher']) . "
-                                                  WHERE id = $id");
+                Database::get()->query("UPDATE videolink SET url = ?s,
+                                                      title = ?s,
+                                                      description = ?s,
+                                                      creator = ?s,
+                                                      publisher = ?s
+                                                  WHERE id = ?d", canonicalize_url($_POST['url']), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
             }
             if ($table == 'video')
                 $vdx->store($id);
@@ -242,7 +242,7 @@ hContent;
                 $vdx->store($id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
-                    'path' => quote($path),
+                    'path' => $path,
                     'url' => $_POST['url'],
                     'title' => $_POST['title'],
                     'description' => $txt_description));
@@ -258,10 +258,11 @@ hContent;
             unlink("$webDir/video/$course_code/" . $myrow->path);
         }
         Database::get()->querySingle("DELETE FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
-        if ($table == 'video')
+        if ($table == 'video') {
             $vdx->remove($id);
-        else
+        } else {
             $vldx->remove($id);
+        }
         Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow->title));
         $tool_content .= "<p class='success'>$langDelF</p><br />";
         $id = "";

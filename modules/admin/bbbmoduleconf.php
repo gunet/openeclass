@@ -42,7 +42,23 @@ $head_content .= <<<EOF
                     {
                         "bProcessing": true,
                         "bServerSide": true,
-                        "sAjaxSource": "./listbbbservers.php"
+                        "sAjaxSource": "./listbbbservers.php",
+                'oLanguage': {                       
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '$langNoResult',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '$langSearch',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
                      
                 }
             );    
@@ -89,6 +105,9 @@ if (isset($_GET['add_server']))
             <input type='radio' id='enabled_true' name='enabled' checked='true' value='true' />
             <label for='enabled_true'>" . $m['yes'] . "</label></td>
         </th>";
+    $tool_content .= '<tr><th class="left" width="100"><b>'.$langBBBServerOrder.':</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="weight" /></td></tr>';
+    
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
     $tool_content .= '</fieldset></form>';    
@@ -113,6 +132,7 @@ else if (isset($_POST['submit'])) {
     $max_users = $_POST['max_users_form'];
     $enable_recordings =  $_POST['enable_recordings'] ;
     $enabled =  $_POST['enabled'] ;
+    $weight = $_POST['weight'];
 
     if(isset($_POST['id_form'])) {
         $id = $_POST['id_form'] ;
@@ -123,13 +143,14 @@ else if (isset($_POST['submit'])) {
                 max_rooms =?s,
                 max_users =?s,
                 enable_recordings =?s,
-                enabled = ?s
-                WHERE id =?d",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled,$id);
+                enabled = ?s,
+                weight = ?d
+                WHERE id =?d",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled,$weight,$id);
     }
     else
     {
-        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings,enabled) VALUES
-        (?s,?s,?s,?s,?s,?s,?s,?s)",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled);
+        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings,enabled,weight) VALUES
+        (?s,?s,?s,?s,?s,?s,?s,?s,?d)",$hostname,$ip,$key,$api_url,$max_rooms,$max_users,$enable_recordings,$enabled,$weight);
         
     }
     
@@ -161,7 +182,8 @@ else {
 			<th>'.$langBBBEnabled.'</th>
 			<th>'.$langBBBOptions.'</th>
 			<th>'.$langBBBConnectedUsers.'</th>
-                        <th>'.$langBBBRemoveServer.'</th>
+                        <th>'.$langBBBServerOrderP.'</th>
+                        <th>'.$langBBBRemoveServer.'</th>                            
 		</tr>
 	</thead>
 	<tbody>
@@ -224,6 +246,8 @@ if (isset($_GET['edit_server'])) {
                 <label for='recorings_on'>" . $m['yes'] . "</label></td>
             </th>";
             
+            $tool_content .= '<tr><th class="left" width="100"><b>'.$langBBBServerOrder.':</b></th>
+            <td class="smaller"><input class="FormData_InputText" type="text" name="weight" value="'.$server->weight.'" /></td></tr>';
             
             $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }

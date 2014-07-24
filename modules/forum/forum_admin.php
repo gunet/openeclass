@@ -150,7 +150,7 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
-    $result = Database::get()->query("SELECT id, cat_title FROM forum_category
+    $result = Database::get()->querySingle("SELECT id, cat_title FROM forum_category
                                 WHERE id = ?d
                                 AND course_id = ?d", $cat_id, $course_id);
     $cat_id = $result->id;

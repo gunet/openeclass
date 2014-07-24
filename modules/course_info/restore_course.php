@@ -466,10 +466,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
 // Display restore info form
 // -------------------------------------
-    $tool_content .= "
-        <br />
-   <fieldset>
-  <legend>$langFirstMethod</legend>
+    $tool_content .= "<br />
+       <fieldset>
+      <legend>$langFirstMethod</legend>
         <table width='100%' class='tbl'><tr>
           <td>$langRequest1
           <br /><br />
@@ -479,9 +478,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             </form>
             <div class='right smaller'>$langMaxFileSize " .
             ini_get('upload_max_filesize') . "</div>
-        </td>
+            </td>
         </tr></table>
-</fieldset>
+        </fieldset>
 <br />
 
  <fieldset>

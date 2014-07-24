@@ -94,18 +94,19 @@ if ($is_editor) {
         if ($req) {
             $cat_id = $req->id;
         } else {
-            $cat_id = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
+            $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
                                          VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
-        }
-
-        for ($i = 1; $i <= $group_quantity; $i++) {                        
+            $cat_id = $req2->lastInsertID;
+        }        
+        for ($i = 1; $i <= $group_quantity; $i++) {
             $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_num . "'");
             if ($res) {
                 $group_num++;
-            }
-            $forum_id = Database::get()->query("INSERT INTO forum (name, `desc`, num_topics, num_posts, last_post_id, cat_id, course_id)
-                                  VALUES (?s, '', 0, 0, 1, ?d, ?d)", ($langForumGroup . $group_num), $cat_id, $course_id)->lastInsertID;
-
+            }            
+            $forumname = "$langForumGroup $group_num";                        
+            $q = Database::get()->query("INSERT INTO forum SET name = '$forumname', 
+                                                    `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+            $forum_id = $q->lastInsertID;
             // Create a unique path to group documents to try (!)
             // avoiding groups entering other groups area
             $secretDirectory = uniqid('');

@@ -20,12 +20,6 @@
  * ======================================================================== */
 
 
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-$TBL_RECORDS = 'exercise_user_record';
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');

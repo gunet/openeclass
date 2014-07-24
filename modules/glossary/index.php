@@ -253,7 +253,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langGlossaryDefinition:</th>
-                   <td valign='top'>" . @text_area('definition', 4, 60, $data['definition']) . "
+                   <td valign='top'>" . @text_area('definition', 4, 60, $data->definition) . "
                    </td>
                  </tr>
                  <tr>
@@ -262,7 +262,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langCategoryNotes:</th>
-                   <td valign='top'>" . @rich_text_editor('notes', 4, 60, $data['notes']) . "
+                   <td valign='top'>" . @rich_text_editor('notes', 4, 60, $data->notes) . "
                    </td>
                  </tr>
                  $category_selection
@@ -272,9 +272,9 @@ if ($is_editor) {
                  </tr>
                  </table>
                </fieldset>
-             </form>\n";
+             </form>";
     }
-    $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) as count FROM glossary
+    $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;
     if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
         $tool_content .= sprintf("<p class='alert1'>$langGlossaryOverLimit</p>", "<b>$max_glossary_terms</b>");

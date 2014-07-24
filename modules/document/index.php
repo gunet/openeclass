@@ -1032,13 +1032,13 @@ if ($can_upload) {
         if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
             $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
         }
-        $tool_content .= "<li><a href='{$base_url}showQuota = true'>$langQuotaBar</a></li>
-            </ul></div>\n";
+        $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>
+            </ul></div>";
     }
 
     // Dialog Box
     if (!empty($dialogBox)) {
-        $tool_content .= "\n" . $dialogBox . "\n";
+        $tool_content .= $dialogBox;
     }
 }
 

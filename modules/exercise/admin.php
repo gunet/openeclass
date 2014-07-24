@@ -43,12 +43,6 @@ $picturePath = "courses/$course_code/image";
 // the 4 types of answers
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, $langFreeText);
 
-// tables used in the exercise tool
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-
 if (!$is_editor) {
     $tool_content .= $langNotAllowed;
     draw($tool_content, 2, null, $head_content);

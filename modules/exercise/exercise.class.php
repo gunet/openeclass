@@ -21,10 +21,12 @@
 
 require_once 'question.class.php';
 require_once 'answer.class.php';
-if (file_exists('../../include/log.php'))
+if (file_exists('../../include/log.php')) {
     require_once '../../include/log.php';
-if (file_exists('../../../include/log.php'))
+}
+if (file_exists('../../../include/log.php')) {
     require_once '../../../include/log.php';
+}
 
 if (!class_exists('Exercise')):
     /* >>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<< */
@@ -83,11 +85,11 @@ if (!class_exists('Exercise')):
          * @return - boolean - true if exercise exists, otherwise false
          */
         function read($id) {
-            global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $course_id;
+            global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
 			attempts_allowed, random, active, results, score
-			FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+			FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
             if ($object) {
@@ -105,7 +107,7 @@ if (!class_exists('Exercise')):
                 $this->results = $object->results;
                 $this->score = $object->score;
 
-                $result = Database::get()->queryArray("SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
+                $result = Database::get()->queryArray("SELECT question_id, q_position FROM `exercise_with_questions`, `exercise_question`
 				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
                 
                 // fills the array with the question ID for this exercise
@@ -430,7 +432,7 @@ if (!class_exists('Exercise')):
          * @author - Olivier Brouckaert
          */
         function save() {
-            global $TBL_EXERCISE, $TBL_QUESTION, $course_id;
+            global $course_id;
 
             $id = $this->id;
             $exercise = $this->exercise;
@@ -449,7 +451,7 @@ if (!class_exists('Exercise')):
 
             // exercise already exists
             if ($id) {
-                $affected_rows = Database::get()->query("UPDATE `$TBL_EXERCISE`
+                $affected_rows = Database::get()->query("UPDATE `exercise`
 				SET title = ?s, description = ?s, type = ?d," .
                         "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
                         "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d
@@ -463,7 +465,7 @@ if (!class_exists('Exercise')):
             }
             // creates a new exercise
             else {
-                $this->id = Database::get()->query("INSERT INTO `$TBL_EXERCISE` (course_id, title, description, type, start_date, 
+                $this->id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date, 
                         end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
 			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
                         $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
@@ -475,7 +477,7 @@ if (!class_exists('Exercise')):
             }
             // updates the question position
             foreach ($this->questionList as $position => $questionId) {
-                Database::get()->query("UPDATE `$TBL_QUESTION` SET q_position = ?d 
+                Database::get()->query("UPDATE `exercise_question` SET q_position = ?d 
                                 WHERE course_id = ?d AND id = ?d", $position, $course_id, $questionId);
             }
         }
@@ -487,9 +489,9 @@ if (!class_exists('Exercise')):
          * @param - integer $id - question ID to move up
          */
         function moveUp($id) {
-            global $TBL_QUESTION, $course_id;
+            global $course_id;
 
-            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+            $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
 				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos > 1) {
                 $temp = $this->questionList[$pos - 1];
@@ -506,9 +508,9 @@ if (!class_exists('Exercise')):
          * @param - integer $id - question ID to move down
          */
         function moveDown($id) {
-            global $TBL_QUESTION, $course_id;
+            global $course_id;
 
-            $pos = Database::get()->querySingle("SELECT q_position FROM `$TBL_QUESTION`
+            $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
 				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos < count($this->questionList)) {
                 $temp = $this->questionList[$pos + 1];
@@ -572,13 +574,13 @@ if (!class_exists('Exercise')):
          * @author - Olivier Brouckaert
          */
         function delete() {
-            global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $course_id;
+            global $course_id;
 
             $id = $this->id;
-            Database::get()->query("DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = ?d", $id);
-            $title = Database::get()->querySingle("SELECT title FROM `$TBL_EXERCISE` 
+            Database::get()->query("DELETE FROM `exercise_with_questions` WHERE exercise_id = ?d", $id);
+            $title = Database::get()->querySingle("SELECT title FROM `exercise` 
                                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
-            $deleted_rows = Database::get()->query("DELETE FROM `$TBL_EXERCISE` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
+            $deleted_rows = Database::get()->query("DELETE FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
             if ($deleted_rows > 0) {
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
             }

@@ -793,7 +793,7 @@ $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσει
  * course_info.php
  * ******************************************* */
 $langCourseIden = "Ταυτότητα Μαθήματος";
-$langBackupCourse = "Αντίγραφο ασφαλείας του μαθήματος";
+$langBackupCourse = "Αντίγραφο ασφαλείας";
 $langModifInfo = "Διαχείριση Μαθήματος";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
 $langHome = "Επιστροφή στην αρχική σελίδα";
@@ -855,7 +855,7 @@ $langLeaveExerciseWarning = "ΠΡΟΣΟΧΗ! Με την έξοδο σας απ�
 $langTemporarySave = "Προσωρινή Αποθήκευση";
 $langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά μια προσπάθεια της άσκησης";
 $langTemporarySaveNotice2 = "Υπάρχει μια προσωρινά αποθηκευμένη προσπάθεια προς ολοκλήρωση η οποια θα εκτελεστεί αν συνεχίσετε. Θέλετε να συνεχίσετε?";
-$langPendingExercise = "Υπάρχουν %s υποβολές προς βαθμολόγηση στην άσκηση «%s».";
+$langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
 $landAttemptCanceled = "Η προσπάθεια ακυρώθηκε.";
 /* * ***************************************************
  * contact.php
@@ -1115,7 +1115,7 @@ $langMultiCourseData = 'Στοιχεία Μαθημάτων';
  * document.php
  * **************************************************** */
 $langUpload = "Ανέβασμα";
-$langDownloadFile = "Ανέβασμα αρχείου στον εξυπηρέτη";
+$langDownloadFile = "Ανέβασμα αρχείου";
 $langPathUploadFile = "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir = "Δημιουργία καταλόγου";
 $langName = "Όνομα";
@@ -1987,6 +1987,7 @@ $langErrorSql = "Σφάλμα στη δήλωση SQL";
 $langErrorValuesInDouble = "Σφάλμα: μία ή δύο τιμές είναι διπλές";
 $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί απόσπασμα από το αρχείο zip.";
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
+$langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
 $langExercise = "Ασκήσεις";
 $langExerciseAsModule = "Χρήση Άσκησης";
@@ -3955,8 +3956,9 @@ $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlu
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
-$langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
+$langBBBConnectedUsers = 'Χρήστες';
 $langBBBRemoveServer = 'Κατάργηση';
+$langBBBServerOrderP = "Σειρά";
 
 $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντεοδιαλέξεων';
 
@@ -3996,6 +3998,12 @@ $langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλ�
 
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του μαθήματος.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεδιασκέψεων δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
+$langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρετητή";
+
+$langBBBRecord = "Καταγραφή Τηλεδιάσκεψης";
+$langBBBRecordTrue = "Ναί";
+$langBBBRecordFalse = "Όχι";
+
 
 /* * ***********************************************************
  * blog.php

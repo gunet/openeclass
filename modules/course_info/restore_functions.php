@@ -238,7 +238,7 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                    <tr><th>$langCourseDescription:</th>
                        <td>" . rich_text_editor('desc', 10, 40, purify($desc)) . "</td></tr>
                        <tr><th>$langFaculty:</th>
-                       <td>" . $tree_html . "<br>$langOldValue: <i>$old_faculty</i></td></tr>
+                       <td>" . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i></td></tr>
                    <tr><th>$langCourseVis:</th><td>" . visibility_select($vis) . "</td></tr>
                    <tr><th>$langTeacher:</th>
                        <td><input type='text' name='course_prof' value='" . q($prof) . "' size='50' /></td></tr>
