@@ -265,7 +265,16 @@ class Hierarchy {
      * @return string         - The (unserialized) node's name
      */
     public function getNodeName($key, $useKey = 'id') {
-        return self::unserializeLangField(Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key)->name);
+        if ($key === null || $key <= 0) {
+            return null;
+        }
+        
+        $node = Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        if ($node) {
+            return self::unserializeLangField($node->name);
+        }
+        
+        return null;
     }
 
     /**

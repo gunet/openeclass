@@ -63,6 +63,17 @@ if (isset($_GET['add'])) {
         'search_am' => true), 'any');
 
     $tool_content .= "
+<div id='operations_container'>
+  <ul id='opslist'>
+    <li><b>$langAdd:</b>&nbsp; <a href='adduser.php?course=$course_code'>$langOneUser</a></li>
+    <li><a href='muladduser.php?course=$course_code'>$langManyUsers</a></li>
+    <li><a href='guestuser.php?course=$course_code'>$langGUser</a>&nbsp;</li>
+    <li><a href='../group/index.php?course=$course_code'>$langGroupUserManagement</a></li>
+    <li><a href='../course_info/refresh_course.php?course=$course_code'>$langDelUsers</a></li>
+  </ul>
+</div>";
+    
+    $tool_content .= "
         <fieldset>
         <legend>$langUserData</legend>
         <table class='tbl'>

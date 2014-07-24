@@ -532,7 +532,7 @@ function process_extracted_file($p_event, &$p_header) {
         }
 
         $path .= '/' . safe_filename($format);        
-        Database::get()->query("INSERT INTO document SET
+        $id = Database::get()->query("INSERT INTO document SET
                                  course_id = ?d,
 				 subsystem = ?d,
                                  subsystem_id = ?d,
@@ -553,9 +553,8 @@ function process_extracted_file($p_event, &$p_header) {
                                  copyrighted = ?d"
                 , $course_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
                 , $file_title, $file_creator, $file_date, $file_date, $file_subject, $file_description
-                , $file_author, $format, $file_language, $file_copyrighted);
+                , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
         // Logging
-        $id = mysql_insert_id();
         $didx->store($id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
             'filepath' => $path,

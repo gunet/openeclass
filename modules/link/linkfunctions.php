@@ -216,8 +216,7 @@ function submit_category() {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
                                       WHERE course_id = ?d", $course_id)->maxorder;
         $order++;
-        Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order);
-        $id = mysql_insert_id();
+        $id = Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order)->lastInsertID;
         $catlinkstatus = $langCategoryAdded;
         $log_type = LOG_INSERT;
     }

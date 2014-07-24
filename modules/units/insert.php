@@ -478,7 +478,7 @@ function insert_link($id) {
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='linkcategory', title = ?s,
                                         comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d", 
                                 $id, $linkcat->name, $linkcat->description, $order, $linkcat->id);
-            $uresId = mysql_insert_id();
+            $uresId = $q->lastInsertID;
             $urdx->store($uresId, false);
         }
     }

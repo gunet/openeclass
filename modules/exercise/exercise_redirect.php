@@ -36,13 +36,6 @@ $nameTools = $langExercicesView;
 require_once 'include/lib/textLib.inc.php';
 
 $picturePath = "courses/$course_code/image";
-
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer';
-$TBL_RECORDS = 'exercise_user_record';
-
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
@@ -83,11 +76,9 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 // if there is an active attempt and it's time passed. Complete the record to finish attempt
-$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
-$tmp = mysql_fetch_row(db_query($sql));
-if ($tmp[0] > 0) {
-	$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid' AND record_end_date is NULL";
-	db_query($sql);
+$tmp = Database::get()->querySingle("SELECT COUNT(*) AS cnt, record_start_date FROM `exercise_user_record` WHERE eid = ?d AND uid= ?d AND record_end_date is NULL", $exerciseId, $uid);
+if ($tmp->cnt > 0) {	
+    Database::get()->query("UPDATE `exercise_user_record` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $exerciseId, $uid);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

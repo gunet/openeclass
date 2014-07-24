@@ -40,8 +40,9 @@ class MediaResourceFactory {
         global $urlServer, $course_code;
         // validate url
         $url = $queryItem->url;
-        if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url)))
+        if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url))) {
             $url = '#';
+        }
         return new MediaResource(
                 $queryItem->id, $queryItem->course_id, $queryItem->title, $url, // Override because path is url in db for videolinks
                 $url, $url, $urlServer . 'modules/video/playlink.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id));

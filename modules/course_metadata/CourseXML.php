@@ -1192,18 +1192,20 @@ class CourseXMLElement extends SimpleXMLElement {
      * Auto-Generate Data for a specific course.
      * 
      * @global string $urlServer
+     * @global string $license
+     * @global string $webDir
+     * @global string $siteName
+     * @global string $Institution
+     * @global string $InstitutionUrl
      * @param  int    $courseId
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer, $license, $webDir, $siteName, $Institution, $InstitutionUrl;
+        global $urlServer, $license, $webDir;
+        global $siteName, $Institution, $InstitutionUrl; // NOTICE: DO NOT remove these global vars, include of common.inc, etc, below requires them
         $data = array();
 
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
-        if (!$course) {
-            return array();
-        }
-
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);
         // course language
         $clang = $course->lang;
         $data['course_language'] = $clang;

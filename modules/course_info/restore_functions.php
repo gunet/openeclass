@@ -32,7 +32,7 @@ function visibility_select($current) {
         $selected = ($type == $current) ? ' selected' : '';
         $ret .= "<option value='$type'$selected>" . q($text) . "</option>\n";
     }
-    $ret .= "</select>\n";
+    $ret .= "</select>";
     return $ret;
 }
 
@@ -232,13 +232,13 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                    <tr><th>$langCourseCode:</th>
                        <td><input type='text' name='course_code' value='" . q($code) . "' /></td></tr>
                    <tr><th>$langLanguage:</th>
-                       <td>" . lang_select_options('languages') . "</td>
+                       <td>" . lang_select_options('course_lang') . "</td>
                    <tr><th>$langTitle:</th>
                        <td><input type='text' name='course_title' value='" . q($title) . "' size='50' /></td></tr>
                    <tr><th>$langCourseDescription:</th>
                        <td>" . rich_text_editor('desc', 10, 40, purify($desc)) . "</td></tr>
                        <tr><th>$langFaculty:</th>
-                       <td>" . $tree_html . "<br>$langOldValue: <i>$old_faculty</i></td></tr>
+                       <td>" . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i></td></tr>
                    <tr><th>$langCourseVis:</th><td>" . visibility_select($vis) . "</td></tr>
                    <tr><th>$langTeacher:</th>
                        <td><input type='text' name='course_prof' value='" . q($prof) . "' size='50' /></td></tr>

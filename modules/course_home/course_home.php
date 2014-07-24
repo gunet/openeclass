@@ -32,6 +32,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
+require_once 'include/action.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -51,8 +52,6 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
 // For statistics: record login
 Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()", $uid, $course_id);
 
-
-require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 

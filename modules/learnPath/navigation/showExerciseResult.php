@@ -333,8 +333,8 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 // update db with results
 $eid = $objExercise->selectId();
 
-$attempt = Database::get()->query("SELECT COUNT(record_start_date) AS count FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->count;
-$eurid = Database::get()->query("SELECT MAX(eurid) AS max FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->max;
+$attempt = Database::get()->querySingle("SELECT COUNT(record_start_date) AS count FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->count;
+$eurid = Database::get()->querySingle("SELECT MAX(eurid) AS max FROM `exercise_user_record` WHERE eid = ?d AND uid = ?d", $eid, $uid)->max;
 
 // record results of exercise
 Database::get()->query("UPDATE exercise_user_record SET total_score = ?d, total_weighting = ?d, attempt = ?d WHERE eurid = ?d", $totalScore, $totalWeighting, $attempt, $eurid);
@@ -402,7 +402,7 @@ if ($uid) {
                  `session_time`	= ?s
            WHERE `learnPath_module_id` = ?d
              AND `user_id` = ?d";
-    Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row['total_time'], $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid);
+    Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row->total_time, $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid);
 }
 
 echo "</div></body></html>" . "\n";
