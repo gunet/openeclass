@@ -51,6 +51,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
 // For statistics: record login
 Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()", $uid, $course_id);
 
+
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
@@ -366,47 +367,286 @@ if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
 
-$tool_content .= "
-<div id='content_course'>
-<table width='100%'>
-<tr>
-<td valign='top'>$main_content</td>
-<td width='200' valign='top'>
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td  class='title1'>$langIdentity</td>
-  </tr>
-  <tr>
-    <td class='smaller'>$bar_content</td>
-  </tr>
-  </table>
-  <br />
-  $license_info_box
-  $opencourses_level
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td class='title1'>$langTools</td>
-    <td class='left'>$toggle_student_view";
-if ($status != USER_GUEST) {
-    if ($receive_mail) {
-        $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                  <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
-    }
-}
-$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-            <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
-if (visible_module(MODULE_ID_ANNOUNCE)) {
-    $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                          <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>&nbsp;$toggle_student_view_close";
-}
-$tool_content .= "</td>
-      </tr>
-      </table>
-      $emailnotification
-      <br />\n";
 
-$tool_content .= "</td></tr></table>
-   <table width='100%' class='tbl'><tr><td>$cunits_content</td>
-   </tr></table></div>";
+
+
+// Title and Toolbox
+$tool_content .= "
+<div id='title'>
+    <h1 class='page-title'>Τίτλος Μαθήματος</h1>
+
+    <div class='toolbox float-right'>
+
+        <div type='button' class='button dropdown open-on-hover'>
+            <span class='txt' class='tooltip-left' data-tooltip='Syllabus'>Πληροφορίες Μαθήματος</span>
+            <span class='fa fa-caret-down'></span>
+            <ul class='dropdown-menu'>
+                <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-toc' href='#''>Επιλογή 2</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-books' href='#''>Επιλογή 3</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#''>Επιλογή 4</a></li>
+            </ul>
+        </div>
+";
+
+        // Button: email - contact professor
+        if ($status != USER_GUEST) {
+            if ($receive_mail) {
+                $tool_content .= "
+                    <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
+                        <button class='button hover-blue' title='$langContactProf' >
+                            <i class='fa fa-envelope'></i>
+                        </button>
+                    </a>";
+            }
+        }
+
+
+        // Button: star - bookmark the page
+        $tool_content .= "        
+                    <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
+                        <button class='button hover-blue' title='$langAddAsBookmark'>
+                            <i class='fa fa-star'></i>
+                        </button>
+                    </a>";
+
+
+        // Button: rss
+        if (visible_module(MODULE_ID_ANNOUNCE))
+        {
+            $tool_content .= "
+                    <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
+                        <button class='button hover-blue' title='" . q($langRSSFeed) . "'>
+                            <i class='fa fa-rss'></i>
+                        </button>
+                    </a>";
+        }
+
+        // Button: toggle student view
+        $tool_content .= "  
+                    <button class='button hover-blue' title='$langAddAsBookmark'>
+                            $toggle_student_view_close
+                            $toggle_student_view
+                    </button>";     
+           
+$tool_content .= "
+    </div>
+    
+</div>";
+
+
+
+
+
+
+
+
+// Contentbox: Course main contentbox
+$tool_content .= "
+<div id='lesson-banner' class='contentbox'>
+    <div class='banner-left'>
+        <div class='banner-image'></div>
+    </div>
+    <div class='banner-content'>
+        <div class='banner-description'>$main_content</p></div>
+        <hr>
+        <div class='banner-tags'>           
+            <span class='label'><span>ID:</span> K19 (Εαρινό 2012)</span>
+            <span class='label'><span>Σχολή - Τμήμα:</span> Πληροφορικής και Τηλεπικοινωνιών</span>
+            <span class='label'><span>Εκπαιδευτές:</span> καθ. Αγγελική Αραπογιάννη</span>
+            <span class='label'><span>Πρόσβαση:</span> Ελεύθερη (χωρίς εγγραφή)</span>
+            <span class='label'><span>Τύπος:</span> Προπτυχιακό</span>
+        </div>
+    </div>
+</div>";
+
+
+
+
+// Contentbox: Thematikes enotites
+// Contentbox: Calendar
+// Contentbox: Announcements
+$tool_content .= "
+<div class='a-wrapper'>
+
+    <div class='column-first column-one-half'>
+        <h5 class='content-title'>Θεματικες Ενοτητες</h5>
+        <ul class='contentbox padding accordion accordion-list-style'>
+
+
+            <li>
+                <div class='accordion-title'>
+                    <h4>1. Εισαγωγή</h4>
+                    <span class='description'>Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...</span>
+                </div>
+                <div class='content'>
+                    <img src='http://users.auth.gr/panchara/eclass/project/img/Y1.jpg' />
+                    Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας, θεώρημα μέγιστης μεταφοράς ισχύος, βασικά δίθυρα-τετράπολα. Αναλογικά και ψηφιακά σήματα. Συμβολισμοί. Βασικά χαρακτηριστικά των ενισχυτών (απόδοση ισχύος, απολαβή-ενίσχυση, γραμμικότητα).
+                    <div class='label-group'>
+                        <span class='title'>Λέξεις Κλειδιά</span>           
+                        <span class='label'>γραμμικά δικτυώματα</span>
+                        <span class='label'>δίθυρα ή τετράπολα</span>
+                        <span class='label'>υβριδικές παράμετροι</span>
+                        <span class='label'>απολαβή ή ενίσχυση</span>
+                    </div>
+                </div>
+            </li
+
+
+            <li>
+                <div class='accordion-title'>
+                    <h4>2. Η Επαφή pn</h4>
+                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
+                </div>     
+                <div class='content'>
+                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
+                    <div class='label-group'>
+                        <span class='title'>Λέξεις Κλειδιά</span>   
+                        <span class='label'>ενδογενής ημιαγωγός</span>          
+                        <span class='label'>πυρίτιο</span>
+                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
+                        <span class='label'>ρεύμα διάχυσης</span>
+                        <span class='label'>ρεύμα ολίσθησης</span>
+                        <span class='label'>δυναμικό επαφής</span>
+                    </div>
+                </div>
+            </li>
+
+
+            <li>
+                <div class='accordion-title'>
+                    <h4>2. Η Επαφή pn</h4>
+                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
+                </div>     
+                <div class='content'>
+                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
+                    <div class='label-group'>
+                        <span class='title'>Λέξεις Κλειδιά</span>   
+                        <span class='label'>ενδογενής ημιαγωγός</span>          
+                        <span class='label'>πυρίτιο</span>
+                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
+                        <span class='label'>ρεύμα διάχυσης</span>
+                        <span class='label'>ρεύμα ολίσθησης</span>
+                        <span class='label'>δυναμικό επαφής</span>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class='accordion-title'>
+                    <h4>2. Η Επαφή pn</h4>
+                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
+                </div>     
+                <div class='content'>
+                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
+                    <div class='label-group'>
+                        <span class='title'>Λέξεις Κλειδιά</span>   
+                        <span class='label'>ενδογενής ημιαγωγός</span>          
+                        <span class='label'>πυρίτιο</span>
+                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
+                        <span class='label'>ρεύμα διάχυσης</span>
+                        <span class='label'>ρεύμα ολίσθησης</span>
+                        <span class='label'>δυναμικό επαφής</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class='column-one-half'>
+
+        <h5 class='content-title'>Ημερολογιο</h5>
+        <div class='contentbox padding'>
+            <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
+        </div>
+
+
+        <h5 class='content-title'>Ανακοινωσεις</h5>
+        <ul class='tablelist contentbox'>
+                
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 1</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 2</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 3</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div style='clear: both'></div>
+
+</div>";
+
+
+
+
+
+
+
+// Contentbox: Keywords, Copyright and Opencourse mode
+$tool_content .= "
+<div id='lesson-footer' class='a-wrapper'>
+    <div class='contentbox padding'>
+
+        <div class='column-first column-one-third'>
+            <span class='title'>Λέξεις Κλειδιά</span>
+            <div class='label-group'>
+                <span class=''>Ημιαγωγοί</span>,
+                <span class=''>δίοδοι</span>,
+                <span class=''>ανόρθωση</span>,
+                <span class=''>σταθεροποίηση τάσης</span>,
+                <span class=''>ψαλλίδιση</span>
+            </div>
+        </div>
+
+        <div class='column-one-third'>
+            <a class='title' href='http://creativecommons.org/licenses/by-sa/3.0/deed.el'>
+                <img style='height:1.6em;' src='http://users.auth.gr/panchara/eclass/project/img/cc.png' title='CC - Παρόμοια Διανομή' alt='CC - Παρόμοια Διανομή'>
+            </a>
+            <span>Άδεια Διάθεσης: CC - Παρόμοια Διανομή</span>
+        </div>
+
+        <div class='column-one-third'>
+            <div class='title'><img src='http://users.auth.gr/panchara/eclass/project/img/oc-small.png'></div>
+            <span>Ανοικτό Ακαδ. Μάθημα: Επίπεδο: A+</span>
+        </div>
+
+        <div style='clear: both'></div>
+
+    </div>
+</div>";
+
+
+
+
+
+
+
+$tool_content .= "
+<br/>
+<span>bar_content: $bar_content</span><br/><hr><br/>
+<span>license_info_box: $license_info_box</span><br/><hr><br/>
+<span>opencourses_level: $opencourses_level</span><br/><hr><br/>
+<span>cunits_content: $cunits_content</span><br/><hr><br/>
+<br/><br/><br/>
+";
 
 draw($tool_content, 2, null, $head_content);

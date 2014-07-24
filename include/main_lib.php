@@ -233,8 +233,8 @@ function load_js($file, $init = '') {
             $uiTheme = 'redmond';
         else
             $uiTheme = 'smoothness';
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.9.2.custom.min.css'>\n";
-        $file = 'jquery-ui-1.9.2.custom.min.js';
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>\n";
+        $file = 'jquery-ui-1.10.4.custom.min.js';
     } elseif ($file == 'jquery-multiselect') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
         $file = 'jquery.multiselect.min.js';

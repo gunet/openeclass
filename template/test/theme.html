@@ -10,9 +10,9 @@
 <link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/style.css">
 <link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/popup.css">
 <link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/modal/component.css">
-<link rel="stylesheet" type="text/css" href="{%template_base%}/js/datatables/media/css/demo_table.css">
+<!--<link rel="stylesheet" type="text/css" href="{%template_base%}/js/datatables/media/css/demo_table.css">-->
 
-<script type="text/javascript" src="{%template_base%}/js/modal/modernizr.custom.js"></script>
+<!--<script type="text/javascript" src="{%template_base%}/js/modal/modernizr.custom.js"></script>-->
 
 
 {%EXTRA_CSS%}
@@ -51,13 +51,37 @@
 	<!-- Header -->
 	    <header id="header" class="Row">
 	    	<div class="header-content">
-                {%LANG_USER%} {%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a>
-		    	<ul class="top-nav">
-					<li><a class="active home-icon" href=""></a></li>
-					<li><a class="folder-icon" href=""></a></li>
-					<li><a class="copy-icon" href=""></a></li>
-					<li><a class="search-icon" href=""></a></li>
-					<li><a class="message-icon" href=""></a></li>
+		    	<ul class="top-nav-wrapper">
+		    		
+		    		<div id="uni-info">
+						<span class="uni-icon"><img src="http://users.auth.gr/panchara/eclass/project/img/uni2.png"></span>
+						<span class="uni-title">Εθνικό και Καποδιστριακό Πανεπιστήμιο Αθηνών</span>
+					</div>
+
+					<ul class="top-nav">
+
+						<li>
+							<span class="tooltip tooltip-bottom" data-tooltip="Your Portfolio">
+								<i class="fa fa-folder"></i>
+							</span>
+						</li>
+						<li>
+							<span class="tooltip tooltip-bottom" data-tooltip="Search">
+								<i class="fa fa-search"></i>
+							</span>
+						</li>
+						<li class="user-info">
+							<span class="auto-width tooltip tooltip-bottom" data-tooltip="Your Dashboard">
+								<i class="fa fa-user"></i>
+							<span class="username">{%LANG_USER%} {%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a></span>
+						</span>
+						</li>
+						<li class="sidebutton displaynone">
+							<span class="toggle-sidebar tooltip tooltip-bottom" data-tooltip="Toggle Sidebar">
+								<i class="fa fa-bars"></i>
+							</span>
+						</li>
+					</ul>
 				</ul>
 	    	</div>
 	    </header>
@@ -94,7 +118,139 @@
 	    </section>
 
 	    <aside id="sidebar">
+	    	<div class="blocks">
 
+			<span class="toggle-sidebar tooltip tooltip-bottom" data-tooltip="Close Sidebar"><i class="fa fa-bars"></i></span>
+
+			<h3 class="sidebar-title">My tools</h3>
+
+			<ul class="accordion">
+
+				<li class="block my-courses">
+
+					<h4 class="title">
+						<span class="txt">Courses</span>
+						<div class="tricky">
+							<div class="description">Δείτε τα μαθήματα στα οποία συμμετέχετε</div>
+							<div class="icon"><i class="fa fa-list-alt"></i></div>
+						</div>
+					</h4>
+
+					<div class="side-list accordion">
+						<h5 class="lesson-title accordion-title">Διαφορικές εξισώσεις με μερικές παραγώγους</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Μίκης Θεοδωράκης</li>
+								<li class="lesson-notifications">
+									<span class="item">
+										<i class="fa fa-calendar"></i>
+										<span class="count">3</span></span>
+										<span class="item"><i class="fa fa-file-text"></i>
+										<span class="count">2</span>
+									</span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Εφαρμοσμένη Ανάλυση Παλινδρόμησης και Διασποράς</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Γεώργιος Ξενοφών</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-play"></i><span class="count">12</span></span>
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">99</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Μαθηματικές Μέθοδοι στην Επιχειρησιακή Έρευνα</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Γιάννης Τσαρτσαφλής</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa fa-bullhorn"></i><span class="count">2</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Στατιστική</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Ελένη Μακιαβέλη</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+						<h5 class="lesson-title accordion-title">Theming Drupal: The most time efficient way to beatify your omega subtheme</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 9912</li>
+								<li class="lesson-professor">Παναγιώτης Χαραλαμπίδης</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+
+				<li class="block my-notes">	
+
+					<h4 class="title">
+						<span class="txt">Notes</span>					
+
+						<div class="tricky">
+							<div class="description">Προσθήκη γρήγορης σημείωσης</div>
+							<div class="icon"><i class="fa fa-pencil"></i></div>
+						</div>
+					</h4>
+
+					<div>
+
+						<div class="input-parent">
+							<textarea placeholder="Type a note..."></textarea>
+							<i class="fa fa-pencil"></i>
+						</div>
+						<button data-label="SAVE" class="button flippin-btn">SAVE</button>
+						<a class="goto" href="">All notes</a>
+					</div>
+				</li>
+
+				<li class="block my-courses">	
+					<h4 class="title">
+						<span class="txt">Messages</span>
+						
+						<div class="tricky">
+							<div class="description">Στείλτε μήνυμα σε κάποιον άλλον χρήστη του συστήματος</div>
+							<div class="icon"><i class="fa fa-envelope"></i></div>
+						</div>
+
+					</h4>
+					<div>
+						<div class="input-parent">
+							<input class="recipients-input" type="text" placeholder="Recipients...">
+							<i class="fa fa-user"></i>
+						</div>
+						<div class="input-parent">
+							<textarea placeholder="Message..."></textarea>
+							<i class="fa fa-envelope"></i>
+						</div>
+						<button data-label="SEND" class="button flippin-btn">SEND</button>
+						<a class="goto" href="">All messages</a>
+					</div>
+				</li>
+
+			</ul>
+		</div>
 	    </aside>
 
 	    <footer id="footer" class="Row">
