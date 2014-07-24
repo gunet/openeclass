@@ -46,7 +46,12 @@ if ($is_editor) {
 
 $paging = true;
 $next = 0;
-$forum_id = intval($_GET['forum']);
+if (isset($_GET['forum'])) {
+    $forum_id = intval($_GET['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
+}
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 

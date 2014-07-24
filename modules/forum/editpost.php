@@ -37,6 +37,9 @@ $fpdx = new ForumPostIndexer($idx);
 
 if (isset($_REQUEST['forum'])) {
     $forum_id = intval($_REQUEST['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
 }
 if (isset($_REQUEST['topic'])) {
     $topic_id = intval($_REQUEST['topic']);

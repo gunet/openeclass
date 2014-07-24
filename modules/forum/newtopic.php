@@ -41,6 +41,9 @@ require_once 'functions.php';
 
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
 }
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
