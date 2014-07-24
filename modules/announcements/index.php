@@ -59,35 +59,41 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
           /* modify visibility */
            $row_id = intval($_POST['value']);
            $visible = intval($_POST['visible']) ? 1 : 0;
-           Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);           
+           Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
            $aidx->store($row_id);
            exit();
         }
-    }  
+    }
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    $keyword = quote('%' . $_GET['sSearch'] . '%');
-    
-    $student_sql = $is_editor? '': "AND visible = 1";    
-    $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);        
-    $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE $keyword $student_sql", $course_id);    
-    ($limit>0) ? $extra_sql = "LIMIT $offset,$limit" : $extra_sql = "";
-    
-    $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE $keyword $student_sql ORDER BY `order` DESC $extra_sql", $course_id);
+    $keyword = '%' . $_GET['sSearch'] . '%';
+
+    $student_sql = $is_editor? '': 'AND visible = 1';
+    $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
+    $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
+    if ($limit>0) {
+        $extra_sql = 'LIMIT ?d, ?d';
+        $extra_terms = array($offset, $limit);
+    } else {
+        $extra_sql = '';
+        $extra_terms = array();
+    }
+
+    $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC $extra_sql", $course_id, $keyword, $extra_terms);
 
     $data['iTotalRecords'] = $all_announc->total;
     $data['iTotalDisplayRecords'] = $filtered_announc->total;
     $data['aaData'] = array();
     if ($is_editor) {
         $iterator = 1;
-        foreach ($result as $myrow) {        
+        foreach ($result as $myrow) {
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
                 $vis_icon = 'invisible';
             } else {
                 $visible = 0;
-                $vis_icon = 'visible';               
+                $vis_icon = 'visible';
             }
             //checking ordering status and initializing appropriate arrows
             $up_arrow = $down_arrow = '';
@@ -96,24 +102,24 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
             if ($offset + $iterator < $all_announc->total) {
                 $down_arrow = icon('down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id");
-            }            
-            //setting datables column data            
+            }
+            //setting datables column data
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_icon,
-                '0' => date('d-m-Y', strtotime($myrow->date)), 
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>', 
+                '0' => date('d-m-Y', strtotime($myrow->date)),
+                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
                 '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id")  .
                        "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\"") .
-                       "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visible\"") . 
+                       "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visible\"") .
                        "&nbsp;" . $down_arrow . $up_arrow
                 );
             $iterator++;
         }
     } else {
-        foreach ($result as $myrow) {                   
+        foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => date('d-m-Y', strtotime($myrow->date)), 
+                '0' => date('d-m-Y', strtotime($myrow->date)),
                 '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>');
         }
     }
@@ -126,21 +132,21 @@ load_js('jquery');
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
 load_js('datatables_filtering_delay');
-$head_content .= "<script type='text/javascript'>  
+$head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
-                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',                   
+                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],                    
-                'sPaginationType': 'full_numbers',              
-                'bSort': false,               
-                'oLanguage': {                       
+               ],
+                'sPaginationType': 'full_numbers',
+                'bSort': false,
+                'oLanguage': {
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -171,7 +177,7 @@ $head_content .= "<script type='text/javascript'>
                             }
                         }
                         $('#tool_title').after('<p class=\"success\">$langAnnDel</p>');
-                        $('.success').delay(3000).fadeOut(1500);    
+                        $('.success').delay(3000).fadeOut(1500);
                         oTable.fnPageChange(page_number);
                     }, 'json');
                  }
@@ -184,7 +190,7 @@ $head_content .= "<script type='text/javascript'>
                     var page_number = oTable.fnPagingInfo().iPage;
                     var per_page = oTable.fnPagingInfo().iLength;
                     oTable.fnPageChange(page_number);
-                }, 'json');                             
+                }, 'json');
             });
             $('.success').delay(3000).fadeOut(1500);
             $('.dataTables_filter input').attr('placeholder', '$langTitle');
@@ -196,14 +202,14 @@ ModalBoxHelper::loadModalBox();
 $public_code = course_id_to_public_code($course_id);
 $nameTools = $langAnnouncements;
 
-if (isset($_GET['an_id'])) {   
+if (isset($_GET['an_id'])) {
     (!$is_editor)? $student_sql = "AND visible = '1'" : $student_sql = "";
-    $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);    
+    $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
 }
-if ($is_editor) {	
+if ($is_editor) {
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
-        $aidx = new AnnouncementIndexer();                        
+        $aidx = new AnnouncementIndexer();
 	$displayForm = true;
 	/* up and down commands */
 	if (isset($_GET['down'])) {
@@ -214,13 +220,13 @@ if ($is_editor) {
 		$thisAnnouncementId = $_GET['up'];
 		$sortDirection = "ASC";
 	}
-        
+
         $thisAnnouncementOrderFound = false;
 	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
             $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
                                            WHERE course_id = ?d
                                            ORDER BY `order` $sortDirection",$course_id );
-            foreach ($ids as $announcement) {   
+            foreach ($ids as $announcement) {
                 if ($thisAnnouncementOrderFound) {
                     $nextAnnouncementId = $announcement->id;
                     $nextAnnouncementOrder = $announcement->order;
@@ -233,7 +239,7 @@ if ($is_editor) {
                     $thisAnnouncementOrder = $announcement->order;
                     $thisAnnouncementOrderFound = true;
                 }
-           }                        	    
+           }
 	}
 
     /* modify */
@@ -244,7 +250,7 @@ if ($is_editor) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);
-        }        
+        }
     }
 
     /* submit */
@@ -255,7 +261,7 @@ if ($is_editor) {
         $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW() WHERE id = ?d", $newContent, $antitle, $id);            
+            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW() WHERE id = ?d", $newContent, $antitle, $id);
             $log_type = LOG_MODIFY;
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
@@ -268,21 +274,21 @@ if ($is_editor) {
                                              title = ?s, `date` = NOW(),
                                              course_id = ?d, `order` = ?d,
                                              visible = 1", $newContent, $antitle, $course_id, $order)->lastInsertID;
-            $log_type = LOG_INSERT;                                    
-        }        
+            $log_type = LOG_INSERT;
+        }
         $aidx->store($id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
         Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
                                                                'email' => $send_mail,
                                                                'title' => $_POST['antitle'],
                                                                'content' => $txt_content));
-        
+
         // send email
         if ($send_mail) {
             $emailContent = "$professorMessage: $_SESSION[givenname] $_SESSION[surname]<br>\n<br>\n" .
-                    autounquote($_POST['antitle']) .
+                    $_POST['antitle'] .
                     "<br>\n<br>\n" .
-                    autounquote($_POST['newContent']);
+                    $_POST['newContent'];
             $emailSubject = "$professorMessage ($public_code - $title)";
             // select students email list
             $countEmail = 0;
@@ -396,8 +402,8 @@ if ($is_editor) {
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
         $tool_content .= "<table id='ann_table{$course_id}' class='display'>";
-        $tool_content .= "<thead>";	
-        $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";                
+        $tool_content .= "<thead>";
+        $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";
         if ($is_editor) {
             $tool_content .= "<th width='100' class='center'>$langActions</th>";
         }
