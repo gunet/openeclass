@@ -188,15 +188,16 @@ hContent;
             } else {
                 $title = $_POST['title'];
             }
-            $id = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
-                                VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s)'
-                    , $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
+            $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
+                                                VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s)', 
+                                        $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
+            $id = $q->lastInsertID;
             $vldx->store($id);
             $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
             Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
-                'url' => canonicalize_url($url),
-                'title' => $title,
-                'description' => $txt_description));
+                                                                    'url' => canonicalize_url($url),
+                                                                    'title' => $title,
+                                                                    'description' => $txt_description));
             $tool_content .= "<p class='success'>$langLinkAdded</p><br />";
         } else {  // add video
             if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {

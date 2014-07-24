@@ -73,7 +73,8 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * @return object - the mysql fetched row
      */
     private function fetch($vlinkId) {
-        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);        
+        
+        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);
         if (!$vlink)
             return null;
 
