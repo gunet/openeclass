@@ -3,9 +3,10 @@
 <html>
 <head>
 <title>{%PAGE_TITLE%}</title>
-<link rel="stylesheet" type="text/css" href="{%template_base%}/css/global.css">
+<!--<link rel="stylesheet" type="text/css" href="{%template_base%}/css/global.css">-->
 
-<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,300,600,700,800&subset=latin,greek' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/style.css">
 <link rel="stylesheet" type="text/css" href="{%template_base%}/sass-css/stylesheets/popup.css">
@@ -60,25 +61,40 @@
 
 					<ul class="top-nav">
 
+<!-- SECTION A -->
 						<li>
-							<span class="tooltip tooltip-bottom" data-tooltip="Your Portfolio">
-								<i class="fa fa-folder"></i>
-							</span>
+							<a href="../main/portfolio.php">
+								<span class="tooltip tooltip-bottom">
+									<i class="fa fa-cube"></i>
+								</span>
+							</a>
 						</li>
 						<li>
-							<span class="tooltip tooltip-bottom" data-tooltip="Search">
+							<span class="tooltip tooltip-bottom">
 								<i class="fa fa-search"></i>
 							</span>
 						</li>
+
+
+						<li>
+							<span class="tooltip tooltip-bottom">
+								<i class="fa fa-globe"></i>
+							</span>
+						</li>
+						<li>
+							<span class="tooltip tooltip-bottom">
+								<i class="fa fa-sign-in"></i>
+							</span>
+						</li>
 						<li class="user-info">
-							<span class="auto-width tooltip tooltip-bottom" data-tooltip="Your Dashboard">
+							<span class="auto-width tooltip tooltip-bottom">
 								<i class="fa fa-user"></i>
-							<span class="username">{%LANG_USER%} {%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a></span>
-						</span>
+								<span class="username">{%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a></span>
+							</span>
 						</li>
 						<li class="sidebutton displaynone">
-							<span class="toggle-sidebar tooltip tooltip-bottom" data-tooltip="Toggle Sidebar">
-								<i class="fa fa-bars"></i>
+							<span class="toggle-sidebar tooltip tooltip-bottom">
+								<i class="fa fa-columns"></i>
 							</span>
 						</li>
 					</ul>
@@ -120,7 +136,7 @@
 	    <aside id="sidebar">
 	    	<div class="blocks">
 
-			<span class="toggle-sidebar tooltip tooltip-bottom" data-tooltip="Close Sidebar"><i class="fa fa-bars"></i></span>
+			<span class="toggle-sidebar tooltip tooltip-bottom" data-tooltip="Close Sidebar"><i class="fa fa-columns"></i></span>
 
 			<h3 class="sidebar-title">My tools</h3>
 
