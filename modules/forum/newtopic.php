@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
     }
     $message = purify($message);
     $poster_ip = $_SERVER['REMOTE_ADDR'];
-    $time = date("Y-m-d H:i");
+    $time = date("Y-m-d H:i:s");
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
                     , $subject, $uid, $forum_id, $time)->lastInsertID;

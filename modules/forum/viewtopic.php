@@ -56,11 +56,23 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
-$myrow = Database::get()->querySingle("SELECT f.id, f.name FROM forum f, forum_topic t
+if (isset($_GET['post_id'])) {//needed to find post page for anchors
+    $post_id = intval($_GET['post_id']);
+    $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time FROM forum f, forum_topic t, forum_post p
+            WHERE f.id = ?d
+            AND t.id = ?d
+            AND p.id = ?d
+            AND t.forum_id = f.id
+            AND p.topic_id = t.id
+            AND f.course_id = ?d", $forum, $topic, $post_id, $course_id);
+} else {
+    $myrow = Database::get()->querySingle("SELECT f.id, f.name FROM forum f, forum_topic t
             WHERE f.id = ?d
             AND t.id = ?d
             AND t.forum_id = f.id
             AND f.course_id = ?d", $forum, $topic, $course_id);
+}
+
 
 if (!$myrow) {
     $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
@@ -155,6 +167,12 @@ if ($paging and $total > $posts_per_page) {
 	  <span class='row'><strong class='pagination'>
 	  <span>";
 
+    if (isset($post_id)) {
+        $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post WHERE topic_id = ?d AND post_time <= ?t", $topic, $myrow->post_time);
+        $num = $result->c;
+        $_GET['start'] = (ceil($num/$posts_per_page)-1)*$posts_per_page;
+    }
+    
     if (isset($_GET['start'])) {
         $start = intval($_GET['start']);
     } else {
@@ -255,11 +273,7 @@ foreach ($result as $myrow) {
         $rate_str = $rating->put($is_editor, $uid, $course_code);
     }
     
-    if (isset($start)) {
-       $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$start#".$myrow->id."'>#".$myrow->id."</a><br/>"; 
-    } else {
-        $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum#".$myrow->id."'>#".$myrow->id."</a><br/>";
-    }
+    $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->id#$myrow->id'>#$myrow->id</a><br/>"; 
     
     $tool_content .= "<td>
 	  <div>

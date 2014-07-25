@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
     }
 
 
-    $time = date("Y-m-d H:i");
+    $time = date("Y-m-d H:i:s");
     $surname = addslashes($_SESSION['surname']);
     $givenname = addslashes($_SESSION['givenname']);
 

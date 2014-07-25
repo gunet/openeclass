@@ -200,8 +200,8 @@ if (count($result) > 0) { // topics found
         $last_post_datetime = $myrow->post_time;
         list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
         list($year, $month, $day) = explode("-", $last_post_date);
-        list($hour, $min) = explode(":", $last_post_time);
-        $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
+        list($hour, $min, $sec) = explode(":", $last_post_time);
+        $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
         if (!isset($last_visit)) {
             $last_visit = 0;
         }
