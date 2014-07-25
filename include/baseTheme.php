@@ -124,6 +124,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $t->set_block('fh', 'mainBlock', 'main');
 
+    // template_callback() can be defined in theme settings.php
+    if (function_exists('template_callback')) {
+	template_callback($t, $menuTypeID);
+    }
+
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------
     $t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
