@@ -36,10 +36,11 @@ class CourseIndexer implements ResourceIndexerInterface {
      * @param Indexer $idxer - optional indexer object
      */
     public function __construct($idxer = null) {
-        if ($idxer == null)
+        if ($idxer == null) {
             $this->__indexer = new Indexer();
-        else
+        } else {
             $this->__indexer = $idxer;
+        }
 
         $this->__index = $this->__indexer->getIndex();
     }
@@ -80,8 +81,9 @@ class CourseIndexer implements ResourceIndexerInterface {
      */
     private function fetch($courseId) {
         $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);        
-        if (!$course)
+        if (!$course) {
             return null;
+        }
 
         // visible units
         $course->units = '';
@@ -136,8 +138,9 @@ class CourseIndexer implements ResourceIndexerInterface {
      */
     public function store($courseId, $optimize = false) {
         $course = $this->fetch($courseId);
-        if (!$course)
+        if (!$course) {
             return;
+        }
 
         // delete existing course from index
         $this->remove($courseId, false, false);
@@ -145,10 +148,11 @@ class CourseIndexer implements ResourceIndexerInterface {
         // add the course back to the index
         $this->__index->addDocument(self::makeDoc($course));
 
-        if ($optimize)
+        if ($optimize) {
             $this->__index->optimize();
-        else
+        } else {
             $this->__index->commit();
+        }
     }
 
     /**
@@ -161,19 +165,22 @@ class CourseIndexer implements ResourceIndexerInterface {
     public function remove($courseId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $course = $this->fetch($courseId);
-            if (!$course)
+            if (!$course) {
                 return;
+            }
         }
 
         $term = new Zend_Search_Lucene_Index_Term('course_' . $courseId, 'pk');
         $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
+        foreach ($docIds as $id) {
             $this->__index->delete($id);
+        }
 
-        if ($optimize)
+        if ($optimize) {
             $this->__index->optimize();
-        else
+        } else {
             $this->__index->commit();
+        }
     }
 
     /**
@@ -185,8 +192,9 @@ class CourseIndexer implements ResourceIndexerInterface {
         // remove all courses from index
         $term = new Zend_Search_Lucene_Index_Term('course', 'doctype');
         $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
+        foreach ($docIds as $id) {
             $this->__index->delete($id);
+        }
 
         // get/index all courses from db
         $res = Database::get()->queryArray("SELECT id FROM course");
@@ -195,10 +203,11 @@ class CourseIndexer implements ResourceIndexerInterface {
             $this->__index->addDocument(self::makeDoc($course));
         }
 
-        if ($optimize)
+        if ($optimize) {
             $this->__index->optimize();
-        else
+        } else {
             $this->__index->commit();
+        }
     }
 
     /**
@@ -296,10 +305,11 @@ class CourseIndexer implements ResourceIndexerInterface {
             $queryStr .= ')';
         }
         $queryStr .= ' AND doctype:course';
-        if ($anonymous)
+        if ($anonymous) {
             $queryStr .= ' AND (visible:1 OR visible:2) ';
-        else
+        } else {
             $queryStr .= ' AND (visible:0 OR visible:3) ';
+        }
         return $queryStr;
     }
 

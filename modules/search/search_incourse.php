@@ -68,9 +68,7 @@ if (isset($_GET['all'])) {
 }
 
 if (isset($_REQUEST['search_terms'])) {
-    $search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
-    $query = " AGAINST ('" . $search_terms . "";
-    $query .= "' IN BOOLEAN MODE)";
+    $search_terms = addslashes($_REQUEST['search_terms']);
 }
 
 if (empty($search_terms)) {
@@ -174,10 +172,11 @@ if (empty($search_terms)) {
                     <td>";
                 $message = $langUnknown;
                 if ($agenda->duration != "") {
-                    if ($agenda->duration == 1)
+                    if ($agenda->duration == 1) {
                         $message = $langHour;
-                    else
+                    } else {
                         $message = $langHours;
+                    }
                 }
                 $tool_content .= "<span class=day>" .
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
