@@ -59,12 +59,82 @@ jQuery(document).ready(function() {
 
 require_once 'perso.php';
 
+
+
+
 $tool_content = "
-<div class='panel_left'>
-<p class='panel_title'>{%LANG_MY_PERSO_LESSONS%}</p>
-<div class='panel_content_open'>{%LESSON_CONTENT%}</div>
+<div class='a-wrapper'>
+
+  <div class='column-first column-one-half'>";
+
+  // Contentbox: Course list
+  $tool_content.= "
+    <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+    <div class='contentbox padding'>
+      {%LESSON_CONTENT%}
+    </div>";
+
+  $tool_content.= "
+  </div>
+
+  <div class='column-one-half'>";
+
+    // Contentbox: Calendar
+    $tool_content.= "
+    <h5 class='content-title'>Ημερολογιο</h5>
+    <div class='contentbox padding'>
+      <img src='http://users.auth.gr/panchara/eclass/project/img/calendar.png' style='margin:1em auto;display:block; max-width:100%;''>
+    </div>";
+
+    // Contentbox: Calendar
+    $tool_content.= "
+    <h5 class='content-title'>Ανακοινωσεις</h5>
+    <ul class='tablelist contentbox'>
+      <li class='list-item'>
+        <span class='item-title'>Ανακοίνωση 1</span>
+        <div class='item-right-cols'>
+          <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+        </div>
+      </li>
+
+      <li class='list-item'>
+        <span class='item-title'>Ανακοίνωση 2</span>
+        <div class='item-right-cols'>
+          <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+        </div>
+      </li>
+
+      <li class='list-item'>
+        <span class='item-title'>Ανακοίνωση 3</span>
+        <div class='item-right-cols'>
+          <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+        </div>
+      </li>
+                
+            
+    </ul>";
+
+$tool_content.= "
+  </div>
+
+
 </div>
 
+<div style='clear: both'></div>
+
+<div class='a-wrapper'>
+  <div class='contentbox padding'>
+      test 1<br/><br/><br/><br/><br/>
+  </div>
+</div>
+
+";
+
+
+
+
+$tool_content.= "
+<br /><br /><br />
 <div class='panel_right'>
 <p class='panel_title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</p>
 <div class='panel_content'>{%ANNOUNCE_CONTENT%}</div>
