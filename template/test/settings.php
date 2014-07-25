@@ -44,6 +44,7 @@ function template_callback($template, $menuTypeID)
 
     if ($uid) {
 	$template->set_var('BODY_SET_CLASS', ' class="sidebar-opened"');
+	$template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     } else {
 	$template->set_block('mainBlock', 'LoggedInBlock', 'delete');
     }
