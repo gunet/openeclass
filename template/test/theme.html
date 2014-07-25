@@ -20,7 +20,7 @@
 {%TOOL_CSS%}
 {%HEAD_EXTRAS%}
 </head>
-<body class="sidebar-opened">
+<body{%BODY_SET_CLASS%}>
 
 <!-- Left Nav -->
 <!-- BEGIN leftNavBlock -->
@@ -61,7 +61,7 @@
 
 					<ul class="top-nav">
 
-<!-- SECTION A -->
+<!-- BEGIN LoggedInBlock -->
 						<li>
 							<a href="../main/portfolio.php">
 								<span class="tooltip tooltip-bottom">
@@ -86,6 +86,8 @@
 								<i class="fa fa-sign-in"></i>
 							</span>
 						</li>
+<!-- END LoggedInBlock -->
+<!-- BEGIN LoggedOutBlock -->
 						<li class="user-info">
 							<span class="auto-width tooltip tooltip-bottom">
 								<i class="fa fa-user"></i>
@@ -97,6 +99,7 @@
 								<i class="fa fa-columns"></i>
 							</span>
 						</li>
+<!-- END LoggedOutBlock -->
 					</ul>
 				</ul>
 	    	</div>

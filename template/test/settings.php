@@ -37,3 +37,14 @@ $icon_map = array(
     'tooladmin' => 'fa-cogs',
     'usage' => 'fa-cogs',
 );
+
+function template_callback($template, $menuTypeID)
+{
+    global $uid;
+
+    if ($uid) {
+	$template->set_var('BODY_SET_CLASS', ' class="sidebar-opened"');
+    } else {
+	$template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    }
+}
