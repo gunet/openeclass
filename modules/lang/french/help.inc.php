@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2013-11-12 19:44:33
+// Generated 2014-07-25 10:15:35
 
 $langWindowClose = "Fermer la fenêtre";
 $langHDefault = 'Aide non disponible';
@@ -235,7 +235,7 @@ $langAgendaContent = "<p>You can add an event in the Agenda, by clicking on the 
       </p>
 <hr noshade size=1>
 <p> $langPHPMathPublisher</p>";
-$langAgenda_studentContent = "<p>The Agenda module informs you about the most important events of the course set by the teacher in a chronological order (conferences, meetings, evaluations, etc).</p>";
+$langAgenda_studentContent = "<p> in the <b> ' ' My </b> Calendar, you can view the calendar with the events that have been included on the agenda of all the courses in which you are enrolled or you as an instructor. So a fact which has been registered in the <b>«Ατζέντα»</b> will appear in your calendar. This way you allow better organization of both the weekly and monthly program inside the platform. Clicking on any event in the calendar can automatically redirected to the corresponding lesson. </p>";
 $langHMyAgenda = "Mon calendrier";
 $langMyAgendaContent = "$langAgenda_studentContent";
 $langHLink = "Liens";
@@ -254,31 +254,28 @@ Click on 'Add link' to add a new link. Type the URL, the name and (optionally) a
 $langLink_studentContent = "<p>Le sous-système Liens donne la possibilité d'accéder à une liste de ressources utiles relatives au cours, tirées d'Internet et regroupées en catégories. Ces liens ont été sélectionnés par l'enseignant responsable du cours. Chaque lien comporte un intitulé, une description, ainsi que nombre d'informations supplémentaires. La plateforme accorde la possibilité de <b>catégoriser</b> les liens afin d'y accéder plus facilement. </p>";
 $langHAnnounce = "Annonces";
 $langHAnnounce_student = $langHAnnounce;
-$langAnnounceContent = "<p>You can add announcements in your course by clicking on the 'Add announcement' link. 
- Then you can type a title and a text body for the announcement at the form displayed.
- If you want to send the announcement (via email) to all registered students, tick the corresponding box.
- The procedure is completed by clicking on 'Add'.</p>
-        <p>
-        <ul>
-        <li>Click on the 'Modification' icon (<img src='$themeimg/edit.png' width=16 height=16>) to modify the announcement contents.</li>
-        <li>Click on <img src='$themeimg/delete.png' width=16 height=16> icon to delete an announcement.</li>
-        <li>Click on the 'Visible/invisible' icon (<img src='$themeimg/visible.png' width=16 height=16>) to define whether an announcement will be displayed or not to students.</li> 
-        </ul>
-        </p>
-<p>Clicking on the <img src='$themeimg/feed.png' width=16 height=16> icon allows you to receive automatically the course announcements through RSS (Really Simple Syndication) not only via a computer but also via a mobile phone, as long as an RSS reader is installed.</p>
+$langAnnounceContent = "<p> You can add announcements to your lesson by clicking at ' Add Notice '. 
+        In the displayed form fill in the title and body of the announcement. 
+        If you wish to send this notice via email (email) to all registered users in the course simply select the relative check box. 
+        The process is completed by pressing the 'Add' button.</p>
+<ul>
+  <li>To change the content of a announcement click <img src='$themeimg/edit.png' width=16 height=16>.</li>
+  <li>To delete an announcement, click <img src='$themeimg/delete.png' width=16 height=16>.</li>
+  <li>To specify whether the announcement will be displayed to $langsStudents, click <img src='$themeimg/visible.png' width=16 height=16</li>
+</ul>
+<p>The <img src='$themeimg/feed.png' width=16 height=16> icon provides automatic receipt of notices of this course via RSS (Really Simple Syndication) from PCs as well as phones, via an RSS reader.
 <hr noshade size=1>
-<p> $langPHPMathPublisher</p>";
+<p>$langPHPMathPublisher</p>";
 $langAnnounce_studentContent = "<p>All announcements added by the course teacher are presented here.</p>
         <p>Clicking on the <img src='$themeimg/feed.png' width=16 height=16> icon allows you to receive automatically the course announcements through RSS (Really Simple Syndication) not only via a computer but also via a mobile phone, as long as an RSS reader is installed.</p>";
 $langHProfile = "Modifier mon profil";
-$langProfileContent = "<p>You can modify your profile data through this module. 
-More specifically, you can modify your name, username, e-mail address, StudentID, etc. 
-You can also modify your portfolio view by selecting either the 'Advanced' or the 'Brief' option.
-You can select to receive or not e-mails from your courses and you can also upload a profile picture by clicking on 'Add Picture'. Click on 'Modification' to complete with all your changes.</p>
- <p>If you wish to change your password, select the 'Modify password' option.
- Select the 'Course notifications' option in order to select the courses you wish to receive emails from. 
- Click on 'Unregister User' to delete your account."
-;
+$langProfileContent = "<p> Through the specific subsystem, you can change your information. 
+Specifically, you can change your <b>ονοματεπώνυμο</b> your <b>username</b> <b> </b> registry number etc. 
+You can also change how your portfolio by selecting ' Detailed ' or ' Concise ' way. 
+Whether or not you want to receive e-mails from your courses check the corresponding option.
+ To upload an image to your profile click on ' Add image '. To complete your changes, click ' change '. </p> <p> If you want to change your password (password), click the ' change password ' password. 
+ To select courses from which you want to receive emails click the ' lesson ' Alerts. 
+ To delete your account, click on ' delete account '. ";
 $langHModule = "Ajouter un lien externe";
 $langModuleContent = "<p>If you want to add an external link presented in the course home page, just type the title and the URL address of the link and click on 'Add'. These links can be deactivated and deleted.</p>";
 $langHcourseTools = "Activer les outils";
@@ -311,9 +308,8 @@ $langCourseAccessHelp
 </ul>
 </p>";
 $langHConference = "Téléconférence";
-$langConferenceContent = "<p>You can exchange messages with the students registered in your course in real time. 
-First type your message and then click on <img src='$themeimg/arrow.png' width=16 height=16>.</p>
-<p>Click on 'Cleaning' to remove all past messages, or on 'Save' to save all messages in a document file under the course 'Documents'.</p>";
+$langConferenceContent = "<p> Τhe 'Teleconference' subsystem allows you to communicate in <b>real time</b> with students registered your course. 
+        Type your message and click at <img src = '$themeimg/arrow.png' width=16 height=16>. By this way you can create a discussion on current lesson's topic , use it to resolve inquiries and generally help the educational processby its use. </p> <p> Features the current subsystem provide's to the user are <b>'Clean</b> and <b>'Save'</b>actions. By selecting ' Cleaning '  all the discussions wich have take taken place up to that time are deleted from ' Collaborative ' window. ' Save ' option this debate is saved in txt format at the submenu ' </p> ' Documents. ";
 $langHConference_student = $langHConference;
 $langConference_studentContent = "<p>Though this module you can communicate in real time with teachers or students of a course. 
 Type your message and click on <img src='$themeimg/arrow.png' width=16 height=16>.</p>";
@@ -437,7 +433,7 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 <p>The Learning Path section lists all the <i>self-built Learning Paths</i>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 
-<p>Selection of the 'Activation' / 'Inactivation' link moves the Learning Path to the 'Active' or 'Inactive Tools' correspondingly.</p>
+<p>Selection of the 'Activation' / 'Deactivation' link moves the Learning Path to the 'Active' or 'Inactive Tools' correspondingly.</p>
 ";
 $langPath_studentContent = "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
 In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute <b>pre-requisites</b> for the steps
@@ -447,18 +443,11 @@ To attend a learning object within a learning path click on its title. Select th
 Selection of button <img src='$themeimg/monitor.png' width=16 height=16> allows you to see the details of a learning object such as: Title, Comments, Module type, Total time, etc.</p>";
 $langHDropbox = "DropBox : Échange de fichiers";
 $langHDropbox_student = $langHDropbox;
-$langDropboxContent = "<p>Dropbox is a tool for exchanging files with other course users.Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description.
-Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure. </p>
-<p>Two Dropbox folders are displayed: </p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file. </p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed, along with additional information on the files exchange. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>
-<p>Finally, a list with other Dropbox files is presented along with additional information on the files exchange.</p>";
-$langDropbox_studentContent = "<p>Dropbox is a tool for exchanging files with the users registered to the course. Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure.</p>
-<p>Two Dropbox folders are displayed:</p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file.</p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed along with additional information on the files. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>";
+$langDropboxContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from other users. Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>
+<p>Note that if you can have access to course users mail messages by clicking in 'Other messages'.</p>";
+$langDropbox_studentContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from course teachers (or/and with other users if platform administrator has given you appropriate permissions). Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>";
 $langHUsage = "Statistiques d'utilisation";
 $langUsageContent = "<p>This module presents course usage statistics information. More specifically,</p>
 <p>
@@ -471,7 +460,13 @@ $langUsageContent = "<p>This module presents course usage statistics information
 </ul>
 </p>";
 $langHPersonalStats = 'Mes statistiques';
-$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
+$langPersonalStatsContent = "<p>The <b>Usage statistics</b> module allows users to display personal statistics about the different actions carried out on the platform. The information displayed includes: 
+    <li><b>Course Visits</b>: Percentage display of visits per course.</li>
+    <li><b>Total visits to course pages</b></li>
+    <li><b>Time Duration of Visits</b>: Total time the user has spent on the platform.</li>
+    <li><b>Participation time per course</b>: The total time duration spent in each course.</li> 
+    <li><b>My last visits</b>: Dates and times the user logged into or out of the platform.</li>
+</ul>";
 $langHCreateCourse = "Créer un cours";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.<br>
 The wizard consists of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.<br>
@@ -524,20 +519,19 @@ Begin each line of preformatted text with a blank space &nbsp;
 <code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
 </ul>
 </ul>
-<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
+<p> The 'Deactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
-$langWikiContent = "
-<p>To create a new Wiki click on the 'Create a new Wiki' link. Then enter a title and description for the Wiki and click on 'Save'.</p>
-<p>A series of actions is provided to you. More specifically: </p>
+$langWikiContent = "<p> In order to create a new Wiki simply click the <b>Create a new Wiki</b> link. 
+        On the form displayed, enter the title and description of the Wiki and click <b>Save</b> to create the wiki or <b>Cancel</b> to quit without creating it.</p>
+<p>A series of actions are available related to Wikis, namely:</p>
 <ul>
-<li><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, 
-you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis for the current course.</li>
-<li><b>Edit properties</b> (<img src='$themeimg/edit.png' align='absmiddle'>). Allows you to change the title and description details of a Wiki.</li>
-<li><b>Delete.</b> To delete a Wiki, click on icon (<img src='$themeimg/delete.png' width=16 height=16>) next to its name.</li>
-</ul>
-For each Wiki page you can select to edit the page content or see a list of the page previous revisions.</p>
-
+    <li><img src='$themeimg/wiki.png' align='absmiddle'> Main page</b>: Displays the Wiki start page</li>
+    <li><b><img src='$themeimg/history.png' align='absmiddle'> Recent changes</b>: List of edits made to the wiki in chronological order, showing when and by whom each change was made</li>
+    <li><b><img src='$themeimg/book.png' align='absmiddle'> All pages</b>: List of all pages in the Wiki</li>
+    <li><b><img src='$themeimg/list.png' align='absmiddle'> List of Wiki<b>: Return to the list of all Wikis</li>
+    <li><b><img src='$themeimg/edit.png' align='absmiddle'> Edit Properties</b>: Allows changing the Wiki title and description</li>
+    <li><b><img src='$themeimg/delete.png' align='absmiddle'> Delete</b>: Delete the Wiki</li>
 $langWikiSyntaxHelp";
 $langWiki_studentContent = "The Wiki module is a new collaboration tool that allows registered users (teachers and students) to create and edit Web page content.
 <p>A series of actions is provided to you. More specifically: </p>

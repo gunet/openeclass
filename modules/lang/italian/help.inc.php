@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2013-11-12 19:44:33
+// Generated 2014-07-25 10:15:36
 
 $langWindowClose = 'Chiudi finestra';
 $langHDefault = 'Guida non disponibile';

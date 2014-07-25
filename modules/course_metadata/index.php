@@ -50,7 +50,7 @@ $socKeys = array('othersoc', 'psych', 'ecobi', 'edusoc', 'sociology', 'law', 'po
 $socJSON = generateJSON($socKeys);
 $medKeys = array('othermed', 'basicmed', 'clinicalmed', 'healthsci', 'medbio');
 $medJSON = generateJSON($medKeys);
-$humKeys = array('otherhum', 'hisarch', 'langlit', 'philosophy', 'arts', 'paidagogy');
+$humKeys = array('otherhum', 'hisarch', 'langlit', 'philosophy', 'arts', 'pedagogy');
 $humJSON = generateJSON($humKeys);
 
 $instrFirst = $langCMeta['course_instructor_firstName'];

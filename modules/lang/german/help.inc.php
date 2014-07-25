@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2013-11-12 19:44:33
+// Generated 2014-07-25 10:15:34
 
 $langWindowClose = "Fenster schließen";
 $langHDefault = 'Hilfe ist nicht verfügbar';
@@ -758,7 +758,13 @@ zeitlichen Dauer von Besuchen. Außerdem kann ausgewählt werden für welche Sub
 benötigt werden sowie deren zeitliche Dauer.</p>
 ";
 $langHPersonalStats = 'Personal Statistics';
-$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
+$langPersonalStatsContent = "<p>The <b>Usage statistics</b> module allows users to display personal statistics about the different actions carried out on the platform. The information displayed includes: 
+    <li><b>Course Visits</b>: Percentage display of visits per course.</li>
+    <li><b>Total visits to course pages</b></li>
+    <li><b>Time Duration of Visits</b>: Total time the user has spent on the platform.</li>
+    <li><b>Participation time per course</b>: The total time duration spent in each course.</li> 
+    <li><b>My last visits</b>: Dates and times the user logged into or out of the platform.</li>
+</ul>";
 $langHCreateCourse = "Kurs erzeugen";
 $langCreateCourseContent = "<p>Der Assistent zum Erzeugen von Kursen ist ein sehr wichtiges Werkzeug 
 der Plattform, da der Benutzer-Dozent mit dessen hilfe neue kurse erzeugen kann.</p><p> Der Assistent 
@@ -809,7 +815,7 @@ Begin each line of preformatted text with a blank space &nbsp;
 <code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
 </ul>
 </ul>
-<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
+<p> The 'Deactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langHWiki = "Wiki-System";
 $langHWiki_student = $langHWiki;
 $langWikiContent = "<p>Damit Sie ein neues Wiki erzeugen,</p>

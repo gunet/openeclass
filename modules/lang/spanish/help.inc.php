@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2013-11-12 19:44:29
+// Generated 2014-07-25 10:15:31
 
 $langWindowClose = "Cierra la ventana";
 $langHDefault = 'Ayuda no disponible';
@@ -412,7 +412,7 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li><br>
 ";
 $langPath_studentContent = "<p>Este módulo ofrece la oportunidad al profesor la oportunidad de crear una secuencia de pasos (ruta de aprendizaje) como actividades de aprendizaje, que deben ser seguidas por los alumnos.<br>
 </p>";
-$langHDropbox = "DropBox";
+$langHDropbox = "Message Exchange";
 $langHDropbox_student = $langHDropbox;
 $langDropboxContent = "<p>Dropbox es una herramienta de intercambo entre profesores y estudiantes. Puedes intercambiar varios tipos de archivos (e.j. Archivos, Excel, PDF etc.)</p><br>
 <p>Hay dos carpetas. En la carpeta <b>Archivos recibidos</b><br>
@@ -425,7 +425,13 @@ $langDropbox_studentContent = "<p>The Dropbox modulo es una herramienta de colab
 $langHUsage = "Usa los Estadísticos";
 $langUsageContent = "<p>El uso del módulo de Estadísticos permite al profesor ver las Estadísticas a cerca de esa lección. Están presentadas en forma de gráficos o listas.</p> <p><strong>Las categorías de las Estadísticas</strong></p> <ul> <li>Uso de Estadísticos</li> <li>Módulos favoritos</li> <li>Visitas de los usuarios</li> <li>Estadísticas antiguas</li> </ul> <p>El uso de los Estadísticos puede ser agrupado por el número de visitas y su duración. De forma adicional, el prfoesor puede escoger los módulos que quiere y ver el tiempo dedicado.</p> <p>Los módulos estadísticos favoritos pueden ser agrupados por el número de vistas y la su duración. De forma adicional, el profesor puede escoger los módulos que quiere ver.</p> <p>Los estadísticos de las visitas de los usuarios pueden agruparse por usuarios, todos, o por letras.</p> <p>La presentación de estadísticos antiguos puede agruparse por el número de visitas y su duración. De forma adicional, el profesor puede escogeer los módulos que quiere ver y el tiempo empleado.</p> ";
 $langHPersonalStats = 'Personal Statistics';
-$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
+$langPersonalStatsContent = "<p>The <b>Usage statistics</b> module allows users to display personal statistics about the different actions carried out on the platform. The information displayed includes: 
+    <li><b>Course Visits</b>: Percentage display of visits per course.</li>
+    <li><b>Total visits to course pages</b></li>
+    <li><b>Time Duration of Visits</b>: Total time the user has spent on the platform.</li>
+    <li><b>Participation time per course</b>: The total time duration spent in each course.</li> 
+    <li><b>My last visits</b>: Dates and times the user logged into or out of the platform.</li>
+</ul>";
 $langHCreateCourse = "Crear un Curso";
 $langCreateCourseContent = "<p>La aplicación inteligente Crear un Cruso es una de las herramientas más importantes de la plataforma. Utilizando, el usuario profesor es capaz de crear cursos nuevos en la plataforma y configurarlos.</p><p>La aplicación inteligente consta de tres pasos. Rellenando cada campo requerido con un asteristo, es obligatorio. Bajo cada campo, subyace información de ejemplo para ayudar al usuario a rellenarlos.</p><p>En caso de que el usuario entre datos incorrectos en un campo, el sistema informa al usuario y solicita corregir el error para poder continuar el siguiente paso.</p>";
 $langWikiSyntaxHelp = "
@@ -470,7 +476,7 @@ Begin each line of preformatted text with a blank space &nbsp;
 <code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
 </ul>
 </ul>
-<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
+<p> The 'Deactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
 $langWikiContent = '<p>Para crear una nueva Wiki</p> <ul> <li>Haz click en el enlace "Crear una nueva Wiki". Entonces entra las propiedades de la Wiki:</li> <br><br><br>
