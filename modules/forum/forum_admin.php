@@ -271,7 +271,7 @@ elseif (isset($_GET['forumgodel'])) {
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
         $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
-        foreach ($result2 as $$result_row2) {
+        foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             $fpdx->removeByTopic($topic_id);
