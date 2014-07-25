@@ -81,17 +81,17 @@ if (isset($_GET['add_server']))
     <table width="100%" align="left" class="tbl">';
     //$tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
     //<td class="smaller"><input class="FormData_InputText" type="text" name="id_form" />&nbsp;(*)</td></tr>';
-    $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
+    $tool_content .= '<tr><th class="left" width="100"><b>'.$langHost.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form"  />&nbsp;(*)</td></tr>';
     $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="ip_form"  />&nbsp;(*)</td></tr>';
-    $tool_content .= '<tr><th class="left" width="100"><b>Pre shared key:</b></th>
+    $tool_content .= '<tr><th class="left" width="100"><b>'.$langPresharedKey.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="key_form"  />&nbsp;(*)</td></tr>';
     $tool_content .= '<tr><th class="left" width="100"><b>API URL:</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="api_url_form"  />&nbsp;(*)</td></tr>';
-    $tool_content .= '<tr><th class="left" width="100"><b>Max rooms:</b></th>
+    $tool_content .= '<tr><th class="left" width="100"><b>'.$langMaxRooms.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form"  />&nbsp;(*)</td></tr>';
-    $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
+    $tool_content .= '<tr><th class="left" width="100"><b>'.$langMaxUsers.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" />&nbsp;(*)</td></tr>';
     $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
             <td><input type='radio' id='recorings_off' name='enable_recordings' checked='true' value='no' />

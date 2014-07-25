@@ -995,17 +995,15 @@ function generateRandomString($length = 10) {
 
 function bbb_session_running($meeting_id)
 {
-    //echo "SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'";
+    //echo "SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'";    
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if (! isset($res)) {
         return false;
     }
-    $running_server = $res->running_at;
-    
+    $running_server = $res->running_at;    
     $res = Database::get()->querySingle("SELECT *
                                     FROM bbb_servers
-                                    WHERE id=?s", $running_server);
-
+                                    WHERE id=?s", $running_server);    
     $salt = $res->server_key;
     $bbb_url = $res->api_url;
     
