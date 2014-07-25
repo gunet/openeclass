@@ -50,6 +50,8 @@ $action->record(MODULE_ID_BBB);
 
 $nameTools = $langBBB;
 
+global $langBBBImportRecordingsΟΚ;
+
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<p class='caution'>$langNoGuest</p>";
@@ -132,11 +134,6 @@ elseif(isset($_GET['choice']))
             {
                 create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_GET['record']);
             }
-            $recordingParams = array(
-                'meetingId' => '1234',
-            );
-            $bbb = new BigBlueButton($salt,$bbb_url);
-
             if(isset($_GET['mod_pw']))
             {
                 header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
@@ -145,11 +142,19 @@ elseif(isset($_GET['choice']))
                 header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
             }
             break;
+        case 'import_video':
+            publish_video_recordings($course_code,$_GET['id']);
+            break;
     }
     bbb_session_details();
+    if($_GET['choice']=='import_video')
+    {
+        $tool_content .= "<div class='success'>$langBBBImportRecordingsΟΚ</div>";
+    }
 } elseif(isset($_POST['new_bbb_session'])) {  
     add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record']);
-} else {    
+}
+else {    
     bbb_session_details();
 }
 
@@ -649,9 +654,8 @@ function bbb_session_details() {
     global $themeimg;
     global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
     global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
-
-    publish_video_recordings($course_id);
-    
+    global $langBBBImportRecordings;
+        
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
 
     $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s ORDER BY id DESC", $course_id);
@@ -682,7 +686,7 @@ function bbb_session_details() {
                 $att_pw = $row->att_pw;
                 $mod_pw = $row->mod_pw;
                 $record = $row->record;
-
+                (isset($row->description)? $desc = $row->description : $desc="");
                 $tool_content .= "<tr>";
 
                 if ($is_editor) {
@@ -696,13 +700,15 @@ function bbb_session_details() {
                             $tool_content .= "
                             <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw&amp;record=$record' target='_blank'>$title</a></td>";
                         }
-                        $tool_content.="<td>".$row->description."</td>
+                        $tool_content.="<td>".$desc."</td>
                         <td class='center'>$start_date</td>
                         <td class='center'>$type</td>
                         <td class='center'>
                         ".icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
                          <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
-                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>";
+                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video' >
+                        <img src='$themeimg/video.png' alt='$langBBBImportRecordings' title='$langBBBImportRecordings' /></a>";
                         if ($row->active=='1') {
                             $deactivate_temp = q($langDeactivate);
                             $activate_temp = q($langActivate);
@@ -728,7 +734,7 @@ function bbb_session_details() {
                         } else {
                             $tool_content .= "$title";
                         }
-                        $tool_content .="<td>".$row->description."</td>
+                        $tool_content .="<td>".$desc."</td>
                             <td align='center'>$start_date</td>
                             <td align='center'>$type</td>
                             <td class='center'>";
@@ -1103,9 +1109,9 @@ function get_total_bbb_servers()
     return $total;
 }
 
-function publish_video_recordings($course_id)
+function publish_video_recordings($course_id,$id)
 {
-    $sessions = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id=?s ORDER BY id DESC", $course_id);
+    $sessions = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id=?s AND id=?d ORDER BY id DESC", $course_id,$id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
 

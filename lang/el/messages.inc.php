@@ -4003,7 +4003,8 @@ $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλ�
 $langBBBRecord = "Καταγραφή Τηλεδιάσκεψης";
 $langBBBRecordTrue = "Ναί";
 $langBBBRecordFalse = "Όχι";
-
+$langBBBImportRecordings = "Εισαγωγή καταγεγραμμένων τηλεδιασκέψεων στα πολυμέσα";
+$langBBBImportRecordingsΟΚ = "Η εισαγωγή στα πολυμέσα ολοκληρώθηκε επιτυχώς!";
 
 /* * ***********************************************************
  * blog.php
