@@ -96,35 +96,30 @@ switch ($u_stats_value) {
             case "summary":
                  while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($langSummary, $row['cnt']));
-                    $chart->width += 25;
                     $chart_content = 1;
                     }
             break;
             case "daily":
                     while ($row = mysql_fetch_assoc($result)) {
                         $dataSet->addPoint(new Point($row['date'], $row['cnt']));
-                        $chart->width += 25;
                         $chart_content = 1;
                     }
             break;
             case "weekly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
-                    $chart->width += 25;
                     $chart_content = 1;
                 }
             break;
             case "monthly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                    $chart->width += 25;
                     $chart_content = 1;
                 }
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($row['year'], $row['cnt']));
-                    $chart->width += 25;
                     $chart_content = 1;
                 }
             break;
@@ -145,7 +140,6 @@ switch ($u_stats_value) {
                 while ($row = mysql_fetch_assoc($result)) {
 		    $row['tot_dur'] = round($row['tot_dur'] / 60);
 		    $dataSet->addPoint(new Point($langSummary, $row['tot_dur']));
-                    $chart->width += 25;
                     $chart_content=1;
                 }
           break;
@@ -153,7 +147,6 @@ switch ($u_stats_value) {
              while ($row = mysql_fetch_assoc($result)) {
 		 $row['tot_dur'] = round($row['tot_dur'] / 60);
                  $dataSet->addPoint(new Point($row['date'], $row['tot_dur']));
-                 $chart->width += 25;
                  $chart_content=1;
              }
          break;
@@ -161,7 +154,6 @@ switch ($u_stats_value) {
              while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
                 $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
-                $chart->width += 25;
                 $chart_content=1;
              }
          break;
@@ -169,7 +161,6 @@ switch ($u_stats_value) {
             while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
                 $dataSet->addPoint(new Point($langMonths[$row['month']], $row['tot_dur']));
-                $chart->width += 25;
                 $chart_content=1;
             }
          break;
@@ -177,7 +168,6 @@ switch ($u_stats_value) {
             while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
                 $dataSet->addPoint(new Point($row['year'], $row['tot_dur']));
-                $chart->width += 25;
                 $chart_content=1;
             }
          break;
