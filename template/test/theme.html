@@ -77,28 +77,30 @@
 
 
 						<li>
-							<span class="tooltip tooltip-bottom">
-								<i class="fa fa-globe"></i>
-							</span>
-						</li>
-						<li>
-							<span class="tooltip tooltip-bottom">
-								<i class="fa fa-sign-in"></i>
-							</span>
-						</li>
-<!-- END LoggedInBlock -->
-<!-- BEGIN LoggedOutBlock -->
-						<li class="user-info">
 							<span class="auto-width tooltip tooltip-bottom">
 								<i class="fa fa-user"></i>
 								<span class="username">{%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a></span>
 							</span>
 						</li>
-						<li class="sidebutton displaynone">
-							<span class="toggle-sidebar tooltip tooltip-bottom">
-								<i class="fa fa-columns"></i>
+<!-- END LoggedInBlock -->
+<!-- BEGIN LoggedOutBlock -->
+						<li>
+							<span class="tooltip tooltip-bottom">
+								<i class="fa fa-search"></i>
 							</span>
 						</li>
+						<li>
+							<span class="tooltip tooltip-bottom">
+								<i class="fa fa-globe"></i>
+							</span>
+						</li>
+						<li class="user-info">
+							<span class="auto-width tooltip tooltip-bottom">
+								<i class="fa fa-sign-in"></i>
+								<span class="username">{%USER_NAME%} {%USER_SURNAME%} <a href='{%LOGOUT_LINK%}'>{%LANG_LOGOUT%}</a></span>
+							</span>
+						</li>
+
 <!-- END LoggedOutBlock -->
 					</ul>
 				</ul>
@@ -109,7 +111,7 @@
 	    <section id="main" class="Row Expand">
 	    	<section id="content">
                 <!-- BEGIN breadCrumbHomeBlock -->
-                <section id="bread">{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}
+                <section id="breadcrumb">{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}
                 <!-- END breadCrumbHomeBlock -->
                 <!-- BEGIN breadCrumbStartBlock -->
                 {%BREAD_ARROW%} {%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}

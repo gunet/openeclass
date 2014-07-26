@@ -1,7 +1,7 @@
 
 /* 
 ======================================================
-    SASS for eClass v3.0 - version 0.8 - 25/7/2014
+    SASS for eClass v3.0 - version 0.81 - 26/7/2014
 ======================================================
 */
 
@@ -10,9 +10,9 @@
 /* Colors */
 
 $mainmenu-color: #2E3033;
-$mainarea-color: #F4F4F4;
-$header-color: #EEEEEE;
-$sidebar-color: #E9E9E9;
+$mainarea-color: #F0F4F6;
+$header-color: #FAFAFA;
+$sidebar-color: #E9ECEE;
 
 $hover-color: #4DA1E4;
 $green-color: #6BCE6B;
@@ -110,6 +110,7 @@ html, body
   height: 100%;
   width: 100%;
 
+  background: #F0F4F6;
 
   padding-left: 180px;
   padding-right: 0;
@@ -162,11 +163,12 @@ html, body
 
       .uni-icon{
         display: inline-block;
-        height:50px;
+        height:40px;
         width: auto;
         vertical-align: middle;
         padding: 6px;
-        margin-left: 3.5em;
+        margin-right: 0.5em;
+
         @include box-sizing (border-box);
 
         img{
@@ -179,6 +181,10 @@ html, body
 
   }
 
+  .top-nav-wrapper
+  {
+    margin: 0;
+  }
 
   .top-nav
   {
@@ -218,10 +224,17 @@ html, body
     &.auto-width{
       min-width:8em;
       width: auto;
+      padding-right:1em;
+      padding-left:1em;
     }
 
   }
 
+  .username
+  {
+    font-size: 0.8em;
+    padding-left: 5px;
+  }
   .top-nav li > *:hover
   {
     background-color: $hover-color;
@@ -275,7 +288,6 @@ html, body
   {
 
     position: relative;
-    background: #eee;
     width: 100%;
     float: left;
 
@@ -507,7 +519,7 @@ table.my-table{
 
 ul.tablelist
 {
-  font-size: 0.75em;
+  font-size: 0.8em;
   margin:0px;
   padding:0px;
   cursor:default;
@@ -554,7 +566,7 @@ ul.tablelist
 
     .item-right-cols .item-content
     {
-      font-size:0.8em;
+      font-size:0.9em;
     }
 
     .item-right-cols a
@@ -720,6 +732,7 @@ ul.tablelist
   .item-body{
     padding:1em 0em;
     min-height:5em;
+    font-size:14px;
   }
 
 
@@ -837,9 +850,9 @@ LEFT NAV
   position:fixed;
   z-index:99999;
 
-  background: #303338;
+  background: #232C3A;
 
-  @include box-shadow(inset -10px 0px 7px -7px rgba(0, 0, 0, 0.5));
+  @include box-shadow(inset -10px 0px 7px -7px #000000);
 
 
   .logo
@@ -887,7 +900,7 @@ LEFT NAV
 
       outline: none;
 
-      font-weight: bold;
+      font-weight: 200;
 
       cursor: pointer;
 
@@ -927,10 +940,12 @@ LEFT NAV
       border-bottom: none;
   }
 
-  .navlist li a.active
+  .navlist li a.current
   {
     color: $main-text-color;
-    background: #eee;
+    background: #F0F4F6;
+
+    @include box-shadow(0px 1px 8px 2px #000000);
     
     @include border-radius(2px);
     
@@ -1207,7 +1222,7 @@ body.sidebar-opened{
     text-transform: uppercase;
     padding: 1.375em;
 
-    background: rgb(227, 228, 230);
+    background: #EEF1F3;
   }
 
   .title{
@@ -1336,6 +1351,7 @@ body.sidebar-opened{
 
       textarea,input{
         padding-left:2em;
+        font-size: 13px;
       }
 
       .fa{
@@ -1411,13 +1427,14 @@ transform-origin: center center;
     .description{
       display: block;
 
-      font-size: 0.75em;
+      font-size: 0.8em;
       line-height: 2em;
-      opacity: 0.5;
+      opacity: 1;
+      color: #555555;
     }
 
     &:hover{
-      background:#dee0e2;
+      background:#F0F2F3;
     }
 
     &:after{
@@ -1475,7 +1492,7 @@ transform-origin: center center;
     padding:1em 3.8em;
     font-size:0.8em;
     color: #999999;
-    background: rgb(228, 228, 228);
+    background: #F0F4F6;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
@@ -1512,8 +1529,6 @@ transform-origin: center center;
   position:relative;
 
   text-align: right;
-
-  margin:1em;
 
   margin-right:0em;  
 
@@ -1622,8 +1637,9 @@ transform-origin: center center;
     @include box-sizing(border-box);
 
     .banner-description{
-      font-size:0.85em;
+      font-size:0.8em;
       min-height: 6em;
+      line-height: 1.7em;
     }
 
     hr{
@@ -1682,10 +1698,10 @@ transform-origin: center center;
 
   @include border-radius(2px);
 
-  @include box-shadow(0 1px 4px #DDDDDD);
+  @include box-shadow(0 0px 7px #DDDDDD);
 
   h1,h2,h3,h4,h5,h6{
-    margin: .5em 0em;
+    margin: 0em 0em 0.6em 0em;
   }
 
 }
@@ -1718,7 +1734,7 @@ transform-origin: center center;
 
   @include border-radius(2px);
 
-  @include box-shadow(0px 0px 1px 0px #ADADAD);
+  @include box-shadow(0 0px 7px #DDDDDD);
 
   /*
     Giving right/reft margin on icons that ain't last/first childs
@@ -2218,8 +2234,12 @@ h1.page-title
 }
 
 #main{
-  h1,h2,h3,h4,h5,h6{
-    color: #555;
+  h1{
+    color:#444;
+  }
+
+  h2,h3,h4,h5,h6{
+    color: #777;
   }
 }
 
@@ -2357,7 +2377,7 @@ body.fixed-width{
     z-index: 999;
     padding-top: 0em;
     top: 2.1em;
-    background: #1F252E;
+    background: #232C3A;
     @include box-shadow(none);
   }
 
@@ -2379,7 +2399,7 @@ body.fixed-width{
     padding: 0em;
     padding-top: 2.1em;
     left: auto;
-    background: #1F252E;
+    background: #FAFAFA;
     outline: none;
     z-index: 10002;
 
@@ -2445,6 +2465,7 @@ body.fixed-width{
     margin-top: 3.1em;
     padding-top: 3.1em!important;
     border-radius: 0px;
+    background: #F0F4F6;
     @include box-shadow(0px -7px 10px 0px black);
   }
 
@@ -2453,6 +2474,7 @@ body.fixed-width{
     position: absolute;
     padding-top: 85px;
     border-left:none;
+    background: #E9ECEE;
     @include box-shadow(0px 0px 10px rgba(0,0,0,.3));
     @include box-sizing(border-box);
     .blocks{
