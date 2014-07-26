@@ -166,8 +166,18 @@ $tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail)
 $tree = new Hierarchy();
 list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
-$tool_content .= $html;
-$tool_content .= "</td>
+$tool_content .= $html . "
+    </td>
+  </tr>
+  <tr>
+    <th class='left'>$langSearchFor:</th>
+    <td>
+      <select name='search_type'>
+        <option value='exact'>$langSearchExact</option>
+        <option value='begin'>$langSearchStartsWith</option>
+        <option value='substring' selected>$langSearchSubstring</option>
+      </select>
+    </td>
   </tr>
   <tr>
     <th>&nbsp;</th>

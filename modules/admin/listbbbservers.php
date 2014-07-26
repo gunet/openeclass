@@ -181,10 +181,10 @@ foreach ($rResult as $aRow) {
         unset($row[6]);
         $order = $row[7];
         unset($row[7]);
-        array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
+        array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>$langEdit</a>");
         array_push($row, "$connected_users");
         array_push($row,$order);
-        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>Remove server</a>");
+        array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation(\"$langConfirmDelete\");'>$langDelete</a>");
         array_shift($row);
         $output['aaData'][] = $row;
         

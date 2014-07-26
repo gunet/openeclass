@@ -3250,3 +3250,7 @@ $langCMeta['philosophy'] = "Philosophy, Ethics and Religion";
 $langCMeta['arts'] = "Arts";
 $langCMeta['pedagogy'] = "Pedagogy";
 $langCMeta['instructor_add'] = "Add instructor";
+$langSearchFor = 'Names search type';
+$langSearchExact = 'Exact values';
+$langSearchStartsWith = 'Starts with';
+$langSearchSubstring = 'Anywhere in names';
