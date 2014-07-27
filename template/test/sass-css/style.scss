@@ -1,18 +1,18 @@
 
 /* 
 ======================================================
-    SASS for eClass v3.0 - version 0.81 - 26/7/2014
+    SASS for eClass v3.0 - version 0.82 - 27/7/2014
 ======================================================
 */
 
 
 /* SASS VARIABLES */
-/* Colors */
 
+/* Colors */
 $mainmenu-color: #2E3033;
 $mainarea-color: #F0F4F6;
 $header-color: #FAFAFA;
-$sidebar-color: #E9ECEE;
+$sidebar-color: #E8ECEF;
 
 $hover-color: #4DA1E4;
 $green-color: #6BCE6B;
@@ -21,17 +21,24 @@ $red-color: #CE6B6B;
 $main-text-color: #222222;
 $main-text-reversed-color: #F4F4F4;
 
-/* Metrics */
 
+/* Metrics */
 $sidebar-width: 240px;
 
-/* Font family */
-$main-font:  'Open Sans';
+
+/* Font families */
+$main-font: 'Open Sans';
+$icon-font: 'FontAwesome';
+
+
+
+
 
 
 /* SASS MIXINS */
 
-@mixin user-select($value){
+@mixin user-select($value)
+{
   -webkit-user-select: $value;
   -moz-user-select: $value;
   -ms-user-select: $value;
@@ -39,25 +46,29 @@ $main-font:  'Open Sans';
   user-select: $value;
 }
 
-@mixin box-sizing($type){ 
+@mixin box-sizing($type)
+{ 
   box-sizing: $type;
   -moz-box-sizing: $type;
   -webkit-box-sizing: $type;
 }
 
-@mixin box-shadow($value){
+@mixin box-shadow($value)
+{
   box-shadow: $value;
   -moz-box-shadow: $value;
   -webkit-box-shadow: $value;
 }
 
-@mixin border-radius($value){
+@mixin border-radius($value)
+{
   border-radius: $value;
   -webkit-border-radius: $value;
   -moz-border-radius: $value;
 }
 
-@mixin transition($value){
+@mixin transition($value)
+{
   -webkit-transition: $value;
   -moz-transition: $value;
   -o-transition: $value;
@@ -65,14 +76,16 @@ $main-font:  'Open Sans';
   transition: $value;
 }
 
-@mixin background-size($value){
+@mixin background-size($value)
+{
   -webkit-background-size: $value;
   -moz-background-size: $value;
   -o-background-size: $value;
   background-size: $value;
 }
 
-@mixin transform($value){
+@mixin transform($value)
+{
   behavior:url(-ms-transform.htc);  
   -moz-transform:rotate($value);  
   -webkit-transform:rotate($value);  
@@ -80,7 +93,8 @@ $main-font:  'Open Sans';
   -ms-transform:rotate($value);
 }
 
-@mixin transform-origin($value){
+@mixin transform-origin($value)
+{
   -moz-transform-origin: $value;
   -webkit-transform-origin: $value;
   -o-transform-origin: $value;
@@ -90,11 +104,15 @@ $main-font:  'Open Sans';
 
 
 
+
+
+
+
+
 /*
   MAIN LAYOUT
   Sticky flexible footer - http://pixelsvsbytes.com/blog/2011/09/sticky-css-footers-the-flexible-way/
 */
-
 
 html, body
 {
@@ -110,7 +128,7 @@ html, body
   height: 100%;
   width: 100%;
 
-  background: #F0F4F6;
+  background: $mainarea-color;
 
   padding-left: 180px;
   padding-right: 0;
@@ -235,6 +253,7 @@ html, body
     font-size: 0.8em;
     padding-left: 5px;
   }
+  
   .top-nav li > *:hover
   {
     background-color: $hover-color;
@@ -1026,7 +1045,7 @@ body.sidebar-opened{
 
   z-index:10001;
 
-  background: rgb(222, 224, 226);
+  background: $sidebar-color;
 
   word-wrap:break-word;
 
@@ -1395,7 +1414,7 @@ body.sidebar-opened{
         right: 1em;
         top: 42%;
         top: calc(50% - 0.5em);
-        font-family: FontAwesome;
+        font-family: $icon-font;
         font-size: 0.85em;
 
         content: "\f107";
@@ -2323,7 +2342,7 @@ a.goto{
   
   &:after{
     content: "\f105";
-    font-family: 'FontAwesome';
+    font-family: $icon-font;
     position: absolute;
     display:block;
     right:0px;
