@@ -179,6 +179,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $module_dir = module_path($toolArr[$i][2][$j]);
                 if ($module_dir == $current_module_dir) {
                     $t->set_var('TOOL_CLASS', 'current');
+                } else {
+                    $t->set_var('TOOL_CLASS', '');
                 }
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
