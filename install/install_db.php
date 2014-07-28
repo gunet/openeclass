@@ -164,6 +164,7 @@ $db->query("CREATE TABLE `course` (
   `password` VARCHAR(50) NOT NULL DEFAULT '',
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
+  `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
   PRIMARY KEY  (`id`)) $charset_spec");
 
 
@@ -395,13 +396,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
- $db->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+$db->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                `uid` int(11) NOT NULL DEFAULT 0,
                `attend` TINYINT(4) NOT NULL DEFAULT 0,
                `comments` TEXT NOT NULL) $charset_spec");
-
+$db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+  
 $db->query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
@@ -1027,7 +1032,8 @@ $admin_uid = $db->query("INSERT INTO `user`
 $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
     $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
-$db->query("INSERT INTO admin VALUES (?d, ?d)", $admin_uid, 0);
+
+$db->query("INSERT INTO admin (user_id, privilege) VALUES (?d, ?d)", $admin_uid, 0);
 
 #
 # Table structure for table `user_request`
@@ -1175,7 +1181,8 @@ $db->query("CREATE TABLE `course_units` (
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,
-    `course_id` INT(11) NOT NULL) $charset_spec");
+    `course_id` INT(11) NOT NULL,
+    `date` DATE NOT NULL DEFAULT '0000-00-00') $charset_spec");
 
 $db->query("CREATE TABLE `unit_resources` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -1288,6 +1295,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `uid` int(11) NOT NULL DEFAULT 0,
     `grade` FLOAT NOT NULL DEFAULT -1,
     `comments` TEXT NOT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `gradebook_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE `oai_record` (
     `id` int(11) NOT NULL AUTO_INCREMENT,

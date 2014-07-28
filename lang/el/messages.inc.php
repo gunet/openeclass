@@ -1110,6 +1110,7 @@ $langMultiCourseInfo = 'Εισαγάγετε στην παρακάτω περι�
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα "|".';
 $langMultiCourseTitles = 'Τίτλοι / Καθηγητές Μαθημάτων';
 $langMultiCourseData = 'Στοιχεία Μαθημάτων';
+$langMultiCourseCreated = 'το μάθημα δημιουργήθηκε';
 
 /* * ****************************************************
  * document.php
@@ -2685,6 +2686,11 @@ $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
 $langDurationVisitsPerCourse = "Χρονική διάρκεια συμμετοχής ανά μάθημα";
+$langSearchFor = 'Αναζήτηση στα ονόματα';
+$langSearchExact = 'Για ακριβείς τιμές';
+$langSearchStartsWith = 'Στην αρχή των ονομάτων';
+$langSearchSubstring = 'Οπουδήποτε';
+
 
 // user registration
 $langAuthUserName = "Δώστε το όνομα χρήστη:";
@@ -4005,3 +4011,6 @@ $langBBBRecordTrue = "Ναί";
 $langBBBRecordFalse = "Όχι";
 $langBBBImportRecordings = "Εισαγωγή καταγεγραμμένων τηλεδιασκέψεων στα πολυμέσα";
 $langBBBImportRecordingsΟΚ = "Η εισαγωγή στα πολυμέσα ολοκληρώθηκε επιτυχώς!";
+$langMaxUsers = "Μέγ. αριθμός χρηστών";
+$langMaxRooms = "Μέγ. αριθμός δωματίων";
+$langPresharedKey = "Διαμοιραζόμενο κλειδί";

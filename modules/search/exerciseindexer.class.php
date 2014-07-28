@@ -20,29 +20,13 @@
  * ======================================================================== */
 
 require_once 'indexer.class.php';
+require_once 'abstractindexer.class.php';
 require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class ExerciseIndexer implements ResourceIndexerInterface {
-
-    private $__indexer = null;
-    private $__index = null;
-
-    /**
-     * Constructor. You can optionally use an already instantiated Indexer object if there is one.
-     * 
-     * @param Indexer $idxer - optional indexer object
-     */
-    public function __construct($idxer = null) {
-        if ($idxer == null)
-            $this->__indexer = new Indexer();
-        else
-            $this->__indexer = $idxer;
-
-        $this->__index = $this->__indexer->getIndex();
-    }
+class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of an exercise db row.
@@ -51,7 +35,7 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * @param  object  $exercise
      * @return Zend_Search_Lucene_Document
      */
-    private static function makeDoc($exercise) {
+    protected function makeDoc($exercise) {
         global $urlServer;
         $encoding = 'utf-8';
 
@@ -74,123 +58,61 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * @param  int $exerciseId
      * @return object - the mysql fetched row
      */
-    private function fetch($exerciseId) {
+    protected function fetch($exerciseId) {
         $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d", $exerciseId);        
-        if (!$exercise)
+        if (!$exercise) {
             return null;
+        }
 
         return $exercise;
     }
-
+    
     /**
-     * Store an Exercise in the Index.
+     * Get Term object for locating a unique single exercise.
      * 
-     * @param  int     $exerciseId
-     * @param  boolean $optimize
+     * @param  int $exerciseId - the exercise id
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function store($exerciseId, $optimize = false) {
-        $exercise = $this->fetch($exerciseId);
-        if (!$exercise)
-            return;
-
-        // delete existing exercise from index
-        $this->remove($exerciseId, false, false);
-
-        // add the exercise back to the index
-        $this->__index->addDocument(self::makeDoc($exercise));
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForSingleResource($exerciseId) {
+        return new Zend_Search_Lucene_Index_Term('exercise_' . $exerciseId, 'pk');
     }
-
+    
     /**
-     * Remove an Exercise from the Index.
+     * Get Term object for locating all possible exercises.
      * 
-     * @param int     $exerciseId
-     * @param boolean $existCheck
-     * @param boolean $optimize
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function remove($exerciseId, $existCheck = false, $optimize = false) {
-        if ($existCheck) {
-            $exercise = $this->fetch($exerciseId);
-            if (!$exercise)
-                return;
-        }
-
-        $term = new Zend_Search_Lucene_Index_Term('exercise_' . $exerciseId, 'pk');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForAllResources() {
+        return new Zend_Search_Lucene_Index_Term('exercise', 'doctype');
     }
-
+    
     /**
-     * Store all Exercises belonging to a Course.
+     * Get all possible exercises from DB.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function storeByCourse($courseId, $optimize = false) {
-        // delete existing exercises from index
-        $this->removeByCourse($courseId);
-
-        // add the exercises back to the index
-        $res = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $courseId);
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getAllResourcesFromDB() {
+        return Database::get()->queryArray("SELECT * FROM exercise");
     }
-
+    
     /**
-     * Remove all Exercises belonging to a Course.
+     * Get Lucene query input string for locating all exercises belonging to a given course.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @param  int $courseId - the given course id
+     * @return string        - the string that can be used as Lucene query input
      */
-    public function removeByCourse($courseId, $optimize = false) {
-        $hits = $this->__index->find('doctype:exercise AND courseid:' . $courseId);
-        foreach ($hits as $hit)
-            $this->__index->delete($hit->getDocument()->id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getQueryInputByCourse($courseId) {
+        return 'doctype:exercise AND courseid:' . $courseId;
     }
-
+    
     /**
-     * Reindex all exercises.
+     * Get all exercises belonging to a given course from DB.
      * 
-     * @param boolean $optimize
+     * @param  int   $courseId - the given course id
+     * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function reindex($optimize = false) {
-        // remove all exercises from index
-        $term = new Zend_Search_Lucene_Index_Term('exercise', 'doctype');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        // get/index all exercises from db
-        $res = Database::get()->queryArray("SELECT * FROM exercise");
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getCourseResourcesFromDB($courseId) {
+        return Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $courseId);
     }
 
     /**

@@ -136,8 +136,9 @@ require_once 'modules/search/indexer.class.php';
 $idx = new Indexer();
 
 // optimize index
-if (isset($_GET['optimize']))
+if (isset($_GET['optimize'])) {
     $idx->getIndex()->optimize();
+}
 
 $numDocs = $idx->getIndex()->numDocs();
 $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];

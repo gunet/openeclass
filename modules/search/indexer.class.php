@@ -106,8 +106,9 @@ class Indexer {
         $terms = explode(' ', str_replace(self::$specials, '', self::phonetics($inputStr)));
         $clearTerms = array();
         foreach ($terms as $term) {
-            if (!in_array($term, self::$specialkeywords))
+            if (!in_array($term, self::$specialkeywords)) {
                 $clearTerms[] = $term;
+            }
         }
         return implode(' ', $clearTerms);
     }
@@ -127,10 +128,11 @@ class Indexer {
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
 
         try {
-            if (file_exists($index_path))
+            if (file_exists($index_path)) {
                 $this->__index = Zend_Search_Lucene::open($index_path); // Open index
-            else
+            } else {
                 $this->__index = Zend_Search_Lucene::create($index_path); // Create index
+            }
         } catch (Zend_Search_Lucene_Exception $e) {
             require_once 'fatal_error.php';
         }
@@ -325,8 +327,9 @@ class Indexer {
      */
     public function test() {
         $phtext = "αβγδεζηθικλμνξοπρσςτυφχψω άέίύήόώ ϊΐϋΰ ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ ΆΈΊΎΉΌΏ ΪΫ Αι έννοιαι των Αιρέσεων του Αββαείου";
-        if (self::phonetics($phtext, 0) != "abgdeziqiklmnjoprsstifxco aeiiioo iiii ABGDEZIQIKLMNJOPRSTIFXCO AEIIIOO II E enie ton Ereseon tu Abaiu")
+        if (self::phonetics($phtext, 0) != "abgdeziqiklmnjoprsstifxco aeiiioo iiii ABGDEZIQIKLMNJOPRSTIFXCO AEIIIOO II E enie ton Ereseon tu Abaiu") {
             return 0;
+        }
 
         return 1;
     }
