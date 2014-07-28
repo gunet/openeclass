@@ -1404,19 +1404,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
 
-                    // bbb_servers table
-                    Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
-                      `id` int(11) NOT NULL AUTO_INCREMENT,
-                      `hostname` varchar(255) DEFAULT NULL,
-                      `ip` varchar(255) NOT NULL,
-                      `enabled` enum("true","false") DEFAULT NULL,
-                      `server_key` varchar(255) DEFAULT NULL,
-                      `api_url` varchar(255) DEFAULT NULL,
-                      `max_rooms` int(11) DEFAULT NULL,
-                      `max_users` int(11) DEFAULT NULL,
-                      `enable_recordings` enum("yes","no") DEFAULT NULL,
-                      PRIMARY KEY (`id`),
-                      KEY `idx_bbb_servers` (`hostname`))');
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `note` (
+                         `id` int(11) NOT NULL auto_increment,
+                         `user_id` int(11) NOT NULL,
+                         `title` varchar(300),
+                         `content` text NOT NULL,
+                         `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                         `order` mediumint(11) NOT NULL default 0,
+                         `reference_obj_module` mediumint(11) default NULL,
+                         `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+                         `reference_obj_id` int(11) default NULL,
+                         `reference_obj_course` int(11) default NULL,
+                        PRIMARY KEY  (`id`))");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
@@ -2051,6 +2050,5 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         echo '</div></body></html>';
         exit;
-    } // end of if not submit
-
+    } // end of if not submit                
 draw($tool_content, 0);

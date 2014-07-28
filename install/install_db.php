@@ -1369,7 +1369,19 @@ $db->query("CREATE TABLE `oai_record` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
 
-// create indexes
+$db->query("CREATE TABLE IF NOT EXISTS `note` (
+        `id` int(11) NOT NULL auto_increment,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(300),
+        `content` text NOT NULL,
+        `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+        `order` mediumint(11) NOT NULL default 0,
+        `reference_obj_module` mediumint(11) default NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+        `reference_obj_id` int(11) default NULL,
+        `reference_obj_course` int(11) default NULL,
+        PRIMARY KEY  (`id`))");
+
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
 $db->query("CREATE INDEX `admin_index` ON admin(user_id)");
@@ -1445,3 +1457,4 @@ $db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
 $db->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
 $db->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
 $db->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
+$db->query("CREATE INDEX `user_notes` ON note (user_id)");

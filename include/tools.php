@@ -273,6 +273,10 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
     array_push($sideMenuImg, "arrow.png");
 
+    array_push($sideMenuText, $GLOBALS['langNotes']);
+    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
+    array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langModifyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
     array_push($sideMenuImg, "arrow.png");

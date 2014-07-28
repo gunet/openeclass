@@ -83,9 +83,12 @@ define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
-define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_BBB', 34);
 
+// user modules
+define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_NOTES', 35);
+define('MODULE_ID_PERSONALCALENDAR',36);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);

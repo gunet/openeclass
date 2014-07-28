@@ -1990,7 +1990,7 @@ $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί �
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
 $langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
-$langExercise = "Ασκήσεις";
+$langExercise = "Άσκηση";
 $langExerciseAsModule = "Χρήση Άσκησης";
 $langExerciseAsModuleLabel = "Άσκησης";
 $langExerciseCancelled = "Η άσκηση ακυρώθηκε. Για να συνεχίσετε, μπορείτε να επιλέξετε την επόμενη ενότητα, κάνοντας κλικ στο επόμενο βήμα.";
@@ -3651,6 +3651,31 @@ $langEBookSectionsModified = "Οι αλλαγές στις ενότητες το
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
+
+/* * ******************************************
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
 
 /* * ******************************************
   Messages for jQuery tools
