@@ -214,7 +214,7 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/slick-master/slick/slick.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
             $file = 'slick-master/slick/slick.min.js';
     } elseif ($file == 'datatables') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
