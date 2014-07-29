@@ -2387,6 +2387,7 @@ $langForumOpen = "Ανοικτή";
 $langForumClosed = "Κλειστή";
 $langNewForum = "Νέα περιοχή συζητήσεων";
 $langEditedBy = "Διορθώθηκε από";
+$langForumDefaultCat = "Γενικές Περιοχές Συζητήσεων";
 
 /* * ***************************************************************
  * questionnaire.php

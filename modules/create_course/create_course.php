@@ -377,6 +377,11 @@ if (!isset($_POST['create_course'])) {
     // creation of course index.php
     course_index($code);
     
+    //add a default forum category
+    Database::get()->query("INSERT INTO forum_category
+                            SET cat_title = ?s,
+                            course_id = ?d", $langForumDefaultCat, $new_course_id);
+    
     $_SESSION['courses'][$code] = USER_TEACHER;
     
     $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>

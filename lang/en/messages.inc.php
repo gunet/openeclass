@@ -2841,6 +2841,7 @@ $langEmptyNewTopic = "You didn't type topic title or / and message";
 $langNewForumCat = "New forum category";
 $langNewForum = "New Forum";
 $langEditedBy = "Edited by";
+$langForumDefaultCat = "General Forums";
 $langCaptchaWrong = "Wrong Captcha.";
 $langTipCaptcha = "Type code as it is displayed ";
 $langUserAccountInfo4 = 'Login as a different user';
