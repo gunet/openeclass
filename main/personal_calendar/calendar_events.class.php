@@ -169,13 +169,14 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ass.deadline',$datecond);
-            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, concat(description,'\n','(deadline: ',deadline,')') content,'deadline' event_type, c.code course "
+            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, concat(ass.description,'\n','(deadline: ',deadline,')') content,'deadline' event_type, c.code course "
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
             $q_args = array_merge($q_args, $q_args);
         }
         $q .= " ORDER BY start, event_type";
+        
         return Database::get()->queryArray($q, $q_args);
         
         /*if($eventtypes == "all"){

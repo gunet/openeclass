@@ -146,7 +146,7 @@ if ($is_editor) {
                                                             'duration' => $duration,
                                                             'title' => $event_title,
                                                             'content' => $txt_content));
-                Database::get()->query("UPDATE agenda SET source_event_id = id WHERE id = ?",$id);
+                Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE id = ?d",$id);
                 if(!empty($period) && !empty($enddate)){
                     $sourceevent = $id;
                     $interval = new DateInterval($period);
