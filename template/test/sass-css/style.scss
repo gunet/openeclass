@@ -1,7 +1,7 @@
 
 /* 
 ======================================================
-    SASS for eClass v3.0 - version 0.82 - 27/7/2014
+    SASS for eClass v3.0 - version 0.83 - 29/7/2014
 ======================================================
 */
 
@@ -547,7 +547,6 @@ ul.tablelist
   {
     position:relative;
 
-    max-height:3.35em;
     
     @include box-sizing(border-box);
 
@@ -555,6 +554,12 @@ ul.tablelist
     border-bottom:1px solid #eee;
     background:white;
     overflow:hidden;
+
+    .max-height
+    {
+      max-height:3.35em;
+    }
+
 
     .item-right-cols > span:not(:last-child)
     {
@@ -564,6 +569,7 @@ ul.tablelist
     .item-right-cols > span:first-child
     {
       border-left: 1px solid #eee;
+      border-bottom: 1px solid #eee;
     }
 
     .item-right-cols
@@ -580,6 +586,13 @@ ul.tablelist
     {
       padding:1em;
       display: inline-block;
+    }
+
+    .item-wholeline
+    {
+      padding:1em;
+      padding-right: 50px;
+      display: inline-block;  
     }
 
 
@@ -655,6 +668,10 @@ ul.tablelist
       background:#333333;
     }
 
+    .item-right-cols .item-options a
+    {
+      color: white;
+    }
     .item-right-cols .item-options a:hover
     {
       color:white;

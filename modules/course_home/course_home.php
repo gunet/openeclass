@@ -256,9 +256,11 @@ if ($first and ! $is_editor) {
     $cunits_content = '';
 }
 
-$bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
-        "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
-        "<li><b>" . $langFaculty . "</b>: ";
+$bar_content .= "
+    <div class='banner-tags'>
+        <span class='label'><span>" . $langCode . "</span>: " . q($public_code) . "</span>" .
+        "<span class='label'><span>" . $langTeachers . "</span>: " . q($professor) . "</span>" .
+        "<span class='label'><span>" . $langFaculty . "</span>: ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -268,7 +270,7 @@ foreach ($departments as $dep) {
     $i++;
 }
 
-$bar_content .= "</li>\n";
+$bar_content .= "</span>\n";
 
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
@@ -293,22 +295,25 @@ switch ($visible) {
             break;
         }
 }
-$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
+$bar_content .= "<span class='label'><span>$langConfidentiality</span>: $lessonStatus</span>";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+$bar_content .= "
+        <span class='label'><span>$langUsers</span>: $link</span> 
+    </div>";
 
 // display course license
 if ($course_license) {
-    $license_info_box = "<table class='tbl_courseid' width='200'>
-        <tr class='title1'>
-            <td class='title1'>${langOpenCoursesLicense}</td></tr>
-        <tr><td><div align='center'><small>" . copyright_info($course_id) . "</small></div></td></tr>
-        </table>
-        <br/>";
+    $license_info_box = "
+        <div class='column-one-third'>
+            <span>
+                ${langOpenCoursesLicense}<br/>
+                <small>" . copyright_info($course_id) . "</small>
+            </span>
+        </div>";
 } else {
     $license_info_box = '';
 }
@@ -449,13 +454,7 @@ $tool_content .= "
     <div class='banner-content'>
         <div class='banner-description'>$main_content</p></div>
         <hr>
-        <div class='banner-tags'>           
-            <span class='label'><span>ID:</span> K19 (Εαρινό 2012)</span>
-            <span class='label'><span>Σχολή - Τμήμα:</span> Πληροφορικής και Τηλεπικοινωνιών</span>
-            <span class='label'><span>Εκπαιδευτές:</span> καθ. Αγγελική Αραπογιάννη</span>
-            <span class='label'><span>Πρόσβαση:</span> Ελεύθερη (χωρίς εγγραφή)</span>
-            <span class='label'><span>Τύπος:</span> Προπτυχιακό</span>
-        </div>
+        $bar_content
     </div>
 </div>";
 
@@ -470,85 +469,150 @@ $tool_content .= "
 
     <div class='column-first column-one-half'>
         <h5 class='content-title'>Θεματικες Ενοτητες</h5>
-        <ul class='contentbox padding accordion accordion-list-style'>
+
+        <div class='toolbox float-right'>
+            <a id='' href='../../modules/units/info.php?course=TMAPOST100'>
+                <button class='button color-green' title='Προσθήκη νέας ενότητας μπλα μπλα'>
+                    <i class='fa fa-plus-circle'></i>
+                    <span class='txt'>Προσθήκη ενότητας μπλα μπλα</span>
+                </button>
+            </a>
+        </div>
+        <div style='clear: both'></div>
 
 
-            <li>
-                <div class='accordion-title'>
+
+
+        
+        <ul class='tablelist contentbox'>
+
+            <li class='list-item'>
+                <span class='item-wholeline'>
                     <h4>1. Εισαγωγή</h4>
-                    <span class='description'>Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...</span>
-                </div>
-                <div class='content'>
-                    <img src='http://users.auth.gr/panchara/eclass/project/img/Y1.jpg' />
-                    Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας, θεώρημα μέγιστης μεταφοράς ισχύος, βασικά δίθυρα-τετράπολα. Αναλογικά και ψηφιακά σήματα. Συμβολισμοί. Βασικά χαρακτηριστικά των ενισχυτών (απόδοση ισχύος, απολαβή-ενίσχυση, γραμμικότητα).
-                    <div class='label-group'>
-                        <span class='title'>Λέξεις Κλειδιά</span>           
-                        <span class='label'>γραμμικά δικτυώματα</span>
-                        <span class='label'>δίθυρα ή τετράπολα</span>
-                        <span class='label'>υβριδικές παράμετροι</span>
-                        <span class='label'>απολαβή ή ενίσχυση</span>
-                    </div>
-                </div>
-            </li
-
-
-            <li>
-                <div class='accordion-title'>
-                    <h4>2. Η Επαφή pn</h4>
-                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
-                </div>     
-                <div class='content'>
-                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
-                    <div class='label-group'>
-                        <span class='title'>Λέξεις Κλειδιά</span>   
-                        <span class='label'>ενδογενής ημιαγωγός</span>          
-                        <span class='label'>πυρίτιο</span>
-                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
-                        <span class='label'>ρεύμα διάχυσης</span>
-                        <span class='label'>ρεύμα ολίσθησης</span>
-                        <span class='label'>δυναμικό επαφής</span>
-                    </div>
+                    <span class='description'>
+                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
+                    </span>
+                </span>
+                <div class='item-right-cols'>
+                <span class='item-options'>
+                    <span class='options-content'>
+                        <a href='/' title='Edit'>
+                            <i class='fa fa-arrow-down'></i>
+                        </a>
+                        <a href='/' title='Edit'>
+                            <i class='fa fa-pencil'></i>
+                        </a>
+                        <a href='/' title='Download'>
+                            <i class='fa fa-lock'></i>
+                        </a>
+                        <a href='/' title='Hide'>
+                            <i class='fa fa-eye'></i>
+                        </a>
+                        <a href ='/' class='delete-action' title='Delete'>
+                            <i class='fa fa-times'></i>
+                        </a>
+                    </span>
+                    <span class='options-icon'>
+                        <i class='fa fa-gear'></i>
+                    </span>
+                </span>
                 </div>
             </li>
 
 
-            <li>
-                <div class='accordion-title'>
-                    <h4>2. Η Επαφή pn</h4>
-                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
-                </div>     
-                <div class='content'>
-                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
-                    <div class='label-group'>
-                        <span class='title'>Λέξεις Κλειδιά</span>   
-                        <span class='label'>ενδογενής ημιαγωγός</span>          
-                        <span class='label'>πυρίτιο</span>
-                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
-                        <span class='label'>ρεύμα διάχυσης</span>
-                        <span class='label'>ρεύμα ολίσθησης</span>
-                        <span class='label'>δυναμικό επαφής</span>
-                    </div>
+            <li class='list-item'>
+                <span class='item-wholeline'>
+                    <h4>1. Εισαγωγή</h4>
+                    <span class='description'>
+                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
+                    </span>
+                </span>
+                <div class='item-right-cols'>
+                <span class='item-options'>
+                    <span class='options-content'>
+                        <a title='Edit'>
+                            <i class='fa fa-pencil'></i>
+                        </a>
+                        <a title='Download'>
+                            <i class='fa fa-download'></i>
+                        </a>
+                        <a title='Hide'>
+                            <i class='fa fa-eye'></i>
+                        </a>
+                        <a class='delete-action' title='Delete'>
+                            <i class='fa fa-times'></i>
+                        </a>
+                    </span>
+                    <span class='options-icon'>
+                        <i class='fa fa-gear'></i>
+                    </span>
+                </span>
                 </div>
             </li>
 
-            <li>
-                <div class='accordion-title'>
-                    <h4>2. Η Επαφή pn</h4>
-                    <span class='description'>Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn...</span>
-                </div>     
-                <div class='content'>
-                    Η δομή του ημιαγωγού. Ενδογενής ημιαγωγός. Οπές και ηλεκτρόνια. Ημιαγωγός με προσμίξεις: τύπου-p και τύπου-n. Μηχανισμοί αγωγιμότητας του ημιαγωγού. Η επαφή pn: χωρίς πόλωση, ορθά πολωμένη, ανάστροφα πολωμένη. Το φαινόμενο της κατάρρευσης της επαφής pn. Η χαρακτηριστική τάσης - ρεύματος της διόδου επαφής pn.
-                    <div class='label-group'>
-                        <span class='title'>Λέξεις Κλειδιά</span>   
-                        <span class='label'>ενδογενής ημιαγωγός</span>          
-                        <span class='label'>πυρίτιο</span>
-                        <span class='label'>ημιαγωγός τύπου-p και τύπου-n</span>
-                        <span class='label'>ρεύμα διάχυσης</span>
-                        <span class='label'>ρεύμα ολίσθησης</span>
-                        <span class='label'>δυναμικό επαφής</span>
-                    </div>
+
+            <li class='list-item'>
+                <span class='item-wholeline'>
+                    <h4>1. Εισαγωγή</h4>
+                    <span class='description'>
+                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
+                    </span>
+                </span>
+                <div class='item-right-cols'>
+                <span class='item-options'>
+                    <span class='options-content'>
+                        <a title='Edit'>
+                            <i class='fa fa-pencil'></i>
+                        </a>
+                        <a title='Download'>
+                            <i class='fa fa-download'></i>
+                        </a>
+                        <a title='Hide'>
+                            <i class='fa fa-eye'></i>
+                        </a>
+                        <a class='delete-action' title='Delete'>
+                            <i class='fa fa-times'></i>
+                        </a>
+                    </span>
+                    <span class='options-icon'>
+                        <i class='fa fa-gear'></i>
+                    </span>
+                </span>
                 </div>
             </li>
+
+
+            <li class='list-item'>
+                <span class='item-wholeline'>
+                    <h4>1. Εισαγωγή</h4>
+                    <span class='description'>
+                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
+                    </span>
+                </span>
+                <div class='item-right-cols'>
+                <span class='item-options'>
+                    <span class='options-content'>
+                        <a title='Edit'>
+                            <i class='fa fa-pencil'></i>
+                        </a>
+                        <a title='Download'>
+                            <i class='fa fa-download'></i>
+                        </a>
+                        <a title='Hide'>
+                            <i class='fa fa-eye'></i>
+                        </a>
+                        <a class='delete-action' title='Delete'>
+                            <i class='fa fa-times'></i>
+                        </a>
+                    </span>
+                    <span class='options-icon'>
+                        <i class='fa fa-gear'></i>
+                    </span>
+                </span>
+                </div>
+            </li>
+
+            
         </ul>
     </div>
 
@@ -616,17 +680,9 @@ $tool_content .= "
             </div>
         </div>
 
-        <div class='column-one-third'>
-            <a class='title' href='http://creativecommons.org/licenses/by-sa/3.0/deed.el'>
-                <img style='height:1.6em;' src='http://users.auth.gr/panchara/eclass/project/img/cc.png' title='CC - Παρόμοια Διανομή' alt='CC - Παρόμοια Διανομή'>
-            </a>
-            <span>Άδεια Διάθεσης: CC - Παρόμοια Διανομή</span>
-        </div>
+        $license_info_box
 
-        <div class='column-one-third'>
-            <div class='title'><img src='http://users.auth.gr/panchara/eclass/project/img/oc-small.png'></div>
-            <span>Ανοικτό Ακαδ. Μάθημα: Επίπεδο: A+</span>
-        </div>
+        $opencourses_level
 
         <div style='clear: both'></div>
 
@@ -641,9 +697,6 @@ $tool_content .= "
 
 $tool_content .= "
 <br/>
-<span>bar_content: $bar_content</span><br/><hr><br/>
-<span>license_info_box: $license_info_box</span><br/><hr><br/>
-<span>opencourses_level: $opencourses_level</span><br/><hr><br/>
 <span>cunits_content: $cunits_content</span><br/><hr><br/>
 <br/><br/><br/>
 ";
