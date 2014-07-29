@@ -192,13 +192,13 @@ if ($is_editor) { //if he is editor
         $last_id = $last_id->id;
     }
     
-    //check if weekly view has been checked
-    $weekly = 0;
+    //Check the course view type
+    $viewCourse = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id)->view_type;
     
-    if($weekly){
+    if($viewCourse == 'weekly'){ //weekly type
         $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
-                  ORDER BY `order` limit 1";
+                  ORDER BY `order`";
     }else{
         $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND `order` >= 0

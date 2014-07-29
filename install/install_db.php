@@ -165,6 +165,8 @@ $db->query("CREATE TABLE `course` (
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
+  `start_date` DATETIME NOT NULL default '0000-00-00',
+  `finish_date` DATETIME NOT NULL default '0000-00-00',
   PRIMARY KEY  (`id`)) $charset_spec");
 
 

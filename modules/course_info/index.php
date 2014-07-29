@@ -43,6 +43,11 @@ load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
+
+//Datepicker
+load_js('tools.js');
+load_js('jquery-ui-timepicker-addon.min.js');
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -82,6 +87,29 @@ $head_content .= <<<hContent
     }
         
     $(document).ready(function() {
+        
+        $('input[name=start_date]').datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (date) {
+                var date2 = $('input[name=start_date]').datepicker('getDate');
+                date2.setDate(date2.getDate() + 1);
+                $('input[name=finish_date]').datepicker('setDate', date2);
+                $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+            }
+        });
+        
+        $('input[name=finish_date]').datepicker({
+            dateFormat: 'yy-mm-dd', 
+            onClose: function () {
+                var dt1 = $('input[name=start_date]').datepicker('getDate');
+                var dt2 = $('input[name=finish_date]').datepicker('getDate');
+                if (dt2 <= dt1) {
+                    var minDate = $('input[name=finish_date]').datepicker('option', 'minDate');
+                    $('input[name=finish_date]').datepicker('setDate', minDate);
+            }
+        }
+        });
+        
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
@@ -180,9 +208,12 @@ if (isset($_POST['submit'])) {
                                 course_license = ?d,
                                 prof_names = ?s,
                                 lang = ?s,
-                                password = ?s
+                                password = ?s,
+                                view_type = ?s,
+                                start_date = ?t,
+                                finish_date = ?t
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], 
-                                            $course_license, $_POST['titulary'], $session->language, $password, $course_id);            
+                                            $course_license, $_POST['titulary'], $session->language, $password, $_POST['view_type'], $_POST['start_date'], $_POST['finish_date'], $course_id);            
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
@@ -214,7 +245,7 @@ if (isset($_POST['submit'])) {
 	</div>";
          
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id
+                	       course_license, password, id, view_type, start_date, finish_date
                       FROM course WHERE code = ?s", $course_code);    
     $title = q($c->title);
     $visible = $c->visible;
@@ -336,6 +367,40 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	</table>
 	</fieldset>
+        
+        <fieldset>
+	    <legend>$langMore</legend>
+	    <table class='tbl'>
+	    <tr>
+		<th width='170'>$langStartDate:</th>
+		<td width='1'><input class='dateInForm' type='text' name='start_date' value='" . $c->start_date . "'></td>
+	    </tr>
+            <tr>
+		<th width='170'>$langFinish:</th>
+		<td width='1'><input class='dateInForm' type='text' name='finish_date' value='" . $c->finish_date . "'></td>
+	    </tr>
+            <tr>
+		<th width='170'>$langDisplay:</th>
+		<td width='1'>
+                    <select name='view_type'>
+                        <option value='units'";
+                        if($c->view_type == "units"){
+                            $tool_content .= " selected ";
+                        }
+                        $tool_content .=">$langCourseUnits</option>
+                        
+
+                        <option value='weekly'";
+                        if($c->view_type == "weekly"){
+                            $tool_content .= " selected ";
+                        }
+                        $tool_content .=">$langWeekly</option>
+                    </select>
+                </td>
+	    </tr>
+	</table>
+	</fieldset>
+
 	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
