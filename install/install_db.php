@@ -165,9 +165,33 @@ $db->query("CREATE TABLE `course` (
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
-  `start_date` DATETIME NOT NULL default '0000-00-00',
-  `finish_date` DATETIME NOT NULL default '0000-00-00',
+  `start_date` DATE NOT NULL default '0000-00-00',
+  `finish_date` DATE NOT NULL default '0000-00-00',
   PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view`
+#
+
+$db->query("CREATE TABLE `course_weekly_view` (
+  `id` INT(11) NOT NULL auto_increment,
+  `course_id` INT(11) NOT NULL,
+  `start_week` DATE NOT NULL default '0000-00-00',
+  `finish_week` DATE NOT NULL default '0000-00-00',
+  `visible` TINYINT(4) NOT NULL,
+  PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view_activities`
+#
+
+$db->query("CREATE TABLE `course_weekly_view_activities` (
+  `id` INT(11) NOT NULL auto_increment,
+  `course_weekly_view_id` INT(11) NOT NULL,
+  `type` VARCHAR(50) NOT NULL DEFAULT '',
+  `act_id` INT(11) NOT NULL,
+  PRIMARY KEY  (`id`)) $charset_spec");
+
 
 
 #

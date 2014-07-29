@@ -193,7 +193,10 @@ if ($is_editor) { //if he is editor
     }
     
     //Check the course view type
-    $viewCourse = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id)->view_type;
+    $courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
+    $viewCourse = $courseInfo->view_type;
+    $start_date = $courseInfo->start_date;
+    $finish_date = $courseInfo->finish_date;
     
     if($viewCourse == 'weekly'){ //weekly type
         $query = "SELECT id, title, comments, visible, public
@@ -283,6 +286,12 @@ foreach ($sql as $cu) {
 if ($first and ! $is_editor) {
     $cunits_content = '';
 }
+
+
+if($viewCourse == "weekly"){
+    echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
+}
+
 
 $bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
         "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
