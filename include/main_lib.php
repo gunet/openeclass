@@ -1484,6 +1484,9 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
+            Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
             return true;
         } else {
             return false;

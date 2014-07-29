@@ -270,7 +270,7 @@ function loggedInMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-    array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
+    array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langNotes']);
