@@ -83,9 +83,12 @@ define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
-define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_BBB', 34);
 
+// user modules
+define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_NOTES', 35);
+define('MODULE_ID_PERSONALCALENDAR',36);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -211,7 +214,7 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/slick-master/slick/slick.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
             $file = 'slick-master/slick/slick.min.js';
     } elseif ($file == 'datatables') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
@@ -1481,6 +1484,9 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
+            Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
             return true;
         } else {
             return false;
