@@ -1,6 +1,6 @@
 /* 
 ======================================================
-    SASS for eClass v3.0 - version 0.83 - 29/7/2014
+    SASS for eClass v3.0 - version 0.84 - 30/7/2014
 ======================================================
 */
 /* SASS VARIABLES */
@@ -437,7 +437,7 @@ ul.tablelist li.list-item .item-title {
 /* line 592, ../style.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 1em;
-  padding-right: 50px;
+  padding-right: 60px;
   display: inline-block;
 }
 /* line 600, ../style.scss */
@@ -486,7 +486,7 @@ ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
 /* line 654, ../style.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
-  margin-right: -20em;
+  margin-right: -25em;
   background: #333333;
   color: white;
   -webkit-transition: all 150ms linear;

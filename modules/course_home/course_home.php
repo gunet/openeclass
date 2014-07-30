@@ -165,12 +165,19 @@ if ($is_editor) {
 }
 
 // add course units
+$cunits_content .= "<h5 class='content-title'>" . q($langCourseUnits) . "</h5>";
 if ($is_editor) {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
-} else {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
-}
-if ($is_editor) {    
+    $cunits_content .= "
+        <div class='toolbox float-right'>
+            <a href='{$urlServer}modules/units/info.php?course=$course_code'>
+                <button class='button color-green' title='$langAddUnit'>
+                    <i class='fa fa-plus-circle'></i>
+                    <span class='txt'>$langAddUnit</span>
+                </button>
+            </a>
+        </div>
+        <div style='clear: both'></div>";
+
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -185,6 +192,7 @@ if ($is_editor) {
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
+$cunits_content .= "<ul class='tablelist contentbox'>";
 $sql = Database::get()->queryArray($query);
 $first = true;
 $count_index = 1;
@@ -196,63 +204,66 @@ foreach ($sql as $cu) {
     $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
     $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
     $class_vis = ($vis == 0) ? 'invisible' : '';
-    $cunits_content .= "<table class='tbl' width='770'>";
-    if ($is_editor) {
-        $cunits_content .= "<tr>" .
-                "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
-    } elseif (resource_access($vis, $access)) {
-        $cunits_content .= "<tr>" .
-                "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
-    }
-    if ($is_editor) { // display actions
-        $cunits_content .= "<th width='80' class='center'>" .
-                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
-                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
-                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
-                "onClick=\"return confirmation('$langConfirmDelete');\">" .
-                "<img src='$themeimg/delete.png' " .
-                "title='$langDelete' alt='$langDelete'></a>" .
-                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
-                "<img src='$themeimg/$icon_vis' " .
-                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
-        if ($visible == COURSE_OPEN) { // public accessibility actions
-            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
-            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
-                    "<img src='$themeimg/$icon_access' " .
-                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
-            $cunits_content .= "&nbsp;&nbsp;</th>";
-        }
-        if ($cu->id != $last_id) {
-            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
-                    "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
-        } else {
-            $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
-        }
-        if (!$first) {
-            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
-                    "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
-        } else {
-            $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
-        }
-    }
-    $cunits_content .= "</tr><tr><td ";
-    if ($is_editor) {
-        $cunits_content .= "colspan='8' $class1_vis>";
-    } else {
-        $cunits_content .= "colspan='2'>";
-    }
     if (resource_access($vis, $access)) {
-        $cunits_content .= standard_text_escape($cu->comments);
+        $cunits_content .= "
+            <li class='list-item'>
+                <span class='item-wholeline'>
+                    <h4>$count_index. <a href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
+                    <span class='description'>" . standard_text_escape($cu->comments) . "</span>
+                </span>
+                <div class='item-right-cols'>";
+        if ($is_editor) {
+            $cunits_content .= "
+                <span class='item-options'>
+                    <span class='options-content'>";
+            if ($cu->id != $last_id) {
+                $cunits_content .= "
+                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' title='$langDown'>
+                            <i class='fa fa-arrow-down'></i>
+                        </a>";
+            }
+            if (!$first) {
+                $cunits_content .= "
+                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id' title='$langUp'>
+                            <i class='fa fa-arrow-up'></i>
+                        </a>";
+            }
+            $cunits_content .= "
+                        <a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id' title='$langEdit'>
+                            <i class='fa fa-pencil'></i>
+                        </a>
+                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id' title='$langVisibility'>
+                            <i class='fa fa-eye'></i>
+                        </a>";
+            if ($visible == COURSE_OPEN) { // public accessibility actions
+                $cunits_content .= "
+                        <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id' title='$langResourceAccess'>
+                            <i class='fa fa-lock'></i>
+                        </a>";
+            }
+            $cunits_content .= "
+                        <a href ='$_SERVER[SCRIPT_NAME]?del=$cu->id' class='delete-action' title='Delete'>
+                            <i class='fa fa-times'></i>
+                        </a>
+                    </span>
+                    <span class='options-icon'>
+                        <i class='fa fa-gear'></i>
+                    </span>
+                </span>";
+        }
         $count_index++;
-    } else {
-        $cunits_content .= "&nbsp;";
     }
-    $cunits_content .= "</td></tr></table>";
     $first = false;
+
+    $cunits_content .= "
+            </div>
+        </li>";
 }
-if ($first and ! $is_editor) {
+
+
+
+// Delete empty units section for non-editors
+if ($first and !$is_editor) {
     $cunits_content = '';
 }
 
@@ -320,7 +331,7 @@ if ($course_license) {
 
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
-$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
+$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id = ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -468,155 +479,8 @@ $tool_content .= "
 <div class='a-wrapper'>
 
     <div class='column-first column-one-half'>
-        <h5 class='content-title'>Θεματικες Ενοτητες</h5>
-
-        <div class='toolbox float-right'>
-            <a id='' href='../../modules/units/info.php?course=TMAPOST100'>
-                <button class='button color-green' title='Προσθήκη νέας ενότητας μπλα μπλα'>
-                    <i class='fa fa-plus-circle'></i>
-                    <span class='txt'>Προσθήκη ενότητας μπλα μπλα</span>
-                </button>
-            </a>
-        </div>
-        <div style='clear: both'></div>
-
-
-
-
-        
-        <ul class='tablelist contentbox'>
-
-            <li class='list-item'>
-                <span class='item-wholeline'>
-                    <h4>1. Εισαγωγή</h4>
-                    <span class='description'>
-                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
-                    </span>
-                </span>
-                <div class='item-right-cols'>
-                <span class='item-options'>
-                    <span class='options-content'>
-                        <a href='/' title='Edit'>
-                            <i class='fa fa-arrow-down'></i>
-                        </a>
-                        <a href='/' title='Edit'>
-                            <i class='fa fa-pencil'></i>
-                        </a>
-                        <a href='/' title='Download'>
-                            <i class='fa fa-lock'></i>
-                        </a>
-                        <a href='/' title='Hide'>
-                            <i class='fa fa-eye'></i>
-                        </a>
-                        <a href ='/' class='delete-action' title='Delete'>
-                            <i class='fa fa-times'></i>
-                        </a>
-                    </span>
-                    <span class='options-icon'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </span>
-                </div>
-            </li>
-
-
-            <li class='list-item'>
-                <span class='item-wholeline'>
-                    <h4>1. Εισαγωγή</h4>
-                    <span class='description'>
-                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
-                    </span>
-                </span>
-                <div class='item-right-cols'>
-                <span class='item-options'>
-                    <span class='options-content'>
-                        <a title='Edit'>
-                            <i class='fa fa-pencil'></i>
-                        </a>
-                        <a title='Download'>
-                            <i class='fa fa-download'></i>
-                        </a>
-                        <a title='Hide'>
-                            <i class='fa fa-eye'></i>
-                        </a>
-                        <a class='delete-action' title='Delete'>
-                            <i class='fa fa-times'></i>
-                        </a>
-                    </span>
-                    <span class='options-icon'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </span>
-                </div>
-            </li>
-
-
-            <li class='list-item'>
-                <span class='item-wholeline'>
-                    <h4>1. Εισαγωγή</h4>
-                    <span class='description'>
-                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
-                    </span>
-                </span>
-                <div class='item-right-cols'>
-                <span class='item-options'>
-                    <span class='options-content'>
-                        <a title='Edit'>
-                            <i class='fa fa-pencil'></i>
-                        </a>
-                        <a title='Download'>
-                            <i class='fa fa-download'></i>
-                        </a>
-                        <a title='Hide'>
-                            <i class='fa fa-eye'></i>
-                        </a>
-                        <a class='delete-action' title='Delete'>
-                            <i class='fa fa-times'></i>
-                        </a>
-                    </span>
-                    <span class='options-icon'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </span>
-                </div>
-            </li>
-
-
-            <li class='list-item'>
-                <span class='item-wholeline'>
-                    <h4>1. Εισαγωγή</h4>
-                    <span class='description'>
-                        Ανασκόπηση των βασικών εννοιών, κανόνων και θεωρημάτων των γραμμικών δικτυωμάτων: κανόνες Kirchhoff, θεώρημα Thevenin, θεώρημα Norton, θεώρημα επαλληλίας...
-                    </span>
-                </span>
-                <div class='item-right-cols'>
-                <span class='item-options'>
-                    <span class='options-content'>
-                        <a title='Edit'>
-                            <i class='fa fa-pencil'></i>
-                        </a>
-                        <a title='Download'>
-                            <i class='fa fa-download'></i>
-                        </a>
-                        <a title='Hide'>
-                            <i class='fa fa-eye'></i>
-                        </a>
-                        <a class='delete-action' title='Delete'>
-                            <i class='fa fa-times'></i>
-                        </a>
-                    </span>
-                    <span class='options-icon'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </span>
-                </div>
-            </li>
-
-            
-        </ul>
+        $cunits_content
     </div>
-
-
 
     <div class='column-one-half'>
 
@@ -697,7 +561,7 @@ $tool_content .= "
 
 $tool_content .= "
 <br/>
-<span>cunits_content: $cunits_content</span><br/><hr><br/>
+<br/><hr><br/>
 <br/><br/><br/>
 ";
 
