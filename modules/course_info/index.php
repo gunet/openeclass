@@ -194,6 +194,14 @@ if (isset($_POST['submit'])) {
             if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
                 $deps_valid = false;
         }
+        
+        //check if there is a start and finish date if weekly selected
+        if($_POST['view_type']){
+            if(!$_POST['start_date']){
+                $view_type = 'units';
+                $noWeeklyMessage = 1;
+            }
+        }
 
         // Check if the teacher is allowed to create in the departments he chose
         if (!$deps_valid) {
@@ -213,7 +221,7 @@ if (isset($_POST['submit'])) {
                                 start_date = ?t,
                                 finish_date = ?t
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], 
-                                            $course_license, $_POST['titulary'], $session->language, $password, $_POST['view_type'], $_POST['start_date'], $_POST['finish_date'], $course_id);            
+                                            $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);            
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
@@ -222,8 +230,13 @@ if (isset($_POST['submit'])) {
                 'prof_names' => $_POST['titulary'],
                 'lang' => $language));
 
-            $tool_content .= "<p class='success'>$langModifDone</p>
-                            <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
+            $tool_content .= "<p class='success'>$langModifDone</p>";
+            
+            if($noWeeklyMessage){
+                $tool_content .= "<p class='alert1'>Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος</p>";
+            }
+                                    
+            $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
                             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
     }
@@ -373,7 +386,11 @@ if (isset($_POST['submit'])) {
 	    <table class='tbl'>
 	    <tr>
 		<th width='170'>$langStartDate:</th>
-		<td width='1'><input class='dateInForm' type='text' name='start_date' value='" . $c->start_date . "'></td>
+		<td width='1'><input class='dateInForm' type='text' name='start_date' value='";
+            if($c->start_date != "0000-00-00"){
+                $tool_content .= $c->start_date;
+            }
+            $tool_content .= "'></td>
 	    </tr>
             <tr>
 		<th width='170'>$langFinish:</th>
