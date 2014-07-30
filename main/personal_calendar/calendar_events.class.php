@@ -140,18 +140,20 @@ class Calendar_Events {
         //retrive events from various tables according to user preferences on what type of events to show
         $q = "";
         $q_args = array();
-        $q_args[] = $user_id;
+        $q_args_templ = array();
+        $q_args_templ[] = $user_id;
         if(!is_null($startdate)){
-           $q_args[] = $startdate; 
+           $q_args_templ[] = $startdate; 
         }
         if(!is_null($enddate)){
-           $q_args[] = $enddate; 
+           $q_args_templ[] = $enddate; 
         }
+        Calendar_Events::get_calendar_settings();
         if(Calendar_Events::$calsettings->show_personal == 1){
             $dc = str_replace('start','pc.start',$datecond);
             $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, content, 'personal' event_type, null as course FROM personal_calendar pc "
                     . "WHERE user_id = ?d " . $dc;
-            $q_args = array_merge($q_args, $q_args);
+            $q_args = array_merge($q_args, $q_args_templ);
         }
         if(Calendar_Events::$calsettings->show_course == 1){
             if(!empty($q)){
@@ -161,8 +163,8 @@ class Calendar_Events {
             $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, content, 'course' event_type, c.code course "
                     . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
-                . $dc;
-            $q_args = array_merge($q_args, $q_args);
+                    . $dc;
+            $q_args = array_merge($q_args, $q_args_templ);
         }
         if(Calendar_Events::$calsettings->show_deadline == 1){
             if(!empty($q)){
@@ -173,10 +175,13 @@ class Calendar_Events {
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
-            $q_args = array_merge($q_args, $q_args);
+            $q_args = array_merge($q_args, $q_args_templ);
+        }
+        if(empty($q))
+        {
+            return null;
         }
         $q .= " ORDER BY start, event_type";
-        
         return Database::get()->queryArray($q, $q_args);
         
         /*if($eventtypes == "all"){
