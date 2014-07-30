@@ -287,6 +287,91 @@ elseif (isset($_GET['forumgodel'])) {
                     AND course_id = ?d", $forum_id, $course_id);    
     $tool_content .= "<p class='success'>$langForumDelete</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+} elseif (isset($_GET['forumtopicedit'])) {
+   $topic_id = intval($_GET['topic_id']);
+   
+   $result = Database::get()->querySingle("SELECT `forum_id` FROM `forum_topic` as ft, `forum` as f  
+           WHERE ft.`id` = ?d AND ft.`forum_id` = f.`id` AND `f`.course_id = ?d ", $topic_id, $course_id);
+   if ($result) {
+       $current_forum_id = $result->forum_id;
+       
+       $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $current_forum_id);
+       if ($result->c == 0) {//cannot move topics for groups
+           $tool_content .= "
+           <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
+           <fieldset>
+           <legend>$langEditTopic</legend>
+           <table class='tbl' width='100%'>
+               <tr>
+               <th>$langChangeTopicForum</th>
+               <td>
+               <select name='forum_id'>";
+           $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
+           foreach ($result as $result_row) {
+               $forum_id = $result_row->forum_id;
+               $forum_name = $result_row->forum_name;
+               $cat_title = $result_row->cat_title;
+               
+               $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $forum_id);
+               if ($result->c != 0) {//cannot move a topic to a group forum
+                   continue;
+               }
+               
+               if ($forum_id == $current_forum_id) {
+                   $tool_content .= "<option value='$forum_id' selected>$forum_name ($cat_title)</option>";
+               } else {
+                   $tool_content .= "<option value='$forum_id'>$forum_name ($cat_title)</option>";
+               }
+           }
+           $tool_content .= "</select></td></tr>
+           <tr><th>&nbsp;</th>
+           <td class='right'><input type='submit' value='$langModify'></td>
+           </tr></table>
+           </fieldset>
+           </form>";
+       }
+   }
+} elseif (isset($_GET['forumtopicsave'])) {
+    $topic_id = intval($_GET['topic_id']);
+    $new_forum = intval($_POST['forum_id']);
+    
+    $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $new_forum);
+    if ($result->c == 0 AND does_exists($topic_id, 'topic')) {//topic belongs to the course and new forum is not a group forum
+    
+        $result = Database::get()->querySingle("SELECT `forum_id`, `num_replies`, `last_post_id`  FROM `forum_topic` WHERE `id` = ?d", $topic_id);
+        $current_forum_id = $result->forum_id;
+        $num_replies = $result->num_replies;
+        $last_post_id = $result->last_post_id;
+        
+        $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $current_forum_id);
+        if ($result->c == 0) {//old forum is not a group forum
+        
+            if ($current_forum_id != $new_forum) {
+                Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
+                $ftdx->store($topic_id);
+                
+                $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$new_forum);
+                $last_post_id = $result->last_post_id;
+                
+                Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`+1, `num_posts` = `num_posts`+?d, `last_post_id` = ?d
+                        WHERE id = ?d",$num_replies+1, $last_post_id, $new_forum);
+                
+                $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$current_forum_id);
+                if ($result) {
+                    $last_post_id = $result->last_post_id;
+                } else {
+                    $last_post_id = 0;
+                }
+                
+                Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`-1, `num_posts` = `num_posts`-?d, `last_post_id` = ?d
+                        WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
+            }//if user selected the current forum do nothing
+            
+           $tool_content .= "<p class='success'>$langTopicDataChanged</p>
+                             <p>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$new_forum'>$langBack</a></p>";
+        }
+    }
+    
 } elseif (isset($_GET['settings'])) {
     if (isset($_POST['submitSettings'])) {
         setting_set(SETTING_FORUM_RATING_ENABLE, $_POST['r_radio'], $course_id);

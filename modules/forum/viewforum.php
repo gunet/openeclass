@@ -252,6 +252,10 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td class='center'>";
         if ($is_editor) {
+            if (!$group_id) {//group topics cannot change forum
+                $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id'>
+			    <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
+            }
             $tool_content .= "
 			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />

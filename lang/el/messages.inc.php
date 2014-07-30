@@ -2388,6 +2388,9 @@ $langForumClosed = "Κλειστή";
 $langNewForum = "Νέα περιοχή συζητήσεων";
 $langEditedBy = "Διορθώθηκε από";
 $langForumDefaultCat = "Γενικές Περιοχές Συζητήσεων";
+$langEditTopic = "Τροποποίηση θέματος";
+$langChangeTopicForum = "Αλλαγή περιοχής συζητήσεων";
+$langTopicDataChanged = "Το θέμα τροποποιήθηκε επιτυχώς";
 
 /* * ***************************************************************
  * questionnaire.php
