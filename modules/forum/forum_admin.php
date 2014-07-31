@@ -125,22 +125,29 @@ elseif (isset($_GET['forumgoedit'])) {
                 <tr>
                 <th valign='top'>$langDescription</th>
                 <td><textarea name='forum_desc' cols='47' rows='3'>" . q($forum_desc) . "</textarea></td>
-                </tr>
-                <tr>
-                <th>$langChangeCat</th>
-                <td>
-                <select name='cat_id'>";
-    $result = Database::get()->queryArray("SELECT id, cat_title FROM forum_category WHERE course_id = ?d", $course_id);
-    foreach ($result as $result_row) {
-        $cat_id = $result_row->id;
-        $cat_title = $result_row->cat_title;
-        if ($cat_id == $cat_id_1) {
-            $tool_content .= "<option value='$cat_id' selected>$cat_title</option>";
-        } else {
-            $tool_content .= "<option value='$cat_id'>$cat_title</option>";
+                </tr>";
+    
+    $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $forum_id);
+    if ($result->c == 0) {//group forums cannot change category
+        $tool_content .= "
+                    <tr>
+                    <th>$langChangeCat</th>
+                    <td>
+                    <select name='cat_id'>";
+        $result = Database::get()->queryArray("SELECT `id`, `cat_title` FROM `forum_category` WHERE `course_id` = ?d AND `cat_order` <> ?d", $course_id, -1);
+        //cat_order <> -1: temp solution to exclude group categories and avoid triple join
+        foreach ($result as $result_row) {
+            $cat_id = $result_row->id;
+            $cat_title = $result_row->cat_title;
+            if ($cat_id == $cat_id_1) {
+                $tool_content .= "<option value='$cat_id' selected>$cat_title</option>";
+            } else {
+                $tool_content .= "<option value='$cat_id'>$cat_title</option>";
+            }
         }
+        $tool_content .= "</select></td></tr>";
     }
-    $tool_content .= "</select></td></tr>
+    $tool_content .= "
         <tr><th>&nbsp;</th>
         <td class='right'><input type='submit' value='$langModify'></td>
         </tr></table>
