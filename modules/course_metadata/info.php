@@ -26,7 +26,7 @@ $nameTools = $langCourseMetadata;
 require_once 'CourseXML.php';
 
 // exit if feature disabled or no metadata present
-if (!get_config('course_metadata') || !file_exists(CourseXMLElement::getCourseXMLPath($code_cours))) {
+if (!get_config('course_metadata') || !file_exists(CourseXMLConfig::getCourseXMLPath($code_cours))) {
     header("Location: {$urlServer}courses/$code_cours/index.php");
     exit();
 }
