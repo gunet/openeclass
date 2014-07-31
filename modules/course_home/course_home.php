@@ -289,7 +289,16 @@ if ($first and ! $is_editor) {
 
 
 if($viewCourse == "weekly"){
-    echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
+    //echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week FROM course_weekly_view WHERE course_id = ?d AND visible = ?d", $course_id, 1);
+    foreach ($weeklyQuery as $week){
+        $tool_content .= "<fieldset>
+                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
+                            <h2>$langWeek: $week->start_week - $week->finish_week</h2>
+                            </a>
+                          </fieldset>";
+        
+    }
 }
 
 
