@@ -42,7 +42,7 @@ $fidx = new ForumIndexer($idx);
 $ftdx = new ForumTopicIndexer($idx);
 $fpdx = new ForumPostIndexer($idx);
 
-$nameTools = $langCatForumAdmin;
+$nameTools = $langForumAdmin;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
@@ -157,6 +157,8 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
+    $nameTools = $langCatForumAdmin;
+    
     $result = Database::get()->querySingle("SELECT id, cat_title FROM forum_category
                                 WHERE id = ?d
                                 AND course_id = ?d", $cat_id, $course_id);
@@ -183,6 +185,8 @@ elseif (isset($_GET['forumcatedit'])) {
 
 // Save forum category
 elseif (isset($_GET['forumcatsave'])) {
+    $nameTools = $langCatForumAdmin;
+    
     Database::get()->query("UPDATE forum_category SET cat_title = ?s
                                         WHERE id = ?d AND course_id = ?d", $_POST['cat_title'], $cat_id, $course_id);
     $tool_content .= "<p class='success'>$langNameCatMod</p>
@@ -190,8 +194,6 @@ elseif (isset($_GET['forumcatsave'])) {
 }
 // Save forum
 elseif (isset($_GET['forumgosave'])) {
-    $nameTools = $langDelete;
-    $navigation[] = array("url" => "../forum/forum_admin.php?course=$course_code", "name" => $langCatForumAdmin);
     Database::get()->query("UPDATE forum SET name = ?s,
                                    `desc` = ?s,
                                    cat_id = ?d
@@ -205,6 +207,8 @@ elseif (isset($_GET['forumgosave'])) {
 
 // Add category to forums
 elseif (isset($_GET['forumcatadd'])) {
+    $nameTools = $langCatForumAdmin;
+    
     Database::get()->query("INSERT INTO forum_category
                         SET cat_title = ?s,
                         course_id = ?d", $_POST['categories'], $course_id);
@@ -215,8 +219,7 @@ elseif (isset($_GET['forumcatadd'])) {
 // forum go add
 elseif (isset($_GET['forumgoadd'])) {
     $nameTools = $langAdd;
-    $navigation[] = array('url' => "../forum/forum_admin.php?course=$course_code",
-        'name' => $langCatForumAdmin);
+    
     $ctg = category_name($cat_id);
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
@@ -249,6 +252,8 @@ elseif (isset($_GET['forumgoadd'])) {
 
 // delete forum category
 elseif (isset($_GET['forumcatdel'])) {
+    $nameTools = $langCatForumAdmin;
+    
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
@@ -273,7 +278,7 @@ elseif (isset($_GET['forumcatdel'])) {
 // delete forum
 elseif (isset($_GET['forumgodel'])) {
     $nameTools = $langDelete;
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langCatForumAdmin);
+    
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);    
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
@@ -412,6 +417,8 @@ elseif (isset($_GET['forumgodel'])) {
         </fieldset>
         </form>";
 } else {
+    $nameTools = $langCatForumAdmin;
+    
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
