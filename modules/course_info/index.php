@@ -197,9 +197,39 @@ if (isset($_POST['submit'])) {
         
         //check if there is a start and finish date if weekly selected
         if($_POST['view_type']){
-            if(!$_POST['start_date']){
+            if(!$_POST['start_date'] && !$_POST['finish_date']){
+                //if no start date and finish date, do not allow weekly view and show alert message
                 $view_type = 'units';
                 $noWeeklyMessage = 1;
+            }
+            else{ //if there is start date create the weeks from that start date
+                
+                $view_type = 'weekly';
+                
+                $begin = new DateTime($_POST['start_date']);
+                $end = new DateTime($_POST['finish_date']);
+                
+                $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
+                
+                foreach($daterange as $date){
+                    //get the end week day
+                    $endWeek = new DateTime($date->format("Y-m-d"));
+                    $endWeek->modify('+6 day');
+                    
+                    //value for db
+                    $startWeekForDB = $date -> format("Y-m-d");
+                    
+                    if($endWeek->format("Y-m-d") < $end->format("Y-m-d")){
+                        $endWeekForDB = $endWeek->format("Y-m-d");
+                    }else{
+                        $endWeekForDB = $end->format("Y-m-d");
+                    }
+                    //create the weeks in DB
+                    Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
+
+                    
+                    
+                }
             }
         }
 
