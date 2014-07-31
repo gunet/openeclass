@@ -184,21 +184,38 @@ if ($is_editor) {
 } else {
     $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
-if ($is_editor) {    
+if ($is_editor) { //if he is editor
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
     if ($last_id) {
         $last_id = $last_id->id;
     }
-    $query = "SELECT id, title, comments, visible, public
+    
+    //Check the course view type
+    $courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
+    $viewCourse = $courseInfo->view_type;
+    $start_date = $courseInfo->start_date;
+    $finish_date = $courseInfo->finish_date;
+    
+    if($viewCourse == 'weekly'){ //weekly type
+        $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
                   ORDER BY `order`";
-} else {
+    }else{
+        $query = "SELECT id, title, comments, visible, public
+		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
+                  ORDER BY `order`";
+    }
+    
+    
+} else { //if he is not editor
     $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
+
+
 $sql = Database::get()->queryArray($query);
 $first = true;
 $count_index = 1;
