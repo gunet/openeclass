@@ -1384,6 +1384,13 @@ function delete_course($cid) {
                          (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
+	Database::get()->query("DELETE forum_post FROM forum_post INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                            INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);
+    Database::get()->query("DELETE forum_topic FROM forum_topic INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);    
+    Database::get()->query("DELETE FROM forum_category WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
