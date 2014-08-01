@@ -115,8 +115,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }        
     }
     // email search
-    if (!empty($email)) {
-        $criteria[] = 'email LIKE ' . quote('%' . $email . '%');
+    if (!empty($user_email)) {
+        $criteria[] = 'email LIKE ' . quote('%' . $user_email . '%');
     }
     // search for inactive users
     if ($search == 'inactive') {
