@@ -1296,7 +1296,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `visible` TINYINT(4),
                              recursion_period varchar(30) DEFAULT NULL,
                              recursion_end date DEFAULT NULL,
-                             PRIMARY KEY (`id`)
+                             `source_event_id` int(11) DEFAULT NULL
                              $charset_spec");
                             
                     

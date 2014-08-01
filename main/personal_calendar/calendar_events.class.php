@@ -41,9 +41,9 @@ class Calendar_Events {
     /** @staticvar array of urls to form links from events in calendar
     */ 
     private static $event_type_url = array(
-            'deadline' => '../../modules/work/index.php?id=thisid&course=thiscourse',
-            'course' => '../../modules/agenda/?id=thisid&course=thiscourse',
-            'personal' => '?modify=thisid');
+            'deadline' => 'modules/work/index.php?id=thisid&course=thiscourse',
+            'course' => 'modules/agenda/?id=thisid&course=thiscourse',
+            'personal' => 'main/personal_calendar/?modify=thisid');
     
     /** @staticvar object with user calendar settings
     */ 
@@ -849,7 +849,8 @@ class Calendar_Events {
       * @return html formatted item
      */
    public static function month_calendar_item($event, $color){
-       $link = str_replace('thisid', $event->id, Calendar_Events::$event_type_url[$event->event_type]);
+       global $urlServer;
+       $link = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
        if($event->event_type != 'personal'){
            $link = str_replace('thiscourse', $event->course, $link);
        }
@@ -865,7 +866,7 @@ class Calendar_Events {
       * @return html formatted item
      */
     public static function week_calendar_item($event, $class){
-        global $langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+        global $urlServer,$langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_type."_color"}."\"></div></td>";
@@ -878,7 +879,7 @@ class Calendar_Events {
             $msg = '';
         }
         $formatted_calendar_item .= "<br><b><div class='event'>";
-        $link = str_replace('thisid', $event->id, Calendar_Events::$event_type_url[$event->event_type]);
+        $link = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
         if($event->event_type != 'personal'){
             $link = str_replace('thiscourse', $event->course, $link);
         }
@@ -901,7 +902,7 @@ class Calendar_Events {
         }
         $formatted_calendar_item .= "<td class='right' width='70'>";
         if($event->event_type == "personal"){
-            $formatted_calendar_item .= icon('edit', $langModify, str_replace('thisid',$event->id,Calendar_Events::$event_type_url['personal'])). "&nbsp;
+            $formatted_calendar_item .= icon('edit', $langModify, str_replace('thisid',$event->id, $urlServer.Calendar_Events::$event_type_url['personal'])). "&nbsp;
                         ".icon('delete', $langDelete, "?delete=$event->id", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
         }
         $formatted_calendar_item .= "</td>";
@@ -917,7 +918,7 @@ class Calendar_Events {
       * @return html formatted item
      */
     public static function day_calendar_item($event, $class){
-        global $langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+        global $urlServer, $langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_type."_color"}."\"></div></td>";
@@ -930,7 +931,7 @@ class Calendar_Events {
             $msg = '';
         }
         $formatted_calendar_item .= "<br><b><div class='event'>";
-        $link = str_replace('thisid', $event->id, Calendar_Events::$event_type_url[$event->event_type]);
+        $link = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
         if($event->event_type != 'personal'){
             $link = str_replace('thiscourse', $event->course, $link);
         }

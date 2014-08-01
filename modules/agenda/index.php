@@ -117,8 +117,6 @@ if ($is_editor) {
                         WHERE course_id = ?d AND id = ?d", $event_title, $content, $date, $duration, $course_id, $id);
             $log_type = LOG_MODIFY;
         } else {
-            $id = Database::get()->query("INSERT INTO agenda SET course_id = ?d, title = ?s, content = ?s , start = ?t, duration = ?s,
-                     visible = 1", $course_id, $event_title, $content, $date, $duration)->lastInsertID;
             $period = "";
             $enddate = "";
             if(isset($_POST['frequencyperiod']) && isset($_POST['frequencynumber']) && isset($_POST['enddate']))
@@ -146,14 +144,12 @@ if ($is_editor) {
                                                             'duration' => $duration,
                                                             'title' => $event_title,
                                                             'content' => $txt_content));
-                Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE id = ?d",$id);
+                Database::get()->query("UPDATE agenda SET source_event_id = id WHERE id = ?d",$id);
                 if(!empty($period) && !empty($enddate)){
                     $sourceevent = $id;
                     $interval = new DateInterval($period);
                     $startdatetime = new DateTime($date);
                     $enddatetime = new DateTime($enddate." 23:59:59");
-                    var_dump($startdatetime);
-
                     $newdate = date_add($startdatetime, $interval);
                     while($newdate <= $enddatetime)
                     {
@@ -161,11 +157,11 @@ if ($is_editor) {
                                 . "SET course_id = ?d, content = ?s, title = ?s, start = ?t, duration = ?t, visible = 1,"
                                 . "recursion_period = ?s, recursion_end = ?t, "
                                 . "source_event_id = ?d", 
-                        $course_id, purify($content), $event_title, $newdate->format('Y-m-d'), $duration, $period, $enddate, $sourceevent)->lastInsertID;
+                        $course_id, purify($content), $event_title, $newdate->format('Y-m-d H:i'), $duration, $period, $enddate, $sourceevent)->lastInsertID;
                         $agdx->store($id);
                         $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
                         Log::record($course_id, MODULE_ID_AGENDA, $log_type, array('id' => $neweventid,
-                                                            'date' => $newdate->format('Y-m-d'),
+                                                            'date' => $newdate->format('Y-m-d H:i'),
                                                             'duration' => $duration,
                                                             'title' => $event_title,
                                                             'content' => $txt_content));

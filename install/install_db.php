@@ -142,7 +142,8 @@ $db->query("CREATE TABLE `agenda` (
     `duration` VARCHAR(20) NOT NULL,
     `visible` TINYINT(4),
     `recursion_period` varchar(30) DEFAULT NULL,
-    `recursion_end` date DEFAULT NULL)
+    `recursion_end` date DEFAULT NULL,
+    `source_event_id` int(11) DEFAULT NULL)
     $charset_spec");
 
 #
