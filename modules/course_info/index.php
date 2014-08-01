@@ -110,6 +110,17 @@ $head_content .= <<<hContent
         }
         });
         
+        $('#weekly_info').hide();
+        
+        $('#view_type').change(function(){
+            if($('#view_type option:selected').val() == 'weekly'){
+                $('#weekly_info').show();
+            }else{
+                $('#weekly_info').hide();
+            }
+            
+        });
+        
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
@@ -342,7 +353,48 @@ if (isset($_POST['submit'])) {
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-         </fieldset>";
+         </fieldset>
+                    
+         <fieldset>
+	    <legend>$langMore</legend>
+	    <table class='tbl'>
+                <tr>
+                    <th width='170'>$langDisplay:</th>
+                    <td width='1'>
+                        <select name='view_type' id='view_type'>
+                            <option value='units'";
+                            if($c->view_type == "units"){
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .=">$langCourseUnits</option>
+                            
+                            <option value='weekly'";
+                            if($c->view_type == "weekly"){
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .=">$langWeekly</option>
+                        </select>
+                        <div class='info' id='weekly_info'>Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width='170'>$langStartDate:</th>
+                    <td width='1'><input class='dateInForm' type='text' name='start_date' value='";
+                if($c->start_date != "0000-00-00"){
+                    $tool_content .= $c->start_date;
+                }
+                $tool_content .= "'></td>
+                </tr>
+                <tr>
+                    <th width='170'>$langFinish:</th>
+                    <td width='1'><input class='dateInForm' type='text' name='finish_date' value='";
+                    if($c->finish_date != "0000-00-00"){
+                    $tool_content .= $c->finish_date;
+                }
+                $tool_content .= "'></td>
+                </tr>
+            </table>
+        </fieldset>";
         if ($isOpenCourseCertified) {
             $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
         }
@@ -411,43 +463,6 @@ if (isset($_POST['submit'])) {
 	</table>
 	</fieldset>
         
-        <fieldset>
-	    <legend>$langMore</legend>
-	    <table class='tbl'>
-	    <tr>
-		<th width='170'>$langStartDate:</th>
-		<td width='1'><input class='dateInForm' type='text' name='start_date' value='";
-            if($c->start_date != "0000-00-00"){
-                $tool_content .= $c->start_date;
-            }
-            $tool_content .= "'></td>
-	    </tr>
-            <tr>
-		<th width='170'>$langFinish:</th>
-		<td width='1'><input class='dateInForm' type='text' name='finish_date' value='" . $c->finish_date . "'></td>
-	    </tr>
-            <tr>
-		<th width='170'>$langDisplay:</th>
-		<td width='1'>
-                    <select name='view_type'>
-                        <option value='units'";
-                        if($c->view_type == "units"){
-                            $tool_content .= " selected ";
-                        }
-                        $tool_content .=">$langCourseUnits</option>
-                        
-
-                        <option value='weekly'";
-                        if($c->view_type == "weekly"){
-                            $tool_content .= " selected ";
-                        }
-                        $tool_content .=">$langWeekly</option>
-                    </select>
-                </td>
-	    </tr>
-	</table>
-	</fieldset>
-
 	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
