@@ -41,8 +41,8 @@ class Calendar_Events {
     /** @staticvar array of urls to form links from events in calendar
     */ 
     private static $event_type_url = array(
-            'deadline' => '../../modules/work/index.php?id=thisid&course=thiscourse',
-            'course' => '../../modules/agenda/?id=thisid&course=thiscourse',
+            'deadline' => '../modules/work/index.php?id=thisid&course=thiscourse',
+            'course' => '../modules/agenda/index.php?id=thisid&course=thiscourse',
             'personal' => '?modify=thisid');
     
     /** @staticvar object with user calendar settings
