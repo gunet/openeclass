@@ -905,7 +905,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
                         'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session',
-                        'blog_post', 'comments', 'rating', 'rating_cache');
+                        'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (Database::get()->query("SELECT COUNT(*) as value FROM `$table_name`")->value > 0) {
@@ -1064,7 +1064,31 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `forum_id` int(10) NOT NULL default '0',
                             PRIMARY KEY (`id`))
                             $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
+                            `user_id` INT(11) NOT NULL,
+                            `num_posts` INT(11) NOT NULL,
+                            `course_id` INT(11) NOT NULL,
+                            PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
+                    $forum_stats = Database::get()->queryArray("SELECT forum.course_id, forum_post.poster_id, count(*) as c FROM forum_post 
+                            INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id 
+                            INNER JOIN forum ON forum.id = forum_topic.forum_id 
+                            GROUP BY forum.course_id, forum_post.poster_id");
+                    
+                    if ($forum_stats) {
+                        $query = "INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES ";
+                        $vars_to_flatten = array();
+                        foreach ($forum_stats as $forum_stat) {
+                            $query .= "(?d,?d,?d),";
+                            $vars_to_flatten[] = $forum_stat->poster_id;
+                            $vars_to_flatten[] = $forum_stat->c;
+                            $vars_to_flatten[] = $forum_stat->course_id;
+                        }
+                        $query = rtrim($query,',');
+                        Database::get()->query($query, $vars_to_flatten);
+                    }
+                    
                     // create video tables
                     Database::get()->query("CREATE TABLE IF NOT EXISTS video (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -1391,6 +1391,7 @@ function delete_course($cid) {
                             WHERE forum.course_id = ?d", $cid);    
     Database::get()->query("DELETE FROM forum_category WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum_user_stats WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
@@ -1490,6 +1491,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
+            Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
             if ($log) {
                 Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);

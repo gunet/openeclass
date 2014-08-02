@@ -84,6 +84,7 @@ $archive_conditions = array(
                                              WHERE forum.id = forum_id AND
                                                    course_id = $course_id)",
     'forum_notify' => $sql_course,
+    'forum_user_stats' => $sql_course,
     'course_description' => $sql_course,
     'glossary' => $sql_course,
     'glossary_category' => $sql_course,

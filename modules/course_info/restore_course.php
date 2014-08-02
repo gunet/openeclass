@@ -194,6 +194,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $course_id),
         'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
+    restore_table($restoreThis, 'forum_user_stats', array('set' => array('course_id' => $course_id),
+    'map' => array('user_id' => $userid_map)));
     if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
             && isset($backupData) && is_array($backupData) 
             && isset($backupData['query']) && is_array($backupData['query'])) {

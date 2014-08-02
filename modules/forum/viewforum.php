@@ -135,9 +135,22 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $number_of_posts = get_total_posts($topic_id);
-    $sql = Database::get()->queryArray("SELECT id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $sql = Database::get()->queryArray("SELECT id,poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $post_authors = array();
     foreach ($sql as $r) {
+        $post_authors[] = $r->poster_id;
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
+    }
+    $post_authors = array_unique($post_authors);
+    foreach ($post_authors as $author) {
+        $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author, $course_id);
+        Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author, $course_id);
+        if ($forum_user_stats->c != 0) {
+            Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
+        }
     }
     $fpdx->removeByTopic($topic_id);
     $number_of_topics = get_total_topics($forum_id);

@@ -490,6 +490,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
   `forum_id` INT(10) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
+        `user_id` INT(11) NOT NULL,
+        `num_posts` INT(11) NOT NULL,
+        `course_id` INT(11) NOT NULL,
+        PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS video (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
