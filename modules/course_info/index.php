@@ -115,7 +115,7 @@ $head_content .= <<<hContent
         $('#weekly_info').hide();
         
         $('#view_type').change(function(){
-            if($('#view_type option:selected').val() == 'weekly'){
+            if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
                 $('#weekly_info').show();
             }else{
                 $('#weekly_info').hide();
@@ -211,36 +211,47 @@ if (isset($_POST['submit'])) {
         //===================course format and start and finish date===============
         //check if there is a start and finish date if weekly selected
         if($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']){
-            if(!$_POST['start_date'] && !$_POST['finish_date']){
-                //if no start date and finish date, do not allow weekly view and show alert message
+            if(!$_POST['start_date']){
+                //if no start date do not allow weekly view and show alert message
                 $view_type = 'units';
                 $noWeeklyMessage = 1;
             }
             else{ //if there is start date create the weeks from that start date
-                $noWeeklyMessage = 0;
-                
-                $view_type = $_POST['view_type'];
-                
-                $begin = new DateTime($_POST['start_date']);
-                $end = new DateTime($_POST['finish_date']);
-                
-                $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
                 
                 //Number of the previous week records for this course
                 $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
-                foreach ($previousWeeks as $previousWeek) {
-                    //array to hold all the previous records
-                    $previousWeeksArray[] = $previousWeek->id;
-                    
-                }
                 //count of previous weeks
-                $countPreviousWeeks = count($previousWeeksArray);
+                if($previousWeeks){
+                    foreach ($previousWeeks as $previousWeek) {
+                        //array to hold all the previous records
+                        $previousWeeksArray[] = $previousWeek->id;
+                    }
+                    $countPreviousWeeks = count($previousWeeksArray);
+                }else{
+                    $countPreviousWeeks = 0;
+                }
                 
                 //counter for the new records
                 $cnt = 1;
                 
                 //counter for the old records
                 $cntOld = 0;
+                
+                $noWeeklyMessage = 0;
+                
+                $view_type = $_POST['view_type'];
+                $begin = new DateTime($_POST['start_date']);
+                
+                //check if there is no end date
+                if($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00'){
+                    $end = new DateTime($begin->format("Y-m-d"));;
+                    $end->add(new DateInterval('P26W'));
+                }else{
+                    $end = new DateTime($_POST['finish_date']);
+                }
+                
+                $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
+                
                 
                 foreach($daterange as $date){
                     //===============================
