@@ -98,6 +98,9 @@ if (isset($_GET['delete']) && $is_editor) {
 
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     $fpdx->remove($post_id);
+    
+    //orphan replies get -1 to parent_post_id
+    Database::get()->query("UPDATE forum_post SET parent_post_id = -1 WHERE parent_post_id = ?d", $post_id);
 
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ", $topic, $forum);
@@ -274,13 +277,21 @@ foreach ($result as $myrow) {
     }
     
     $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->id#$myrow->id'>#$myrow->id</a><br/>"; 
+    if ($myrow->parent_post_id == -1) {
+        $parent_post_link = "<br/><br/>$langForumPostParentDel";
+    } elseif ($myrow->parent_post_id != 0) {
+        $parent_post_link = "<br/><br/>$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a>";
+    } else {
+        $parent_post_link = "";
+    }
     
     $tool_content .= "<td>
 	  <div>
 	    <a name='".$myrow->id."'></a>$anchor_link
+	    <a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langForumPostReply</a><br/>
 	    <b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
 	  </div>
-	  <br />$message<br />".$rate_str."
+	  <br />$message<br />".$rate_str.$parent_post_link."
 	</td>";
     if ($is_editor) {
         $tool_content .= "<td width='40' valign='top'>

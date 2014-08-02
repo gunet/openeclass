@@ -2391,6 +2391,9 @@ $langForumDefaultCat = "Γενικές Περιοχές Συζητήσεων";
 $langEditTopic = "Τροποποίηση θέματος";
 $langChangeTopicForum = "Αλλαγή περιοχής συζητήσεων";
 $langTopicDataChanged = "Το θέμα τροποποιήθηκε επιτυχώς";
+$langForumPostReply = "Απάντηση σε αυτό το μήνυμα";
+$langForumPostParent = "Αυτό το μήνυμα είναι απάντηση στο μήνυμα ";
+$langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί.";
 
 /* * ***************************************************************
  * questionnaire.php
