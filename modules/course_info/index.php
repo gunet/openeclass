@@ -92,9 +92,11 @@ $head_content .= <<<hContent
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {
                 var date2 = $('input[name=start_date]').datepicker('getDate');
-                date2.setDate(date2.getDate() + 1);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                    date2.setDate(date2.getDate() + 1);
+                    $('input[name=finish_date]').datepicker('setDate', date2);
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }
             }
         });
         
@@ -206,23 +208,43 @@ if (isset($_POST['submit'])) {
                 $deps_valid = false;
         }
         
+        //===================course format and start and finish date===============
         //check if there is a start and finish date if weekly selected
-        if($_POST['view_type']){
+        if($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']){
             if(!$_POST['start_date'] && !$_POST['finish_date']){
                 //if no start date and finish date, do not allow weekly view and show alert message
                 $view_type = 'units';
                 $noWeeklyMessage = 1;
             }
             else{ //if there is start date create the weeks from that start date
+                $noWeeklyMessage = 0;
                 
-                $view_type = 'weekly';
+                $view_type = $_POST['view_type'];
                 
                 $begin = new DateTime($_POST['start_date']);
                 $end = new DateTime($_POST['finish_date']);
                 
                 $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
                 
+                //Number of the previous week records for this course
+                $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
+                foreach ($previousWeeks as $previousWeek) {
+                    //array to hold all the previous records
+                    $previousWeeksArray[] = $previousWeek->id;
+                    
+                }
+                //count of previous weeks
+                $countPreviousWeeks = count($previousWeeksArray);
+                
+                //counter for the new records
+                $cnt = 1;
+                
+                //counter for the old records
+                $cntOld = 0;
+                
                 foreach($daterange as $date){
+                    //===============================
+                    //new weeks
                     //get the end week day
                     $endWeek = new DateTime($date->format("Y-m-d"));
                     $endWeek->modify('+6 day');
@@ -235,15 +257,33 @@ if (isset($_POST['submit'])) {
                     }else{
                         $endWeekForDB = $end->format("Y-m-d");
                     }
-                    //create the weeks in DB
-                    Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
-
-                    
-                    
+                    //================================
+                    //update the DB or insert new weeks
+                    if($cnt <= $countPreviousWeeks){
+                        //update the weeks in DB
+                        Database::get()->query("UPDATE course_weekly_view SET start_week = ?t, finish_week = ?t WHERE course_id = ?d AND id = ?d", $startWeekForDB, $endWeekForDB, $course_id, $previousWeeksArray[$cntOld]);
+                        //update the cntOLD records
+                        $cntOld++;
+                    }else{
+                        //create the weeks in DB
+                        Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
+                    }
+                    //update the counter
+                    $cnt++;
+                }
+                //check if left from the previous weeks and they are out of the new period
+                //if so delete them
+                if(--$cnt < $countPreviousWeeks){
+                    $week2delete = $countPreviousWeeks - $cnt;
+                    for($i=0; $i<$week2delete; $i++){
+                        Database::get()->query("DELETE FROM course_weekly_view WHERE id = ?d", $previousWeeksArray[$cntOld]);
+                        $cntOld++;
+                    }
                 }
             }
         }
-
+        //=======================================================
+        
         // Check if the teacher is allowed to create in the departments he chose
         if (!$deps_valid) {
             $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>

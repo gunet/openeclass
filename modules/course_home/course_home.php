@@ -288,20 +288,6 @@ if ($first and ! $is_editor) {
 }
 
 
-if($viewCourse == "weekly"){
-    //echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
-    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week FROM course_weekly_view WHERE course_id = ?d AND visible = ?d", $course_id, 1);
-    foreach ($weeklyQuery as $week){
-        $tool_content .= "<fieldset>
-                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                            <h2>$langWeek: $week->start_week - $week->finish_week</h2>
-                            </a>
-                          </fieldset>";
-        
-    }
-}
-
-
 $bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
         "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
         "<li><b>" . $langFaculty . "</b>: ";
@@ -451,8 +437,26 @@ $tool_content .= "</td>
       $emailnotification
       <br />\n";
 
-$tool_content .= "</td></tr></table>
-   <table width='100%' class='tbl'><tr><td>$cunits_content</td>
-   </tr></table></div>";
+$tool_content .= "</td></tr></table>";
+
+if($viewCourse == "weekly"){
+    //echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week FROM course_weekly_view WHERE course_id = ?d AND visible = ?d", $course_id, 1);
+    foreach ($weeklyQuery as $week){
+        $tool_content .= "<fieldset>
+                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
+                            <h2>$langWeek: $week->start_week - $week->finish_week</h2>
+                            </a>
+                          </fieldset>";
+        
+    }
+}
+
+if($viewCourse == "units"){
+    $tool_content .= "<table width='100%' class='tbl'><tr><td>$cunits_content</td>
+   </tr></table>";
+}
+
+$tool_content .= "</div>";
 
 draw($tool_content, 2, null, $head_content);
