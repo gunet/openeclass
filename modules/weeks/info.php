@@ -27,52 +27,50 @@
 $require_current_course = true;
 $require_editor = true;
 $require_help = true;
-$helpTopic = 'AddCourseUnits';
+$helpTopic = '';
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langEditUnit;
+//$nameTools = $langEditUnit;
+$nameTools = "Επεξεργασία εβδομάδας";
 
 load_js('tools.js');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
-    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d",$id);    
-    $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
-    $unitdescr = $cu->comments;
-    $unit_id = $cu->id;
+    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_weekly_view WHERE id = ?d",$id);    
+    $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
+    $weekdescr = $cu->comments;
+    $week_id = $cu->id;
 } else {
     $nameTools = $langAddUnit;
-    $unitdescr = $unittitle = '';
+    $weekdescr = $weektitle = '';
 }
 
-if (isset($_GET['next'])) {
-    $action = "index.php?course=$course_code&amp;id=$unit_id";
-} else {
-    $action = "${urlServer}courses/$course_code/";
-}
+$action = "${urlServer}courses/$course_code/";
 
-$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
+
+$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'weektitle');\">
     <fieldset>
     <legend>$nameTools</legend>";
-if (isset($unit_id)) {
-    $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
+if (isset($week_id)) {
+    $tool_content .= "<input type='hidden' name='week_id' value='$week_id'>";
 }
 $tool_content .= "
     <table class='tbl' width='100%'>
     <tr>
-      <th width='150'>$langUnitTitle:</th>
+      <th width='150'>Τίτλος εβδομάδας ($langOptionalCfgSetting):</th>
     </tr>
     <tr>
-      <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle ></td>
+      <td><input type='text' name='weektitle' size='50' maxlength='255' $weektitle ></td>
     </tr>
     <tr>
       <th valign='top'>$langUnitDescr:</th>
     </tr>
     <tr>
-      <td>" . rich_text_editor('unitdescr', 4, 20, $unitdescr) . "</td>
+      <td>" . rich_text_editor('weekdescr', 4, 20, $weekdescr) . "</td>
     </tr>
     <tr>
-      <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>
+      <td class='right'><input type='submit' name='edit_submitW' value='$langSubmit'></td>
     </tr>
     </table>
     </fieldset>

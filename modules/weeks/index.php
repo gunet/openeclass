@@ -70,7 +70,7 @@ if ($access) {
 
 if ($is_editor) {
     $tool_content .= "&nbsp;<div id='operations_container'>
-		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
+		<form name='resinsert' action='{$urlServer}modules/weeks/insert.php' method='get'>
 		<select name='type' onChange='document.resinsert.submit();'>
 			<option>-- $langAdd --</option>
 			<option value='doc'>$langInsertDoc</option>
@@ -125,21 +125,6 @@ foreach (array('previous', 'next') as $i) {
         $arrow2 = ' »';
     }
     
-   /* if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
-            $access_check = "";
-    } else {
-        $access_check = "AND public = 1";
-    }
-     */   
-//    $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
-//                       WHERE course_id = ?d
-//                             AND id <> ?d
-//                             AND `order` $op $info->order
-//                             AND `order` >= 0
-//                             $visibility_check
-//                             $access_check
-//                       ORDER BY `order` $dir
-//                       LIMIT 1", $course_id, $id);
     $q = Database::get()->querySingle("SELECT id, start_week, finish_week FROM course_weekly_view
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -185,24 +170,22 @@ if (!empty($comments)) {
         </table>";
 }
 
-show_resources($id);
+show_resourcesWeeks($id);
 
-$tool_content .= '<form name="unitselect" action="' . $urlServer . 'modules/units/" method="get">';
+$tool_content .= '<form name="unitselect" action="' . $urlServer . 'modules/weeks/" method="get">';
 $tool_content .="
     <table width='99%' class='tbl'>
      <tr class='odd'>
-       <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
+       <td class='right'>" . $langWeeks . ":&nbsp;</td>
        <td width='50' class='right'>" .
         "<select name='id' onChange='document.unitselect.submit();'>";
 
-$q = Database::get()->queryArray("SELECT id, title FROM course_units
-               WHERE course_id = ?d AND `order` > 0
-                     $visibility_check
-               ORDER BY `order`", $course_id);
+$q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
+               WHERE course_id = ?d $visibility_check", $course_id);
 foreach ($q as $info) {
     $selected = ($info->id == $id) ? ' selected ' : '';
     $tool_content .= "<option value='$info->id'$selected>" .
-            htmlspecialchars(ellipsize($info->title, 40)) .
+            htmlspecialchars(ellipsize($info->start_week . " ... " . $info->finish_week, 40)) .
             '</option>';
 }
 $tool_content .= "</select>

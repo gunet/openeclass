@@ -33,17 +33,17 @@ function process_actions() {
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
         if ($id = check_admin_unit_resource($res_id)) {
-            return edit_res($res_id);
+            return edit_res($res_id); 
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
         $res_id = intval($_REQUEST['resource_id']);
         if ($id = check_admin_unit_resource($res_id)) {
             @$restitle = $_REQUEST['restitle'];
             $rescomments = purify($_REQUEST['rescomments']);
-            $result = Database::get()->query("UPDATE unit_resources SET
+            $result = Database::get()->query("UPDATE course_weekly_view_activities SET
                                         title = ?s,
                                         comments = ?s
-                                        WHERE unit_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
+                                        WHERE course_weekly_view_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
             $urdx->store($res_id, false);
             $cidx->store($course_id, true);
             CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -52,7 +52,7 @@ function process_actions() {
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if ($id = check_admin_unit_resource($res_id)) {
-            Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);            
+            Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);            
             $urdx->remove($res_id, false, false);
             $cidx->store($course_id, true);
             CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -61,9 +61,9 @@ function process_actions() {
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
         if ($id = check_admin_unit_resource($res_id)) {            
-            $vis = Database::get()->querySingle("SELECT `visible` FROM unit_resources WHERE id = ?d", $res_id)->visible;            
+            $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view_activities WHERE id = ?d", $res_id)->visible;            
             $newvis = ($vis == 1) ? 0 : 1;
-            Database::get()->query("UPDATE unit_resources SET visible = '$newvis' WHERE id = ?d", $res_id);
+            Database::get()->query("UPDATE course_weekly_view_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
             $urdx->store($res_id, false);
             $cidx->store($course_id, true);
             CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -71,12 +71,12 @@ function process_actions() {
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
         if ($id = check_admin_unit_resource($res_id)) {
-            move_order('unit_resources', 'id', $res_id, 'order', 'down', "unit_id=$id");
+            move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
         }
     } elseif (isset($_REQUEST['up'])) { // change order up
         $res_id = intval($_REQUEST['up']);
         if ($id = check_admin_unit_resource($res_id)) {
-            move_order('unit_resources', 'id', $res_id, 'order', 'up', "unit_id=$id");
+            move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
         }
     }
     return '';
@@ -95,9 +95,9 @@ function check_admin_unit_resource($resource_id) {
     global $course_id, $is_editor;
 
     if ($is_editor) {
-        $q = Database::get()->querySingle("SELECT course_units.id AS cuid FROM course_units,unit_resources WHERE
-			course_units.course_id = ?d AND course_units.id = unit_resources.unit_id
-			AND unit_resources.id = ?d", $course_id, $resource_id);
+        $q = Database::get()->querySingle("SELECT course_weekly_view.id AS cuid FROM course_weekly_view,course_weekly_view_activities WHERE
+			course_weekly_view.course_id = ?d AND course_weekly_view.id = course_weekly_view_activities.course_weekly_view_id
+			AND course_weekly_view_activities.id = ?d", $course_id, $resource_id);
         if ($q) {
             $unit_id = $q->cuid;
             return $unit_id;
@@ -113,23 +113,23 @@ function check_admin_unit_resource($resource_id) {
  * @global type $max_resource_id
  * @param type $unit_id
  */
-function show_resources($unit_id) {
+function show_resourcesWeeks($unit_id) {
     global $tool_content, $max_resource_id;
     
-    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
+    $req = Database::get()->queryArray("SELECT * FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
-        $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-                                WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                        
+        $max_resource_id = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities
+                                WHERE course_weekly_view_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                     
         $tool_content .= "<table class='tbl_alt_bordless' width='99%'>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
-            show_resource($info);
+            show_resourceWeek($info);
         }
         $tool_content .= "</table>";
     }
 }
 
-function show_resource($info) {
+function show_resourceWeek($info) {
     global $tool_content, $langUnknownResType, $is_editor;
 
     if ($info->visible == 0 and ! $is_editor) {
@@ -1141,13 +1141,13 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
 function edit_res($resource_id) {
     global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify, $course_code;
 
-    $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);   
+    $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM course_weekly_view_activities WHERE id = ?d", $resource_id);   
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
     $rescomments = $ru->comments;
     $resource_id = $ru->id;
     $resource_type = $ru->type;
 
-    $tool_content = "<form method='post' action='${urlServer}modules/units/?course=$course_code'>" .
+    $tool_content = "<form method='post' action='${urlServer}modules/weeks/?course=$course_code'>" .
             "<fieldset>" .
             "<legend>$langEditForum</legend>" .
             "<input type='hidden' name='id' value='$id'>" .

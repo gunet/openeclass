@@ -48,7 +48,7 @@ $urdx = new UnitResourceIndexer($idx);
 $id = intval($_REQUEST['id']);
 if ($id != -1) {
     // Check that the current unit id belongs to the current course
-    $q = Database::get()->querySingle("SELECT * FROM course_units
+    $q = Database::get()->querySingle("SELECT * FROM course_weekly_view
                                     WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if (!$q) {
         $nameTools = $langUnitUnknown;
@@ -180,13 +180,13 @@ function insert_docs($id) {
         exit;
     }
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['document'] as $file_id) {
         $order++;
         $file = Database::get()->querySingle("SELECT * FROM document
                                     WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
         $title = (empty($file->title)) ? $file->filename : $file->title;
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc', 
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='doc', 
                                         title = ?s, comments = ?s, 
                                         visible = ?d, `order` = ?d, 
                                         `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
@@ -213,10 +213,10 @@ function insert_docs($id) {
 function insert_text($id) {
     global $comments, $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     $order++;
     $comments = purify($comments);
-    $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+    $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='text', title='',
                         comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
     $uresId = $q->lastInsertID;
     $urdx->store($uresId, false);
@@ -237,12 +237,12 @@ function insert_text($id) {
 function insert_lp($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['lp'] as $lp_id) {
         $order++;
         $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath
 			WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='lp', title = ?s, comments = ?s,
                                         visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                 $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
         $uresId = $q->lastInsertID;
@@ -266,15 +266,15 @@ function insert_lp($id) {
 function insert_video($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['video'] as $video_id) {
         $order++;
         list($table, $res_id) = explode(':', $video_id);        
         $table = ($table == 'video') ? 'video' : 'videolink';
         $row = Database::get()->querySingle("SELECT * FROM $table
 			WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
-        $q = Database::get()->query("INSERT INTO unit_resources 
-                                SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities 
+                                SET course_weekly_view_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                             $id, $row->title, $row->description, $res_id);
         $uresId = $q->lastInsertID;
         $urdx->store($uresId, false);
@@ -297,7 +297,7 @@ function insert_video($id) {
 function insert_work($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['work'] as $work_id) {
         $order++;
         $work = Database::get()->querySingle("SELECT * FROM assignment
@@ -307,8 +307,8 @@ function insert_work($id) {
         } else {
             $visibility = 1;
         }
-        $q = Database::get()->querySingle("INSERT INTO unit_resources SET
-                                unit_id = ?d,
+        $q = Database::get()->querySingle("INSERT INTO course_weekly_view_activities SET
+                                course_weekly_view_id = ?d,
                                 type = 'work',
                                 title = ?s,
                                 comments = ?s,
@@ -337,7 +337,7 @@ function insert_work($id) {
 function insert_exercise($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['exercise'] as $exercise_id) {
         $order++;
         $exercise = Database::get()->querySingle("SELECT * FROM exercise
@@ -347,7 +347,7 @@ function insert_exercise($id) {
         } else {
             $visibility = 1;
         }
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='exercise', title = ?s,
                             comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                     $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
         $uresId = $q->lastInsertID;
@@ -371,7 +371,7 @@ function insert_exercise($id) {
 function insert_forum($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['forum'] as $for_id) {
         $order++;
         $ids = explode(':', $for_id);
@@ -380,15 +380,15 @@ function insert_forum($id) {
             $topic = Database::get()->querySingle("SELECT * FROM forum_topic
                                         WHERE id = ?d
                                         AND forum_id = ?d", $topic_id, $forum_id);
-            $q = Database::get()->query("INSERT INTO unit_resources
-                                            SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
+            $q = Database::get()->query("INSERT INTO course_weekly_view_activities
+                                            SET course_weekly_view_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
                                         $id, $topic->title, $order, $topic->id);
         } else {
             $forum_id = $ids[0];
             $forum = Database::get()->querySingle("SELECT * FROM forum
                                         WHERE id = ?d
                                         AND course_id = ?d", $forum_id, $course_id);
-            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
+            $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = 'forum', title = ?s,
                                             comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
                                     $id, $forum->name, $forum->desc, $order, $forum->id);
         }
@@ -413,11 +413,11 @@ function insert_forum($id) {
 function insert_poll($id) {
     global $course_id, $course_code, $cidx, $urdx;
     
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['poll'] as $poll_id) {
         $order++;
         $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', 
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = 'poll', 
                                         title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                     $id, $poll->name, $order, $poll->pid);
         $uresId = $q->lastInsertID;
@@ -440,12 +440,12 @@ function insert_poll($id) {
 function insert_wiki($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['wiki'] as $wiki_id) {
         $order++;
         $wiki = Database::get()->querySingle("SELECT * FROM wiki_properties
 			WHERE course_id = ?d AND id = ?d", $course_id, $wiki_id);
-        $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='wiki', title = ?s, comments = ?s,
+        $q =  Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='wiki', title = ?s, comments = ?s,
                                         visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                     $id, $wiki->title, $wiki->description, $order, $wiki->id);
         $uresId = $q->lastInsertID;
@@ -469,13 +469,13 @@ function insert_wiki($id) {
 function insert_link($id) {
     global $course_id, $course_code, $cidx, $urdx;
     
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     // insert link categories
     if (isset($_POST['catlink']) and count($_POST['catlink'] > 0)) {
         foreach ($_POST['catlink'] as $catlink_id) {
             $order++;
             $linkcat = Database::get()->querySingle("SELECT * FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $catlink_id);
-            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='linkcategory', title = ?s,
+            $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='linkcategory', title = ?s,
                                         comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d", 
                                 $id, $linkcat->name, $linkcat->description, $order, $linkcat->id);
             $uresId = $q->lastInsertID;
@@ -487,7 +487,7 @@ function insert_link($id) {
         foreach ($_POST['link'] as $link_id) {
             $order++;
             $link = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
-            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'link', title = ?s,
+            $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = 'link', title = ?s,
                                             comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                 $id, $link->title, $link->description, $order, $link->id);
             $uresId = $q->lastInsertID;
@@ -511,12 +511,12 @@ function insert_link($id) {
 function insert_ebook($id) {
     global $course_id, $course_code, $cidx, $urdx;
     
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach (array('ebook', 'section', 'subsection') as $type) {
         if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
             foreach ($_POST[$type] as $ebook_id) {
                 $order++;
-                $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = $id, type = '$type',
+                $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = $id, type = '$type',
                                                 title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d", 
                                             $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 $uresId = $q->lastInsertID;

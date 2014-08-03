@@ -34,6 +34,12 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
 
+
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/weeks/functions.php';
+require_once 'modules/document/doc_init.php';
+
+
 $tree = new Hierarchy();
 $course = new Course();
 
@@ -176,6 +182,24 @@ if ($is_editor) {
         $id = intval($_REQUEST['up']);
         move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
     }
+    
+    if (isset($_REQUEST['visW'])) { // modify visibility of the Week
+        $id = intval($_REQUEST['visW']);
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
+        $newvis = ($vis == 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
+    }
+    
+    if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
+        $title = $_REQUEST['weektitle'];
+        $descr = $_REQUEST['weekdescr'];
+        $unit_id = $_REQUEST['week_id'];
+        Database::get()->query("UPDATE course_weekly_view SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);        
+    }
+    
 }
 
 // add course units
@@ -198,16 +222,9 @@ if ($is_editor) { //if he is editor
     $start_date = $courseInfo->start_date;
     $finish_date = $courseInfo->finish_date;
     
-    if($viewCourse == 'weekly'){ //weekly type
-        $query = "SELECT id, title, comments, visible, public
-		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
-                  ORDER BY `order`";
-    }else{
-        $query = "SELECT id, title, comments, visible, public
-		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
-                  ORDER BY `order`";
-    }
-    
+    $query = "SELECT id, title, comments, visible, public
+                FROM course_units WHERE course_id = $course_id AND `order` >= 0
+                ORDER BY `order`";
     
 } else { //if he is not editor
     $query = "SELECT id, title, comments, visible, public
@@ -440,13 +457,34 @@ $tool_content .= "</td>
 $tool_content .= "</td></tr></table>";
 
 if($viewCourse == "weekly"){
+    
+    if(!$is_editor){
+        $visibleFlag = " AND visible = 1";
+    }else{
+        $visibleFlag = "";
+    }
+    
     //echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
-    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week FROM course_weekly_view WHERE course_id = ?d AND visible = ?d", $course_id, 1);
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
+        $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
+        $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
+        
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                            <h2>$langWeek: $week->start_week - $week->finish_week</h2>
+                                <h2 $class_vis>$langWeek: $week->start_week - $week->finish_week - $week->title</h2>
                             </a>
+                            <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
+                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
+                                <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
+                            </a>
+                            <div $class_vis>$week->comments</div>
+                            <hr>
+                            <table>
+                            ".show_resourcesWeeks($week->id)."
+                            </table>
                           </fieldset>";
         
     }

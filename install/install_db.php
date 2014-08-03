@@ -180,6 +180,8 @@ $db->query("CREATE TABLE `course` (
 $db->query("CREATE TABLE `course_weekly_view` (
   `id` INT(11) NOT NULL auto_increment,
   `course_id` INT(11) NOT NULL,
+  `title` VARCHAR(255) NOT NULL DEFAULT '',
+  `comments` MEDIUMTEXT,
   `start_week` DATE NOT NULL default '0000-00-00',
   `finish_week` DATE NOT NULL default '0000-00-00',
   `visible` TINYINT(4) NOT NULL DEFAULT 1,
@@ -190,11 +192,15 @@ $db->query("CREATE TABLE `course_weekly_view` (
 #
 
 $db->query("CREATE TABLE `course_weekly_view_activities` (
-  `id` INT(11) NOT NULL auto_increment,
-  `course_weekly_view_id` INT(11) NOT NULL,
-  `type` VARCHAR(50) NOT NULL DEFAULT '',
-  `act_id` INT(11) NOT NULL,
-  PRIMARY KEY  (`id`)) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `course_weekly_view_id` INT(11) NOT NULL ,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `comments` MEDIUMTEXT,
+    `res_id` INT(11) NOT NULL,
+    `type` VARCHAR(255) NOT NULL DEFAULT '',
+    `visible` TINYINT(4),
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
 
 
 
@@ -1211,8 +1217,7 @@ $db->query("CREATE TABLE `course_units` (
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,
-    `course_id` INT(11) NOT NULL,
-    `date` DATE NOT NULL DEFAULT '0000-00-00') $charset_spec");
+    `course_id` INT(11) NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE `unit_resources` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
