@@ -2394,6 +2394,9 @@ $langTopicDataChanged = "Το θέμα τροποποιήθηκε επιτυχώ
 $langForumPostReply = "Απάντηση σε αυτό το μήνυμα";
 $langForumPostParent = "Αυτό το μήνυμα είναι απάντηση στο μήνυμα ";
 $langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί.";
+$langErrorTopicLocked = "Αυτό το θέμα συζήτησης είναι κλειδωμένο.";
+$langLockTopic = "Κλείδωμα θέματος";
+$langUnlockTopic = "Ξεκλείδωμα θέματος";
 
 /* * ***************************************************************
  * questionnaire.php

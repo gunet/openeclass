@@ -1062,8 +1062,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `num_replies` int(10) NOT NULL default '0',
                             `last_post_id` int(10) NOT NULL default '0',
                             `forum_id` int(10) NOT NULL default '0',
+                            `locked` TINYINT DEFAULT 0 NOT NULL,
                             PRIMARY KEY (`id`))
                             $charset_spec");
+                    
+                    if (!mysql_field_exists($mysqlMainDb, 'forum_topic', 'locked')) {
+                        Database::get()->query("ALTER TABLE `forum_topic` ADD `locked` TINYINT DEFAULT 0 NOT NULL");
+                    }
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
                             `user_id` INT(11) NOT NULL,

@@ -54,7 +54,7 @@ if (isset($_GET['parent_post'])) {
     $parent_post = 0;
 }
 
-$myrow = Database::get()->querySingle("SELECT f.name, t.title
+$myrow = Database::get()->querySingle("SELECT f.name, t.title, t.locked
             FROM forum f, forum_topic t
             WHERE f.id = $forum
             AND t.id = $topic
@@ -63,6 +63,7 @@ $myrow = Database::get()->querySingle("SELECT f.name, t.title
 
 $forum_name = $myrow->name;
 $topic_title = $myrow->title;
+$topic_locked = $myrow->locked;
 $forum_id = $forum;
 
 $is_member = false;
@@ -75,6 +76,12 @@ $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$top
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_post_ok) {
     $tool_content .= $langErrorTopicSelect;
+    draw($tool_content, 2, null, $head_content);
+    exit();
+}
+
+if ($topic_locked == 1) {
+    $tool_content .= "<p class='alert1'>$langErrorTopicLocked</p>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }

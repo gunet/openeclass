@@ -42,6 +42,20 @@ require_once 'functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
+    load_js('jquery');
+    $head_content .= '<script>
+                          function lock(topic_id,course_code) {
+                            $.getJSON("lock_topic.php?course="+course_code+"&topic="+topic_id,function(response){
+                              if (response) {
+                                if ($("#lock-"+topic_id).attr("src").indexOf("lock_closed.png") != -1) {
+                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_closed.png","lock_open.png"));
+                                } else if ($("#lock-"+topic_id).attr("src").indexOf("lock_open.png") != -1) {
+                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_open.png","lock_closed.png"));
+                                }
+                              }
+                            });
+                          }
+                      </script>';
 }
 
 $paging = true;
@@ -232,6 +246,7 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td width='1'><img src='$image' /></td>";
         $topic_title = $myrow->title;
+        $topic_locked = $myrow->locked;
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($replies > $posts_per_page) {
@@ -271,6 +286,12 @@ if (count($result) > 0) { // topics found
 			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
+            
+            if ($topic_locked == 0) {
+                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_open.png' title='$langLockTopic' alt='$langLockTopic' /></a>";
+            } else {
+                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_closed.png' title='$langUnlockTopic' alt='$langUnlockTopic' /></a>";
+            }
         }
         if (isset($_GET['start']) and $_GET['start'] > 0) {
             $tool_content .= "

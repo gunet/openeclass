@@ -58,7 +58,7 @@ if (isset($_GET['topic'])) {
 }
 if (isset($_GET['post_id'])) {//needed to find post page for anchors
     $post_id = intval($_GET['post_id']);
-    $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time, p.poster_id FROM forum f, forum_topic t, forum_post p
+    $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time, p.poster_id, t.locked FROM forum f, forum_topic t, forum_post p
             WHERE f.id = ?d
             AND t.id = ?d
             AND p.id = ?d
@@ -66,7 +66,7 @@ if (isset($_GET['post_id'])) {//needed to find post page for anchors
             AND p.topic_id = t.id
             AND f.course_id = ?d", $forum, $topic, $post_id, $course_id);
 } else {
-    $myrow = Database::get()->querySingle("SELECT f.id, f.name FROM forum f, forum_topic t
+    $myrow = Database::get()->querySingle("SELECT f.id, f.name, t.locked FROM forum f, forum_topic t
             WHERE f.id = ?d
             AND t.id = ?d
             AND t.forum_id = f.id
@@ -81,6 +81,7 @@ if (!$myrow) {
 }
 $forum_name = $myrow->name;
 $forum = $myrow->id;
+$topic_locked = $myrow->locked;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
@@ -161,11 +162,16 @@ if (isset($_SESSION['message'])) {
     $tool_content .= $_SESSION['message'];
     unset($_SESSION['message']);
 }
-$tool_content .= "<div id='operations_container'>
-	<ul id='opslist'>
-	<li><a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum'>$langReply";
 
-$tool_content .= "</a></li></ul></div>";
+if ($topic_locked == 1) {
+    $tool_content .= "<p class='alert1'>$langErrorTopicLocked</p>";
+} else {
+    $tool_content .= "<div id='operations_container'>
+    	<ul id='opslist'>
+    	<li><a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum'>$langReply";
+    
+    $tool_content .= "</a></li></ul></div>";
+}
 
 if ($paging and $total > $posts_per_page) {
     $times = 1;

@@ -488,6 +488,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
   `num_replies` INT(10) NOT NULL DEFAULT 0,
   `last_post_id` INT(10) NOT NULL DEFAULT 0,
   `forum_id` INT(10) NOT NULL DEFAULT 0,
+  `locked` TINYINT DEFAULT 0 NOT NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
