@@ -218,9 +218,9 @@ function new_bbb_session() {
             $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
             $res = Database::get()->queryArray($sql,$course_code);
             $tool_content .= "<option value=0>" . $langAllUsers . "</option>";
-                foreach ($res as $r) {
-                    $tool_content .= "<option value=" . $r->id . ">" . q($r->name) . "</option>";
-                }
+                    foreach ($res as $r) {
+                        if(isset($r->id)) {$tool_content .= "<option value=" . $r->id . ">" . q($r->name) . "</option>";}
+                    }
         $tool_content .= "</select></td>";
         $tool_content .="</th>
         </tr>
