@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /* ========================================================================
  * Open eClass 3.0
@@ -34,6 +34,7 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'main/personal_calendar/calendar_events.class.php';
 
 if ($_SESSION['status'] == USER_TEACHER) {
     $extra = "AND course.visible != " . COURSE_INACTIVE;
@@ -53,7 +54,7 @@ if (count($result2) > 0) {
     }
 }
 $_SESSION['courses'] = $courses;
- 
+
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
@@ -82,13 +83,25 @@ if (count($lesson_ids) > 0) {
 }
 
 // create array with content
+//BEGIN - Get user personal calendar
+$today = getdate();
+$day = $today['mday'];
+$month = $today['mon'];
+$year = $today['year']; 
+Calendar_Events::get_calendar_settings();
+$user_personal_calendar = Calendar_Events::small_month_calendar($day,$month,$year);
+//END - Get personal calendar
+
+// ==  BEGIN create array with personalised content
+
 $perso_tool_content = array(
     'lessons_content' => $user_lesson_info,
     'assigns_content' => $user_assignments,
     'announce_content' => $user_announcements,
     'docs_content' => $user_documents,
     'agenda_content' => $user_agenda,
-    'forum_content' => $user_forumPosts
+    'forum_content' => $user_forumPosts,
+    'personal_calendar_content' => $user_personal_calendar
 );
 
 

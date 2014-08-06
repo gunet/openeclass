@@ -1362,9 +1362,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `content` TEXT NOT NULL,
                             `start` DATETIME NOT NULL DEFAULT '0000-00-00',                                
                             `duration` VARCHAR(20) NOT NULL,
-                            `visible` TINYINT(4))
-                            $charset_spec");
-
+                            `visible` TINYINT(4),
+                             recursion_period varchar(30) DEFAULT NULL,
+                             recursion_end date DEFAULT NULL,
+                             PRIMARY KEY (`id`)
+                             $charset_spec");
+                            
+                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -1473,26 +1477,58 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
 
-                    // bbb_servers table
-                    Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
-                      `id` int(11) NOT NULL AUTO_INCREMENT,
-                      `hostname` varchar(255) DEFAULT NULL,
-                      `ip` varchar(255) NOT NULL,
-                      `enabled` enum("true","false") DEFAULT NULL,
-                      `server_key` varchar(255) DEFAULT NULL,
-                      `api_url` varchar(255) DEFAULT NULL,
-                      `max_rooms` int(11) DEFAULT NULL,
-                      `max_users` int(11) DEFAULT NULL,
-                      `enable_recordings` enum("yes","no") DEFAULT NULL,
-                      PRIMARY KEY (`id`),
-                      KEY `idx_bbb_servers` (`hostname`))');
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `note` (
+                         `id` int(11) NOT NULL auto_increment,
+                         `user_id` int(11) NOT NULL,
+                         `title` varchar(300),
+                         `content` text NOT NULL,
+                         `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                         `order` mediumint(11) NOT NULL default 0,
+                         `reference_obj_module` mediumint(11) default NULL,
+                         `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+                         `reference_obj_id` int(11) default NULL,
+                         `reference_obj_course` int(11) default NULL,
+                        PRIMARY KEY  (`id`))");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_settings` (
                           `setting_id` INT(11) NOT NULL,
                           `course_id` INT(11) NOT NULL,
                           `value` INT(11) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`setting_id`, `course_id`))");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` int(11) NOT NULL,
+                        `title` varchar(200) NOT NULL,
+                        `content` text NOT NULL,
+                        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        `duration` time NOT NULL,
+                        `recursion_period` varchar(30) DEFAULT NULL,
+                        `recursion_end` date DEFAULT NULL,
+                        `source_event_id` int(11) DEFAULT NULL,
+                        `reference_obj_module` mediumint(11) DEFAULT NULL,
+                        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+                        `reference_obj_id` int(11) DEFAULT NULL,
+                        `reference_obj_course` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`))");
 
+                Database::get()->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+                        `user_id` int(11) NOT NULL,
+                        `view_type` enum('month','week') DEFAULT 'month',
+                        `personal_color` varchar(30) DEFAULT NULL,
+                        `course_color` varchar(30) DEFAULT NULL,
+                        `deadline_color` varchar(30) DEFAULT NULL,
+                        `show_personal` bit(1) DEFAULT b'1',
+                        `show_course` bit(1) DEFAULT b'1',
+                        `show_deadline` bit(1) DEFAULT b'1',
+                        PRIMARY KEY (`user_id`))");
+
+                    //create triggers
+                    Database::get()->query("CREATE TRIGGER personal_calendar_settings_init "
+                            . "AFTER INSERT ON `user` FOR EACH ROW "
+                            . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
+                    Database::get()->query("INSERT INTO personal_calendar_settings(user_id) SELECT id FROM user");
+                    
                     // bbb_sessions tables
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
                       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1509,9 +1545,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `unlock_interval` int(11) DEFAULT NULL,
                       `external_users` varchar(255) DEFAULT "",
                       `participants` varchar(255) DEFAULT "",
-                      PRIMARY KEY (`id`)
-                    )');
-
+                      PRIMARY KEY (`id`))');
+                    
+                    Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `ip` varchar(255) NOT NULL,
+                        `enabled` enum("true","false") DEFAULT NULL,
+                        `server_key` varchar(255) DEFAULT NULL,
+                        `api_url` varchar(255) DEFAULT NULL,
+                        `max_rooms` int(11) DEFAULT NULL,
+                        `max_users` int(11) DEFAULT NULL,
+                        `enable_recordings` enum("yes","no") DEFAULT NULL,
+                        `weight` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_bbb_servers` (`hostname`))');
+                    
                     // hierarchy tables
                     $n = Database::get()->queryArray("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;
@@ -2118,8 +2167,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         <p class='info'>$langUpgSucNotice</p>
         <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
 
+
         echo '</div></body></html>';
         exit;
-    } // end of if not submit
-
+    } // end of if not submit                
 draw($tool_content, 0);

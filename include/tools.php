@@ -270,9 +270,19 @@ function loggedInMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-    array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
+    array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "arrow.png");
 
+    array_push($sideMenuText, $GLOBALS['langNotes']);
+    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
+    array_push($sideMenuImg, "arrow.png");
+    
+    if (isset($status) and ($status == USER_STUDENT)) {
+        array_push($sideMenuText, $GLOBALS['langGradeTotal']);
+        array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
+    
     array_push($sideMenuText, $GLOBALS['langModifyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
     array_push($sideMenuImg, "arrow.png");
@@ -346,11 +356,9 @@ function loggedOutMenu() {
 /**
  * Creates the administrator menu
  * 
- * @global type $urlAppend
  * @global type $language
  * @global type $phpSysInfoURL
  * @global type $phpMyAdminURL
- * @global type $siteName
  * @global type $urlServer
  * @global type $is_admin
  * @global type $is_power_user
@@ -359,8 +367,8 @@ function loggedOutMenu() {
  */
 function adminMenu() {
 
-    global $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-    global $siteName, $urlServer;
+    global $language, $phpSysInfoURL, $phpMyAdminURL;
+    global $urlServer;
     global $is_admin, $is_power_user, $is_departmentmanage_user;
 
     $sideMenuGroup = array();

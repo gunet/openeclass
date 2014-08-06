@@ -336,7 +336,6 @@ $langdbpass = "Συνθηματικό χρήστη Βάσης Δεδομένων
 $langdbtable = "Όνομα πίνακα Βάσης Δεδομένων";
 $langdbfielduser = "Όνομα πεδίου Χρήστη στον πίνακα";
 $langdbfieldpass = "Όνομα πεδίου Συνθηματικού Χρήστη στον πίνακα";
-$langdbpassencr = "Κρυπτογράφηση πεδίου συνθηματικού";
 $langInstructionsAuth = "Οδηγίες διασύνδεσης και χρήσης";
 $langTestAccount = "Για να ενεργοποιηθεί ο τρόπος πιστοποίησης είναι απαραίτητο να κάνετε μια δοκιμαστική χρήση με ένα λογαριασμό της μεθόδου που επιλέξατε";
 $langpop3host = "Εξυπηρέτης POP3";
@@ -1341,7 +1340,6 @@ $langQuestCreate = "Δημιουργία ερωτήσεων";
 $langExRecord = "Η άσκησή σας αποθηκεύτηκε";
 $langBackModif = "Επιστροφή στη διόρθωση της άσκησης";
 $langDoEx = "Κάντε την άσκηση";
-$langRemainingTime = "Υπολειπόμενος χρόνος";
 $langDefScor = "Καθορίστε τις ρυθμίσεις βαθμών";
 $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεων";
 $langSub = "Υπότιτλος";
@@ -1480,8 +1478,6 @@ $langExerciseMaxAttemptsReached = "Έχετε φτάσει τον μέγιστο
 $langExerciseExpiredTime = "Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο εκτέλεσης της άσκησης.";
 $langExerciseExpired = "Η άσκηση έχει λήξει ή δεν έχει ενεργοποιηθεί";
 $langExerciseLis = "Λίστα ασκήσεων";
-$langExerciseEndTime = "Τέλος χρόνου";
-$langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults = "Αποτελέσματα";
 $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
@@ -1990,7 +1986,7 @@ $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί �
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
 $langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
-$langExercise = "Ασκήσεις";
+$langExercise = "Άσκηση";
 $langExerciseAsModule = "Χρήση Άσκησης";
 $langExerciseAsModuleLabel = "Άσκησης";
 $langExerciseCancelled = "Η άσκηση ακυρώθηκε. Για να συνεχίσετε, μπορείτε να επιλέξετε την επόμενη ενότητα, κάνοντας κλικ στο επόμενο βήμα.";
@@ -3663,6 +3659,95 @@ $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
 
 /* * ******************************************
+<<<<<<< mine
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
+
+/* * ******************************************
+=======
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
+
+/* * ******************************************
+  Personal calendar
+ * ***************************************** */
+$langAddEvent = "Νέο γεγονός";
+$langDays= "ημέρες";
+$langDateTime = "Ημέρα και ώρα";
+$langDocument = "Έγγραφο";
+$langDuration = "Διάρκεια";
+$langEmptyEventTitle = "Νέο γεγονός";
+$langEvent = "Γεγονός";
+$langEventAdd = "Νέο γεγονός προστέθηκε.";
+$langEventBody = "Περιγραφή";
+$langEventcourse = "γεγονότα μαθημάτων";
+$langEventdeadline = "προθεσμίες";
+$langEventDel = "Το γεγονός διαγράφηκε.";
+$langEventModified = "Το γεγονός άλλαξε.";
+$langEventModify = "Το γεγονός ενημερώθηκε.";
+$langEventNoTitle = "Κενός τίτλος";
+$langEventpersonal = "προσωπικά γεγονότα";
+$langEvents = "Γεγονότα";
+$langEventsDeleted = "Τα γεγονότα σας διαγράφηκαν.";
+$langEventTitle = "Τίτλος";
+$langEvery = "κάθε";
+$langiCalExport = "Εξαγωγή iCal";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifEvent = "Αλλαγή γεγονότος";
+$langMonthsAbstract = "μήνες";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langRepeat = "Επανάληψη";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
+$langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
+$langUntil = "μέχρι";
+$langWeek = "Eβδομάδα";
+$langWeeks = "εβδομάδες";
+
+/* * ******************************************
   Messages for jQuery tools
  * ***************************************** */
 
@@ -4025,6 +4110,7 @@ $langMaxUsers = "Μέγ. αριθμός χρηστών";
 $langMaxRooms = "Μέγ. αριθμός δωματίων";
 $langPresharedKey = "Διαμοιραζόμενο κλειδί";
 
+$langBBBSessionMaxUsers = "Μέγ. αριθμός συμμετεχόντων";
 /* * ***********************************************************
  * blog.php
  * ************************************************************ */

@@ -140,7 +140,10 @@ $db->query("CREATE TABLE `agenda` (
     `content` TEXT NOT NULL,
     `start` DATETIME NOT NULL DEFAULT '0000-00-00',
     `duration` VARCHAR(20) NOT NULL,
-    `visible` TINYINT(4)) $charset_spec");
+    `visible` TINYINT(4),
+    `recursion_period` varchar(30) DEFAULT NULL,
+    `recursion_end` date DEFAULT NULL)
+    $charset_spec");
 
 #
 # table `course`
@@ -290,6 +293,37 @@ $db->query("CREATE TABLE loginout (
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
+
+$db->query("CREATE TABLE `personal_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `reference_obj_module` mediumint(11) DEFAULT NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+        `reference_obj_id` int(11) DEFAULT NULL,
+        `reference_obj_course` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`))");
+ 
+$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+        `user_id` int(11) NOT NULL,
+        `view_type` enum('month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT NULL,
+        `course_color` varchar(30) DEFAULT NULL,
+        `deadline_color` varchar(30) DEFAULT NULL,
+        `show_personal` bit(1) DEFAULT b'1',
+        `show_course` bit(1) DEFAULT b'1',
+        `show_deadline` bit(1) DEFAULT b'1',
+        PRIMARY KEY (`user_id`))");
+//create triggers
+$db->query("CREATE TRIGGER personal_calendar_settings_init "
+        . "AFTER INSERT ON `user` FOR EACH ROW "
+        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
 
 // haniotak:
 // table for loginout rollups
@@ -1304,6 +1338,7 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
     `external_users` varchar(255) DEFAULT NULL,
     `participants` varchar(255) DEFAULT NULL,
     `record` enum("true","false") DEFAULT "false",
+    `sessionUsers` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`))');
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
@@ -1414,6 +1449,96 @@ $db->query("CREATE TABLE `oai_record` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `note` (
+        `id` int(11) NOT NULL auto_increment,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(300),
+        `content` text NOT NULL,
+        `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+        `order` mediumint(11) NOT NULL default 0,
+        `reference_obj_module` mediumint(11) default NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+        `reference_obj_id` int(11) default NULL,
+        `reference_obj_course` int(11) default NULL,
+        PRIMARY KEY  (`id`))");
+
+$db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
+$db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
+$db->query("CREATE INDEX `admin_index` ON admin(user_id)");
+$db->query("CREATE INDEX `agenda_index` ON agenda(course_id)");
+$db->query("CREATE INDEX `ann_index` ON announcement(course_id)");
+$db->query("CREATE INDEX `assignment_index` ON assignment(course_id)");
+$db->query("CREATE INDEX `assign_submit_index` ON assignment_submit(uid, assignment_id)");
+$db->query("CREATE INDEX `assign_spec_index` ON assignment_to_specific(user_id)");
+$db->query("CREATE INDEX `att_index` ON attendance(course_id)");
+$db->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
+$db->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
+$db->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
+$db->query("CREATE INDEX `course_index` ON course(code)");
+$db->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
+$db->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
+$db->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
+$db->query('CREATE INDEX `cid` ON course_description (course_id)');
+$db->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
+$db->query("CREATE INDEX `crev_index` ON course_review(course_id)");
+$db->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order`)");
+$db->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
+$db->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
+$db->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
+$db->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
+$db->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
+$db->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
+$db->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");
+$db->query("CREATE INDEX `ebook_sub_sec_index` ON ebook_subsection(section_id)");
+$db->query('CREATE INDEX `exer_index` ON exercise (course_id)');
+$db->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
+$db->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
+$db->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
+$db->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
+$db->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
+$db->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
+$db->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
+$db->query("CREATE INDEX `for_index` ON forum(course_id)");
+$db->query("CREATE INDEX `for_cat_index` ON forum_category(course_id)");
+$db->query("CREATE INDEX `for_not_index` ON forum_notify(course_id)");
+$db->query("CREATE INDEX `for_post_index` ON forum_post(topic_id)");
+$db->query("CREATE INDEX `for_topic_index` ON forum_topic(forum_id)");
+$db->query("CREATE INDEX `glos_index` ON glossary(course_id)");
+$db->query("CREATE INDEX `glos_cat_index` ON glossary_category(course_id)");
+$db->query("CREATE INDEX `grade_index` ON gradebook(course_id)");
+$db->query("CREATE INDEX `grade_act_index` ON gradebook_activities(gradebook_id)");
+$db->query("CREATE INDEX `grade_book_index` ON gradebook_book(gradebook_activity_id)");
+$db->query("CREATE INDEX `group_index` ON `group`(course_id)");
+$db->query("CREATE INDEX `gr_mem_index` ON group_members(group_id,user_id)");
+$db->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
+$db->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
+$db->query("CREATE INDEX `link_index` ON link(course_id)");
+$db->query("CREATE INDEX `link_cat_index` ON link_category(course_id)");
+$db->query("CREATE INDEX `cmid` ON log (course_id, module_id)");
+$db->query("CREATE INDEX `logins_id` ON logins(user_id, course_id)");
+$db->query("CREATE INDEX `loginout_id` ON loginout(id_user)");
+$db->query("CREATE INDEX `lp_as_id` ON lp_asset(module_id)");
+$db->query("CREATE INDEX `lp_id` ON lp_learnPath(course_id)");
+$db->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
+$db->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
+$db->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
+$db->query('CREATE INDEX `cid` ON oai_record (course_id)');
+$db->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
+$db->query("CREATE INDEX `poll_index` ON poll(course_id)");
+$db->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+$db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
+$db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
+$db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
+$db->query("CREATE INDEX `u_id` ON user(username)");
+$db->query("CREATE INDEX `udep_id` ON user_department(user, department)");
+$db->query("CREATE INDEX `cid` ON video (course_id)");
+$db->query("CREATE INDEX `cid` ON videolink (course_id)");
+$db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
+$db->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
+$db->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
+$db->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
+$db->query("CREATE INDEX `user_notes` ON note (user_id)");
+
 // create indexes
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
@@ -1490,3 +1615,8 @@ $db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
 $db->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
 $db->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
 $db->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
+$db->query("CREATE INDEX `user_notes` ON note (user_id)");
+$db->query('CREATE INDEX `user_events` ON personal_calendar (user_id)');
+$db->query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start)');
+$db->query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
+$db->query('CREATE INDEX `deadline_dates` ON assignment (course_id, deadline)');

@@ -204,6 +204,8 @@ if ($is_editor) {
             $activity_type = "";
         }
 
+        if (!isset($contentToModify)) $contentToModify = "";
+
         @$tool_content .= "
             <tr><th>$langGradebookType:</th></tr>
             <tr>
