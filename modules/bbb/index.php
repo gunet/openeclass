@@ -131,6 +131,12 @@ elseif(isset($_GET['choice']))
             enable_bbb_session($_GET['id']);
             break;
         case 'do_join':
+            #check if there is any record-capable bbb server. Otherwise notify users
+            if($_GET['record']=='true' && Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+            {
+                $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoServerForRecording</p>";
+                break;
+            }
             if(bbb_session_running($_GET['meeting_id'])=='false')
             {
                 create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_GET['record']);
@@ -821,7 +827,7 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record)
     $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
                                 WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
     //Algorithm to select BBB server GOES HERE ...
-    $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC");
+    $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
 
     if ($query) {        
         foreach ($query as $row) {
@@ -1009,6 +1015,16 @@ function bbb_session_running($meeting_id)
         return false;
     }
     $running_server = $res->running_at;    
+    
+    if(Database::get()->querySingle("SELECT count(*) as count
+                                    FROM bbb_servers
+                                    WHERE id=?s AND enabled='true'", $running_server)->count == 0)
+    {
+        //it means that the server is disabled so session must be recreated
+        return false;
+    }
+    
+    
     $res = Database::get()->querySingle("SELECT *
                                     FROM bbb_servers
                                     WHERE id=?s", $running_server);    
