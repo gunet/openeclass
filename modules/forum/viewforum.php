@@ -42,11 +42,30 @@ require_once 'functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
+    load_js('jquery');
+    $head_content .= '<script>
+                          function lock(topic_id,course_code) {
+                            $.getJSON("lock_topic.php?course="+course_code+"&topic="+topic_id,function(response){
+                              if (response) {
+                                if ($("#lock-"+topic_id).attr("src").indexOf("lock_closed.png") != -1) {
+                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_closed.png","lock_open.png"));
+                                } else if ($("#lock-"+topic_id).attr("src").indexOf("lock_open.png") != -1) {
+                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_open.png","lock_closed.png"));
+                                }
+                              }
+                            });
+                          }
+                      </script>';
 }
 
 $paging = true;
 $next = 0;
-$forum_id = intval($_GET['forum']);
+if (isset($_GET['forum'])) {
+    $forum_id = intval($_GET['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
+}
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
@@ -130,9 +149,22 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $number_of_posts = get_total_posts($topic_id);
-    $sql = Database::get()->queryArray("SELECT id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $sql = Database::get()->queryArray("SELECT id,poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $post_authors = array();
     foreach ($sql as $r) {
+        $post_authors[] = $r->poster_id;
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
+    }
+    $post_authors = array_unique($post_authors);
+    foreach ($post_authors as $author) {
+        $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author, $course_id);
+        Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author, $course_id);
+        if ($forum_user_stats->c != 0) {
+            Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
+        }
     }
     $fpdx->removeByTopic($topic_id);
     $number_of_topics = get_total_topics($forum_id);
@@ -195,8 +227,8 @@ if (count($result) > 0) { // topics found
         $last_post_datetime = $myrow->post_time;
         list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
         list($year, $month, $day) = explode("-", $last_post_date);
-        list($hour, $min) = explode(":", $last_post_time);
-        $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
+        list($hour, $min, $sec) = explode(":", $last_post_time);
+        $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
         if (!isset($last_visit)) {
             $last_visit = 0;
         }
@@ -214,6 +246,7 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td width='1'><img src='$image' /></td>";
         $topic_title = $myrow->title;
+        $topic_locked = $myrow->locked;
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($replies > $posts_per_page) {
@@ -247,10 +280,18 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "<td class='center'>";
         if ($is_editor) {
+            $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id'>
+			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
             $tool_content .= "
 			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
+            
+            if ($topic_locked == 0) {
+                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_open.png' title='$langLockTopic' alt='$langLockTopic' /></a>";
+            } else {
+                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_closed.png' title='$langUnlockTopic' alt='$langUnlockTopic' /></a>";
+            }
         }
         if (isset($_GET['start']) and $_GET['start'] > 0) {
             $tool_content .= "

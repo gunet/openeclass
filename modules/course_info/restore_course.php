@@ -194,6 +194,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $course_id),
         'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
+    restore_table($restoreThis, 'forum_user_stats', array('set' => array('course_id' => $course_id),
+    'map' => array('user_id' => $userid_map)));
     if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
             && isset($backupData) && is_array($backupData) 
             && isset($backupData['query']) && is_array($backupData['query'])) {
@@ -308,7 +310,37 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'owner_id' => $userid_map), 'return_mapping' => 'id'));
     restore_table($restoreThis, 'wiki_pages_content', array('delete' => array('id'),
         'map' => array('pid' => $wiki_pages_map, 'editor_id' => $userid_map)));
-
+    
+    //Blog
+    if (file_exists("$restoreThis/blog_post")) {
+        $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $course_id),
+        'return_mapping' => 'id'));
+    }
+    
+    //Comments
+    if (file_exists("$restoreThis/comments")) {
+        restore_table($restoreThis, 'rating', array('delete' => array('id'),
+        'map' => array('user_id' => $userid_map),
+        'map_function' => 'comments_map_function',
+        'map_function_data' => array($blog_map,
+        $course_id)));
+    }
+    
+    //Rating
+    if (file_exists("$restoreThis/rating")) {
+        restore_table($restoreThis, 'rating', array('delete' => array('rate_id'),
+        'map' => array('user_id' => $userid_map),
+        'map_function' => 'ratings_map_function',
+        'map_function_data' => array($blog_map,
+        $course_id)));
+    }
+    if (file_exists("$restoreThis/rating_cache")) {
+        restore_table($restoreThis, 'rating_cache', array('delete' => array('rate_cache_id'),
+        'map_function' => 'ratings_map_function',
+        'map_function_data' => array($blog_map,
+        $course_id)));
+    }
+    
     // Polls
     $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $course_id),
         'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid'));

@@ -49,6 +49,8 @@ if ($is_editor) {
 	<ul id='opslist'>
 	<li><a href='forum_admin.php?course=$course_code'>$langAddCategory</a>
 	</li>
+	<li><a href='forum_admin.php?course=$course_code&amp;settings=yes'>$langConfig</a>
+	</li>
 	</ul>
 	</div>";
 }
@@ -96,7 +98,7 @@ if ($total_categories > 0) {
 		ORDER BY f.cat_id, f.id", $course_id);
 
     foreach ($categories as $cat_row) {
-        $title = q($cat_row->cat_title);
+        $cat_title = q($cat_row->cat_title);
         $catNum = $cat_row->id;        
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
                                                         WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", 
@@ -114,7 +116,7 @@ if ($total_categories > 0) {
         }
         $tool_content .= "<table width='100%' class='tbl_alt' style='margin-bottom: 20px;'>";
         $tool_content .= "<tr class='odd'>
-		<th colspan='5'><b>$title</b></th>
+		<th colspan='5'><b>$cat_title</b></th>
 		<th width='80' class='right'>";
         if ($is_editor) {
             $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum'>

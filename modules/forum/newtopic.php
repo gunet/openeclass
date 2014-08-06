@@ -41,6 +41,9 @@ require_once 'functions.php';
 
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
 }
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
@@ -75,7 +78,7 @@ if (isset($_POST['submit'])) {
     }
     $message = purify($message);
     $poster_ip = $_SERVER['REMOTE_ADDR'];
-    $time = date("Y-m-d H:i");
+    $time = date("Y-m-d H:i:s");
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
                     , $subject, $uid, $forum_id, $time)->lastInsertID;
@@ -85,6 +88,13 @@ if (isset($_POST['submit'])) {
     $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
                     , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
     $fpdx->store($post_id);
+    
+    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $uid, $course_id);
+    Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $uid, $forum_user_stats->c, $course_id);
 
     Database::get()->query("UPDATE forum_topic
                     SET last_post_id = ?d

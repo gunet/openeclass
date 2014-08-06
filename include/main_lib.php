@@ -83,7 +83,11 @@ define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_BLOG', 37);
+define('MODULE_ID_COMMENTS', 38);
+define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_SHARING', 40);
 
 // user modules
 define('MODULE_ID_SETTINGS', 31);
@@ -223,6 +227,8 @@ function load_js($file, $init = '') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
     } elseif ($file == 'tagsinput') {
         $file = 'taginput/jquery.tagsinput.min.js';
+    } elseif ($file == 'RateIt') {
+        $file = 'jquery.rateit.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     if ($file == 'jquery-1.10.2.min.js')
@@ -1018,14 +1024,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1109,7 +1115,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1381,6 +1387,14 @@ function delete_course($cid) {
                          (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
+	Database::get()->query("DELETE forum_post FROM forum_post INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                            INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);
+    Database::get()->query("DELETE forum_topic FROM forum_topic INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);    
+    Database::get()->query("DELETE FROM forum_category WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum_user_stats WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
@@ -1393,6 +1407,15 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
+                            WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `blog_post` ON `rating_cache`.`rid` = `blog_post`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
+    Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
+    Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -1471,6 +1494,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
+            Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
             if ($log) {
                 Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
@@ -1483,6 +1507,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
+            Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
