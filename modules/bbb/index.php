@@ -505,8 +505,8 @@ function edit_bbb_session($session_id) {
                     <legend>$langNewBBBSessionInfo</legend>
                     <table class='tbl' width='100%'>
                     <tr>
-                      <th>$langTitle:</th>
-                      <td><input type='text' name='title' size='55' value=".$row->title."></td>
+                      <th>$langTitle:</th>`
+                      <td><input type='text' name='title' size='55' value='".$row->title."'></td>
                     </tr>
                     <tr>
                       <th>$langNewBBBSessionDesc:</th>
