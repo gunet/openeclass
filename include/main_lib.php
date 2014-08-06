@@ -84,11 +84,11 @@ define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
 define('MODULE_ID_SETTINGS', 31);
-define('MODULE_ID_BLOG', 35);
-define('MODULE_ID_COMMENTS', 36);
-define('MODULE_ID_RATING', 37);
+define('MODULE_ID_BLOG', 37);
+define('MODULE_ID_COMMENTS', 38);
+define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
-define('MODULE_ID_SHARING', 38);
+define('MODULE_ID_SHARING', 40);
 
 
 // exercise answer types
