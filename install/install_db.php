@@ -522,8 +522,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
   `num_replies` INT(10) NOT NULL DEFAULT 0,
   `last_post_id` INT(10) NOT NULL DEFAULT 0,
   `forum_id` INT(10) NOT NULL DEFAULT 0,
+  `locked` TINYINT DEFAULT 0 NOT NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
+        `user_id` INT(11) NOT NULL,
+        `num_posts` INT(11) NOT NULL,
+        `course_id` INT(11) NOT NULL,
+        PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS video (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -663,6 +669,45 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
                 `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                 PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `title` VARCHAR(255) NOT NULL DEFAULT '',
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `course_id` INT(11) NOT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `comments` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `rating` (
+                `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `value` TINYINT NOT NULL,
+                `widget` VARCHAR(30) NOT NULL,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `rating_source` VARCHAR(50) NOT NULL,
+                INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
+                INDEX `rating_index_2` (`rid`, `rtype`, `widget`, `user_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
+                `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `value` FLOAT NOT NULL DEFAULT 0,
+                `count` INT(11) NOT NULL DEFAULT 0,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `tag` VARCHAR(50),
+                INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -904,7 +904,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session');
+                        'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session',
+                        'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (Database::get()->query("SELECT COUNT(*) as value FROM `$table_name`")->value > 0) {
@@ -1061,9 +1062,38 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `num_replies` int(10) NOT NULL default '0',
                             `last_post_id` int(10) NOT NULL default '0',
                             `forum_id` int(10) NOT NULL default '0',
+                            `locked` TINYINT DEFAULT 0 NOT NULL,
                             PRIMARY KEY (`id`))
                             $charset_spec");
+                    
+                    if (!mysql_field_exists($mysqlMainDb, 'forum_topic', 'locked')) {
+                        Database::get()->query("ALTER TABLE `forum_topic` ADD `locked` TINYINT DEFAULT 0 NOT NULL");
+                    }
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
+                            `user_id` INT(11) NOT NULL,
+                            `num_posts` INT(11) NOT NULL,
+                            `course_id` INT(11) NOT NULL,
+                            PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
+                    $forum_stats = Database::get()->queryArray("SELECT forum.course_id, forum_post.poster_id, count(*) as c FROM forum_post 
+                            INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id 
+                            INNER JOIN forum ON forum.id = forum_topic.forum_id 
+                            GROUP BY forum.course_id, forum_post.poster_id");
+                    
+                    if ($forum_stats) {
+                        $query = "INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES ";
+                        $vars_to_flatten = array();
+                        foreach ($forum_stats as $forum_stat) {
+                            $query .= "(?d,?d,?d),";
+                            $vars_to_flatten[] = $forum_stat->poster_id;
+                            $vars_to_flatten[] = $forum_stat->c;
+                            $vars_to_flatten[] = $forum_stat->course_id;
+                        }
+                        $query = rtrim($query,',');
+                        Database::get()->query($query, $vars_to_flatten);
+                    }
+                    
                     // create video tables
                     Database::get()->query("CREATE TABLE IF NOT EXISTS video (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1214,6 +1244,45 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                             PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `content` TEXT NOT NULL,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `course_id` INT(11) NOT NULL) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `comments` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `content` TEXT NOT NULL,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `rating` (
+                            `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `value` TINYINT NOT NULL,
+                            `widget` VARCHAR(30) NOT NULL,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `rating_source` VARCHAR(50) NOT NULL,
+                            INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
+                            INDEX `rating_index_2` (`rid`, `rtype`, `user_id`, `widget`)) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `rating_cache` (
+                            `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `value` FLOAT NOT NULL DEFAULT 0,
+                            `count` INT(11) NOT NULL DEFAULT 0,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `tag` VARCHAR(50),
+                            INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

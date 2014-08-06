@@ -26,8 +26,15 @@
 require_once 'include/log.php';
 
 // Available settings
-define('SETTING_COMMENT_ENABLE', 1);
+define('SETTING_BLOG_COMMENT_ENABLE', 1);
 define('SETTING_BLOG_STUDENT_POST', 2);
+define('SETTING_BLOG_RATING_ENABLE', 3);
+define('SETTING_BLOG_SHARING_ENABLE', 4);
+define('SETTING_COURSE_SHARING_ENABLE', 5);
+define('SETTING_COURSE_RATING_ENABLE', 6);
+define('SETTING_COURSE_COMMENT_ENABLE', 7);
+define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
+define('SETTING_FORUM_RATING_ENABLE', 9);
 
 /** Get the default value of a course setting.
  * 
@@ -36,8 +43,15 @@ define('SETTING_BLOG_STUDENT_POST', 2);
  */
 function setting_default($setting_id) {
     $defaults = array(
-        SETTING_COMMENT_ENABLE => 1,
-        SETTING_BLOG_STUDENT_POST => 1);
+        SETTING_BLOG_COMMENT_ENABLE => 1,
+        SETTING_BLOG_STUDENT_POST => 1,
+        SETTING_BLOG_RATING_ENABLE => 1,
+        SETTING_BLOG_SHARING_ENABLE => 0,
+        SETTING_COURSE_SHARING_ENABLE => 0,
+        SETTING_COURSE_RATING_ENABLE => 0,
+        SETTING_COURSE_COMMENT_ENABLE => 0,
+        SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0,
+        SETTING_FORUM_RATING_ENABLE => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

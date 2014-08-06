@@ -30,6 +30,7 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/search/forumindexer.class.php';
@@ -41,7 +42,7 @@ $fidx = new ForumIndexer($idx);
 $ftdx = new ForumTopicIndexer($idx);
 $fpdx = new ForumPostIndexer($idx);
 
-$nameTools = $langCatForumAdmin;
+$nameTools = $langForumAdmin;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
@@ -124,22 +125,29 @@ elseif (isset($_GET['forumgoedit'])) {
                 <tr>
                 <th valign='top'>$langDescription</th>
                 <td><textarea name='forum_desc' cols='47' rows='3'>" . q($forum_desc) . "</textarea></td>
-                </tr>
-                <tr>
-                <th>$langChangeCat</th>
-                <td>
-                <select name='cat_id'>";
-    $result = Database::get()->queryArray("SELECT id, cat_title FROM forum_category WHERE course_id = ?d", $course_id);
-    foreach ($result as $result_row) {
-        $cat_id = $result_row->id;
-        $cat_title = $result_row->cat_title;
-        if ($cat_id == $cat_id_1) {
-            $tool_content .= "<option value='$cat_id' selected>$cat_title</option>";
-        } else {
-            $tool_content .= "<option value='$cat_id'>$cat_title</option>";
+                </tr>";
+    
+    $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $forum_id);
+    if ($result->c == 0) {//group forums cannot change category
+        $tool_content .= "
+                    <tr>
+                    <th>$langChangeCat</th>
+                    <td>
+                    <select name='cat_id'>";
+        $result = Database::get()->queryArray("SELECT `id`, `cat_title` FROM `forum_category` WHERE `course_id` = ?d AND `cat_order` <> ?d", $course_id, -1);
+        //cat_order <> -1: temp solution to exclude group categories and avoid triple join
+        foreach ($result as $result_row) {
+            $cat_id = $result_row->id;
+            $cat_title = $result_row->cat_title;
+            if ($cat_id == $cat_id_1) {
+                $tool_content .= "<option value='$cat_id' selected>$cat_title</option>";
+            } else {
+                $tool_content .= "<option value='$cat_id'>$cat_title</option>";
+            }
         }
+        $tool_content .= "</select></td></tr>";
     }
-    $tool_content .= "</select></td></tr>
+    $tool_content .= "
         <tr><th>&nbsp;</th>
         <td class='right'><input type='submit' value='$langModify'></td>
         </tr></table>
@@ -149,6 +157,8 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
+    $nameTools = $langCatForumAdmin;
+    
     $result = Database::get()->querySingle("SELECT id, cat_title FROM forum_category
                                 WHERE id = ?d
                                 AND course_id = ?d", $cat_id, $course_id);
@@ -175,6 +185,8 @@ elseif (isset($_GET['forumcatedit'])) {
 
 // Save forum category
 elseif (isset($_GET['forumcatsave'])) {
+    $nameTools = $langCatForumAdmin;
+    
     Database::get()->query("UPDATE forum_category SET cat_title = ?s
                                         WHERE id = ?d AND course_id = ?d", $_POST['cat_title'], $cat_id, $course_id);
     $tool_content .= "<p class='success'>$langNameCatMod</p>
@@ -182,8 +194,6 @@ elseif (isset($_GET['forumcatsave'])) {
 }
 // Save forum
 elseif (isset($_GET['forumgosave'])) {
-    $nameTools = $langDelete;
-    $navigation[] = array("url" => "../forum/forum_admin.php?course=$course_code", "name" => $langCatForumAdmin);
     Database::get()->query("UPDATE forum SET name = ?s,
                                    `desc` = ?s,
                                    cat_id = ?d
@@ -197,6 +207,8 @@ elseif (isset($_GET['forumgosave'])) {
 
 // Add category to forums
 elseif (isset($_GET['forumcatadd'])) {
+    $nameTools = $langCatForumAdmin;
+    
     Database::get()->query("INSERT INTO forum_category
                         SET cat_title = ?s,
                         course_id = ?d", $_POST['categories'], $course_id);
@@ -207,8 +219,7 @@ elseif (isset($_GET['forumcatadd'])) {
 // forum go add
 elseif (isset($_GET['forumgoadd'])) {
     $nameTools = $langAdd;
-    $navigation[] = array('url' => "../forum/forum_admin.php?course=$course_code",
-        'name' => $langCatForumAdmin);
+    
     $ctg = category_name($cat_id);
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
@@ -241,14 +252,28 @@ elseif (isset($_GET['forumgoadd'])) {
 
 // delete forum category
 elseif (isset($_GET['forumcatdel'])) {
+    $nameTools = $langCatForumAdmin;
+    
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
         $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
+            $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             $fpdx->removeByTopic($topic_id);
+            
+            foreach ($post_authors as $author) {
+                $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author, $course_id);
+                Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author, $course_id);
+                if ($forum_user_stats->c != 0) {
+                    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
+                }
+            }
         }
         Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
         $ftdx->removeByForum($forum_id);
@@ -265,15 +290,27 @@ elseif (isset($_GET['forumcatdel'])) {
 // delete forum
 elseif (isset($_GET['forumgodel'])) {
     $nameTools = $langDelete;
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langCatForumAdmin);
+    
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);    
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
         $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
-        foreach ($result2 as $$result_row2) {
+        foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
+            $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             $fpdx->removeByTopic($topic_id);
+            
+            foreach ($post_authors as $author) {
+                $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author, $course_id);
+                Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author, $course_id);
+                if ($forum_user_stats->c != 0) {
+                    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
+                }
+            }
         }
     }
     Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
@@ -286,7 +323,113 @@ elseif (isset($_GET['forumgodel'])) {
                     AND course_id = ?d", $forum_id, $course_id);    
     $tool_content .= "<p class='success'>$langForumDelete</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+} elseif (isset($_GET['forumtopicedit'])) {
+   $topic_id = intval($_GET['topic_id']);
+   
+   $result = Database::get()->querySingle("SELECT `forum_id` FROM `forum_topic` as ft, `forum` as f  
+           WHERE ft.`id` = ?d AND ft.`forum_id` = f.`id` AND `f`.course_id = ?d ", $topic_id, $course_id);
+   if ($result) {
+       $current_forum_id = $result->forum_id;
+       
+       $tool_content .= "
+       <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
+       <fieldset>
+       <legend>$langEditTopic</legend>
+       <table class='tbl' width='100%'>
+           <tr>
+           <th>$langChangeTopicForum</th>
+           <td>
+           <select name='forum_id'>";
+       $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
+       foreach ($result as $result_row) {
+           $forum_id = $result_row->forum_id;
+           $forum_name = $result_row->forum_name;
+           $cat_title = $result_row->cat_title;
+           
+           if ($forum_id == $current_forum_id) {
+               $tool_content .= "<option value='$forum_id' selected>$forum_name ($cat_title)</option>";
+           } else {
+               $tool_content .= "<option value='$forum_id'>$forum_name ($cat_title)</option>";
+           }
+       }
+       $tool_content .= "</select></td></tr>
+       <tr><th>&nbsp;</th>
+       <td class='right'><input type='submit' value='$langModify'></td>
+       </tr></table>
+       </fieldset>
+       </form>";
+   }
+} elseif (isset($_GET['forumtopicsave'])) {
+    $topic_id = intval($_GET['topic_id']);
+    $new_forum = intval($_POST['forum_id']);
+    
+    if (does_exists($topic_id, 'topic')) {//topic belongs to the course and new forum is not a group forum
+    
+        $result = Database::get()->querySingle("SELECT `forum_id`, `num_replies`, `last_post_id`  FROM `forum_topic` WHERE `id` = ?d", $topic_id);
+        $current_forum_id = $result->forum_id;
+        $num_replies = $result->num_replies;
+        $last_post_id = $result->last_post_id;
+        
+        if ($current_forum_id != $new_forum) {
+            Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
+            $ftdx->store($topic_id);
+            
+            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$new_forum);
+            $last_post_id = $result->last_post_id;
+            
+            Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`+1, `num_posts` = `num_posts`+?d, `last_post_id` = ?d
+                    WHERE id = ?d",$num_replies+1, $last_post_id, $new_forum);
+            
+            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$current_forum_id);
+            if ($result) {
+                $last_post_id = $result->last_post_id;
+            } else {
+                $last_post_id = 0;
+            }
+            
+            Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`-1, `num_posts` = `num_posts`-?d, `last_post_id` = ?d
+                    WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
+        }//if user selected the current forum do nothing
+        
+       $tool_content .= "<p class='success'>$langTopicDataChanged</p>
+                         <p>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$new_forum'>$langBack</a></p>";
+    }
+    
+} elseif (isset($_GET['settings'])) {
+    if (isset($_POST['submitSettings'])) {
+        setting_set(SETTING_FORUM_RATING_ENABLE, $_POST['r_radio'], $course_id);
+        $message = "<p class='success'>$langRegDone</p>";
+    }
+    
+    if (isset($message) && $message) {
+        $tool_content .= $message . "<br/>";
+        unset($message);
+    }
+    
+    if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
+        <fieldset>
+        <legend>$langRating</legend>
+        <table class='tbl' width='100%'>
+        <tbody>
+        <tr><td><input type=\"radio\" value=\"1\" name=\"r_radio\" $checkEn/>$langRatingEn</td></tr>
+        <tr><td><input type=\"radio\" value=\"0\" name=\"r_radio\" $checkDis/>$langRatingDis</td></tr>
+        <tr><td><input type=\"submit\" name=\"submitSettings\" value=\"$langSubmit\" /></td></tr>
+        </tbody>
+        </table>
+        </fieldset>
+        </form>";
 } else {
+    $nameTools = $langCatForumAdmin;
+    
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>

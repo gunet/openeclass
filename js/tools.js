@@ -260,6 +260,15 @@ function profile_init()
         });
 }
 
+function toggleMenu(mid){
+	menuObj = document.getElementById(mid);
+	
+	if(menuObj.style.display=='none')
+		menuObj.style.display='block';
+	else
+		menuObj.style.display='none';
+}
+
 function exercise_enter_handler() {
     /* 
      * Make an array of possible inputs and everytime

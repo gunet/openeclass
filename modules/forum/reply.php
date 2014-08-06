@@ -36,12 +36,25 @@ $fpdx = new ForumPostIndexer();
 
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
+} else {
+    header("Location: index.php?course=$course_code");
+    exit();
 }
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
+$parent_post_ok = true;
+if (isset($_GET['parent_post'])) {
+    $parent_post = intval($_GET['parent_post']);
+    $result = Database::get()->querySingle("SELECT * FROM forum_post WHERE topic_id = ?d AND id = ?d", $topic, $parent_post);
+    if (!$result) {
+        $parent_post_ok = false; //user has altered get param from url
+    }
+} else {
+    $parent_post = 0;
+}
 
-$myrow = Database::get()->querySingle("SELECT f.name, t.title
+$myrow = Database::get()->querySingle("SELECT f.name, t.title, t.locked
             FROM forum f, forum_topic t
             WHERE f.id = $forum
             AND t.id = $topic
@@ -50,6 +63,7 @@ $myrow = Database::get()->querySingle("SELECT f.name, t.title
 
 $forum_name = $myrow->name;
 $topic_title = $myrow->title;
+$topic_locked = $myrow->locked;
 $forum_id = $forum;
 
 $is_member = false;
@@ -60,8 +74,14 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $forum_name);
 $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => $topic_title);
 
-if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
+if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_post_ok) {
     $tool_content .= $langErrorTopicSelect;
+    draw($tool_content, 2, null, $head_content);
+    exit();
+}
+
+if ($topic_locked == 1) {
+    $tool_content .= "<p class='alert1'>$langErrorTopicLocked</p>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }
@@ -69,6 +89,7 @@ if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 if (isset($_POST['submit'])) {
     $message = $_POST['message'];
     $poster_ip = $_SERVER['REMOTE_ADDR'];
+    $parent_post = $_POST['parent_post'];
     if (trim($message) == '') {
         $tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
@@ -78,13 +99,19 @@ if (isset($_POST['submit'])) {
     }
 
 
-    $time = date("Y-m-d H:i");
+    $time = date("Y-m-d H:i:s");
     $surname = addslashes($_SESSION['surname']);
     $givenname = addslashes($_SESSION['givenname']);
 
-    $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s , ?d, ?t, ?s)"
-                    , $topic, $message, $uid, $time, $poster_ip)->lastInsertID;
+    $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, parent_post_id) VALUES (?d, ?s , ?d, ?t, ?s, ?d)"
+                    , $topic, $message, $uid, $time, $poster_ip, $parent_post)->lastInsertID;
     $fpdx->store($this_post);
+    $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
+                        INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                        INNER JOIN forum ON forum.id = forum_topic.forum_id
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $uid, $course_id);
+    Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $uid, $forum_user_stats->c, $course_id);
     Database::get()->query("UPDATE forum_topic SET topic_time = ?t,
                     num_replies = num_replies+1,
                     last_post_id = ?d
@@ -151,6 +178,7 @@ if (isset($_POST['submit'])) {
         </div>";
 
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+	<input type='hidden' name='parent_post' value='$parent_post'>
 	<fieldset>
         <legend>$langTopicAnswer: " . q($topic_title) . "</legend>
 	<table class='tbl' width='100%'>
