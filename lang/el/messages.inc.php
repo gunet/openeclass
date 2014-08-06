@@ -4099,3 +4099,5 @@ $langBBBImportRecordingsΟΚ = "Η εισαγωγή στα πολυμέσα ολ
 $langMaxUsers = "Μέγ. αριθμός χρηστών";
 $langMaxRooms = "Μέγ. αριθμός δωματίων";
 $langPresharedKey = "Διαμοιραζόμενο κλειδί";
+
+$langBBBSessionMaxUsers = "Μέγ. αριθμός συμμετεχόντων";

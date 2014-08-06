@@ -112,7 +112,7 @@ if (isset($_GET['add'])) {
 }
 elseif(isset($_POST['update_bbb_session']))
 { 
-    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record']);
+    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
 }
 elseif(isset($_GET['choice']))
 {
@@ -153,7 +153,7 @@ elseif(isset($_GET['choice']))
         $tool_content .= "<div class='success'>$langBBBImportRecordingsΟΚ</div>";
     }
 } elseif(isset($_POST['new_bbb_session'])) {  
-    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record']);
+    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
 }
 else {    
     bbb_session_details();
@@ -189,7 +189,7 @@ function new_bbb_session() {
     global $start_session;
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
-    global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse;
+    global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_session = strftime('%Y-%m-%d', strtotime('now'));
@@ -259,6 +259,10 @@ function new_bbb_session() {
             </td>
         </tr>
         <tr>
+            <th>$langBBBSessionMaxUsers:</th>
+            <td><input type='text' name='sessionUsers' size='5' ></td>
+        </tr>                    
+        <tr>
             <th>
                 $langBBBNotifyExternalUsers
             </th>
@@ -298,7 +302,7 @@ function new_bbb_session() {
  * @param type $minutes_before
  * @param type $external_users
  */
-function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record)
+function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
     global $tool_content, $langBBBAddSuccessful;
     global $langBBBScheduledSession;
@@ -324,8 +328,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             break;
     }
     
-    Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record)"
-        . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record);
+    Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
+        . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
     
     $tool_content .= "<div class='success'>$langBBBAddSuccessful</div>";
     $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
@@ -386,7 +390,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
  * @param type $minutes_before
  * @param type $external_users
  */
-function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record)
+function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
     global $tool_content, $langBBBAddSuccessful, $course_id;
     global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2 ;
@@ -409,7 +413,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             break;
     }
     Database::get()->querySingle("UPDATE bbb_session SET title=?s,description=?s,"
-            . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s,participants=?s,record=?s WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $r_group, $record, $session_id);
+            . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s,participants=?s,record=?s,sessionUsers=?d WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $r_group, $record, $sessionUsers, $session_id);
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -482,7 +486,7 @@ function edit_bbb_session($session_id) {
     global $start_session;
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
-    global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse;
+    global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
 
     
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -591,6 +595,10 @@ function edit_bbb_session($session_id) {
                           $tool_content .=">10</option>
                       </select> $langBBBMinutesBefore
                       </td>
+                    </tr>                    
+                    <tr>
+                      <th>$langBBBSessionMaxUsers:</th>
+                      <td><input type='text' name='sessionUsers' size='5' value=".$row->sessionUsers."></td>
                     </tr>                    
                     <tr>
                         <th>
