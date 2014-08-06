@@ -94,9 +94,9 @@ if (isset($_GET['add_server']))
     $tool_content .= '<tr><th class="left" width="100"><b>'.$langMaxUsers.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" />&nbsp;(*)</td></tr>';
     $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
-            <td><input type='radio' id='recorings_off' name='enable_recordings' checked='true' value='no' />
+            <td><input type='radio' id='recorings_off' name='enable_recordings' checked='true' value='false' />
             <label for='recorings_off'>" . $m['no'] . "</label><br />
-            <input type='radio' id='recorings_on' name='enable_recordings' value='yes' />
+            <input type='radio' id='recorings_on' name='enable_recordings' value='true' />
             <label for='recorings_on'>" . $m['yes'] . "</label></td>
         </th>";
     $tool_content .= "<tr><th class='left' width='100'><b>$langActivate</b></th>
@@ -213,18 +213,18 @@ if (isset($_GET['edit_server'])) {
             $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
             <td><input type='radio' id='recorings_off' name='enable_recordings' ";
             
-            if($server->enable_recordings=="no")
+            if($server->enable_recordings=="false")
             {
                 $tool_content .= " checked='true' ";
             }
-            $tool_content .=" value='no'/>
+            $tool_content .=" value='false'/>
                 <label for='recorings_off'>" . $langNo . "</label><br />
                 <input type='radio' id='recorings_on' name='enable_recordings' ";
-                        if($server->enable_recordings=="yes")
+                        if($server->enable_recordings=="true")
             {
                 $tool_content .= " checked='true' ";
             }
-            $tool_content .= " value='yes' />
+            $tool_content .= " value='true' />
                 <label for='recorings_on'>" . $langYes . "</label></td>
             </th>";
             
