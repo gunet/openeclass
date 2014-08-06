@@ -1293,6 +1293,7 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
     `external_users` varchar(255) DEFAULT NULL,
     `participants` varchar(255) DEFAULT NULL,
     `record` enum("true","false") DEFAULT "false",
+    `sessionUsers` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`))');
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
