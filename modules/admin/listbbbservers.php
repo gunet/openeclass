@@ -27,30 +27,35 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'bbb-api.php';
 
-function get_connected_users($salt,$bbb_url)
+function get_connected_users($salt,$bbb_url,$ip)
 {
-    // Instatiate the BBB class:
-    $bbb = new BigBlueButton($salt,$bbb_url);
+    $socket = @fsockopen($ip, '80', $errorNo, $errorStr, 3);
+    if(!$socket) return 0;
+    else 
+        {
+     
+            // Instatiate the BBB class:
+            $bbb = new BigBlueButton($salt,$bbb_url);
 
-    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+            $meetings = $bbb->getMeetingsWithXmlResponseArray();
 
-    $sum = 0;
-    foreach($meetings as $meeting){
-            $mid = $meeting['meetingId'];
-            $pass = $meeting['moderatorPw'];
-            if($mid != null){
-                    $info = $bbb->getMeetingInfoWithXmlResponseArray(array('meetingId' => $mid, 'password' => $pass));
-                    $sum += $info['participantCount'];
+            $sum = 0;
+            foreach($meetings as $meeting){
+                    $mid = $meeting['meetingId'];
+                    $pass = $meeting['moderatorPw'];
+                    if($mid != null){
+                            $info = $bbb->getMeetingInfoWithXmlResponseArray(array('meetingId' => $mid, 'password' => $pass));
+                            $sum += $info['participantCount'];
+                    }
             }
-    }
-    return $sum;
-
+            return $sum;
+        }
 }
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array( 'id','hostname','ip','enabled','server_key','api_url','max_users','weight');
+$aColumns = array( 'id', 'hostname','ip','enabled','server_key','api_url','max_users','weight');
 	
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = "hostname";
@@ -173,7 +178,7 @@ foreach ($rResult as $aRow) {
 		$row[] = $aRow->$aColumns[$i];
             }
 	}
-        $connected_users = get_connected_users($row[4],$row[5]) . "/" . $row[6];
+        $connected_users = get_connected_users($row[4],$row[5],$row[2]) . "/" . $row[6];
 
         //Remove elements from array to complete json data
         unset($row[4]);
