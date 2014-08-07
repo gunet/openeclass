@@ -537,12 +537,14 @@ function edit_bbb_session($session_id) {
                     }
                     $tool_content .=">" . $langAllUsers . "</option>";
                     foreach ($res as $r) {
-                        $tool_content .= "<option "; 
-                            if(in_array($r->id,$r_group))
-                            {
-                                $tool_content.="selected ";
+                        if($r->id){
+                                $tool_content .= "<option "; 
+                                if(in_array($r->id,$r_group))
+                                {
+                                    $tool_content.="selected ";
+                                }
+                                $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
                             }
-                            $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
                     }
                     $tool_content .= "</select></td>";
                     $tool_content .="</th>
