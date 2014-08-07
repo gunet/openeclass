@@ -860,6 +860,25 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record)
     if($run_to == -1)
     {
         //WE SHOULD TAKE ACTION IF NO SERVER AVAILABLE DUE TO CAPACITY PROBLEMS
+        // If no server available we select server with min connected users
+        
+        $temp_conn = 10000000;
+        
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC",$record);
+
+        if ($query) {        
+            foreach ($query as $row) {
+
+                // GET connected Participants
+                $connected_users = get_connected_users($row->server_key,$row->api_url);
+
+                if($connected_users<$temp_conn)
+                {
+                    $run_to=$row->id;
+                    $temp_conn = $connected_users;
+                }
+            }
+        }
         Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?d",$run_to,$meeting_id);
     }
     
