@@ -1125,10 +1125,13 @@ function get_total_bbb_servers()
 
 function publish_video_recordings($course_id,$id)
 {
-    $sessions = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id=?s AND id=?d ORDER BY id DESC", $course_id,$id);
+    $sessions = Database::get()->queryArray("SELECT bbb_session.id,bbb_session.course_id as course_id,"
+            . "bbb_session.title,bbb_session.description,bbb_session.start_date,"
+            . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id,$id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
-
+#print_r($servers);
+#print_r($sessions);
     if (($sessions) && ($servers)) {
         foreach ($servers as $server){
             $salt = $server->server_key;
@@ -1139,18 +1142,23 @@ function publish_video_recordings($course_id,$id)
                 $recordingParams = array(
                     'meetingId' => $session->meeting_id,
                 );
-                $recs = $bbb->getRecordingsUrl($recordingParams);
-                $recs = str_replace("bigbluebutton/api/getRecordings?meetingID","playback/presentation/playback.html?meetingId",$recs);
-                
-                #Check if recording allready in videolinks and if not insert
-                $c = Database::get()->querySingle("SELECT count(*) AS cnt FROM videolink
-                WHERE url = ?s",$recs);
-                if($c->cnt == '0')
+                $recs = file_get_contents($bbb->getRecordingsUrl($recordingParams));
+                #print_r($recs);
+                $xml = simplexml_load_string($recs);
+                # If not set it means that there is no video recording.
+                # Skip and search for next one
+                if(isset($xml->recordings->recording->playback->format->url))
                 {
-                    Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
-                    . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$course_id,$recs,$session->title,$session->desc,'xxx','XXX','2014-07-14 12:30:00',1,0);
-                }
+                    $url = (string) $xml->recordings->recording->playback->format->url;
 
+                    #Check if recording allready in videolinks and if not insert
+                    $c = Database::get()->querySingle("SELECT count(*) AS cnt FROM videolink WHERE url = ?s",$url);
+                    if($c->cnt == 0)
+                    {
+                        Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
+                        . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
+                    }
+                }
             }
         }
     }
