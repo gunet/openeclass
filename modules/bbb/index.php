@@ -137,7 +137,7 @@ elseif(isset($_GET['choice']))
                 $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoServerForRecording</p>";
                 break;
             }
-            if(bbb_session_running($_GET['meeting_id'])=='false')
+            if(bbb_session_running($_GET['meeting_id'])== false)
             {
                 create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_GET['record']);
             }
@@ -860,13 +860,13 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record)
     if($run_to == -1)
     {
         //WE SHOULD TAKE ACTION IF NO SERVER AVAILABLE DUE TO CAPACITY PROBLEMS
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?d",$run_to,$meeting_id);
+        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?d",$run_to,$meeting_id);
     }
     
     //we find the bbb server that will serv the session
     $res = Database::get()->querySingle("SELECT *
                         FROM bbb_servers
-                        WHERE id=?s", $run_to);
+                        WHERE id=?d", $run_to);
 
     $salt = $res->server_key;
     $bbb_url = $res->api_url;
@@ -1011,27 +1011,27 @@ function bbb_session_running($meeting_id)
 {
     //echo "SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'";    
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
-    if (! isset($res)) {
+
+    if (! isset($res->running_at)) {
         return false;
     }
     $running_server = $res->running_at;    
-    
+
     if(Database::get()->querySingle("SELECT count(*) as count
                                     FROM bbb_servers
-                                    WHERE id=?s AND enabled='true'", $running_server)->count == 0)
+                                    WHERE id=?d AND enabled='true'", $running_server)->count == 0)
     {
         //it means that the server is disabled so session must be recreated
         return false;
     }
     
-    
     $res = Database::get()->querySingle("SELECT *
                                     FROM bbb_servers
-                                    WHERE id=?s", $running_server);    
+                                    WHERE id=?d", $running_server);    
     $salt = $res->server_key;
     $bbb_url = $res->api_url;
     
-    if(!isset($salt) || !isset($bbb_url)) { return 'false'; }
+    if(!isset($salt) || !isset($bbb_url)) { return false; }
     
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
