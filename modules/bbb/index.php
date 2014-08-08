@@ -199,6 +199,7 @@ function new_bbb_session() {
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
+    global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_session = strftime('%Y-%m-%d', strtotime('now'));
@@ -213,7 +214,7 @@ function new_bbb_session() {
         </tr>
         <tr>
           <th>$langNewBBBSessionDesc:</th>
-          <td>$textarea</td>
+          <th colspan='2'>$textarea</th>
         </tr>
         <tr>
           <th>$langNewBBBSessionStart:</th>
@@ -259,25 +260,28 @@ function new_bbb_session() {
         </tr>
         <tr>
             <th>$langBBBSessionAvailable:</th>
-                <td>
+                <th colspan='2'>
                     <select name='minutes_before'>
                         <option value='15'' selected='selected'>15</option>
                         <option value='30'>30</option>
                         <option value='10'>10</option>
                     </select> $langBBBMinutesBefore
-            </td>
+            </th>
         </tr>
         <tr>
             <th>$langBBBSessionMaxUsers:</th>
-            <td><input type='text' name='sessionUsers' size='5' ></td>
+            <td><input type='text' name='sessionUsers' size='5' > $langBBBSessionSuggestedUsers:";
+        $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+        if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
+        $tool_content .=" <strong>$c</strong> ($langBBBSessionSuggestedUsers2)</td>
         </tr>                    
         <tr>
             <th>
                 $langBBBNotifyExternalUsers
             </th>
-            <td>
+            <th colspan='2'>
                 <input id='tags_1' name='external_users' type='text' class='tags' value='' />
-                </td>
+            </th>
         </tr>
         <tr>
         <th colspan='2' valign='top'>
@@ -286,7 +290,7 @@ function new_bbb_session() {
         </tr>        
         <tr>
           <th>&nbsp;</th>
-          <td class='right'><input type='submit' name='new_bbb_session' value='$langAdd' /></td>
+          <th colspan='2' class='right'><input type='submit' name='new_bbb_session' value='$langAdd' /></th>
         </tr>
         </table>
         </fieldset>
@@ -496,6 +500,7 @@ function edit_bbb_session($session_id) {
     global $langBack, $langTitle;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
+    global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
 
     
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -609,7 +614,10 @@ function edit_bbb_session($session_id) {
                     </tr>                    
                     <tr>
                       <th>$langBBBSessionMaxUsers:</th>
-                      <td><input type='text' name='sessionUsers' size='5' value=".$row->sessionUsers."></td>
+                      <td><input type='text' name='sessionUsers' size='5' value=".$row->sessionUsers."> $langBBBSessionSuggestedUsers:";
+        $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+        if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
+        $tool_content .=" <strong>$c</strong> ($langBBBSessionSuggestedUsers2)</td></td>
                     </tr>                    
                     <tr>
                         <th>
