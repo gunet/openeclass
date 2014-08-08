@@ -44,7 +44,7 @@ $action->record(MODULE_ID_BBB);
 
 $nameTools = $langBBB;
 
-global $langBBBImportRecordingsΟΚ;
+global $langBBBImportRecordingsΟΚ,$langBBBMaxUsersJoinError;
 
 // guest user not allowed
 if (check_guest()) {
@@ -140,15 +140,27 @@ elseif(isset($_GET['choice']))
                 $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoServerForRecording</p>";
                 break;
             }
-            if(bbb_session_running($_GET['meeting_id'])== false)
+            if(bbb_session_running($_GET['meeting_id']) == false)
             {
-                create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_GET['record']);
+                $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;
+                create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
             }
             if(isset($_GET['mod_pw']))
             {
                 header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
             }else
             {
+                # Get session capacity
+                $c = Database::get()->querySingle("SELECT sessionUsers FROM bbb_session where meeting_id=?s",$_GET['meeting_id']);
+                $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
+                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);
+
+                if( ($c > 0) && ($c < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
+                {
+                    $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBMaxUsersJoinError</p>";
+                    break;
+                }
+                else
                 header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
             }
             break;
@@ -271,6 +283,7 @@ function new_bbb_session() {
         <tr>
             <th>$langBBBSessionMaxUsers:</th>
             <td><input type='text' name='sessionUsers' size='5' > $langBBBSessionSuggestedUsers:";
+        
         $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
         if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
         $tool_content .=" <strong>$c</strong> ($langBBBSessionSuggestedUsers2)</td>
@@ -739,7 +752,7 @@ function bbb_session_details() {
                     $access='false';
                     foreach($myGroups as $mg)
                     {
-                        if(in_array($my,$r_group)) { 
+                        if(in_array($mg,$r_group)) { 
                             $access='true';                            
                         }
                     }
@@ -830,7 +843,7 @@ function delete_bbb_session($id)
 
 
 function create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record)
-{    
+{
     global $course_id;
 
     $run_to = -1;
@@ -1001,7 +1014,7 @@ function bbb_join_user($meeting_id,$att_pw,$surname,$name){
 
     $res = Database::get()->querySingle("SELECT *
                         FROM bbb_servers
-                        WHERE id=?s", $running_server);
+                        WHERE id=?d", $running_server);
 
     $salt = $res->server_key;
     $bbb_url = $res->api_url;
@@ -1076,7 +1089,11 @@ function bbb_session_running($meeting_id)
         $itsAllGood = false;
         return $itsAllGood;
     }
-    return $result['running'];
+    if((string) $result['running'] == 'false')
+    {
+        return false;
+        
+    }else return true;
 }
 
 //Function to calculate date diff in minutes in order to enable join link
@@ -1141,8 +1158,7 @@ function publish_video_recordings($course_id,$id)
             . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id,$id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
-#print_r($servers);
-#print_r($sessions);
+
     if (($sessions) && ($servers)) {
         foreach ($servers as $server){
             $salt = $server->server_key;
@@ -1174,6 +1190,46 @@ function publish_video_recordings($course_id,$id)
         }
     }
     return true;
+}
+
+function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
+{
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $infoParams = array(
+        'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting.
+        'password' => $pw,	// REQUIRED - Must match moderator pass for meeting.
+    );
+
+    // Now get meeting info and display it:
+    $itsAllGood = true;
+    try {$result = $bbb->getMeetingInfoWithXmlResponseArray($infoParams);}
+    catch (Exception $e) {
+        echo 'Caught exception: ', $e->getMessage(), "\n";
+        $itsAllGood = false;
+    }
+
+    if ($itsAllGood == true) {
+        // If it's all good, then we've interfaced with our BBB php api OK:
+            if ($result == null) {
+                // If we get a null response, then we're not getting any XML back from BBB.
+                echo "Failed to get any response. Maybe we can't contact the BBB server.";
+            }	
+            else {
+                // We got an XML response, so let's see what it says:
+                //var_dump($result);
+                if (!isset($result['messageKey'])) {
+                    // Then do stuff ...
+                    echo "<p>Meeting info was found on the server.</p>";
+                }
+                else {
+                    echo "<p>Failed to get meeting info.</p>";
+                }
+            }
+    }
+
+    return (int)$result['participantCount'];
 }
 
 add_units_navigation(TRUE);
