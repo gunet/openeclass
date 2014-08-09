@@ -280,12 +280,13 @@ function new_bbb_session() {
                     </select> $langBBBMinutesBefore
             </th>
         </tr>
-        <tr>
-            <th>$langBBBSessionMaxUsers:</th>
-            <td><input type='text' name='sessionUsers' size='5' > $langBBBSessionSuggestedUsers:";
+        <tr>";
+            $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+            if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
+
+        $tool_content.="<th>$langBBBSessionMaxUsers:</th>
+            <td><input type='text' name='sessionUsers' size='5' value='$c' > $langBBBSessionSuggestedUsers:";
         
-        $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
-        if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
         $tool_content .=" <strong>$c</strong> ($langBBBSessionSuggestedUsers2)</td>
         </tr>                    
         <tr>
