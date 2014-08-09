@@ -56,9 +56,7 @@ load_js('tagsinput');
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
-
-$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-        $langΒΒΒAlertTitle . '";</script>';
+load_js('validation.js');
 
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
 <script type='text/javascript'>
@@ -212,11 +210,12 @@ function new_bbb_session() {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
+    global $langΒΒΒAlertTitle,$langΒΒΒAlertMaxParticipants;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_session = strftime('%Y-%m-%d', strtotime('now'));
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
+        <form name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <legend>$langNewBBBSessionInfo</legend>
         <table class='tbl' width='100%'>
@@ -308,7 +307,14 @@ function new_bbb_session() {
         </tr>
         </table>
         </fieldset>
-        </form>";        
+        </form>";
+        $tool_content .='<script language="javaScript" type="text/javascript">
+        //<![CDATA[
+            var chkValidator  = new Validator("sessionForm");
+            chkValidator.addValidation("title","req","'.$langΒΒΒAlertTitle.'");
+            chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
+            chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
+        //]]></script>';
     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
@@ -515,6 +521,7 @@ function edit_bbb_session($session_id) {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
+    global $langΒΒΒAlertTitle, $langΒΒΒAlertMaxParticipants;
 
     
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -528,7 +535,7 @@ function edit_bbb_session($session_id) {
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
 
     $tool_content .= "
-                    <form action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post' onsubmit='return checkrequired(this, \"title\");'>
+                    <form name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
                     <fieldset>
                     <legend>$langNewBBBSessionInfo</legend>
                     <table class='tbl' width='100%'>
@@ -653,6 +660,13 @@ function edit_bbb_session($session_id) {
                     </table>
                     </fieldset>
                     </form>";
+                $tool_content .='<script language="javaScript" type="text/javascript">
+                    //<![CDATA[
+                    var chkValidator  = new Validator("sessionForm");
+                    chkValidator.addValidation("title","req","'.$langΒΒΒAlertTitle.'");
+                    chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
+                    chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
+                    //]]></script>';
                     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
         }
 

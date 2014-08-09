@@ -31,7 +31,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('jquery');
 load_js('datatables');
 load_js('tools.js');
-
+load_js('validation.js');
     
 $head_content .= <<<EOF
 <script type='text/javascript'>
@@ -72,9 +72,12 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
+global $langΒΒΒServerAlertHostname,$langΒΒΒServerAlertIP,$langΒΒΒServerAlertKey,$langΒΒΒServerAlertAPIUrl;
+global $langΒΒΒServerAlertMaxRooms,$langΒΒΒServerAlertMaxUsers,$langΒΒΒServerAlertOrder;
+
 if (isset($_GET['add_server']))
 {
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<form name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= '<fieldset><legend>';
     $tool_content .=  $langAddBBBServer;
     $tool_content .='</legend>
@@ -110,7 +113,23 @@ if (isset($_GET['add_server']))
     
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
-    $tool_content .= '</fieldset></form>';    
+    $tool_content .= '</fieldset></form>';
+    
+    $tool_content .='<script language="javaScript" type="text/javascript">
+        //<![CDATA[
+            var chkValidator  = new Validator("serverForm");
+            chkValidator.addValidation("hostname_form","req","'.$langΒΒΒServerAlertHostname.'");
+            chkValidator.addValidation("ip_form","req","'.$langΒΒΒServerAlertIP.'");
+            chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","'.$langΒΒΒServerAlertIP.'");
+            chkValidator.addValidation("key_form","req","'.$langΒΒΒServerAlertKey.'");
+            chkValidator.addValidation("api_url_form","req","'.$langΒΒΒServerAlertAPIUrl.'");
+            chkValidator.addValidation("max_rooms_form","req","'.$langΒΒΒServerAlertMaxRooms.'");
+            chkValidator.addValidation("max_rooms_form","numeric","'.$langΒΒΒServerAlertMaxRooms.'");
+            chkValidator.addValidation("max_users_form","req","'.$langΒΒΒServerAlertMaxUsers.'");
+            chkValidator.addValidation("max_users_form","numeric","'.$langΒΒΒServerAlertMaxUsers.'");
+            chkValidator.addValidation("weight","req","'.$langΒΒΒServerAlertOrder.'");
+            chkValidator.addValidation("weight","numeric","'.$langΒΒΒServerAlertOrder.'");
+        //]]></script>';
 }
 else if (isset($_GET['delete_server']))
 {
@@ -164,7 +183,7 @@ else if (isset($_POST['submit'])) {
 } // end of if($submit)
 // Display config.php edit form
 else {
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<form name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
     $tool_content .= '<fieldset><legend>'.$langAvailableBBBServers.'</legend>
     <div id="operations_container">
@@ -252,7 +271,21 @@ if (isset($_GET['edit_server'])) {
             $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
             $tool_content .= '</fieldset></form>';    
-    
+            $tool_content .='<script language="javaScript" type="text/javascript">
+                //<![CDATA[
+                    var chkValidator  = new Validator("serverForm");
+                    chkValidator.addValidation("hostname_form","req","'.$langΒΒΒServerAlertHostname.'");
+                    chkValidator.addValidation("ip_form","req","'.$langΒΒΒServerAlertIP.'");
+                    chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","'.$langΒΒΒServerAlertIP.'");
+                    chkValidator.addValidation("key_form","req","'.$langΒΒΒServerAlertKey.'");
+                    chkValidator.addValidation("api_url_form","req","'.$langΒΒΒServerAlertAPIUrl.'");
+                    chkValidator.addValidation("max_rooms_form","req","'.$langΒΒΒServerAlertMaxRooms.'");
+                    chkValidator.addValidation("max_rooms_form","numeric","'.$langΒΒΒServerAlertMaxRooms.'");
+                    chkValidator.addValidation("max_users_form","req","'.$langΒΒΒServerAlertMaxUsers.'");
+                    chkValidator.addValidation("max_users_form","numeric","'.$langΒΒΒServerAlertMaxUsers.'");
+                    chkValidator.addValidation("weight","req","'.$langΒΒΒServerAlertOrder.'");
+                    chkValidator.addValidation("weight","numeric","'.$langΒΒΒServerAlertOrder.'");
+                //]]></script>';
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 }
