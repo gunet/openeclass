@@ -3704,6 +3704,7 @@ $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν �
   Personal calendar
  * ***************************************** */
 $langAddEvent = "Νέο γεγονός";
+$langAddAdminEvent = "Νέο γεγονός συστήματος";
 $langDays= "ημέρες";
 $langDateTime = "Ημέρα και ώρα";
 $langDocument = "Έγγραφο";
@@ -3711,6 +3712,7 @@ $langDuration = "Διάρκεια";
 $langEmptyEventTitle = "Νέο γεγονός";
 $langEvent = "Γεγονός";
 $langEventAdd = "Νέο γεγονός προστέθηκε.";
+$langEventadmin = "γεγονότα συστήματος";
 $langEventBody = "Περιγραφή";
 $langEventcourse = "γεγονότα μαθημάτων";
 $langEventdeadline = "προθεσμίες";
@@ -3731,6 +3733,11 @@ $langPersonalEvent = "Προσωπικό γεγονός";
 $langReferencedObject = "Αφορά";
 $langRepeat = "Επανάληψη";
 $langSelectFromMenu = "Επιλέξτε...";
+$langShowTo = "Εμφάνιση σε";
+$langShowToAdminsOnly = "διαχειριστές μόνο";
+$langShowToAdminsandProfs = "διαχειριστές κι εκπαιδευτές";
+$langShowToAllregistered = "όλους τους εγγεγραμμένους";
+$langShowToAll = "όλους";
 $langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
 $langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
 $langUntil = "μέχρι";
