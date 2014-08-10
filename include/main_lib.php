@@ -93,6 +93,7 @@ define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
+define('MODULE_ID_ADMINCALENDAR',37);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
