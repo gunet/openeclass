@@ -1365,7 +1365,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `visible` TINYINT(4),
                              recursion_period varchar(30) DEFAULT NULL,
                              recursion_end date DEFAULT NULL,
-                             PRIMARY KEY (`id`)
+                             `source_event_id` int(11) DEFAULT NULL
                              $charset_spec");
                             
                     
@@ -1496,7 +1496,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `value` INT(11) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`setting_id`, `course_id`))");
                     
-                    db_query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `user_id` int(11) NOT NULL,
                         `title` varchar(200) NOT NULL,
@@ -1512,16 +1512,34 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `reference_obj_course` int(11) DEFAULT NULL,
                         PRIMARY KEY (`id`))");
 
-                Database::get()->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+                    Database::get()->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
                         `user_id` int(11) NOT NULL,
-                        `view_type` enum('month','week') DEFAULT 'month',
-                        `personal_color` varchar(30) DEFAULT NULL,
-                        `course_color` varchar(30) DEFAULT NULL,
-                        `deadline_color` varchar(30) DEFAULT NULL,
+                        `view_type` enum('day','month','week') DEFAULT 'month',
+                        `personal_color` varchar(30) DEFAULT '#5882fa',
+                        `course_color` varchar(30) DEFAULT '#acfa58',
+                        `deadline_color` varchar(30) DEFAULT '#fa5882',
+                        `admin_color` varchar(30) DEFAULT '#eeeeee',
                         `show_personal` bit(1) DEFAULT b'1',
                         `show_course` bit(1) DEFAULT b'1',
                         `show_deadline` bit(1) DEFAULT b'1',
+                        `show_admin` bit(1) DEFAULT b'1',
                         PRIMARY KEY (`user_id`))");
+                    
+                    Database::get()->query("CREATE TABLE `admin_calendar` (
+                                `id` int(11) NOT NULL AUTO_INCREMENT,
+                                `user_id` int(11) NOT NULL,
+                                `title` varchar(200) NOT NULL,
+                                `content` text NOT NULL,
+                                `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `duration` time NOT NULL,
+                                `recursion_period` varchar(30) DEFAULT NULL,
+                                `recursion_end` date DEFAULT NULL,
+                                `source_event_id` int(11) DEFAULT NULL,
+                                `visibility_level` int(11) DEFAULT '1',
+                                `email_notification` time DEFAULT NULL,
+                                PRIMARY KEY (`id`),
+                                KEY `user_events` (`user_id`),
+                                KEY `admin_events_dates` (`start`))");
 
                     //create triggers
                     Database::get()->query("CREATE TRIGGER personal_calendar_settings_init "

@@ -142,7 +142,8 @@ $db->query("CREATE TABLE `agenda` (
     `duration` VARCHAR(20) NOT NULL,
     `visible` TINYINT(4),
     `recursion_period` varchar(30) DEFAULT NULL,
-    `recursion_end` date DEFAULT NULL)
+    `recursion_end` date DEFAULT NULL,
+    `source_event_id` int(11) DEFAULT NULL)
     $charset_spec");
 
 #
@@ -312,18 +313,36 @@ $db->query("CREATE TABLE `personal_calendar` (
  
 $db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
         `user_id` int(11) NOT NULL,
-        `view_type` enum('month','week') DEFAULT 'month',
-        `personal_color` varchar(30) DEFAULT NULL,
-        `course_color` varchar(30) DEFAULT NULL,
-        `deadline_color` varchar(30) DEFAULT NULL,
+        `view_type` enum('day','month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT '#5882fa',
+        `course_color` varchar(30) DEFAULT '#acfa58',
+        `deadline_color` varchar(30) DEFAULT '#fa5882',
+        `admin_color` varchar(30) DEFAULT '#eeeeee',
         `show_personal` bit(1) DEFAULT b'1',
         `show_course` bit(1) DEFAULT b'1',
         `show_deadline` bit(1) DEFAULT b'1',
+        `show_admin` bit(1) DEFAULT b'1',
         PRIMARY KEY (`user_id`))");
 //create triggers
 $db->query("CREATE TRIGGER personal_calendar_settings_init "
         . "AFTER INSERT ON `user` FOR EACH ROW "
         . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
+
+$db->query("CREATE TABLE `admin_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `visibility_level` int(11) DEFAULT '1',
+        `email_notification` time DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        KEY `user_events` (`user_id`),
+        KEY `admin_events_dates` (`start`))");
 
 // haniotak:
 // table for loginout rollups

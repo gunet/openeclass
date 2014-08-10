@@ -3290,6 +3290,7 @@ $langSureToDelNoteAll = "Are you sure about deleting all your notes?";
   Personal calendar
  * ***************************************** */
 $langAddEvent = "New event";
+$langAddAdminEvent = "New system event";
 $langDateTime = "Date and time";
 $langDays= "days";
 $langDocument = "Document";
@@ -3297,6 +3298,7 @@ $langDuration = "Duration";
 $langEmptyEventTitle = "New event";
 $langEvent = "Event";
 $langEventAdd = "Event added.";
+$langEventadmin = "system events";
 $langEventBody = "Summary";
 $langEventcourse = "course events";
 $langEventDel = "Event deletes.";
@@ -3318,6 +3320,11 @@ $langPersonalEvent = "Personal event";
 $langReferencedObject = "Refers to";
 $langRepeat = "Repeat";
 $langSelectFromMenu = "Select...";
+$langShowTo = "Displaey event to";
+$langShowToAdminsOnly = "administrators only";
+$langShowToAdminsandProfs = "administrators and teachers";
+$langShowToAllregistered = "all registered users";
+$langShowToAll = "all";
 $langSureToDelEvent = "Are you sure to delete the event?";
 $langSureToDelEventAll = "Are you sure to delete all events?";
 $langUntil = "until";
