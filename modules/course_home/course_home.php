@@ -177,10 +177,26 @@ if ($is_editor) {
         Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
-        move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
+        }else{
+            $res_id = intval($_REQUEST['down']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
+            }
+        }
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval($_REQUEST['up']);
-        move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
+        }else{
+            $res_id = intval($_REQUEST['up']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
+            }
+        }
     }
     
     if (isset($_REQUEST['visW'])) { // modify visibility of the Week
@@ -464,7 +480,6 @@ if($viewCourse == "weekly"){
         $visibleFlag = "";
     }
     
-    //echo date('Y-m-d', strtotime($start_date . ' + 7 days'));
     $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
@@ -481,11 +496,9 @@ if($viewCourse == "weekly"){
                                 <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
                             </a>
                             <div $class_vis>$week->comments</div>
-                            <hr>
-                            <table>
-                            ".show_resourcesWeeks($week->id)."
-                            </table>
-                          </fieldset>";
+                            <hr>";
+                            show_resourcesWeeks($week->id);
+        $tool_content .= "</fieldset>";
         
     }
 }

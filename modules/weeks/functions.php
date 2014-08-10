@@ -120,7 +120,7 @@ function show_resourcesWeeks($unit_id) {
     if (count($req) > 0) {
         $max_resource_id = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                     
-        $tool_content .= "<table class='tbl_alt_bordless' width='99%'>";
+        $tool_content .= "<table class='tbl_alt_bordless' width='99%' >";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resourceWeek($info);
@@ -1115,7 +1115,11 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     } else {
         $content .= "<td width='12'>&nbsp;</td>";
     }
-    if (!$first) {
+    
+    $weekly_id = Database::get()->querySingle("SELECT course_weekly_view_id FROM course_weekly_view_activities WHERE id = ?d ", $resource_id)->course_weekly_view_id;
+    $check = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d ORDER BY `order` ASC LIMIT 1", $weekly_id);
+    
+    if ($check->id != $resource_id) {
         $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id'>" .
                 "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></div></td>";
     } else {
