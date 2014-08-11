@@ -155,13 +155,26 @@ if ($is_editor) {
         $main_content .= handle_unit_info_edit();
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
-        Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
-        Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
-        $uidx->remove($id, false);
-        $urdx->removeByUnit($id, false);
-        $cidx->store($course_id, true);
-        CourseXMLElement::refreshCourse($course_id, $course_code);
-        $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
+            Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
+            $uidx->remove($id, false);
+            $urdx->removeByUnit($id, false);
+            $cidx->store($course_id, true);
+            CourseXMLElement::refreshCourse($course_id, $course_code);
+            $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        }else{
+            $res_id = intval($_GET['del']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
+                $urdx->remove($res_id, false, false);
+                $cidx->store($course_id, true);
+                CourseXMLElement::refreshCourse($course_id, $course_code);
+                $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+            }
+        }
+        
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
