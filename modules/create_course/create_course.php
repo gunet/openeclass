@@ -46,6 +46,10 @@ load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
 
+//Datepicker
+load_js('tools.js');
+load_js('jquery-ui-timepicker-addon.min.js');
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -107,6 +111,42 @@ $head_content .= <<<hContent
     }
                 
     $(document).ready(function() {
+        
+        $('input[name=start_date]').datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (date) {
+                var date2 = $('input[name=start_date]').datepicker('getDate');
+                if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                    date2.setDate(date2.getDate() + 1);
+                    $('input[name=finish_date]').datepicker('setDate', date2);
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }
+            }
+        });
+        
+        $('input[name=finish_date]').datepicker({
+            dateFormat: 'yy-mm-dd', 
+            onClose: function () {
+                var dt1 = $('input[name=start_date]').datepicker('getDate');
+                var dt2 = $('input[name=finish_date]').datepicker('getDate');
+                if (dt2 <= dt1) {
+                    var minDate = $('input[name=finish_date]').datepicker('option', 'minDate');
+                    $('input[name=finish_date]').datepicker('setDate', minDate);
+            }
+        }
+        });
+        
+        $('#weekly_info').hide();
+        
+        $('#view_type').change(function(){
+            if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
+                $('#weekly_info').show();
+            }else{
+                $('#weekly_info').hide();
+            }
+            
+        });
+        
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
@@ -199,12 +239,41 @@ if (!isset($_POST['create_course'])) {
                             <br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";        
          $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 
+         
+        $tool_content .="
+        <tr><td class='sub_title1' colspan='2'>$langMore</td></tr>
+        <tr>
+            <th >$langDisplay:</th>
+            <td >
+                <select name='view_type' id='view_type'>
+                    <option value='units'";
+                    $tool_content .=">$langCourseUnits</option>
+                    <option value='weekly'";
+                    $tool_content .=">$langWeekly</option>
+                </select>
+                <div class='info' id='weekly_info'>Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος</div>
+            </td>
+        </tr>
+        <tr>
+            <th >$langStartDate:</th>
+            <td ><input class='dateInForm' type='text' name='start_date' value=''></td>
+        </tr>
+        <tr>
+            <th >$langFinish:</th>
+            <td ><input class='dateInForm' type='text' name='finish_date' value=''></td>
+        </tr>";
+        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
+        
+        
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
         }
-
+        
+        
+        
+        
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
         <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
             {$license[0]['title']}
@@ -325,6 +394,16 @@ if (!isset($_POST['create_course'])) {
                 break;
         }
     }
+    
+    if(ctype_alnum($_POST['view_type'])){
+        $view_type = $_POST['view_type'];
+        if($view_type == "weekly" && ($_POST['start_date'] !='' && $_POST['start_date'] !='0000-00-00')){
+            $view_type == "weekly";
+        }else{
+            $view_type = "units";    
+        }
+    }
+    
     $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -338,14 +417,58 @@ if (!isset($_POST['create_course'])) {
                         group_quota = ?f,
                         dropbox_quota = ?f,
                         password = ?s,
+                        view_type = ?s,
+                        start_date = ?t,
+                        finish_date = ?t,
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
                         glossary_index = 1", $code, $language, $title, $_POST['formvisible'], 
             intval($course_license), $prof_names, $code, $doc_quota * 1024 * 1024, 
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024, 
-            $dropbox_quota * 1024 * 1024, $password);
+            $dropbox_quota * 1024 * 1024, $password, $view_type, $_POST['start_date'], $_POST['finish_date']);
     $new_course_id = $result->lastInsertID;
+
+    //===================course format and start and finish date===============
+    if ($view_type == "weekly") {
+
+        //get the last inserted id as the course id
+        $course_id = $new_course_id;
+        
+        $begin = new DateTime($_POST['start_date']);
+
+        //check if there is no end date
+        if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
+            $end = new DateTime($begin->format("Y-m-d"));
+            $end->add(new DateInterval('P26W'));
+        } else {
+            $end = new DateTime($_POST['finish_date']);
+        }
+        
+        $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
+
+        foreach ($daterange as $date) {
+            //===============================
+            //new weeks
+            //get the end week day
+            $endWeek = new DateTime($date->format("Y-m-d"));
+            $endWeek->modify('+6 day');
+
+            //value for db
+            $startWeekForDB = $date->format("Y-m-d");
+
+            if ($endWeek->format("Y-m-d") < $end->format("Y-m-d")) {
+                $endWeekForDB = $endWeek->format("Y-m-d");
+            } else {
+                $endWeekForDB = $end->format("Y-m-d");
+            }
+            //================================
+            Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
+        }
+    }
+   
+    //=======================================================
+    
 
     // create course  modules              
     create_modules($new_course_id);
