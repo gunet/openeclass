@@ -41,27 +41,6 @@ if (isset($_POST['submitQuestion'])) {
     if (empty($questionName)) {
         $msgErr = $langGiveQuestion;
     }
-    // checks if the question is used in several exercises
-    elseif ($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1) {
-        // duplicates the question
-        $questionId = $objQuestion->duplicate();
-        // deletes the old question
-        $objQuestion->delete($exerciseId);
-        // removes the old question ID from the question list of the Exercise object
-        $objExercise->removeFromList($modifyQuestion);
-        $nbrQuestions--;
-        // construction of the duplicated Question
-        $objQuestion = new Question();
-        $objQuestion->read($questionId);
-        // adds the exercise ID into the exercise list of the Question object
-        $objQuestion->addToList($exerciseId);
-        // construction of the Answer object
-        $objAnswerTmp = new Answer($modifyQuestion);
-        // copies answers from $modifyQuestion to $questionId
-        $objAnswerTmp->duplicate($questionId);
-        // destruction of the Answer object
-        unset($objAnswerTmp);
-    }
 
     $objQuestion->read($_GET['modifyQuestion']);
     $objQuestion->updateTitle($questionName);
@@ -72,7 +51,7 @@ if (isset($_POST['submitQuestion'])) {
     if (isset($questionGrade)) {
         $objQuestion->updateWeighting($questionGrade);
     }
-    $objQuestion->save($exerciseId);
+    (isset($exerciseId)) ? $objQuestion->save($exerciseId) : $objQuestion->save();
     $questionId = $objQuestion->selectId();
     // upload or delete picture
     if (isset($_POST['deletePicture'])) {
@@ -87,21 +66,22 @@ if (isset($_POST['submitQuestion'])) {
             $tool_content .= "<div class='caution'>$langInvalidPicture</div>";
         }
     }
-    if ($exerciseId) {
+    if (isset($exerciseId)) {
         // adds the question ID into the question list of the Exercise object
         if ($objExercise->addToList($questionId)) {
             $objExercise->save();
             $nbrQuestions++;
         }
     }
-    if (isset($_GET['newQuestion'])) {
-        // goes to answer administration
-        $_GET['modifyAnswers'] = $questionId;
+    //if the answer type is free text (which means doesn't have predefined answers) 
+    //redirects to either pool or edit exercise page
+    //else it redirect to modifyanswers page in order to add answers to question
+    if ($answerType == FREE_TEXT) {
+        $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId" : "modules/exercise/question_pool.php?course=$course_code";
     } else {
-        // goes to exercise viewing
-        $editQuestion = $questionId;
+        $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
     }
-    unset($_GET['newQuestion'], $_GET['modifyQuestion']);
+    redirect_to_home_page($redirect_url);
 } else {
 // if we don't come here after having cancelled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
@@ -119,9 +99,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (!empty($msgErr)) {
         $tool_content .= "<p class='caution'>$msgErr</p>\n";
     }
-
+    if (isset($_GET['newQuestion'])){
+        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=$_GET[newQuestion]'>";
+    } else {
+        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=$_GET[modifyQuestion]'>";
+    }
     @$tool_content .= "
-	<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
 	<fieldset>
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>
