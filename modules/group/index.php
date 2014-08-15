@@ -287,13 +287,23 @@ if ($is_editor) {
         <div id='operations_container'>
           <ul id='opslist'>
             <li><a href='group_creation.php?course=$course_code' title='$langNewGroupCreate'>$langCreate</a></li>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
+            <li><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a></li>";
+                
+    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
+    $num_of_groups = count($groupSelect);
+    // groups list
+    if ($num_of_groups > 0) {
+
+        $tool_content .="<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
             <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
-          </ul>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>";
+                
+    }
+    $tool_content .="</ul>
         </div>";
 
     // ---------- display properties ------------------------
+    /*
     $tool_content .= "<table class='tbl_courseid' width='100%'>
         <tr>
           <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
@@ -321,6 +331,9 @@ if ($is_editor) {
 
 
     $registered_students = $total_students - $unregistered_students;
+    
+    
+    
     $tool_content .= "
         <tr>
           <td colspan='2'><u>$langGroupPrefs</u></td>
@@ -402,8 +415,12 @@ if ($is_editor) {
     	<td align='right'><font color='red'>$langNo</font>";
     }
     $tool_content .= "</td></tr>";
+    
     $tool_content .= "</table>";
-
+    
+     */
+    
+    
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $myIterator = 0;
     $num_of_groups = count($groupSelect);
