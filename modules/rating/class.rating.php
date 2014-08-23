@@ -417,11 +417,10 @@ Class Rating {
             $num_ratings = $this->getRatingsNum();
             
             if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
-                $avg_datavalue = "";
-                if ($num_ratings['fivestar'] != 0) {
-                    $avg = $this->getFivestarRating();
-                    $avg_datavalue = 'data-rateit-value="'.$avg.'" data-rateit-ispreset="true" data-rateit-readonly="true"';
-                }
+                
+                $avg = $this->getFivestarRating();
+                $avg_datavalue = 'data-rateit-value="'.$avg.'" data-rateit-ispreset="true" data-rateit-readonly="true"';
+                
                 $out .= '<div class="rateit" id="rateit-avg-'.$this->rtype.'-'.$this->rid.'" '.$avg_datavalue.'></div>';
                 
                 $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
