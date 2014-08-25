@@ -146,7 +146,11 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             $objAnswer = new Answer($question_id);            
             include('answer_admin.inc.php');
         } else {
-            
+            $nameTools = $langInfoQuestion;
+            $navigation[] = array(
+                'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
+                'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+            );            
             include('statement_admin.inc.php');
         }
     } else {
@@ -163,6 +167,8 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
     } elseif (isset($_GET['modifyExercise'])) {
         $nameTools = $langInfoExercise;
         $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+    } else {
+        $nameTools = $objExercise->selectTitle();
     }
     include('exercise_admin.inc.php');
     if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
