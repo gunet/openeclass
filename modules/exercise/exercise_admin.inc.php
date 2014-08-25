@@ -89,7 +89,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     }
     $tool_content .= "
         <tr>
-        <th width='180'>" . $langExerciseName . "cbvcvb:</th>
+        <th width='180'>" . $langExerciseName .":</th>
         <td><input type='text' name='exerciseTitle' " . "size='50' maxlength='200' value='" . q($exerciseTitle) . "' style='width:400px;'></td>
         </tr>
         <tr>
