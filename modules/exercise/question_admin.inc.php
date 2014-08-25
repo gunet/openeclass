@@ -25,6 +25,7 @@ $questionName = $objQuestion->selectTitle();
 $questionDescription = $objQuestion->selectDescription();
 $questionId = $objQuestion->selectId();
 $questionType = $objQuestion->selectType();
+$questionTypeWord = $objQuestion->selectTypeWord($questionType);
 // is picture set ?
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 $tool_content .= "
@@ -36,6 +37,7 @@ $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code"
 
 
 $tool_content .= "</legend>
+    <em><small>$langAnswerType: $questionTypeWord</small><em><br>
     <b>" . nl2br(q($questionName)) . "</b>&nbsp;&nbsp;";
 
 $questionDescription = standard_text_escape($questionDescription);
