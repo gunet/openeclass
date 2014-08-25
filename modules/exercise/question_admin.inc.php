@@ -37,7 +37,7 @@ $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code"
 
 
 $tool_content .= "</legend>
-    <em><small>$langAnswerType: $questionTypeWord</small><em><br>
+    <em><small>$questionTypeWord</small><em><br>
     <b>" . nl2br(q($questionName)) . "</b>&nbsp;&nbsp;";
 
 $questionDescription = standard_text_escape($questionDescription);
