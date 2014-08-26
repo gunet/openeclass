@@ -68,7 +68,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $offset = intval($_GET['iDisplayStart']);
     $keyword = '%' . $_GET['sSearch'] . '%';
 
-    $student_sql = $is_editor? '': 'AND visible = 1';
+    $student_sql = $is_editor? '': 'AND visible = 1 AND start_display<=CURDATE() AND stop_display>=CURDATE() ';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
     if ($limit>0) {
@@ -203,8 +203,11 @@ $public_code = course_id_to_public_code($course_id);
 $nameTools = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
-    (!$is_editor)? $student_sql = "AND visible = '1'" : $student_sql = "";
+    (!$is_editor)? $student_sql = "AND visible = '1' AND start_display<=CURDATE() AND stop_display>=CURDATE()" : $student_sql = "";
     $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
+    if(empty($row)){
+        redirect_to_home_page("modules/announcements/");
+    }
 }
 if ($is_editor) {
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
@@ -250,6 +253,8 @@ if ($is_editor) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);
+            $showFrom = q($announce->start_display);
+            $showUntil = q($announce->stop_display);
         }
     }
 
@@ -258,10 +263,12 @@ if ($is_editor) {
         // modify announcement
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
-        $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
+        $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
+        $start_display = (isset($_POST['startdate']) && !empty($_POST['startdate']))? $_POST['startdate']:"2014-01-01";
+        $stop_display = (isset($_POST['enddate']) && !empty($_POST['enddate']))? $_POST['enddate']:"2094-12-31";
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW() WHERE id = ?d", $newContent, $antitle, $id);
+            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW(), start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
@@ -273,7 +280,9 @@ if ($is_editor) {
                                          SET content = ?s,
                                              title = ?s, `date` = NOW(),
                                              course_id = ?d, `order` = ?d,
-                                             visible = 1", $newContent, $antitle, $course_id, $order)->lastInsertID;
+                                             visible = 1,
+                                             start_display = ?t,
+                                             stop_display = ?t", $newContent, $antitle, $course_id, $order, $start_display, $stop_display)->lastInsertID;
             $log_type = LOG_INSERT;
         }
         $aidx->store($id);
@@ -285,11 +294,15 @@ if ($is_editor) {
 
         // send email
         if ($send_mail) {
+            $recipients_emaillist = "";
+            foreach($_POST['recipients'] as $re){
+                $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
+            }
             $emailContent = "$professorMessage: $_SESSION[givenname] $_SESSION[surname]<br>\n<br>\n" .
                     $_POST['antitle'] .
                     "<br>\n<br>\n" .
                     $_POST['newContent'];
-            $emailSubject = "$professorMessage ($public_code - $title)";
+            $emailSubject = "$professorMessage ($public_code - $title - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
             $invalid = 0;
@@ -301,7 +314,7 @@ if ($is_editor) {
             $general_to = 'Members of course ' . $course_code;
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
-                                                   WHERE course_id = ?d AND
+                                                   WHERE course_id = ?d AND user.email IN ($recipients_emaillist) AND 
                                                          course_user.user_id = user.id", function ($person)
                     use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
                 $countEmail++;
@@ -337,9 +350,21 @@ if ($is_editor) {
         $tool_content .= $message . "<br/>";
         $displayForm = false; //do not show form
     }
-
     /* display form */
     if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
+        load_js('jquery-ui');
+        load_js('jquery-ui-timepicker-addon.min.js');
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+            <script type='text/javascript'>
+            $(function() {
+            $('input[name=startdate]').datepicker({
+                dateFormat: 'yy-mm-dd'
+                });
+            $('input[name=enddate]').datepicker({
+                dateFormat: 'yy-mm-dd'
+                });
+               });"
+        . "</script>";
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
@@ -354,7 +379,8 @@ if ($is_editor) {
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
-
+        if (!isset($showFrom)) $showFrom = "";
+        if (!isset($showUntil)) $showUntil = "";
         $tool_content .= "
         <tr>
           <th>$langAnnTitle:</th>
@@ -369,10 +395,25 @@ if ($is_editor) {
           <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
         </tr>
 	<tr>
-          <td class='smaller right'>
-	  <img src='$themeimg/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
+          <th><img src='$themeimg/email.png' title='email' /> $langEmailOption:</th>
         </tr>
+        <tr>
+          <td>
+            <select name='recipients[]' multiple='true' class='auth_input' id='select-recipients' style='min-width:400px;'>";
+            $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
+            foreach($course_users as $cu){
+               $tool_content .= "<option value='{$cu->email}'>{$cu->name} ($cu->email)</option>"; 
+            } 
+            $tool_content .= "</select>
+          </td>
+	</tr>
 	<tr>
+          <th>$langAnnouncementActivePeriod:</th>
+        </tr>
+        <tr>
+          <td>$langFrom: <input type='text' name='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' value='$showUntil'></td>
+        </tr>
+        <tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
 	</tr>
 	</table>
@@ -410,4 +451,15 @@ if ($is_editor) {
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
 add_units_navigation(TRUE);
+load_js('jquery-ui');
+load_js('jquery.multiselect.min.js');
+$head_content .= "<script type='text/javascript'>$(document).ready(function () {
+        $('#select-recipients').multiselect({
+                selectedText: '$langJQSelectNum',
+                noneSelectedText: '$langJQNoneSelected',
+                checkAllText: '$langJQCheckAll',
+                uncheckAllText: '$langJQUncheckAll'
+        });
+});</script>
+<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 draw($tool_content, 2, null, $head_content);

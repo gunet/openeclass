@@ -620,6 +620,7 @@ $langFirst = "Πρώτη";
 $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
+$langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 
 /* * *****************************************
  * archive_course.php
