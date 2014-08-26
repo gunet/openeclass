@@ -67,7 +67,7 @@ Class Mailbox {
         $msgs = array();
         
         if ($this->courseId == 0) {//all messages except those from courses where dropbox is inactive
-            $sql = "SELECT `dropbox_msg`.`id`
+            $sql = "SELECT DISTINCT `dropbox_msg`.`id`
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND (
@@ -109,7 +109,7 @@ Class Mailbox {
         $msgs = array();
         
         if ($this->courseId == 0) {//all mesages except those from courses where dropbox is inactive
-            $sql = "SELECT `dropbox_msg`.`id` 
+            $sql = "SELECT DISTINCT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND (
