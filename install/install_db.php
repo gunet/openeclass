@@ -701,7 +701,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `comments` (
                 `rid` INT(11) NOT NULL,
                 `rtype` VARCHAR(50) NOT NULL,
                 `content` TEXT NOT NULL,
-                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `time` DATETIME NOT NULL,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `rating` (
@@ -710,7 +710,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `rating` (
                 `rtype` VARCHAR(50) NOT NULL,
                 `value` TINYINT NOT NULL,
                 `widget` VARCHAR(30) NOT NULL,
-                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `time` DATETIME NOT NULL,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `rating_source` VARCHAR(50) NOT NULL,
                 INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
@@ -722,7 +722,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                 `rtype` VARCHAR(50) NOT NULL,
                 `value` FLOAT NOT NULL DEFAULT 0,
                 `count` INT(11) NOT NULL DEFAULT 0,
-                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `tag` VARCHAR(50),
                 INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 

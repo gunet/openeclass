@@ -81,8 +81,8 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function create($content, $authorId, $rtype, $rid) {
-        $sql = 'INSERT INTO `comments` (`content`, `user_id`, `rtype`, `rid`) '
-                .'VALUES(?s,?d,?s,?d)';
+        $sql = 'INSERT INTO `comments` (`content`, `user_id`, `rtype`, `rid`, `time`) '
+                .'VALUES(?s,?d,?s,?d,NOW())';
         $id = Database::get()->query($sql, $content, $authorId, $rtype, $rid)->lastInsertID;
         //load the comment after creation
         if ($this->loadFromDB($id)) {

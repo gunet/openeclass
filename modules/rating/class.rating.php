@@ -137,7 +137,7 @@ Class Rating {
                 }
                 
                 //cast new rating
-                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`,`time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
                 Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
                 
                 $action = "ins";
@@ -163,7 +163,7 @@ Class Rating {
                 $action = "del";
             } else {//either casting a new rating or changing the rating
                 //cast new rating
-                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`, `time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
                 Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
             
                 $action = "ins";
@@ -182,7 +182,7 @@ Class Rating {
                 $action = "del";
             } else {
                 //cast new rating
-                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`, `rating_source`) VALUES(?d,?s,?s,?d,?d,?s)";
+                $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`, `rating_source`, `time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
                 Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
                 
                 $action = "ins";
@@ -219,7 +219,7 @@ Class Rating {
         $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, 1);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `tag`) VALUES(?d,?s,?d,?d,?s)";
         Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, 'up');
     }
     
@@ -233,7 +233,7 @@ Class Rating {
         $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, -1);
         
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `tag`) VALUES(?d,?s,?d,?d,?s)";
         Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, 'down');
     }
     
@@ -248,7 +248,7 @@ Class Rating {
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget);
         
         if ($res->c != 0) {
-            $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?f,?d,NOW(),?s)";
+            $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `tag`) VALUES(?d,?s,?f,?d,?s)";
             Database::get()->query($sql, $this->rid, $this->rtype, $res->avg, $res->c, $this->widget);
         }
     }
@@ -263,7 +263,7 @@ Class Rating {
         $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rtype`=?s AND `rid`=?d AND `widget` = ?s AND `value`=?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid, $this->widget, 1);
     
-        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `time`, `tag`) VALUES(?d,?s,?d,?d,NOW(),?s)";
+        $sql = "INSERT INTO `rating_cache` (`rid`,`rtype`,`value`, `count`, `tag`) VALUES(?d,?s,?d,?d,?s)";
         Database::get()->query($sql, $this->rid, $this->rtype, $res->c, $res->c, $this->widget);
     }
     
