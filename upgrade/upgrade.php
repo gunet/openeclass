@@ -1135,18 +1135,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `msg_id` INT(11) UNSIGNED NOT NULL,
                             `filename` VARCHAR(250) NOT NULL,
                             `real_filename` varchar(255) NOT NULL,
-                            `filesize` INT(11) UNSIGNED NOT NULL,
-                            KEY `msg` (`msg_id`)) $charset_spec");
+                            `filesize` INT(11) UNSIGNED NOT NULL) $charset_spec");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                             `msg_id` INT(11) UNSIGNED NOT NULL,
                             `recipient_id` INT(11) UNSIGNED NOT NULL,
-                            `thread_id` INT(11) UNSIGNED NOT NULL,
                             `is_read` BOOLEAN NOT NULL DEFAULT 0,
                             `deleted` BOOLEAN NOT NULL DEFAULT 0,
-                            PRIMARY KEY (`msg_id`, `recipient_id`),
-                            KEY `list` (`recipient_id`,`is_read`),
-                            KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
+                            PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `lp_module` (
                             `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2004,7 +2000,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         mysql_index_exists('dropbox_attachment', 'drop_att_index') or
                 Database::get()->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
         mysql_index_exists('dropbox_index', 'drop_index') or
-                Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
+                Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(recipient_id, is_read)");
         mysql_index_exists('drobox_msg', 'drop_msg_index') or
                 Database::get()->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
         mysql_index_exists('ebook', 'ebook_index') or

@@ -143,9 +143,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         $tool_content .= "<tr>
             <th width='120'>".$langCourse.":</th>
               <td>
-                <select id='courseselect' name='course'>";
+                <select id='courseselect' name='course'>
+                  <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {    
-            $tool_content .="<option value='-1'>&nbsp;</option><option value='".$course->code."'>$course->title</option>";
+            $tool_content .="<option value='".$course->code."'>$course->title</option>";
         }
         $tool_content .="    </select>
                            </td>

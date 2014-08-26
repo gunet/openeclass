@@ -274,7 +274,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $dropbox_map = restore_table($restoreThis, 'dropbox_msg', array('set' => array('course_id' => $course_id),
             'map' => array('author_id' => $userid_map), 'return_mapping' => 'id'));
     restore_table($restoreThis, 'dropbox_attachment', array('map' => array('msg_id' => $dropbox_map), 'return_mapping' => 'id'));
-    restore_table($restoreThis, 'dropbox_index', array('map' => array('msg_id' => $dropbox_map, 'thread_id' => $dropbox_map, 'recipient_id' => $userid_map)));
+    restore_table($restoreThis, 'dropbox_index', array('map' => array('msg_id' => $dropbox_map, 'recipient_id' => $userid_map)));
     
     // Learning Path
     $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', array('set' => array('course_id' => $course_id),

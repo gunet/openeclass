@@ -28,20 +28,17 @@ if(isset($_GET['course'])) {//course messages
 $guest_allowed = FALSE;
 
 include '../../include/baseTheme.php';
+require_once("class.msg.php");
 
 if (!isset($course_id)) {
     $course_id = 0;
 }
 
-require_once("class.thread.php");
-
-if (isset($_GET['tid'])) {
-    require_once("class.msg.php");
+if (isset($_GET['mid'])) {
     
-    $tid = intval($_GET['tid']);
-    $thread = new Thread($tid, $uid);
-    if (!$thread->error) {
-        $msgs = $thread->getMsgs();
+    $mid = intval($_GET['mid']);
+    $msg = new Msg($mid, $uid);
+    if (!$msg->error) {
        
         $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
         $urlstr = '';
@@ -49,11 +46,11 @@ if (isset($_GET['tid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out .= "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<h2>$langSubject: ".q($thread->subject)."</h2><br/>";
-        if ($thread->course_id != 0 && $course_id == 0) {
-            $out .= "<p class=\"tags\"><span class=\"st_tag\"><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></span></p><br/>";
+        $out .= "<h2>$langSubject: ".q($msg->subject)."</h2><br/>";
+        if ($msg->course_id != 0 && $course_id == 0) {
+            $out .= "<p class=\"tags\"><span class=\"st_tag\"><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></span></p><br/>";
         }
-        $out .= "<table id=\"thread_table\">
+        $out .= "<table id=\"msg_table\">
                   <thead>
                     <tr>
                       <th>$langDate</th>
@@ -65,19 +62,18 @@ if (isset($_GET['tid'])) {
                   </thead>
                   <tbody>";
         
-        foreach ($msgs as $m) {
-            $out .= "<tr id='$m->id'>
-                       <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
-                       <td>".uid_to_name($m->author_id)."</td>
-                       <td>".standard_text_escape($m->body)."</td>";
-            if ($m->filename != '') {
-                $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($m->course_id)."&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
-            } else {
-                $out .= "<td></td>";
-            }
-            $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
-                     </tr>";
+       
+        $out .= "<tr id='$msg->id'>
+                   <td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td>
+                   <td>".uid_to_name($msg->author_id)."</td>
+                   <td>".standard_text_escape($msg->body)."</td>";
+        if ($msg->filename != '') {
+            $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
+        } else {
+            $out .= "<td></td>";
         }
+        $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
+                 </tr>";
         
         $out .= "  </tbody>
                  </table><br/><br/>";
@@ -85,16 +81,15 @@ if (isset($_GET['tid'])) {
         /*****Reply Form****/
         if ($course_id == 0) {
             $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-            if ($thread->course_id != 0) {//thread belonging to a course viewed from the central ui
-                $out .= "<input type='hidden' name='course' value='".course_id_to_code($thread->course_id)."' />";
+            if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
+                $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
             }
         } else {
             $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
         }
         //hidden variables needed in case of a reply
-        $out .= "<input type='hidden' name='message_title' value='$thread->subject' />";
-        $out .= "<input type='hidden' name='thread_id' value='$thread->id' />";
-        foreach ($thread->recipients as $rec) {
+        $out .= "<input type='hidden' name='message_title' value='$msg->subject' />";
+        foreach ($msg->recipients as $rec) {
             if ($rec != $uid) {
                 $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
             }
@@ -144,7 +139,7 @@ if (isset($_GET['tid'])) {
         $out .= "<script>
                    $(document).ready(function() {
                      $('div.loading').hide();
-                     $('#thread_table').dataTable();
+                     $('#msg_table').dataTable();
                    });
                  </script>";
         
@@ -180,9 +175,9 @@ if (isset($_GET['tid'])) {
     
     $mbox = new Mailbox($uid, $course_id);
     
-    $threads = $mbox->getInboxThreads();
+    $msgs = $mbox->getInboxMsgs();
     
-    if (empty($threads)) {
+    if (empty($msgs)) {
         $out = "<p class='alert1'>$langTableEmpty</p>";
     } else {
         $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
@@ -199,9 +194,9 @@ if (isset($_GET['tid'])) {
                   </thead>
                   <tbody>";
         
-        foreach ($threads as $thread) {
+        foreach ($msgs as $msg) {
             $participants = '';
-            foreach ($thread->recipients as $r) {
+            foreach ($msg->recipients as $r) {
                 $participants .= uid_to_name($r).'<br/>';
             }
             $participants = substr($participants, 0, strlen($participants)-5);
@@ -209,11 +204,11 @@ if (isset($_GET['tid'])) {
             if ($course_id != 0) {
                 $urlstr = "&amp;course=".$course_code;
             }
-            $out .= "<tr id='$thread->id'>";
+            $out .= "<tr id='$msg->id'>";
             if ($course_id != 0) {
-                $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($thread->course_id)."\">".course_id_to_title($thread->course_id)."</a></td>";
+                $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td>";
             }
-            $out .= " <td><a href='inbox.php?tid=$thread->id".$urlstr."'>".q($thread->subject)."</a></td>
+            $out .= " <td><a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a></td>
                       <td>$participants</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";

@@ -38,11 +38,11 @@ Class Mailbox {
     }
     
     /**
-     * Get the number of unread threads of a user
+     * Get the number of unread messages of a user
      * @return int
      */
-    public function unreadThreadsNumber() {
-        $sql = "SELECT COUNT(DISTINCT `thread_id`) as `unread_count`
+    public function unreadMsgsNumber() {
+        $sql = "SELECT COUNT(`msg_id`) as `unread_count`
                 FROM `dropbox_index`, `course_module`, `dropbox_msg`
                 WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
                 AND (
@@ -60,14 +60,14 @@ Class Mailbox {
     }
     
     /**
-     * Get the threads of a user's inbox
-     * @return thread objects
+     * Get the messages of a user's inbox
+     * @return Msgs objects
      */
-    public function getInboxThreads() {
-        $threads = array();
+    public function getInboxMsgs() {
+        $msgs = array();
         
-        if ($this->courseId == 0) {//all threads except those from courses where dropbox is inactive
-            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
+        if ($this->courseId == 0) {//all messages except those from courses where dropbox is inactive
+            $sql = "SELECT `dropbox_msg`.`id`
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND (
@@ -83,8 +83,8 @@ Class Mailbox {
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
                     AND `dropbox_index`.`deleted` = ?d";
             $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0);
-        } else {//threads in course context
-            $sql = "SELECT DISTINCT `dropbox_index`.`thread_id` 
+        } else {//messages in course context
+            $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND `dropbox_index`.`recipient_id` = ?d
@@ -95,10 +95,10 @@ Class Mailbox {
         }
         
         foreach ($res as $r) {
-           $threads[] = new Thread($r->thread_id, $this->uid);
+           $msgs[] = new Msg($r->id, $this->uid);
         }
         
-        return $threads;
+        return $msgs;
     }
     
     /**
@@ -109,7 +109,7 @@ Class Mailbox {
         $msgs = array();
         
         if ($this->courseId == 0) {//all mesages except those from courses where dropbox is inactive
-            $sql = "SELECT DISTINCT `dropbox_msg`.`id` 
+            $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND (

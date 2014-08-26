@@ -45,7 +45,7 @@ Class Msg {
     public function __construct($arg1, $arg2, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
         if (func_num_args() > 2) {
             $this->uid = $arg1;
-            $this->createNewMsg($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9);
+            $this->createNewMsg($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8);
         } else {
             $this->uid = $arg2;
             $this->loadMsgFromDB($arg1);
@@ -72,9 +72,7 @@ Class Msg {
             $res = Database::get()->queryArray($sql, $id);
             
             foreach ($res as $r) {
-                if ($r->recipient_id != $this->author_id) {
-                    $this->recipients[] = $r;
-                }
+                    $this->recipients[] = $r->recipient_id;
             }
             
             $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
@@ -100,7 +98,7 @@ Class Msg {
     /**
      * Private function that creates a new msg
      */
-    private function createNewMsg($author_id, $course_id, $subject, $body, $recipients, $filename, $real_filename, $filesize, $thread_id) {
+    private function createNewMsg($author_id, $course_id, $subject, $body, $recipients, $filename, $real_filename, $filesize) {
         $this->author_id = $author_id;
         $this->course_id = $course_id;
         $this->subject = $subject;
@@ -111,25 +109,18 @@ Class Msg {
         $sql = "INSERT INTO `dropbox_msg` (`author_id`, `course_id`, `subject`, `body`, `timestamp`) VALUES(?d,?d,?s,?s,?d)";
         $this->id = Database::get()->query($sql, $author_id, $course_id, $subject, $body, $this->timestamp)->lastInsertID;
         
-        if (is_null($thread_id)) {
-            //the thread id gets the id of the first thread message
-            $thread_id = $this->id;
-        }
-        
-        $sql = "INSERT INTO `dropbox_index` (`msg_id`,`recipient_id`, `thread_id`, `is_read`, `deleted`) VALUES (?d,?d,?d,?d,?d)";
+        $sql = "INSERT INTO `dropbox_index` (`msg_id`,`recipient_id`, `is_read`, `deleted`) VALUES (?d,?d,?d,?d)";
         
         $argsarr = array();
         $argsarr[] = $this->id;
         $argsarr[] = $author_id;
-        $argsarr[] = $thread_id;
         $argsarr[] = 1;
         $argsarr[] = 0;
         
         foreach ($recipients as $rec) {
-            $sql .= ",(?d,?d,?d,?d,?d)";
+            $sql .= ",(?d,?d,?d,?d)";
             $argsarr[] = $this->id;
             $argsarr[] = $rec;
-            $argsarr[] = $thread_id;
             $argsarr[] = 0;
             $argsarr[] = 0;
         }

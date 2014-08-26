@@ -26,16 +26,7 @@ include '../../include/baseTheme.php';
 
 require_once("class.msg.php");
 
-if (isset($_POST['tid'])) {
-    require_once("class.thread.php");
-    
-    $tid = intval($_POST['tid']);
-    $thread = new Thread($tid, $uid);
-    if (!$thread->error) {
-        $thread->delete();
-    }
-    
-} elseif (isset($_POST['mid'])) {
+if (isset($_POST['mid'])) {
     $mid = intval($_POST['mid']);
     $msg = new Msg($mid, $uid);
     if (!$msg->error) {

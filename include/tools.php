@@ -260,7 +260,7 @@ function loggedInMenu() {
     require_once 'modules/dropbox/class.mailbox.php';
     
     $mbox = new Mailbox($uid, 0);
-    $new_msgs = $mbox->unreadThreadsNumber();
+    $new_msgs = $mbox->unreadMsgsNumber();
     if ($new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langDropBox']);
     } else {

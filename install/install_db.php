@@ -588,18 +588,14 @@ $db->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
                 `msg_id` INT(11) UNSIGNED NOT NULL,
                 `filename` VARCHAR(250) NOT NULL,
                  real_filename varchar(255) NOT NULL,
-                `filesize` INT(11) UNSIGNED NOT NULL,
-                KEY `msg` (`msg_id`)) $charset_spec");
+                `filesize` INT(11) UNSIGNED NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                 `msg_id` INT(11) UNSIGNED NOT NULL,
                 `recipient_id` INT(11) UNSIGNED NOT NULL,
-                `thread_id` INT(11) UNSIGNED NOT NULL,
                 `is_read` BOOLEAN NOT NULL DEFAULT 0,
                 `deleted` BOOLEAN NOT NULL DEFAULT 0,
-                PRIMARY KEY (`msg_id`, `recipient_id`),
-                KEY `list` (`recipient_id`,`is_read`),
-                KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
+                PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `lp_module` (
                 `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1505,7 +1501,7 @@ $db->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order
 $db->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
 $db->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 $db->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
-$db->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
+$db->query("CREATE INDEX `drop_index` ON dropbox_index(recipient_id, is_read)");
 $db->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
 $db->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
 $db->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");

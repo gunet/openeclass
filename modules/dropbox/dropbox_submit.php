@@ -87,11 +87,8 @@ if (isset($_POST["submit"])) {
             } else {
                 $cid = $course_id;
             }
-            if (!isset($_POST['thread_id'])) {//new message
-                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-            } else {//reply to a thread
-                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
-            }            
+            
+            $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
         } else {
             $cwd = getcwd();
             if (is_dir($dropbox_dir)) {
@@ -133,11 +130,8 @@ if (isset($_POST["submit"])) {
                 } else {
                     $cid = $course_id;
                 }
-                if (!isset($_POST['thread_id'])) {
-                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-                } else {
-                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
-                }
+                
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             }            
             chdir($cwd);
         }        
