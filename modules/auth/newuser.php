@@ -273,12 +273,11 @@ if (!isset($_POST['submit'])) {
         }
         // login user
         else {            
-            $results = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
-            foreach ($results as $myrow) {
-                $uid = $myrow->id;
-                $surname = $myrow->surname;
-                $givenname = $myrow->givenname;
-            }            
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
+            $uid = $myrow->id;
+            $surname = $myrow->surname;
+            $givenname = $myrow->givenname;
+        
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                              VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
             $_SESSION['uid'] = $uid;
