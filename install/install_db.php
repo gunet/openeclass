@@ -113,6 +113,8 @@ $db->query("CREATE TABLE announcement (
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
+    `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+    `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
     PRIMARY KEY (id)) $charset_spec");
 
 #

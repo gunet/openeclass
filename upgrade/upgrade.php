@@ -1009,7 +1009,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        CHANGE `cours_id` `course_id` INT(11),
                                        CHANGE `ordre` `order` MEDIUMINT(11),
                                        CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0,
+                                       ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
                                        DROP INDEX annonces");
+                    } else {
+                        Database::get()->query("ALTER TABLE announcement 
+                                       ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
+                                       ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
                     }
 
                     // create forum tables

@@ -620,6 +620,7 @@ $langFirst = "Πρώτη";
 $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
+$langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 
 /* * *****************************************
  * archive_course.php
@@ -1328,11 +1329,11 @@ $langActive = "ενεργό";
 $langInactive = "μη ενεργό";
 $langNoEx = "Δεν υπάρχει διαθέσιμη άσκηση";
 $langNewEx = "Νέα Άσκηση";
-$langExerciseType = "Τύπος Ασκήσης";
+$langExerciseType = "Τύπος Ασκήσεων";
 $langExerciseName = "Όνομα Άσκησης";
 $langExerciseDescription = "Περιγραφή Άσκησης";
-$langSimpleExercise = "Όλες οι ερωτήσεις σε μία σελίδα";
-$langSequentialExercise = "Mία ερώτηση ανά σελίδα (στη σειρά)";
+$langSimpleExercise = "Σε μία μόνο σελίδα";
+$langSequentialExercise = "Σε μία ερώτηση ανά σελίδα (στη σειρά)";
 $langRandomQuestions = "Τυχαίες Ερωτήσεις";
 $langGiveExerciseName = "Δώστε το όνομα της άσκησης";
 $langGiveExerciseInts = "Τα πεδία Χρονικός Περιορισμός & Επιτρεπόμενες Επαναλήψεις πρέπει να είναι ακέραιοι αριθμοί";
@@ -1393,9 +1394,8 @@ $langGoBackToQuestionList = "Επιστροφή στη λίστα ερωτήσε
 $langQuestionAnswers = "Απαντήσεις στην ερώτηση";
 $langUsedInSeveralExercises = "Προσοχή! H ερώτηση και οι απαντήσεις της χρησιμοποιούνται σε αρκετές ασκήσεις. 
         Θέλετε σίγουρα να τις αλλάξετε;";
-$langModifyInAllExercises = "Σε όλες τις ασκήσεις";
-$langModifyInThisExercise = "Μόνο στην τρέχουσα άσκηση";
-$langModifyInQuestionPool = "Μόνο στην τράπεζα ερωτήσεων";
+$langModifyInAllExercises = "σε όλες τις ασκήσεις";
+$langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
 $langQuestionView = "Προβολή";
 
 // statement_admin.php
@@ -1441,7 +1441,7 @@ $langQuestionList = "Κατάλογος ερωτήσεων της άσκησης
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
 
 // question_pool.php
-$langQuestionPool = "Τράπεζα Ερωτήσεων";
+$langQuestionPool = "Διαθέσιμες Ερωτήσεις";
 $langOrphanQuestions = "Ορφανές Ερωτήσεις";
 $langNoQuestion = "Δεν έχουν ορισθεί ερωτήσεις για τη συγκεκριμένη άσκηση";
 $langAllExercises = "Όλες οι ερωτήσεις";
