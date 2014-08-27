@@ -205,7 +205,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, description content, 'course' event_group, 'teleconference' event_type,  c.code course "
+            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, bbb.description content, 'course' event_group, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
