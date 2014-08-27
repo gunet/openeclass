@@ -1251,7 +1251,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `title` VARCHAR(255) NOT NULL DEFAULT '',
                             `content` TEXT NOT NULL,
-                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `time` DATETIME NOT NULL,
                             `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `course_id` INT(11) NOT NULL) $charset_spec");
