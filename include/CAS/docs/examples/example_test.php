@@ -1,11 +1,11 @@
 <?php
 
 /**
- *  Example for handling logout requests
+ *   Example for a simple cas 2.0 client
  *
  * PHP Version 5
  *
- * @file     example_logout.php
+ * @file     example_simple.php
  * @category Authentication
  * @package  PhpCAS
  * @author   Joachim Fritschi <jfritschi@freenet.de>
@@ -19,11 +19,11 @@ require_once 'config.php';
 // Load the CAS lib
 require_once $phpcas_path . '/CAS.php';
 
-// Enable debugging
+// Uncomment to enable debugging
 phpCAS::setDebug();
 
 // Initialize phpCAS
-phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+phpCAS::proxy(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 
 // For production use set the CA certificate that is the issuer of the cert
 // on the CAS server and uncomment the line below
@@ -34,18 +34,16 @@ phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 // VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL!
 phpCAS::setNoCasServerValidation();
 
-// handle incoming logout requests
-phpCAS::handleLogoutRequests();
-
-// Or as an advanced featue handle SAML logout requests that emanate from the
-// CAS host exclusively.
-// Failure to restrict SAML logout requests to authorized hosts could
-// allow denial of service attacks where at the least the server is
-// tied up parsing bogus XML messages.
-// phpCAS::handleLogoutRequests(true, $cas_real_hosts);
-
 // force CAS authentication
 phpCAS::forceAuthentication();
+
+// at this step, the user has been authenticated by the CAS server
+// and the user's login name can be read with phpCAS::getUser().
+$pt = phpCAS::retrievePT('http://localhost/test', $err_code, $err_msg);
+// logout if desired
+if (isset($_REQUEST['logout'])) {
+	phpCAS::logout();
+}
 
 // for this test, simply print that the authentication was successfull
 ?>
@@ -58,5 +56,7 @@ phpCAS::forceAuthentication();
     <?php require 'script_info.php' ?>
     <p>the user's login is <b><?php echo phpCAS::getUser(); ?></b>.</p>
     <p>phpCAS version is <b><?php echo phpCAS::getVersion(); ?></b>.</p>
+    <p>phpCAS PT is <b><?php echo $pt ?></b>.</p>
+    <p><a href="?logout=">Logout</a></p>
   </body>
 </html>

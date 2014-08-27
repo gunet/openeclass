@@ -515,7 +515,7 @@ function check_guest($id = FALSE) {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;        
+        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;
         if ($status == USER_GUEST) {
             return TRUE;
         } else {
@@ -1025,14 +1025,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }

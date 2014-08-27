@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Advanced example for SAML with attributes and single logout
+ * Advanced example for hardening the phpcas client
  *
  * PHP Version 5
  *
- * @file     example_advanced_saml11.php
+ * @file     example_hardening.php
  * @category Authentication
  * @package  PhpCAS
  * @author   Joachim Fritschi <jfritschi@freenet.de>
@@ -21,6 +21,9 @@ require_once $phpcas_path . '/CAS.php';
 
 // Enable debugging
 phpCAS::setDebug();
+
+// Harden session cookie to prevent some attacks on the cookie (e.g. XSS)
+session_set_cookie_params($client_lifetime, $client_path, $client_domain, $client_secure, $client_httpOnly);
 
 // Initialize phpCAS
 phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context);
