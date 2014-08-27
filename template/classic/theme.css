@@ -959,6 +959,16 @@ a.unit_link_invisible:hover {
     text-decoration: underline;
 }
 
+ul.poll_answers li {
+    margin: 1em 0;
+    list-style-image: url(img/arrow.png);
+}
+
+.q_comments {
+font-size: 12px;
+padding: 5px 5px 5px 5px;
+background-color: #f8f8f8;
+}
 /*-------------------------------------
    7. Perso
 -------------------------------------*/

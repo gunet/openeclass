@@ -1712,7 +1712,7 @@ $langPollUnknown = "Je ne sais pas/Je ne réponds pas";
 $langIndividuals = "Résultats par utilisateur";
 $langCollectiveCharts = "Résultats collectifs";
 $langHasNotParticipated = "Vous n'y avez pas participé";
-$langThereAreParticipants = "<p class='caution'>Il y a déjà des utilisateurs qui ont participé à ce Questionnaire. <br/> La correction des données n'est plus possible !</p>";
+$langThereAreParticipants = "Il y a déjà des utilisateurs qui ont participé à ce Questionnaire. <br/> La correction des données n'est plus possible !";
 $langPollEmpty = "<p class='caution'>Veuiller ajouter des questions dans le Questionnaire !</p>";
 $langPollEmptyAnswers = "<p class='caution'>Erreur! Il n'y a pas de réponses à cette question</p>";
 $langSee = "Preview";

@@ -1373,6 +1373,8 @@ $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλο
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
+$langPurgeExercises = "Διαγραφή αποτελεσμάτων";
+$langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langAttemptCompleted = "Oλοκληρώθηκε";
 $langAttemptPending = "Προς Βαθμολόγηση";
@@ -2433,6 +2435,8 @@ $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
+$langCreateDuplicate = "Δημιουργία Αντιγράφου";
+$langCopy2 = "Αντίγραφο";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
@@ -2449,6 +2453,8 @@ $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers = "+";
+$langPollEndMessage = 'Μήνυμα ολοκλήρωσης';
+$langPollEndMessageText = 'Σας ευχαριστούμε για τη συμμετοχή σας στο ερωτηματολόγιο!';
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
 $langPollCreated = "Το Ερωτηματολόγιο δημιουργήθηκε με επιτυχία.";
@@ -2474,7 +2480,7 @@ $langPollAnonymize = "Ανωνυμοποίηση";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
-$langThereAreParticipants = "<p class='caution'>Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!</p>";
+$langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!";
 $langPollEmpty = "<p class='caution'>Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!</p>";
 $langPollEmptyAnswers = "<p class='caution'>Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση</p>";
 

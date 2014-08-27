@@ -734,6 +734,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` INT(11) NOT NULL DEFAULT 0,
+                `description` MEDIUMTEXT NOT NULL,
+                `end_message` MEDIUMTEXT NOT NULL,
                 `anonymized` INT(1) NOT NULL DEFAULT 0) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -747,7 +749,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
                 `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
                 `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                `qtype` ENUM('multiple', 'fill') NOT NULL ) $charset_spec");
+                `qtype` tinyint(3) UNSIGNED NOT NULL ) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                 `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pqid` INT(11) NOT NULL DEFAULT 0,

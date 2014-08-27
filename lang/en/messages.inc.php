@@ -1656,6 +1656,8 @@ $langHasParticipated = "Already participated";
 $langSurveyInfo = "You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
+$langCreateDuplicate = "Create Duplicate";
+$langCopy2 = "Copy";
 $langQuestion1 = array('In this unit, my effort was focused in subjects that interested me.'
     , 'Almost never.'
     , 'Seldom.'
@@ -1736,6 +1738,8 @@ $langPollOperations = "Operations";
 $langPollNumAnswers = "Number of Answers";
 $langPollAddAnswer = "Add Answers";
 $langPollType = "Type";
+$langPollEndMessage = 'Completion message';
+$langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langPollMC = "Multiple Choice";
 $langPollFillText = "Fill in the text";
 $langPollContinue = "Continue";
@@ -2990,6 +2994,8 @@ $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored d
 $langInfoGrades = "grades";
 $langInfoGrade = "grade";
 $langFromRandomQuestions = "random questions from";
+$langPurgeExercises = "Delete results";
+$langConfirmPurgeExercises = "Confirm results deletion";
 $langAnswerUngraded = "The answer haven't been graded yet.";
 $langAttemptCompleted = "Copleted";
 $langAttemptPending = "Pending Grading";

@@ -1631,7 +1631,7 @@ $langPollUnknown = "Ich weiss nicht / Ich antworte nicht";
 $langIndividuals = "Ergebnisse pro Benutzer";
 $langCollectiveCharts = "Zusammenfassende Ergebnisse";
 $langHasNotParticipated = "Sie haben nicht teilgenommen";
-$langThereAreParticipants = "<p class='caution'>Es gibt schon Teilnehmer für diesen Fragebogen. <br />Das verändern der Daten ist nicht möglich!</p>";
+$langThereAreParticipants = "Es gibt schon Teilnehmer für diesen Fragebogen. <br />Das verändern der Daten ist nicht möglich!";
 $langPollEmpty = "<p class='caution'>Bitte fügen Sie dem Fragebogen weitere Fragen hinzu!</p>";
 $langPollEmptyAnswers = "<p class='caution'>Fehler! Es gibt keine Antworten zu dieser Frage</p>";
 $langSee = "Vorschau";

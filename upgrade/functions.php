@@ -1143,6 +1143,13 @@ function upgrade_course_2_10($code, $extramessage = '') {
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
+    if (!mysql_field_exists($code, 'poll', 'description')) {
+        db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+                                   ADD end_message MEDIUMTEXT NOT NULL,
+                                   ADD anonymized INT(1) NOT NULL DEFAULT 0');
+        db_query('ALTER TABLE poll_question
+                    CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
+    }    
 }
 
 /**
