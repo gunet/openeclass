@@ -1398,6 +1398,7 @@ $langUsedInSeveralExercises = "Προσοχή! H ερώτηση και οι απ
         Θέλετε σίγουρα να τις αλλάξετε;";
 $langModifyInAllExercises = "σε όλες τις ασκήσεις";
 $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
+$langModifyInQuestionPool = "μόνο στην τράπεζα ερωτήσεων";
 $langQuestionView = "Προβολή";
 
 // statement_admin.php
@@ -1443,7 +1444,7 @@ $langQuestionList = "Κατάλογος ερωτήσεων της άσκησης
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
 
 // question_pool.php
-$langQuestionPool = "Διαθέσιμες Ερωτήσεις";
+$langQuestionPool = "Τράπεζα Ερωτήσεων";
 $langOrphanQuestions = "Ορφανές Ερωτήσεις";
 $langNoQuestion = "Δεν έχουν ορισθεί ερωτήσεις για τη συγκεκριμένη άσκηση";
 $langAllExercises = "Όλες οι ερωτήσεις";

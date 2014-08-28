@@ -842,6 +842,7 @@ $langQuestionAnswers = "Question answers";
 $langUsedInSeveralExercises = "Be careful! This question and its answers are being used in several exercises. Do you want to change them?";
 $langModifyInAllExercises = "in all exercises";
 $langModifyInThisExercise = "in this exercise";
+$langModifyInQuestionPool = "only in question pool";
 $langQuestionView = "View";
 $langAnswerType = "Answer type";
 $langUniqueSelect = "Multiple Choice (One Anwser)";
