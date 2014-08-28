@@ -1197,6 +1197,12 @@ $restrict_owndep = intval($restrict_owndep);
 $restrict_teacher_owndep = intval($restrict_teacher_owndep);
 $student_upload_whitelist = $student_upload_whitelist;
 $teacher_upload_whitelist = $teacher_upload_whitelist;
+$enable_indexing = intval($enable_indexing);
+$enable_search = intval($enable_search);
+
+if ($enable_search == 1) {
+    $enable_indexing = 1;
+}
 
 // restrict_owndep and restrict_teacher_owndep are interdependent
 if ($restrict_owndep == 0) {
@@ -1260,6 +1266,8 @@ $default_config = array(
     'log_purge_interval', 12,
     'course_metadata', 0,
     'opencourses_enable', 0,
+    'enable_indexing', $enable_indexing,
+    'enable_search', $enable_search,
     'version', ECLASS_VERSION);
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
     implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')),

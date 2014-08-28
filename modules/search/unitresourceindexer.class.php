@@ -132,6 +132,10 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
      * @param boolean $optimize
      */
     public function removeByUnit($unitId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $hits = $this->__index->find('doctype:unitresource AND unitid:' . $unitId);
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);

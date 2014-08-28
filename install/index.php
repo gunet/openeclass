@@ -36,12 +36,15 @@ require_once '../include/lib/pwgen.inc.php';
 require_once 'install_functions.php';
 
 $tool_content = '';
-if (!isset($siteName))
+if (!isset($siteName)) {
     $siteName = '';
-if (!isset($InstitutionUrl))
+}
+if (!isset($InstitutionUrl)) {
     $InstitutionUrl = '';
-if (!isset($Institution))
+}
+if (!isset($Institution)) {
     $Institution = '';
+}
 
 if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
     date_default_timezone_set("Europe/Athens");
@@ -180,6 +183,7 @@ if (isset($_POST['welcomeScreen'])) {
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
         'disable_log_user_actions' => true,
+        'enable_indexing' => true,
         'enable_search' => true,
         'student_upload_whitelist' => true,
         'teacher_upload_whitelist' => true));
@@ -235,7 +239,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'insert_xml_metadata', 'enable_mobileapi',
     'course_multidep', 'user_multidep',
     'eclass_stud_reg', 'eclass_prof_reg',
-    'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search',
+    'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_indexing', 'enable_search',
     'student_upload_whitelist', 'teacher_upload_whitelist');
 
 // step 2 license
@@ -431,6 +435,10 @@ elseif (isset($_REQUEST['install5']) OR isset($_REQUEST['back5'])) {
           <tr>
 		<th class='left'><b>$lang_disable_log_actions</b></th>
 		<td>" . checkbox_input('disable_log_user_actions') . "</td>
+	  </tr>
+          <tr>
+		<th class='left'><b>$langEnableIndexing</b></th>
+		<td>" . checkbox_input('enable_indexing') . "</td>
 	  </tr>
           <tr>
 		<th class='left'><b>$langEnableSearch</b></th>

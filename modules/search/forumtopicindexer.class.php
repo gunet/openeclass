@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -132,6 +132,10 @@ class ForumTopicIndexer extends AbstractIndexer implements ResourceIndexerInterf
      * @param boolean $optimize
      */
     public function removeByForum($forumId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $hits = $this->__index->find('doctype:ftopic AND forumid:' . $forumId);
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);

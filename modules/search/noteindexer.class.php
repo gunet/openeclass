@@ -20,29 +20,13 @@
  * ======================================================================== */
 
 require_once 'indexer.class.php';
+require_once 'abstractindexer.class.php';
 require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class NoteIndexer implements ResourceIndexerInterface {
-
-    private $__indexer = null;
-    private $__index = null;
-
-    /**
-     * Constructor. You can optionally use an already instantiated Indexer object if there is one.
-     * 
-     * @param Indexer $idxer - optional indexer object
-     */
-    public function __construct($idxer = null) {
-        if ($idxer == null)
-            $this->__indexer = new Indexer();
-        else
-            $this->__indexer = $idxer;
-
-        $this->__index = $this->__indexer->getIndex();
-    }
+class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a note db row.
@@ -51,7 +35,7 @@ class NoteIndexer implements ResourceIndexerInterface {
      * @param  object  $note
      * @return Zend_Search_Lucene_Document
      */
-    private static function makeDoc($note) {
+    protected function makeDoc($note) {
         global $urlServer;
         $encoding = 'utf-8';
 
@@ -76,62 +60,65 @@ class NoteIndexer implements ResourceIndexerInterface {
      * @param  int $noteId
      * @return object - the mysql fetched row
      */
-    private function fetch($noteId) {
+    protected function fetch($noteId) {
         $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d", $noteId);        
-        if (!$note)
+        if (!$note) {
             return null;
-        if(!is_null($note->reference_obj_course)){
+        }
+        
+        if(!is_null($note->reference_obj_course)) {
             $note->course_id = intval($note->reference_obj_course);
         }
+        
         return $note;
     }
-
+    
     /**
-     * Store a Note in the Index.
+     * Get Term object for locating a unique single note.
      * 
-     * @param  int     $noteId
-     * @param  boolean $optimize
+     * @param  int $noteId - the note id
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function store($noteId, $optimize = false) {
-        $note = $this->fetch($noteId);
-        if (!$note)
-            return;
-
-        // delete existing note from index
-        $this->remove($noteId, false, false);
-
-        // add the note back to the index
-        $this->__index->addDocument(self::makeDoc($note));
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForSingleResource($noteId) {
+        return new Zend_Search_Lucene_Index_Term('note_' . $noteId, 'pk');
     }
-
+    
     /**
-     * Remove a Note from the Index.
+     * Get Term object for locating all possible notes.
      * 
-     * @param int     $noteId
-     * @param boolean $existCheck
-     * @param boolean $optimize
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function remove($noteId, $existCheck = false, $optimize = false) {
-        if ($existCheck) {
-            $note = $this->fetch($noteId);
-            if (!$note)
-                return;
-        }
-
-        $term = new Zend_Search_Lucene_Index_Term('note_' . $noteId, 'pk');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForAllResources() {
+        return new Zend_Search_Lucene_Index_Term('note', 'doctype');
+    }
+    
+    /**
+     * Get all possible notes from DB.
+     * 
+     * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
+     */
+    protected function getAllResourcesFromDB() {
+        return Database::get()->queryArray("SELECT * FROM note");
+    }
+    
+    /**
+     * Get Lucene query input string for locating all notes belonging to a given course.
+     * 
+     * @param  int $courseId - the given course id
+     * @return string        - the string that can be used as Lucene query input
+     */
+    protected function getQueryInputByCourse($courseId) {
+        return 'doctype:note AND courseid:' . $courseId;
+    }
+    
+    /**
+     * Get all notes belonging to a given course from DB.
+     * 
+     * @param  int   $courseId - the given course id
+     * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
+     */
+    protected function getCourseResourcesFromDB($courseId) {
+        return Database::get()->queryArray("SELECT * FROM note WHERE reference_obj_course = ?d", $courseId);
     }
 
     /**
@@ -141,19 +128,20 @@ class NoteIndexer implements ResourceIndexerInterface {
      * @param boolean $optimize
      */
     public function storeByUser($userId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         // delete existing notes from index
         $this->removeByUser($userId);
 
         // add the notes back to the index
-        $res = Database::get()->queryArray("SELECT id FROM note WHERE user_id = ?d", $userId);
+        $res = Database::get()->queryArray("SELECT * FROM note WHERE user_id = ?d", $userId);
         foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc(self::$this->fetch($row->id)));
+            $this->__index->addDocument($this->makeDoc($row));
         }
 
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+        $this->optimizeOrCommit($optimize);
     }
 
     /**
@@ -163,55 +151,16 @@ class NoteIndexer implements ResourceIndexerInterface {
      * @param boolean $optimize
      */
     public function removeByUser($userId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $hits = $this->__index->find('doctype:note AND userid:' . $userId);
-        foreach ($hits as $hit)
-            $this->__index->delete($hit->getDocument()->id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
-    }
-
-    /**
-     * Remove all Notes written by a user.
-     * 
-     * @param int     $userId
-     * @param boolean $optimize
-     */
-    public function removeByCourse($courseId, $optimize = false) {
-        $hits = $this->__index->find('doctype:note AND courseid:' . $courseId);
-        foreach ($hits as $hit)
-            $this->__index->delete($hit->getDocument()->id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
-    }
-    
-    /**
-     * Reindex all notes.
-     * 
-     * @param boolean $optimize
-     */
-    public function reindex($optimize = false) {
-        // remove all notes from index
-        $term = new Zend_Search_Lucene_Index_Term('note', 'doctype');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        // get/index all notes from db
-        $res = Database::get()->queryArray("SELECT id FROM note");
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($this->fetch($row->id)));
+        foreach ($hits as $hit) {
+            $this->__index->delete($hit->id);
         }
 
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+        $this->optimizeOrCommit($optimize);
     }
 
     /**

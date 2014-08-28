@@ -47,6 +47,10 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
      * @param boolean $optimize - whether to optimize after removing
      */
     public function removeByCourse($courseId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $hits = $this->__index->find($this->getQueryInputByCourse($courseId));
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);
@@ -62,6 +66,10 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
      * @param boolean $optimize - whether to optimize after removing
      */
     public function storeByCourse($courseId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         // delete existing resources from index
         $this->removeByCourse($courseId);
 

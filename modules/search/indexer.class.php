@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,19 +28,20 @@ require_once 'Zend/Search/Lucene.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
-require_once 'courseindexer.class.php';
-require_once 'announcementindexer.class.php';
 require_once 'agendaindexer.class.php';
-require_once 'linkindexer.class.php';
-require_once 'videoindexer.class.php';
-require_once 'videolinkindexer.class.php';
+require_once 'announcementindexer.class.php';
+require_once 'courseindexer.class.php';
+require_once 'documentindexer.class.php';
 require_once 'exerciseindexer.class.php';
 require_once 'forumindexer.class.php';
-require_once 'forumtopicindexer.class.php';
 require_once 'forumpostindexer.class.php';
-require_once 'documentindexer.class.php';
+require_once 'forumtopicindexer.class.php';
+require_once 'linkindexer.class.php';
+require_once 'noteindexer.class.php';
 require_once 'unitindexer.class.php';
 require_once 'unitresourceindexer.class.php';
+require_once 'videoindexer.class.php';
+require_once 'videolinkindexer.class.php';
 
 class Indexer {
 
@@ -120,6 +121,10 @@ class Indexer {
      */
     public function __construct() {
         global $webDir;
+        
+        if (!get_config('enable_indexing')) {
+            return;
+        }
 
         $index_path = $webDir . '/courses/idx';
         // Give read-writing permissions only for current user and group
@@ -164,6 +169,10 @@ class Indexer {
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function search($inputStr) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $queryStr = self::filterQuery($inputStr);
         return $this->searchRaw($queryStr);
     }
@@ -175,6 +184,10 @@ class Indexer {
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function searchRaw($inputStr) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         try {
             $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
             return $this->__index->find($query);
@@ -190,6 +203,10 @@ class Indexer {
      * @param int $courseId
      */
     public function storeAllByCourse($courseId) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $cidx = new CourseIndexer($this);
         $cidx->store($courseId);
 
@@ -228,6 +245,9 @@ class Indexer {
 
         $urdx = new UnitResourceIndexer($this);
         $urdx->storeByCourse($courseId);
+        
+        $ndx = new NoteIndexer($this);
+        $ndx->storeByCourse($courseId);
     }
 
     /**
@@ -236,6 +256,10 @@ class Indexer {
      * @param int $courseId
      */
     public function removeAllByCourse($courseId) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $cidx = new CourseIndexer($this);
         $cidx->remove($courseId);
 
@@ -274,12 +298,19 @@ class Indexer {
 
         $urdx = new UnitResourceIndexer($this);
         $urdx->removeByCourse($courseId);
+        
+        $ndx = new NoteIndexer($this);
+        $ndx->removeByCourse($courseId);
     }
 
     /**
      * Batch index all possible contents.
      */
     public function reindexAll() {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $cidx = new CourseIndexer($this);
         $cidx->reindex();
 
@@ -318,6 +349,9 @@ class Indexer {
 
         $urdx = new UnitResourceIndexer($this);
         $urdx->reindex();
+        
+        $ndx = new NoteIndexer($this);
+        $ndx->reindex();
     }
 
     /**

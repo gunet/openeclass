@@ -3339,3 +3339,5 @@ $langSureToDelEventAll = "Are you sure to delete all events?";
 $langUntil = "until";
 $langWeek = "Week";
 $langWeeks = "weeks";
+$langEnableIndexing = "Enable search indexing";
+$langEnableSearch = "Enable search engine";

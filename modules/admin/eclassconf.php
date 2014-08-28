@@ -69,6 +69,7 @@ $(document).ready(function() {
         loginFailPanel(true);
     });
         
+    // Open Courses checkbox
     $('#opencourses_enable').click(function(event) {
         if ($('#opencourses_enable').is(":checked")) {
             $('#course_metadata').attr('checked', true);
@@ -80,6 +81,20 @@ $(document).ready(function() {
     
     if ($('#opencourses_enable').is(":checked")) {
         $('#course_metadata').attr('disabled', true);
+    }
+        
+    // Search Engine checkbox
+    $('#search_enable').click(function(event) {
+        if ($('#search_enable').is(":checked")) {
+            $('#index_enable').attr('checked', true);
+            $('#index_enable').attr('disabled', true);
+        } else {
+            $('#index_enable').attr('disabled', false);
+        }
+    });
+        
+    if ($('#search_enable').is(":checked")) {
+        $('#index_enable').attr('disabled', true);
     }
 
 });
@@ -158,6 +173,7 @@ if (isset($_POST['submit'])) {
         'alt_auth_stud_reg' => true,
         'eclass_prof_reg' => true,
         'alt_auth_prof_reg' => true,
+        'enable_indexing' => true,
         'enable_search' => true,
         'enable_common_docs' => true,
         'enable_social_sharing_links' => true,
@@ -174,8 +190,13 @@ if (isset($_POST['submit'])) {
     register_posted_variables($config_vars, 'all', 'intval');
     $_SESSION['theme'] = $theme = $available_themes[$theme];
 
-    if ($GLOBALS['opencourses_enable'] == 1)
+    if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
+    }
+    
+    if ($GLOBALS['enable_search'] == 1) {
+        $GLOBALS['enable_indexing'] = 1;
+    }
 
     // restrict_owndep and restrict_teacher_owndep are interdependent
     if ($GLOBALS['restrict_owndep'] == 0) {
@@ -379,6 +400,7 @@ else {
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';    
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
+    $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
@@ -406,8 +428,11 @@ else {
         <tr>        
                 <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='" . intval(get_config('min_password_len')) . "'></td></tr>        
         <tr>
-                <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
-        </tr>        
+                <td><input id='index_enable' type='checkbox' name='enable_indexing' value='1' $cbox_enable_indexing />&nbsp;$langEnableIndexing</td>
+        </tr>
+        <tr>
+                <td><input id='search_enable' type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
+        </tr>
         <tr>		
                 <td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
         </tr>
