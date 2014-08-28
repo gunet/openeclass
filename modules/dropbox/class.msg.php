@@ -170,7 +170,7 @@ Class Msg {
         if (Database::get()->querySingle($sql, $this->id, 0)->c == 0) {
             $sql = "DELETE FROM `dropbox_msg` WHERE `id` = ?d";
             Database::get()->query($sql, $this->id);
-            $sql = "DELETE FROM `dropbox_index` WHERE `id` = ?d";
+            $sql = "DELETE FROM `dropbox_index` WHERE `msg_id` = ?d";
             Database::get()->query($sql, $this->id);
             if ($this->course_id != 0) {//only course messages may have attachment
                 if ($this->filename != '') {

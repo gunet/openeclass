@@ -247,7 +247,7 @@ if (isset($_GET['mid'])) {
                         $(\'div.loading\').fadeIn();
                         var rowContainer = $(this).parent().parent();
                         var id = rowContainer.attr("id");
-                        var string = \'tid=\'+ id ;
+                        var string = \'mid=\'+ id ;
 
                         $.ajax({
                           type: "POST",
