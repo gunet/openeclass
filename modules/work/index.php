@@ -961,11 +961,11 @@ function show_student_assignment($id) {
         $submit_ok = FALSE;;
     } else {
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
-            if ($sub['grade'] != '') {
+            if ($sub->grade != '') {
                 $submit_ok = false;
             var_dump($submit_ok);
             }
-            show_submission_details($sub['id']);
+            show_submission_details($sub->id);
         }
     }
     if ($submit_ok) {
@@ -1492,9 +1492,9 @@ function show_student_assignments() {
 
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
                 foreach ($submission as $sub) {
-                    if (isset($sub['group_id'])) { // if is a group assignment
+                    if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
-                                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>" .
+                                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>)</div>";
                     }
                     $tool_content .= "<img src='$themeimg/checkbox_on.png' alt='$m[yes]' /><br />";
@@ -1505,7 +1505,7 @@ function show_student_assignments() {
             $tool_content .= "</td>
                                     <td width='30' align='center'>";
             foreach ($submission as $sub) {
-                $grade = submission_grade($sub['id']);
+                $grade = submission_grade($sub->id);
                 if (!$grade) {
                     $grade = "<div style='padding-bottom: 5px;padding-top:5px;'> - </div>";
                 }
