@@ -31,6 +31,8 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
+set_time_limit(0);
+
 Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
