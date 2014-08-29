@@ -958,7 +958,7 @@ if ($is_editor) {
         //=================
         //attendance limit
         //=================
-        $tool_content .= "<br>
+        @$tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
             <legend>$langAttendanceLimitTitle</legend>

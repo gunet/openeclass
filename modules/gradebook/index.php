@@ -1247,15 +1247,15 @@ if ($is_editor) {
                 <tr>
                   <th>
                   <select name='degreerange'><option value=10";
-        if($gradebook_range == 10){
+        if (isset($gradebook_range) and $gradebook_range == 10) {
             $tool_content .= " selected ";
-        }          
+        }
         $tool_content .= ">0-10</option><option value=5";
-        if($gradebook_range == 5){
+        if (isset($gradebook_range) and $gradebook_range == 5) {
             $tool_content .= " selected ";
         }
         $tool_content .= ">0-5</option><option value=100";
-        if($gradebook_range == 100){
+        if (isset($gradebook_range) and $gradebook_range == 100) {
             $tool_content .= " selected ";
         }
         $tool_content .= ">0-100</option></select>";
