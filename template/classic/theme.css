@@ -1981,3 +1981,15 @@ div.tagsinput div { display:block; float: left; }
     list-style-type: none;
     padding-right: 10px;
 }
+
+/* Autocomplete input */
+#recipients.ui-autocomplete-loading {
+    background: white url('img/ajax_loader.gif') right center no-repeat;
+}
+
+#recipients.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}

@@ -37,20 +37,19 @@ if (!isset($course_id)) {
 if (isset($_GET['mid'])) {
     
     $mid = intval($_GET['mid']);
-    $msg = new Msg($mid, $uid);
+    $msg = new Msg($mid, $uid, 'msg_view');
     if (!$msg->error) {
        
-        $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
         }
-        $out .= "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
+        $out = "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
         $out .= "<h2>$langSubject: ".q($msg->subject)."</h2><br/>";
         if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "<p class=\"tags\"><span class=\"st_tag\"><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></span></p><br/>";
+            $out .= "<p><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></p><br/>";
         }
-        $out .= "<table id=\"msg_table\">
+        $out .= "<table>
                   <thead>
                     <tr>
                       <th>$langDate</th>
@@ -135,13 +134,6 @@ if (isset($_GET['mid'])) {
                             });</script>
         <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
         /******End of Reply Form ********/
-
-        $out .= "<script>
-                   $(document).ready(function() {
-                     $('div.loading').hide();
-                     $('#msg_table').dataTable();
-                   });
-                 </script>";
         
         $out .= '<script>
                   $(function() {
@@ -188,18 +180,14 @@ if (isset($_GET['mid'])) {
             $out .= "<th>$langCourse</th>";
         }
         $out .= "     <th>$langSubject</th>
-                      <th>$langParticipants</th>
+                      <th>$langSender</th>
+                      <th>$langDate</th>
                       <th>$langDelete</th>
                     </tr>
                   </thead>
                   <tbody>";
         
         foreach ($msgs as $msg) {
-            $participants = '';
-            foreach ($msg->recipients as $r) {
-                $participants .= uid_to_name($r).'<br/>';
-            }
-            $participants = substr($participants, 0, strlen($participants)-5);
             $urlstr = '';
             if ($course_id != 0) {
                 $urlstr = "&amp;course=".$course_code;
@@ -209,7 +197,8 @@ if (isset($_GET['mid'])) {
                 $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td>";
             }
             $out .= " <td><a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a></td>
-                      <td>$participants</td>
+                      <td>".uid_to_name($msg->author_id)."</td>
+                      <td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";
         }
@@ -220,6 +209,7 @@ if (isset($_GET['mid'])) {
                    $(document).ready(function() {
                      $('div.loading').hide();
                      $('#inbox_table').dataTable({
+                       'bSort': false,
                        'oLanguage': {                       
                             'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                             'sZeroRecords':  '".$langNoResult."',

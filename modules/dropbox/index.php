@@ -293,16 +293,24 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                           },
                           //open links inside tabs
                           load: function(event, ui) {
-                            $(\".ui-tabs-panel.ui-widget-content\").delegate('a', 'click', function(event) {
+                            $(\".ui-tabs-panel.ui-widget-content-new\").delegate('a', 'click', function(event) {
                               if (event.target.className != 'outtabs' && event.target.className != 'paginate_enabled_next' 
                                   && event.target.className != 'paginate_disabled_previous' && event.target.className != 'paginate_disabled_next'
                                   && event.target.className != 'paginate_enabled_previous') {
                                 event.preventDefault();
-                                $(this).closest('.ui-tabs-panel.ui-widget-content').load(this.href);
+                                $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
                               }
                             });
                           }
                          })
+                        //remove some classes to avoid overriding of openeclass styling
+                        $('#tabs').removeClass('ui-widget');
+                        $('#tabs').removeClass('ui-widget-content');
+                        $('#ui-tabs-1').removeClass('ui-widget-content');
+                        $('#ui-tabs-2').removeClass('ui-widget-content');
+                        //add classes needed for opening links inside tabs (see above)
+                        $('#ui-tabs-1').addClass('ui-widget-content-new');
+                        $('#ui-tabs-2').addClass('ui-widget-content-new');
                       })
                       </script>";
     if ($course_id == 0) {

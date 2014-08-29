@@ -47,11 +47,9 @@ if (empty($out_msgs)) {
     $out .= "<table id=\"outbox_table\">
                <thead>
                  <tr>
-                   <th>$langDate</th>
                    <th>$langSubject</th>
                    <th>$langRecipients</th>
-                   <th>$langMessage</th>
-                   <th>$langAttachedFile</th>
+                   <th>$langDate</th>
                    <th>$langDelete</th>
                  </tr>
                </thead>
@@ -64,16 +62,10 @@ if (empty($out_msgs)) {
         }
         $recipients = substr($recipients, 0, strlen($recipients)-2);
         $out .= "<tr id='$m->id'>
-                   <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
                    <td>".q($m->subject)."</td>
                    <td>$recipients</td>
-                   <td>".standard_text_escape($m->body)."</td>";
-        if ($m->filename != '') {
-            $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($m->course_id)."&amp;id=$m->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
-        } else {
-            $out .= "<td></td>";
-        }
-        $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
+                   <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
+                   <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                  </tr>";
     }
     
@@ -83,6 +75,7 @@ if (empty($out_msgs)) {
                $(document).ready(function() {
                  $('div.loading').hide();
                  $('#outbox_table').dataTable({
+                    'bSort': false,
                     'oLanguage': {
                             'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                             'sZeroRecords':  '".$langNoResult."',

@@ -42,21 +42,22 @@ Class Msg {
      * Takes either one argument to load the msg from db or multiple
      * arguments to create a new msg
      */
-    public function __construct($arg1, $arg2, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
-        if (func_num_args() > 2) {
+    public function __construct($arg1, $arg2, $arg3, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null, $arg8 = null, $arg9 = null) {
+        if (func_num_args() > 3) {
             $this->uid = $arg1;
             $this->createNewMsg($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8);
         } else {
             $this->uid = $arg2;
-            $this->loadMsgFromDB($arg1);
+            $this->loadMsgFromDB($arg1, $arg3);
         }
     }
     
     /**
      * Private function that loads a Msg from DB
      * @param the msg id
+     * @param view, string: 'list_view' if msg loaded in list, 'msg_view' if loaded in full view 
      */
-    private function loadMsgFromDB($id) {
+    private function loadMsgFromDB($id, $view) {
         $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
         $res = Database::get()->querySingle($sql, $id);
         
@@ -68,11 +69,18 @@ Class Msg {
             $this->course_id = $res->course_id;
             $this->timestamp = $res->timestamp;
             
-            $sql = "SELECT `recipient_id` FROM `dropbox_index` WHERE `msg_id` = ?d";
+            $sql = "SELECT `recipient_id`,`is_read` FROM `dropbox_index` WHERE `msg_id` = ?d";
             $res = Database::get()->queryArray($sql, $id);
             
             foreach ($res as $r) {
                     $this->recipients[] = $r->recipient_id;
+                    if ($this->uid == $r->recipient_id) {
+                        if ($r->is_read == 1) {
+                           $is_read = true;
+                        } else {
+                            $is_read = false;
+                        }
+                    }
             }
             
             $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
@@ -87,9 +95,11 @@ Class Msg {
                 $this->filesize = 0;
             }
             
-            //after loaded, message is considered read for this user
-            $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
-            Database::get()->query($sql, 1, $id, $this->uid);
+            if (!$is_read && $view == 'msg_view') {
+                //after loaded, message is considered read for this user
+                $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
+                Database::get()->query($sql, 1, $id, $this->uid);
+            }
         } else {
             $this->error = true;
         }

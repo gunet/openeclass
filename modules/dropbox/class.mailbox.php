@@ -81,7 +81,8 @@ Class Mailbox {
                     ) 
                     AND `dropbox_index`.`recipient_id` = ?d 
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
-                    AND `dropbox_index`.`deleted` = ?d";
+                    AND `dropbox_index`.`deleted` = ?d
+                    ORDER BY `timestamp` DESC";
             $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0);
         } else {//messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
@@ -90,12 +91,13 @@ Class Mailbox {
                     AND `dropbox_index`.`recipient_id` = ?d
                     AND `dropbox_msg`.`course_id` = ?d
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
-                    AND `dropbox_index`.`deleted` = ?d";
+                    AND `dropbox_index`.`deleted` = ?d
+                    ORDER BY `timestamp` DESC";
             $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0);
         }
         
         foreach ($res as $r) {
-           $msgs[] = new Msg($r->id, $this->uid);
+           $msgs[] = new Msg($r->id, $this->uid, 'list_view');
         }
         
         return $msgs;
@@ -139,7 +141,7 @@ Class Mailbox {
         }
         
         foreach ($res as $r) {
-            $msgs[] = new Msg($r->id, $this->uid);
+            $msgs[] = new Msg($r->id, $this->uid, 'list_view');
         }
         
         return $msgs;
