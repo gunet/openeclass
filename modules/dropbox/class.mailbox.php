@@ -42,7 +42,7 @@ Class Mailbox {
      * @return int
      */
     public function unreadMsgsNumber() {
-        $sql = "SELECT COUNT(`msg_id`) as `unread_count`
+        $sql = "SELECT COUNT(DISTINCT `msg_id`) as `unread_count`
                 FROM `dropbox_index`, `course_module`, `dropbox_msg`
                 WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
                 AND (

@@ -775,6 +775,7 @@ $langNewCourseMessage = "New course message";
 $langParticipants = "Participants";
 $langRecipients = "Recipients";
 $langLoading = "Loading";
+$langMessageDeleteSuccess = "Message deleted succesfully!";
 $langExercicesView = "Exercise View";
 $langExercicesResult = "Exercise Results";
 $langQuestion = "Question";

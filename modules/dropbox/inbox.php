@@ -45,37 +45,30 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<h2>$langSubject: ".q($msg->subject)."</h2><br/>";
+        $out .= "<div id='del_msg'></div><div id='msg_area'><table>";
+        $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
+        $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "<p><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></p><br/>";
+            $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
-        $out .= "<table>
-                  <thead>
-                    <tr>
-                      <th>$langDate</th>
-                      <th>$langSender</th>
-                      <th>$langMessage</th>
-                      <th>$langAttachedFile</th>
-                      <th>$langDelete</th>
-                    </tr>
-                  </thead>
-                  <tbody>";
+        $out .= "<tr><td>$langDate:</td><td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td></tr>";
+        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id)."</td></tr>";
         
-       
-        $out .= "<tr id='$msg->id'>
-                   <td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td>
-                   <td>".uid_to_name($msg->author_id)."</td>
-                   <td>".standard_text_escape($msg->body)."</td>";
+        $recipients = '';
+        foreach ($msg->recipients as $r) {
+            if ($r != $msg->author_id) {
+                $recipients .= display_user($r).'<br/>';
+            }
+        }
+        
+        $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
+        $out .= "<tr><td>$langMessage:</td><td>".standard_text_escape($msg->body)."</td></tr>";
+
         if ($msg->filename != '') {
-            $out .= "<td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td>";
-        } else {
-            $out .= "<td></td>";
+            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$m->real_filename</a></td></tr>";
         }
-        $out .= "  <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>        
-                 </tr>";
         
-        $out .= "  </tbody>
-                 </table><br/><br/>";
+        $out .= "</table><br/>";
         
         /*****Reply Form****/
         if ($course_id == 0) {
@@ -135,11 +128,12 @@ if (isset($_GET['mid'])) {
         <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
         /******End of Reply Form ********/
         
+        $out .= "</div>"; 
+         
         $out .= '<script>
                   $(function() {
                     $(".delete").click(function() {
                       if (confirm("' . $langConfirmDelete . '")) {
-                        $(\'div.loading\').fadeIn();
                         var rowContainer = $(this).parent().parent();
                         var id = rowContainer.attr("id");
                         var string = \'mid=\'+ id ;
@@ -150,8 +144,8 @@ if (isset($_GET['mid'])) {
                           data: string,
                           cache: false,
                           success: function(){
-                            rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                            $(\'div.loading\').fadeOut();
+                            $("#msg_area").slideUp(\'fast\', function() {$(this).remove();});
+                            $("#del_msg").html("<p class=\'success\'>'.$langMessageDeleteSuccess.'</p>");
                           }
                        });
                        return false;
@@ -197,7 +191,7 @@ if (isset($_GET['mid'])) {
                 $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td>";
             }
             $out .= " <td><a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a></td>
-                      <td>".uid_to_name($msg->author_id)."</td>
+                      <td>".display_user($msg->author_id)."</td>
                       <td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";
