@@ -32,4 +32,32 @@ if (isset($_POST['mid'])) {
     if (!$msg->error) {
         $msg->delete();
     }
+} elseif (isset($_POST['all_inbox'])) {
+    require_once("class.mailbox.php");
+    
+    if (isset($_POST['course_id'])) {
+        $course_id = intval($_POST['course_id']);
+    } else {
+        $course_id = 0;
+    }
+    
+    $inbox = new Mailbox($uid, $course_id);
+    $msgs = $inbox->getInboxMsgs();
+    foreach ($msgs as $msg) {
+        $msg->delete();
+    }
+} elseif (isset($_POST['all_outbox'])) {
+    require_once("class.mailbox.php");
+    
+    if (isset($_POST['course_id'])) {
+        $course_id = intval($_POST['course_id']);
+    } else {
+        $course_id = 0;
+    }
+    
+    $outbox = new Mailbox($uid, $course_id);
+    $msgs = $outbox->getOutboxMsgs();
+    foreach ($msgs as $msg) {
+        $msg->delete();
+    }
 }

@@ -1313,6 +1313,9 @@ $langDoNotReply = "Αν απαντήσετε απευθείας στο παρα�
 $langParticipants = "Συμμετέχοντες";
 $langLoading = "Φόρτωση...";
 $langMessageDeleteSuccess = "Η διαγραφή του μηνύματος πραγματοποιήθηκε επιτυχώς!";
+$langDeleteAllMsgs = "Διαγραφή όλων των μηνυμάτων";
+$langConfirmDeleteAllMsgs = "Αυτή η ενέργεια θα διαγράψει όλα τα μηνύματα σε αυτή τη θυρίδα!";
+$langMessageDeleteAllSuccess = "Η διαγραφή των πραγματοποιήθηκε επιτυχώς!";
 
 /* * ********************************************************
  * exercise

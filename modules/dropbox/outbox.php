@@ -106,6 +106,8 @@ if (isset($_GET['mid'])) {
         $out = "<p class='alert1'>$langTableEmpty</p>";
     } else {
         $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
+        $out .= "<div id='del_msg'></div><div id='outbox'>";
+        $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
         $out .= "<table id=\"outbox_table\">
                    <thead>
                      <tr>
@@ -137,7 +139,7 @@ if (isset($_GET['mid'])) {
         }
         
         $out .= "  </tbody>
-                 </table>";
+                 </table></div>";
         $out .= "<script>
                    $(document).ready(function() {
                      $('div.loading').hide();
@@ -185,6 +187,25 @@ if (isset($_GET['mid'])) {
                              return false;
                            }
                          });
+                                   
+                         $(".delete_all").click(function() {
+                          if (confirm("' . $langConfirmDeleteAllMsgs . '")) {
+                            var string = \'all_outbox=1&course_id=\'+'.$course_id.' ;
+    
+                            $.ajax({
+                              type: "POST",
+                              url: "delete.php",
+                              data: string,
+                              cache: false,
+                              success: function(){
+                                $("#outbox").slideUp(\'fast\', function() {$(this).remove();});
+                                $("#del_msg").html("<p class=\'success\'>'.$langMessageDeleteAllSuccess.'</p>");
+                              }
+                           });
+                           return false;
+                         }
+                       });
+                                    
                        });
                      </script>';
     }
