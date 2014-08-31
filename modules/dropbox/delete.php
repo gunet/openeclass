@@ -44,7 +44,9 @@ if (isset($_POST['mid'])) {
     $inbox = new Mailbox($uid, $course_id);
     $msgs = $inbox->getInboxMsgs();
     foreach ($msgs as $msg) {
-        $msg->delete();
+        if (!$msg->error) {
+            $msg->delete();
+        }
     }
 } elseif (isset($_POST['all_outbox'])) {
     require_once("class.mailbox.php");
@@ -58,6 +60,8 @@ if (isset($_POST['mid'])) {
     $outbox = new Mailbox($uid, $course_id);
     $msgs = $outbox->getOutboxMsgs();
     foreach ($msgs as $msg) {
-        $msg->delete();
+        if (!$msg->error) {
+            $msg->delete();
+        }
     }
 }
