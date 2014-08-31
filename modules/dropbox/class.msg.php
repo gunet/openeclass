@@ -58,50 +58,58 @@ Class Msg {
      * @param view, string: 'list_view' if msg loaded in list, 'msg_view' if loaded in full view 
      */
     private function loadMsgFromDB($id, $view) {
-        $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
-        $res = Database::get()->querySingle($sql, $id);
-        
-        if (is_object($res)) {
-            $this->author_id = $res->author_id;
-            $this->body = $res->body;
-            $this->subject = $res->subject;
-            $this->id = $id;
-            $this->course_id = $res->course_id;
-            $this->timestamp = $res->timestamp;
-            
-            $sql = "SELECT `recipient_id`,`is_read` FROM `dropbox_index` WHERE `msg_id` = ?d";
-            $res = Database::get()->queryArray($sql, $id);
-            
-            foreach ($res as $r) {
-                    $this->recipients[] = $r->recipient_id;
-                    if ($this->uid == $r->recipient_id) {
-                        if ($r->is_read == 1) {
-                           $is_read = true;
-                        } else {
-                            $is_read = false;
-                        }
-                    }
-            }
-            
-            $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
-            $res = Database::get()->querySingle($sql, $id);
-            if (is_object($res)) {
-                $this->filename = $res->filename;
-                $this->real_filename = $res->real_filename;
-                $this->filesize = $res->filesize;
-            } else {
-                $this->filename = '';
-                $this->real_filename = '';
-                $this->filesize = 0;
-            }
-            
-            if (!$is_read && $view == 'msg_view') {
-                //after loaded, message is considered read for this user
-                $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
-                Database::get()->query($sql, 1, $id, $this->uid);
-            }
-        } else {
+        //check if this user is recipient/author of this message before loading
+        $sql = "SELECT COUNT(*) as `c` FROM `dropbox_index` WHERE `msg_id` = ?d AND recipient_id = ?d AND deleted = ?d";
+        $res = Database::get()->querySingle($sql, $id, $this->uid, 0);
+        if ($res->c == 0) {
             $this->error = true;
+        } else {
+            
+            $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
+            $res = Database::get()->querySingle($sql, $id);
+            
+            if (is_object($res)) {
+                $this->author_id = $res->author_id;
+                $this->body = $res->body;
+                $this->subject = $res->subject;
+                $this->id = $id;
+                $this->course_id = $res->course_id;
+                $this->timestamp = $res->timestamp;
+                
+                $sql = "SELECT `recipient_id`,`is_read` FROM `dropbox_index` WHERE `msg_id` = ?d";
+                $res = Database::get()->queryArray($sql, $id);
+                
+                foreach ($res as $r) {
+                        $this->recipients[] = $r->recipient_id;
+                        if ($this->uid == $r->recipient_id) {
+                            if ($r->is_read == 1) {
+                               $is_read = true;
+                            } else {
+                                $is_read = false;
+                            }
+                        }
+                }
+                
+                $sql = "SELECT * FROM `dropbox_attachment` WHERE `msg_id` = ?d";
+                $res = Database::get()->querySingle($sql, $id);
+                if (is_object($res)) {
+                    $this->filename = $res->filename;
+                    $this->real_filename = $res->real_filename;
+                    $this->filesize = $res->filesize;
+                } else {
+                    $this->filename = '';
+                    $this->real_filename = '';
+                    $this->filesize = 0;
+                }
+                
+                if (!$is_read && $view == 'msg_view') {
+                    //after loaded, message is considered read for this user
+                    $sql = "UPDATE `dropbox_index` SET `is_read` = ?d WHERE `msg_id` = ?d AND `recipient_id` = ?d";
+                    Database::get()->query($sql, 1, $id, $this->uid);
+                }
+            } else {
+                $this->error = true;
+            }
         }
     }
     
