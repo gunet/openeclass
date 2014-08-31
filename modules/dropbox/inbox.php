@@ -84,7 +84,6 @@ if (isset($_GET['mid'])) {
                 $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             //hidden variables needed in case of a reply
-            $out .= "<input type='hidden' name='message_title' value='$msg->subject' />";
             foreach ($msg->recipients as $rec) {
                 if ($rec != $uid) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
@@ -96,6 +95,10 @@ if (isset($_GET['mid'])) {
                          <tr>
                            <th>$langSender:</th>
                            <td>" . q(uid_to_name($uid)) . "</td>
+    	                 </tr>
+                         <tr>
+                           <th>$langSubject:</th>
+                           <td><input type='text' name='message_title' value='".$langMsgRe.$msg->subject."' /></td>
     	                 </tr>";
             $out .= "<tr>
                       <th>" . $langMessage . ":</th>

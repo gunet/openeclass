@@ -1316,6 +1316,7 @@ $langMessageDeleteSuccess = "Η διαγραφή του μηνύματος πρ�
 $langDeleteAllMsgs = "Διαγραφή όλων των μηνυμάτων";
 $langConfirmDeleteAllMsgs = "Αυτή η ενέργεια θα διαγράψει όλα τα μηνύματα σε αυτή τη θυρίδα!";
 $langMessageDeleteAllSuccess = "Η διαγραφή των πραγματοποιήθηκε επιτυχώς!";
+$langMsgRe = "Απ:";
 
 /* * ********************************************************
  * exercise
