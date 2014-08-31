@@ -34,6 +34,7 @@ Class Msg {
     var $real_filename;
     var $filesize;
     var $error = false;
+    var $is_read;
     //user context
     var $uid;
     
@@ -59,11 +60,12 @@ Class Msg {
      */
     private function loadMsgFromDB($id, $view) {
         //check if this user is recipient/author of this message before loading
-        $sql = "SELECT COUNT(*) as `c` FROM `dropbox_index` WHERE `msg_id` = ?d AND recipient_id = ?d AND deleted = ?d";
+        $sql = "SELECT is_read FROM `dropbox_index` WHERE `msg_id` = ?d AND recipient_id = ?d AND deleted = ?d";
         $res = Database::get()->querySingle($sql, $id, $this->uid, 0);
-        if ($res->c == 0) {
+        if (!is_object($res)) {
             $this->error = true;
         } else {
+            $this->is_read = $res->is_read;
             
             $sql = "SELECT * FROM `dropbox_msg` WHERE `id` = ?d";
             $res = Database::get()->querySingle($sql, $id);

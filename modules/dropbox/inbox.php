@@ -184,17 +184,26 @@ if (isset($_GET['mid'])) {
                   <tbody>";
         
         foreach ($msgs as $msg) {
+            if ($msg->is_read == 1) {
+                $bold_start = "";
+                $bold_end = "";
+            } else {
+                $bold_start = "<b>";
+                $bold_end = "</b>";
+            }
+            
             $urlstr = '';
             if ($course_id != 0) {
                 $urlstr = "&amp;course=".$course_code;
             }
             $out .= "<tr id='$msg->id'>";
             if ($course_id != 0) {
-                $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td>";
+                $out .= "<td>$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end</td>";
             }
-            $out .= " <td><a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a></td>
-                      <td>".display_user($msg->author_id)."</td>
-                      <td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td>
+            
+            $out .= " <td>$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>$bold_end</td>
+                      <td>$bold_start".display_user($msg->author_id)."$bold_end</td>
+                      <td>$bold_start".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."$bold_end</td>
                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
                     </tr>";
         }
