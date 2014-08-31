@@ -35,6 +35,7 @@ if (!isset($course_id)) {
 }
 
 if (isset($_GET['mid'])) {
+    $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
     
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
@@ -71,61 +72,65 @@ if (isset($_GET['mid'])) {
         $out .= "</table><br/>";
         
         /*****Reply Form****/
-        if ($course_id == 0) {
-            $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-            if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
-                $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
-            }
+        if ($msg->course_id == 0 && !$personal_msgs_allowed) {
+            //do not show reply form when personal messages are not allowed
         } else {
-            $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-        }
-        //hidden variables needed in case of a reply
-        $out .= "<input type='hidden' name='message_title' value='$msg->subject' />";
-        foreach ($msg->recipients as $rec) {
-            if ($rec != $uid) {
-                $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
+            if ($course_id == 0) {
+                $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
+                    $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
+                }
+            } else {
+                $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
-        }
-        $out .= "<fieldset>
-                   <table width='100%' class='tbl'>
-                     <caption><b>$langReply</b></caption>
-                     <tr>
-                       <th>$langSender:</th>
-                       <td>" . q(uid_to_name($uid)) . "</td>
-	                 </tr>";
-        $out .= "<tr>
-                  <th>" . $langMessage . ":</th>
-                  <td>".rich_text_editor('body', 4, 20, '')."
-                    <small><br/>$langMaxMessageSize</small></td>
-                 </tr>";
-        if ($course_id != 0) {
+            //hidden variables needed in case of a reply
+            $out .= "<input type='hidden' name='message_title' value='$msg->subject' />";
+            foreach ($msg->recipients as $rec) {
+                if ($rec != $uid) {
+                    $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
+                }
+            }
+            $out .= "<fieldset>
+                       <table width='100%' class='tbl'>
+                         <caption><b>$langReply</b></caption>
+                         <tr>
+                           <th>$langSender:</th>
+                           <td>" . q(uid_to_name($uid)) . "</td>
+    	                 </tr>";
             $out .= "<tr>
-                   <th width='120'>$langFileName:</th>
-                   <td><input type='file' name='file' size='35' />
-                   </td>
-                 </tr>";
+                      <th>" . $langMessage . ":</th>
+                      <td>".rich_text_editor('body', 4, 20, '')."
+                        <small><br/>$langMaxMessageSize</small></td>
+                     </tr>";
+            if ($course_id != 0) {
+                $out .= "<tr>
+                       <th width='120'>$langFileName:</th>
+                       <td><input type='file' name='file' size='35' />
+                       </td>
+                     </tr>";
+            }
+            
+            $out .= "<tr>
+    	               <th>&nbsp;</th>
+                       <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
+                          $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
+                     </tr>
+                   </table>
+                 </fieldset>
+               </form>
+               <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
+    
+             $out .= "<script type='text/javascript' src='{$urlAppend}js/jquery.multiselect.min.js'></script>\n";
+             $out .= "<script type='text/javascript'>$(document).ready(function () {
+                                  $('#select-recipients').multiselect({
+                                    selectedText: '$langJQSelectNum',
+                                    noneSelectedText: '$langJQNoneSelected',
+                                    checkAllText: '$langJQCheckAll',
+                                    uncheckAllText: '$langJQUncheckAll'
+                                  });
+                                });</script>
+            <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
         }
-        
-        $out .= "<tr>
-	               <th>&nbsp;</th>
-                   <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
-                      $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
-                 </tr>
-               </table>
-             </fieldset>
-           </form>
-           <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
-
-         $out .= "<script type='text/javascript' src='{$urlAppend}js/jquery.multiselect.min.js'></script>\n";
-         $out .= "<script type='text/javascript'>$(document).ready(function () {
-                              $('#select-recipients').multiselect({
-                                selectedText: '$langJQSelectNum',
-                                noneSelectedText: '$langJQNoneSelected',
-                                checkAllText: '$langJQCheckAll',
-                                uncheckAllText: '$langJQUncheckAll'
-                              });
-                            });</script>
-        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
         /******End of Reply Form ********/
         
         $out .= "</div>"; 

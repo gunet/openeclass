@@ -150,6 +150,7 @@ if (isset($_POST['submit'])) {
         'am_required' => true,
         'dont_display_login_form' => true,
         'dropbox_allow_student_to_student' => true,
+        'dropbox_allow_personal_messages' => true,
         'block_username_change' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,        
@@ -397,6 +398,7 @@ else {
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
+    $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';    
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
@@ -438,6 +440,9 @@ else {
         </tr>
         <tr>		
                 <td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages />&nbsp;$lang_dropbox_allow_personal_messages</td>
         </tr>
         <tr>		
                 <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>

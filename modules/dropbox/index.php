@@ -33,6 +33,8 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
+$personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
+
 if (!isset($course_id)) {
     $course_id = 0;
 }
@@ -74,9 +76,11 @@ if ($course_id != 0) {
 } else {
     $tool_content .="
     <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>
-        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
+      <ul id='opslist'>";
+    if ($personal_msgs_allowed) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>";
+    }
+    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
       </ul>
     </div>";
 }
@@ -94,6 +98,12 @@ load_js('jquery-ui');
 
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
+        if (!$personal_msgs_allowed) {
+            $tool_content .= "<p class='alert1'>$langGeneralError</p>";
+            draw($tool_content, 1, null, $head_content);
+            exit;
+        }
+        
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
             $type = 'cm';
         } else {

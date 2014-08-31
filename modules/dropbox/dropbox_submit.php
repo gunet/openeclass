@@ -31,6 +31,8 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
+$personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
+
 if (!isset($course_id) || !$course_id) {
     $course_id = 0;
 }
@@ -60,6 +62,9 @@ if (isset($_POST["submit"])) {
     } else if ($_POST['body'] == '') {
         $error = TRUE;
         $errormsg = $langEmptyMsg;
+    } elseif(!isset($_POST['course']) && !$personal_msgs_allowed) {
+        $error = TRUE;
+        $errormsg = $langGeneralError;
     } elseif (!empty($_FILES['file']['name'])) {
         $file_attached = TRUE;
     }
