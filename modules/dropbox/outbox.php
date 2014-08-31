@@ -110,8 +110,11 @@ if (isset($_GET['mid'])) {
         $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
         $out .= "<table id=\"outbox_table\">
                    <thead>
-                     <tr>
-                       <th>$langSubject</th>
+                     <tr>";
+        if ($course_id == 0) {
+            $out .= "<th>$langCourse</th>";
+        }
+        $out .= "      <th>$langSubject</th>
                        <th>$langRecipients</th>
                        <th>$langDate</th>
                        <th>$langDelete</th>
@@ -130,8 +133,15 @@ if (isset($_GET['mid'])) {
                     $recipients .= display_user($r).'<br/>';
                 }
             }
-            $out .= "<tr id='$m->id'>
-                       <td><a href='outbox.php?mid=$m->id".$urlstr."'>".q($m->subject)."</a></td>
+            $out .= "<tr id='$m->id'>";
+            if ($course_id == 0) {
+                if ($m->course_id != 0) {
+                    $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($m->course_id)."\">".course_id_to_title($m->course_id)."</a></td>";
+                } else {
+                    $out .= "<td></td>";
+                }
+            }
+             $out .= " <td><a href='outbox.php?mid=$m->id".$urlstr."'>".q($m->subject)."</a></td>
                        <td>$recipients</td>
                        <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
                        <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>

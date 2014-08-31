@@ -172,7 +172,7 @@ if (isset($_GET['mid'])) {
         $out .= "<table id=\"inbox_table\">
                   <thead>
                     <tr>";
-        if ($course_id != 0) {
+        if ($course_id == 0) {
             $out .= "<th>$langCourse</th>";
         }
         $out .= "     <th>$langSubject</th>
@@ -197,8 +197,12 @@ if (isset($_GET['mid'])) {
                 $urlstr = "&amp;course=".$course_code;
             }
             $out .= "<tr id='$msg->id'>";
-            if ($course_id != 0) {
-                $out .= "<td>$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end</td>";
+            if ($course_id == 0) {
+                if ($msg->course_id != 0) {
+                    $out .= "<td>$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end</td>";
+                } else {
+                    $out .= "<td></td>";
+                }
             }
             
             $out .= " <td>$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>$bold_end</td>
