@@ -78,7 +78,18 @@ if (isset($_POST["submit"])) {
             $filename = '';
             $real_filename = '';
             $filesize = 0;
-            $recipients = $_POST["recipients"];
+            $recipients = array();
+            foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
+                if (preg_match('/^_/', $r)) {
+                    $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
+                    foreach ($sql_res as $ar) {
+                        $recipients[] = $ar->user_id;
+                    }
+                } else {
+                    $recipients[] = $r;
+                }
+            }
+            $recipients = array_unique($recipients);
             if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
                 $subject = $_POST['message_title'];
             } else {

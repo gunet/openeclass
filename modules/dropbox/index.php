@@ -142,7 +142,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                 if(!($.isEmptyObject(data))) {
                                   $('#select-recipients').empty();
                                   $.each(data, function(key,value){
-                                    $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                    if (key.charAt(0) == '_') {
+                                      $('#select-recipients').prepend('<option value=\'' + key + '\'>' + value + '</option>');
+                                    } else {
+                                      $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                    }
                                   });
                                 }
                                 $('#select-recipients').multiselect('refresh');
@@ -187,15 +191,46 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
     
         if ($course_id != 0) {//course messages
-            //select all users from this course except yourself
-            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                    FROM user u, course_user cu
-    			    WHERE cu.course_id = ?d
-                    AND cu.user_id = u.id
-                    AND cu.status != ?d
-                    AND u.id != ?d
-                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-            $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+            
+            $student_to_student_allow = get_config('dropbox_allow_student_to_student');
+            
+            if ($is_editor || $student_to_student_allow == 1) {
+                //select all users from this course except yourself
+                $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                        FROM user u, course_user cu
+        			    WHERE cu.course_id = ?d
+                        AND cu.user_id = u.id
+                        AND cu.status != ?d
+                        AND u.id != ?d
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                
+                $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+                
+                if ($is_editor) {
+                    $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d";
+                    $result_g = Database::get()->queryArray($sql_g, $course_id);
+                } else {//allow students to send messages only to groups they are members of
+                    $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm` 
+                              WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
+                    $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
+                }
+                
+                foreach ($result_g as $res_g)
+                {
+                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                }
+            } else {
+                //if user is student an student-student messages not allowed for course messages show teachers
+                $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                        FROM user u, course_user cu
+        			    WHERE cu.course_id = ?d
+                        AND cu.user_id = u.id
+                        AND cu.status = ?d
+                        AND u.id != ?d
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                
+                $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, $uid);
+            }
             
             foreach ($res as $r) {
                 $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
