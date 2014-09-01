@@ -321,6 +321,7 @@ function add_assignment() {
     $title = $_POST['title'];
     $desc = $_POST['desc'];
     $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
+    $late_submission = ((isset($_POST['late_submission']) &&  trim($_POST['WorkEnd']!=FALSE)) ? 1 : 0);
     $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
     $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
@@ -331,7 +332,8 @@ function add_assignment() {
         $assign_to_specific = 0;
     }
     if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
-        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) VALUES (?d, ?s, ?s, ?t, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
+                . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
         $secret = work_secret($id);
         if ($id) {
             $local_name = uid_to_name($uid);
@@ -399,9 +401,9 @@ function submit_work($id, $on_behalf_of = null) {
         } else { // user NOT guest
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
                 // user is registered to this lesson
-                $row = Database::get()->querySingle("SELECT deadline, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                $row = Database::get()->querySingle("SELECT deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                               FROM assignment WHERE id = ?d", $id);
-                if (($row->time < 0 && (int) $row->deadline) and !$on_behalf_of) {
+                if (($row->time < 0 && (int) $row->deadline && !$row->late_submission) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
                     $submit_ok = TRUE; // before deadline
@@ -547,13 +549,17 @@ function new_assignment() {
           <th>$m[max_grade]:</th>
           <td><input type='text' name='max_grade' size='5' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'/></td>
         </tr>        
-        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#deadline_row, #late_sub_row\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#deadline_row, #late_sub_row\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
-        <tr id='example' ". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
+        <tr id='deadline_row' ". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
           <th></th>
           <td><input id='deadline' type='text' name='WorkEnd' value='".(isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "")."' />&nbsp $m[deadline_notif]</td>
         </tr>
+        <tr id='late_sub_row'". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
+               <th></th>
+               <td><input type='checkbox' name='late_submission' value='1'>$m[late_submission_enable]</td>
+         </tr>          
         <tr>
           <th>$m[group_or_user]:</th>
           <td><input type='radio' id='user_button' name='group_submissions' value='0' checked='1' /><label for='user_button'>$m[user_work]</label>
@@ -694,13 +700,18 @@ function show_edit_assignment($id) {
         <td><input type='text' name='max_grade' size='5' value='$row->max_grade'/></td>
     </tr>           
     <tr>
-        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
-        <td></tr>
-        <tr id='example'". (($deadline) ? "" : "style=\"display:none\"") .">
+        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#deadline_row, #late_sub_row\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#deadline_row, #late_sub_row\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <td>
+    </tr>
+    <tr id='deadline_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
           <th></th>
           <td><input id='deadline' type='text' name='WorkEnd' value='{$deadline}' />&nbsp $m[deadline_notif]</td>
-    </tr>        
+    </tr>  
+    <tr id='late_sub_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
+          <th></th>
+          <td><input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">$m[late_submission_enable]</td>
+    </tr>     
     <tr>
       <th valign='top'>$m[group_or_user]:</th>
       <td><input type='radio' id='user_button' name='group_submissions' value='0'".(($row->group_submissions==1) ? '' : 'checked')." />
@@ -761,6 +772,7 @@ function edit_assignment($id) {
     $title = $_POST['title'];
     $desc = purify($_POST['desc']);
     $deadline = trim($_POST['WorkEnd']) == FALSE ? '0000-00-00 00:00': date('Y-m-d H:i', strtotime($_POST['WorkEnd']));
+    $late_submission = ((isset($_POST['late_submission']) && trim($_POST['WorkEnd']) != FALSE) ? 1 : 0);
     $group_submissions = $_POST['group_submissions'];
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
     $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
@@ -806,10 +818,10 @@ function edit_assignment($id) {
         }        
     }   
     Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-        group_submissions = ?d, comments = ?s, deadline = ?t, max_grade = ?d, 
+        group_submissions = ?d, comments = ?s, deadline = ?t, late_submission = ?d, max_grade = ?d, 
         assign_to_specific = ?d, file_path = ?s, file_name = ?s
         WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-        $comments, $deadline, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
+        $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
     Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
    
@@ -951,7 +963,7 @@ function show_student_assignment($id) {
 
     assignment_details($id, $row);
 
-    $submit_ok = ($row->time > 0 || !(int) $row->deadline);
+    $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
 
     if (!$uid) {
         $tool_content .= "<p>$langUserOnly</p>";
@@ -963,7 +975,7 @@ function show_student_assignment($id) {
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
             if ($sub->grade != '') {
                 $submit_ok = false;
-            var_dump($submit_ok);
+            
             }
             show_submission_details($sub->id);
         }
@@ -1237,9 +1249,10 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assign.submission_date submission_date,
                                                    assign.grade_submission_date grade_submission_date,
                                                    assign.grade grade, assign.comments comments,
-                                                   assign.grade_comments grade_comments
-                                                   FROM assignment_submit AS assign, user
-                                                   WHERE assign.assignment_id = ?d AND user.id = assign.uid
+                                                   assign.grade_comments grade_comments,
+                                                   assignment.deadline deadline 
+                                                   FROM assignment_submit AS assign, user, assignment
+                                                   WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY ?s ?s", $id, $order, $rev);
 
             $tool_content .= "
@@ -1277,6 +1290,8 @@ function show_assignment($id, $display_graph_results = false) {
                 $filelink = empty($row->file_name) ? '&nbsp;' :
                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
                         q($row->file_name) . "</a>");
+                
+                $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
                 $tool_content .= "
                                 <tr $row_color>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
@@ -1285,9 +1300,9 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td width='180'>$filelink
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
                                  <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
-                                </a>                                        
+                                </a>                                
                                 </td>
-                                <td width='100'>" . nice_format($row->submission_date, TRUE) . "</td>
+                                <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
                                 <div align='center'><input type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'></div>
                                 </td>
@@ -1327,9 +1342,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 $m[email_users]: <input type='checkbox' value='1' name='email'></p>
                         <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
                         </form>";
-        }
-
-        if ($display_graph_results) { // display pie chart with grades results
+        } else {
+        // display pie chart with grades results
             if ($gradesExists) {
                 // Used to display grades distribution chart
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
@@ -1755,18 +1769,19 @@ function create_zip_index($path, $id, $online = FALSE) {
 				<th>' . $m['grade'] . '</th>
 			</tr>');
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d ORDER BY id", $id);
+    $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline FROM assignment_submit a, assignment b WHERE a.assignment_id = ?d AND a.assignment_id = b.id ORDER BY a.id", $id);
 
     foreach ($result as $row) {
         $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
         fputs($fp, '
 			<tr class="sep">
 				<td>' . q(uid_to_name($row->uid)) . '</td>
 				<td>' . q(uid_to_am($row->uid)) . '</td>
 				<td align="center">' . $filelink . '</td>
-				<td align="center">' . $row->submission_date . '</td>
+				<td align="center">' . $row->submission_date .$late_sub_text. '</td>
 				<td align="center">' . $row->grade . '</td>
 			</tr>');
         if (trim($row->comments != '')) {
