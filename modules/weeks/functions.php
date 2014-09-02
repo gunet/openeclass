@@ -1079,7 +1079,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
     } else {
         $icon_vis = ($status == 1) ? 'visible.png' : 'invisible.png';
-        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
+        $edit_link = "../../modules/weeks/?course=$course_code&amp;edit=$resource_id";
     }
 
     if ($status != 'del') {
@@ -1088,7 +1088,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     } else {
         $content = "<td width='3'>&nbsp;</td>";
     }
-    $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id'" .
+    $content .= "<td width='3'><a href='../../modules/weeks/?course=$course_code&amp;del=$resource_id'" .
             " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
             "<img src='$themeimg/delete.png' " .
             "title='$langDelete' alt='$langDelete'></a></td>";
