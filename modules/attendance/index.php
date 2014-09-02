@@ -94,8 +94,7 @@ if ($attendance) {
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
                                GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
@@ -712,11 +711,10 @@ if ($is_editor) {
             //check the rest value and rearrange the table
             $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
-                               GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
+                               GROUP BY user.id", $limitDate, $course_id, USER_STUDENT);
             
             if($newUsersQuery){
                 foreach ($newUsersQuery as $newUsers){
