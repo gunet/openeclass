@@ -30,10 +30,9 @@ if (isset($_POST['course'])) {
         $cid = course_code_to_id($_POST['course']);
         $student_to_student_allow = get_config('dropbox_allow_student_to_student');
         
-        $s = Database::get()->querySingle("SELECT editor FROM course_user
-                                        WHERE user_id = ?d AND
-                                        course_id = ?d", $uid, $cid);
-        if ($s and $s->editor == 1) {
+        $sql = "SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d AND (status = ?d OR editor = ?d)";
+        $res = Database::get()->querySingle($sql, $cid, $uid, USER_TEACHER, 1);
+        if ($res->c != 0) {
             $is_editor = true;
         } else {
             $is_editor = false;
