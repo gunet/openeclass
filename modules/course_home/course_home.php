@@ -231,6 +231,12 @@ if ($is_editor) {
     
 }
 
+//Check the course view type
+$courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
+$viewCourse = $courseInfo->view_type;
+$start_date = $courseInfo->start_date;
+$finish_date = $courseInfo->finish_date;
+
 // add course units
 if ($is_editor) {
     $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
@@ -245,11 +251,6 @@ if ($is_editor) { //if he is editor
         $last_id = $last_id->id;
     }
     
-    //Check the course view type
-    $courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
-    $viewCourse = $courseInfo->view_type;
-    $start_date = $courseInfo->start_date;
-    $finish_date = $courseInfo->finish_date;
     
     $query = "SELECT id, title, comments, visible, public
                 FROM course_units WHERE course_id = $course_id AND `order` >= 0
