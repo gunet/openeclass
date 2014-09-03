@@ -341,10 +341,12 @@ if ($is_editor) {
         }
         $actDesc = purify($_POST['actDesc']);
         if (isset($_POST['auto'])) {
-            $auto = intval($_POST['auto']);
+            $auto = $_POST['auto'];
+        } else {
+            $auto = "";
         }
-        $weight = intval($_POST['weight']);
-        $type = intval($_POST['activity_type']);
+        $weight = $_POST['weight'];
+        $type = $_POST['activity_type'];
         $actDate = $_POST['date'];
         $visible = $_POST['visible'];
         
@@ -1287,12 +1289,11 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<fieldset><legend>$langGradebookGrades</legend>";
-        $tool_content .= "<div class='center'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
+        $tool_content .= "<div class='info'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
         
         if(weightleft($gradebook_id, 0) != 0){
             $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
-        }
-        
+        }        
         
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
@@ -1305,8 +1306,10 @@ if ($is_editor) {
     if ($result) {
         foreach ($result as $announce) {            
             //check if the user has attend for this activity
-            $userAttend = Database::get()->querySingle("SELECT grade FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID)->grade;
-
+            $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID);
+            if ($sql) {
+                $userAttend = $sql->grade;
+            }
             $content = standard_text_escape($announce->description);
             $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
 
