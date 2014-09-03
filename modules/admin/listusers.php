@@ -110,8 +110,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($auth_type >= 2) {
             $criteria[] = 'password = ' . quote($auth_ids[$auth_type]);
         } elseif ($auth_type == 1) {
-            $criteria[] = 'password NOT IN (' .
-                    implode(', ', $auth_ids) . ')';
+            $q1 = "'". implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN ('.$q1.')';
         }        
     }
     // email search
