@@ -322,6 +322,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	}
 } else {//mailbox
     load_js('datatables');
+    load_js('datatables_filtering_delay');
     $head_content .= "<script type='text/javascript'>
 		              $(function() {
 		                $( \"#tabs\" ).tabs({

@@ -251,7 +251,7 @@ if (isset($_GET['mid'])) {
                                  'sLast':     '&raquo;'
                             }
                         }
-                     });
+                     }).fnSetFilteringDelay(1000);
                    });
                  </script>";
         
