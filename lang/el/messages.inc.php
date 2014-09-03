@@ -1472,6 +1472,7 @@ $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
+$langRemainingTime = "Υπολειπόμενος χρόνος";
 
 // exercise result.php
 $langExerciseStart = "Έναρξη";
