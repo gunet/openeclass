@@ -296,7 +296,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_owndep', '0'),
                     ('restrict_teacher_owndep', '0')");
 
-                if ($oldversion < '2.1.3' or (!isset($oldversion))) {                    
+                if (version_compare($oldversion, '2.1.3', '<') or (!isset($oldversion))) {                    
                     echo "<hr><p class='alert1'>$langUpgTooOld</p>
                         <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
                     echo '</div></body></html>';
@@ -304,7 +304,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     draw($tool_content, 0);
                 }
                 
-                if ($oldversion < '2.2') {
+                if (version_compare($oldversion, '2.2', '<')) {
                     // course units
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -325,7 +325,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
                 }
 
-                if ($oldversion < '2.2.1') {
+                if (version_compare($oldversion, '2.2.1', '<')) {
                     Database::get()->query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'");
                     Database::get()->query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
                     Database::get()->query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'");
@@ -339,14 +339,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `notify_sent` BOOL NOT NULL DEFAULT '0',
                         `course_id` INT NOT NULL DEFAULT '0') $charset_spec");
 
-                    if (!mysql_field_exists($mysqlMainDb, 'course_user', 'course_id')) {
-                        Database::get()->query('ALTER TABLE course_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
-                        Database::get()->query('UPDATE course_user SET course_id =
-                                        (SELECT course_id FROM cours WHERE code = course_user.code_cours)
+                    if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'course_id')) {
+                        Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
+                        Database::get()->query('UPDATE cours_user SET course_id =
+                                        (SELECT course_id FROM cours WHERE code = cours_user.code_cours)
                              WHERE course_id = 0');
-                        Database::get()->query('ALTER TABLE course_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
-                        Database::get()->query('CREATE INDEX course_user_id ON course_user (user_id, course_id)');
-                        Database::get()->query('ALTER TABLE course_user DROP code_cours');
+                        Database::get()->query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
+                        Database::get()->query('CREATE INDEX course_user_id ON cours_user (user_id, course_id)');
+                        Database::get()->query('ALTER TABLE cours_user DROP code_cours');
                     }
 
                     if (!mysql_field_exists($mysqlMainDb, 'annonces', 'course_id')) {
@@ -357,7 +357,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query('ALTER TABLE annonces DROP code_cours');
                     }
                 }
-                if ($oldversion < '2.3.1') {
+                if (version_compare($oldversion, '2.3.1', '<')) {
                     if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
                         Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
                     }
@@ -370,7 +370,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
                         ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
 
-                if ($oldversion < '2.4') {
+                if (version_compare($oldversion, '2.4', '<')) {
                     if (mysql_field_exists($mysqlMainDb, 'cours', 'faculte')) {
                         echo delete_field('cours', 'faculte');
                     }
@@ -564,7 +564,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                 }
 
-                if ($oldversion < '2.5') {
+                if (version_compare($oldversion, '2.5', '<')) {
                     Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                     ('disable_eclass_stud_reg', '0'),
                     ('disable_eclass_prof_reg', '0'),
@@ -586,12 +586,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("UPDATE `user` SET `username`=TRIM(`username`)");
                 }
 
-                if ($oldversion < '2.5.2') {
+                if (version_compare($oldversion, '2.5.2', '<')) {
                     Database::get()->query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
                     Database::get()->query("DROP TABLE IF EXISTS passwd_reset");
                 }
 
-                if ($oldversion < '2.6') {
+                if (version_compare($oldversion, '2.6', '<')) {
                     Database::get()->query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
                     $old_close_user_registration = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = 'close_user_registration'")->value;
                     if ($old_close_user_registration == 0) {
@@ -641,7 +641,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 UNIQUE KEY ip (ip)) $charset_spec");
                 }
 
-                if ($oldversion < '2.6.1') {
+                if (version_compare($oldversion, '2.6.1', '<')) {
                     Database::get()->query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('login_fail_check', 1),
                                         ('login_fail_threshold', 15),
@@ -649,7 +649,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('login_fail_forgive_interval', 24)");
                 }
 
-                if ($oldversion < '2.7') {
+                if (version_compare($oldversion, '2.7', '<')) {
                     mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
                             Database::get()->query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
                     mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
@@ -665,7 +665,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                          PRIMARY KEY (`id`)) $charset_spec");
                 }
 
-                if ($oldversion < '2.8') {
+                if (version_compare($oldversion, '2.8', '<')) {
                     Database::get()->query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('course_metadata', 0),
                                         ('opencourses_enable', 0)");
@@ -690,7 +690,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                 }
 
-                if ($oldversion < '2.8.3') {
+                if (version_compare($oldversion, '2.8.3', '<')) {
                     Database::get()->query("CREATE TABLE course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
@@ -734,7 +734,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     });
                 }
 
-                if ($oldversion < '2.9.1') {
+                if (version_compare($oldversion, '2.9.1') == 1) {
                     mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
                             Database::get()->query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
                 }
@@ -1247,7 +1247,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                             PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
                     
-                    db_query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `blog_post` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `title` VARCHAR(255) NOT NULL DEFAULT '',
                             `content` TEXT NOT NULL,
@@ -1256,7 +1256,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `course_id` INT(11) NOT NULL) $charset_spec");
                     
-                    db_query("CREATE TABLE IF NOT EXISTS `comments` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `comments` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `rid` INT(11) NOT NULL,
                             `rtype` VARCHAR(50) NOT NULL,
@@ -1264,7 +1264,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `time` DATETIME NOT NULL,
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
                     
-                    db_query("CREATE TABLE IF NOT EXISTS `rating` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `rating` (
                             `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `rid` INT(11) NOT NULL,
                             `rtype` VARCHAR(50) NOT NULL,
@@ -1276,7 +1276,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
                             INDEX `rating_index_2` (`rid`, `rtype`, `user_id`, `widget`)) $charset_spec");
                     
-                    db_query("CREATE TABLE IF NOT EXISTS `rating_cache` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                             `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `rid` INT(11) NOT NULL,
                             `rtype` VARCHAR(50) NOT NULL,
@@ -1366,7 +1366,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `visible` TINYINT(4),
                              recursion_period varchar(30) DEFAULT NULL,
                              recursion_end date DEFAULT NULL,
-                             `source_event_id` int(11) DEFAULT NULL
+                             `source_event_id` int(11) DEFAULT NULL)
                              $charset_spec");
                             
                     
@@ -2116,24 +2116,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $total = count($res);
         $i = 1;
         foreach ($res as $row) {
-            if ($oldversion <= '2.2') {
+            if (version_compare($oldversion, '2.2', '<')) {
                 upgrade_course_2_2($row->code, $row->lang, "($i / $total)");
             }
-            if ($oldversion < '2.3') {
+            if (version_compare($oldversion, '2.3', '<')) {
                 upgrade_course_2_3($row->code, "($i / $total)");
             }
-            if ($oldversion < '2.4') {
+            if (version_compare($oldversion, '2.4', '<')) {
                 convert_description_to_units($row->code, $row->id);
                 upgrade_course_index_php($row->code);
                 upgrade_course_2_4($row->code, $row->lang, "($i / $total)");
             }
-            if ($oldversion < '2.5') {
+            if (version_compare($oldversion, '2.5', '<')) {
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.10', '<')) {
                 upgrade_course_2_10($row->code, "($i / $total)");
             }
-            if ($oldversion < '3.0') {
+            if (version_compare($oldversion, '3.0', '')) {
                 upgrade_course_3_0($row->code, "($i / $total)");
             }
             echo "</p>";
@@ -2141,12 +2141,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         echo "<hr>";
 
-        if ($oldversion < '2.1.3') {
+        if (version_compare($oldversion, '2.1.3', '<')) {
             echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
             convert_db_utf8($mysqlMainDb);
         }
 
-        if ($oldversion < '3.0') { // special procedure, must execute after course upgrades
+        if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
             mysql_select_db($mysqlMainDb);
 
             Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
