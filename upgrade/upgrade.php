@@ -1525,7 +1525,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `show_admin` bit(1) DEFAULT b'1',
                         PRIMARY KEY (`user_id`))");
                     
-                    Database::get()->query("CREATE TABLE `admin_calendar` (
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `admin_calendar` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `user_id` int(11) NOT NULL,
                                 `title` varchar(200) NOT NULL,
