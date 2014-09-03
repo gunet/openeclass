@@ -628,8 +628,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
                     }
                     Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
-                            ('student_upload_whitelist', " . quote($_POST['student_upload_whitelist']) . "),
-                            ('teacher_upload_whitelist', " . quote($_POST['teacher_upload_whitelist']) . ")");
+                            ('student_upload_whitelist', ?s),
+                            ('teacher_upload_whitelist', ?s)", $_POST['student_upload_whitelist'], $_POST['teacher_upload_whitelist']);
                     if (!mysql_field_exists($mysqlMainDb, 'user', 'last_passreminder')) {
                         Database::get()->query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
                     }
@@ -791,7 +791,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
                                 course_id = ?d, title = ?s, comments = ?s,
-                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), quote($ures->date));
+                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), $ures->date);
                             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", intval($ures->id));
                         });
                     }
@@ -903,8 +903,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'poll_question_answer', 'assignment', 'assignment_submit',
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
-                        'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department', 'wiki_locks', 'bbb_servers', 'bbb_session',
+                        'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
                         'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
@@ -1580,6 +1579,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         PRIMARY KEY (`id`),
                         KEY `idx_bbb_servers` (`hostname`))');
                     
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `course_id` int(11) NOT NULL UNIQUE,
+                        PRIMARY KEY (`id`)) $charset_spec");
+                    
                     // hierarchy tables
                     $n = Database::get()->queryArray("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;
@@ -1614,21 +1618,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i, &$max, $langpre, $langpost, $langother) {
                             $lft = 2 + 8 * $i;
                             $rgt = $lft + 7;
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) VALUES ($r->id,
-                            " . quote($r->code) . ",
-                            " . quote($r->name) . ",
-                            $r->number, $r->generator,
-                            $lft, $rgt, true, true)");
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
+                                VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?d, true, true)", $r->id, $r->code, $r->name, $r->number, $r->generator, $lft, $rgt);
 
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpre) . ", " . ($lft + 1) . ", " . ($lft + 2) . ", true, true)");
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langpost) . ", " . ($lft + 3) . ", " . ($lft + 4) . ", true, true)");
-                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) VALUES (" . ( ++$max) . ", " . quote($r->code) . ", " . quote($langother) . ", " . ($lft + 5) . ", " . ($lft + 6) . ", true, true)");
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", (++$max), $r->code, $langpre, ($lft+1), ($lft+2));
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", (++$max), $r->code, $langpost, ($lft+3), ($lft+4));
+                            Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", (++$max), $r->code, $langother, ($lft+5), ($lft+6));
                             $i++;
                         });
 
                         $root_rgt = 2 + 8 * intval(Database::get()->querySingle("SELECT COUNT(*) as value FROM `faculte`")->value);
                         $rnode = Database::get()->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
-                    VALUES ('', " . quote($_POST['Institution']) . ", 1, $root_rgt)");
+                            VALUES ('', ?s, 1, ?d)", $_POST['Institution'], $root_rgt);
                         $root_node = $rnode->lastInsertID;
                     }
 
@@ -1646,10 +1650,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 $qlike = $langother;
                             }                                
                             // take care of courses with no parent
-                            if (!empty($r->faculteid))
+                            if (!empty($r->faculteid)) {
                                 $qfaculteid = $r->faculteid;
-                            else
+                            } else {
                                 $qfaculteid = $root_node;
+                            }
 
                             $node = Database::get()->querySingle("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
                                             WHERE node.name LIKE ?s AND
@@ -2107,7 +2112,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         mysql_index_exists('wiki_pages_contenet', 'wiki_pcon_id') or
                 Database::get()->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
         mysql_index_exists('wiki_properties', 'wik_prop_id') or
-                Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");    
+                Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
+        mysql_index_exists('idx_queue', 'idx_queue_cid') or
+                Database::get()->query("CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)");
                                                               
         // **********************************************
         // upgrade courses databases
@@ -2164,11 +2171,29 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("INSERT INTO `actions_daily` 
                     (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
                     VALUES 
-                    (NULL, " . $row->user_id . ", " . $row->module_id . ", " . $row->course_id . ", " . $row->hits . ", " . $row->duration . ", '" . $row->day . "', NOW())");
+                    (NULL, ?d, ?d, ?d, ?d, ?d, ?t, NOW())", $row->user_id, $row->module_id, $row->course_id, $row->hits, $row->duration, $row->day);
             });
 
             Database::get()->query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
             Database::get()->query("DROP TABLE IF EXISTS `actions`");
+            
+            if (get_config('enable_search')) {
+                $n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM course")->count;
+                
+                if ($n > 100) {
+                    set_config('enable_search', 0);
+                    set_config('enable_indexing', 0);
+                    echo "<hr><p class='info'>$langUpgIndexingNotice</p>";
+                } else {
+                    set_config('enable_indexing', 1);
+                    require_once 'modules/search/indexer.class.php';
+                    $idx = new Indexer();
+                    Database::get()->queryFunc("SELECT id FROM course", function ($r) use ($idx) {
+                        $idx->removeAllByCourse($r->id);
+                        $idx->storeAllByCourse($r->id);
+                    });
+                }
+            }
         }
         // convert tables to InnoDB storage engine                
         $result = Database::get()->queryArray("SHOW FULL TABLES");

@@ -28,24 +28,29 @@ $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('jquery');
+load_js('jquery-ui');
 $head_content .= <<<EOF
+<style type="text/css">
+    .no-close .ui-dialog-titlebar-close {
+        display: none;
+    }
+</style>
+
 <script type='text/javascript'>
 /* <![CDATA[ */
 
 function loginFailPanel(e) {
-    
     duration = null;
-    if (e)
+    if (e) {
         duration = 400;
+    }
         
-    if ($('#login_fail_check').is(":checked"))
-    {
+    if ($('#login_fail_check').is(":checked")) {
         $('#login_fail_threshold').show(duration);
         $('#login_fail_deny_interval').show(duration);
         $('#login_fail_forgive_interval').show(duration);
     }
-    else
-    {
+    else {
         $('#login_fail_threshold').hide(duration);
         $('#login_fail_deny_interval').hide(duration);
         $('#login_fail_forgive_interval').hide(duration);
@@ -54,48 +59,86 @@ function loginFailPanel(e) {
 
 $(document).ready(function() {
 
+    // Course Settings checkboxes
     $('#uown').click(function(event) {
-    
-        if (!this.checked)
-            $('#town').attr('checked', false);
-        
-        $('#town').attr('disabled', !this.checked);
-        
+        if (!$('#uown').is(":checked")) {
+            $('#town').prop('checked', false);
+        }
+        $('#town').prop('disabled', !$('#uown').is(":checked"));
     });
     
+    // Login Fail Panel
     loginFailPanel();
-
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
-        
-    // Open Courses checkbox
+    
+    // Open Courses checkboxes
     $('#opencourses_enable').click(function(event) {
         if ($('#opencourses_enable').is(":checked")) {
-            $('#course_metadata').attr('checked', true);
-            $('#course_metadata').attr('disabled', true);
+            if ($('#course_metadata').is(":checked")) {
+                $('#course_metadata').prop('disabled', true);
+            } else {
+                $('#course_metadata')
+                    .prop('checked', true)
+                    .prop('disabled', true)
+                    .change();
+            }
         } else {
-            $('#course_metadata').attr('disabled', false);
+            $('#course_metadata').prop('disabled', false);
         }
     });
     
     if ($('#opencourses_enable').is(":checked")) {
-        $('#course_metadata').attr('disabled', true);
+        $('#course_metadata').prop('disabled', true);
     }
-        
-    // Search Engine checkbox
-    $('#search_enable').click(function(event) {
-        if ($('#search_enable').is(":checked")) {
-            $('#index_enable').attr('checked', true);
-            $('#index_enable').attr('disabled', true);
-        } else {
-            $('#index_enable').attr('disabled', false);
+    
+    // Search Engine checkboxes
+    $("#confirmIndexDialog").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 600,
+        modal: true,
+        dialogClass: "no-close",
+        closeOnEscape: false,
+        buttons: {
+            "$langCancel": function() {
+                $('#index_enable')
+                    .prop('checked', false)
+                    .prop('disabled', false);
+                $('#search_enable').prop('checked', false);
+                $(this).dialog("close");
+            },
+            "$langOk": function() {
+                $(this).dialog("close");
+            }
         }
     });
-        
+    
+    $('#search_enable').change(function(event) {
+        if ($('#search_enable').is(":checked")) {
+            if ($('#index_enable').is(":checked")) {
+                $('#index_enable').prop('disabled', true);
+            } else {
+                $('#index_enable')
+                    .prop('checked', true)
+                    .prop('disabled', true)
+                    .change();
+            }
+        } else {
+            $('#index_enable').prop('disabled', false);
+        }
+    });
+    
     if ($('#search_enable').is(":checked")) {
-        $('#index_enable').attr('disabled', true);
+        $('#index_enable').prop('disabled', true);
     }
+    
+    $('#index_enable').change(function(event) {
+        if ($('#index_enable').is(":checked")) {
+            $("#confirmIndexDialog").dialog("open");
+        }
+    });
 
 });
 
@@ -203,13 +246,61 @@ if (isset($_POST['submit'])) {
     if ($GLOBALS['restrict_owndep'] == 0) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
     }
+    
+    $scheduleIndexing = false;
+    // indexing was previously off, but now set to on, need to schedule re-indexing
+    if (!get_config('enable_indexing') && $enable_indexing) {
+        $scheduleIndexing = true;
+        Database::get()->query("DELETE FROM idx_queue");
+        Database::get()->queryFunc("SELECT id FROM course", function($r) {
+            Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
+        });
+    }
 
     // update table `config`
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
     }
+    
     // Display result message
     $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    
+    // schedule indexing if necessary
+    if ($scheduleIndexing) {
+        $tool_content .= "<p class='alert1'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></p>";
+        $head_content .= <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+var idxwindow = null;
+                
+function idxpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (idxwindow == null || idxwindow.closed) {
+        idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && idxwindow !== null) {
+            idxwindow.focus();
+        }
+    } else {
+        idxwindow.focus();
+    }
+    
+    return false;
+}
+
+$(document).ready(function() {
+
+    $('#idxpbut').click();
+
+});
+
+/* ]]> */
+</script>
+EOF;
+    }
+    
     // Display link to go back to index.php
     $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 } // end of if($submit)
@@ -541,6 +632,12 @@ else {
         </form>";
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+    
+    // Modal dialog
+    $tool_content .= "<div id='confirmIndexDialog' title='" . $langConfirmEnableIndexTitle . "'>
+            <p>" . $langConfirmEnableIndex . "</p>
+        </div>";
+    
     // After restored values have been inserted into form then bring back
     // values from original config.php, so the rest of the page can be displayed correctly
     if (isset($_GET['restore']) && $_GET['restore'] == "yes") {

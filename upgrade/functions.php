@@ -132,7 +132,7 @@ function mysql_field_exists($db, $table, $field) {
 
 // check if a mysql index exists
 function mysql_index_exists($table, $index_name) {
-    $q = Database::get()->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = " . quote($index_name));
+    $q = Database::get()->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = ?s", $index_name);
     return count($q) > 0;
 }
 
@@ -1105,13 +1105,6 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         // Do not drop database yet so we can run upgrade many times
         //Database::get()->query("DROP DATABASE $code");
     }
-
-    // index all courses
-    mysql_select_db($mysqlMainDb);
-    global $webDir;
-    require_once 'modules/search/indexer.class.php';
-    $idx = new Indexer();
-    $idx->storeAllByCourse($course_id);
 
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {

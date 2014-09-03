@@ -23,7 +23,7 @@ $tool_content = "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass</title>
+    <title>Asynchronous eLearning Platform Open eClass</title>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <link href='../../install/install.css' rel='stylesheet' type='text/css' />
   </head>
@@ -31,9 +31,9 @@ $tool_content = "
   <div class='install_container'>
   <p align='center'><img src='../../template/classic/img/logo_openeclass.png' alt='logo' /></p>
   <div class='alert' align='center'>
-  <p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί.</p>
-  <p>Πιθανό πρόβλημα με τα δικαιώματα του καταλόγου της μηχανής αναζήτησης (courses/idx/).</p>
-  <p>Παρακαλούμε ενημερώστε το διαχειριστή της πλατφόρμας.</p>
+  <p>The asynchronous eLearning Platform Open eClass is not operational.</p>
+  <p>This is caused by a possible permissions problem for the search engine indexing directory (courses/idx/).</p>
+  <p>Please inform the platform administrator.</p>
   </div>
   </div>
   </body>
