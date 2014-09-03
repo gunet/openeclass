@@ -339,9 +339,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                           //open links inside tabs
                           load: function(event, ui) {
                             $(\".ui-tabs-panel.ui-widget-content-new\").delegate('a', 'click', function(event) {
-                              if (event.target.className != 'outtabs' && event.target.className != 'paginate_enabled_next' 
-                                  && event.target.className != 'paginate_disabled_previous' && event.target.className != 'paginate_disabled_next'
-                                  && event.target.className != 'paginate_enabled_previous') {
+                              if (event.target.className != 'outtabs' && event.target.className.indexOf('paginate_button') == -1) {
                                 event.preventDefault();
                                 $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
                               }

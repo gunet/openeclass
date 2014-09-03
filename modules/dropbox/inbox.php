@@ -226,6 +226,14 @@ if (isset($_GET['mid'])) {
                    $(document).ready(function() {
                      $('div.loading').hide();
                      $('#inbox_table').dataTable({
+                       'bStateSave' : true,
+                       'bProcessing': true,
+                       'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                       'aLengthMenu': [
+                           [10, 15, 20 , -1],
+                           [10, 15, 20, '$langAllOfThem'] // change per page values here
+                        ],
+                       'sPaginationType': 'full_numbers',
                        'bSort': false,
                        'oLanguage': {                       
                             'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
@@ -238,8 +246,8 @@ if (isset($_GET['mid'])) {
                             'sUrl':          '',
                             'oPaginate': {
                                  'sFirst':    '&laquo;',
-                                 'sPrevious': '$langPrevious',
-                                 'sNext':     '$langNext',
+                                 'sPrevious': '&lsaquo;',
+                                 'sNext':     '&rsaquo;',
                                  'sLast':     '&raquo;'
                             }
                         }
