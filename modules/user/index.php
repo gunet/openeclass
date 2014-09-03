@@ -222,7 +222,7 @@ $head_content .= "
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                if (confirmation('$langDeleteUser $langDeleteUser2')) {
+                if (confirmation('".js_escape($langDeleteUser)." ".js_escape($langDeleteUser2). "')) {
                     var row_id = $(this).closest('tr').attr('id');
                     $.post('', { action: 'delete', value: row_id}, function() {
                         var num_page_records = oTable.fnGetData().length;
