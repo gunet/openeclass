@@ -59,13 +59,10 @@ $require_help = TRUE;
 $helpTopic = 'Doc';
 
 if ($is_in_tinymce) {
-
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
-
     load_js('jquery');
-    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
