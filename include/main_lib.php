@@ -226,6 +226,8 @@ function load_js($file, $init = '') {
         $file = 'datatables/media/js/jquery.dataTables.min.js';                
     } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
+    } elseif ($file == 'datatables_reload') {
+            $file = 'datatables/media/js/jquery.dataTables_reload.js';
     } elseif ($file == 'tagsinput') {
         $file = 'taginput/jquery.tagsinput.min.js';
     } elseif ($file == 'RateIt') {
