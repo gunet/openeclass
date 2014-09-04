@@ -541,7 +541,7 @@ function edit_bbb_session($session_id) {
                     <table class='tbl' width='100%'>
                     <tr>
                       <th>$langTitle:</th>`
-                      <td><input type='text' name='title' size='55' value='".$row->title."'></td>
+                      <td><input type='text' name='title' size='55' value='".q($row->title)."'></td>
                     </tr>
                     <tr>
                       <th>$langNewBBBSessionDesc:</th>
@@ -549,7 +549,7 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                       <th>$langNewBBBSessionStart:</th>
-                      <td><input type='text' name='start_session' value = ".$row->start_date."></td>
+                      <td><input type='text' name='start_session' value = ".q($row->start_date)."></td>
                     </tr>
                     <tr>
                     <th valign='top'>$langParticipants:</th>
@@ -740,13 +740,13 @@ function bbb_session_details() {
                     if(get_total_bbb_servers()=='0')
                     {
                         $tool_content .= "
-                        <td>$title</td>";
+                        <td>".q($title)."</td>";
                     } else {
                         $tool_content .= "
-                        <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw&amp;record=$record' target='_blank'>$title</a></td>";
+                        <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>".q($title)."</a></td>";
                     }
                     $tool_content.="<td>".$desc."</td>
-                    <td class='center'>$start_date</td>
+                    <td class='center'>".q($start_date)."</td>
                     <td class='center'>$type</td>
                     <td class='center'>
                     ".icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
@@ -776,18 +776,18 @@ function bbb_session_details() {
                         $tool_content .= "<td align='center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
-                        {
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw&amp;record=$record' target='_blank'>$title</a>";
+                        {   
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>".q($title)."</a>";
                         } else {
-                            $tool_content .= "$title";
+                            $tool_content .= q($title);
                         }
-                        $tool_content .="<td>".$desc."</td>
-                            <td align='center'>$start_date</td>
+                        $tool_content .="<td>".q($desc)."</td>
+                            <td align='center'>".q($start_date)."</td>
                             <td align='center'>$type</td>
                             <td class='center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw&amp;record=$record' target='_blank'>$langBBBSessionJoin</a></td>";
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>$langBBBSessionJoin</a></td>";
                         } else {
                             $tool_content .= "-</td>";
                         }
