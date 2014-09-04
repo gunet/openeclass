@@ -475,49 +475,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public_id` VARCHAR(11) NOT NULL,
                             `file_id` INT(11) NOT NULL,
                             `title` TEXT) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
-                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `course_id` INT(11) NOT NULL,
-                            `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
-                            `range` TINYINT(4) NOT NULL DEFAULT 10) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
-                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `gradebook_id` MEDIUMINT(11) NOT NULL,
-                            `title` VARCHAR(250) DEFAULT NULL,
-                            `activity_type` INT(11) DEFAULT NULL,
-                            `date` DATETIME DEFAULT NULL,
-                            `description` TEXT NOT NULL,
-                            `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
-                            `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
-                            `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-                            `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
-                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
-                            `uid` int(11) NOT NULL DEFAULT 0,
-                            `grade` FLOAT NOT NULL DEFAULT -1,
-                            `comments` TEXT NOT NULL) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance` (
-                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `limit` TINYINT(4) NOT NULL DEFAULT 0,
-                                `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
-                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `attendance_id` MEDIUMINT(11) NOT NULL,
-                                `title` VARCHAR(250) DEFAULT NULL,
-                                `date` DATETIME DEFAULT NULL,
-                                `description` TEXT NOT NULL,
-                                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
-                                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-                                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
-                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
-                                `uid` int(11) NOT NULL DEFAULT 0,
-                                `attend` TINYINT(4) NOT NULL DEFAULT 0,
-                                `comments` TEXT NOT NULL) $charset_spec");
-
+                    
                     if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
                         Database::get()->query("RENAME TABLE prof_request TO user_request");
                         Database::get()->query("ALTER TABLE user_request
@@ -1128,7 +1086,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $charset_spec");
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
-				            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `author_id` INT(11) UNSIGNED NOT NULL,
                             `subject` VARCHAR(250) NOT NULL,
@@ -1284,6 +1242,54 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `tag` VARCHAR(50),
                             INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
+                            `range` TINYINT(4) NOT NULL DEFAULT 10) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_id` MEDIUMINT(11) NOT NULL,
+                            `title` VARCHAR(250) DEFAULT NULL,
+                            `activity_type` INT(11) DEFAULT NULL,
+                            `date` DATETIME DEFAULT NULL,
+                            `description` TEXT NOT NULL,
+                            `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                            `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                            `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+                            `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
+                            `uid` int(11) NOT NULL DEFAULT 0,
+                            `grade` FLOAT NOT NULL DEFAULT -1,
+                            `comments` TEXT NOT NULL) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `course_id` INT(11) NOT NULL,
+                                `limit` TINYINT(4) NOT NULL DEFAULT 0,
+                                `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_id` MEDIUMINT(11) NOT NULL,
+                                `title` VARCHAR(250) DEFAULT NULL,
+                                `date` DATETIME DEFAULT NULL,
+                                `description` TEXT NOT NULL,
+                                `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+                                `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+                                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_activity_id` MEDIUMINT(11) NOT NULL,
+                                `uid` int(11) NOT NULL DEFAULT 0,
+                                `attend` TINYINT(4) NOT NULL DEFAULT 0,
+                                `comments` TEXT NOT NULL) $charset_spec");                    
+                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -1999,7 +2005,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
         mysql_index_exists('course_module', 'visible_cid') or
                 Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
-        mysql_index_exists('course_rev', 'crev_index') or
+        mysql_index_exists('course_review', 'crev_index') or
                 Database::get()->query("CREATE INDEX `crev_index` ON course_review(course_id)");
         mysql_index_exists('course_units', 'course_units_index') or
                 Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
@@ -2099,7 +2105,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
         mysql_index_exists('user', 'u_id') or
                 Database::get()->query("CREATE INDEX `u_id` ON user(username)");
-        mysql_index_exists('department', 'udep_id') or
+        mysql_index_exists('user_department', 'udep_id') or
                 Database::get()->query("CREATE INDEX `udep_id` ON user_department(user, department)");
         mysql_index_exists('video', 'cid') or
                 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
@@ -2109,7 +2115,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
         mysql_index_exists('wiki_pages', 'wiki_pages_id') or
                 Database::get()->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
-        mysql_index_exists('wiki_pages_contenet', 'wiki_pcon_id') or
+        mysql_index_exists('wiki_pages_content', 'wiki_pcon_id') or
                 Database::get()->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
         mysql_index_exists('wiki_properties', 'wik_prop_id') or
                 Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
@@ -2195,12 +2201,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
             }
         }
-        // convert tables to InnoDB storage engine                
+        // convert tables to InnoDB storage engine
         $result = Database::get()->queryArray("SHOW FULL TABLES");
         foreach ($result as $table) {
             $value = "Tables_in_$mysqlMainDb";
             if ($table->Table_type === 'BASE TABLE') {
-                Database::get()->query("ALTER TABLE " . $table->$value . " ENGINE = InnoDB");
+                Database::get()->query("ALTER TABLE `" . $table->$value . "` ENGINE = InnoDB");
             }
         }                
         // update eclass version

@@ -323,7 +323,6 @@ function upgrade_course($code, $lang) {
  * @global type $mysqlMainDb
  * @global type $webDir
  * @global type $langUpgradeCourseDone
- * @global type $webDir
  * @param type $code
  * @param type $extramessage
  * @param type $return_mapping
@@ -417,9 +416,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
                                `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
-        if ($ok)
+        if ($ok) {
             Database::get($code)->query("DROP TABLE video");
-
+        }
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $videoid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
@@ -447,9 +446,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
 
-        if ($ok)
+        if ($ok) {
             Database::get($code)->query("DROP TABLE videolinks");
-
+        }
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
