@@ -781,7 +781,7 @@ function bbb_session_details() {
                         } else {
                             $tool_content .= q($title);
                         }
-                        $tool_content .="<td>".q($desc)."</td>
+                        $tool_content .="<td>".$desc."</td>
                             <td align='center'>".q($start_date)."</td>
                             <td align='center'>$type</td>
                             <td class='center'>";
