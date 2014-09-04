@@ -139,7 +139,7 @@ $head_content .= "<script type='text/javascript'>
                 'bProcessing': true,
                 'bServerSide': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
-                'sAjaxSource': '$_SERVER[SCRIPT_NAME]',
+                'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
