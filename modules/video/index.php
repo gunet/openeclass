@@ -81,9 +81,7 @@ list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ?
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-
     load_js('jquery');
-    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 

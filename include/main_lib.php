@@ -191,10 +191,11 @@ function load_js($file, $init = '') {
     if ($file == 'jquery') {
         $file = 'jquery-1.10.2.min.js';
     } elseif ($file == 'jquery-ui') {
-        if ($theme == 'modern' || $theme == 'ocean')
+        if ($theme == 'modern' || $theme == 'ocean') {
             $uiTheme = 'redmond';
-        else
+        } else {
             $uiTheme = 'smoothness';
+        }
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.9.2.custom.min.css'>\n";
         $file = 'jquery-ui-1.9.2.custom.min.js';
     } elseif ($file == 'jquery-multiselect') {
@@ -232,11 +233,13 @@ function load_js($file, $init = '') {
         $file = 'jquery.rateit.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-    if ($file == 'jquery-1.10.2.min.js')
+    if ($file == 'jquery-1.10.2.min.js') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+    }
 
-    if (strlen($init) > 0)
+    if (strlen($init) > 0) {
         $head_content .= $init;
+    }
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
@@ -1627,7 +1630,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
-    global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
 
     if (!$init_done) {
@@ -1635,7 +1638,7 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
         $filebrowser = $url = '';
         $activemodule = 'document/index.php';
         if (isset($course_code) && !empty($course_code)) {
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $filebrowser = "file_browser_callback : openDocsPicker,";
             if (!$is_editor) {
                 $cid = course_code_to_id($course_code);
                 $module = Database::get()->querySingle("SELECT * FROM course_module
@@ -1663,61 +1666,15 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
             }
             $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $filebrowser = "file_browser_callback : openDocsPicker,";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
 <script type='text/javascript'>
-tinyMCE_GZ.init({
-        plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
-        themes : 'advanced',
-        languages : '$language',
-        disk_cache : true,
-        debug : false
-});
-
-tinyMCE.init({
-        // General options
-                language : '$language',
-                mode : 'specific_textareas',
-                editor_deselector : 'mceNoEditor',
-                theme : 'advanced',
-                plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
-                entity_encoding : 'raw',
-                relative_urls : false,
-                advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
-                $filebrowser
-
-                // Theme options
-                theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
-                theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,media,emotions,charmap,|,insertdate,inserttime',
-                theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
-                theme_advanced_toolbar_location : 'top',
-                theme_advanced_toolbar_align : 'left',
-                theme_advanced_statusbar_location : 'bottom',
-                theme_advanced_resizing : true,
-
-                // Style formats
-                style_formats : [
-                        {title : 'Bold text', inline : 'b'},
-                        {title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-                        {title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-                        {title : 'Example 1', inline : 'span', classes : 'example1'},
-                        {title : 'Example 2', inline : 'span', classes : 'example2'},
-                        {title : 'Table styles'},
-                        {title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-                ],
-
-                // Replace values for the template plugin
-                template_replace_values : {
-                        username : 'Open eClass',
-                        staffid : '991234'
-                }
-});
 
 function openDocsPicker(field_name, url, type, win) {
-    tinyMCE.activeEditor.windowManager.open({
+    tinymce.activeEditor.windowManager.open({
         file: '$url' + type,
         title: 'Resources Browser',
         width: 800,
@@ -1732,6 +1689,31 @@ function openDocsPicker(field_name, url, type, win) {
     });
     return false;
 }
+
+tinymce.init({
+    // General options
+    selector: 'textarea:not(.mceNoEditor)',
+    language: '$language',
+    theme: 'modern',
+    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime',
+    entity_encoding: 'raw',
+    relative_urls: false,
+    link_class_list: [
+        {title: 'None', value: ''},
+        {title: '$langPopUp', value: 'colorbox'},
+        {title: '$langPopUpFrame', value: 'colorboxframe'}
+    ],
+    $filebrowser
+
+    // Toolbar options
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia',
+
+    // Replace values for the template plugin
+    template_replace_values: {
+            username : 'Open eClass',
+            staffid : '991234'
+    }
+});
 </script>";
     }
 
