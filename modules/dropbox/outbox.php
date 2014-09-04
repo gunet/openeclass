@@ -45,19 +45,19 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = "<div style=\"float:right;\"><a href=\"outbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<div id='del_msg'></div><div id='msg_area'><table>";
+        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
             $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
         $out .= "<tr><td>$langDate:</td><td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td></tr>";
-        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id)."</td></tr>";
+        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id, false, false)."</td></tr>";
         
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
-                $recipients .= display_user($r).'<br/>';
+                $recipients .= display_user($r, false, false).'<br/>';
             }
         }
         
@@ -76,156 +76,119 @@ if (isset($_GET['mid'])) {
             if (confirm("' . $langConfirmDelete . '")) {
             var rowContainer = $(this).parent().parent();
                     var id = rowContainer.attr("id");
-                    var string = \'mid=\'+ id ;
+                    var string = \'mid=\'+ id;
     
                     $.ajax({
-                    type: "POST",
-                       url: "delete.php",
+                       type: "POST",
+                       url: "ajax_handler.php",
                        data: string,
-                              cache: false,
-                              success: function(){
-                                $("#msg_area").slideUp(\'fast\', function() {$(this).remove();});
-                                $("#del_msg").html("<p class=\'success\'>'.$langMessageDeleteSuccess.'</p>");
-                              }
+                       cache: false,
+                       success: function(){
+                           $("#out_msg_area").slideUp(\'fast\', function() {
+                                $(this).remove();
+                                $("#out_del_msg").html("<p class=\'success\'>'.$langMessageDeleteSuccess.'</p>");
                            });
-                           return false;
-                         }
-                       });
-                     });
-                 </script>';
+                       }
+                    });
+                    return false;
+            }
+        });
+        });
+        </script>';
     }
 } else {
     
-    require_once("class.mailbox.php");
-    
-    $mbox = new Mailbox($uid, $course_id);
-    
-    $out_msgs = $mbox->getOutboxMsgs();
-    
-    if (empty($out_msgs)) {
-        $out = "<p class='alert1'>$langTableEmpty</p>";
-    } else {
-        $out = "<div class=\"loading\" align=\"center\"><img src=\"".$themeimg."/ajax_loader.gif"."\" align=\"absmiddle\"/>".$langLoading."</div>";
-        $out .= "<div id='del_msg'></div><div id='outbox'>";
-        $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
-        $out .= "<table id=\"outbox_table\">
-                   <thead>
-                     <tr>";
-        if ($course_id == 0) {
-            $out .= "<th>$langCourse</th>";
-        }
-        $out .= "      <th>$langSubject</th>
-                       <th>$langRecipients</th>
-                       <th>$langDate</th>
-                       <th>$langDelete</th>
-                     </tr>
-                   </thead>
-                   <tbody>";
-        
-        foreach ($out_msgs as $m) {
-            $urlstr = '';
-            if ($course_id != 0) {
-                $urlstr = "&amp;course=".$course_code;
-            }
-            $recipients = '';
-            foreach ($m->recipients as $r) {
-                if ($r != $m->author_id) {
-                    $recipients .= display_user($r).'<br/>';
-                }
-            }
-            $out .= "<tr id='$m->id'>";
-            if ($course_id == 0) {
-                if ($m->course_id != 0) {
-                    $out .= "<td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($m->course_id)."\">".course_id_to_title($m->course_id)."</a></td>";
-                } else {
-                    $out .= "<td></td>";
-                }
-            }
-             $out .= " <td><a href='outbox.php?mid=$m->id".$urlstr."'>".q($m->subject)."</a></td>
-                       <td>$recipients</td>
-                       <td>".nice_format(date('Y-m-d H:i:s',$m->timestamp), true)."</td>
-                       <td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td>
-                     </tr>";
-        }
-        
-        $out .= "  </tbody>
-                 </table></div>";
-        $out .= "<script>
-                   $(document).ready(function() {
-                     $('div.loading').hide();
-                     $('#outbox_table').dataTable({
-                        'bStateSave' : true,
-                        'bProcessing': true,
-                        'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
-                        'aLengthMenu': [
-                           [10, 15, 20 , -1],
-                           [10, 15, 20, '$langAllOfThem'] // change per page values here
-                         ],
-                        'sPaginationType': 'full_numbers',
-                        'bSort': false,
-                        'oLanguage': {
-                                'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                                'sZeroRecords':  '".$langNoResult."',
-                                'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                                'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                                'sInfoFiltered': '',
-                                'sInfoPostFix':  '',
-                                'sSearch':       '".$langSearch."',
-                                'sUrl':          '',
-                                'oPaginate': {
-                                     'sFirst':    '&laquo;',
-                                     'sPrevious': '&lsaquo;',
-                                     'sNext':     '&rsaquo;',
-                                     'sLast':     '&raquo;'
-                                }
-                            } 
-                        }).fnSetFilteringDelay(1000);
-                   });
-                 </script>";
-        
-            $out .= '<script>
-                       $(function() {
-                         $(".delete").click(function() {
-                           if (confirm("' . $langConfirmDelete . '")) {
-                             $(\'div.loading\').fadeIn();
-                             var rowContainer = $(this).parent().parent();
-                             var id = rowContainer.attr("id");
-                             var string = \'mid=\'+ id ;
-            
-                             $.ajax({
-                               type: "POST",
-                               url: "delete.php",
-                               data: string,
-                               cache: false,
-                               success: function(){
-                                 rowContainer.slideUp(\'slow\', function() {$(this).remove();});
-                                 $(\'div.loading\').fadeOut();
-                               }
-                             });
-                             return false;
-                           }
-                         });
-                                   
-                         $(".delete_all").click(function() {
-                          if (confirm("' . $langConfirmDeleteAllMsgs . '")) {
-                            var string = \'all_outbox=1&course_id=\'+'.$course_id.' ;
-    
-                            $.ajax({
-                              type: "POST",
-                              url: "delete.php",
-                              data: string,
-                              cache: false,
-                              success: function(){
-                                $("#outbox").slideUp(\'fast\', function() {$(this).remove();});
-                                $("#del_msg").html("<p class=\'success\'>'.$langMessageDeleteAllSuccess.'</p>");
-                              }
-                           });
-                           return false;
-                         }
-                       });
-                                    
-                       });
-                     </script>';
+    $out = "<div id='out_del_msg'></div><div id='outbox'>";
+    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
+    $out .= "<table id=\"outbox_table\">
+               <thead>
+                 <tr>";
+    if ($course_id == 0) {
+        $out .= "<th>$langCourse</th>";
     }
+    $out .= "      <th>$langSubject</th>
+                   <th>$langRecipients</th>
+                   <th>$langDate</th>
+                   <th>$langDelete</th>
+                 </tr>
+               </thead>
+               <tbody>
+               </tbody>
+             </table>";
+    
+    $out .= "<script>
+               $(document).ready(function() {
+                 var oTable2 = $('#outbox_table').dataTable({
+                    'bStateSave' : true,
+                    'bProcessing': true,
+                    'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                    'sAjaxSource': 'ajax_handler.php?mbox_type=outbox&course_id=$course_id',
+                    'aLengthMenu': [
+                       [10, 15, 20 , -1],
+                       [10, 15, 20, '$langAllOfThem'] // change per page values here
+                     ],
+                    'sPaginationType': 'full_numbers',
+                    'bSort': false,
+                    'oLanguage': {
+                            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                            'sZeroRecords':  '".$langNoResult."',
+                            'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                            'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                            'sInfoFiltered': '',
+                            'sInfoPostFix':  '',
+                            'sSearch':       '".$langSearch."',
+                            'sUrl':          '',
+                            'oPaginate': {
+                                 'sFirst':    '&laquo;',
+                                 'sPrevious': '&lsaquo;',
+                                 'sNext':     '&rsaquo;',
+                                 'sLast':     '&raquo;'
+                            }
+                        },
+                       'fnDrawCallback' : function( oSettings ) {
+                        $('.delete').on('click', function() {
+                           if (confirm('$langConfirmDelete')) {
+                               var rowContainer = $(this).parent().parent();
+                               var id = rowContainer.attr('id');
+                               var string = 'mid='+ id ;
+                               $.ajax({
+                                   type: 'POST',
+                                   url: 'ajax_handler.php',
+                                   data: string,
+                                   cache: false,
+                                   success: reload()
+                               });
+                               return false;
+                           }
+                       }); 
+                      } 
+                    }).fnSetFilteringDelay(1000);
+                    
+                    var reload = function() {
+                        oTable2.fnReloadAjax();
+                        $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
+                        $('.success').delay(3000).fadeOut(1500);
+                    };
+                     
+                    $('.delete_all').click(function() {
+                      if (confirm('$langConfirmDeleteAllMsgs')) {
+                        var string = 'all_outbox=1';
+                        $.ajax({
+                          type: 'POST',
+                          url: 'ajax_handler.php?course_id=$course_id',
+                          data: string,
+                          cache: false,
+                          success: function(){
+                            oTable2.fnReloadAjax();      
+                            $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteAllSuccess</p>');
+                            $('.success').delay(3000).fadeOut(1500);
+                          }
+                       });
+                       return false;
+                     }
+                   });
+               
+               });
+             </script>";
 }
 echo $out;
