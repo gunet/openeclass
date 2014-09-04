@@ -55,8 +55,9 @@ Class Mailbox {
                       `dropbox_msg`.`course_id` = ?d
                     )
                 AND `dropbox_index`.`is_read` = ?d 
-                AND `dropbox_index`.`recipient_id` = ?d";
-        return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid)->unread_count;
+                AND `dropbox_index`.`recipient_id` = ?d
+                AND `dropbox_index`.`deleted` = ?d";
+        return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, 0)->unread_count;
     }
     
     /**
