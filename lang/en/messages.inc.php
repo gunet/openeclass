@@ -1450,7 +1450,7 @@ $langCategorisedLinks = "Categorised links";
 $showall = "Show all";
 $shownone = "Show none";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
-$langNoLinksExist = "The " . $langsTeacher . "has not added any links.";
+$langNoLinksExist = "The " . $langsTeacher . " has not added any links.";
 $langEmptyLinkURL = "Link URL is empty";
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
