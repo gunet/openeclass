@@ -33,7 +33,7 @@ if ($is_editor) {
     $bom = "\357\273\277";
 
     $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+    $output = "$bom$langSurname\t$langName\t$langAm\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
     $output .= "$crlf";
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
@@ -42,6 +42,7 @@ if ($is_editor) {
         $sid = $row->uid;
         $surname = uid_to_name($sid,'surname');
         $name = uid_to_name($sid,'givenname');
+        $am = uid_to_am($sid);
 
         $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
 			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
@@ -51,6 +52,7 @@ if ($is_editor) {
         foreach ($result2 as $row2) {
             $output .= csv_escape($surname) . "\t";
             $output .= csv_escape($name) . "\t";
+            $output .= csv_escape($am) . "\t";
             $recordStartDate = $row2->record_start_date;
             $output .= csv_escape($recordStartDate) . "\t";
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
