@@ -69,7 +69,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 break;
             } else {
                 // adds the answer into the object
-                $objAnswer->createAnswer($reponse[$i], $goodAnswer, $comment[$i], $weighting[$i], $i);
+                $objAnswer->createAnswer(purify($reponse[$i]), $goodAnswer, purify($comment[$i]), $weighting[$i], $i);
             }
         }  // end for()
 
@@ -223,7 +223,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 break;
             } else {
                 // adds the answer into the object
-                $objAnswer->createAnswer($reponse[$i], $goodAnswer, $comment[$i], $weighting[$i], $i);
+                $objAnswer->createAnswer($reponse[$i], $goodAnswer, purify($comment[$i]), $weighting[$i], $i);
             }
         }  // end for()
         if (empty($msgErr)) {
@@ -731,7 +731,7 @@ if (isset($_GET['modifyAnswers'])) {
                     <table class='tbl'>
                     <tr>
                       <td colspan='2'><b>$langAnswer</b></td>
-                      <td class='center'><b>$langComment</b></td>
+                      <td style='width:350px;' class='center'><b>$langComment</b></td>
                       <td class='center'><b>$langQuestionWeighting</b></td>
                     </tr>";
         $tool_content .="
@@ -746,8 +746,8 @@ if (isset($_GET['modifyAnswers'])) {
 
         $tool_content .= "
   <input type='hidden' name='reponse[1]' value='$langCorrect' />
-  <td>" .
-                text_area("comment[1]", 4, 40, @$comment[1], "class=''")
+  <td style='width:100%;'>" .
+                rich_text_editor("comment[1]", 4, 40, @$comment[1], "", true)
                 . "</td>
   <td valign='top'><input type='text' name='weighting[1]' size='5' value=\"";
         if (isset($weighting[1])) {
@@ -767,7 +767,7 @@ if (isset($_GET['modifyAnswers'])) {
         }
         $tool_content .= "
                     <input type='hidden' name='reponse[2]' value='$langFalse'>
-                  <td>" .
+                  <td style='width:100%;'>" .
                 text_area("comment[2]", 4, 40, @$comment[2], "class=''")
                 . "</td>
                     <td valign='top'><input type='text' name='weighting[2]' size='5' value=\"";

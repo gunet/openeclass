@@ -1634,7 +1634,6 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
 function rich_text_editor($name, $rows, $cols, $text, $extra = '', $onFocus = false) {
     global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
-//die(var_dump($onFocus));
     if (!$init_done) {
         $init_done = true;
         $filebrowser = $url = '';
