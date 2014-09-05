@@ -153,7 +153,7 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
-        $sqll = "SELECT u.user_id, u.nom, u.prenom
+        $sqll = "SELECT u.user_id, u.nom, u.prenom, u.am
                         FROM user u, cours_user cu
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
@@ -163,7 +163,7 @@ if ($multi_reg) {
                         ORDER BY u.nom, u.prenom";
 } else {
         // Students registered to the course but members of no group
-        $sqll = "SELECT u.user_id, u.nom, u.prenom
+        $sqll = "SELECT u.user_id, u.nom, u.prenom, u.am
                         FROM (user u, cours_user cu)
                         WHERE cu.cours_id = $cours_id AND
                               cu.user_id = u.user_id AND
@@ -179,7 +179,7 @@ $tool_content_not_Member = '';
 $resultNotMember = db_query($sqll);
 while ($myNotMember = mysql_fetch_array($resultNotMember)) {
         $tool_content_not_Member .= "<option value='$myNotMember[user_id]'>" .
-                        q("$myNotMember[nom] $myNotMember[prenom]") . "</option>";
+                        q("$myNotMember[nom] $myNotMember[prenom]") . (!empty($myNotMember['am'])? q(" ($myNotMember[am])"):"") ."</option>";
 }
 
 $q = db_query("SELECT user.user_id, nom, prenom
