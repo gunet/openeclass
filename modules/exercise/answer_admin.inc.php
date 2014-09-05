@@ -241,7 +241,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     }
-    if (!$setWeighting) {
+    if (!isset($setWeighting)) {
         if (isset($exerciseId)) {
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         } else {
