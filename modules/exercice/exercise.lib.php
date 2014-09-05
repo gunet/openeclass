@@ -19,13 +19,19 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+function showAnswer($text) {
+    global $urlAppend;
+
+    return mathfilter(make_clickable(q($text)), 12, "{$urlAppend}/courses/mathimg/");
+}
+
 
 function showQuestion($questionId, $onlyAnswers = false) {
 	
-        global $tool_content, $picturePath;
-	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
+    global $tool_content, $picturePath;
+    global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
-        // construction of the Question object
+    // construction of the Question object
 	$objQuestionTmp=new Question();
 	// reads question informations
 	if(!$objQuestionTmp->read($questionId)) {
@@ -78,7 +84,6 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		$answer = $objAnswerTmp->selectAnswer($answerId);
-		$answer = mathfilter($answer, 12, '../../courses/mathimg/');
 		$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
@@ -86,7 +91,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			// replaces [blank] by an input field
                         $answer = preg_replace('/\[[^]]+\]/',
 					       '<input type="text" name="choice['.$questionId.'][]" size="10" />',
-					       standard_text_escape(($answer)));
+					       showAnswer($answer));
 		}
 		// unique answer
 		if($answerType == UNIQUE_ANSWER) {
@@ -95,7 +100,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td class='center' width='1'>
 			    <input type='radio' name='choice[${questionId}]' value='${answerId}' />
 			  </td>
-			  <td>". standard_text_escape($answer) ."</td>
+			  <td><pre>". showAnswer($answer) ."</pre></td>
 			</tr>";
 		}
 		// multiple answers
@@ -105,7 +110,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td width='1' align='center'>
 			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
 			  </td>
-			  <td>". standard_text_escape($answer) ."</td>
+			  <td><pre>". showAnswer($answer) ."</pre></td>
 			</tr>";
 		}
 		// fill in blanks
@@ -121,14 +126,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
-				$Select[$answerId]['Reponse'] = standard_text_escape($answer);
+				$Select[$answerId]['Reponse'] = showAnswer($answer);
 			} else {
 				$tool_content .= "
 				<tr class='even'>
 				  <td colspan='2'>
 				    <table class='tbl' width='100%'>
 				    <tr>
-				      <td width='200'><b>${cpt2}.</b> ". standard_text_escape($answer) ."</td>
+				      <td width='200'><b>${cpt2}.</b> <pre>". showAnswer($answer) ."</pre></td>
 				      <td width='100'><div align='left'>
 				       <select name='choice[${questionId}][${answerId}]'>
 					 <option value='0'>--</option>";
@@ -179,7 +184,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                             <td width='1' align='center'>
                               <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                             </td>
-                            <td>". standard_text_escape($answer) ."</td>
+                            <td><pre>". showAnswer($answer) ."</pre></td>
                           </tr>";
 		}
 	}	// end for()

@@ -249,9 +249,9 @@ class Answer
 		$sql = "INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
 
 		for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-			$answer = quote(standard_text_escape($this->new_answer[$i]));
+			$answer = quote($this->new_answer[$i]);
 			$correct = intval($this->new_correct[$i]);
-			$comment = quote(standard_text_escape($this->new_comment[$i]));
+			$comment = quote($this->new_comment[$i]);
 			$weighting = floatval($this->new_weighting[$i]);
 			$position = intval($this->new_position[$i]);
 			$sql .= "($i, $questionId, $answer, $correct, $comment, $weighting, $position),";

@@ -34,6 +34,7 @@ $TBL_RECORDS='exercise_user_record';
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
+include('exercise.lib.php');
 
 $require_current_course = TRUE;
 $guest_allowed = true;
@@ -167,21 +168,18 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 	
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer=$objAnswerTmp->selectAnswer($answerId);
-		$answerComment=$objAnswerTmp->selectComment($answerId);
-		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-		// support for math symbols
-		$answer = mathfilter($answer, 12, "../../courses/mathimg/");
-		$answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+		$answer = showAnswer($objAnswerTmp->selectAnswer($answerId));
+		$answerComment = showAnswer($objAnswerTmp->selectComment($answerId));
+		$answerCorrect = $objAnswerTmp->isCorrect($answerId);
+		$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 
 		switch($answerType)
 		{
 			// for unique answer
 			case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
 				if($studentChoice) {
-					$questionScore+=$answerWeighting;
-					$totalScore+=$answerWeighting;
+					$questionScore += $answerWeighting;
+					$totalScore += $answerWeighting;
 				}
 				break;
 			// for multiple answers
@@ -299,13 +297,14 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					} else {
 						$tool_content .= "_off";	
 					}
-					$tool_content .= ".png' /></div>";	
+                    $tool_content .= ".png' alt='" .
+                        ($answerCorrect? 'true': 'false') . "'></div>";	
 					$tool_content .= "
 					</td>
-					<td>". standard_text_escape($answer) ."</td>
+					<td><pre>". $answer ."</pre></td>
 					<td>";
 					if ($studentChoice) {
-						$tool_content .= standard_text_escape(nl2br(make_clickable($answerComment))); 
+						$tool_content .= "<pre>$answerComment</pre>"; 
 					} else { 
 						$tool_content .= '&nbsp;';
 					} 
@@ -313,12 +312,12 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 				} elseif($answerType == FILL_IN_BLANKS) {
 					$tool_content .= "
 					<tr class='even'>
-					  <td>". standard_text_escape(nl2br($answer)) ."</td>
+					  <td>". $answer ."</td>
 					</tr>";
 				} else {
 					$tool_content .= "
 					<tr class='even'>
-					  <td>". standard_text_escape($answer) ."</td>
+					  <td>". $answer ."</td>
 					  <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
 					</tr>";
 				}

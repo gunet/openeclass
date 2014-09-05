@@ -182,7 +182,7 @@ function db_query_fetch_all($sqlQuery, $db = FALSE) {
 
 // Quote string for SQL query
 function quote($s) {
-	return "'".addslashes(canonicalize_whitespace($s))."'";
+	return "'".addslashes(trim($s))."'";
 }
 
 
