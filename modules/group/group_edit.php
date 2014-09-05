@@ -152,7 +152,7 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
     // Students registered to the course but not members of this group
-    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                         FROM user u, course_user cu
                         WHERE cu.course_id = ?d AND
                               cu.user_id = u.id AND
@@ -162,7 +162,7 @@ if ($multi_reg) {
                         ORDER BY u.surname, u.givenname", $course_id, $group_id);
 } else {
     // Students registered to the course but members of no group
-    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.id AND
@@ -177,7 +177,7 @@ if ($multi_reg) {
 $tool_content_not_Member = '';
 foreach ($resultNotMember as $myNotMember) {
     $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
-            q("$myNotMember->surname $myNotMember->givenname") . "</option>";
+            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am)? q(" ($myNotMember->am)"):"") ."</option>";
 }
 
 $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
