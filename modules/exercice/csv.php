@@ -32,7 +32,7 @@ if ($is_editor) {
 	$bom = "\357\273\277";
 	
 	$crlf="\r\n";
-	$output =  "$bom$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+	$output =  "$bom$langSurname\t$langName\t$langAm\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
 	$output .=  "$crlf";
 	
 	mysql_select_db($currentCourseID);
@@ -40,10 +40,11 @@ if ($is_editor) {
 	$result = db_query($sql);
 	while ($row=mysql_fetch_array($result)) {
 		$sid = $row['uid'];
-		$StudentName = db_query("select nom, prenom from user where user_id='$sid'", $mysqlMainDb);
+		$StudentName = db_query("select nom, prenom, am from user where user_id='$sid'", $mysqlMainDb);
 		$theStudent = mysql_fetch_array($StudentName);	
 		$nom = $theStudent["nom"];
-		$prenom = $theStudent["prenom"];	
+		$prenom = $theStudent["prenom"];
+                $am = $theStudent["am"];
 		mysql_select_db($currentCourseID);
 		$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, 
 			RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
@@ -53,6 +54,7 @@ if ($is_editor) {
 		while ($row2=mysql_fetch_array($result2)) {
 			$output .= csv_escape($prenom) ."\t";
 			$output .= csv_escape($nom) ."\t";
+                        $output .= csv_escape($am) ."\t";
 			$RecordStartDate = $row2['RecordStartDate'];
 			$output .= csv_escape($RecordStartDate) ."\t";
 			if ($row2['TimeDuration'] == '00:00:00' or empty($row2['TimeDuration'])) { // for compatibility 
