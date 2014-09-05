@@ -57,7 +57,7 @@ class Zend_Search_Lucene_Storage_Directory_Filesystem extends Zend_Search_Lucene
      *
      * @var integer
      */
-    protected static $_defaultFilePermissions = 0666;
+    protected static $_defaultFilePermissions = 0600;
 
 
     /**
@@ -90,7 +90,7 @@ class Zend_Search_Lucene_Storage_Directory_Filesystem extends Zend_Search_Lucene
      * @return boolean
      */
 
-    public static function mkdirs($dir, $mode = 0777, $recursive = true)
+    public static function mkdirs($dir, $mode = 0700, $recursive = true)
     {
         if (($dir === null) || $dir === '') {
             return false;
