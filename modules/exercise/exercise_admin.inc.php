@@ -94,7 +94,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         </tr>
         <tr>
         <th>" . $langExerciseDescription . ":</th>
-        <td>" . rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") . "</td>
+        <td>" . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") . "</td>
         </tr>
         <tr>
         <th>" . $langExerciseType . ":</th>

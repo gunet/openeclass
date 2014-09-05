@@ -457,7 +457,7 @@ if (isset($_GET['modifyAnswers'])) {
             }
 
             $tool_content .= "
-                            <td>" . text_area("reponse[$i]", 7, 40, @$reponse[$i], "class=''") . "</td>
+                            <td>" . rich_text_editor("reponse[$i]", 7, 40, @$reponse[$i], "class='test'", true) . "</td>
                             <td class='center'>" . text_area("comment[$i]", 7, 25, @$comment[$i], "class=''") . "</td>
                             <td valign='top' class='center'><input type='text' name=\"weighting[" . $i . "]\" size=\"5\" value=\"";
             if (isset($weighting[$i])) {
