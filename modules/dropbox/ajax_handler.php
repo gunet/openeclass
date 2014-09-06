@@ -72,7 +72,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     //Total records
     $data['iTotalRecords'] = $mbox->MsgsNumber($mbox_type);
     
-    $keyword = quote('%' . $_GET['sSearch'] . '%');
+    $keyword = $_GET['sSearch'];
     
     if ($mbox_type == 'inbox') {
         //Total records after applying search filter
