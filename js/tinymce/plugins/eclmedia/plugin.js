@@ -246,7 +246,7 @@ tinymce.PluginManager.add('eclmedia', function(editor, url) {
         }
 
         win = editor.windowManager.open({
-            title: 'Insert link',
+            title: 'Insert/Edit Pop-Up Media',
             data: data,
             body: [
                 {
@@ -319,22 +319,6 @@ tinymce.PluginManager.add('eclmedia', function(editor, url) {
 
                 if (!href) {
                     editor.execCommand('unlink');
-                    return;
-                }
-
-                // Is email and not //user@domain.com
-                if (href.indexOf('@') > 0 && href.indexOf('//') === -1 && href.indexOf('mailto:') === -1) {
-                    delayedConfirm(
-                            'The URL you entered seems to be an email address. Do you want to add the required mailto: prefix?',
-                            function(state) {
-                                if (state) {
-                                    href = 'mailto:' + href;
-                                }
-
-                                insertLink();
-                            }
-                    );
-
                     return;
                 }
 

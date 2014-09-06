@@ -64,23 +64,27 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         exit();
     }
     
-    
-    
-    //$limit = intval($_GET['iDisplayLength']);
-    //$offset = intval($_GET['iDisplayStart']);
-    
     $mbox = new Mailbox($uid, $course_id);
     
-    if ($mbox_type == 'inbox') {
-        $msgs = $mbox->getInboxMsgs();
-    } else {
-        $msgs = $mbox->getOutboxMsgs();
-    }
+    $limit = intval($_GET['iDisplayLength']);
+    $offset = intval($_GET['iDisplayStart']);
     
     //Total records
-    $data['iTotalRecords'] = count($msgs);
+    $data['iTotalRecords'] = $mbox->MsgsNumber($mbox_type);
     
-    $data['iTotalDisplayRecords'] = count($msgs);
+    $keyword = quote('%' . $_GET['sSearch'] . '%');
+    
+    if ($mbox_type == 'inbox') {
+        //Total records after applying search filter
+        $data['iTotalDisplayRecords'] = count($mbox->getInboxMsgs($keyword));
+        
+        $msgs = $mbox->getInboxMsgs($keyword, $limit, $offset);
+    } else {
+        //Total records after applying search filter
+        $data['iTotalDisplayRecords'] = count($mbox->getOutboxMsgs($keyword));
+        
+        $msgs = $mbox->getOutboxMsgs($keyword, $limit, $offset);
+    }
     
     $data['aaData'] = array();
     

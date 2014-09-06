@@ -1631,10 +1631,9 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
+function rich_text_editor($name, $rows, $cols, $text, $extra = '', $onFocus = false) {
     global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
-
     if (!$init_done) {
         $init_done = true;
         $filebrowser = $url = '';
@@ -1670,6 +1669,24 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
         } elseif ($is_admin) { /* special case for admin announcements */
             $filebrowser = "file_browser_callback : openDocsPicker,";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
+        }
+        if ($onFocus) {
+            $focus_init = ",
+                menubar: false,
+                statusbar: false,   
+                setup: function (theEditor) {
+                    theEditor.on('focus', function () {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').show();
+                    });
+                    theEditor.on('blur', function () {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    });
+                    theEditor.on('init', function() {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    });
+                }";
+        } else {
+            $focus_init ='';
         }
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
@@ -1709,12 +1726,12 @@ tinymce.init({
 
     // Toolbar options
     toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia',
-
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
             staffid : '991234'
     }
+    $focus_init
 });
 </script>";
     }
