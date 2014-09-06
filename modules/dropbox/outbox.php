@@ -122,6 +122,7 @@ if (isset($_GET['mid'])) {
                     'bStateSave' : true,
                     'bProcessing': true,
                     'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                    'bServerSide': true,
                     'sAjaxSource': 'ajax_handler.php?mbox_type=outbox&course_id=$course_id',
                     'aLengthMenu': [
                        [10, 15, 20 , -1],
