@@ -140,10 +140,13 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         $this->addField(Zend_Search_Lucene_Field::Text('title', $docTitle, 'UTF-8'));
 
         $metaNodes = $xpath->query('/html/head/meta[@name]');
+        $whitelist = array('keywords');
         foreach ($metaNodes as $metaNode) {
-            $this->addField(Zend_Search_Lucene_Field::Text($metaNode->getAttribute('name'),
+            if (in_array($metaNode->getAttribute('name'), $whitelist, true)) {
+                $this->addField(Zend_Search_Lucene_Field::Text($metaNode->getAttribute('name'),
                                                            $metaNode->getAttribute('content'),
                                                            'UTF-8'));
+            }
         }
 
         $docBody = '';

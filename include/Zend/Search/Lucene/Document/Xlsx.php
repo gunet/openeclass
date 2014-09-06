@@ -220,9 +220,12 @@ class Zend_Search_Lucene_Document_Xlsx extends Zend_Search_Lucene_Document_OpenX
         }
 
         // Store meta data properties
+        $whitelist = array('keywords');
         foreach ($coreProperties as $key => $value)
-        {
-            $this->addField(Zend_Search_Lucene_Field::Text($key, $value, 'UTF-8'));
+        {    
+            if (in_array($key, $whitelist, true)) {
+                $this->addField(Zend_Search_Lucene_Field::Text($key, $value, 'UTF-8'));
+            }
         }
 
         // Store title (if not present in meta data)

@@ -125,8 +125,11 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
         }
 
         // Store meta data properties
-        foreach ($coreProperties as $key => $value) {
-            $this->addField(Zend_Search_Lucene_Field::Text($key, $value, 'UTF-8'));
+        $whitelist = array('keywords');
+        foreach ($coreProperties as $key => $value) {    
+            if (in_array($key, $whitelist, true)) {
+                $this->addField(Zend_Search_Lucene_Field::Text($key, $value, 'UTF-8'));
+            }
         }
 
         // Store title (if not present in meta data)
