@@ -2202,6 +2202,15 @@ function canonicalize_url($url) {
     }
 }
 
+function is_url_accepted($url,$protocols=""){
+    if ($url === 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url)) || ($protocols!=="" && !preg_match('/^'.$protocols.'/i', preg_replace('/\s+/', '', $url)))) {
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
+
 function stop_output_buffering() {
     while (ob_get_level() > 0) {
         ob_end_flush();

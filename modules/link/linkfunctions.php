@@ -129,13 +129,18 @@ function showcategoryadmintools($categoryid) {
 // Enter the modified info submitted from the link form into the database
 function submit_link() {
     global $course_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
-    $urllink, $title, $description, $selectcategory;
+    $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
         'description' => true,
         'selectcategory' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
+    if (!is_url_accepted($urllink,"(https?|ftp)")){
+        $catlinkstatus = $langLinkNotPermitted;
+        $state = "error";
+        return ;
+    }
     $set_sql = "SET url = " . autoquote($urllink) . ",
                         title = " . autoquote($title) . ",
                         description = " . autoquote(purify($description)) . ",
@@ -169,6 +174,7 @@ function submit_link() {
         'title' => $title,
         'description' => $txt_description,
         'category' => $category));
+
 }
 
 function category_form_defaults($id) {

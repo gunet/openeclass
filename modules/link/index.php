@@ -92,6 +92,7 @@ function checkrequired(which, entry) {
 
 </script>
 hContent;
+$state= 'success';
 
 if (isset($_GET['category'])) {
     $category = intval($_GET['category']);
@@ -130,7 +131,7 @@ if ($is_editor) {
     }
 
     if (!empty($catlinkstatus)) {
-        $tool_content .= "<p class='success'>$catlinkstatus</p>\n";
+        $tool_content .= "<p class='$state'>$catlinkstatus</p>\n";
     }
 
     if (!$is_in_tinymce) {

@@ -1351,6 +1351,7 @@ $langLinkDeleted = "Il link è eliminato";
 $langLinkName = "Nome del Link";
 $langLinkAdd = "Aggiungere link";
 $langLinkAdded = "Il link è aggiunto";
+$langLinkNotPermitted = "Il link non è consentito";
 $langLinkDelconfirm = "Vuoi davvero eliminare il link?";
 $langCategoryName = "Nome della categoria";
 $langCategoryAdd = "Aggiungere categoria";
