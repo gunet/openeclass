@@ -75,38 +75,38 @@ if (empty($search_terms)) {
 
     // display form
     $tool_content .= "
-	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-	    <fieldset>
-	    <legend>$langSearchCriteria</legend>
-	    <table width='100%' class='tbl'>
-	    <tr>
-	      <th class='left' width='120'>$langOR</th>
-	      <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
-	    </tr>
-	    <tr>
-	      <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
-	      <td width='35%'><input type='checkbox' name='announcements' checked='checked' />$langAnnouncements</td>
-	      <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
-	    </tr>
-	    <tr>
-	      <td><input type='checkbox' name='course_units' checked='checked' />$langCourseUnits</td>
-	      <td><input type='checkbox' name='documents' checked='checked' />$langDoc</td>
-	    </tr>
-	    <tr>
-	      <td><input type='checkbox' name='forums' checked='checked' />$langForums</td>
-	      <td><input type='checkbox' name='exercises' checked='checked' />$langExercices</td>
-	    </tr>
-	   <tr>
-	      <td><input type='checkbox' name='video' checked='checked' />$langVideo</td>
-	      <td><input type='checkbox' name='links' checked='checked' />$langLinks</td>
-	   </tr>
-	   <tr>
-	     <th>&nbsp;</th>
-	     <td colspan='2' class='right'><input type='submit' name='submit' value='$langDoSearch' /></td>
-	   </tr>
-	   </table>
-	   </fieldset>
-	   </form>";
+        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <fieldset>
+        <legend>$langSearchCriteria</legend>
+        <table width='100%' class='tbl'>
+        <tr>
+          <th class='left' width='120'>$langOR</th>
+          <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
+        </tr>
+        <tr>
+          <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
+          <td width='35%'><input type='checkbox' name='announcements' checked='checked' />$langAnnouncements</td>
+          <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
+        </tr>
+        <tr>
+          <td><input type='checkbox' name='course_units' checked='checked' />$langCourseUnits</td>
+          <td><input type='checkbox' name='documents' checked='checked' />$langDoc</td>
+        </tr>
+        <tr>
+          <td><input type='checkbox' name='forums' checked='checked' />$langForums</td>
+          <td><input type='checkbox' name='exercises' checked='checked' />$langExercices</td>
+        </tr>
+       <tr>
+          <td><input type='checkbox' name='video' checked='checked' />$langVideo</td>
+          <td><input type='checkbox' name='links' checked='checked' />$langLinks</td>
+       </tr>
+       <tr>
+         <th>&nbsp;</th>
+         <td colspan='2' class='right'><input type='submit' name='submit' value='$langDoSearch' /></td>
+       </tr>
+       </table>
+       </fieldset>
+       </form>";
 } else {
     // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
     $_POST['course_id'] = $course_id;
@@ -116,10 +116,10 @@ if (empty($search_terms)) {
 
     $tool_content .= "
         <div id=\"operations_container\">
-	  <ul id='opslist'>
-	    <li><a href='" . $_SERVER['SCRIPT_NAME'] . "'>$langNewSearch</a></li>
-	  </ul>
-	</div>
+      <ul id='opslist'>
+        <li><a href='" . $_SERVER['SCRIPT_NAME'] . "'>$langNewSearch</a></li>
+      </ul>
+    </div>
         <p class='sub_title1'>$langResults</p>";
 
     // search in announcements
@@ -157,8 +157,8 @@ if (empty($search_terms)) {
         if (count($agendaHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table width='99%' class='sortable' id='t2' align='left'>
-		  <tr>
-		    <th colspan='2' class='left'>$langAgenda:</th>
+          <tr>
+            <th colspan='2' class='left'>$langAgenda:</th>
                   </tr>";
 
             $numLine = 0;
@@ -210,8 +210,8 @@ if (empty($search_terms)) {
                 $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . $document->comment . ")</span>";
-                $tool_content .= "<a href='" . $docHit->url . "'>" . $document->filename . "</a> $add_comment </td></tr>";
+                $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
+                $tool_content .= "<a href='" . $docHit->url . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -225,8 +225,8 @@ if (empty($search_terms)) {
         if (count($exerciseHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='100%' class='sortable' id='t4' align='left'>
-		<tr>
-		  <th colspan='2' class='left'>$langExercices:</th>
+        <tr>
+          <th colspan='2' class='left'>$langExercices:</th>
                 </tr>";
 
             $numLine = 0;
@@ -238,7 +238,7 @@ if (empty($search_terms)) {
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
-                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . $exercise->title . "</a>$desc_text </td></tr>";
+                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -267,8 +267,8 @@ if (empty($search_terms)) {
                 $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . $forum->desc . ")</span>";
-                $tool_content .= "<a href='" . $forumHit->url . "'>" . $forum->name . "</a> $desc_text </td></tr>";
+                $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . q($forum->desc) . ")</span>";
+                $tool_content .= "<a href='" . $forumHit->url . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -278,8 +278,8 @@ if (empty($search_terms)) {
         if (count($forumTopicHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable' id='t6' align='left'>
-		<tr>
-		  <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
+        <tr>
+          <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
                 </tr>";
 
             $numLine = 0;
@@ -289,7 +289,7 @@ if (empty($search_terms)) {
                 $tool_content .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . $ftopic->title . "</a>";
+                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
                     foreach ($forumPostHits as $forumPostHit) {
                         $fpost = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $forumPostHit->pkid);                        
@@ -310,7 +310,7 @@ if (empty($search_terms)) {
         if (count($linkHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='100%' class='sortable' id='t7' align='left'>
-		<tr>
+        <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
 
@@ -324,7 +324,7 @@ if (empty($search_terms)) {
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
                 $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=$linkHit->pkid&amp;url=" .
-                urlencode($linkHit->url) . "' target=_blank> " . $link->title . "</a> $desc_text </td></tr>";
+                urlencode($linkHit->url) . "' target=_blank> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -339,7 +339,7 @@ if (empty($search_terms)) {
         if (count($videoHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable'  id='t8' align='left'>
-		<tr>
+        <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
             $numLine = 0;
@@ -350,8 +350,8 @@ if (empty($search_terms)) {
                 $tool_content .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . $video->description . ")</span>";
-                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . $video->title . "</a> $desc_text </td></tr>";
+                $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . q($video->description) . ")</span>";
+                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -373,8 +373,8 @@ if (empty($search_terms)) {
                 $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . $vlink->description . ")</span>";
-                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . $vlink->title . "</a><br /> $desc_text </td></tr>";
+                $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . q($vlink->description) . ")</span>";
+                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -402,7 +402,7 @@ if (empty($search_terms)) {
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
-                $tool_content .= "<a href='" . $unitHit->url . "'>" . $unit->title . "</a> $comments_text </td></tr>";
+                $tool_content .= "<a href='" . $unitHit->url . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -426,7 +426,7 @@ if (empty($search_terms)) {
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
-                $tool_content .= $ures->title . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
+                $tool_content .= q($ures->title) . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
