@@ -663,7 +663,7 @@ function show_edit_assignment($id) {
         $deadline = '';
     }
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
-    $tool_content .= "<h1>".$row->title."</h1>";
+    $tool_content .= "<h1>".q($row->title)."</h1>";
     $tool_content .= "
     <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
@@ -690,7 +690,7 @@ function show_edit_assignment($id) {
     $tool_content .= "
         <tr>
             <th class='left' width='150'>$langWorkFile:</th>
-            <td>".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>"
+            <td>".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
             . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
                                  <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' name='userfile' />")."</td>
         </tr>";
@@ -1117,7 +1117,7 @@ function assignment_details($id, $row) {
         $tool_content .= "
                 <tr>
                   <th class='left'>$langWorkFile:</th>
-                  <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a></td>
+                  <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a></td>
                 </tr>";
     }   
     if((int)$row->deadline){
