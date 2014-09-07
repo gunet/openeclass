@@ -160,7 +160,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 <select id='courseselect' name='course'>
                   <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {    
-            $tool_content .="<option value='".$course->code."'>$course->title</option>";
+            $tool_content .="<option value='".$course->code."'>".q($course->title)."</option>";
         }
         $tool_content .="    </select>
                            </td>
