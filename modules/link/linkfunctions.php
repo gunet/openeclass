@@ -69,7 +69,7 @@ function showlinksofcategory($catid) {
         }
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "
-                  <td valign='top' colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?c=$course_code&amp;id=$myrow->id&amp;url=" .
+                  <td valign='top' colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
                 urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
