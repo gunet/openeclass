@@ -232,7 +232,7 @@ if (isset($_POST['submit'])) {
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
                 	       course_license, password, id
                       FROM course WHERE code = ?s", $course_code);    
-    $title = q($c->title);
+    $title = $c->title;
     $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
@@ -265,7 +265,7 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    <tr>
 		<th>$langCourseTitle:</th>
-		<td><input type='text' name='title' value='$title' size='60' /></td>
+		<td><input type='text' name='title' value='" . q($title) . "' size='60' /></td>
 	    </tr>
 	    <tr>
 		<th>$langTeachers:</th>
