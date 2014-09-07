@@ -219,15 +219,15 @@ function printPolls() {
                 if ($is_editor) {
                     $tool_content .= "
                         <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
-                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>$thepoll->name</a>";
+                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>".q($thepoll->name)."</a>";
                 } else {
                     $tool_content .= "
                         <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                     if (($has_participated == 0) and $poll_ended == 0) {
-                        $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>$thepoll->name</a>";
+                        $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
                     } else {
-                        $tool_content .= "$thepoll->name";
+                        $tool_content .= q($thepoll->name);
                     }
                 }
                 $tool_content .= "                       
