@@ -96,7 +96,9 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         } else {
             $htmlData = $data;
         }
-        @$this->_doc->loadHTML($htmlData);
+        $internalErrors = libxml_use_internal_errors(true);
+        $disableEntities = libxml_disable_entity_loader(true);
+        @$this->_doc->loadHTML($htmlData,LIBXML_NONET);
 
         if ($this->_doc->encoding === null) {
             // Document encoding is not recognized
@@ -109,7 +111,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
                 @$this->_doc->loadHTML(iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, 0, $htmlTagOffset))
                                      . '<head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/></head>'
-                                     . iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, $htmlTagOffset)));
+                                     . iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, $htmlTagOffset)),LIBXML_NONET);
 
                 // Remove additional HEAD section
                 $xpath = new DOMXPath($this->_doc);
@@ -119,10 +121,12 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
                 // It's an HTML fragment
                 @$this->_doc->loadHTML('<html><head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/></head><body>'
                                      . iconv($defaultEncoding, 'UTF-8//IGNORE', $htmlData)
-                                     . '</body></html>');
+                                     . '</body></html>',LIBXML_NONET);
             }
 
         }
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($disableEntities);
         /** @todo Add correction of wrong HTML encoding recognition processing
          * The case is:
          * Content-type HTTP-EQUIV meta tag is presented, but ISO-8859-5 encoding is actually used,
@@ -322,11 +326,15 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
             // Transform HTML string to a DOM representation and automatically transform retrieved string
             // into valid XHTML (It's automatically done by loadHTML() method)
+            $internalErrors = libxml_use_internal_errors(true);
+            $disableEntities = libxml_disable_entity_loader(true);
             $highlightedWordNodeSetDomDocument = new DOMDocument('1.0', 'UTF-8');
             $success = @$highlightedWordNodeSetDomDocument->
                                 loadHTML('<html><head><meta http-equiv="Content-type" content="text/html; charset=UTF-8"/></head><body>'
                                        . $highlightedWordNodeSetHtml
-                                       . '</body></html>');
+                                       . '</body></html>',LIBXML_NONET);
+            libxml_use_internal_errors($internalErrors);
+            libxml_disable_entity_loader($disableEntities);
             if (!$success) {
                 require_once 'Zend/Search/Lucene/Exception.php';
                 throw new Zend_Search_Lucene_Exception("Error occured while loading highlighted text fragment: '$highlightedWordNodeSetHtml'.");
