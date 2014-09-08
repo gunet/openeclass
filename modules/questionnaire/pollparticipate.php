@@ -88,7 +88,7 @@ function printPollForm() {
 
         <p class=\"title1\">" . q($thePoll->name) . "</p>\n";
         if ($thePoll->description) {
-        $tool_content .= q($thePoll->description).'<br>';
+        $tool_content .= $thePoll->description.'<br>';
         }        
 
         //*****************************************************************************
@@ -100,7 +100,7 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $tool_content .= "
-            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".q($theQuestion->question_text)."</b></div>
+            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".(($qtype==QTYPE_LABEL)? ($theQuestion->question_text) : q($theQuestion->question_text))."</b></div>
             <p><input type='hidden' name='question[$pqid]' value='$qtype' />";
             if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                 $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
