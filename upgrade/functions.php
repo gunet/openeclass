@@ -479,8 +479,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
-                         (`msg_id`, `recipient_id`, `thread_id`, `is_read`, `deleted`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, dropbox_map.new_id, 1, 0
+                         (`msg_id`, `recipient_id`, `is_read`, `deleted`)
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, 1, 0
                            FROM dropbox_person, dropbox_map
                           WHERE dropbox_person.fileId = dropbox_map.old_id
                           ORDER BY dropbox_person.fileId") != null) && $ok;
