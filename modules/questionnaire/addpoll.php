@@ -164,7 +164,7 @@ function printPollCreationForm() {
 	<table width=\"100%\" class='tbl'>
 	<tr>
 	  <th width='100'>$langTitle:</th>
-	  <td><input type='text' size='50' name='PollName' value='$PollName'></td>
+	  <td><input type='text' size='50' name='PollName' value='".q($PollName)."'></td>
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
@@ -354,7 +354,7 @@ function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE) {
 	<tr>
 	  <td width='150'><b>$langQuestion #$number</b>" . toolbar($i) . "</td>
       <td>
-	    <input type='text' name='question[$i]' value='$text' size='52' />" ."
+	    <input type='text' name='question[$i]' value='".q($text)."' size='52' />" ."
             <input type='hidden' name='question_type[$i]' value='$qtype' />
 	  </td>
 	</tr>";
@@ -376,7 +376,7 @@ function add_multiple_choice_question($i, $number, $text, $qtype=QTYPE_SINGLE) {
           <td>&nbsp;</td>
           <td><ul class='poll_answers'>";
     foreach ($answers as $j => $answertext) {
-        $tool_content .= "<li><input type='text' name='answer${i}[]' value='$answertext' size='50'></li>";
+        $tool_content .= "<li><input type='text' name='answer${i}[]' value='".q($answertext)."' size='50'></li>";
     }
     if ($qtype == QTYPE_SINGLE) {
         $tool_content .= "<li id='unknown'>$langPollUnknown</li>";
@@ -404,7 +404,7 @@ function add_fill_text_question($i, $number, $text) {
 	<tr>
 	  <td width=\"120\"><b>$langQuestion #" . $number . "</b></td>
 	  <td>
-	  <input type='text' name='question[$i]' value='$text' size='52' />" . "
+	  <input type='text' name='question[$i]' value='".q($text)."' size='52' />" . "
 	  <input type='hidden' name='question_type[$i]' value='2'> ($langPollFillText)
 	  </td>
 	</tr>
