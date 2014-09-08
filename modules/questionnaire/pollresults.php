@@ -117,7 +117,7 @@ foreach ($questions as $theQuestion) {
         <td colspan='2'>";
         $j++;
     } else {
-       $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>".q($theQuestion->question_text)."</div><br><hr></td></tr>"; 
+       $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>".$theQuestion->question_text."</div><br><hr></td></tr>"; 
     }
         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
             $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
