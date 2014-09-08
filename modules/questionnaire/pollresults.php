@@ -86,7 +86,7 @@ $tool_content .= "
 <table class='tbl_border'>
 <tr>
         <th width='150'>$langTitle:</th>
-        <td>" . $thePoll->name . "</td>
+        <td>" . q($thePoll->name) . "</td>
 </tr>
 <tr>
         <th>$langPollCreation:</th>
@@ -111,13 +111,13 @@ foreach ($questions as $theQuestion) {
         $tool_content .= "
         <tr>
                 <td width='80'><b>$langQuestion $j:</b></td>
-                <td>$theQuestion->question_text</td>
+                <td>".q($theQuestion->question_text)."</td>
         </tr>
         <tr>
         <td colspan='2'>";
         $j++;
     } else {
-       $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>$theQuestion->question_text</div><br><hr></td></tr>"; 
+       $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>".q($theQuestion->question_text)."</div><br><hr></td></tr>"; 
     }
         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
             $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
@@ -144,7 +144,7 @@ foreach ($questions as $theQuestion) {
                         <th width='30%'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";            
             foreach ($answer_counts as $i => $count) {
                 $percentage = round(100 * ($count / $answer_total),2);
-                $chart->addPoint($answer_text[$i], $percentage);
+                $chart->addPoint(q($answer_text[$i]), $percentage);
                 if ($thePoll->anonymized != 1) {
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = $i AND a.user_id = b.id");
                     foreach($names as $name) {
@@ -155,8 +155,8 @@ foreach ($questions as $theQuestion) {
                 }
                 $answers_table .= "
                     <tr>
-                            <td>$answer_text[$i]</th>
-                            <td>$count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.$names_str.' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
+                            <td>".q($answer_text[$i])."</th>
+                            <td>$count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
                 unset($names_array);
             }
             $answers_table .= "</table><br>";
@@ -179,7 +179,7 @@ foreach ($questions as $theQuestion) {
                     $tool_content .= "
                     <tr>
                             <td>$langStudent $k</th>
-                            <td>$theAnswer->answer_text</td>
+                            <td>".q($theAnswer->answer_text)."</td>
                     </tr>";                
                     $k++;    
                 }           
@@ -189,7 +189,7 @@ foreach ($questions as $theQuestion) {
                     $tool_content .= "
                     <tr ".(($k>3) ? 'class="hidden_row" style="display:none;"' : '').">
                             <td>" . q(uid_to_name($theAnswer->user_id)) ."</th>
-                            <td>$theAnswer->answer_text</td>
+                            <td>".q($theAnswer->answer_text)."</td>
                     </tr>";
                     $k++;
                 }

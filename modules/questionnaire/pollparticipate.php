@@ -86,9 +86,9 @@ function printPollForm() {
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 
-        <p class=\"title1\">" . $thePoll->name . "</p>\n";
+        <p class=\"title1\">" . q($thePoll->name) . "</p>\n";
         if ($thePoll->description) {
-        $tool_content .= $thePoll->description.'<br>';
+        $tool_content .= q($thePoll->description).'<br>';
         }        
 
         //*****************************************************************************
@@ -100,7 +100,7 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $tool_content .= "
-            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".$theQuestion->question_text."</b></div>
+            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".q($theQuestion->question_text)."</b></div>
             <p><input type='hidden' name='question[$pqid]' value='$qtype' />";
             if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                 $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
@@ -108,7 +108,7 @@ function printPollForm() {
                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer 
                             WHERE pqid = ?d ORDER BY pqaid", $pqid);
                 foreach ($answers as $theAnswer) {
-                    $tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' />$theAnswer->answer_text </label><br />\n";
+                    $tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' />".q($theAnswer->answer_text)." </label><br />\n";
                 }
                 if ($qtype == QTYPE_SINGLE) {
                     $tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
