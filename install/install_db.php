@@ -597,7 +597,6 @@ $db->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                 `msg_id` INT(11) UNSIGNED NOT NULL,
                 `recipient_id` INT(11) UNSIGNED NOT NULL,
-                `thread_id` INT(11) UNSIGNED NOT NULL,
                 `is_read` BOOLEAN NOT NULL DEFAULT 0,
                 `deleted` BOOLEAN NOT NULL DEFAULT 0,
                 PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
