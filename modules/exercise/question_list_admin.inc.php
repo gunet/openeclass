@@ -74,7 +74,7 @@ if (isset($_GET['deleteQuestion'])) {
             $nbrQuestions--;
         }
     }
-    redirect_to_home_page('modules/exercise/admin.php?course=TMAPOST101&exerciseId='.$exerciseId);
+    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
 
