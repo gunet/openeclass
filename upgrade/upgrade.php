@@ -1103,6 +1103,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                             `msg_id` INT(11) UNSIGNED NOT NULL,
                             `recipient_id` INT(11) UNSIGNED NOT NULL,
+                            `thread_id` INT(11) UNSIGNED NOT NULL,
                             `is_read` BOOLEAN NOT NULL DEFAULT 0,
                             `deleted` BOOLEAN NOT NULL DEFAULT 0,
                             PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
@@ -2010,14 +2011,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         mysql_index_exists('course_units', 'course_units_index') or
                 Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
         mysql_index_exists('course_user', 'cu_index') or
-                Database::get()->query("CREATE INDEX `cu_index` ON course_user (course_user, user_id, status)");
+                Database::get()->query("CREATE INDEX `cu_index` ON course_user (course_id, user_id, status)");
         mysql_index_exists('document', 'doc_path_index') or
                 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
         mysql_index_exists('dropbox_attachment', 'drop_att_index') or
                 Database::get()->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
         mysql_index_exists('dropbox_index', 'drop_index') or
                 Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(recipient_id, is_read)");
-        mysql_index_exists('drobox_msg', 'drop_msg_index') or
+        mysql_index_exists('dropbox_msg', 'drop_msg_index') or
                 Database::get()->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
         mysql_index_exists('ebook', 'ebook_index') or
                 Database::get()->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
