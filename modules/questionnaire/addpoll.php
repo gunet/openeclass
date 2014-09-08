@@ -66,6 +66,10 @@ $nameTools = $langCreatePoll;
 if (isset($_REQUEST['pid'])) {
     $pid = intval($_REQUEST['pid']);
     $nameTools = $langEditPoll;
+    $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+    if(!$p){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
 }
 
 if (isset($_GET['edit']) and isset($pid)) {

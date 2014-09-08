@@ -40,6 +40,10 @@ if (!isset($_REQUEST['UseCase']))
     $_REQUEST['UseCase'] = "";
 if (!isset($_REQUEST['pid']))
     die();
+$p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
+if(!$p){
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 
 switch ($_REQUEST['UseCase']) {
     case 1:       

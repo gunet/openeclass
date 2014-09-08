@@ -74,7 +74,9 @@ if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
 }
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
-
+if(!$thePoll){
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 $tool_content .= "
 <div class='info'>
 <b>$langDumpUserDurationToFile: </b>1. <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>

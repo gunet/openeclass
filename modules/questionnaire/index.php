@@ -46,6 +46,10 @@ load_js('tools.js');
 if ($is_editor) {
     if (isset($_GET['pid'])) {
         $pid = $_GET['pid'];
+        $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+        if(!$p){
+            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+        }
         // activate / dectivate polls
         if (isset($_GET['visibility'])) {
             switch ($_GET['visibility']) {
