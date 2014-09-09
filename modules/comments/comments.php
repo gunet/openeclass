@@ -103,7 +103,7 @@ if (setting_get($setting_id, $course_id) == 1) {
                 if ($comment->edit($_POST['commentText'])) {
                     $response[0] = 'OK';
                     $response[1] = "<p class='success'>".$langCommentsSaveSuccess."</p>";
-                    $response[2] = '<div id="comment_content-'.$comment->getId().'">'.$comment->getContent().'</div>';
+                    $response[2] = '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<p class='alert1'>".$langCommentsSaveFail."</p>";
