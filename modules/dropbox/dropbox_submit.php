@@ -53,7 +53,7 @@ $file_attached = FALSE;
 /*
   form submission
  */
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) {
     $error = FALSE;
     $errormsg = '';
     if (!isset($_POST['body'])) {
@@ -65,6 +65,9 @@ if (isset($_POST["submit"])) {
     } elseif(!isset($_POST['course']) && !$personal_msgs_allowed) {
         $error = TRUE;
         $errormsg = $langGeneralError;
+    } elseif (!isset($_POST['recipients']) or empty($_POST['recipients'])) {
+        $error = TRUE;
+        $errormsg = $langNoRecipients;
     } elseif (!empty($_FILES['file']['name'])) {
         $file_attached = TRUE;
     }

@@ -144,7 +144,7 @@ function printPolls() {
     global $tool_content, $course_id, $course_code, $langCreatePoll,
     $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
+    $themeimg, $langEdit, $langDelete, $langActions,
     $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
     $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,

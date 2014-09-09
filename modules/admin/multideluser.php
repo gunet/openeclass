@@ -31,7 +31,7 @@ $tree = new Hierarchy();
 $user = new User();
 
 $nameTools = $langMultiDelUser;
-$navigation[] = array('url' => "index.php", 'name' => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
 
@@ -83,6 +83,7 @@ if (isset($_POST['submit'])) {
 
         // Criteria/Filters
         $criteria = array();
+        $terms = array();
 
         if (isset($_POST['date']) or $hour or $minute) {
             $date = explode('-', $_POST['date']);
@@ -97,36 +98,53 @@ if (isset($_POST['submit'])) {
             $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . $user_registered_at;
         }
 
-        if (!empty($lname))
-            $criteria[] = "surname LIKE " . quote('%' . $lname . '%');
-
-        if (!empty($fname))
-            $criteria[] = "givenname LIKE " . quote('%' . $fname . '%');
-
-        if (!empty($uname))
-            $criteria[] = "username LIKE " . quote('%' . $uname . '%');
-
-        if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or $verified_mail === EMAIL_VERIFIED or $verified_mail === EMAIL_UNVERIFIED)
-            $criteria[] = "verified_mail=" . quote($verified_mail);
-
-        if (!empty($am))
-            $criteria[] = "am LIKE " . quote('%' . $am . '%');
-
-        if (!empty($user_type))
-            $criteria[] = "status = " . intval($user_type);
-
-        if (!empty($auth_type)) {
-            if ($auth_type >= 2)
-                $criteria[] = "password = " . quote($auth_ids[$auth_type]);
-            elseif ($auth_type == 1)
-                $criteria[] = "password NOT IN ('" . implode("', '", $auth_ids) . "')";
+        if (!empty($lname)) {
+            $criteria[] = 'surname LIKE ?s';
+            $terms[] = '%' . $lname . '%';
         }
 
-        if (!empty($email))
-            $criteria[] = " email LIKE " . quote('%' . $email . '%');
+        if (!empty($fname)) {
+            $criteria[] = 'givenname LIKE ?s';
+            $terms[] = '%' . $fname . '%';
+        }
 
-        if ($search == 'inactive')
-            $criteria[] = "expires_at < " . time() . " AND user.id <> 1";
+        if (!empty($uname)) {
+            $criteria[] = 'username LIKE ?s';
+            $terms[] = '%' . $uname . '%';
+        }
+
+        if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or $verified_mail === EMAIL_VERIFIED or $verified_mail === EMAIL_UNVERIFIED)
+            $criteria[] = 'verified_mail = ?d';
+            $terms[] = $verified_mail;
+        }
+
+        if (!empty($am)) {
+            $criteria[] = 'am LIKE ?d';
+            $terms[] = '%' . $am . '%';
+        }
+
+        if (!empty($user_type)) {
+            $criteria[] = 'status = ?d';
+            $terms[] = $user_type;
+        }
+
+        if (!empty($auth_type)) {
+            if ($auth_type >= 2) {
+                $criteria[] = 'password = ?s';
+                $terms[] = $auth_ids[$auth_type];
+            } elseif ($auth_type == 1) {
+                $criteria[] = 'password NOT IN (' . implode(', ', array_fill(0, count($auth_ids), '?s')) . ')';
+                $terms = array_merge($terms, $auth_ids);
+            }
+        }
+
+        if (!empty($email)) {
+            $criteria[] = 'email LIKE ?s';
+            $terms[] = '%' . $email . '%';
+
+        if ($search == 'inactive') {
+            $criteria[] = 'expires_at < ' . DBHelper::timeAfter();
+        }
 
         // Department search
         $depqryadd = '';
@@ -137,46 +155,50 @@ if (isset($_POST['submit'])) {
             $subs = array();
             if ($dep) {
                 $subs = $tree->buildSubtrees(array($dep));
-            } else if (isDepartmentAdmin())
+            } else if (isDepartmentAdmin()) {
                 $subs = $user->getDepartmentIds($uid);
-
-            $ids = '';
-            foreach ($subs as $key => $id) {
-                $ids .= $id . ',';
-                validateNode($id, isDepartmentAdmin());
             }
-            // remove last ',' from $ids
-            $deps = substr($ids, 0, -1);
+
+            $count = 0;
+            foreach ($subs as $key => $id) {
+                $terms[] = $id;
+                validateNode($id, isDepartmentAdmin());
+                $count++;
+            }
 
             $pref = ($c) ? 'a' : 'user';
             $criteria[] = $pref . '.user.id = user_department.user';
-            $criteria[] = 'department IN (' . $deps . ')';
+            $criteria[] = 'department IN (' . array_fill(0, $count, '?s') . ')';
         }
 
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';
         // end filter/criteria
 
         if (!empty($c)) {
-            $qry_base = " FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id $depqryadd WHERE b.course_id = $c ";
-            if ($qry_criteria)
+            $qry_base = " FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id $depqryadd WHERE b.course_id = ?d ";
+            array_unshift($terms, $c);
+            if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
+            }
             $qry = "SELECT DISTINCT a.username " . $qry_base . " ORDER BY a.username ASC";
         } elseif ($search == 'no_login') {
             $qry_base = " FROM user LEFT JOIN loginout ON user.id = loginout.id_user $depqryadd WHERE loginout.id_user IS NULL ";
-            if ($qry_criteria)
+            if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
+            }
             $qry = "SELECT DISTINCT username " . $qry_base . ' ORDER BY username ASC';
         } else {
             $qry_base = ' FROM user' . $depqryadd;
-            if ($qry_criteria)
+            if ($qry_criteria) {
                 $qry_base .= ' WHERE ' . $qry_criteria;
+            }
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
 
         Database::get()->queryFunc($qry
                 , function($users) use(&$usernames) {
             $usernames .= $users->username . "\n";
-        });
+        }, $terms);
     }
 
 
@@ -203,7 +225,7 @@ draw($tool_content, 3, 'admin', $head_content);
 
 // Translate username to uid
 function usernameToUid($uname) {
-    $r = Database::get()->querySingle("SELECT id FROM user WHERE username = %s", $uname);
+    $r = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $uname);
     if ($r)
         return $r->id;
     else

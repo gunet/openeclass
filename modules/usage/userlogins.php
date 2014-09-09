@@ -94,19 +94,21 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 $date_fmt = '%Y-%m-%d';
-$date_where = ' (date_time BETWEEN ' . quote("$u_date_start") .
-        ' AND ' . quote("$u_date_end") . ') ';
+$date_where = '(date_time BETWEEN ?s AND ?s)';
+$date_terms = array($u_date_start, $u_date_end);
 $date_what = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
+$terms = array();
 if ($u_user_id != -1) {
-    $user_where = ' (user_id = ' . intval($u_user_id) . ') ';
+    $user_where = 'AND user_id = ?d';
+    $terms[] = intval($u_user_id);
 } else {
-    $user_where = ' (1) ';
+    $user_where = '';
 }
 // get data from logins
 $result_2 = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username
                  FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                 WHERE b.course_id = ?d AND $user_where", $course_id);
+                 WHERE b.course_id = ?d $user_where", $course_id, $terms);
 $users = array();
 foreach ($result_2 as $row) {
     $users[$row->id] = $row->surname . ' ' . $row->givenname;
@@ -114,10 +116,8 @@ foreach ($result_2 as $row) {
 $table_cont = '';
 $unknown_users = array();
 $result = Database::get()->queryArray("SELECT user_id, ip, date_time FROM logins 
-                 WHERE $date_where 
-                 AND $user_where
-                 AND course_id = ?d
-                 ORDER BY date_time DESC", $course_id);
+                 WHERE course_id = ?d AND $date_where $user_where
+                 ORDER BY date_time DESC", $course_id, $date_terms, $terms);
 $k = 0;
 foreach ($result as $row) {    
     $known = false;

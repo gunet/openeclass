@@ -95,11 +95,11 @@ Class Mailbox {
      * @param int offset
      * @return Msgs objects
      */
-    public function getInboxMsgs($keyword = "", $limit=0, $offset=0) {
+    public function getInboxMsgs($keyword='', $limit=0, $offset=0) {
         $msgs = array();
         $args = array();
         
-        $query_sql = $extra_sql = "";
+        $query_sql = $extra_sql = '';
         
         if (!empty($keyword)) {
             $query_sql = "AND `dropbox_msg`.`subject` LIKE concat('%', ?s, '%')";
@@ -111,7 +111,7 @@ Class Mailbox {
             $args[] = $limit;
         }
         
-        if ($this->courseId == 0) {//all messages except those from courses where dropbox is inactive
+        if ($this->courseId == 0) { //all messages except those from courses where dropbox is inactive
             $sql = "SELECT DISTINCT `dropbox_msg`.`id`
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
@@ -129,7 +129,7 @@ Class Mailbox {
                     AND `dropbox_index`.`deleted` = ?d $query_sql
                     ORDER BY `timestamp` DESC $extra_sql";
             $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0, $args);
-        } else {//messages in course context
+        } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
@@ -155,11 +155,11 @@ Class Mailbox {
      * @param int offset
      * @return msg objects
      */
-    public function getOutboxMsgs($keyword = "", $limit=0, $offset=0) {
+    public function getOutboxMsgs($keyword='', $limit=0, $offset=0) {
         $msgs = array();
         $args = array();
         
-        $query_sql = $extra_sql = "";
+        $query_sql = $extra_sql = '';
         
         if (!empty($keyword)) {
             $query_sql = "AND `dropbox_msg`.`subject` LIKE concat('%', ?s, '%')";
@@ -171,7 +171,7 @@ Class Mailbox {
             $args[] = $limit;
         }
         
-        if ($this->courseId == 0) {//all mesages except those from courses where dropbox is inactive
+        if ($this->courseId == 0) { //all mesages except those from courses where dropbox is inactive
             $sql = "SELECT DISTINCT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
@@ -189,7 +189,7 @@ Class Mailbox {
                     AND  `dropbox_index`.`recipient_id` = ?d $query_sql
                     ORDER BY `timestamp` DESC $extra_sql";
             $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, $this->uid, $args);
-        } else {//messages in course context
+        } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index` 
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id` 

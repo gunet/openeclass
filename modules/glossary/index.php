@@ -296,7 +296,7 @@ if ($glossary_index and count($prefixes) > 1) {
     $begin = true;
     foreach ($prefixes as $letter) {
         $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
-                (isset($_GET['prefix']) and autounquote($_GET['prefix']) == $letter);
+                (isset($_GET['prefix']) and $_GET['prefix'] == $letter);
         $tool_content .= ($begin ? '' : ' | ') .
                 ($active ? '<b>' : "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
                 q($letter) . ($active ? '</b>' : '</a>');
@@ -310,16 +310,21 @@ if ($glossary_index and count($prefixes) > 1) {
  * *********************************************** */
 
 $where = '';
+$terms = array();
 if (isset($_GET['edit'])) {
-    $where = "AND id = $id";
+    $where = "AND id = ?d";
+    $terms[] = intval($id);
 } elseif (isset($_GET['id'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
-    $where = "AND id = " . intval($_GET['id']);
+    $where = "AND id = ?d";
+    $terms[] = intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
-    $where = " AND term LIKE " . quote($_GET['prefix'] . '%');
+    $where = "AND term LIKE ?s";
+    $terms[] = $_GET['prefix'] . '%';
 } elseif ($glossary_index and ! $cat_id and count($prefixes) > 1) {
-    $where = " AND term LIKE " . quote($prefixes[0] . '%');
+    $where = "AND term LIKE ?s";
+    $terms[] = $prefixes[0] . '%';
 }
 if ($cat_id) {
     $navigation[] = array('url' => $base_url,
@@ -330,7 +335,7 @@ if ($cat_id) {
 $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                         FROM glossary WHERE course_id = ?d $where
                         GROUP BY term
-                        ORDER BY term", $course_id);
+                        ORDER BY term", $course_id, $terms);
 if (count($sql) > 0) {
     $tool_content .= "
 	       <script type='text/javascript' src='../auth/sorttable.js'></script>

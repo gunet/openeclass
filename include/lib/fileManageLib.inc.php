@@ -349,7 +349,7 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     $zipfile = new PclZip($zip_filename);
     $v = $zipfile->create($topdir, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename');
     if ($v === 0) {
-        die("error: ".$zipfile->errorInfo(true));
+        die("error: " . $zipfile->errorInfo(true));
     }
     
     $real_paths = array();
@@ -362,8 +362,8 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     }
     $v = $zipfile->add($real_paths, PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
     if ($v === 0) {
-        die("error: ".$zipfile->errorInfo(true));
-    }    
+        die("error: " . $zipfile->errorInfo(true));
+    }
 }
 
 

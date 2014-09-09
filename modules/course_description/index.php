@@ -61,7 +61,7 @@ if ($is_editor) {
         $res_id = intval($_POST['edIdBloc']);
         if ($res_id == -1) {
             $unit_id = description_unit_id($course_id);
-            add_unit_resource($unit_id, 'description', $res_id, autounquote($_POST['edTitleBloc']), autounquote($_POST['edContentBloc']));
+            add_unit_resource($unit_id, 'description', $res_id, $_POST['edTitleBloc'], $_POST['edContentBloc']);
             header("Location: {$urlServer}courses/$course_code");
             exit;
         }

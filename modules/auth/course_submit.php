@@ -39,7 +39,6 @@ if (isset($_POST['cid']) and isset($_POST['state'])) {
 
 $q = Database::get()->querySingle("SELECT visible, password FROM course WHERE id = ?d", $cid);
 if ($q) {
-    //list($visible, $course_password) = mysql_fetch_row($q);
     $visible = $q->visible;
     $course_password = $q->password;
     if ($state == 'true') {

@@ -91,8 +91,8 @@ if ($is_editor) {
     load_js('jquery-ui');
     load_js('jquery-ui-timepicker-addon.min.js');  
     global $themeimg, $m;
-    $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
-    <script>
+    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+    <script type='text/javascript'>
     $(function() {
         $('input[name=WorkEnd]').datetimepicker({
             showOn: 'both',
@@ -138,11 +138,11 @@ if ($is_editor) {
                 var select_content = '';
                 if(type==0){
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '</option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
                     }
                 } else {
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '</option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
                     }            
                 }
                 $('#assignee_box').find('option').remove();
@@ -362,9 +362,15 @@ function add_assignment() {
                 }                
             }                    
             if ($assign_to_specific && !empty($assigned_to)) {
-                $column = $group_submissions == 1 ? 'group_id' : 'user_id';
+                if ($group_submissions == 1) {
+                    $column = 'group_id';
+                    $other_column = 'user_id';
+                } else {
+                    $column = 'user_id';
+                    $other_column = 'group_id';
+                }
                 foreach ($assigned_to as $assignee_id) {
-                    Database::get()->query("INSERT INTO assignment_to_specific ({$column} , assignment_id) VALUES (?d,?d)", $assignee_id, $id);
+                    Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
                 }
             }    
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
@@ -473,15 +479,15 @@ function submit_work($id, $on_behalf_of = null) {
                 @chmod("$workPath/$filename", 0644);
             }
             $msg2 = $langUploadSuccess;
-            $submit_ip = quote($_SERVER['REMOTE_ADDR']);
+            $submit_ip = $_SERVER['REMOTE_ADDR'];
             if (isset($on_behalf_of)) {
                 if ($group_sub) {
                     $auto_comments = sprintf($langOnBehalfOfGroupComment, uid_to_name($uid), $gids[$group_id]);
                 } else {
                     $auto_comments = sprintf($langOnBehalfOfUserComment, uid_to_name($uid), uid_to_name($user_id));
                 }
-                $stud_comments = quote($auto_comments);
-                $grade_comments = quote($_POST['stud_comments']);
+                $stud_comments = $auto_comments;
+                $grade_comments = $_POST['stud_comments'];
                 
                 $grade_valid = filter_input(INPUT_POST, 'grade', FILTER_VALIDATE_FLOAT);
                 (isset($_POST['grade']) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
@@ -507,9 +513,8 @@ function submit_work($id, $on_behalf_of = null) {
                     'comments' => $stud_comments,
                     'group_id' => $group_id));
                 if ($on_behalf_of and isset($_POST['email'])) {
-                    $email_grade = autounquote($_POST['grade']);
-                    $email_comments = "\n$auto_comments\n\n" .
-                            autounquote($_POST['stud_comments']);
+                    $email_grade = $_POST['grade'];
+                    $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
                     grade_email_notify($id, $sid, $email_grade, $email_comments);
                 }
             }
@@ -783,9 +788,9 @@ function edit_assignment($id) {
     }
 
     if (!isset($_POST['comments'])) {
-        $comments = "";
+        $comments = '';
     } else {
-        $comments = quote(purify($_POST['comments']));
+        $comments = purify($_POST['comments']);
     }
     
     if (!isset($_FILES) || !$_FILES['userfile']['size']) {
@@ -824,11 +829,17 @@ function edit_assignment($id) {
         $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
     Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-   
+
     if ($assign_to_specific && !empty($assigned_to)) {
-        $column = $group_submissions == 1 ? 'group_id' : 'user_id';
+        if ($group_submissions == 1) {
+            $column = 'group_id';
+            $other_column = 'user_id';
+        } else {
+            $column = 'user_id';
+            $other_column = 'group_id';
+        }
         foreach ($assigned_to as $assignee_id) {
-            Database::get()->query("INSERT INTO assignment_to_specific ({$column} , assignment_id) VALUES (?d,?d)", $assignee_id, $id);
+            Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
         }
     }    
     Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
@@ -1088,10 +1099,8 @@ function assignment_details($id, $row) {
         <fieldset>
         <legend>" . $m['WorkInfo'];
     if ($is_editor) {
-        $tool_content .= "&nbsp;
-                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
-                 <img src='$themeimg/edit.png' alt='$m[edit]' />
-                 </a>";
+        $tool_content .= "&nbsp;" . icon('edit', $m['edit'],
+                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit");
     }
     $tool_content .= "</legend>
         <table class='tbl'>
@@ -1605,26 +1614,28 @@ function show_assignments() {
                 $tool_content .= " (<span class='expired'>$m[expired]</span>)";
             }                         
            $tool_content .= "</td>
-			  <td class='right'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
-                                <img src='$themeimg/edit.png' alt='$m[edit]' />
-                            </a>";
-           if (is_numeric($num_submitted) && $num_submitted>0) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge' onClick='return confirmation(\"$langWarnForSubmissions. $langDelSure\");'>
-                                <img src='$themeimg/clear.png' alt='".q($m['WorkSubsDelete'])."' title='".q($m['WorkSubsDelete'])."'>
-                            </a>";
+              <td class='right'>" .
+                  icon('edit', $m['edit'],
+                      "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit") .
+                  '&nbsp;';
+           if (is_numeric($num_submitted) && $num_submitted > 0) {
+                $tool_content .= icon('clear', $m['WorkSubsDelete'],
+                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
+                    "onClick='return confirmation(\"$langWarnForSubmissions. $langDelSure\")'") .
+                    '&nbsp;';
            }
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"$langConfirmDelete\");'>
-                                <img src='$themeimg/delete.png' alt='$m[delete]' />
-                            </a>";
+            $tool_content .= icon('delete', $m['delete'],
+                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                "onClick='return confirmation(\"$langConfirmDelete\")'") .
+                '&nbsp;';
             if ($row->active) {
-                $deactivate_temp = q($m['deactivate']);
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
+                $tool_content .= icon('visible', $m['deactivate'],
+                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id");
             } else {
-                $activate_temp = q($m['activate']);
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
+                $tool_content .= icon('invisible', $m['activate'],
+                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id");
             }
-            $tool_content .= "&nbsp;</td></tr>";
+            $tool_content .= "</td></tr>";
             $index++;
         }
         $tool_content .= '</table>';

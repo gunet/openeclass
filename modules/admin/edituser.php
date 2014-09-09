@@ -185,7 +185,7 @@ if ($u) {
             $tool_content .= "
                 <tr>
                 <th class='left'>" . $langUsername . "</th>
-                <td><b>" . autoquote($info->username) . "</b> [" . $auth_text . "] <input type='hidden' name='username' value=" . autoquote($info->username) . " /> </td>
+                <td><b>" . q($info->username) . "</b> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . "> </td>
                 </tr>";
         }
         $tool_content .= "

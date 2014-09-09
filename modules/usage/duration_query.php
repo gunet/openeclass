@@ -23,15 +23,17 @@
 // Returns a MySQL resource, where fetching rows results in:
 // duration, surname, givenname, user_id, am
 function user_duration_query($course_id, $start = false, $end = false, $group = false) {
-
+    $terms = array();
     if ($start !== false AND $end !== false) {
-        $date_where = 'AND actions_daily.day BETWEEN ' .
-                quote($start . ' 00:00:00') . ' AND ' .
-                quote($end . ' 23:59:59');
+        $date_where = 'AND actions_daily.day BETWEEN ?s AND ?s';
+        $terms = array($start . ' 00:00:00',
+                       $end . ' 23:59:59');
     } elseif ($start !== false) {
-        $date_where = 'AND actions_daily.day > ' . quote($start . ' 00:00:00');
+        $date_where = 'AND actions_daily.day > ?s';
+        $terms[] = $start . ' 00:00:00';
     } elseif ($end !== false) {
-        $date_where = 'AND actions_daily.day < ' . quote($end . ' 23:59:59');
+        $date_where = 'AND actions_daily.day < ?s';
+        $terms[] = $end . ' 23:59:59';
     } else {
         $date_where = '';
     }
@@ -39,8 +41,9 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     if ($group !== false) {
         $from = "`group_members` AS groups
                                 LEFT JOIN user ON groups.user_id = user.id";
-        $and = "AND groups.group_id = $group";
+        $and = "AND groups.group_id = ?d";
         $or = '';
+        $terms[] = $group;
     } else {
         $from = " (SELECT * FROM user UNION (SELECT 0 as id,
                             '' as surname,
@@ -79,5 +82,5 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             $and
                             $date_where
                             GROUP BY user.id
-                            ORDER BY surname, givenname",  $course_id);
+                            ORDER BY surname, givenname",  $course_id, $terms);
 }

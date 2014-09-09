@@ -196,7 +196,6 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         // check if the username is already in use
-        //$q2 = "SELECT username FROM user WHERE username = " . autoquote($uname);
         $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $uname);
         if ($username_check) {
             $registration_errors[] = $langUserFree;
@@ -245,7 +244,6 @@ if (!isset($_POST['submit'])) {
         }
 
         $emailsubject = "$langYourReg $siteName";
-        $uname = autounquote($uname);
         $telephone = get_config('phone');
         $administratorName = get_config('admin_name');
         $emailhelpdesk = get_config('email_helpdesk');

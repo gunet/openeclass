@@ -1688,3 +1688,8 @@ function html_cleanup($s) {
     // Fixes overescaping introduced by bug in older versions
     return str_replace(array('&quot;', '\\'), '', $s);
 }
+
+// Quote string for output in config.php file
+function quote($s) {
+    return "'" . addslashes(canonicalize_whitespace($s)) . "'";
+}

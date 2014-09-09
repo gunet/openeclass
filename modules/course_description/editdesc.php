@@ -37,7 +37,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 
 if (isset($_POST['submit'])) {
     $unit_id = description_unit_id($course_id);
-    add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
+    add_unit_resource($unit_id, 'description', -1, $langDescription, trim($_POST['description']));
     // update index
     require_once 'modules/search/courseindexer.class.php';
     $idx = new CourseIndexer();

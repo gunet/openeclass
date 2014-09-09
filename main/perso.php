@@ -282,18 +282,18 @@ function getUserAgenda($lesson_id) {
         return "<p class='alert1'>$langNoEventsExist</p>";
     }
                
-    $mysql_query_result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
-                                                        agenda.duration, course.code, course.title AS course_title
-                                                        FROM agenda, course WHERE agenda.course_id IN ($course_ids)
-                                                        AND agenda.course_id = course.id
-                                                        AND agenda.visible = 1
-                                                        HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
-                                                    ORDER BY start ASC
-                                                    LIMIT 5");
+    $result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
+                                                  agenda.duration, course.code, course.title AS course_title
+                                             FROM agenda, course WHERE agenda.course_id IN ($course_ids)
+                                                  AND agenda.course_id = course.id
+                                                  AND agenda.visible = 1
+                                             HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= 0
+                                             ORDER BY start ASC
+                                             LIMIT 5");
           
     $agenda_content = "<table width='100%'>";
-    if ($mysql_query_result > 0) {        
-        foreach ($mysql_query_result as $data) {
+    if ($result > 0) {        
+        foreach ($result as $data) {
             $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data->start)) . "</td></tr>";                        
             $url = $urlServer . "modules/agenda/index.php?course=" . $data->code;
             if (strlen($data->duration) == 0) {

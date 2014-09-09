@@ -151,19 +151,24 @@ hContent;
                 $table = select_table($_POST['table']);
             }
             if ($table == 'video') {
-                Database::get()->query("UPDATE video SET title = ?s,
-                                                 description = ?s,
-                                                 creator = ?s,
-                                                 publisher = ?s
-                                             WHERE id = ?d"
-                        , $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
+                Database::get()->query("UPDATE video 
+                        SET title = ?s,
+                            description = ?s,
+                            creator = ?s,
+                            publisher = ?s
+                        WHERE id = ?d",
+                        $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
             } elseif ($table == 'videolink') {
-                Database::get()->query("UPDATE videolink SET url = ?s,
-                                                      title = ?s,
-                                                      description = ?s,
-                                                      creator = ?s,
-                                                      publisher = ?s
-                                                  WHERE id = ?d", canonicalize_url($_POST['url']), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
+                Database::get()->query("UPDATE videolink
+                        SET url = ?s,
+                            title = ?s,
+                            description = ?s,
+                            creator = ?s,
+                            publisher = ?s
+                        WHERE id = ?d",
+                        canonicalize_url($_POST['url']), $_POST['title'],
+                        $_POST['description'], $_POST['creator'],
+                        $_POST['publisher'], $id);
             }
             if ($table == 'video')
                 $vdx->store($id);

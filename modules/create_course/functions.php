@@ -21,7 +21,6 @@
 
 /**
  * @brief create course
- * @global type  $mysqlMainDb
  * @param  type  $fake_code
  * @param  type  $lang
  * @param  type  $title

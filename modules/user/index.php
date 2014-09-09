@@ -65,10 +65,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $offset = intval($_GET['iDisplayStart']);
     
     if (!empty($_GET['sSearch'])) {
-        $keyword = quote("%".$_GET['sSearch']."%");
-        $search_sql = 'AND (user.surname LIKE '.$keyword.' OR user.givenname LIKE '.$keyword.' OR user.username LIKE '.$keyword.' OR user.email LIKE '.$keyword.')';     
+        $search_values = array_fill(0, 4, '%' . $_GET['sSearch'] . '%');
+        $search_sql = 'AND (user.surname LIKE ?s OR user.givenname LIKE ?s OR user.username LIKE ?s OR user.email LIKE ?s)';     
     } else {
         $search_sql='';
+        $search_values = array();
     }
     if (!empty($_GET['iSortCol_0'])){
         $order_sql = 'ORDER BY ';
@@ -84,7 +85,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                                 AND `course_user`.`course_id` = ?d", $course_id)->total;
     $filtered_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user 
                                                 WHERE `user`.`id` = `course_user`.`user_id`
-                                                AND `course_user`.`course_id` = ?d $search_sql", $course_id)->total;
+                                                AND `course_user`.`course_id` = ?d $search_sql", $course_id, $search_values)->total;
     $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
                            course_user.tutor, course_user.editor, course_user.reviewer, 
@@ -92,7 +93,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     FROM course_user, user
                     WHERE `user`.`id` = `course_user`.`user_id` 
                     AND `course_user`.`course_id` = ?d
-                    $search_sql $order_sql $limit_sql", $course_id);
+                    $search_sql $order_sql $limit_sql", $course_id, $search_values);
     
     $data['iTotalRecords'] = $all_users;
     $data['iTotalDisplayRecords'] = $filtered_users;

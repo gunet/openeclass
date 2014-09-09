@@ -39,7 +39,7 @@ load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js'); 
 global $themeimg;
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
     <script>
     $(function() {
         $('input[name=PollStart], input[name=PollEnd]').datetimepicker({
