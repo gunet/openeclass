@@ -35,16 +35,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $unregister_ok = true;            
             // Security: don't remove myself except if there is another prof
             if ($unregister_gid == $uid) {
-                    $result = Database::get()->querySingle("SELECT user_id FROM course_user
+                    $result = Database::get()->querySingle("SELECT COUNT(user_id) AS cnt FROM course_user
                                             WHERE course_id = ?d AND
                                                   status = " . USER_TEACHER . " AND
                                                   user_id != ?d
                                             LIMIT 1", $course_id, $uid);
+                    
                     if ($result) {
+                        if ($result->cnt == 0) {
                             $unregister_ok = false;
+                        }
                     }
             }
-            if ($unregister_ok) {                
+            if ($unregister_ok) {
                     Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
@@ -109,8 +112,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     }
             } */           
             //create date field with unregister button
-            $date_field = ($myrow->reg_date == '0000-00-00')? $langUnknownDate : nice_format($myrow->reg_date); 
-            $date_field .= "&nbsp;&nbsp;<a href='' class='delete_btn'><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";              
+            $date_field = ($myrow->reg_date == '0000-00-00')? $langUnknownDate : nice_format($myrow->reg_date);
+            if ($myrow->status != '1') {
+                $date_field .= "&nbsp;&nbsp;<a href='' class='delete_btn'><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";
+            }            
             //Create appropriate role control buttons
             //Tutor right
             if ($myrow->tutor == '0') {
