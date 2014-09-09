@@ -117,12 +117,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         
         if ($mbox_type == 'inbox') {
-            $td[2] = $bold_start.display_user($msg->author_id, false, false).$bold_end;
+            $td[2] = $bold_start.display_user($msg->author_id, false, false, "outtabs").$bold_end;
         } else {
             $recipients = '';
             foreach ($msg->recipients as $r) {
                 if ($r != $msg->author_id) {
-                    $recipients .= display_user($r, false, false).'<br/>';
+                    $recipients .= display_user($r, false, false, "outtabs").'<br/>';
                 }
             }
             $td[2] = $recipients;

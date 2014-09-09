@@ -247,7 +247,7 @@ function load_js($file, $init = '') {
 // Return HTML for a user - first parameter is either a user id (so that the
 // user's info is fetched from the DB) or a hash with user_id, surname, givenname,
 // email, or an array of user ids or user info arrays
-function display_user($user, $print_email = false, $icon = true) {
+function display_user($user, $print_email = false, $icon = true, $class = "") {
     global $langAnonymous, $urlAppend;
 
     if (count($user) == 0) {
@@ -288,9 +288,15 @@ function display_user($user, $print_email = false, $icon = true) {
             $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
         }
     }
-
+    
+    if (!empty($class)) {
+        $class_str = "class='$class'";
+    } else {
+        $class_str = "";
+    }
+    
     $token = token_generate($user->id, true);
-    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
+    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
             q($user->givenname) . " " .  q($user->surname) . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
