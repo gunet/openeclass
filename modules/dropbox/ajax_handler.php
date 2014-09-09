@@ -110,13 +110,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
         }
     
-        if ($mbox_type == 'index') {
+        if ($mbox_type == 'inbox') {
             $td[1] = "$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>$bold_end";
         } else {
             $td[1] = "<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>";
         }
         
-        if ($mbox_type == 'index') {
+        if ($mbox_type == 'inbox') {
             $td[2] = $bold_start.display_user($msg->author_id, false, false).$bold_end;
         } else {
             $recipients = '';
