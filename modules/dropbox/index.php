@@ -340,7 +340,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                           },
                           //open links inside tabs
                           load: function(event, ui) {
-                            $(\".ui-tabs-panel.ui-widget-content-new\").delegate('a', 'click', function(event) {
+                            //following line prevents double requests by unbinding click event on previously loaded tab content 
+                            $('.ui-tabs-panel.ui-widget-content-new').off('click', 'a'); 
+                            $('.ui-tabs-panel.ui-widget-content-new').on('click', 'a', function(event) {
                               if (event.target.className != 'outtabs' && event.target.className.indexOf('paginate_button') == -1) {
                                 event.preventDefault();
                                 $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
