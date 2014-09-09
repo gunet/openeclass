@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.11
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -30,7 +30,7 @@ include '../admin/admin.inc.php';
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action']=='delete') {
-            $unregister_gid = intval($_POST['value']);
+            $unregister_gid = intval($_POST['value']);            
             $unregister_ok = true;
             // Security: don't remove myself except if there is another prof
             if ($unregister_gid == $uid) {
@@ -39,7 +39,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                                   statut = 1 AND
                                                   user_id != $uid
                                             LIMIT 1", $mysqlMainDb);
-                    if (mysql_num_rows($result) > 0) {
+                    if (mysql_num_rows($result) == 0) {
                             $unregister_ok = false;
                     }
             }
@@ -227,7 +227,7 @@ $head_content .= "
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                if (confirmation('$langDeleteUser $langDeleteUser2')) {
+                if (confirmation('".js_escape($langDeleteUser)." ".js_escape($langDeleteUser2). "')) {
                     var row_id = $(this).closest('tr').attr('id');
                     $.post('', { action: 'delete', value: row_id}, function() {
                         var num_page_records = oTable.fnGetData().length;
