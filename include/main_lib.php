@@ -132,33 +132,6 @@ function email_seems_valid($email) {
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------
 
-/*
- * Quote string for SQL query
- */
-function quote($s) {
-    return "'" . mysql_real_escape_string(canonicalize_whitespace($s)) . "'";
-}
-
-// Quote string for SQL query if needed (if magic quotes are off)
-function autoquote($s) {
-    $s = canonicalize_whitespace($s);
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return "'$s'";
-    } else {
-        return "'" . addslashes($s) . "'";
-    }
-}
-
-// Unquote string if needed (if magic quotes are on)
-function autounquote($s) {
-    $s = canonicalize_whitespace($s);
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return stripslashes($s);
-    } else {
-        return $s;
-    }
-}
-
 // Shortcut for htmlspecialchars()
 function q($s) {
     return htmlspecialchars($s, ENT_QUOTES);

@@ -87,7 +87,7 @@ if (isset($_POST['submit'])) {
                 course_index($code);
             }
             $class = $prof_not_found ? 'alert1' : 'success';
-            $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: ' . q($langBetaCMSLessonCreatedOK);
+            $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: ' . q($langMultiCourseCreated);
             if ($prof_uid) {
                 $tool_content .= '<br>' . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
             } elseif ($prof_not_found) {
@@ -279,21 +279,24 @@ $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div
 draw($tool_content, 3, null, $head_content);
 
 // Helper function
-function prof_query($sql) {
-    return Database::get()->querySingle("SELECT id FROM user WHERE status = 1 AND ( $sql )")->id;
+function prof_query($sql, $terms) {
+    $result = Database::get()->querySingle("SELECT id FROM user WHERE status = 1 AND ( $sql )", $terms);
+    if ($result) {
+        return $result->id;
+    } else {
+        return false;
+    }
 }
 
 // Find a professor by name ("Name surname") or username
 function find_prof($uname) {
-    if ($uid = prof_query('username = ' . quote($uname))) {
+    if ($uid = prof_query('username = ?s', array($uname))) {
         return $uid;
     } else {
         $names = explode(' ', $uname);
         if (count($names) == 2 and
-                $uid = prof_query('(surname = ' . quote($names[0]) .
-                ' AND givenname = ' . quote($names[1]) .
-                ') OR (givenname = ' . quote($names[0]) .
-                ' AND surname = ' . quote($names[1]) . ')')) {
+            $uid = prof_query('(surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)',
+                              array($names[0], $names[1], $names[0], $names[1]))) {
             return $uid;
         }
     }

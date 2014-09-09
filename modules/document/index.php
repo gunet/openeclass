@@ -252,8 +252,9 @@ if ($can_upload) {
         // Check if file already exists
         $result = Database::get()->querySingle("SELECT path, visible FROM document WHERE
                                            $group_sql AND
-                                           path REGEXP " . quote("^$uploadPath/[^/]+$") . " AND
-                                           filename = " . quote($fileName) . " LIMIT 1");
+                                           path REGEXP ?s AND
+                                           filename = ?s LIMIT 1",
+                                        "^$uploadPath/[^/]+$", $fileName);
         if ($result) {
             if (isset($_POST['replace'])) {
                 // Delete old file record when replacing file
@@ -376,15 +377,16 @@ if ($can_upload) {
         $delete = str_replace('..', '', $_POST['filePath']);
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
-                                        WHERE $group_sql AND path=?s", $delete);
+                                        WHERE $group_sql AND path = ?s", $delete);
         $delete_ok = true;
         if ($r) {
             // remove from index if relevant (except non-main sysbsystems and metadata)
-            Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0 
-                                            AND format <> \".meta\" AND path LIKE " . quote($delete . '%')
-                    , function ($r2) use($didx) {
-                $didx->remove($r2->id);
-            });
+            Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
+                                            AND format <> '.meta' AND path LIKE ?s",
+                function ($r2) use($didx) {
+                    $didx->remove($r2->id);
+                },
+                $delete . '%');
 
             if (empty($r->extra_path)) {
                 if ($delete_ok = my_delete($basedir . $delete) && $delete_ok) {
@@ -588,7 +590,7 @@ if ($can_upload) {
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
                         (empty($newformat) ? '' : '.' . $newformat);
                 my_delete($basedir . $oldpath);
-                $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW() 
+                $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path = ?s"
                                 , $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or $affectedRows == 0) {
@@ -1023,7 +1025,7 @@ if ($can_upload) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
         $tool_content .= "<div id='operations_container'>
                     <ul id='opslist'>
-                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>  
+                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>
                        <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
                        <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
         if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {

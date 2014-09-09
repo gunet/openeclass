@@ -33,7 +33,8 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
-require_once 'install_functions.php';
+require_once '../upgrade/functions.php';
+require_once 'functions.php';
 
 $tool_content = '';
 if (!isset($siteName)) {
@@ -570,7 +571,6 @@ elseif (isset($_REQUEST['install7'])) {
     $langStepTitle = $langInstallEnd;
     $langStep = $langStep7;
     $_SESSION['step'] = 7;
-    $db = @mysql_connect($dbHostForm, $dbUsernameForm, autounquote($dbPassForm));
     $GLOBALS['mysqlServer'] = $dbHostForm;
     $GLOBALS['mysqlUser'] = $dbUsernameForm;
     $GLOBALS['mysqlPassword'] = $dbPassForm;
@@ -642,18 +642,18 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
 
     // create config, courses directories etc.
-    mkdir_or_error('config');
-    touch_or_error('config/index.htm');
-    mkdir_or_error('courses');
-    touch_or_error('courses/index.htm');
-    mkdir_or_error('courses/temp');
-    touch_or_error('courses/temp/index.htm');
-    mkdir_or_error('courses/userimg');
-    touch_or_error('courses/userimg/index.htm');
-    mkdir_or_error('courses/commondocs');
-    touch_or_error('courses/commondocs/index.htm');
-    mkdir_or_error('video');
-    touch_or_error('video/index.htm');
+    mkdir_try('config');
+    touch_try('config/index.htm');
+    mkdir_try('courses');
+    touch_try('courses/index.htm');
+    mkdir_try('courses/temp');
+    touch_try('courses/temp/index.htm');
+    mkdir_try('courses/userimg');
+    touch_try('courses/userimg/index.htm');
+    mkdir_try('courses/commondocs');
+    touch_try('courses/commondocs/index.htm');
+    mkdir_try('video');
+    touch_try('video/index.htm');
 
     if ($configErrorExists) {
         $tool_content .= implode("<br />", $errorContent);
@@ -744,22 +744,22 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
 // -----------------------
 // functions
 // -----------------------
-function mkdir_or_error($dirname) {
+function mkdir_try($dirname) {
     global $errorContent, $configErrorExists, $langWarningInstall3,
-    $langWarnInstallNotice1, $langWarnInstallNotice2,
-    $install_info_file, $langHere;
+        $langWarnInstallNotice1, $langWarnInstallNotice2,
+        $install_info_file, $langHere;
     if (!is_dir('../' . $dirname)) {
-        if (@!mkdir('../' . $dirname, 0777)) {
+        if (!mkdir('../' . $dirname, 0775)) {
             $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $dirname);
             $configErrorExists = true;
         }
     }
 }
 
-function touch_or_error($filename) {
+function touch_try($filename) {
     global $errorContent, $configErrorExists, $langWarningInstall3,
-    $langWarnInstallNotice1, $langWarnInstallNotice2,
-    $install_info_file, $langHere;
+        $langWarnInstallNotice1, $langWarnInstallNotice2,
+        $install_info_file, $langHere;
     if (@!touch('../' . $filename)) {
         $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $filename);
         $configErrorExists = true;

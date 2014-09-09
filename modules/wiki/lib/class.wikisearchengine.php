@@ -81,7 +81,6 @@ class WikiSearchEngine {
      * @return Array ( keywords, implode_word )
      */
     function splitPattern($pattern, $mode = CLWIKI_SEARCH_ANY) {
-        //$pattern = mysql_real_escape_string($pattern);
         $pattern = str_replace('_', '\_', $pattern);
         $pattern = str_replace('%', '\%', $pattern);
         $pattern = str_replace('?', '_' , $pattern);

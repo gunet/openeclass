@@ -80,7 +80,7 @@ if ($is_editor) {
             $success_message = $langCategoryAdded;
         }
         if ($q and $q->affectedRows) {
-            $categories[$category_id] = autounquote($_POST['name']);
+            $categories[$category_id] = $_POST['name'];
             $tool_content .= "<div class='success'>$success_message</div><br />";
         }
     }

@@ -508,8 +508,7 @@ if (!is_dir($baseWorkDir)) {
 // will set $_POST to NULL, so we need to check it
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
-    // arrays used to store inserted ids in case
-    // will be used to build delete queries for mysql < 4.0.0
+    // arrays used to store inserted ids
     $insertedModule_id = array();
     $insertedAsset_id = array();
 

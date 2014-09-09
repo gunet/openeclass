@@ -1329,6 +1329,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `description` TEXT NOT NULL,
                             `comments` TEXT NOT NULL,
                             `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `late_submission` TINYINT NOT NULL DEFAULT '0',
                             `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `active` CHAR(1) NOT NULL DEFAULT 1,
                             `secret_directory` VARCHAR(30) NOT NULL,

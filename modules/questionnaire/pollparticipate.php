@@ -59,7 +59,7 @@ switch ($_REQUEST['UseCase']) {
 draw($tool_content, 2);
 
 function printPollForm() {
-    global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart,
+    global $course_id, $course_code, $tool_content, $langPollStart,
     $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack;
 
@@ -151,9 +151,9 @@ function submitPoll() {
             continue;
         } elseif ($qtype == QTYPE_SINGLE) {
             $aid = intval($answer[$pqid]);
-            $answer_text = "''";
+            $answer_text = '';
         } elseif ($qtype == QTYPE_FILL) {
-            $answer_text = quote($answer[$pqid]);
+            $answer_text = $answer[$pqid];
             $aid = 0;
         } else {
             continue;

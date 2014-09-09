@@ -44,7 +44,7 @@ $tool_content .= "<form action='$urlSecure' method='post'>
         <input class='Login' name='pass' type='password' size='20' autocomplete='off' /><br /><br />
         <input class='Login' name='submit' type='submit' size='20' value='$langEnter' />
 	$warning</td></tr>
-	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />
+	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />
 	   </td>
 	 </tr>";
 if (!empty($shibboleth_link) or !empty($cas_link)) {

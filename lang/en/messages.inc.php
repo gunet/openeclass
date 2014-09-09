@@ -1010,10 +1010,10 @@ $langGroupCancel = "cancel";
 $langGroupSettingsModified = "Group settings modified";
 $langNameSurname = "Name Surname";
 $langEmail = "Email";
-$langGroupStudentsInGroup = "" . $langsStudents . "registered in groups";
-$langGroupStudentsRegistered = "" . $langsStudents . "registered to this course";
-$langGroupNoGroup = "unassigned " . $langsStudents . "";
-$langGroupUsersList = "See <a href=../user/user.php>Users</a>";
+$langGroupStudentsInGroup = $langsStudents . " registered in groups";
+$langGroupStudentsRegistered = $langsStudents . " registered to this course";
+$langGroupNoGroup = "unassigned " . $langsStudents;
+$langGroupUsersList = "See <a href='../user/user.php'>Users</a>";
 $langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below).
  Group composition has not been modified";
 $langGroupTutor = "Group Tutor";
@@ -3506,3 +3506,5 @@ $langIndexingAlert2 = "Do not close this window or else the indexing process wil
 $langIndexingRemain = "Remaining courses for indexing";
 $langIndexingDone = "The indexing was completed successfully, you can now close this window.";
 $langUpgIndexingNotice = "Because of the number of courses, the search and indexing engines have been deactivated. Please look for their corresponding setting under Platform Settings and follow the instructions for indexing.";
+$langNoRecipients = "No recipients specified";
+$langOnlineUsers = 'Online Users';

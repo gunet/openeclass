@@ -545,7 +545,6 @@ function insert_common_docs($file, $target_dir) {
     $common_docs_dir_map = array();
 
     if ($file->format == '.dir') {
-        //$target_dir = make_path($target_dir, array($file['filename']));
         $target_dir = make_path($target_dir, array($file->filename));
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $target_dir);
         $didx->store($r->id);
@@ -553,8 +552,8 @@ function insert_common_docs($file, $target_dir) {
         $q = Database::get()->queryArray("SELECT * FROM document
                                       WHERE course_id = -1 AND
                                             subsystem = " . COMMON . " AND
-                                            path LIKE " . quote($file->path . '/%') . "
-                                      ORDER BY path");
+                                            path LIKE ?s
+                                      ORDER BY path", $file->path . '/%');
         foreach ($q as $file) {
             $new_target_dir = $common_docs_dir_map[dirname($file->path)];
             if ($file->format == '.dir') {
@@ -567,7 +566,7 @@ function insert_common_docs($file, $target_dir) {
             }
         }
     } else {
-        $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
+        $path = preg_replace('|^.*/|', $target_dir . '/', $file->path);
         if ($file->extra_path) {
             $extra_path = $file->extra_path;
         } else {

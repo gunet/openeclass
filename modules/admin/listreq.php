@@ -199,7 +199,10 @@ if (!empty($show) and $show == 'closed') {
 } elseif (!empty($close)) {
     switch ($close) {
         case '1':
-            Database::get()->query("UPDATE user_request SET state = 2, date_closed = " . DBHelper::timeAfter() . " WHERE id = ?d", $id);
+            Database::get()->query("UPDATE user_request
+                                       SET state = 2,
+                                           date_closed = " . DBHelper::timeAfter() . "
+                                       WHERE id = ?d", $id);
             if ($list_status == 1) {
                 $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
             } else {
@@ -212,10 +215,11 @@ if (!empty($show) and $show == 'closed') {
                 // post the comment and do the delete action
                 if (!empty($_POST['comment'])) {
                     $sql = "UPDATE user_request
-                               SET state = 3, date_closed = NOW(),
-                                   comment = " . autoquote($_POST['comment']) . "
-                               WHERE id = $id";
-                    if (Database::get()->query($sql)->affectedRows > 0) {
+                               SET state = 3,
+                                   date_closed = " . DBHelper::timeAfter() . ",
+                                   comment = ?s
+                               WHERE id = ?d";
+                    if (Database::get()->query($sql, $_POST['comment'], $id)->affectedRows > 0) {
                         if (isset($_POST['sendmail']) and ( $_POST['sendmail'] == 1)) {
                             $telephone = get_config('phone');
                             $administratorName = get_config('admin_name');

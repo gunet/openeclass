@@ -72,8 +72,8 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     require_once ('modules/auth/auth.inc.php');
     require_once ('include/phpass/PasswordHash.php');
 
-    $uname = autounquote(canonicalize_whitespace($_POST['uname']));
-    $pass = autounquote($_POST['pass']);
+    $uname = canonicalize_whitespace($_POST['uname']);
+    $pass = $_POST['pass'];
 
     foreach (array_keys($_SESSION) as $key)
         unset($_SESSION[$key]);
@@ -82,11 +82,11 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
                    FROM user
                   WHERE username ";
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin .= "= " . quote($uname);
+        $sqlLogin .= "= ?s";
     } else {
-        $sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
+        $sqlLogin .= "COLLATE utf8_bin = ?s";
     }
-    $myrow = Database::get()->querySingle($sqlLogin);
+    $myrow = Database::get()->querySingle($sqlLogin, $uname);
     $myrow = (array) $myrow;
     if (in_array($myrow['password'], $auth_ids)) {
         $ok = alt_login($myrow, $uname, $pass);

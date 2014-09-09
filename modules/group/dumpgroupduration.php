@@ -44,8 +44,8 @@ if ($is_editor) {
     header("Content-Type: text/csv; charset=$charset");
     header("Content-Disposition: attachment; filename=groupuserduration.csv");
     if (isset($_REQUEST['u_date_start']) and isset($_REQUEST['u_date_end'])) {
-        $u_date_start = autounquote($_REQUEST['u_date_start']);
-        $u_date_end = autounquote($_REQUEST['u_date_end']);
+        $u_date_start = $_REQUEST['u_date_start'];
+        $u_date_end = $_REQUEST['u_date_end'];
     } else {
         $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;        
         $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));

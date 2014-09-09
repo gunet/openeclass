@@ -66,8 +66,6 @@ if ($not_found) {
     not_found($uri);
 }
 
-mysql_select_db($mysqlMainDb);
-
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {

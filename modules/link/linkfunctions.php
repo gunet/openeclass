@@ -141,14 +141,12 @@ function submit_link() {
         $state = "error";
         return ;
     }
-    $set_sql = "SET url = " . autoquote($urllink) . ",
-                        title = " . autoquote($title) . ",
-                        description = " . autoquote(purify($description)) . ",
-                        category = " . intval($selectcategory);
+    $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
+    $terms = array($urllink, $title, purify($description), $selectcategory);
 
     if (isset($_POST['id'])) {
         $id = intval($_POST['id']);
-        Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 
         $catlinkstatus = $langLinkMod;
         $log_type = LOG_MODIFY;
@@ -156,7 +154,7 @@ function submit_link() {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
                                       WHERE course_id = ?d AND category = ?d", $course_id, $selectcategory)->maxorder;
         $order++;
-        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order)->lastInsertID;
+        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
         $catlinkstatus = $langLinkAdded;
         $log_type = LOG_INSERT;
     }
@@ -210,19 +208,19 @@ function submit_category() {
 
     register_posted_variables(array('categoryname' => true,
         'description' => true), 'all', 'trim');
-    $set_sql = "SET name = " . autoquote($categoryname) . ",
-                        description = " . autoquote(purify($description));
+    $set_sql = "SET name = ?s, description = ?s";
+    $terms = array($categoryname, purify($description));
 
     if (isset($_POST['id'])) {
         $id = intval($_POST['id']);
-        Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
         $catlinkstatus = $langCategoryModded;
         $log_type = LOG_MODIFY;
     } else {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
                                       WHERE course_id = ?d", $course_id)->maxorder;
         $order++;
-        $id = Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $course_id, $order)->lastInsertID;
+        $id = Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
         $catlinkstatus = $langCategoryAdded;
         $log_type = LOG_INSERT;
     }
