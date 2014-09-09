@@ -30,6 +30,9 @@ header('Content-Type: text/html; charset=UTF-8');
  *
  */
 
+
+define("DEBUG_MYSQL", true);
+
 if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 	date_default_timezone_set("Europe/Athens");
 }
@@ -579,8 +582,19 @@ elseif(isset($_REQUEST['install7']))
 		"</form>";
 		draw($tool_content);
 		exit();
-	}
+	}        
 	$mysqlMainDb = $dbNameForm;
+        
+        // test if database creation is possible
+        $dbname = genPass();
+        $sql = db_query("CREATE DATABASE $dbname");
+        if ($sql) {
+                db_query("DROP DATABASE $dbname");
+        } else {
+                $tool_content .= "<div class='caution'>$lang_error_db</div>";
+		draw($tool_content);
+		exit();            
+        }
 	// create main database
 	require "install_db.php";
 	// create config.php

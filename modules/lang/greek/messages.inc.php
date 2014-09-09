@@ -1721,7 +1721,7 @@ $langDefaultAdminSurname = 'Πλατφόρμας';
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUnet';
 $lang_course_metadata = "Μετασχολιασμός Μαθημάτων";
 $lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
-
+$lang_error_db = "Η πλατφόρμα δεν έχει δικαιώματα δημιουργίας βάσεων δεδομένων. Η λειτουργία της δεν είναι δυνατή!";
 
 /********************************************************
 * learnpath.php
@@ -3011,7 +3011,6 @@ $langVideoDeleted = "Όλοι οι σύνδεσμοι διαγράφηκαν";
 $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρετητή ήχου ή βίντεο";
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";
-$langdate="Ημερομηνία";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
