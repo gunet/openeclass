@@ -103,10 +103,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                     <img src='$themeimg/email.png' title='".q($langEmailToParent)."' alt='".q($langEmailToParent)."' />
                                     </a>";                
                     }
-            }            
+            }                        
             //create date field with unregister button
-            $date_field = ($myrow['reg_date'] == '0000-00-00')? $langUnknownDate : nice_format($myrow['reg_date']); 
-            $date_field .= "&nbsp;&nbsp;<a href='' class='delete_btn'><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";              
+            $date_field = ($myrow['reg_date'] == '0000-00-00')? $langUnknownDate : nice_format($myrow['reg_date']);
+            if ($myrow['statut'] != '1') {
+                $date_field .= "&nbsp;&nbsp;<a href='' class='delete_btn'><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";              
+            }
             //Create appropriate role control buttons
             //Tutor right
             if ($myrow['tutor'] == '0') {
