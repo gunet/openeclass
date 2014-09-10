@@ -2184,6 +2184,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
             Database::get()->query("DROP TABLE IF EXISTS `actions`");
             
+            // improve primary key for table exercise_answer
+            Database::get()->query("ALTER TABLE `exercise_answer` CHANGE id oldid INT(11)");
+            Database::get()->query("ALTER TABLE `exercise_answer` DROP PRIMARY KEY");
+            Database::get()->query("ALTER TABLE `exercise_answer` ADD `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST");
+            Database::get()->query("ALTER TABLE `exercise_answer` DROP `oldid`");
+            
             if (get_config('enable_search')) {
                 $n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM course")->count;
                 

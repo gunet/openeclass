@@ -841,14 +841,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `q_position` INT(11) DEFAULT 1,
                 `type` INT(11) DEFAULT 1) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
-                `id` INT(11) NOT NULL DEFAULT 0,
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `question_id` INT(11) NOT NULL DEFAULT 0,
                 `answer` TEXT,
                 `correct` INT(11) DEFAULT NULL,
                 `comment` TEXT,
                 `weight` FLOAT(5,2),
-                `r_position` INT(11) DEFAULT NULL,
-                PRIMARY KEY (id, question_id) ) $charset_spec");
+                `r_position` INT(11) DEFAULT NULL ) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
                 `question_id` INT(11) NOT NULL DEFAULT 0,
                 `exercise_id` INT(11) NOT NULL DEFAULT 0,

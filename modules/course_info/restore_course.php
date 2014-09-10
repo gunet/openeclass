@@ -372,16 +372,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'map' => array('eid' => $exercise_map, 'uid' => $userid_map)));
     $question_map = restore_table($restoreThis, 'exercise_question', array('set' => array('course_id' => $course_id),
         'return_mapping' => 'id'));
-
-    $answer_offset = 0;
-    $maxEa = Database::get()->querySingle("SELECT max(id) as max FROM exercise_answer");
-    if ($maxEa) {
-        $answer_offset = $maxEa->max;
-    }
-
-    restore_table($restoreThis, 'exercise_answer', array('map_function' => 'offset_map_function',
-        'map_function_data' => array('id', $answer_offset),
-        'map' => array('question_id' => $question_map)));
+    restore_table($restoreThis, 'exercise_answer', array(
+        'delete' => array('id'),
+        'map' => array('question_id' => $question_map)
+    ));
     restore_table($restoreThis, 'exercise_with_questions', array('map' => array('question_id' => $question_map,
             'exercise_id' => $exercise_map)));
 

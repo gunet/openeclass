@@ -578,14 +578,6 @@ function comments_map_function(&$data, $maps) {
     return true;
 }
 
-function offset_map_function(&$data, $maps) {
-    list($key, $offset) = $maps;
-    if (isset($data[$key])) {
-        $data[$key] += $offset;
-    }
-    return true;
-}
-
 function get_tabledata_from_parsed($table, $set = array()) {
     global $restoreHelper, $backupData;
     $backup = array();
