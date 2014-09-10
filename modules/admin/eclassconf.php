@@ -256,6 +256,13 @@ if (isset($_POST['submit'])) {
             Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
         });
     }
+    
+    // indexing was previously on, but now set to off, need to empty it
+    if (get_config('enable_indexing') && !$enable_indexing) {
+        require_once 'modules/search/indexer.class.php';
+        $idx = new Indexer();
+        $idx->deleteAll();
+    }
 
     // update table `config`
     foreach ($config_vars as $varname => $what) {

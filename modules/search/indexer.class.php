@@ -353,6 +353,23 @@ class Indexer {
         $ndx = new NoteIndexer($this);
         $ndx->reindex();
     }
+    
+    /**
+     * Batch remove all index contents.
+     */
+    public function deleteAll() {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+
+        for ($count = 0; $count < $this->__index->maxDoc(); $count++) {
+            if (!$this->__index->isDeleted($count)) {
+                $this->__index->delete($count);
+            }
+        }
+
+        $this->__index->commit();
+    }
 
     /**
      * Unit test for phonetic conversion.
