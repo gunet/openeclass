@@ -65,15 +65,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $terms[] = $searchtype;
     }
     if ($searchfaculte) {
-        $query .= ' AND hierarchy.id IN (';
         $subs = $tree->buildSubtrees(array($searchfaculte));
         $ids = 0;
         foreach ($subs as $key => $id) {
             $terms[] = $id;
             $ids++;
         }
-        $query .= ' AND hierarchy.id IN (' .
-            implode(', ', array_fill(0, $ids, '?d')) . ')';
+        $query .= ' AND hierarchy.id IN (' . implode(', ', array_fill(0, $ids, '?d')) . ')';
     }
     if (isset($_GET['reg_flag']) and !empty($_GET['date'])) {
         $query .= ' AND created ' .  (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
