@@ -571,7 +571,7 @@ function adminMenu() {
  * @return array
  */
 function lessonToolsMenu() {
-    global $is_editor, $is_course_admin;
+    global $uid, $is_editor, $is_course_admin;
     global $course_code, $langAdministrationTools, $langExternalLinks;
     global $modules, $admin_modules, $urlAppend;
 
@@ -619,7 +619,20 @@ function lessonToolsMenu() {
         
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
-            array_push($sideMenuText, q($modules[$mid]['title']));
+            if ($mid == MODULE_ID_DROPBOX) {
+                require_once 'modules/dropbox/class.mailbox.php';
+                
+                $mbox = new Mailbox($uid, course_code_to_id($course_code));
+                $new_msgs = $mbox->unreadMsgsNumber();
+                if ($new_msgs != 0) {
+                    array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")</b>");
+                } else {
+                    array_push($sideMenuText, q($modules[$mid]['title']));
+                }
+            } else {
+                array_push($sideMenuText, q($modules[$mid]['title']));
+            }
+            
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);

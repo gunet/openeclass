@@ -42,22 +42,33 @@ Class Mailbox {
      * @return int
      */
     public function unreadMsgsNumber() {
-        $sql = "SELECT COUNT(DISTINCT `msg_id`) as `unread_count`
-                FROM `dropbox_index`, `course_module`, `dropbox_msg`
-                WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
-                AND (
-                     (
-                      `dropbox_msg`.`course_id` = `course_module`.`course_id`
-                      AND `course_module`.`module_id` = ?d
-                      AND `course_module`.`visible` = ?d
-                     ) 
-                     OR 
-                      `dropbox_msg`.`course_id` = ?d
-                    )
-                AND `dropbox_index`.`is_read` = ?d 
-                AND `dropbox_index`.`recipient_id` = ?d
-                AND `dropbox_index`.`deleted` = ?d";
-        return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, 0)->unread_count;
+        if ($this->courseId == 0) { //all unread messages
+            $sql = "SELECT COUNT(DISTINCT `msg_id`) as `unread_count`
+                    FROM `dropbox_index`, `course_module`, `dropbox_msg`
+                    WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
+                    AND (
+                         (
+                          `dropbox_msg`.`course_id` = `course_module`.`course_id`
+                          AND `course_module`.`module_id` = ?d
+                          AND `course_module`.`visible` = ?d
+                         ) 
+                         OR 
+                          `dropbox_msg`.`course_id` = ?d
+                        )
+                    AND `dropbox_index`.`is_read` = ?d 
+                    AND `dropbox_index`.`recipient_id` = ?d
+                    AND `dropbox_index`.`deleted` = ?d";
+            return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, 0)->unread_count;
+        } else { //unread messages in course context
+            $sql = "SELECT COUNT(`msg_id`) as `unread_count`
+                    FROM `dropbox_index`, `dropbox_msg`
+                    WHERE `dropbox_index`.`msg_id` = `dropbox_msg`.`id`
+                    AND `dropbox_msg`.`course_id` = ?d
+                    AND `dropbox_index`.`is_read` = ?d 
+                    AND `dropbox_index`.`recipient_id` = ?d
+                    AND `dropbox_index`.`deleted` = ?d";
+            return Database::get()->querySingle($sql, $this->courseId, 0, $this->uid, 0)->unread_count;
+        }
     }
     
     /**
