@@ -303,6 +303,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map' => array('user_id' => $userid_map,
             'learnPath_module_id' => $lp_rel_learnPath_module_map,
             'learnPath_id' => $lp_learnPath_map)), $url_prefix_map, $backupData, $restoreHelper);
+        foreach ($lp_learnPath_map as $old_id => $new_id) {
+            // new and old id might overlap as the map contains multiple values!
+            rename("$coursedir/scormPackages/path_$old_id", "$coursedir/scormPackages/__during_restore__$new_id");
+        }
+        foreach ($lp_learnPath_map as $old_id => $new_id) {
+            // better to use an intermediary rename step
+            rename("$coursedir/scormPackages/__during_restore__$new_id", "$coursedir/scormPackages/path_$new_id");
+        }
 
         // Wiki
         $wiki_map = restore_table($restoreThis, 'wiki_properties', array('set' => array('course_id' => $course_id),
