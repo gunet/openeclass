@@ -412,6 +412,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'delete' => array('id')));
 
     removeDir($restoreThis);
+    
+    // index course after restoring
+    require_once 'modules/search/indexer.class.php';
+    $idx = new Indexer();
+    $idx->removeAllByCourse($course_id);
+    $idx->storeAllByCourse($course_id);
+    
     $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>$langBack</a></p></center>";
 } elseif (isset($_POST['do_restore'])) {
     $base = $_POST['restoreThis'];
