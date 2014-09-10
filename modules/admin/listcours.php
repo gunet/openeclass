@@ -149,9 +149,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;
         $dep = '';
-        foreach ($departments as $dep) {
+        foreach ($departments as $department) {
             $br = ($i < count($departments)) ? '<br/>' : '';
-            $dep .= $tree->getFullPath($dep) . $br;
+            $dep .= $tree->getFullPath($department) . $br;
             $i++;
         }
 
