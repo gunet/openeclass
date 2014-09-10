@@ -24,8 +24,13 @@
  * @brief redirect user to external link
  */
 
-require_once '../../include/init.php';
-$course_id = course_code_to_id($_GET['c']);
+$require_current_course = TRUE;
+$require_help = true;
+$helpTopic = 'Link';
+$guest_allowed = true;
+
+require_once '../../include/baseTheme.php';
+$course_id = course_code_to_id($_GET['course']);
 
 $id = $_GET['id'];
 if ($course_id !== false) {

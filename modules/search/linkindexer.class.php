@@ -20,29 +20,13 @@
  * ======================================================================== */
 
 require_once 'indexer.class.php';
+require_once 'abstractindexer.class.php';
 require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class LinkIndexer implements ResourceIndexerInterface {
-
-    private $__indexer = null;
-    private $__index = null;
-
-    /**
-     * Constructor. You can optionally use an already instantiated Indexer object if there is one.
-     * 
-     * @param Indexer $idxer - optional indexer object
-     */
-    public function __construct($idxer = null) {
-        if ($idxer == null)
-            $this->__indexer = new Indexer();
-        else
-            $this->__indexer = $idxer;
-
-        $this->__index = $this->__indexer->getIndex();
-    }
+class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a link db row.
@@ -51,7 +35,7 @@ class LinkIndexer implements ResourceIndexerInterface {
      * @param  object  $link
      * @return Zend_Search_Lucene_Document
      */
-    private static function makeDoc($link) {
+    protected function makeDoc($link) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
@@ -72,124 +56,61 @@ class LinkIndexer implements ResourceIndexerInterface {
      * @param  int $linkId
      * @return object - the mysql fetched row
      */
-    private function fetch($linkId) {
+    protected function fetch($linkId) {
         $link = Database::get()->querySingle("SELECT * FROM link WHERE id = ?d", $linkId);        
-        if (!$link)
+        if (!$link) {
             return null;
+        }
 
         return $link;
     }
-
+    
     /**
-     * Store a Link in the Index.
+     * Get Term object for locating a unique single link.
      * 
-     * @param  int     $linkId
-     * @param  boolean $optimize
+     * @param  int $linkId - the link id
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function store($linkId, $optimize = false) {
-        $link = $this->fetch($linkId);
-        if (!$link)
-            return;
-
-        // delete existing link from index
-        $this->remove($linkId, false, false);
-
-        // add the link back to the index
-        $this->__index->addDocument(self::makeDoc($link));
-
-        // commit/optimize unless not wanted
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForSingleResource($linkId) {
+        return new Zend_Search_Lucene_Index_Term('link_' . $linkId, 'pk');
     }
-
+    
     /**
-     * Remove a Link from the Index.
+     * Get Term object for locating all possible links.
      * 
-     * @param int     $linkId
-     * @param boolean $existCheck
-     * @param boolean $optimize
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function remove($linkId, $existCheck = false, $optimize = false) {
-        if ($existCheck) {
-            $link = $this->fetch($linkId);
-            if (!$link)
-                return;
-        }
-
-        $term = new Zend_Search_Lucene_Index_Term('link_' . $linkId, 'pk');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForAllResources() {
+        return new Zend_Search_Lucene_Index_Term('link', 'doctype');
     }
-
+    
     /**
-     * Store all Links belonging to a Course.
+     * Get all possible links from DB.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function storeByCourse($courseId, $optimize = false) {
-        // delete existing links from index
-        $this->removeByCourse($courseId);
-
-        // add the links back to the index
-        $res = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getAllResourcesFromDB() {
+        return Database::get()->queryArray("SELECT * FROM link");
     }
-
+    
     /**
-     * Remove all Links belonging to a Course.
+     * Get Lucene query input string for locating all links belonging to a given course.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @param  int $courseId - the given course id
+     * @return string        - the string that can be used as Lucene query input
      */
-    public function removeByCourse($courseId, $optimize = false) {
-        $hits = $this->__index->find('doctype:link AND courseid:' . $courseId);
-        foreach ($hits as $hit)
-            $this->__index->delete($hit->getDocument()->id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getQueryInputByCourse($courseId) {
+        return 'doctype:link AND courseid:' . $courseId;
     }
-
+    
     /**
-     * Reindex all links.
+     * Get all links belonging to a given course from DB.
      * 
-     * @param boolean $optimize
+     * @param  int   $courseId - the given course id
+     * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function reindex($optimize = false) {
-        // remove all links from index
-        $term = new Zend_Search_Lucene_Index_Term('link', 'doctype');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        // get/index all links from db
-        $res = Database::get()->queryArray("SELECT * FROM link");
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getCourseResourcesFromDB($courseId) {
+        return Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
     }
 
     /**

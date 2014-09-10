@@ -336,7 +336,6 @@ $langdbpass = "Συνθηματικό χρήστη Βάσης Δεδομένων
 $langdbtable = "Όνομα πίνακα Βάσης Δεδομένων";
 $langdbfielduser = "Όνομα πεδίου Χρήστη στον πίνακα";
 $langdbfieldpass = "Όνομα πεδίου Συνθηματικού Χρήστη στον πίνακα";
-$langdbpassencr = "Κρυπτογράφηση πεδίου συνθηματικού";
 $langInstructionsAuth = "Οδηγίες διασύνδεσης και χρήσης";
 $langTestAccount = "Για να ενεργοποιηθεί ο τρόπος πιστοποίησης είναι απαραίτητο να κάνετε μια δοκιμαστική χρήση με ένα λογαριασμό της μεθόδου που επιλέξατε";
 $langpop3host = "Εξυπηρέτης POP3";
@@ -467,6 +466,14 @@ $langTeacherUploadWhitelist = "Τύποι επιτρεπτών αρχείων γ
 $langUploadedFileNotAllowed = "Το αρχείο που επιχειρείτε να ανεβάσετε δεν είναι επιτρεπτό. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 $langRenamedFileNotAllowed = "Το καινούριο όνομα του αρχείου που επιχειρείτε να μετονομάσετε δεν είναι επιτρεπτό. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 $langUploadedZipFileNotAllowed = "Το zip αρχείο που επιχειρείτε να ανεβάσετε και αποσυμπιέσετε περιέχει μη επιτρεπτά αρχεία. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
+$langEnableIndexing = "Ενεργοποίηση μηχανής ευρετηρίου";
+$langConfirmEnableIndexTitle = "Επιβεβαίωση έναρξη ευρετηριοποίησης";
+$langConfirmEnableIndex = "Η ευρετηριοποίηση θα χρειαστεί <strong>συγκεκριμένο χρονικό διάστημα και υπολογιστικούς πόρους</strong> για να πραγματοποιηθεί, ανάλογα με το μέγεθος της βάσης δεδομένων.<br/><br/>Η διαδικασία θα ξεκινήσει σε <u>ξεχωριστό παράθυρο</u> μετά την αποθήκευση των ρυθμίσεων.<br/><br/><em>Ακυρώστε</em> την επιλογή σας αν επιθυμείτε να ξεκινήσετε την ευρετηριοποίηση σε <u>άλλη</u> χρονική στιγμή.";
+$langIndexingNeeded = "Αν δεν έχει ανοίξει το παράθυρο της ευρετηριοποίησης, πχ το εμπόδισε ο φυλλομετρητής, αποδεχθείτε το άνοιγμα του παράθυρου ή πατήστε";
+$langIndexingAlert1 = "Παρακαλώ περιμένετε όσο η ευρετηροποίηση επεξεργάζεται όλα τα δεδομένα της πλατφόρμας, μπορεί να πάρει αρκετό χρόνο.";
+$langIndexingAlert2 = "Μην κλείσετε αυτό το παράθυρο, αλλιώς η διαδικασία θα διακοπεί.";
+$langIndexingRemain = "Μαθήματα που απομένουν για ευρετηριοποίηση";
+$langIndexingDone = "Η ευρετηροποίηση ολοκληρώθηκε επιτυχώς, μπορείτε να κλείσετε αυτό το παράθυρο.";
 $langEnableSearch = "Ενεργοποίηση μηχανής αναζήτησης";
 $langUserRegistration = "Δυνατότητα εγγραφής χρηστών";
 $langUserAccount = "Λογαριασμός $langOfStudent";
@@ -621,6 +628,7 @@ $langFirst = "Πρώτη";
 $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
+$langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 
 /* * *****************************************
  * archive_course.php
@@ -939,13 +947,13 @@ $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές 
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
-$langAttendanceΑbsences = "Παρουσίες";
-$langAttendanceΑbsencesYes = "Παρουσία";
-$langAttendanceΑbsencesΝο = "Απουσία";
-$langAttendanceΑbsences = "Παρουσίες";
-$langAttendanceΑbsencesFrom = "παρουσίες από τις";
-$langAttendanceΑbsencesFrom2 = "υποχρεωτικές του μαθήματος";
-$langAttendanceΑbsencesYesNo = "Παρουσία/απουσία";
+$langAttendanceAbsences = "Παρουσίες";
+$langAttendanceAbsencesYes = "Παρουσία";
+$langAttendanceAbsencesNo = "Απουσία";
+$langAttendanceAbsences = "Παρουσίες";
+$langAttendanceAbsencesFrom = "παρουσίες από τις";
+$langAttendanceAbsencesFrom2 = "υποχρεωτικές του μαθήματος";
+$langAttendanceAbsencesYesNo = "Παρουσία/απουσία";
 $langAttendanceAddActivity = "Προσθήκη υποχρεωτικής δραστηριότητας";
 $langAttendanceActivityDate = "Ημερομηνία διεξαγωγής";
 $langAttendanceActivityDate2 = "Ημερομηνία";
@@ -1110,6 +1118,7 @@ $langMultiCourseInfo = 'Εισαγάγετε στην παρακάτω περι�
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα "|".';
 $langMultiCourseTitles = 'Τίτλοι / Καθηγητές Μαθημάτων';
 $langMultiCourseData = 'Στοιχεία Μαθημάτων';
+$langMultiCourseCreated = 'το μάθημα δημιουργήθηκε';
 
 /* * ****************************************************
  * document.php
@@ -1310,6 +1319,12 @@ $langAttachedFile = "Συννημένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
 $langParticipants = "Συμμετέχοντες";
 $langLoading = "Φόρτωση...";
+$langMessageDeleteSuccess = "Η διαγραφή του μηνύματος πραγματοποιήθηκε επιτυχώς!";
+$langDeleteAllMsgs = "Διαγραφή όλων των μηνυμάτων";
+$langConfirmDeleteAllMsgs = "Αυτή η ενέργεια θα διαγράψει όλα τα μηνύματα σε αυτή τη θυρίδα!";
+$langMessageDeleteAllSuccess = "Η διαγραφή των μηνυμάτων πραγματοποιήθηκε επιτυχώς!";
+$langMsgRe = "Απ:";
+$langNoRecipients = "Δεν έχετε ορίσει παραλήπτες";
 
 /* * ********************************************************
  * exercise
@@ -1340,7 +1355,6 @@ $langQuestCreate = "Δημιουργία ερωτήσεων";
 $langExRecord = "Η άσκησή σας αποθηκεύτηκε";
 $langBackModif = "Επιστροφή στη διόρθωση της άσκησης";
 $langDoEx = "Κάντε την άσκηση";
-$langRemainingTime = "Υπολειπόμενος χρόνος";
 $langDefScor = "Καθορίστε τις ρυθμίσεις βαθμών";
 $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεων";
 $langSub = "Υπότιτλος";
@@ -1373,6 +1387,8 @@ $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλο
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
+$langPurgeExercises = "Διαγραφή αποτελεσμάτων";
+$langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langAttemptCompleted = "Oλοκληρώθηκε";
 $langAttemptPending = "Προς Βαθμολόγηση";
@@ -1396,6 +1412,7 @@ $langUsedInSeveralExercises = "Προσοχή! H ερώτηση και οι απ
         Θέλετε σίγουρα να τις αλλάξετε;";
 $langModifyInAllExercises = "σε όλες τις ασκήσεις";
 $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
+$langModifyInQuestionPool = "μόνο στην τράπεζα ερωτήσεων";
 $langQuestionView = "Προβολή";
 
 // statement_admin.php
@@ -1441,7 +1458,7 @@ $langQuestionList = "Κατάλογος ερωτήσεων της άσκησης
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
 
 // question_pool.php
-$langQuestionPool = "Διαθέσιμες Ερωτήσεις";
+$langQuestionPool = "Τράπεζα Ερωτήσεων";
 $langOrphanQuestions = "Ορφανές Ερωτήσεις";
 $langNoQuestion = "Δεν έχουν ορισθεί ερωτήσεις για τη συγκεκριμένη άσκηση";
 $langAllExercises = "Όλες οι ερωτήσεις";
@@ -1463,6 +1480,7 @@ $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
+$langRemainingTime = "Υπολειπόμενος χρόνος";
 
 // exercise result.php
 $langExerciseStart = "Έναρξη";
@@ -1479,8 +1497,6 @@ $langExerciseMaxAttemptsReached = "Έχετε φτάσει τον μέγιστο
 $langExerciseExpiredTime = "Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο εκτέλεσης της άσκησης.";
 $langExerciseExpired = "Η άσκηση έχει λήξει ή δεν έχει ενεργοποιηθεί";
 $langExerciseLis = "Λίστα ασκήσεων";
-$langExerciseEndTime = "Τέλος χρόνου";
-$langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults = "Αποτελέσματα";
 $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
@@ -1885,7 +1901,8 @@ $lang_email_verification_required = "Να είναι υποχρεωτική η �
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την ηλεκτρονική τους διεύθυνση";
 $lang_email_from = "Τα emails που στέλνονται θα έχουν την διεύθυνση του αποστολέα";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
-$lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή αρχείων μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
+$lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή μηνυμάτων μαθήματος μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
+$lang_dropbox_allow_personal_messages = "Να επιτρέπεται η ανταλλαγή προσωπικών μηνυμάτων στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα η οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_display_captcha = "Να εμφανίζεται κωδικός ασφαλείας κατά την εγγραφή των χρηστών";
@@ -1989,7 +2006,7 @@ $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί �
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
 $langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
-$langExercise = "Ασκήσεις";
+$langExercise = "Άσκηση";
 $langExerciseAsModule = "Χρήση Άσκησης";
 $langExerciseAsModuleLabel = "Άσκησης";
 $langExerciseCancelled = "Η άσκηση ακυρώθηκε. Για να συνεχίσετε, μπορείτε να επιλέξετε την επόμενη ενότητα, κάνοντας κλικ στο επόμενο βήμα.";
@@ -2140,6 +2157,7 @@ $langLinkDeleted = "Ο σύνδεσμος διαγράφηκε";
 $langLinkName = "Όνομα συνδέσμου";
 $langLinkAdd = "Προσθήκη συνδέσμου";
 $langLinkAdded = "Ο σύνδεσμος προστέθηκε";
+$langLinkNotPermitted = "Ο σύνδεσμος δεν επιτρέπεται";
 $langLinkDelconfirm = "Θέλετε να διαγράψετε τον σύνδεσμο;";
 $langCategoryName = "Όνομα κατηγορίας";
 $langCategoryAdd = "Προσθήκη κατηγορίας";
@@ -2386,6 +2404,16 @@ $langForumOpen = "Ανοικτή";
 $langForumClosed = "Κλειστή";
 $langNewForum = "Νέα περιοχή συζητήσεων";
 $langEditedBy = "Διορθώθηκε από";
+$langForumDefaultCat = "Γενικές Περιοχές Συζητήσεων";
+$langEditTopic = "Τροποποίηση θέματος";
+$langChangeTopicForum = "Αλλαγή περιοχής συζητήσεων";
+$langTopicDataChanged = "Το θέμα τροποποιήθηκε επιτυχώς";
+$langForumPostReply = "Απάντηση σε αυτό το μήνυμα";
+$langForumPostParent = "Αυτό το μήνυμα είναι απάντηση στο μήνυμα ";
+$langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί.";
+$langErrorTopicLocked = "Αυτό το θέμα συζήτησης είναι κλειδωμένο.";
+$langLockTopic = "Κλείδωμα θέματος";
+$langUnlockTopic = "Ξεκλείδωμα θέματος";
 
 /* * ***************************************************************
  * questionnaire.php
@@ -2425,6 +2453,8 @@ $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
+$langCreateDuplicate = "Δημιουργία Αντιγράφου";
+$langCopy2 = "Αντίγραφο";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
@@ -2441,6 +2471,8 @@ $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers = "+";
+$langPollEndMessage = 'Μήνυμα ολοκλήρωσης';
+$langPollEndMessageText = 'Σας ευχαριστούμε για τη συμμετοχή σας στο ερωτηματολόγιο!';
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
 $langPollCreated = "Το Ερωτηματολόγιο δημιουργήθηκε με επιτυχία.";
@@ -2466,7 +2498,7 @@ $langPollAnonymize = "Ανωνυμοποίηση";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
-$langThereAreParticipants = "<p class='caution'>Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!</p>";
+$langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!";
 $langPollEmpty = "<p class='caution'>Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!</p>";
 $langPollEmptyAnswers = "<p class='caution'>Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση</p>";
 
@@ -2685,6 +2717,11 @@ $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
 $langDurationVisitsPerCourse = "Χρονική διάρκεια συμμετοχής ανά μάθημα";
+$langSearchFor = 'Αναζήτηση στα ονόματα';
+$langSearchExact = 'Για ακριβείς τιμές';
+$langSearchStartsWith = 'Στην αρχή των ονομάτων';
+$langSearchSubstring = 'Οπουδήποτε';
+
 
 // user registration
 $langAuthUserName = "Δώστε το όνομα χρήστη:";
@@ -2952,6 +2989,7 @@ $langUpgFileNotRead = "To αρχείο δεν μπόρεσε να διαβαστ
 $langUpgFileNotModify = "Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langUpgNotChDir = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langUpgIndex = "Τροποποίηση αρχείου index.php του μαθήματος";
+$langUpgIndexingNotice = "Λόγω του πλήθους των μαθημάτων, οι μηχανές αναζήτησης και ευρετηριοποίησης έχουν απενεργοποιηθεί. Παρακαλούμε ανατρέξτε στις ρυθμίσεις της πλατφόρμας για την επαναφορά τους και ακολουθήστε τις οδηγίες για την ευρετηριοποίηση.";
 $langCheckPerm = "Ελέγξτε τα δικαιώματα πρόσβασης";
 $langUpgNotIndex = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του μαθήματος";
 $langConfigFound = "Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας.";
@@ -3352,6 +3390,8 @@ $m['deactivate'] = "Απενεργοποίηση";
 $m['deadline'] = "Προθεσμία υποβολής";
 $m['deadline_notif'] = "(Kενό για εργασία χωρίς προθεσμία υποβολής)";
 $m['no_deadline'] = "Χωρίς Προθεσμία";
+$m['late_submission'] = "Εκπρόθεσμη Υποβολή";
+$m['late_submission_enable'] = "Ενεργοποίηση εκπρόθεσμης υποβολής";
 $m['username'] = "Όνομα " . $langsOfStudent . " ";
 $m['filename'] = "Όνομα αρχείου";
 $m['sub_date'] = "Ημ/νία αποστολής";
@@ -3645,6 +3685,102 @@ $langEBookSectionsModified = "Οι αλλαγές στις ενότητες το
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
+
+/* * ******************************************
+<<<<<<< mine
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
+
+/* * ******************************************
+=======
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
+
+/* * ******************************************
+  Personal calendar
+ * ***************************************** */
+$langAddEvent = "Νέο γεγονός";
+$langAddAdminEvent = "Νέο γεγονός συστήματος";
+$langDays= "ημέρες";
+$langDateTime = "Ημέρα και ώρα";
+$langDocument = "Έγγραφο";
+$langDuration = "Διάρκεια";
+$langEmptyEventTitle = "Νέο γεγονός";
+$langEvent = "Γεγονός";
+$langEventAdd = "Νέο γεγονός προστέθηκε.";
+$langEventadmin = "γεγονότα συστήματος";
+$langEventBody = "Περιγραφή";
+$langEventcourse = "γεγονότα μαθημάτων";
+$langEventdeadline = "προθεσμίες";
+$langEventDel = "Το γεγονός διαγράφηκε.";
+$langEventModified = "Το γεγονός άλλαξε.";
+$langEventModify = "Το γεγονός ενημερώθηκε.";
+$langEventNoTitle = "Κενός τίτλος";
+$langEventpersonal = "προσωπικά γεγονότα";
+$langEvents = "Γεγονότα";
+$langEventsDeleted = "Τα γεγονότα σας διαγράφηκαν.";
+$langEventTitle = "Τίτλος";
+$langEvery = "κάθε";
+$langiCalExport = "Εξαγωγή iCal";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifEvent = "Αλλαγή γεγονότος";
+$langMonthsAbstract = "μήνες";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langRepeat = "Επανάληψη";
+$langSelectFromMenu = "Επιλέξτε...";
+$langShowTo = "Εμφάνιση σε";
+$langShowToAdminsOnly = "διαχειριστές μόνο";
+$langShowToAdminsandProfs = "διαχειριστές κι εκπαιδευτές";
+$langShowToAllregistered = "όλους τους εγγεγραμμένους";
+$langShowToAll = "όλους";
+$langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
+$langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
+$langUntil = "μέχρι";
+$langWeek = "Eβδομάδα";
+$langWeeks = "εβδομάδες";
 
 /* * ******************************************
   Messages for jQuery tools
@@ -3982,8 +4118,8 @@ $langNewBBBSessionInActive = "Μη ορατή";
 
 $langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεδιάσκεψης πραγματοποιήθηκε επιτυχώς";
 
-$langBBBNoteEnableJoin = "Ο σύνδεσμος για σύνδεση είναι ενεργός μόνο για όσες τηλεδιασκέψεις είναι σε εξέλιξη";
-$langBBBNoteEnableJoinEditor = "Ο σύνδεσμος για σύνδεση ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
+$langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεδιασκέψεις είναι σε εξέλιξη";
+$langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
 
 $langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
@@ -4003,4 +4139,100 @@ $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλ�
 $langBBBRecord = "Καταγραφή Τηλεδιάσκεψης";
 $langBBBRecordTrue = "Ναί";
 $langBBBRecordFalse = "Όχι";
+$langBBBImportRecordings = "Εισαγωγή καταγεγραμμένων τηλεδιασκέψεων στα πολυμέσα";
+$langBBBImportRecordingsOK = "Η εισαγωγή στα πολυμέσα ολοκληρώθηκε επιτυχώς!";
+$langMaxUsers = "Μέγ. αριθμός χρηστών";
+$langMaxRooms = "Μέγ. αριθμός δωματίων";
+$langPresharedKey = "Διαμοιραζόμενο κλειδί";
 
+$langBBBSessionMaxUsers = "Μέγ. αριθμός συμμετεχόντων";
+$langBBBSessionSuggestedUsers = "Προτεινόμενο πλήθος συμμετεχόντων";
+$langBBBSessionSuggestedUsers2 = "για περισσότερους από 20, προτείνεται το 50% των εγγεγραμμένων στο μάθημα";
+$langBBBNoServerForRecording = "Η ενεργοποίηση της τηλεδιάσκεψης δεν μπορεί να πραγματοποιηθεί καθώς δεν υπάρχει διαθέσιμος εξυπηρετητής BigBlueButton με ενεργοποιημένη τη δυνατότητα καταγραφής.<br />Παρακαλούμε είτε απενεργοποιήστε την επιλογή καταγραφής για να συνεχίσετε άμεσα είτε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
+
+$langΒΒΒAlertTitle = "Παρακαλώ πληκτρολογείστε τον τίτλο της τηλεδιάσκεψης";
+$langΒΒΒAlertMaxParticipants = "Παρακαλώ ορίστε το μέγιστο πλήθος συμμετεχόντων";
+$langΒΒΒServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname του εξυπηρετητή";
+$langΒΒΒServerAlertIP = "Παρακαλώ πληκτρολογείστε σωστά την ip του εξυπηρετητή";
+$langΒΒΒServerAlertKey = "Παρακαλώ πληκτρολογείστε το διαμοιραζόμενο κλειδί του εξυπηρετητή";
+$langΒΒΒServerAlertAPIUrl = "Παρακαλώ πληκτρολογείστε το ΑPI url του εξυπηρετητή";
+$langΒΒΒServerAlertMaxRooms = "Παρακαλώ πληκτρολογείστε σωστά το μέγιστο πλήθος δωματίων του εξυπηρετητή";
+$langΒΒΒServerAlertMaxUsers = "Παρακαλώ πληκτρολογείστε σωστά το μέγιστο πλήθος συνδεδεμένων χρηστών του εξυπηρετητή";
+$langΒΒΒServerAlertOrder = "Παρακαλώ πληκτρολογείστε σωστά τη σειρά επιλογής του εξυπηρετητή";
+
+$langBBBMaxUsersJoinError = "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεδιάσκεψη. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τον καθηγητή του μαθήματος";
+/* * ***********************************************************
+ * blog.php
+ * ************************************************************ */
+$langBlog = "Ιστολόγιο";
+$langCourseBlog = "Ιστολόγιο μαθήματος";
+$langBlogPosts = "Αναρτήσεις ιστολογίου";
+$langBlogPopular = "Δημοφιλείς αναρτήσεις";
+$langBlogPostDelSucc = "Η διαγραφή της ανάρτησης ήταν επιτυχής";
+$langBlogPostDelFail = "Η διαγραφή της ανάρτησης απέτυχε";
+$langBlogPostNotFound = "Η ανάρτηση δεν ήταν εφικτό να βρεθεί";
+$langBlogAddPost = "Προσθήκη ανάρτησης";
+$langBlogEmpty = "Δεν υπάρχουν αναρτήσες ιστολογίου";
+$langBlogNewerPosts = "Νεότερες αναρτήσεις";
+$langBlogOlderPosts = "Παλαιότερες αναρτήσεις";
+$langBlogPopular = "Δημοφιλείς Αναρτήσεις";
+$langBlogPostUser = " - από τον χρήστη ";
+$langSureToDelBlogPost = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανάρτηση";
+$langBlogPostBody = "Σώμα Ανάρτησης";
+$langBlogPostTitle = "Τίτλος Ανάρτησης";
+$langBlogPost = "Ανάρτηση Ιστολογίου";
+$langModifBlogPost = "Αλλαγή της ανάρτησης";
+$langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
+$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε επιτυχώς";
+$langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
+$langBlogPostHistory = "Ιστορικό αναρτήσεων";
+$langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
+$langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφής της ανάρτησης";
+$langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";
+$langReturnBlog = "Επιστροφή στο ιστολόγιο";
+$langBlogPerm = "Δικαιώματα σύνταξης";
+$langBlogPermStudents = "Ο καθηγητής και οι μαθητές έχουν δικαίωμα σύνταξης";
+$langBlogPermTeacher = "Ο καθηγητής μόνο έχει δικαίωμα σύνταξης";
+
+/* * ***********************************************************
+ * comments
+ * ************************************************************ */
+$langCommentsDelConfirm = "Είστε σίγουροι πως θέλετε να διαγράψετε το σχόλιο;";
+$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε επιτυχώς";
+$langCommentsDelFail = "Η διαγραφή του σχολίου απέτυχε";
+$langCommentsLoadFail = "Το σχόλιο δεν ήταν δυνατό να βρεθεί";
+$langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
+$langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε επιτυχώς";
+$langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
+$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
+$langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
+$langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
+$langCommenting = "Σχολιασμός";
+$langCommentsEn = "Ενεργοποιημένος σχολιασμός";
+$langCommentsDis = "Απενεργοποιημένος σχολιασμός";
+
+/* * ***********************************************************
+ * rating
+ * ************************************************************ */
+$langRating = "Αξιολόγηση";
+$langRatingEn = "Ενεργοποιημένη αξιολόγηση";
+$langRatingDis = "Απενεργοποιημένη αξιολόγηση";
+$langUserHasRated = "Έχετε υποβάλει την αξιολόγησή σας";
+$langRatingAverage = "Μέση Βαθμολογία: ";
+$langRatingVote = " αξιολόγηση";
+$langRatingVotes = " αξιολογήσεις";
+$langRatingAnonEn = "Επιτρέπεται η αξιολόγηση από ανώνυμους χρήστες";
+$langRatingAnonDis = "Δεν επιτρέπεται η αξιολόγηση από ανώνυμους χρήστες";
+$langRatingAnonDisCourse = "Η αξιολόγηση από ανώνυμους χρήστες είναι απενεργοποιημένη για μαθήματα με μη ελεύθερη πρόσβαση χωρίς εγγραφή.";
+$langRateIt = "Αξιολόγησέ το!";
+
+/* * ***********************************************************
+ * sharing
+ * ************************************************************ */
+$langSharing = "Διαμοιρασμός σε κοινωνικά δίκτυα";
+$langSharingEn = "Ενεργοποιημένος διαμοιρασμός";
+$langSharingDis = "Απενεργοποιημένος διαμοιρασμός";
+$langShare = "Μοιράσου το";
+$langSharingDisAdmin = "Ο Διαμοιρασμός σε κοινωνικά δίκτυα είναι καθολικά απενεργοποιημένος από τον διαχειριστή της πλατφόρμας.";
+$langSharingDisCourse = "Ο Διαμοιρασμός σε κοινωνικά δίκτυα είναι απενεργοποιημένος για μαθήματα με μη ελεύθερη πρόσβαση χωρίς εγγραφή.";
+$langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμού σε κοινωνικά δίκτυα";

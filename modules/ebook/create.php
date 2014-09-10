@@ -31,8 +31,6 @@ $nameTools = $langEBookCreate;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
 define('EBOOK_DOCUMENTS', true);
 
-mysql_select_db($mysqlMainDb);
-
 if (!$is_editor) {
     redirect_to_home_page();
 } else {

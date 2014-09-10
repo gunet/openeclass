@@ -55,69 +55,91 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    
-    /* * *************
-      Criteria/Filters
-     * ************* */
+
+    // 'LIKE' argument prefix/postfix - default is substring search
+    $l1 = $l2 = '%';
+    if (isset($_GET['search_type'])) {
+        if ($_GET['search_type'] == 'exact') {
+            $l1 = $l2 = '';
+        } elseif ($_GET['search_type'] == 'begin') {
+            $l1 = '';
+        }
+    }
+
+    /***************
+     Criteria/Filters
+     ************** */
     $criteria = array();
+    $terms = array();
     $params = array();
     // Registration date/time search
     if (!empty($user_registered_at)) {
         add_param('reg_flag');
         add_param('user_registered_at');
         // join the above with registered at search
-        $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . quote($user_registered_at);
+        $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
+        $terms[] = $user_registered_at;
     }
     // surname search
     if (!empty($lname)) {
-        $criteria[] = 'surname LIKE ' . quote('%' . $lname . '%');
+        $criteria[] = 'surname LIKE ?s';
+        $terms[] = $l1 . $lname . $l2;
         add_param('lname');
     }
     // first name search
     if (!empty($fname)) {
-        $criteria[] = 'givenname LIKE ' . quote('%' . $fname . '%');
+        $criteria[] = 'givenname LIKE ?s';
+        $terms[] = $l1 . $fname . $l2;
         add_param('fname');
     }
     // username search
     if (!empty($uname)) {
-        $criteria[] = 'username LIKE ' . quote('%' . $uname . '%');
+        $criteria[] = 'username LIKE ?s';
+        $terms[] = $l1 . $uname . $l2;
         add_param('uname');
     }
     // mail verified
     if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or
-            $verified_mail === EMAIL_VERIFIED or
-            $verified_mail === EMAIL_UNVERIFIED) {
-        $criteria[] = 'verified_mail = ' . $verified_mail;
+        $verified_mail === EMAIL_VERIFIED or
+        $verified_mail === EMAIL_UNVERIFIED) {
+        $criteria[] = 'verified_mail = ?d';
+        $terms[] = $verified_mail;
         add_param('verified_mail');
     }
     //user am search
     if (!empty($am)) {
-        $criteria[] = "am LIKE " . quote('%' . $am . '%');
+        $criteria[] = 'am LIKE ?s';
+        $terms[] = $l1 . $am . $l2;
         add_param('am');
     }
     // user type search
     if (!empty($user_type)) {
-        $criteria[] = "status = " . $user_type;
+        $criteria[] = 'status = ?d';
+        $terms[] = $user_type;
         add_param('user_type');
     }
     // auth type search
     if (!empty($auth_type)) {
         if ($auth_type >= 2) {
-            $criteria[] = 'password = ' . quote($auth_ids[$auth_type]);
-        } elseif ($auth_type == 1) {                        
-            $q1 = "'". implode("','", $auth_ids) . "'";
-            $criteria[] = 'password NOT IN ('.$q1.')';
+            $criteria[] = 'password = ?s';
+            $terms[] = $auth_ids[$auth_type];
+        } elseif ($auth_type == 1) {
+            $terms[] = $auth_ids;
+            $criteria[] = 'password NOT IN (' .
+                implode(', ', array_fill(0, count($auth_ids), '?s')) .
+                ')';
         }
         add_param('auth_type');
     }
     // email search
     if (!empty($email)) {
-        $criteria[] = 'email LIKE ' . quote('%' . $email . '%');
+        $criteria[] = 'email LIKE ?s';
+        $terms[] = $l1 . $email . $l2;
         add_param('email');
     }
     // search for inactive users
     if ($search == 'inactive') {
-        $criteria[] = 'expires_at < CURRENT_DATE() AND user.id <> 1';
+        $criteria[] = 'expires_at < CURRENT_DATE()';
         add_param('search', 'inactive');
     }
 
@@ -156,19 +178,20 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     // end filter/criteria
     if ($c) { // users per course
         $qry_base = "FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                              $depqryadd WHERE b.course_id = $c";
+                              $depqryadd WHERE b.course_id = ?d";
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
-        }    
+        }
         $qry = "SELECT DISTINCT a.id, a.surname, a.givenname, a.username, a.email,
-                           a.verified_mail, b.status " . $qry_base;        
+                           a.verified_mail, b.status " . $qry_base;
         add_param('c');
+        array_unshift($terms, $c);
     } elseif ($search == 'no_login') { // users who have never logged in
         $qry_base = "FROM user LEFT JOIN loginout ON user.id = loginout.id_user $depqryadd
                               WHERE loginout.id_user IS NULL";
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
-        }   
+        }
         $qry = "SELECT DISTINCT user.id, surname, givenname, username, email, verified_mail, status " .
                 $qry_base;
         add_param('search', 'no_login');
@@ -176,21 +199,23 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $qry_base = ' FROM user' . $depqryadd;
         if ($qry_criteria) {
             $qry_base .= ' WHERE ' . $qry_criteria;
-        }    
+        }
         $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail' .
                 $qry_base;
     }
-  
+    $terms_base[] = $terms;
+
     // internal search
     if (!empty($_GET['sSearch'])) {
-        $keyword = quote('%' . $_GET['sSearch'] . '%');
         if (($qry_criteria) or ($c)) {
-            $qry .= ' AND (surname LIKE '.$keyword.' OR givenname LIKE '.$keyword.' OR username LIKE '.$keyword.' OR email LIKE '.$keyword.')';
+            $qry .= ' AND (surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
         } else {
-             $qry .= ' WHERE (surname LIKE '.$keyword.' OR givenname LIKE '.$keyword.' OR username LIKE '.$keyword.' OR email LIKE '.$keyword.')';
-        }        
+            $qry .= ' WHERE (surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
+        }
+        $keywords = array_fill(0, 4, $l1 . $_GET['sSearch'] . $l2);
+        $terms = array_merge($terms, $keywords);
     } else {
-        $keyword = "'%%'";
+        $keywords = array_fill(0, 4, '%');
     }
     // sorting
     if (!empty($_GET['iSortCol_0'])) {
@@ -202,28 +227,34 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             case '2': $qry .= ' ORDER BY username ';
                 break;
         }
-        $qry .= $_GET['sSortDir_0'];
+        $qry .= ($_GET['sSortDir_0'] == 'desc'? 'DESC': '');
     } else {
-        $qry .= ' ORDER BY status, surname';
-        $qry .= ' '.$_GET['sSortDir_0'];
-    }   
+        $qry .= ' ORDER BY status, surname ' .
+            ($_GET['sSortDir_0'] == 'desc'? 'DESC': '');
+    }
     //pagination
-    ($limit > 0) ? $qry .= " LIMIT $offset,$limit" : $qry .= "";    
-    $sql = Database::get()->queryArray($qry);
+    if ($limit > 0) {
+        $qry .= " LIMIT ?d, ?d";
+        $terms[] = $offset;
+        $terms[] = $limit;
+    }
+    $sql = Database::get()->queryArray($qry, $terms);
 
-    $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base")->total;        
+    $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base", $terms_base)->total;
     if (($qry_criteria) or ($c)) {
         $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base
-                                                        AND (surname LIKE $keyword
-                                                        OR givenname LIKE $keyword
-                                                        OR username LIKE $keyword
-                                                        OR email LIKE $keyword)")->total;
+                                                         AND (surname LIKE ?s
+                                                             OR givenname LIKE ?s
+                                                             OR username LIKE ?s
+                                                             OR email LIKE ?s)",
+                                                        $terms_base, $keywords)->total;
     } else {
-        $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
-                                                     WHERE (surname LIKE $keyword
-                                                        OR givenname LIKE $keyword
-                                                        OR username LIKE $keyword
-                                                        OR email LIKE $keyword)")->total;
+        $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user
+                                                         WHERE (surname LIKE ?s
+                                                                OR givenname LIKE ?s
+                                                                OR username LIKE ?s
+                                                                OR email LIKE ?s)",
+                                                        $keywords)->total;
     }
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
@@ -246,9 +277,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     $tip = $langMailVerificationNoU;
                     break;
             }
-            $email_icon .= ' ' . icon($icon, $tip);            
+            $email_icon .= ' ' . icon($icon, $tip);
         }
-        
+
 
         switch ($logs->status) {
             case USER_TEACHER:
@@ -265,11 +296,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 break;
             default:
                 $icon = false;
-                $tip = $langOther;                
+                $tip = $langOther;
                 break;
         }
-        
-        //$width = (!isDepartmentAdmin()) ? 100 : 80;                   
+
+        //$width = (!isDepartmentAdmin()) ? 100 : 80;
         if ($logs->id == 1) { // don't display actions for admin user
             $icon_content = "&mdash;&nbsp;";
         } else {
@@ -294,16 +325,16 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data);
     exit();
 }
-        
+
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#search_results_table').DataTable ({            
+            $('#search_results_table').DataTable ({
                 'bProcessing': true,
-                'bServerSide': true,                
+                'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -319,7 +350,7 @@ $head_content .= "<script type='text/javascript'>
                     {'bSortable' : false, 'sClass': 'center' },
                     {'bSortable' : false, 'sWidth': '30%' },
                 ],
-                'oLanguage': {                       
+                'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '".$langNoResult."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -345,7 +376,7 @@ $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 $nameTools = $langListUsersActions;
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'><ul id='opslist'>";    
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";
 $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'>$langAllUsers</a></li>";
 if (isset($_GET['search']) and $_GET['search'] == 'inactive') {  // inactive users
   $tool_content .= "<li><a href='updatetheinactive.php?activate=1'>" . $langAddSixMonths . "</a></li>";

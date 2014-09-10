@@ -40,7 +40,9 @@ header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
 
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
-
+if(!$p){
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 echo csv_escape($langQuestions), $crlf, $crlf;
 $q = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid=?d",$p->pid);
 foreach ($q as $question) {

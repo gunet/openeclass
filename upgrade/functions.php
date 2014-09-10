@@ -132,7 +132,7 @@ function mysql_field_exists($db, $table, $field) {
 
 // check if a mysql index exists
 function mysql_index_exists($table, $index_name) {
-    $q = Database::get()->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = " . quote($index_name));
+    $q = Database::get()->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = ?s", $index_name);
     return count($q) > 0;
 }
 
@@ -323,7 +323,6 @@ function upgrade_course($code, $lang) {
  * @global type $mysqlMainDb
  * @global type $webDir
  * @global type $langUpgradeCourseDone
- * @global type $webDir
  * @param type $code
  * @param type $extramessage
  * @param type $return_mapping
@@ -417,9 +416,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
                                `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
-        if ($ok)
+        if ($ok) {
             Database::get($code)->query("DROP TABLE video");
-
+        }
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $videoid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
@@ -447,9 +446,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
 
-        if ($ok)
+        if ($ok) {
             Database::get($code)->query("DROP TABLE videolinks");
-
+        }
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
@@ -480,8 +479,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
-                         (`msg_id`, `recipient_id`, `thread_id`, `is_read`, `deleted`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, dropbox_map.new_id, 1, 0
+                         (`msg_id`, `recipient_id`, `is_read`, `deleted`)
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, 1, 0
                            FROM dropbox_person, dropbox_map
                           WHERE dropbox_person.fileId = dropbox_map.old_id
                           ORDER BY dropbox_person.fileId") != null) && $ok;
@@ -1106,13 +1105,6 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         //Database::get()->query("DROP DATABASE $code");
     }
 
-    // index all courses
-    mysql_select_db($mysqlMainDb);
-    global $webDir;
-    require_once 'modules/search/indexer.class.php';
-    $idx = new Indexer();
-    $idx->storeAllByCourse($course_id);
-
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
@@ -1143,6 +1135,13 @@ function upgrade_course_2_10($code, $extramessage = '') {
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
+    if (!mysql_field_exists($code, 'poll', 'description')) {
+        db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+                                   ADD end_message MEDIUMTEXT NOT NULL,
+                                   ADD anonymized INT(1) NOT NULL DEFAULT 0');
+        db_query('ALTER TABLE poll_question
+                    CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
+    }    
 }
 
 /**
@@ -1688,4 +1687,9 @@ function load_global_messages() {
 function html_cleanup($s) {
     // Fixes overescaping introduced by bug in older versions
     return str_replace(array('&quot;', '\\'), '', $s);
+}
+
+// Quote string for output in config.php file
+function quote($s) {
+    return "'" . addslashes(canonicalize_whitespace($s)) . "'";
 }

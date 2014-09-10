@@ -33,6 +33,11 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -46,11 +51,20 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('jquery');
+load_js('slick');
 ModalBoxHelper::loadModalBox();
-$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
+$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+            $('.course_description').slick({
+                dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
+            });
+            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
+    })
+    </script>";         
 
 // For statistics: record login
-Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()", $uid, $course_id);
+Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);
@@ -73,6 +87,8 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)    
     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
+$main_extra .= "<div class = 'course_description' style='width: 520px;'>";
+$tool_content .= "<div style='display: none'>";
 foreach ($res as $row) {
     $desctype = intval($row->type) - 1;
     $descicon = (!empty($row->icon)) ? $row->icon : 'default.png';
@@ -85,8 +101,11 @@ foreach ($res as $row) {
     $main_extra .= "<div $element_id>" .
             "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
             q($row->title) .
-            "</a></div>\n";
+            "</a></div>";
 }
+$main_extra .= "</div>";    
+$tool_content .= "</div>";
+    
 if ($is_editor) {
     $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
@@ -113,6 +132,25 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+
+if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+    $rating = new Rating('fivestar', 'course', $course_id);
+    $main_content .= $rating->put($is_editor, $uid, $course_id);
+}
+
+if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+    commenting_add_js();
+    $comm = new Commenting('course', $course_id);
+    $main_content .= $comm->put($course_code, $is_editor, $uid);
+}
+
+if (is_sharing_allowed($course_id)) {
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
+    }
+}
+
+
 $main_content .= $main_extra;
 
 units_set_maxorder();
@@ -165,19 +203,12 @@ if ($is_editor) {
 }
 
 // add course units
-$cunits_content .= "<h5 class='content-title'>" . q($langCourseUnits) . "</h5>";
 if ($is_editor) {
-    $cunits_content .= "
-        <div class='toolbox float-right'>
-            <a href='{$urlServer}modules/units/info.php?course=$course_code'>
-                <button class='button color-green' title='$langAddUnit'>
-                    <i class='fa fa-plus-circle'></i>
-                    <span class='txt'>$langAddUnit</span>
-                </button>
-            </a>
-        </div>
-        <div style='clear: both'></div>";
-
+    $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+} else {
+    $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
+}
+if ($is_editor) {    
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -192,7 +223,6 @@ if ($is_editor) {
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
-$cunits_content .= "<ul class='tablelist contentbox'>";
 $sql = Database::get()->queryArray($query);
 $first = true;
 $count_index = 1;
@@ -204,74 +234,69 @@ foreach ($sql as $cu) {
     $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
     $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
     $class_vis = ($vis == 0) ? 'invisible' : '';
-    if (resource_access($vis, $access)) {
-        $cunits_content .= "
-            <li class='list-item'>
-                <span class='item-wholeline'>
-                    <h4>$count_index. <a href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
-                    <span class='description'>" . standard_text_escape($cu->comments) . "</span>
-                </span>
-                <div class='item-right-cols'>";
-        if ($is_editor) {
-            $cunits_content .= "
-                <span class='item-options'>
-                    <span class='options-content'>";
-            if ($cu->id != $last_id) {
-                $cunits_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' title='$langDown'>
-                            <i class='fa fa-arrow-down'></i>
-                        </a>";
-            }
-            if (!$first) {
-                $cunits_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id' title='$langUp'>
-                            <i class='fa fa-arrow-up'></i>
-                        </a>";
-            }
-            $cunits_content .= "
-                        <a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id' title='$langEdit'>
-                            <i class='fa fa-pencil'></i>
-                        </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id' title='$langVisibility'>
-                            <i class='fa fa-eye'></i>
-                        </a>";
-            if ($visible == COURSE_OPEN) { // public accessibility actions
-                $cunits_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id' title='$langResourceAccess'>
-                            <i class='fa fa-lock'></i>
-                        </a>";
-            }
-            $cunits_content .= "
-                        <a href ='$_SERVER[SCRIPT_NAME]?del=$cu->id' class='delete-action' title='Delete'>
-                            <i class='fa fa-times'></i>
-                        </a>
-                    </span>
-                    <span class='options-icon'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </span>";
-        }
-        $count_index++;
+    $cunits_content .= "<table class='tbl' width='770'>";
+    if ($is_editor) {
+        $cunits_content .= "<tr>" .
+                "<th width='25' class='right'>$count_index.</th>" .
+                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
+    } elseif (resource_access($vis, $access)) {
+        $cunits_content .= "<tr>" .
+                "<th width='25' class='right'>$count_index.</th>" .
+                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
     }
+    if ($is_editor) { // display actions
+        $cunits_content .= "<th width='80' class='center'>" .
+                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
+                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
+                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
+                "onClick=\"return confirmation('$langConfirmDelete');\">" .
+                "<img src='$themeimg/delete.png' " .
+                "title='$langDelete' alt='$langDelete'></a>" .
+                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
+                "<img src='$themeimg/$icon_vis' " .
+                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
+        if ($visible == COURSE_OPEN) { // public accessibility actions
+            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
+            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
+                    "<img src='$themeimg/$icon_access' " .
+                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
+            $cunits_content .= "&nbsp;&nbsp;</th>";
+        }
+        if ($cu->id != $last_id) {
+            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
+                    "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
+        } else {
+            $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
+        }
+        if (!$first) {
+            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
+                    "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
+        } else {
+            $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+        }
+    }
+    $cunits_content .= "</tr><tr><td ";
+    if ($is_editor) {
+        $cunits_content .= "colspan='8' $class1_vis>";
+    } else {
+        $cunits_content .= "colspan='2'>";
+    }
+    if (resource_access($vis, $access)) {
+        $cunits_content .= standard_text_escape($cu->comments);
+        $count_index++;
+    } else {
+        $cunits_content .= "&nbsp;";
+    }
+    $cunits_content .= "</td></tr></table>";
     $first = false;
-
-    $cunits_content .= "
-            </div>
-        </li>";
 }
-
-
-
-// Delete empty units section for non-editors
-if ($first and !$is_editor) {
+if ($first and ! $is_editor) {
     $cunits_content = '';
 }
 
-$bar_content .= "
-    <div class='banner-tags'>
-        <span class='label'><span>" . $langCode . "</span>: " . q($public_code) . "</span>" .
-        "<span class='label'><span>" . $langTeachers . "</span>: " . q($professor) . "</span>" .
-        "<span class='label'><span>" . $langFaculty . "</span>: ";
+$bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
+        "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
+        "<li><b>" . $langFaculty . "</b>: ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -281,7 +306,7 @@ foreach ($departments as $dep) {
     $i++;
 }
 
-$bar_content .= "</span>\n";
+$bar_content .= "</li>\n";
 
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
@@ -306,32 +331,29 @@ switch ($visible) {
             break;
         }
 }
-$bar_content .= "<span class='label'><span>$langConfidentiality</span>: $lessonStatus</span>";
+$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "
-        <span class='label'><span>$langUsers</span>: $link</span> 
-    </div>";
+$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 
 // display course license
 if ($course_license) {
-    $license_info_box = "
-        <div class='column-one-third'>
-            <span>
-                ${langOpenCoursesLicense}<br/>
-                <small>" . copyright_info($course_id) . "</small>
-            </span>
-        </div>";
+    $license_info_box = "<table class='tbl_courseid' width='200'>
+        <tr class='title1'>
+            <td class='title1'>${langOpenCoursesLicense}</td></tr>
+        <tr><td><div align='center'><small>" . copyright_info($course_id) . "</small></div></td></tr>
+        </table>
+        <br/>";
 } else {
     $license_info_box = '';
 }
 
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
-$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id = ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
+$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -382,187 +404,47 @@ if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
 
-
-
-
-// Title and Toolbox
 $tool_content .= "
-<div id='title'>
-    <h1 class='page-title'>Τίτλος Μαθήματος</h1>
+<div id='content_course'>
+<table width='100%'>
+<tr>
+<td valign='top'>$main_content</td>
+<td width='200' valign='top'>
+  <table class='tbl_courseid' width='200'>
+  <tr class='title1'>
+    <td  class='title1'>$langIdentity</td>
+  </tr>
+  <tr>
+    <td class='smaller'>$bar_content</td>
+  </tr>
+  </table>
+  <br />
+  $license_info_box
+  $opencourses_level
+  <table class='tbl_courseid' width='200'>
+  <tr class='title1'>
+    <td class='title1'>$langTools</td>
+    <td class='left'>$toggle_student_view";
+if ($status != USER_GUEST) {
+    if ($receive_mail) {
+        $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
+                  <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
+    }
+}
+$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
+            <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
+if (visible_module(MODULE_ID_ANNOUNCE)) {
+    $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
+                          <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>&nbsp;$toggle_student_view_close";
+}
+$tool_content .= "</td>
+      </tr>
+      </table>
+      $emailnotification
+      <br />\n";
 
-    <div class='toolbox float-right'>
-
-        <div type='button' class='button dropdown open-on-hover'>
-            <span class='txt' class='tooltip-left' data-tooltip='Syllabus'>Πληροφορίες Μαθήματος</span>
-            <span class='fa fa-caret-down'></span>
-            <ul class='dropdown-menu'>
-                <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
-                <li><a class='md-trigger' data-modal='syllabus-toc' href='#''>Επιλογή 2</a></li>
-                <li><a class='md-trigger' data-modal='syllabus-books' href='#''>Επιλογή 3</a></li>
-                <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#''>Επιλογή 4</a></li>
-            </ul>
-        </div>
-";
-
-        // Button: email - contact professor
-        if ($status != USER_GUEST) {
-            if ($receive_mail) {
-                $tool_content .= "
-                    <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                        <button class='button hover-blue' title='$langContactProf' >
-                            <i class='fa fa-envelope'></i>
-                        </button>
-                    </a>";
-            }
-        }
-
-
-        // Button: star - bookmark the page
-        $tool_content .= "        
-                    <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-                        <button class='button hover-blue' title='$langAddAsBookmark'>
-                            <i class='fa fa-star'></i>
-                        </button>
-                    </a>";
-
-
-        // Button: rss
-        if (visible_module(MODULE_ID_ANNOUNCE))
-        {
-            $tool_content .= "
-                    <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                        <button class='button hover-blue' title='" . q($langRSSFeed) . "'>
-                            <i class='fa fa-rss'></i>
-                        </button>
-                    </a>";
-        }
-
-        // Button: toggle student view
-        $tool_content .= "  
-                    <button class='button hover-blue' title='$langAddAsBookmark'>
-                            $toggle_student_view_close
-                            $toggle_student_view
-                    </button>";     
-           
-$tool_content .= "
-    </div>
-    
-</div>";
-
-
-
-
-
-
-
-
-// Contentbox: Course main contentbox
-$tool_content .= "
-<div id='lesson-banner' class='contentbox'>
-    <div class='banner-left'>
-        <div class='banner-image'></div>
-    </div>
-    <div class='banner-content'>
-        <div class='banner-description'>$main_content</p></div>
-        <hr>
-        $bar_content
-    </div>
-</div>";
-
-
-
-
-// Contentbox: Thematikes enotites
-// Contentbox: Calendar
-// Contentbox: Announcements
-$tool_content .= "
-<div class='a-wrapper'>
-
-    <div class='column-first column-one-half'>
-        $cunits_content
-    </div>
-
-    <div class='column-one-half'>
-
-        <h5 class='content-title'>Ημερολογιο</h5>
-        <div class='contentbox padding'>
-            <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
-        </div>
-
-
-        <h5 class='content-title'>Ανακοινωσεις</h5>
-        <ul class='tablelist contentbox'>
-                
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 1</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 2</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 3</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-        </ul>
-
-    </div>
-
-    <div style='clear: both'></div>
-
-</div>";
-
-
-
-
-
-
-
-// Contentbox: Keywords, Copyright and Opencourse mode
-$tool_content .= "
-<div id='lesson-footer' class='a-wrapper'>
-    <div class='contentbox padding'>
-
-        <div class='column-first column-one-third'>
-            <span class='title'>Λέξεις Κλειδιά</span>
-            <div class='label-group'>
-                <span class=''>Ημιαγωγοί</span>,
-                <span class=''>δίοδοι</span>,
-                <span class=''>ανόρθωση</span>,
-                <span class=''>σταθεροποίηση τάσης</span>,
-                <span class=''>ψαλλίδιση</span>
-            </div>
-        </div>
-
-        $license_info_box
-
-        $opencourses_level
-
-        <div style='clear: both'></div>
-
-    </div>
-</div>";
-
-
-
-
-
-
-
-$tool_content .= "
-<br/>
-<br/><hr><br/>
-<br/><br/><br/>
-";
+$tool_content .= "</td></tr></table>
+   <table width='100%' class='tbl'><tr><td>$cunits_content</td>
+   </tr></table></div>";
 
 draw($tool_content, 2, null, $head_content);

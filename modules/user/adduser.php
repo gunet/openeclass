@@ -21,7 +21,7 @@
 
 /**
  * @file adduser.php
- * @brief Course admin can add users to the course. 
+ * @brief Course admin can add users to the course.
  */
 $require_current_course = true;
 $require_course_admin = true;
@@ -39,9 +39,9 @@ if (isset($_GET['add'])) {
     $uid_to_add = intval($_GET['add']);
     $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date)
                                     VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $uid_to_add, $course_id);
-    
+
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
-                                                               'right' => '+5'));        
+                                                               'right' => '+5'));
     if ($result) {
         $tool_content .= "<p class='success'>$langTheU $langAdded</p>";
         // notify user via email
@@ -50,7 +50,7 @@ if (isset($_GET['add'])) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
             send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-        }    
+        }
     } else {
         $tool_content .= "<p class='alert1'>$langAddError</p>";
     }
@@ -93,10 +93,12 @@ if (isset($_GET['add'])) {
         </form>";
 
     $search = array();
+    $values = array();
     foreach (array('surname', 'givenname', 'username', 'am') as $term) {
         $tvar = 'search_' . $term;
         if (!empty($GLOBALS[$tvar])) {
-            $search[] = "u.$term LIKE " . quote($GLOBALS[$tvar] . '%');
+            $search[] = "u.$term LIKE ?s";
+            $values = $GLOBALS[$tvar] . '%';
         }
     }
     $query = join(' AND ', $search);
@@ -105,7 +107,7 @@ if (isset($_GET['add'])) {
                     SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
         $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
-                                                c.user_id IS NULL AND $query");                           
+                                                c.user_id IS NULL AND $query", $values);
         if ($result) {
             $tool_content .= "<table width=100% class='tbl_alt'>
                                 <tr>

@@ -31,6 +31,8 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
+$personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
+
 if (!isset($course_id) || !$course_id) {
     $course_id = 0;
 }
@@ -51,7 +53,7 @@ $file_attached = FALSE;
 /*
   form submission
  */
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) {
     $error = FALSE;
     $errormsg = '';
     if (!isset($_POST['body'])) {
@@ -60,6 +62,12 @@ if (isset($_POST["submit"])) {
     } else if ($_POST['body'] == '') {
         $error = TRUE;
         $errormsg = $langEmptyMsg;
+    } elseif(!isset($_POST['course']) && !$personal_msgs_allowed) {
+        $error = TRUE;
+        $errormsg = $langGeneralError;
+    } elseif (!isset($_POST['recipients']) or empty($_POST['recipients'])) {
+        $error = TRUE;
+        $errormsg = $langNoRecipients;
     } elseif (!empty($_FILES['file']['name'])) {
         $file_attached = TRUE;
     }
@@ -73,7 +81,18 @@ if (isset($_POST["submit"])) {
             $filename = '';
             $real_filename = '';
             $filesize = 0;
-            $recipients = $_POST["recipients"];
+            $recipients = array();
+            foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
+                if (preg_match('/^_/', $r)) {
+                    $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
+                    foreach ($sql_res as $ar) {
+                        $recipients[] = $ar->user_id;
+                    }
+                } else {
+                    $recipients[] = $r;
+                }
+            }
+            $recipients = array_unique($recipients);
             if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
                 $subject = $_POST['message_title'];
             } else {
@@ -87,11 +106,8 @@ if (isset($_POST["submit"])) {
             } else {
                 $cid = $course_id;
             }
-            if (!isset($_POST['thread_id'])) {//new message
-                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-            } else {//reply to a thread
-                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
-            }            
+            
+            $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
         } else {
             $cwd = getcwd();
             if (is_dir($dropbox_dir)) {
@@ -133,11 +149,8 @@ if (isset($_POST["submit"])) {
                 } else {
                     $cid = $course_id;
                 }
-                if (!isset($_POST['thread_id'])) {
-                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-                } else {
-                    $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize, intval($_POST['thread_id']));
-                }
+                
+                $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             }            
             chdir($cwd);
         }        

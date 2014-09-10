@@ -27,6 +27,7 @@ require_once 'modules/search/exerciseindexer.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
+    
     $exerciseTitle = trim($exerciseTitle);
     $exerciseDescription = purify($exerciseDescription);
     $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
@@ -54,10 +55,11 @@ if (isset($_POST['submitExercise'])) {
             $exerciseId = $objExercise->selectId();
             $eidx = new ExerciseIndexer();
             $eidx->store($exerciseId);
-            unset($_GET['modifyExercise']);
+            redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);
         }
     }
 } else {
+    $exerciseId = $objExercise->selectId();
     $exerciseTitle = $objExercise->selectTitle();
     $exerciseDescription = $objExercise->selectDescription();
     $exerciseType = $objExercise->selectType();
@@ -72,8 +74,13 @@ if (isset($_POST['submitExercise'])) {
 }
 
 // shows the form to modify the exercise
-if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POST['submitExercise'])) {
-    @$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyExercise=$_GET[modifyExercise]'>
+if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
+    if (isset($_GET['modifyExercise'])) {
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>";
+    } else {
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;NewExercise=Yes'>";
+    }
+    @$tool_content .="
 	<fieldset>
         <legend>$langInfoExercise </legend>
 	<table width='99%' class='tbl'>";
@@ -82,12 +89,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_PO
     }
     $tool_content .= "
         <tr>
-        <th width='180'>" . $langExerciseName . ":</th>
+        <th width='180'>" . $langExerciseName .":</th>
         <td><input type='text' name='exerciseTitle' " . "size='50' maxlength='200' value='" . q($exerciseTitle) . "' style='width:400px;'></td>
         </tr>
         <tr>
         <th>" . $langExerciseDescription . ":</th>
-        <td>" . rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") . "</td>
+        <td>" . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") . "</td>
         </tr>
         <tr>
         <th>" . $langExerciseType . ":</th>
@@ -193,37 +200,31 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_PO
 	</fieldset>
 	</form>";
 } else {
-    $displayResults = $objExercise->selectResults();
-    if ($displayResults == 1) {
-        $disp_results_message = $langAnswersDisp;
-    } else {
-        $disp_results_message = $langAnswersNotDisp;
-    }
-    $displayScore = $objExercise->selectScore();
-    if ($displayScore == 1) {
-        $disp_score_message = $langScoreDisp;
-    } else {
-        $disp_score_message = $langScoreNotDisp;
-    }
+    
+    $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
+    $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
+    $exerciseDescription = standard_text_escape($exerciseDescription);
+    $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
+    $exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
+    $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
+    $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
     $tool_content .= "
         <fieldset>
-        <legend>$langInfoExercise&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyExercise=yes'>
+        <legend>$langInfoExercise&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes'>
               <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
-	  <th width='180'>$langExerciseName :</th>
+	  <th width='180'>$langExerciseName:</th>
 	  <td>" . q($exerciseTitle) . "</td>
 	</tr>
 	<tr>
-	  <th>$langExerciseDescription :</th>
-	  <td>";
-
-    $exerciseDescription = standard_text_escape($exerciseDescription);
-    $tool_content .= $exerciseDescription;
-    $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
-    $exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
-    $tool_content .= "</td>
+	  <th>$langExerciseDescription:</th>
+	  <td>$exerciseDescription</td>
 	</tr>
+        <tr>
+            <th>$langExerciseType:</th>
+            <td>$exerciseType</td>
+        </tr>
 	<tr>
 	  <th>$langExerciseStart:</th>
 	  <td>$exerciseStartDate</td>
@@ -232,6 +233,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_PO
 	  <th>$langExerciseEnd:</th>
 	  <td>$exerciseEndDate</td>
 	</tr>
+        <tr>
+            <th>$langTemporarySave:</th>
+            <td>$exerciseTempSave</td>
+        </tr>
 	<tr>
 	  <th>$langExerciseConstrain:</th>
 	  <td>$exerciseTimeConstraint $langExerciseConstrainUnit</td>
@@ -240,6 +245,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_PO
 	  <th>$langExerciseAttemptsAllowed:</th>
   	  <td>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</td>
 	</tr>
+        <tr>
+            <th>$langRandomQuestions</th>
+            <td>$langSelection $randomQuestions $langFromRandomQuestions</td>
+        </tr>
 	<tr>
 	  <th>$langAnswers:</th>
 	  <td>$disp_results_message</td>

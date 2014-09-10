@@ -163,7 +163,7 @@ function file_url_escape($name) {
 }
 
 function public_file_path($disk_path, $filename = null) {
-    global $mysqlMainDb, $group_sql;
+    global $group_sql;
     static $seen_paths;
     $dirpath = dirname($disk_path);        
     

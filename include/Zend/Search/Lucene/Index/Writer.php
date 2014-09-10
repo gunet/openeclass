@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Search_Lucene
  * @subpackage Index
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Writer.php 24593 2012-01-05 20:35:02Z matthew $
+ * @version    $Id$
  */
 
 
@@ -29,7 +29,7 @@ require_once 'Zend/Search/Lucene/LockManager.php';
  * @category   Zend
  * @package    Zend_Search_Lucene
  * @subpackage Index
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Search_Lucene_Index_Writer
@@ -673,7 +673,7 @@ class Zend_Search_Lucene_Index_Writer
                     $segmentName = substr($file, 0, strlen($file) - 4);
                     // Check if it's not one of the segments in the current segments set
                     if (!isset($segments[$segmentName])  &&
-                        ($this->_currentSegment === null  ||  $this->_currentSegment->getName() != $segmentName)) {
+                        ($this->_currentSegment === null  ||  $this->_currentSegment->getName() !== $segmentName)) {
                         $filesToDelete[] = $file;
                         $filesTypes[]    = 3; // second group of files for deletions
                         $filesNumbers[]  = (int)base_convert(substr($file, 1 /* skip '_' */, strlen($file)-5), 36, 10); // order by segment number
@@ -710,7 +710,7 @@ class Zend_Search_Lucene_Index_Writer
                 try {
                     /** Skip shared docstore segments deleting */
                     /** @todo Process '.cfx' files to check if them are already unused */
-                    if (substr($file, strlen($file)-4) != '.cfx') {
+                    if (substr($file, strlen($file)-4) !== '.cfx') {
                         $this->_directory->deleteFile($file);
                     }
                 } catch (Zend_Search_Lucene_Exception $e) {

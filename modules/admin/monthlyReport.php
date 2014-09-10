@@ -68,7 +68,7 @@ if (isset($_POST["selectedMonth"])) {
 
     $coursNum = '';
     $row = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
-                       FROM monthly_summary WHERE `month` = " . quote($month));
+                       FROM monthly_summary WHERE `month` = ?s", $month);
     if ($row) {
         $row = (array) $row;
         $profesNum = $row['profesNum'];

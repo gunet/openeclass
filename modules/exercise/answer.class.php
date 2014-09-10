@@ -224,17 +224,16 @@ if (!class_exists('Answer')):
             // removes old answers before inserting of new ones
             Database::get()->query("DELETE FROM exercise_answer WHERE question_id = ?d", $questionId);
             // inserts new answers into data base
-            $sql = "INSERT INTO exercise_answer (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
+            $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
 
             for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-                  $data_array[] = $i;
                   $data_array[] = $questionId;
                   $data_array[] = $this->new_answer[$i];
                   $data_array[] = $this->new_correct[$i];
                   $data_array[] = $this->new_comment[$i];
                   $data_array[] = $this->new_weighting[$i];
                   $data_array[] = $this->new_position[$i];
-                $sql .= "(?d, ?d, ?s, ?d, ?s, ?f, ?d),";
+                $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
             }
             $sql = substr($sql, 0, -1);
             Database::get()->query($sql,$data_array);
@@ -263,10 +262,9 @@ if (!class_exists('Answer')):
             // if at least one answer
             if ($this->nbrAnswers) {
                 // inserts new answers into data base
-                $sql = "INSERT INTO exercise_answer (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
+                $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
 
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    $data_array[] = $i;
                     $data_array[] = $newQuestionId;
                     $data_array[] = $this->answer[$i];
                     $data_array[] = $this->correct[$i];
@@ -274,7 +272,7 @@ if (!class_exists('Answer')):
                     $data_array[] = $this->weighting[$i];
                     $data_array[] = $this->position[$i];  
                     
-                    $sql .= "(?d, ?d, ?s, ?d, ?s, ?f, ?d),";
+                    $sql .= "(?d, ?s, ?d, ?s, ?f, ?d),";
                 }
 
                 $sql = substr($sql, 0, -1);

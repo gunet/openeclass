@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Search_Lucene
  * @subpackage Document
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Html.php 24593 2012-01-05 20:35:02Z matthew $
+ * @version    $Id$
  */
 
 
@@ -31,7 +31,7 @@ require_once 'Zend/Search/Lucene/Document.php';
  * @category   Zend
  * @package    Zend_Search_Lucene
  * @subpackage Document
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
@@ -96,7 +96,9 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         } else {
             $htmlData = $data;
         }
-        @$this->_doc->loadHTML($htmlData);
+        $internalErrors = libxml_use_internal_errors(true);
+        $disableEntities = libxml_disable_entity_loader(true);
+        @$this->_doc->loadHTML($htmlData,LIBXML_NONET);
 
         if ($this->_doc->encoding === null) {
             // Document encoding is not recognized
@@ -109,7 +111,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
                 @$this->_doc->loadHTML(iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, 0, $htmlTagOffset))
                                      . '<head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/></head>'
-                                     . iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, $htmlTagOffset)));
+                                     . iconv($defaultEncoding, 'UTF-8//IGNORE', substr($htmlData, $htmlTagOffset)),LIBXML_NONET);
 
                 // Remove additional HEAD section
                 $xpath = new DOMXPath($this->_doc);
@@ -119,10 +121,12 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
                 // It's an HTML fragment
                 @$this->_doc->loadHTML('<html><head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/></head><body>'
                                      . iconv($defaultEncoding, 'UTF-8//IGNORE', $htmlData)
-                                     . '</body></html>');
+                                     . '</body></html>',LIBXML_NONET);
             }
 
         }
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($disableEntities);
         /** @todo Add correction of wrong HTML encoding recognition processing
          * The case is:
          * Content-type HTTP-EQUIV meta tag is presented, but ISO-8859-5 encoding is actually used,
@@ -140,10 +144,13 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         $this->addField(Zend_Search_Lucene_Field::Text('title', $docTitle, 'UTF-8'));
 
         $metaNodes = $xpath->query('/html/head/meta[@name]');
+        $whitelist = array('keywords');
         foreach ($metaNodes as $metaNode) {
-            $this->addField(Zend_Search_Lucene_Field::Text($metaNode->getAttribute('name'),
+            if (in_array($metaNode->getAttribute('name'), $whitelist, true)) {
+                $this->addField(Zend_Search_Lucene_Field::Text($metaNode->getAttribute('name'),
                                                            $metaNode->getAttribute('content'),
                                                            'UTF-8'));
+            }
         }
 
         $docBody = '';
@@ -160,16 +167,16 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
         $linkNodes = $this->_doc->getElementsByTagName('a');
         foreach ($linkNodes as $linkNode) {
-            if (($href = $linkNode->getAttribute('href')) != '' &&
-                (!self::$_excludeNoFollowLinks  ||  strtolower($linkNode->getAttribute('rel')) != 'nofollow' )
+            if (($href = $linkNode->getAttribute('href')) !== '' &&
+                (!self::$_excludeNoFollowLinks  ||  strtolower($linkNode->getAttribute('rel')) !== 'nofollow' )
                ) {
                 $this->_links[] = $href;
             }
         }
         $linkNodes = $this->_doc->getElementsByTagName('area');
         foreach ($linkNodes as $linkNode) {
-            if (($href = $linkNode->getAttribute('href')) != '' &&
-                (!self::$_excludeNoFollowLinks  ||  strtolower($linkNode->getAttribute('rel')) != 'nofollow' )
+            if (($href = $linkNode->getAttribute('href')) !== '' &&
+                (!self::$_excludeNoFollowLinks  ||  strtolower($linkNode->getAttribute('rel')) !== 'nofollow' )
                ) {
                 $this->_links[] = $href;
             }
@@ -178,7 +185,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
         $linkNodes = $xpath->query('/html/head/link');
         foreach ($linkNodes as $linkNode) {
-            if (($href = $linkNode->getAttribute('href')) != '') {
+            if (($href = $linkNode->getAttribute('href')) !== '') {
                 $this->_headerLinks[] = $href;
             }
         }
@@ -220,7 +227,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
             if(!in_array($node->parentNode->tagName, $this->_inlineTags)) {
                 $text .= ' ';
             }
-        } else if ($node->nodeType == XML_ELEMENT_NODE  &&  $node->nodeName != 'script') {
+        } else if ($node->nodeType == XML_ELEMENT_NODE  &&  $node->nodeName !== 'script') {
             foreach ($node->childNodes as $childNode) {
                 $this->_retrieveNodeText($childNode, $text);
             }
@@ -319,11 +326,15 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
             // Transform HTML string to a DOM representation and automatically transform retrieved string
             // into valid XHTML (It's automatically done by loadHTML() method)
+            $internalErrors = libxml_use_internal_errors(true);
+            $disableEntities = libxml_disable_entity_loader(true);
             $highlightedWordNodeSetDomDocument = new DOMDocument('1.0', 'UTF-8');
             $success = @$highlightedWordNodeSetDomDocument->
                                 loadHTML('<html><head><meta http-equiv="Content-type" content="text/html; charset=UTF-8"/></head><body>'
                                        . $highlightedWordNodeSetHtml
-                                       . '</body></html>');
+                                       . '</body></html>',LIBXML_NONET);
+            libxml_use_internal_errors($internalErrors);
+            libxml_disable_entity_loader($disableEntities);
             if (!$success) {
                 require_once 'Zend/Search/Lucene/Exception.php';
                 throw new Zend_Search_Lucene_Exception("Error occured while loading highlighted text fragment: '$highlightedWordNodeSetHtml'.");

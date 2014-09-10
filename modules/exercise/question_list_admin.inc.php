@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,6 +21,34 @@
 /**
  * @file question_list_admin.inc.php
  */
+load_js('jquery');
+load_js('jquery-ui');
+$head_content .= "
+<script>
+  $(function() {
+    $('.modal_warning').click( function(e){
+        var link = $(this).parent().attr('href');
+        e.preventDefault();
+        $('#dialog').dialog({
+            resizable: false,
+            width: 500,
+            modal: true,
+            buttons: {
+               '$langModifyInAllExercises': function() {
+                $( this ).dialog( 'close' );
+                window.location = link;
+              },            
+              '$langModifyInThisExercise': function() {
+                $( this ).dialog( 'close' );
+                window.location = link.concat('&clone=true');
+              }
+            }        
+        });
+    });
+  });
+</script>
+";
+$tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 // moves a question up in the list
 if (isset($_GET['moveUp'])) {
     $objExercise->moveUp($_GET['moveUp']);
@@ -46,15 +74,14 @@ if (isset($_GET['deleteQuestion'])) {
             $nbrQuestions--;
         }
     }
-    // destruction of the Question object
-    unset($objQuestionTmp);
+    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
 
 $tool_content .= "
     <div align='left' id='operations_container'>
       <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newQuestion=yes'>$langNewQu</a>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes'>$langNewQu</a>
 	&nbsp;|&nbsp;
 	<a href='question_pool.php?course=$course_code&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
       </ul>
@@ -74,6 +101,7 @@ if ($nbrQuestions) {
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         $objQuestionTmp->read($id);
+        
         if ($i % 2 == 0) {
             $tool_content .= "\n    <tr class='odd'>";
         } else {
@@ -85,15 +113,15 @@ if ($nbrQuestions) {
 			<td> " . q($objQuestionTmp->selectTitle()) . "<br />
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
 			<td class='right' width='50'>" .
-                icon('edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;editQuestion=$id") . "&nbsp;" .
-                icon('delete', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
+                icon('edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='modal_warning'" : "")) . "&nbsp;" .
+                icon('delete', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
                 "</td><td width='20'>";
         if ($i != 1) {
-            $tool_content .= icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;moveUp=$id");
+            $tool_content .= icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id");
         }
         $tool_content .= "</td><td width='20'>";
         if ($i != $nbrQuestions) {
-            $tool_content .= icon('down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;moveDown=$id");
+            $tool_content .= icon('down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id");
         }
         $tool_content .= "</td></tr>";
         $i++;

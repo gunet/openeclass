@@ -83,9 +83,17 @@ define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_GRADEBOOKTOTAL', 33);
 define('MODULE_ID_ATTENDANCE', 30);
-define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_BLOG', 37);
+define('MODULE_ID_COMMENTS', 38);
+define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_SHARING', 40);
 
+// user modules
+define('MODULE_ID_SETTINGS', 31);
+define('MODULE_ID_NOTES', 35);
+define('MODULE_ID_PERSONALCALENDAR',36);
+define('MODULE_ID_ADMINCALENDAR',37);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -124,33 +132,6 @@ function email_seems_valid($email) {
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------
 
-/*
- * Quote string for SQL query
- */
-function quote($s) {
-    return "'" . mysql_real_escape_string(canonicalize_whitespace($s)) . "'";
-}
-
-// Quote string for SQL query if needed (if magic quotes are off)
-function autoquote($s) {
-    $s = canonicalize_whitespace($s);
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return "'$s'";
-    } else {
-        return "'" . addslashes($s) . "'";
-    }
-}
-
-// Unquote string if needed (if magic quotes are on)
-function autounquote($s) {
-    $s = canonicalize_whitespace($s);
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return stripslashes($s);
-    } else {
-        return $s;
-    }
-}
-
 // Shortcut for htmlspecialchars()
 function q($s) {
     return htmlspecialchars($s, ENT_QUOTES);
@@ -183,11 +164,11 @@ function load_js($file, $init = '') {
     if ($file == 'jquery') {
         $file = 'jquery-2.1.1.min.js';
     } elseif ($file == 'jquery-ui') {
-        if ($theme == 'modern' || $theme == 'ocean')
+        if ($theme == 'modern' || $theme == 'ocean') {
             $uiTheme = 'redmond';
-        else
+        } else {
             $uiTheme = 'smoothness';
-        $head_content .= "<!--<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>-->\n";
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>\n";
         $file = 'jquery-ui-1.10.4.custom.min.js';
     } elseif ($file == 'jquery-multiselect') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
@@ -211,26 +192,34 @@ function load_js($file, $init = '') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/slick-master/slick/slick.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
             $file = 'slick-master/slick/slick.min.js';
     } elseif ($file == 'datatables') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
         $file = 'datatables/media/js/jquery.dataTables.min.js';                
     } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
+    } elseif ($file == 'datatables_reload') {
+            $file = 'datatables/media/js/jquery.dataTables_reload.js';
+    } elseif ($file == 'tagsinput') {
+        $file = 'taginput/jquery.tagsinput.min.js';
+    } elseif ($file == 'RateIt') {
+        $file = 'jquery.rateit.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-    if ($file == 'jquery-1.10.2.min.js')
+    if ($file == 'jquery-1.10.2.min.js') {
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+    }
 
-    if (strlen($init) > 0)
+    if (strlen($init) > 0) {
         $head_content .= $init;
+    }
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
 // user's info is fetched from the DB) or a hash with user_id, surname, givenname,
 // email, or an array of user ids or user info arrays
-function display_user($user, $print_email = false, $icon = true) {
+function display_user($user, $print_email = false, $icon = true, $class = "") {
     global $langAnonymous, $urlAppend;
 
     if (count($user) == 0) {
@@ -271,9 +260,15 @@ function display_user($user, $print_email = false, $icon = true) {
             $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
         }
     }
+    
+    if (!empty($class)) {
+        $class_str = "class='$class'";
+    } else {
+        $class_str = "";
+    }
 
     $token = token_generate($user->id, true);
-    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
+    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
             q($user->givenname) . " " .  q($user->surname) . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
@@ -1466,6 +1461,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
+            Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
             if ($log) {
                 Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
@@ -1478,7 +1474,12 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
+            Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
+            Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
             return true;
         } else {
             return false;
@@ -1591,16 +1592,15 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
-    global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+function rich_text_editor($name, $rows, $cols, $text, $extra = '', $onFocus = false) {
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
-
     if (!$init_done) {
         $init_done = true;
         $filebrowser = $url = '';
         $activemodule = 'document/index.php';
         if (isset($course_code) && !empty($course_code)) {
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $filebrowser = "file_browser_callback : openDocsPicker,";
             if (!$is_editor) {
                 $cid = course_code_to_id($course_code);
                 $module = Database::get()->querySingle("SELECT * FROM course_module
@@ -1628,61 +1628,33 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '') {
             }
             $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            $filebrowser = "file_browser_callback : openDocsPicker,";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        if ($onFocus) {
+            $focus_init = ",
+                menubar: false,
+                statusbar: false,   
+                setup: function (theEditor) {
+                    theEditor.on('focus', function () {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').show();
+                    });
+                    theEditor.on('blur', function () {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    });
+                    theEditor.on('init', function() {
+                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    });
+                }";
+        } else {
+            $focus_init ='';
+        }
+        load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
 <script type='text/javascript'>
-tinyMCE_GZ.init({
-        plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
-        themes : 'advanced',
-        languages : '$language',
-        disk_cache : true,
-        debug : false
-});
-
-tinyMCE.init({
-        // General options
-                language : '$language',
-                mode : 'specific_textareas',
-                editor_deselector : 'mceNoEditor',
-                theme : 'advanced',
-                plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
-                entity_encoding : 'raw',
-                relative_urls : false,
-                advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
-                $filebrowser
-
-                // Theme options
-                theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
-                theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,media,emotions,charmap,|,insertdate,inserttime',
-                theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
-                theme_advanced_toolbar_location : 'top',
-                theme_advanced_toolbar_align : 'left',
-                theme_advanced_statusbar_location : 'bottom',
-                theme_advanced_resizing : true,
-
-                // Style formats
-                style_formats : [
-                        {title : 'Bold text', inline : 'b'},
-                        {title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-                        {title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-                        {title : 'Example 1', inline : 'span', classes : 'example1'},
-                        {title : 'Example 2', inline : 'span', classes : 'example2'},
-                        {title : 'Table styles'},
-                        {title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-                ],
-
-                // Replace values for the template plugin
-                template_replace_values : {
-                        username : 'Open eClass',
-                        staffid : '991234'
-                }
-});
 
 function openDocsPicker(field_name, url, type, win) {
-    tinyMCE.activeEditor.windowManager.open({
+    tinymce.activeEditor.windowManager.open({
         file: '$url' + type,
         title: 'Resources Browser',
         width: 800,
@@ -1697,6 +1669,31 @@ function openDocsPicker(field_name, url, type, win) {
     });
     return false;
 }
+
+tinymce.init({
+    // General options
+    selector: 'textarea:not(.mceNoEditor)',
+    language: '$language',
+    theme: 'modern',
+    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime',
+    entity_encoding: 'raw',
+    relative_urls: false,
+    link_class_list: [
+        {title: 'None', value: ''},
+        {title: '$langPopUp', value: 'colorbox'},
+        {title: '$langPopUpFrame', value: 'colorboxframe'}
+    ],
+    $filebrowser
+
+    // Toolbar options
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia',
+    // Replace values for the template plugin
+    template_replace_values: {
+            username : 'Open eClass',
+            staffid : '991234'
+    }
+    $focus_init
+});
 </script>";
     }
 
@@ -2163,6 +2160,15 @@ function canonicalize_url($url) {
         return 'http://' . $url;
     } else {
         return $url;
+    }
+}
+
+function is_url_accepted($url,$protocols=""){
+    if ($url === 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url)) || ($protocols!=="" && !preg_match('/^'.$protocols.'/i', preg_replace('/\s+/', '', $url)))) {
+        return 0;
+    }
+    else{
+        return 1;
     }
 }
 

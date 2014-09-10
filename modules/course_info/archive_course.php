@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 $require_current_course = true;
-$require_course_admin = true;
+$require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
@@ -84,6 +84,7 @@ $archive_conditions = array(
                                              WHERE forum.id = forum_id AND
                                                    course_id = $course_id)",
     'forum_notify' => $sql_course,
+    'forum_user_stats' => $sql_course,
     'course_description' => $sql_course,
     'glossary' => $sql_course,
     'glossary_category' => $sql_course,
@@ -132,8 +133,11 @@ $archive_conditions = array(
                                                              WHERE course_id = $course_id) OR
                                       exercise_id IN (SELECT id FROM exercise
                                                              WHERE course_id = $course_id)",
-    'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)"
-);
+    'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)",
+    'blog_post' => "id IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
+    'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
+    'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
+    'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)");
 
 foreach ($archive_conditions as $table => $condition) {
     backup_table($archivedir, $table, $condition);

@@ -28,24 +28,29 @@ $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('jquery');
+load_js('jquery-ui');
 $head_content .= <<<EOF
+<style type="text/css">
+    .no-close .ui-dialog-titlebar-close {
+        display: none;
+    }
+</style>
+
 <script type='text/javascript'>
 /* <![CDATA[ */
 
 function loginFailPanel(e) {
-    
     duration = null;
-    if (e)
+    if (e) {
         duration = 400;
+    }
         
-    if ($('#login_fail_check').is(":checked"))
-    {
+    if ($('#login_fail_check').is(":checked")) {
         $('#login_fail_threshold').show(duration);
         $('#login_fail_deny_interval').show(duration);
         $('#login_fail_forgive_interval').show(duration);
     }
-    else
-    {
+    else {
         $('#login_fail_threshold').hide(duration);
         $('#login_fail_deny_interval').hide(duration);
         $('#login_fail_forgive_interval').hide(duration);
@@ -54,33 +59,86 @@ function loginFailPanel(e) {
 
 $(document).ready(function() {
 
+    // Course Settings checkboxes
     $('#uown').click(function(event) {
-    
-        if (!this.checked)
-            $('#town').attr('checked', false);
-        
-        $('#town').attr('disabled', !this.checked);
-        
+        if (!$('#uown').is(":checked")) {
+            $('#town').prop('checked', false);
+        }
+        $('#town').prop('disabled', !$('#uown').is(":checked"));
     });
     
+    // Login Fail Panel
     loginFailPanel();
-
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
-        
+    
+    // Open Courses checkboxes
     $('#opencourses_enable').click(function(event) {
         if ($('#opencourses_enable').is(":checked")) {
-            $('#course_metadata').attr('checked', true);
-            $('#course_metadata').attr('disabled', true);
+            if ($('#course_metadata').is(":checked")) {
+                $('#course_metadata').prop('disabled', true);
+            } else {
+                $('#course_metadata')
+                    .prop('checked', true)
+                    .prop('disabled', true)
+                    .change();
+            }
         } else {
-            $('#course_metadata').attr('disabled', false);
+            $('#course_metadata').prop('disabled', false);
         }
     });
     
     if ($('#opencourses_enable').is(":checked")) {
-        $('#course_metadata').attr('disabled', true);
+        $('#course_metadata').prop('disabled', true);
     }
+    
+    // Search Engine checkboxes
+    $("#confirmIndexDialog").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 600,
+        modal: true,
+        dialogClass: "no-close",
+        closeOnEscape: false,
+        buttons: {
+            "$langCancel": function() {
+                $('#index_enable')
+                    .prop('checked', false)
+                    .prop('disabled', false);
+                $('#search_enable').prop('checked', false);
+                $(this).dialog("close");
+            },
+            "$langOk": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+    
+    $('#search_enable').change(function(event) {
+        if ($('#search_enable').is(":checked")) {
+            if ($('#index_enable').is(":checked")) {
+                $('#index_enable').prop('disabled', true);
+            } else {
+                $('#index_enable')
+                    .prop('checked', true)
+                    .prop('disabled', true)
+                    .change();
+            }
+        } else {
+            $('#index_enable').prop('disabled', false);
+        }
+    });
+    
+    if ($('#search_enable').is(":checked")) {
+        $('#index_enable').prop('disabled', true);
+    }
+    
+    $('#index_enable').change(function(event) {
+        if ($('#index_enable').is(":checked")) {
+            $("#confirmIndexDialog").dialog("open");
+        }
+    });
 
 });
 
@@ -135,6 +193,7 @@ if (isset($_POST['submit'])) {
         'am_required' => true,
         'dont_display_login_form' => true,
         'dropbox_allow_student_to_student' => true,
+        'dropbox_allow_personal_messages' => true,
         'block_username_change' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,        
@@ -158,8 +217,10 @@ if (isset($_POST['submit'])) {
         'alt_auth_stud_reg' => true,
         'eclass_prof_reg' => true,
         'alt_auth_prof_reg' => true,
+        'enable_indexing' => true,
         'enable_search' => true,
         'enable_common_docs' => true,
+        'enable_social_sharing_links' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -173,20 +234,80 @@ if (isset($_POST['submit'])) {
     register_posted_variables($config_vars, 'all', 'intval');
     $_SESSION['theme'] = $theme = $available_themes[$theme];
 
-    if ($GLOBALS['opencourses_enable'] == 1)
+    if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
+    }
+    
+    if ($GLOBALS['enable_search'] == 1) {
+        $GLOBALS['enable_indexing'] = 1;
+    }
 
     // restrict_owndep and restrict_teacher_owndep are interdependent
     if ($GLOBALS['restrict_owndep'] == 0) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
+    }
+    
+    $scheduleIndexing = false;
+    // indexing was previously off, but now set to on, need to schedule re-indexing
+    if (!get_config('enable_indexing') && $enable_indexing) {
+        $scheduleIndexing = true;
+        Database::get()->query("DELETE FROM idx_queue");
+        Database::get()->queryFunc("SELECT id FROM course", function($r) {
+            Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
+        });
+    }
+    
+    // indexing was previously on, but now set to off, need to empty it
+    if (get_config('enable_indexing') && !$enable_indexing) {
+        require_once 'modules/search/indexer.class.php';
+        $idx = new Indexer();
+        $idx->deleteAll();
     }
 
     // update table `config`
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
     }
+    
     // Display result message
     $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    
+    // schedule indexing if necessary
+    if ($scheduleIndexing) {
+        $tool_content .= "<p class='alert1'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></p>";
+        $head_content .= <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+var idxwindow = null;
+                
+function idxpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (idxwindow == null || idxwindow.closed) {
+        idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && idxwindow !== null) {
+            idxwindow.focus();
+        }
+    } else {
+        idxwindow.focus();
+    }
+    
+    return false;
+}
+
+$(document).ready(function() {
+
+    $('#idxpbut').click();
+
+});
+
+/* ]]> */
+</script>
+EOF;
+    }
+    
     // Display link to go back to index.php
     $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 } // end of if($submit)
@@ -375,11 +496,14 @@ else {
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
+    $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';    
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
+    $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
+    $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
 
     $tool_content .= "<fieldset>
@@ -404,13 +528,19 @@ else {
         <tr>        
                 <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='" . intval(get_config('min_password_len')) . "'></td></tr>        
         <tr>
-                <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
-        </tr>        
+                <td><input id='index_enable' type='checkbox' name='enable_indexing' value='1' $cbox_enable_indexing />&nbsp;$langEnableIndexing</td>
+        </tr>
+        <tr>
+                <td><input id='search_enable' type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
+        </tr>
         <tr>		
                 <td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
         </tr>
         <tr>		
                 <td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages />&nbsp;$lang_dropbox_allow_personal_messages</td>
         </tr>
         <tr>		
                 <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
@@ -420,6 +550,9 @@ else {
         </tr>
         <tr>
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
+        </tr>
+        <tr>
+                <td><input type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links />&nbsp;$langEnableSocialSharingLiks</td>
         </tr>
         <tr>
                 <td>$langActionsExpireInterval&nbsp;<input type='text' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "' size='5' />&nbsp;($langMonthsUnit)</td>
@@ -506,6 +639,12 @@ else {
         </form>";
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+    
+    // Modal dialog
+    $tool_content .= "<div id='confirmIndexDialog' title='" . $langConfirmEnableIndexTitle . "'>
+            <p>" . $langConfirmEnableIndex . "</p>
+        </div>";
+    
     // After restored values have been inserted into form then bring back
     // values from original config.php, so the rest of the page can be displayed correctly
     if (isset($_GET['restore']) && $_GET['restore'] == "yes") {

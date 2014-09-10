@@ -79,7 +79,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
     $langChooseLang, $langCopyrightFooter, $langDeactivate,
     $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp,
-    $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda,
+    $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
     $langMyPersoAnnouncements, $langMyPersoDeadlines,
     $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
     $langPersonalisedBriefcase, $langSearch, $langUser,
@@ -97,6 +97,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $docs_content = $perso_tool_content ['docs_content'];
         $agenda_content = $perso_tool_content ['agenda_content'];
         $forum_content = $perso_tool_content ['forum_content'];
+        $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
@@ -449,7 +450,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
             $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
             $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
-
+            $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
+            
             $t->set_var('LESSON_CONTENT', $lesson_content);
             $t->set_var('ASSIGN_CONTENT', $assigns_content);
             $t->set_var('ANNOUNCE_CONTENT', $announce_content);
@@ -458,6 +460,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('FORUM_CONTENT', $forum_content);
             $t->set_var('URL_PATH', $urlAppend);
             $t->set_var('TOOL_PATH', $urlAppend);
+            $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
         }
 
         $t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);

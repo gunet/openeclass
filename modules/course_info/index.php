@@ -34,6 +34,8 @@ require_once 'include/log.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
 
 $user = new User();
 $course = new Course();
@@ -195,6 +197,20 @@ if (isset($_POST['submit'])) {
                             <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
                             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
+        
+        if (isset($_POST['s_radio'])) {
+            setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
+        }
+        
+        if (isset($_POST['r_radio'])) {
+            setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
+        }
+        if (isset($_POST['ran_radio'])) {
+            setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $_POST['ran_radio'], $course_id);
+        }
+        if (isset($_POST['c_radio'])) {
+            setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
+        }
     }
 } else {
     $tool_content .= "
@@ -216,7 +232,7 @@ if (isset($_POST['submit'])) {
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
                 	       course_license, password, id
                       FROM course WHERE code = ?s", $course_code);    
-    $title = q($c->title);
+    $title = $c->title;
     $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
@@ -249,7 +265,7 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    <tr>
 		<th>$langCourseTitle:</th>
-		<td><input type='text' name='title' value='$title' size='60' /></td>
+		<td><input type='text' name='title' value='" . q($title) . "' size='60' /></td>
 	    </tr>
 	    <tr>
 		<th>$langTeachers:</th>
@@ -335,8 +351,95 @@ if (isset($_POST['submit'])) {
 	        <td class='smaller'>$langTipLang</td>
 	    </tr>
 	</table>
-	</fieldset>
-	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+	</fieldset>";
+    
+    if (!is_sharing_allowed($course_id)) {
+        $radio_dis = " disabled";
+        $sharing_dis_label = "<tr><td><em>";
+        if (!get_config('enable_social_sharing_links')) {
+            $sharing_dis_label .= $langSharingDisAdmin;
+        }
+        if (course_status($course_id) != COURSE_OPEN) {
+            $sharing_dis_label .= " ".$langSharingDisCourse;
+        }
+        $sharing_dis_label .= "</em></td></tr>";
+    } else {
+        $radio_dis = "";
+        $sharing_dis_label = "";
+    }
+    
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked";
+    } else {
+        $checkDis = "checked";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<fieldset>
+        <legend>$langSharing</legend>
+            <table class='tbl' width='100%'>
+                <tr><td colspan='2'><input type='radio' value='1' name='s_radio' $checkEn $radio_dis/>$langSharingEn</td></td></tr>
+                <tr><td colspan='2'><input type='radio' value='0' name='s_radio' $checkDis $radio_dis/>$langSharingDis</td></tr>
+                <tr><td colspan='2'>$sharing_dis_label</tr></td>
+            </table>
+    </fieldset>";
+    
+    if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<fieldset>
+        <legend>$langRating</legend>
+            <table class='tbl' width='100%'>
+                <tr><td colspan='2'><input type='radio' value='1' name='r_radio' $checkEn />$langRatingEn</td></td></tr>
+                <tr><td colspan='2'><input type='radio' value='0' name='r_radio' $checkDis />$langRatingDis</td></tr>";
+    
+    if (course_status($course_id) != COURSE_OPEN) {
+        $radio_dis = " disabled";
+        $rating_dis_label = "<tr><td><em>".$langRatingAnonDisCourse."</em></td></tr>";
+    } else {
+        $radio_dis = "";
+        $rating_dis_label = "";
+    }
+    
+    if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<tr><td colspan='2'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis/>$langRatingAnonEn</td></td></tr>
+                      <tr><td colspan='2'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis/>$langRatingAnonDis</td></tr>
+                      <tr><td colspan='2'>$rating_dis_label</tr></td>";
+    
+    
+    $tool_content .= "</table>
+    </fieldset>";
+    
+    if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    
+    $tool_content .= "<fieldset>
+        <legend>$langCommenting</legend>
+            <table class='tbl' width='100%'>
+                <tr><td colspan='2'><input type='radio' value='1' name='c_radio' $checkEn />$langCommentsEn</td></td></tr>
+                <tr><td colspan='2'><input type='radio' value='0' name='c_radio' $checkDis />$langCommentsDis</td></tr>
+            </table>
+    </fieldset>";
+    
+	$tool_content .= "<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
 

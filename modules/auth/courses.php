@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
         if ($course_info) {
             if (($course_info->visible == COURSE_REGISTRATION or 
                     $course_info->visible == COURSE_OPEN) and !empty($course_info->password) and 
-                    $course_info->password !== autounquote($_POST['pass' . $cid])) {
+                    $course_info->password !== $_POST['pass' . $cid]) {
                 $errorExists = true;
                 $restrictedCourses[] = $course_info->public_code;
                 continue;
@@ -183,7 +183,6 @@ function getdepnumcourses($fac) {
  * @global type $langTutor
  * @global type $langBegin
  * @global type $langRegistration
- * @global type $mysqlMainDb
  * @global type $langRegistration
  * @global type $langCourseCode
  * @global type $langTeacher
@@ -199,7 +198,7 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
+    global $m, $icons, $langTutor, $langBegin, $langRegistration,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
     $langpres, $langposts, $langothers, $themeimg, $tree;
 

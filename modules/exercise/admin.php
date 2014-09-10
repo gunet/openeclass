@@ -44,9 +44,8 @@ $picturePath = "courses/$course_code/image";
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, $langFreeText);
 
 if (!$is_editor) {
-    $tool_content .= $langNotAllowed;
-    draw($tool_content, 2, null, $head_content);
-    exit();
+    Session::set_flashdata($langNotAllowed, 'alert1');
+    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
 /* * ************************* */
@@ -65,162 +64,118 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// construction of the Exercise object
+$objExercise = new Exercise();
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = $_GET['exerciseId'];
+    $exerciseId = $_GET['exerciseId'];   
+    $objExercise->read($exerciseId);
+    $nbrQuestions = $objExercise->selectNbrQuestions();
 }
-if (isset($_GET['newQuestion'])) {
-    $newQuestion = $_GET['newQuestion'];
-}
-if (isset($_SESSION['objExercise'])) {
-    $objExercise = $_SESSION['objExercise'];
-}
-if (isset($_SESSION['objAnswer'])) {
-    $objAnswer = $_SESSION['objAnswer'];
-}
-// intializes the Exercise object
-if (@(!is_object($objExercise))) {
-    // construction of the Exercise object
-    $objExercise = new Exercise();
-    // creation of a new exercise if wrong or not specified exercise ID
-    if (isset($exerciseId)) {
-        $objExercise->read($exerciseId);
-    }
-    // saves the object into the session
-    //$_SESSION['objExercise'][$exerciseId] = $objExercise;
-    $_SESSION['objExercise'] = $objExercise;
-}
-
-// doesn't select the exercise ID if we come from the question pool
-if (!isset($fromExercise)) {
-    // gets the right exercise ID, and if 0 creates a new exercise
-    if (!$exerciseId = $objExercise->selectId()) {
-        $modifyExercise = 'yes';
-    }
-}
-
-$nbrQuestions = $objExercise->selectNbrQuestions();
-
-// intializes the Question object
-if (isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
-    // construction of the Question object
-    $objQuestion = new Question();
-    // saves the object into the session
-    $_SESSION['objQuestion'][$exerciseId] = $objQuestion;
-    // reads question data
-    if (isset($_GET['editQuestion'])) {
-        // question not found
-        if (!$objQuestion->read($_GET['editQuestion'])) {
-            $tool_content .= $langQuestionNotFound;
-            draw($tool_content, 2, null, $head_content);
-            exit();
-        }
-    }
-}
-
-if (isset($_SESSION['objQuestion'][$exerciseId])) {
-    $objQuestion = $_SESSION['objQuestion'][$exerciseId];
-}
-
-if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) { 
-    // checks if the object exists
-    if (is_object($objQuestion)) {
-        // gets the question ID
-        $questionId = $objQuestion->selectId();
-    } else { // question not found
-        $tool_content .= $langQuestionNotFound;
-        draw($tool_content, 2, null, $head_content);
-        exit();
-    }
-}
-
 // if cancelling an exercise
 if (isset($_POST['cancelExercise'])) {
-    // existing exercise
-    if ($exerciseId) {
-        unset($_GET['modifyExercise']);
+    // goes back to the exercise list
+    redirect_to_home_page("modules/exercise/index.php?course=$course_code");
+}
+
+// if cancelling question creation/modification or cancelling answer creation/modification
+if (isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
+    // goes back to the edit exercise or question pool
+    if (isset($exerciseId)) {
+        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
     } else {
-        // goes back to the exercise list
-        header('Location: index.php?course=' . $course_code);
-        exit();
+        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
     }
 }
 
-// if cancelling question creation/modification
-if (isset($_POST['cancelQuestion'])) {
-    // if we are creating a new question from the question pool
-    if (!$exerciseId && !$questionId) {
-        // goes back to the question pool
-        header('Location: question_pool.php?course=' . $course_code);
-        exit();
+// intializes the Question object
+if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+    // construction of the Question object
+    $objQuestion = new Question();
+    // reads question data
+    if (isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+        if (isset($_GET['editQuestion'])) {
+            $question_id = $_GET['editQuestion'];
+        } elseif (isset($_GET['modifyQuestion'])) {
+            $question_id = $_GET['modifyQuestion'];
+        } elseif (isset($_GET['modifyAnswers'])) {
+            $question_id = $_GET['modifyAnswers'];
+        }
+        // if question not found
+        if (!$objQuestion->read($question_id)) {
+            Session::set_flashdata($langQuestionNotFound, 'alert1');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
+        }
+        
+        if (isset($_GET['editQuestion'])) {
+            //clone and redirect to edit
+            if (isset($_GET['clone'])) {
+                //if user comes from an exercise page
+                if (isset($exerciseId)) {
+                    // duplicates the question
+                    $new_question_id = $objQuestion->duplicate();
+                    // deletes the old question from the specific exercise
+                    $objQuestion->delete($exerciseId);
+                    // removes the old question ID from the question list of the Exercise object
+                    $objExercise->removeFromList($question_id);
+                    // adds the new question ID into the question list of the Exercise object
+                    $objExercise->addToList($new_question_id);
+                    // construction of the duplicated Question
+                    $objQuestion = new Question();
+                    $objQuestion->read($new_question_id);
+                    // adds the exercise ID into the exercise list of the Question object
+                    $objQuestion->addToList($exerciseId);
+                    // copies answers from the old qustion to the new
+                    $objAnswer = new Answer($question_id);
+                    $objAnswer->duplicate($new_question_id);
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&editQuestion=$new_question_id");
+                //if the user comes from question pool    
+                } else {
+                    $new_question_id = $objQuestion->duplicate();
+                    $objAnswer = new Answer($question_id);
+                    $objAnswer->duplicate($new_question_id);
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&editQuestion=$question_id");
+                }
+            }
+            $nameTools = $langQuestionManagement;
+            $navigation[] = array(
+                'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
+                'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+            );            
+            include('question_admin.inc.php');
+        } elseif (isset($_GET['modifyAnswers'])) {
+            $objAnswer = new Answer($question_id);            
+            include('answer_admin.inc.php');
+        } else {
+            $nameTools = $langInfoQuestion;
+            $navigation[] = array(
+                'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
+                'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+            );            
+            include('statement_admin.inc.php');
+        }
     } else {
-        // goes back to the question viewing
-        $editQuestion = $_GET['modifyQuestion'];
-        unset($_GET['newQuestion'], $_GET['modifyQuestion']);
+        $nameTools = $langNewQu;
+        $navigation[] = array(
+            'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
+            'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+            );
+        include('statement_admin.inc.php');
     }
-}
-
-// if cancelling answer creation/modification
-if (isset($_POST['cancelAnswers'])) {
-    // goes back to the question viewing
-    $editQuestion = $_GET['modifyAnswers'];
-    unset($_GET['modifyAnswers']);
-}
-
-// modifies the query string that is used in the link of tool name
-if (isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
-    $nameTools = $langQuestionManagement;
-    $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
-    @$QUERY_STRING = $questionId ? 'editQuestion=' . $questionId . '&fromExercise=' . $fromExercise : 'newQuestion=yes';
-} elseif (isset($_GET['newQuestion'])) {
-    $nameTools = $langNewQu;
-    $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
-    @$QUERY_STRING = $questionId ? 'editQuestion=' . $questionId . '&fromExercise=' . $fromExercise : 'newQuestion=yes';
-} elseif (isset($_GET['NewExercise'])) {
-    $nameTools = $langNewEx;
-    $QUERY_STRING = '';
-} elseif (isset($_GET['modifyExercise'])) {
-    $nameTools = $langInfoExercise;
-    $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
-    $QUERY_STRING = '';
 } else {
-    $nameTools = $langExerciseManagement;
-    $QUERY_STRING = '';
-}
-
-
-// --------- Various Actions ---------------------------
-// if the question is duplicated, disable the link of tool name
-if (isset($_POST['modifyIn']) and $_POST['modifyIn'] == 'thisExercise') {
-    if (isset($_POST['buttonBack'])) {
-        $modifyIn = 'allExercises';
+    if (isset($_GET['NewExercise'])) {
+        $nameTools = $langNewEx;
+    } elseif (isset($_GET['modifyExercise'])) {
+        $nameTools = $langInfoExercise;
+        $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
     } else {
-        $noPHP_SELF = true;
+        $nameTools = $objExercise->selectTitle();
     }
-}
-
-if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
-    // statement management
-    include('statement_admin.inc.php');
-}
-if (isset($_GET['modifyAnswers'])) {
-    // answer management
-    include('answer_admin.inc.php');
-}
-
-if (isset($_GET['editQuestion']) || isset($usedInSeveralExercises)) {
-    // question management
-    include('question_admin.inc.php');
-}
-
-if (!isset($_GET['newQuestion']) && !isset($_GET['modifyQuestion']) &&
-        !isset($_GET['editQuestion']) && !isset($_GET['modifyAnswers'])) {
-    // exercise management
     include('exercise_admin.inc.php');
-    if (!isset($_GET['modifyExercise']) and !isset($_GET['NewExercise'])) {
-        // question list management
+    if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
         include('question_list_admin.inc.php');
     }
 }
+
 draw($tool_content, 2, null, $head_content);
 
 // -----------------------------------------------

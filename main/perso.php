@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /* ========================================================================
  * Open eClass 3.0
@@ -34,6 +34,7 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'main/personal_calendar/calendar_events.class.php';
 
 if ($_SESSION['status'] == USER_TEACHER) {
     $extra = "AND course.visible != " . COURSE_INACTIVE;
@@ -53,7 +54,7 @@ if (count($result2) > 0) {
     }
 }
 $_SESSION['courses'] = $courses;
- 
+
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
@@ -82,13 +83,25 @@ if (count($lesson_ids) > 0) {
 }
 
 // create array with content
+//BEGIN - Get user personal calendar
+$today = getdate();
+$day = $today['mday'];
+$month = $today['mon'];
+$year = $today['year']; 
+Calendar_Events::get_calendar_settings();
+$user_personal_calendar = Calendar_Events::small_month_calendar($day,$month,$year);
+//END - Get personal calendar
+
+// ==  BEGIN create array with personalised content
+
 $perso_tool_content = array(
     'lessons_content' => $user_lesson_info,
     'assigns_content' => $user_assignments,
     'announce_content' => $user_announcements,
     'docs_content' => $user_documents,
     'agenda_content' => $user_agenda,
-    'forum_content' => $user_forumPosts
+    'forum_content' => $user_forumPosts,
+    'personal_calendar_content' => $user_personal_calendar
 );
 
 
@@ -269,18 +282,18 @@ function getUserAgenda($lesson_id) {
         return "<p class='alert1'>$langNoEventsExist</p>";
     }
                
-    $mysql_query_result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
-                                                        agenda.duration, course.code, course.title AS course_title
-                                                        FROM agenda, course WHERE agenda.course_id IN ($course_ids)
-                                                        AND agenda.course_id = course.id
-                                                        AND agenda.visible = 1
-                                                        HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
-                                                    ORDER BY start ASC
-                                                    LIMIT 5");
+    $result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
+                                                  agenda.duration, course.code, course.title AS course_title
+                                             FROM agenda, course WHERE agenda.course_id IN ($course_ids)
+                                                  AND agenda.course_id = course.id
+                                                  AND agenda.visible = 1
+                                             HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= 0
+                                             ORDER BY start ASC
+                                             LIMIT 5");
           
     $agenda_content = "<table width='100%'>";
-    if ($mysql_query_result > 0) {        
-        foreach ($mysql_query_result as $data) {
+    if ($result > 0) {        
+        foreach ($result as $data) {
             $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data->start)) . "</td></tr>";                        
             $url = $urlServer . "modules/agenda/index.php?course=" . $data->code;
             if (strlen($data->duration) == 0) {

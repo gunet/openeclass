@@ -238,11 +238,11 @@ if ($parentDir == '/' or $parentDir == '\\') {
   -------------------------------------- */
 
 /* Search infos in the DB about the current directory the user is in */
-$sql = "SELECT * FROM document
+$result = Database::get()->queryArray("SELECT * FROM document
                  WHERE $group_sql AND
-                       path LIKE " . autoquote($curDirPath . '/%') . " AND
-                       path NOT LIKE " . autoquote($curDirPath . '/%/%');
-$result = Database::get()->queryArray($sql);
+                       path LIKE ?s AND
+                       path NOT LIKE ?s",
+            $curDirPath . '/%', $curDirPath . '/%/%');
 $attribute = array();
 
 foreach ($result as $row) {

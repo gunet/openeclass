@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,29 +20,13 @@
  * ======================================================================== */
 
 require_once 'indexer.class.php';
+require_once 'abstractindexer.class.php';
 require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class VideolinkIndexer implements ResourceIndexerInterface {
-
-    private $__indexer = null;
-    private $__index = null;
-
-    /**
-     * Constructor. You can optionally use an already instantiated Indexer object if there is one.
-     * 
-     * @param Indexer $idxer - optional indexer object
-     */
-    public function __construct($idxer = null) {
-        if ($idxer == null)
-            $this->__indexer = new Indexer();
-        else
-            $this->__indexer = $idxer;
-
-        $this->__index = $this->__indexer->getIndex();
-    }
+class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a VideoLink db row.
@@ -51,7 +35,7 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * @param  object  $vlink
      * @return Zend_Search_Lucene_Document
      */
-    private static function makeDoc($vlink) {
+    protected function makeDoc($vlink) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
@@ -72,124 +56,62 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * @param  int $vlinkId
      * @return object - the mysql fetched row
      */
-    private function fetch($vlinkId) {
+    protected function fetch($vlinkId) {
         
         $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);
-        if (!$vlink)
+        if (!$vlink) {
             return null;
+        }
 
         return $vlink;
     }
-
+    
     /**
-     * Store a VideoLink in the Index.
+     * Get Term object for locating a unique single videolink.
      * 
-     * @param int     $vlinkId
-     * @param boolean $optimize
+     * @param  int $vlinkId - the videolink id
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function store($vlinkId, $optimize = false) {
-        $vlink = $this->fetch($vlinkId);
-        if (!$vlink)
-            return;
-
-        // delete existing videolink from index
-        $this->remove($vlinkId, false, false);
-
-        // add the videolink back to the index
-        $this->__index->addDocument(self::makeDoc($vlink));
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForSingleResource($vlinkId) {
+        return new Zend_Search_Lucene_Index_Term('vlink_' . $vlinkId, 'pk');
     }
-
+    
     /**
-     * Remove a VideoLink from the Index.
+     * Get Term object for locating all possible videolinks.
      * 
-     * @param int     $vlinkId
-     * @param boolean $existCheck
-     * @param boolean $optimize
+     * @return Zend_Search_Lucene_Index_Term
      */
-    public function remove($vlinkId, $existCheck = false, $optimize = false) {
-        if ($existCheck) {
-            $vlink = $this->fetch($vlinkId);
-            if (!$vlink)
-                return;
-        }
-
-        $term = new Zend_Search_Lucene_Index_Term('vlink_' . $vlinkId, 'pk');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getTermForAllResources() {
+        return new Zend_Search_Lucene_Index_Term('vlink', 'doctype');
     }
-
+    
     /**
-     * Store all VideoLinks belonging to a Course.
+     * Get all possible videolinks from DB.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function storeByCourse($courseId, $optimize = false) {
-        // delete existing videolinks from index
-        $this->removeByCourse($courseId);
-
-        // add the videolinks back to the index
-        $res = Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d", $courseId);
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getAllResourcesFromDB() {
+        return Database::get()->queryArray("SELECT * FROM videolink");
     }
-
+    
     /**
-     * Remove all VideoLinks belonging to a Course.
+     * Get Lucene query input string for locating all videolinks belonging to a given course.
      * 
-     * @param int     $courseId
-     * @param boolean $optimize
+     * @param  int $courseId - the given course id
+     * @return string        - the string that can be used as Lucene query input
      */
-    public function removeByCourse($courseId, $optimize = false) {
-        $hits = $this->__index->find('doctype:vlink AND courseid:' . $courseId);
-        foreach ($hits as $hit)
-            $this->__index->delete($hit->getDocument()->id);
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getQueryInputByCourse($courseId) {
+        return 'doctype:vlink AND courseid:' . $courseId;
     }
-
+    
     /**
-     * Reindex all VideoLinks.
+     * Get all videolinks belonging to a given course from DB.
      * 
-     * @param boolean $optimize
+     * @param  int   $courseId - the given course id
+     * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    public function reindex($optimize = false) {
-        // remove all videolinks from index
-        $term = new Zend_Search_Lucene_Index_Term('vlink', 'doctype');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
-
-        // get/index all videolinks from db
-        $res = Database::get()->queryArray("SELECT * FROM videolink");
-        foreach ($res as $row) {
-            $this->__index->addDocument(self::makeDoc($row));
-        }
-
-        if ($optimize)
-            $this->__index->optimize();
-        else
-            $this->__index->commit();
+    protected function getCourseResourcesFromDB($courseId) {
+        return Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d", $courseId);
     }
 
     /**

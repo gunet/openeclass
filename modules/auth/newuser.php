@@ -196,7 +196,6 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         // check if the username is already in use
-        //$q2 = "SELECT username FROM user WHERE username = " . autoquote($uname);
         $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $uname);
         if ($username_check) {
             $registration_errors[] = $langUserFree;
@@ -245,7 +244,6 @@ if (!isset($_POST['submit'])) {
         }
 
         $emailsubject = "$langYourReg $siteName";
-        $uname = autounquote($uname);
         $telephone = get_config('phone');
         $administratorName = get_config('admin_name');
         $emailhelpdesk = get_config('email_helpdesk');
@@ -273,12 +271,11 @@ if (!isset($_POST['submit'])) {
         }
         // login user
         else {            
-            $results = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
-            foreach ($results as $myrow) {
-                $uid = $myrow->id;
-                $surname = $myrow->surname;
-                $givenname = $myrow->givenname;
-            }            
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
+            $uid = $myrow->id;
+            $surname = $myrow->surname;
+            $givenname = $myrow->givenname;
+        
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                              VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
             $_SESSION['uid'] = $uid;

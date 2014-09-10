@@ -94,8 +94,7 @@ if ($gradebook) {
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
                                GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
@@ -203,6 +202,8 @@ if ($is_editor) {
             $gradebookActivityToModify = "";
             $activity_type = "";
         }
+
+        if (!isset($contentToModify)) $contentToModify = "";
 
         @$tool_content .= "
             <tr><th>$langGradebookType:</th></tr>
@@ -340,10 +341,12 @@ if ($is_editor) {
         }
         $actDesc = purify($_POST['actDesc']);
         if (isset($_POST['auto'])) {
-            $auto = intval($_POST['auto']);
+            $auto = $_POST['auto'];
+        } else {
+            $auto = "";
         }
-        $weight = intval($_POST['weight']);
-        $type = intval($_POST['activity_type']);
+        $weight = $_POST['weight'];
+        $type = $_POST['activity_type'];
         $actDate = $_POST['date'];
         $visible = $_POST['visible'];
         
@@ -839,11 +842,10 @@ if ($is_editor) {
             //check the rest value and rearrange the table
             $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
-                               GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
+                               GROUP BY user.id", $limitDate, $course_id, USER_STUDENT);
 
             if ($newUsersQuery) {
                 foreach ($newUsersQuery as $newUsers) {
@@ -1245,15 +1247,15 @@ if ($is_editor) {
                 <tr>
                   <th>
                   <select name='degreerange'><option value=10";
-        if($gradebook_range == 10){
+        if (isset($gradebook_range) and $gradebook_range == 10) {
             $tool_content .= " selected ";
-        }          
+        }
         $tool_content .= ">0-10</option><option value=5";
-        if($gradebook_range == 5){
+        if (isset($gradebook_range) and $gradebook_range == 5) {
             $tool_content .= " selected ";
         }
         $tool_content .= ">0-5</option><option value=100";
-        if($gradebook_range == 100){
+        if (isset($gradebook_range) and $gradebook_range == 100) {
             $tool_content .= " selected ";
         }
         $tool_content .= ">0-100</option></select>";
@@ -1287,12 +1289,11 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<fieldset><legend>$langGradebookGrades</legend>";
-        $tool_content .= "<div class='center'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
+        $tool_content .= "<div class='info'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
         
         if(weightleft($gradebook_id, 0) != 0){
             $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
-        }
-        
+        }        
         
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
@@ -1305,8 +1306,10 @@ if ($is_editor) {
     if ($result) {
         foreach ($result as $announce) {            
             //check if the user has attend for this activity
-            $userAttend = Database::get()->querySingle("SELECT grade FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID)->grade;
-
+            $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID);
+            if ($sql) {
+                $userAttend = $sql->grade;
+            }
             $content = standard_text_escape($announce->description);
             $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
 

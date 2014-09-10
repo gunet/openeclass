@@ -39,12 +39,11 @@ if (isset($_POST['cid']) and isset($_POST['state'])) {
 
 $q = Database::get()->querySingle("SELECT visible, password FROM course WHERE id = ?d", $cid);
 if ($q) {
-    //list($visible, $course_password) = mysql_fetch_row($q);
     $visible = $q->visible;
     $course_password = $q->password;
     if ($state == 'true') {
         if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
-                $password === $course_password) {
+                ($password === $course_password or $course_password === null)) {
             Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                          VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $cid, $uid);
             Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => 5));

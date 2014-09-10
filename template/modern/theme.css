@@ -960,6 +960,16 @@ a.unit_link_invisible:hover {
     text-decoration: underline;
 }
 
+ul.poll_answers li {
+    margin: 1em 0;
+    list-style-image: url(img/arrow.png);
+}
+
+.q_comments {
+font-size: 12px;
+padding: 5px 5px 5px 5px;
+background-color: #f8f8f8;
+}
 /*-------------------------------------
    7. Perso
 -------------------------------------*/
@@ -1771,4 +1781,209 @@ div.tagsinput div { display:block; float: left; }
 
 .wikitable th {
     border: 1px solid black;
+}
+.blog_posts {
+    float: left; 
+    width: 75%; 
+    word-wrap:break-word;
+}
+
+.blog_post {
+    margin-bottom: 10px;
+}
+
+.blog_post_content {
+    margin-bottom: 10px;
+}
+
+.blog_post_title {
+    margin-bottom: 10px;
+}
+
+.blog_post_empty_space {
+    margin-bottom: 40px;
+}
+
+.blog_tree {
+    list-style-type: none; 
+    padding: 0;
+    margin-left: 0;
+}
+
+.blog_tree_m_cur {
+    list-style-type: disk;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_m {
+    display:none;
+    list-style-type: disk;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_y_cur {
+    list-style-type: none;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_y {
+    display:none;
+    list-style-type: none;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.commenting {
+    margin-bottom: 40px;
+}
+
+.commentArea {
+    display: none;
+}
+
+.comment {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/*-------------------
+       RATING
+--------------------*/
+.rating {
+    margin-bottom: 10px;
+}
+
+.rateit {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.rateit .rateit-range
+{
+    position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+    background: url(img/star.gif);
+    height: 16px;
+    outline: none;
+}
+
+.rateit .rateit-range * {
+    display:block;
+}
+
+/* for IE 6 */
+* html .rateit, * html .rateit .rateit-range
+{
+    display: inline;
+}
+
+/* for IE 7 */
+* + html .rateit, * + html .rateit .rateit-range
+{
+    display: inline;
+}
+
+.rateit .rateit-hover, .rateit .rateit-selected
+{
+    position: absolute;
+    left: 0px;
+}
+
+.rateit .rateit-hover-rtl, .rateit .rateit-selected-rtl
+{
+    left: auto;
+    right: 0px;
+}
+
+.rateit .rateit-hover
+{
+    background: url(img/star.gif) left -32px;
+}
+
+.rateit .rateit-hover-rtl
+{
+    background-position: right -32px;
+}
+
+.rateit .rateit-selected
+{
+    background: url(img/star.gif) left -16px;
+}
+
+.rateit .rateit-selected-rtl
+{
+    background-position: right -16px;
+}
+
+.rateit .rateit-preset
+{
+    background: url(img/star.gif) left -48px;
+}
+
+.rateit .rateit-preset-rtl
+{
+    background: url(img/star.gif) left -48px;
+}
+
+.rateit button.rateit-reset
+{
+    background: url(img/delrate.gif) 0 0;
+    width: 16px;
+    height: 16px;
+    display: -moz-inline-box;
+    display: inline-block;
+    float: left;
+    outline: none;
+    border:none;
+    padding: 0;
+}
+
+.rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
+{
+    background-position: 0 -16px;
+}
+
+.hideratewidget {
+    display:none;
+}
+
+/*-------------------*/
+
+.sharingcontainer {
+    margin-bottom: 10px;
+}
+
+.sharinglist {
+    display: inline;
+    padding-left: 10px;
+}
+
+.sharinglist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 10px;
+}
+
+/* Autocomplete input */
+#recipients.ui-autocomplete-loading {
+    background: white url('img/ajax_loader.gif') right center no-repeat;
+}
+
+#recipients.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
 }

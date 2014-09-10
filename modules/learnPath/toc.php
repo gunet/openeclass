@@ -119,7 +119,7 @@ echo "<ul><li class='category'>$langContents</li>";
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
-    if ($module['visible'] == 1 || $is_blocked) {
+    if ($module['visible'] == 0 || $is_blocked) {
         if ($is_editor) {
             $style = " class='invisible'";
             $image_bullet = "off";

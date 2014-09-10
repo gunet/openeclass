@@ -260,7 +260,7 @@ function loggedInMenu() {
     require_once 'modules/dropbox/class.mailbox.php';
     
     $mbox = new Mailbox($uid, 0);
-    $new_msgs = $mbox->unreadThreadsNumber();
+    $new_msgs = $mbox->unreadMsgsNumber();
     if ($new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langDropBox']);
     } else {
@@ -270,9 +270,19 @@ function loggedInMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-    array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
+    array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "arrow.png");
 
+    array_push($sideMenuText, $GLOBALS['langNotes']);
+    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
+    array_push($sideMenuImg, "arrow.png");
+    
+    if (isset($status) and ($status == USER_STUDENT)) {
+        array_push($sideMenuText, $GLOBALS['langGradeTotal']);
+        array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
+    
     array_push($sideMenuText, $GLOBALS['langModifyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
     array_push($sideMenuImg, "arrow.png");
@@ -346,11 +356,9 @@ function loggedOutMenu() {
 /**
  * Creates the administrator menu
  * 
- * @global type $urlAppend
  * @global type $language
  * @global type $phpSysInfoURL
  * @global type $phpMyAdminURL
- * @global type $siteName
  * @global type $urlServer
  * @global type $is_admin
  * @global type $is_power_user
@@ -359,8 +367,8 @@ function loggedOutMenu() {
  */
 function adminMenu() {
 
-    global $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-    global $siteName, $urlServer;
+    global $language, $phpSysInfoURL, $phpMyAdminURL;
+    global $urlServer;
     global $is_admin, $is_power_user, $is_departmentmanage_user;
 
     $sideMenuGroup = array();
@@ -563,7 +571,7 @@ function adminMenu() {
  * @return array
  */
 function lessonToolsMenu() {
-    global $is_editor, $is_course_admin;
+    global $uid, $is_editor, $is_course_admin;
     global $course_code, $langAdministrationTools, $langExternalLinks;
     global $modules, $admin_modules, $urlAppend;
 
@@ -611,7 +619,20 @@ function lessonToolsMenu() {
         
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
-            array_push($sideMenuText, q($modules[$mid]['title']));
+            if ($mid == MODULE_ID_DROPBOX) {
+                require_once 'modules/dropbox/class.mailbox.php';
+                
+                $mbox = new Mailbox($uid, course_code_to_id($course_code));
+                $new_msgs = $mbox->unreadMsgsNumber();
+                if ($new_msgs != 0) {
+                    array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")</b>");
+                } else {
+                    array_push($sideMenuText, q($modules[$mid]['title']));
+                }
+            } else {
+                array_push($sideMenuText, q($modules[$mid]['title']));
+            }
+            
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);
