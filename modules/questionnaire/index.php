@@ -126,7 +126,7 @@ if ($is_editor) {
     $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
-	    <li><a href='addpoll.php?course=$course_code'>$langCreatePoll</a></li>
+	    <li><a href='admin.php?course=$course_code&amp;newPoll=yes'>$langCreatePoll</a></li>
 	  </ul>
 	</div>";
 }
@@ -243,7 +243,7 @@ function printPolls() {
                         <td class='center'>" .
                             icon('search', $langSee, "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid") .
                             "&nbsp;" . 
-                            icon('edit', $langEdit, "addpoll.php?course=$course_code&amp;edit=yes&amp;pid=$pid") .
+                            icon('edit', $langEdit, "admin.php?course=$course_code&amp;pid=$pid") .
                             "&nbsp;" . 
                             icon('clear', $langPurgeExercises,
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",

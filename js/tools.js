@@ -338,73 +338,22 @@ function secondsToHms(d) {
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
 // Questionnaire / Poll
-
 function poll_init() {
-    var deleteIcon = $('#deleteIcon').html();
-    var moveIcon = $('#moveIcon').html();
+    delete_init();
     $('input[type=submit][value="+"]').on('click', function (event) {
-        var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
-        $(this).closest('tr').next().find('li').last()
-            .before('<li><input type="text" name="answer' +
-                qid + '[]" value="" size="50">' + deleteIcon + moveIcon +'</li>');
+        //var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
+        var last_li = $(this).closest('tr').next().find('li').last();
+        last_li.after(last_li.clone()).next().find('input').removeAttr('value');
+        delete_init();
         event.preventDefault();
     });
-    $('.poll_answers').sortable({items: "li:not(#unknown)"});
-    $('.poll_answers li:not(#unknown)').append(deleteIcon).css('cursor', 'move').append(moveIcon);
-    $('.poll_answers li:not(#unknown)').find('#moveIconImg').css('cursor', 'move');
+    $('.poll_answers').sortable();
+    $('.poll_answers').find('#moveIconImg').css('cursor', 'move');
+
+}
+function delete_init(){
     $('.poll_answers img').not('#moveIconImg').css('cursor', 'pointer').on('click', function () {
         $(this).closest('li').remove();
-    });
-    $('.poll_toolbar img').css('cursor', 'pointer').on('click', function () {
-        var icon = icon_src_to_name($(this).attr('src'));
-        var cur_tinymce_id = $(this).closest('td').next().find('textarea').attr('id');
-        if (cur_tinymce_id) {
-            tinyMCE.execCommand( 'mceRemoveControl', false, cur_tinymce_id );
-        }
-        var cur = $(this).closest('.poll_item');
-        if (icon == 'up') {
-            var prev = cur.prevAll('.poll_item');
-            if (prev.length) {
-                var prev_tinymce_id = prev.find('textarea').attr('id');
-                if (prev_tinymce_id) {
-                    tinyMCE.execCommand( 'mceRemoveControl', false, prev_tinymce_id );
-                }                
-                prev = prev.eq(0);
-                var prev_contents = prev.clone(true);
-                var cur_contents = cur.clone(true);
-                cur.replaceWith(prev_contents);
-                prev.replaceWith(cur_contents);
-                if (cur_tinymce_id) {
-                    tinyMCE.execCommand( 'mceAddControl', true, cur_tinymce_id );
-                }
-                if (prev_tinymce_id) {
-                    tinyMCE.execCommand( 'mceAddControl', true, prev_tinymce_id );
-                }                   
-            }
-        } else if (icon == 'down') {
-            var next = cur.nextAll('.poll_item');
-            if (next.length) {
-                var next_tinymce_id = next.find('textarea').attr('id');
-                if (next_tinymce_id) {
-                    tinyMCE.execCommand( 'mceRemoveControl', false, next_tinymce_id );
-                }                  
-                next = next.eq(0);
-                var next_contents = next.clone(true);
-                var cur_contents = cur.clone(true);
-                cur.replaceWith(next_contents);
-                next.replaceWith(cur_contents);
-                if (cur_tinymce_id) {
-                    tinyMCE.execCommand( 'mceAddControl', true, cur_tinymce_id );
-                }
-                if (next_tinymce_id) {
-                    tinyMCE.execCommand( 'mceAddControl', true, next_tinymce_id );
-                }                    
-            }
-        } else if (icon == 'delete') {
-            cur.prev('hr').remove();
-            cur.prev('br').remove();
-            cur.remove();
-        }
     });
 }
 function icon_src_to_name(src) {

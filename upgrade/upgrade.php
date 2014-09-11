@@ -262,8 +262,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                 echo "<p class='sub_title1'>$langUpgradeBase <b>$mysqlMainDb</b></p>\n\n";
                 flush();
-                mysql_select_db($mysqlMainDb);
-
+                
                 // Create or upgrade config table
                 if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
                     Database::get()->query("RENAME TABLE config TO old_config");
@@ -1314,7 +1313,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pid` INT(11) NOT NULL DEFAULT 0,
                             `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                            `qtype` ENUM('multiple', 'fill') NOT NULL)
+                            `q_position` INT(11) DEFAULT 1)
                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                             `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1871,10 +1870,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("ALTER TABLE `logins` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
 
                     // There is a special case with user_request storing its IP in numeric format
-                    $fields_user_request = mysql_list_fields($mysqlMainDb, 'user_request');
-                    $columns_user_request = mysql_num_fields($fields_user_request);
-                    for ($i = 0; $i < $columns_user_request; $i++) {
-                        if (mysql_field_name($fields_user_request, $i) == "ip_address") {
+
+                    $fields_user_request = Database::get()->queryArray("SHOW COLUMNS FROM user_request");
+                    foreach ($fields_user_request as $row2) {
+                        if ($row2->Field == "ip_address") {
                             Database::get()->query("ALTER TABLE `user_request` ADD `request_ip` varchar(45) NOT NULL DEFAULT ''");
                             Database::get()->queryFunc("SELECT id,INET_NTOA(ip_address) as ip_addr FROM user_request", function ($row) {
                                 Database::get()->query("UPDATE `user_request` SET `request_ip` = ?s WHERE `id` = ?s", $row->ip_addr, $row->id);
