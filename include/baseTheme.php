@@ -100,6 +100,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
+    $classes = array(
+        'current' => 'current',
+    );
+
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
     unset($_SESSION['embedonce']);
@@ -144,7 +148,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     if (is_array($toolArr)) {
         for ($i = 0; $i < $numOfToolGroups; $i ++) {
-            $t->set_var ( 'NAV_BLOCK_CLASS', $toolArr[$i][0]['class'] );
+            $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
+            $t->set_var('TOOL_GROUP_ID', $i);
             if ($toolArr [$i] [0] ['type'] == 'none') {
                 $t->set_var('ACTIVE_TOOLS', '&nbsp;');
                 $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
@@ -179,7 +184,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('IMG_CLASS', $img_class);
                 $module_dir = module_path($toolArr[$i][2][$j]);
                 if ($module_dir == $current_module_dir) {
-                    $t->set_var('TOOL_CLASS', 'current');
+                    $t->set_var('TOOL_CLASS', $classes['current']);
                 } else {
                     $t->set_var('TOOL_CLASS', '');
                 }

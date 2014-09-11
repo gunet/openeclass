@@ -151,7 +151,7 @@ function js_escape($s) {
 }
 
 // Include a JavaScript file from the main js directory
-function load_js($file, $init = '') {
+function load_js($file, $init = '', $really_load=true) {
     global $head_content, $urlAppend, $theme;
     static $loaded;
 
@@ -161,55 +161,57 @@ function load_js($file, $init = '') {
         $loaded[$file] = true;
     }
 
-    if ($file == 'jquery') {
-        $file = 'jquery-2.1.1.min.js';
-    } elseif ($file == 'jquery-ui') {
-        if ($theme == 'modern' || $theme == 'ocean') {
-            $uiTheme = 'redmond';
-        } else {
-            $uiTheme = 'smoothness';
+    if ($really_load) {
+        if ($file == 'jquery') {
+            $file = 'jquery-2.1.1.min.js';
+        } elseif ($file == 'jquery-ui') {
+            if ($theme == 'modern' || $theme == 'ocean') {
+                $uiTheme = 'redmond';
+            } else {
+                $uiTheme = 'smoothness';
+            }
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>\n";
+            $file = 'jquery-ui-1.10.4.custom.min.js';
+        } elseif ($file == 'jquery-multiselect') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
+            $file = 'jquery.multiselect.min.js';
+        } elseif ($file == 'jstree') {
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
+            $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'shadowbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
+            $file = 'shadowbox/shadowbox.js';
+        } elseif ($file == 'fancybox2') {
+            $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
+            $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
+        } elseif ($file == 'colorbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
+            $file = 'colorbox/jquery.colorbox.min.js';
+        } elseif ($file == 'flot') {
+            $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+            $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
+            $file = 'flot/jquery.flot.categories.min.js';
+        } elseif ($file == 'slick') {
+                $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
+                $file = 'slick-master/slick/slick.min.js';
+        } elseif ($file == 'datatables') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
+            $file = 'datatables/media/js/jquery.dataTables.min.js';                
+        } elseif ($file == 'datatables_filtering_delay') {
+                $file = 'datatables/media/js/jquery.dataTables_delay.js';
+        } elseif ($file == 'datatables_reload') {
+                $file = 'datatables/media/js/jquery.dataTables_reload.js';
+        } elseif ($file == 'tagsinput') {
+            $file = 'taginput/jquery.tagsinput.min.js';
+        } elseif ($file == 'RateIt') {
+            $file = 'jquery.rateit.min.js';
         }
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>\n";
-        $file = 'jquery-ui-1.10.4.custom.min.js';
-    } elseif ($file == 'jquery-multiselect') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
-        $file = 'jquery.multiselect.min.js';
-    } elseif ($file == 'jstree') {
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
-        $file = 'jstree/jquery.jstree.min.js';
-    } elseif ($file == 'shadowbox') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
-        $file = 'shadowbox/shadowbox.js';
-    } elseif ($file == 'fancybox2') {
-        $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
-        $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
-    } elseif ($file == 'colorbox') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
-        $file = 'colorbox/jquery.colorbox.min.js';
-    } elseif ($file == 'flot') {
-        $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
-        $file = 'flot/jquery.flot.categories.min.js';
-    } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
-            $file = 'slick-master/slick/slick.min.js';
-    } elseif ($file == 'datatables') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
-        $file = 'datatables/media/js/jquery.dataTables.min.js';                
-    } elseif ($file == 'datatables_filtering_delay') {
-            $file = 'datatables/media/js/jquery.dataTables_delay.js';
-    } elseif ($file == 'datatables_reload') {
-            $file = 'datatables/media/js/jquery.dataTables_reload.js';
-    } elseif ($file == 'tagsinput') {
-        $file = 'taginput/jquery.tagsinput.min.js';
-    } elseif ($file == 'RateIt') {
-        $file = 'jquery.rateit.min.js';
-    }
-    $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-    if ($file == 'jquery-1.10.2.min.js') {
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
+        if ($file == 'jquery-1.10.2.min.js') {
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+        }
     }
 
     if (strlen($init) > 0) {

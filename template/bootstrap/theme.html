@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<!-- BEGIN mainBlock -->
+<html>
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>{%PAGE_TITLE%}</title>
+
+	<!-- jQuery -->
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
+
+	<!-- jQuery UI custom - selected only the importants -->
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-ui-1.10.4.custom.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	<!-- Font Awesome - A font of icons -->
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+	<!-- Our javascript -->
+    <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
+
+	<!-- Our main styles -->
+    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/main.css">
+
+	<!-- Open Sans font from google -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,300,600,700,800&amp;subset=latin,greek-ext' rel='stylesheet' type='text/css'>
+
+    {%EXTRA_CSS%}
+    {%TOOL_CSS%}
+    {%HEAD_EXTRAS%}
+
+</head>
+
+<body>
+	<div class="container">
+	<!--
+		<div class="page-header">
+			<h1>Diligent</h1>
+			<p class="lead">The bootstrap-based default theme of eClass</p>	
+		</div>
+	-->
+	    <div class="row" id="Frame">
+	        <div id="leftnav" class="col-xs-1 col-sm-1 col-md-2 sidebar">
+
+	        	<div class="logo">
+                    <img class="img-responsive" src="{%template_base%}/img/eclass-new-logo.png" alt=''>
+	        	</div>
+
+					<div class="panel-group" id="sidebar-accordion">
+                        <!-- BEGIN leftNavBlock -->
+                        <!-- BEGIN leftNavCategoryBlock -->
+                        <div class="panel">
+
+                            <!-- BEGIN leftNavCategoryTitleBlock -->
+                            <a data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
+	                            <div class="panel-heading">
+	                                <h4 class="panel-title">
+                                        <i class="fa fa-dashboard"></i><span class="hidden-sm hidden-xs">{%ACTIVE_TOOLS%}</span>
+	                                </h4>
+	                            </div>
+                            </a>
+                            <!-- END leftNavCategoryTitleBlock -->
+
+                            <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse">
+                                    <!-- BEGIN leftNavLinkBlock -->
+                                    <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}">
+                                      <i class="fa {%IMG_CLASS%}"></i>
+                                      <span class="hidden-sm hidden-xs">{%TOOL_TEXT%}</span>
+				                    </a>
+                                    <!-- END leftNavLinkBlock -->
+                            </div>
+
+                        </div>
+                        <!-- END leftNavCategoryBlock -->
+                        <!-- END leftNavBlock -->
+
+                    </div>
+	        </div>
+	        <div id="main-content" class="col-xs-11 col-sm-11 col-md-10">
+		        <nav id="header" class="row navbar navbar-default navbar-collapse" role="navigation">
+		        	<ul class="nav navbar-nav navbar-right">
+		              <li><a href="#"><i class="fa fa-folder"></i></a></li>
+		              <li><a href="#"><i class="fa fa-search"></i></a></li>
+		              <li class="dropdown"><a href="#"><i class="fa fa-user"></i>panchara</a></li>
+		              <li><a class="toggle-sidebar"><i class="fa fa-bars"></i></a></li>
+		            </ul>
+		        </nav>
+	        	<div class="">
+                    <div class="breadcrumb_wrapper">
+                        <!-- BEGIN breadCrumbHomeBlock -->
+                        <ol class="breadcrumb container">
+                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+                            <!-- END breadCrumbHomeBlock -->
+                            <!-- BEGIN breadCrumbStartBlock -->
+                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+                            <!-- END breadCrumbStartBlock -->
+                            <!-- BEGIN breadCrumbEndBlock -->
+                            <!-- END breadCrumbEndBlock -->
+                        </ol>
+                    </div>
+
+                    <!-- BEGIN toolTitleBlock -->
+                    <h3>{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small></h3>
+                    <!-- END toolTitleBlock -->
+
+                    <!-- BEGIN TOOL CONTENT -->
+                    {%EXTRA_MSG%}
+                    {%TOOL_CONTENT%}
+                    <!-- END TOOL CONTENT -->
+                </div>
+
+	        	<aside id="sidebar">		
+
+		<div class="blocks">
+
+			<h3 class="sidebar-title">My tools</h3>
+
+			<ul class="accordion">
+
+				<li class="block my-courses">
+
+					<h4 class="title">
+						<span class="txt">Courses</span>
+						<div class="tricky">
+							<div class="description">Δείτε τα μαθήματα στα οποία συμμετέχετε</div>
+							<div class="icon"><i class="fa fa-list-alt"></i></div>
+						</div>
+					</h4>
+
+					<div class="side-list accordion">
+						<h5 class="lesson-title accordion-title">Διαφορικές εξισώσεις με μερικές παραγώγους</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Μίκης Θεοδωράκης</li>
+								<li class="lesson-notifications">
+									<span class="item">
+										<i class="fa fa-calendar"></i>
+										<span class="count">3</span></span>
+										<span class="item"><i class="fa fa-file-text"></i>
+										<span class="count">2</span>
+									</span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Εφαρμοσμένη Ανάλυση Παλινδρόμησης και Διασποράς</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Γεώργιος Ξενοφών</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-play"></i><span class="count">12</span></span>
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">99</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Μαθηματικές Μέθοδοι στην Επιχειρησιακή Έρευνα</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Γιάννης Τσαρτσαφλής</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa fa-bullhorn"></i><span class="count">2</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+
+						<h5 class="lesson-title accordion-title">Στατιστική</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 1230</li>
+								<li class="lesson-professor">Ελένη Μακιαβέλη</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+						<h5 class="lesson-title accordion-title">Theming Drupal: The most time efficient way to beatify your omega subtheme</h5>
+						<div>
+							<ul>
+								<li class="lesson-id">ID: 9912</li>
+								<li class="lesson-professor">Παναγιώτης Χαραλαμπίδης</li>
+								<li class="lesson-notifications">
+									<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
+									<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+
+				<li class="block my-notes">	
+
+					<h4 class="title">
+						<span class="txt">Notes</span>					
+
+						<div class="tricky">
+							<div class="description">Προσθήκη γρήγορης σημείωσης</div>
+							<div class="icon"><i class="fa fa-pencil"></i></div>
+						</div>
+					</h4>
+
+					<div>
+
+						<div class="input-parent">
+							<textarea placeholder="Type a note..."></textarea>
+							<i class="fa fa-pencil"></i>
+						</div>
+						<button data-label="SAVE" class="button flippin-btn">SAVE</button>
+						<a class="goto" href="">All notes</a>
+					</div>
+				</li>
+
+				<li class="block my-courses">	
+					<h4 class="title">
+						<span class="txt">Messages</span>
+						
+						<div class="tricky">
+							<div class="description">Στείλτε μήνυμα σε κάποιον άλλον χρήστη του συστήματος</div>
+							<div class="icon"><i class="fa fa-envelope"></i></div>
+						</div>
+
+					</h4>
+					<div>
+						<div class="input-parent">
+							<input class="recipients-input" type="text" placeholder="Recipients...">
+							<i class="fa fa-user"></i>
+						</div>
+						<div class="input-parent">
+							<textarea placeholder="Message..."></textarea>
+							<i class="fa fa-envelope"></i>
+						</div>
+						<button data-label="SEND" class="button flippin-btn">SEND</button>
+						<a class="goto" href="">All messages</a>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</aside>
+
+	        	<footer class="footer row"><span>GUNET © eClass</span></footer>
+	        </div>
+	    </div>
+	</div>	
+</body>
+</html>
+<!-- END mainBlock -->
