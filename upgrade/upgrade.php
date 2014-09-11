@@ -738,7 +738,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                     db_query("INSERT INTO course_description SET
                         course_id = " . intval($ures['course_id']) . ",
                         title = " . quote($ures['title']) . ",
-                        comments = " . quote(purify($ures['comments'])) . ",
+                        comments = " . quote($ures['comments']) . ",
                         visible = " . intval($newvis) . ",
                         `order` = " . intval($ures['order']) . ",
                         update_dt = " . quote($ures['date']));
