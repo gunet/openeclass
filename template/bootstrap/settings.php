@@ -3,7 +3,8 @@
 load_js('jquery', false);
 load_js('jquery-ui', false);
 
-$classes['current'] = 'active';
+$classes['tool_active'] = 'active';
+$classes['group_active'] = 'in';
 
 $icon_map = array(
     'arrow' => 'fa-caret-right',

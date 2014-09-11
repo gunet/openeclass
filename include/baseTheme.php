@@ -101,7 +101,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $classes = array(
-        'current' => 'current',
+        'tool_active' => 'tool_active',
+        'group_active' => 'group_active',
     );
 
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
@@ -164,6 +165,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
             }
 
+            $t->set_var('GROUP_CLASS', '');
             $numOfTools = count($toolArr[$i][1]);
             for ($j = 0; $j < $numOfTools; $j++) {
                 $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
@@ -184,7 +186,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('IMG_CLASS', $img_class);
                 $module_dir = module_path($toolArr[$i][2][$j]);
                 if ($module_dir == $current_module_dir) {
-                    $t->set_var('TOOL_CLASS', $classes['current']);
+                    $t->set_var('TOOL_CLASS', $classes['tool_active']);
+                    $t->set_var('GROUP_CLASS', $classes['group_active']);
                 } else {
                     $t->set_var('TOOL_CLASS', '');
                 }
