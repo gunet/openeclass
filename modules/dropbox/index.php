@@ -264,7 +264,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                   search: function() {
                                     // custom minLength
                                     var term = extractLast( this.value );
-                                    if ( term.length < 2 ) {
+                                    if ( term.length < 3 ) {
                                       return false;
                                     }
                                   },
@@ -294,7 +294,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         
         $tool_content .= "<tr>
     	                    <th>$langSendTo:</th>
-    	                    <td><input name='autocomplete' id='recipients' /></td>
+    	                    <td><input name='autocomplete' id='recipients' /><br/><em>$langSearchSurname</em></td>
                           </tr>";        
     }
     

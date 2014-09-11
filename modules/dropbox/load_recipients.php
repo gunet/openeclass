@@ -83,14 +83,15 @@ if (isset($_POST['course'])) {
         echo json_encode(array());
     }
 } elseif (isset($_GET['autocomplete']) && $_GET['autocomplete'] == 1) {
-    $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+    $sql = "SELECT DISTINCT u.id user_id, u.am, CONCAT(u.surname,' ', u.givenname) AS name
             FROM user u, course_user cu
 		    WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
             AND cu.user_id = u.id
             AND cu.status != ?d
             AND u.id != ?d
-            AND CONCAT(u.surname,' ', u.givenname) LIKE ?s
-            ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+            AND u.surname LIKE ?s
+            ORDER BY UPPER(u.surname), UPPER(u.givenname)
+            LIMIT 10";
     $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['term']."%");
     
     $jsonarr = array();
@@ -99,6 +100,9 @@ if (isset($_POST['course'])) {
     foreach ($res as $r) {
         $jsonarr[$i]['value'] = $r->user_id;
         $jsonarr[$i]['label'] = $r->name;
+        if (!empty($r->am)) {
+            $jsonarr[$i]['label'] .= " ($r->am)";
+        }
         $i++;
     }
     header('Content-Type: application/json');

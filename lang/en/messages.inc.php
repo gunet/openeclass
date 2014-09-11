@@ -780,6 +780,7 @@ $langDeleteAllMsgs = "Delete all messages";
 $langConfirmDeleteAllMsgs = "This action will delete all messages in this mailbox!";
 $langMessageDeleteAllSuccess = "Messages deleted succesfully!";
 $langMsgRe = "Re:";
+$langSearchSurname = "Search recipients by surname";
 $langExercicesView = "Exercise View";
 $langExercicesResult = "Exercise Results";
 $langQuestion = "Question";
