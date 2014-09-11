@@ -493,6 +493,7 @@ db_query("CREATE TABLE agenda (
                url varchar(200),
                titre varchar(200),
                description text,
+               category INT(6) DEFAULT NULL,
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
@@ -508,6 +509,7 @@ db_query("CREATE TABLE agenda (
                url varchar(200),
                titre varchar(200),
                description text,
+               category INT(6) DEFAULT NULL,
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
@@ -515,7 +517,15 @@ db_query("CREATE TABLE agenda (
                `public` TINYINT(4) NOT NULL DEFAULT 1,
                PRIMARY KEY (id))
          $charset_spec");
-
+        
+        db_query("CREATE TABLE video_category (
+            id int(6) NOT NULL auto_increment, 
+            name varchar(255) NOT NULL, 
+            description text DEFAULT NULL, 
+            `order` int(6) NOT NULL,
+            view int(11) NOT NULL DEFAULT 0,
+            PRIMARY KEY (id))
+        $charset_spec");
 
 ############################# WORKS ###########################################
 

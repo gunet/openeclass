@@ -330,11 +330,41 @@ function upgrade_course($code, $lang)
         upgrade_course_2_8($code, $lang);
         upgrade_course_2_9($code, $lang);
         upgrade_course_2_10($code, $lang);
+        upgrade_course_2_11($code, $lang);
 }
+
+function upgrade_course_2_11($code, $lang, $extramessage = '') {
+    
+    global $langUpgCourse;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
+    flush();
+    
+    if (!mysql_field_exists($code, 'video', 'category')) {
+        db_query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!mysql_field_exists($code, 'videolinks', 'category')) {
+        db_query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!mysql_table_exists($code, 'video_category')) {
+        db_query("CREATE TABLE video_category (
+                id int(6) NOT NULL auto_increment, 
+                name varchar(255) NOT NULL, 
+                description text DEFAULT NULL, 
+                `order` int(6) NOT NULL,
+                view int(11) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id))
+                $GLOBALS[charset_spec]");
+    }
+}
+
 
 function upgrade_course_2_10($code, $lang, $extramessage = '') {
 
-    global $langUpgCourse, $global_messages, $webDir;
+    global $langUpgCourse, $webDir;
 
     mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
@@ -359,7 +389,7 @@ function upgrade_course_2_10($code, $lang, $extramessage = '') {
 
 function upgrade_course_2_9($code, $lang, $extramessage = '') {
 
-    global $langUpgCourse, $global_messages;
+    global $langUpgCourse;
 
     mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";

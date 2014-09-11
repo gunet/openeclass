@@ -156,6 +156,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 if (version_compare($eclass_version, '2.10', '<')) {
                         upgrade_course_2_10($new_course_code, $course_lang);
                 }
+                if (version_compare($eclass_version, '2.11', '<')) {
+                        upgrade_course_2_11($new_course_code, $course_lang);
+                }
 	}
         convert_description_to_units($new_course_code, $course_id);
 	$tool_content .= ob_get_contents();

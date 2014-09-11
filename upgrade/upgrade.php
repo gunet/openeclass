@@ -910,7 +910,10 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 if (version_compare($oldversion, '2.10', '<')) {
                     upgrade_course_2_10($code[0], $lang, "($i / $total)");
                 }
-                echo "</p>\n";
+                if (version_compare($oldversion, '2.11', '<')) {
+                    upgrade_course_2_11($code[0], $lang, "($i / $total)");
+                }
+                echo "</p>";
                 $i++;
         }
 	echo "<hr>";
