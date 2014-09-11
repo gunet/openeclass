@@ -751,7 +751,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
                 `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
                 `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                `qtype` tinyint(3) UNSIGNED NOT NULL ) $charset_spec");
+                `qtype` tinyint(3) UNSIGNED NOT NULL,
+                `q_position` INT(11) DEFAULT 1 ) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                 `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pqid` INT(11) NOT NULL DEFAULT 0,
