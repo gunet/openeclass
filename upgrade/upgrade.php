@@ -262,8 +262,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                 echo "<p class='sub_title1'>$langUpgradeBase <b>$mysqlMainDb</b></p>\n\n";
                 flush();
-                mysql_select_db($mysqlMainDb);
-
+                
                 // Create or upgrade config table
                 if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
                     Database::get()->query("RENAME TABLE config TO old_config");
