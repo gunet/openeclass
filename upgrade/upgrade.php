@@ -282,6 +282,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('email_from', '1'),
                     ('am_required', '0'),
                     ('dropbox_allow_student_to_student', '0'),
+                    ('dropbox_allow_personal_messages', '0'),
+                    ('enable_social_sharing_links', '0'),                                
                     ('block_username_change', '0'),                    
                     ('enable_mobileapi', '0'),
                     ('display_captcha', '0'),
