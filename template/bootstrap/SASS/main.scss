@@ -1,3 +1,6 @@
+/* SASStyling for new-UI of eclass v3.0 beta */
+/* File version 0.1 */
+
 $color_sidebar: #232c3a;
 $color_hover: #4da1e4;
 $color_content_top: #DBDBDB;
@@ -64,20 +67,30 @@ body > .container{
   padding: 0;
 
 	.logo{
-		margin:2em 0em;
+		margin:2em 1em;
 		img{margin:0 auto;}
 	}
 
 	.panel{
-		background: none;
 		border: none;
-		margin:0;
+    margin: 0;
+    margin-bottom: 1em;
+    background: inherit;
+		
+    border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+
+    border-radius: 4px 0px 0px 4px;
+
+    .list-group{
+      border-radius:0;
+    }
 
 		.panel-heading{
-			border-radius: 4px 0px 0px 4px!important;
-			border-top: 1px solid #414141;
+			border-radius: 4px 0px 0px 0px!important;
 
 			.panel-title{
+        text-align: center;
 				font-size: 0.85em;
 				font-weight: bold;
 			}
@@ -87,45 +100,62 @@ body > .container{
 			}
 		}
 
-		.panel-collapse{
-			padding-left: 0.5em;
-		}
+
+    > a{
+      display: block;
+      background: rgba(0, 0, 0, 0.2)!important;
+
+      &:not(.collapsed){
+        border-radius: 4px 0px 0px 0px!important;
+        color: $color_hover;
+      }
+
+      &:hover{
+        background: rgba(255,255,255,.25);
+      }
+
+      &:hover, &:not(.collapsed){
+        border-radius: 4px 0px 0px 4px;
+      }
+    }
 
 		a{
 			background: transparent;
 			color: #ADADAD;
-			border-radius: 4px 0px 0px 4px;
+      text-decoration: none;
 
-			> span{
-				font-size: 0.9em;
-			}
-
-			i.fa{
-				margin-right: 0.5em;
-			}
-
-			&:hover{
-				text-decoration: none;
-				color: #eee;
-				background: $color_hover;
-			}
-
-			&.active{
-				background: $color_main_content;
-				text-shadow: none;
-				color: #333;
-
-        box-shadow: -8px 0px 12px -2px rgba(0,0,0,.8);
-        -moz-box-shadow: -8px -0px 12px -2px rgba(0,0,0,.8);
-        -webkit-box-shadow: -8px 0px 12px -2px rgba(0,0,0,.8);
-			}
 
 			&.list-group-item{
 
 				border: none;
-				border-bottom: 1px solid #414141;
+        border-top: 1px solid rgba(255,255,255,.075);
 				padding: 1em;
         text-align: center;
+
+        > span{
+          font-size: 0.9em;
+          margin-left: 0.5em;
+        }
+
+        &:hover{
+          text-decoration: none;
+          color: #eee;
+          background: $color_hover;
+          border-radius: 4px 0px 0px 4px;
+
+          margin-left: 0px;
+        }
+
+        &.active{
+          background: $color_main_content;
+          text-shadow: none;
+          color: #333;
+          border-radius: 4px 0px 0px 4px;
+
+          box-shadow: -5px 0px 10px -3px rgba(0,0,0,.8);
+          -moz-box-shadow: -5px -0px 10px -3px rgba(0,0,0,.8);
+          -webkit-box-shadow: -5px 0px 10px -3px rgba(0,0,0,.8);
+        }
 
 				//we don't want a border-bottom if it's the last option
 				&:last-child{
@@ -133,7 +163,7 @@ body > .container{
 				}
 
 				&:first-child{
-					border-top: 1px solid #414141;
+					border-top: 1px solid rgba(255,255,255,.075);
 				}
 			}
 		}
@@ -145,11 +175,11 @@ body > .container{
 
 	overflow: hidden;
 	
-	box-shadow: 0px -7px 10px 0px black;
-	-moz-box-shadow: 0px -7px 10px 0px black;
-	-webkit-box-shadow: 0px -7px 10px 0px black;
+	box-shadow: 0px -5px 10px 0px black;
+	-moz-box-shadow: 0px -5px 10px 0px black;
+	-webkit-box-shadow: 0px -5px 10px 0px black;
 
-	.navbar{
+	#header.navbar{
 		padding: 0;
 		border: 0;
 		background: #DBDBDB;
@@ -219,6 +249,10 @@ footer.footer{
 
 /* migrated sidebar */
 
+body.sidebar-opened .toggle-sidebar{
+  background: #e3e4e6;
+}
+
 #sidebar
 {
   position: absolute;
@@ -285,6 +319,8 @@ footer.footer{
 
     .lesson-title{
       background: #344458;
+
+      font-size: 0.85em;
 
       margin:0px;
 
@@ -635,7 +671,46 @@ footer.footer{
 }
 
 @media (min-width: 992px){
-  #leftnav .panel a.list-group-item{
+  #leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title{
     text-align: left;
   }
+}
+
+@media (max-width: 992px){
+  #Frame, body>.container{
+    padding:0;
+    margin:0;
+  }
+
+  #leftnav .panel a{
+    font-size: 1.5em;
+  }
+
+  #main-content .navbar .navbar-nav > li a{
+    padding: 15px 0.5em;    
+  }
+
+  #leftnav .panel a.list-group-item{
+      padding:1em 0.8em;
+  }
+
+  #main-content,
+  #leftnav .panel a.list-group-item,
+  #main-content #header.navbar .navbar-nav > li:last-child > a,
+  .navbar-default{
+    border-radius: 0px!important;
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 992px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (                min-resolution: 192dpi) and (min-width: 992px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 992px) { 
+
+  /* Medium screen, retina, stuff to override above media query */
+
 }
