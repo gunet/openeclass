@@ -338,7 +338,7 @@ function upgrade_course_2_11($code, $lang, $extramessage = '') {
     global $langUpgCourse;
 
     mysql_select_db($code);
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
     flush();
     
     if (!mysql_field_exists($code, 'video', 'category')) {
@@ -354,10 +354,8 @@ function upgrade_course_2_11($code, $lang, $extramessage = '') {
                 id int(6) NOT NULL auto_increment, 
                 name varchar(255) NOT NULL, 
                 description text DEFAULT NULL, 
-                `order` int(6) NOT NULL,
-                view int(11) NOT NULL DEFAULT 0,
-                PRIMARY KEY (id))
-                $GLOBALS[charset_spec]");
+                `order` int(6) NOT NULL,                
+                PRIMARY KEY (id)) DEFAULT CHARACTER SET=utf8");
     }
 }
 

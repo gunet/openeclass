@@ -216,15 +216,28 @@ function insert_video($id)
 	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
-	foreach ($_POST['video'] as $video_id) {
-		$order++;
-                list($table, $res_id) = explode(':', $video_id);
-                $res_id = intval($res_id);
-                $table = ($table == 'video')? 'video': 'videolinks';
-		$row = mysql_fetch_array(db_query("SELECT * FROM $table
-			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
-                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
-	}
+        // insert link categories 
+        if (isset($_POST['videocatlink']) and count($_POST['videocatlink'] > 0)) {
+                foreach ($_POST['videocatlink'] as $videocatlink_id) {
+                        $order++;
+                        $sql = db_query("SELECT * FROM video_category WHERE id =" . intval($videocatlink_id) . "", $GLOBALS['currentCourseID']);
+                        $videolinkcat = mysql_fetch_array($sql);
+                        db_query("INSERT INTO unit_resources SET unit_id = $id, type='videolinkcategory', title = " .
+                                quote($videolinkcat['name']) . ", comments = " . autoquote($videolinkcat['description']) .
+                                ", visibility='v', `order` = $order, `date` = NOW(), res_id = $videolinkcat[id]", $GLOBALS['mysqlMainDb']);
+                }
+        }
+        if (isset($_POST['video']) and count($_POST['video'] > 0)) {
+            foreach ($_POST['video'] as $video_id) {
+                    $order++;
+                    list($table, $res_id) = explode(':', $video_id);
+                    $res_id = intval($res_id);
+                    $table = ($table == 'video')? 'video': 'videolinks';
+                    $row = mysql_fetch_array(db_query("SELECT * FROM $table
+                            WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
+                    db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
+            }
+        }
         CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;

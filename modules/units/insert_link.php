@@ -71,7 +71,7 @@ function list_links()
 			'title' => ($row['title'] == '')? $row['url']: $row['title'],
                         'comment' => $row['description'],
 			'category' => $row['category']);
-		}
+		}                
 		if (count($linkinfo) > 0) {
 			$tool_content .= "\n  <tr class='odd'>" .
                                          "\n    <td colspan='3' class='bold'>$langNoCategory</td>" .

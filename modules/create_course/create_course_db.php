@@ -522,8 +522,7 @@ db_query("CREATE TABLE agenda (
             id int(6) NOT NULL auto_increment, 
             name varchar(255) NOT NULL, 
             description text DEFAULT NULL, 
-            `order` int(6) NOT NULL,
-            view int(11) NOT NULL DEFAULT 0,
+            `order` int(6) NOT NULL,            
             PRIMARY KEY (id))
         $charset_spec");
 

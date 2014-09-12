@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.11
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,11 +21,7 @@
 /*
  * Groups Component
  *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
  * @abstract This module is responsible for the user groups of each lesson
- *
  */
 
 $require_current_course = TRUE;
@@ -362,10 +358,9 @@ if ($is_editor) {
 	if ($num_of_groups > 0) {
 		$tool_content .= "<br />
 		<table width='100%' align='left' class='tbl_alt'>
-		<tr>
-           
+		<tr>           
 		  <th colspan='2'><div align='left'>$langGroupName</div></th>
-		  <th width='250'>$langGroupTutor</th>
+		  <th width='200'>$langGroupTutor</th>
 		  <th width='30'>$langRegistered</th>
 		  <th width='30'>$langMax</th>
 		  <th width='30'>$langActions</th>
@@ -373,19 +368,18 @@ if ($is_editor) {
                 while ($group = mysql_fetch_array($groupSelect)) {
                         initialize_group_info($group['id']);
                         if ($myIterator % 2 == 0) {
-                                $tool_content .= "
-                <tr class='even'>";
+                                $tool_content .= "<tr class='even'>";
                         } else {
-                                $tool_content .= "
-                <tr class='odd'>";
+                                $tool_content .= "<tr class='odd'>";
                         }
                         $tool_content .= "
-                  <td width='16'>
-                        <img src='$themeimg/arrow.png' alt='' /></td><td>
-                        <a href='group_space.php?course=$code_cours&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
-                        $tool_content .= "
-                  <td>" . display_user($tutors) . "</td>" . "
-                  <td class='center'>$member_count</td>";
+                        <td width='16'>
+                              <img src='$themeimg/arrow.png' alt='' /></td><td>
+                              <a href='group_space.php?course=$code_cours&amp;group_id=$group[id]'>".q($group_name)."</a>
+                              <br><small>".q($group_description)."</small></td>";
+                              $tool_content .= "
+                        <td>" . display_user($tutors, false ,false) . "</td>" . "
+                        <td class='center'>$member_count</td>";
                         if ($max_members == 0) {
                                 $tool_content .= "<td>-</td>";
                         } else {

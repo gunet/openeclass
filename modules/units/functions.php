@@ -127,8 +127,11 @@ function show_resource($info)
                         $tool_content .= show_lp($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
 		case 'video':
-		case 'videolinks':
+		case 'videolinks':                    
                         $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        break;
+                case 'videolinkcategory':                    
+                        $tool_content .= show_videocat($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
                         break;
 		case 'exercise':
                         $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
@@ -299,7 +302,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
         global $is_editor, $currentCourseID, $tool_content, $themeimg, $langInactiveModule;
-
+        
         $module_visible = visible_module(4); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
@@ -351,6 +354,73 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         </tr>";
 }
 
+
+// display resource video category
+function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id, $visibility)
+{   
+    	global $is_editor, $langWasDeleted, $cours_id, $currentCourseID, $themeimg, $langInactiveModule;
+	
+	$content = $linkcontent = '';
+        $module_visible = visible_module(2); // checks module visibility
+        
+        if (!$module_visible and !$is_editor) {
+                       return '';
+        }        
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $class_vis = ($visibility == 'i' or !$module_visible)?
+                     ' class="invisible"': ' class="even"';	
+        $title = htmlspecialchars($title);
+	$sql = db_query("SELECT * FROM `$currentCourseID`.video_category WHERE id = $videolinkcat_id");
+		while ($vlcat = mysql_fetch_array($sql)) {
+                    $content .= "
+                    <tr$class_vis>
+                      <td width='1'><img src='$themeimg/folder_open.png' /></td>
+                      <td>" . q($vlcat['name']);
+                    if (!empty($vlcat['description'])) {
+                            $comment_box = "<br />$vlcat[description]";
+                    } else {
+                            $comment_box = '';
+                    }
+                    foreach (array('video', 'videolinks') as $table) {    
+                        $sql2 = db_query("SELECT * FROM `$currentCourseID`.$table WHERE category = $vlcat[id]");
+                        while ($row = mysql_fetch_array($sql2, MYSQL_ASSOC)) {                            
+                            if (!$is_editor and (!resource_access(1, $row['public']))) {
+                                return '';
+                            }
+                            $status = $row['public'];
+                            $row['course_id'] = $GLOBALS['cours_id'];
+
+                            if ($table == 'video') {
+                                $vObj = MediaResourceFactory::initFromVideo($row);
+                                $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                            } else {
+                                $vObj = MediaResourceFactory::initFromVideoLink($row);
+                                $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+                            }
+                            if (!$module_visible) {
+                                    $videolink .= " <i>($langInactiveModule)</i>";
+                            }
+                            $imagelink = "<img src='$themeimg/videos_" .
+                                         ($visibility == 'i'? 'off': 'on') . ".png' />";
+                            if (!empty($comments)) {
+                                    $comment_box = "<br />$comments";
+                            } else {
+                                    $comment_box = "";
+                            }
+                            $class_vis = ($visibility == 'i' or !$module_visible or $status == 'del')? ' class="invisible"': ' class="even"';                            
+                            $ltitle = q(($row['titre'] == '')? $row['url']: $row['titre']);
+                            $linkcontent .= "<br />$imagelink&nbsp;&nbsp;$videolink</a>";
+                            if (!$module_visible) {
+                                    $linkcontent .= " <i>($langInactiveModule)</i>";
+                            }
+                        }
+                    }
+		}
+	
+	return $content . $comment_box . $linkcontent .'
+           </td>'. actions('videolinkcategory', $resource_id, $visibility) .
+		'</tr>';
+}
 
 // display resource work (assignment)
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
@@ -558,7 +628,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 // display resource link
 function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
+	global $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $currentCourseID, $themeimg, $langInactiveModule;
         
         $module_visible = visible_module(2); // checks module visibility
