@@ -312,7 +312,6 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
 
     $course_id = course_code_to_id($code);
-    mysql_select_db($code);
     flush();
 
     // move forum tables to central db
@@ -1391,7 +1390,6 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
 function upgrade_course_2_3($code, $extramessage = '') {
     global $langUpgCourse;
 
-    mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
     flush();
     // upgrade exercises
@@ -1410,7 +1408,6 @@ function upgrade_course_2_3($code, $extramessage = '') {
 function upgrade_course_2_2($code, $lang, $extramessage = '') {
     global $langUpgCourse, $global_messages;
 
-    mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
     flush();
 
@@ -1457,8 +1454,6 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
  */
 function upgrade_course_2_1_3($code, $extramessage = '') {
     global $mysqlMainDb, $langEncodeDropBoxDocuments, $langUpgCourse;
-
-    mysql_select_db($code);
 
     echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
     flush();
@@ -1510,8 +1505,6 @@ function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
 // Convert course description to special course unit with order = -1
 function convert_description_to_units($code, $course_id) {
     global $mysqlMainDb, $langCourseDescription;
-
-    mysql_select_db($mysqlMainDb);
 
     $desc = $addon = '';
     $qdesc = Database::get()->querySingle("SELECT description, course_addon FROM cours WHERE course_id = ?d", $course_id);

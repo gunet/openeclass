@@ -73,12 +73,10 @@ $tool_content .= "<form name='authchange' method='post' action='$_SERVER[SCRIPT_
 </tr>";
 
 if ($submit && $auth && $auth_change) {
-    if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s and user_id != 1", $auth_ids[$auth_change], $auth_ids[$auth])) {
-        if (mysql_affected_rows() >= 1) {
-            $tool_content .= "
+    if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s and user_id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
+        $tool_content .= "
 				<td class='success'>$langAuthChangeYes</td></tr></tbody></table><br /><br />";
-            draw($tool_content, 3);
-        }
+        draw($tool_content, 3);
     }
 }
 
