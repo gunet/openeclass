@@ -144,7 +144,7 @@ $db->query("CREATE TABLE `agenda` (
     `content` TEXT NOT NULL,
     `start` DATETIME NOT NULL DEFAULT '0000-00-00',
     `duration` VARCHAR(20) NOT NULL,
-    `visible` TINYINT(4),
+    `visible` TINYINT(4)
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
     `source_event_id` int(11) DEFAULT NULL)
@@ -172,7 +172,40 @@ $db->query("CREATE TABLE `course` (
   `password` VARCHAR(50) NOT NULL DEFAULT '',
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
+  `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
+  `start_date` DATE NOT NULL default '0000-00-00',
+  `finish_date` DATE NOT NULL default '0000-00-00',
   PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view`
+#
+
+$db->query("CREATE TABLE `course_weekly_view` (
+  `id` INT(11) NOT NULL auto_increment,
+  `course_id` INT(11) NOT NULL,
+  `title` VARCHAR(255) NOT NULL DEFAULT '',
+  `comments` MEDIUMTEXT,
+  `start_week` DATE NOT NULL default '0000-00-00',
+  `finish_week` DATE NOT NULL default '0000-00-00',
+  `visible` TINYINT(4) NOT NULL DEFAULT 1,
+  PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view_activities`
+#
+
+$db->query("CREATE TABLE `course_weekly_view_activities` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `course_weekly_view_id` INT(11) NOT NULL ,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `comments` MEDIUMTEXT,
+    `res_id` INT(11) NOT NULL,
+    `type` VARCHAR(255) NOT NULL DEFAULT '',
+    `visible` TINYINT(4),
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+
 
 
 #
@@ -1495,6 +1528,39 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL UNIQUE,
     PRIMARY KEY (`id`)) $charset_spec");
+
+
+$db->query("CREATE TABLE `personal_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `reference_obj_module` mediumint(11) DEFAULT NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+        `reference_obj_id` int(11) DEFAULT NULL,
+        `reference_obj_course` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`))");
+ 
+$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+        `user_id` int(11) NOT NULL,
+        `view_type` enum('month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT NULL,
+        `course_color` varchar(30) DEFAULT NULL,
+        `deadline_color` varchar(30) DEFAULT NULL,
+        `show_personal` bit(1) DEFAULT b'1',
+        `show_course` bit(1) DEFAULT b'1',
+        `show_deadline` bit(1) DEFAULT b'1',
+        PRIMARY KEY (`user_id`))");
+
+//create triggers
+$db->query("CREATE TRIGGER personal_calendar_settings_init "
+        . "AFTER INSERT ON `user` FOR EACH ROW "
+        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
 
 // create indexes
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");

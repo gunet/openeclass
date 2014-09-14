@@ -87,6 +87,7 @@ define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
 
 // user modules

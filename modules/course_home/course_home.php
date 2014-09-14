@@ -33,11 +33,12 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
-require_once 'include/course_settings.php';
-require_once 'modules/sharing/sharing.php';
-require_once 'modules/rating/class.rating.php';
-require_once 'modules/comments/class.comment.php';
-require_once 'modules/comments/class.commenting.php';
+
+
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/weeks/functions.php';
+require_once 'modules/document/doc_init.php';
+
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -132,25 +133,6 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
-
-if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
-    $rating = new Rating('fivestar', 'course', $course_id);
-    $main_content .= $rating->put($is_editor, $uid, $course_id);
-}
-
-if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
-    commenting_add_js();
-    $comm = new Commenting('course', $course_id);
-    $main_content .= $comm->put($course_code, $is_editor, $uid);
-}
-
-if (is_sharing_allowed($course_id)) {
-    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
-        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
-    }
-}
-
-
 $main_content .= $main_extra;
 
 units_set_maxorder();
@@ -173,13 +155,26 @@ if ($is_editor) {
         $main_content .= handle_unit_info_edit();
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
-        Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
-        Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
-        $uidx->remove($id, false);
-        $urdx->removeByUnit($id, false);
-        $cidx->store($course_id, true);
-        CourseXMLElement::refreshCourse($course_id, $course_code);
-        $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
+            Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
+            $uidx->remove($id, false);
+            $urdx->removeByUnit($id, false);
+            $cidx->store($course_id, true);
+            CourseXMLElement::refreshCourse($course_id, $course_code);
+            $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        }else{
+            $res_id = intval($_GET['del']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
+                $urdx->remove($res_id, false, false);
+                $cidx->store($course_id, true);
+                CourseXMLElement::refreshCourse($course_id, $course_code);
+                $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+            }
+        }
+        
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
@@ -195,12 +190,52 @@ if ($is_editor) {
         Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
-        move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
+        }else{
+            $res_id = intval($_REQUEST['down']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
+            }
+        }
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval($_REQUEST['up']);
-        move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
+        if($course_format == "units"){
+            move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
+        }else{
+            $res_id = intval($_REQUEST['up']);
+            if ($id = check_admin_unit_resource($res_id)) {
+                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
+            }
+        }
     }
+    
+    if (isset($_REQUEST['visW'])) { // modify visibility of the Week
+        $id = intval($_REQUEST['visW']);
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
+        $newvis = ($vis == 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
+    }
+    
+    if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
+        $title = $_REQUEST['weektitle'];
+        $descr = $_REQUEST['weekdescr'];
+        $unit_id = $_REQUEST['week_id'];
+        Database::get()->query("UPDATE course_weekly_view SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);        
+    }
+    
 }
+
+//Check the course view type
+$courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
+$viewCourse = $courseInfo->view_type;
+$start_date = $courseInfo->start_date;
+$finish_date = $courseInfo->finish_date;
 
 // add course units
 if ($is_editor) {
@@ -208,21 +243,26 @@ if ($is_editor) {
 } else {
     $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
-if ($is_editor) {    
+if ($is_editor) { //if he is editor
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
     if ($last_id) {
         $last_id = $last_id->id;
     }
+    
+    
     $query = "SELECT id, title, comments, visible, public
-		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
-                  ORDER BY `order`";
-} else {
+                FROM course_units WHERE course_id = $course_id AND `order` >= 0
+                ORDER BY `order`";
+    
+} else { //if he is not editor
     $query = "SELECT id, title, comments, visible, public
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
+
+
 $sql = Database::get()->queryArray($query);
 $first = true;
 $count_index = 1;
@@ -293,6 +333,7 @@ foreach ($sql as $cu) {
 if ($first and ! $is_editor) {
     $cunits_content = '';
 }
+
 
 $bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
         "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
@@ -443,8 +484,44 @@ $tool_content .= "</td>
       $emailnotification
       <br />\n";
 
-$tool_content .= "</td></tr></table>
-   <table width='100%' class='tbl'><tr><td>$cunits_content</td>
-   </tr></table></div>";
+$tool_content .= "</td></tr></table>";
+
+if($viewCourse == "weekly"){
+    
+    if(!$is_editor){
+        $visibleFlag = " AND visible = 1";
+    }else{
+        $visibleFlag = "";
+    }
+    
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
+    foreach ($weeklyQuery as $week){
+        $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
+        $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
+        
+        $tool_content .= "<fieldset>
+                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
+                                <h2 $class_vis>$langWeek: $week->start_week - $week->finish_week - $week->title</h2>
+                            </a>
+                            <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
+                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
+                                <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
+                            </a>
+                            <div $class_vis>$week->comments</div>
+                            <hr>";
+                            show_resourcesWeeks($week->id);
+        $tool_content .= "</fieldset>";
+        
+    }
+}
+
+if($viewCourse == "units"){
+    $tool_content .= "<table width='100%' class='tbl'><tr><td>$cunits_content</td>
+   </tr></table>";
+}
+
+$tool_content .= "</div>";
 
 draw($tool_content, 2, null, $head_content);

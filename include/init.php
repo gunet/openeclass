@@ -363,7 +363,8 @@ $modules = array(
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
     MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference'),
-    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes')
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes'),
+    MODULE_ID_WEEKS => array('title' => $langWeeks, 'link' => 'weeks', 'image' => 'weeks')
 );
 // ----------------------------------------
 // course admin modules
