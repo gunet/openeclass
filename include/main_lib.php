@@ -499,11 +499,11 @@ function check_guest($id = FALSE) {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;
-        if ($status == USER_GUEST) {
-            return TRUE;
-        } else {
-            return false;
+        if (DBHelper::fieldExists("user", "status")) {
+            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
+            if ($status && $status->status == USER_GUEST) {
+                return TRUE;
+            }
         }
     }
     return false;

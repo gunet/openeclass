@@ -376,6 +376,15 @@ final class Database {
         return $result;
     }
 
+    /**
+     * Safely start a transaction and clean up if an error was produced. If this 
+     * method is called when we are already in a transaction, no new transaction
+     * will be started.
+     * @param callable $function The code inside this function will be called
+     *  when the database is in transactional state
+     * @throws Exception if an error occured while running; the transaction will
+     *  be rolled back if required
+     */
     public function transaction($function) {
         if (is_callable($function)) {
             $needsTransaction = !$this->dbh->inTransaction();

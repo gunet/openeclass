@@ -52,16 +52,14 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
-        if (Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND user_id!=1", $new_mail_ver, $old_mail_ver)->affectedRows > 0) {
-            $count = mysql_affected_rows();
-            if ($count > 0) {
-                $user = ($count == 1) ? $langOfUser : $langUsersS;
-                $tool_content .= "<p class='success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</p>";
-            }
-            // user is admin or no user selected
-            else {
-                $tool_content .= "<p class='caution'>$langMailVerificationChangedNoAdmin</p>";
-            }
+        $count = Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND user_id!=1", $new_mail_ver, $old_mail_ver)->affectedRows;
+        if ($count > 0) {
+            $user = ($count == 1) ? $langOfUser : $langUsersS;
+            $tool_content .= "<p class='success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</p>";
+        }
+        // user is admin or no user selected
+        else {
+            $tool_content .= "<p class='caution'>$langMailVerificationChangedNoAdmin</p>";
         }
     }
     // no change selected

@@ -46,12 +46,10 @@ $activate = isset($_GET['activate']) ? $_GET['activate'] : ''; //variable of dec
 if ((!empty($activate)) && ($activate == 1)) {
     // do the update
     $newtime = time() + 15552000;
-    if (Database::get()->query("UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time())->affectedRows > 0) {
-        $countinactive = mysql_affected_rows();
-        if ($countinactive > 0) {
-            $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";
-            $tool_content .= "<a href='index.php'>$langBack</a>";
-        }
+    $countinactive = Database::get()->query("UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time())->affectedRows;
+    if ($countinactive > 0) {
+        $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";
+        $tool_content .= "<a href='index.php'>$langBack</a>";
     } else {
         $tool_content .= $langNoChanges;
         $tool_content .= "<a href='index.php'>$langBack</a>";

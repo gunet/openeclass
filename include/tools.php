@@ -83,7 +83,7 @@ function getSideMenu($menuTypeID) {
  * to the parameter passed.
  *
  * @param string $cat Type of lesson tools
- * @return mysql_resource
+ * @return array of course_module objects
  * @see function lessonToolsMenu
  */
 
