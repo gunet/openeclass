@@ -77,14 +77,14 @@ if (!isset($_POST['submit2']) and ! $command_line) {
     }
 }
 
-if (!mysql_table_exists($mysqlMainDb, 'config')) {
+if (!DBHelper::tableExists('config')) {
     $tool_content .= "<p class='alert1'>$langUpgTooOld</p>";
     draw($tool_content, 0);
     exit;
 }
 
 // Upgrade user table first if needed
-if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
+if (!DBHelper::fieldExists('user', 'id')) {
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -264,7 +264,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 flush();
                 
                 // Create or upgrade config table
-                if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
+                if (DBHelper::fieldExists('config', 'id')) {
                     Database::get()->query("RENAME TABLE config TO old_config");
                     Database::get()->query("CREATE TABLE `config` (
                          `key` VARCHAR(32) NOT NULL,
@@ -340,7 +340,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `notify_sent` BOOL NOT NULL DEFAULT '0',
                         `course_id` INT NOT NULL DEFAULT '0') $charset_spec");
 
-                    if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'course_id')) {
+                    if (!DBHelper::fieldExists('cours_user', 'course_id')) {
                         Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
                         Database::get()->query('UPDATE cours_user SET course_id =
                                         (SELECT course_id FROM cours WHERE code = cours_user.code_cours)
@@ -350,7 +350,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query('ALTER TABLE cours_user DROP code_cours');
                     }
 
-                    if (!mysql_field_exists($mysqlMainDb, 'annonces', 'course_id')) {
+                    if (!DBHelper::fieldExists('annonces', 'course_id')) {
                         Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
                         Database::get()->query('UPDATE annonces SET course_id =
                                         (SELECT course_id FROM cours WHERE code = annonces.code_cours)
@@ -359,33 +359,33 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                 }
                 if (version_compare($oldversion, '2.3.1', '<')) {
-                    if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
+                    if (!DBHelper::fieldExists('prof_request', 'am')) {
                         Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
                     }
                 }
 
                 Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
-                mysql_field_exists($mysqlMainDb, 'user', 'email_public') or
+                DBHelper::fieldExists('user', 'email_public') or
                         Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
                         ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
                         ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
 
                 if (version_compare($oldversion, '2.4', '<')) {
-                    if (mysql_field_exists($mysqlMainDb, 'cours', 'faculte')) {
+                    if (DBHelper::fieldExists('cours', 'faculte')) {
                         echo delete_field('cours', 'faculte');
                     }
 
                     Database::get()->query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
-                    mysql_field_exists($mysqlMainDb, 'annonces', 'visibility') or
+                    DBHelper::fieldExists('annonces', 'visibility') or
                             Database::get()->query("ALTER TABLE `annonces` ADD `visibility` CHAR(1) NOT NULL DEFAULT 'v'");
-                    mysql_field_exists($mysqlMainDb, 'user', 'description') or
+                    DBHelper::fieldExists('user', 'description') or
                             Database::get()->query("ALTER TABLE `user` ADD description TEXT,
                                          ADD has_icon BOOL NOT NULL DEFAULT 0");
-                    mysql_field_exists($mysqlMainDb, 'user', 'verified_mail') or
+                    DBHelper::fieldExists('user', 'verified_mail') or
                             Database::get()->query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
                                          ADD receive_mail BOOL NOT NULL DEFAULT 1");
-                    mysql_field_exists($mysqlMainDb, 'course_user', 'receive_mail') or
+                    DBHelper::fieldExists('course_user', 'receive_mail') or
                             Database::get()->query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                         `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -477,7 +477,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `file_id` INT(11) NOT NULL,
                             `title` TEXT) $charset_spec");
                     
-                    if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
+                    if (DBHelper::tableExists('prof_request')) {
                         Database::get()->query("RENAME TABLE prof_request TO user_request");
                         Database::get()->query("ALTER TABLE user_request
                                     CHANGE rid id INT(11) NOT NULL auto_increment,
@@ -493,7 +493,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     // Upgrade table admin_announcements if needed
-                    if (mysql_field_exists($mysqlMainDb, 'admin_announcements', 'gr_body')) {
+                    if (DBHelper::fieldExists('admin_announcements', 'gr_body')) {
                         Database::get()->query("RENAME TABLE `admin_announcements` TO `admin_announcements_old`");
                         Database::get()->query("CREATE TABLE IF NOT EXISTS `admin_announcements` (
                                     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -515,10 +515,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                      FROM admin_announcements_old WHERE en_title <> '' OR en_body <> ''");
                         Database::get()->query("DROP TABLE admin_announcements_old");
                     }
-                    mysql_field_exists($mysqlMainDb, 'admin_announcements', 'ordre') or
+                    DBHelper::fieldExists('admin_announcements', 'ordre') or
                             Database::get()->query("ALTER TABLE `admin_announcements` ADD `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0 AFTER `lang`");
                     // not needed anymore
-                    if (mysql_table_exists($mysqlMainDb, 'cours_faculte')) {
+                    if (DBHelper::tableExists('cours_faculte')) {
                         Database::get()->query("DROP TABLE cours_faculte");
                     }
                 }
@@ -534,11 +534,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('code_key', '" . generate_secret_key(32) . "')");
 
                     // old users have their email verified
-                    if (mysql_field_exists($mysqlMainDb, 'user', 'verified_mail')) {
+                    if (DBHelper::fieldExists('user', 'verified_mail')) {
                         Database::get()->query('ALTER TABLE `user` MODIFY `verified_mail` TINYINT(1) NOT NULL DEFAULT ' . EMAIL_UNVERIFIED);
                         Database::get()->query('UPDATE `user` SET `verified_mail`= ' . EMAIL_VERIFIED);
                     }
-                    mysql_field_exists($mysqlMainDb, 'user_request', 'verified_mail') or
+                    DBHelper::fieldExists('user_request', 'verified_mail') or
                             Database::get()->query("ALTER TABLE `user_request` ADD `verified_mail` TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . " AFTER `email`");
 
                     Database::get()->query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
@@ -582,14 +582,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     Database::get()->query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
 
-                    if (!mysql_field_exists($mysqlMainDb, 'user', 'whitelist')) {
+                    if (!DBHelper::fieldExists('user', 'whitelist')) {
                         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
                         Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
                     }
                     Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', ?s),
                             ('teacher_upload_whitelist', ?s)", $_POST['student_upload_whitelist'], $_POST['teacher_upload_whitelist']);
-                    if (!mysql_field_exists($mysqlMainDb, 'user', 'last_passreminder')) {
+                    if (!DBHelper::fieldExists('user', 'last_passreminder')) {
                         Database::get()->query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
                     }
                     Database::get()->query("CREATE TABLE IF NOT EXISTS login_failure (
@@ -609,9 +609,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if (version_compare($oldversion, '2.7', '<')) {
-                    mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
+                    DBHelper::fieldExists('document', 'extra_path') or
                             Database::get()->query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
-                    mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
+                    DBHelper::fieldExists('user', 'parent_email') or
                             Database::get()->query("ALTER TABLE `user` ADD `parent_email` VARCHAR(100) NOT NULL DEFAULT '' AFTER `email`");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
                         `id` mediumint(9) NOT NULL auto_increment,
@@ -629,11 +629,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('course_metadata', 0),
                                         ('opencourses_enable', 0)");
 
-                    mysql_field_exists($mysqlMainDb, 'document', 'public') or
+                    DBHelper::fieldExists('document', 'public') or
                             Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
-                    mysql_field_exists($mysqlMainDb, 'cours_user', 'reviewer') or
+                    DBHelper::fieldExists('cours_user', 'reviewer') or
                             Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
-                    mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
+                    DBHelper::fieldExists('cours', 'course_license') or
                             Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
 
                     Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
@@ -694,12 +694,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 if (version_compare($oldversion, '2.9.1') == 1) {
-                    mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
+                    DBHelper::fieldExists('course_units', 'public') or
                             Database::get()->query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
                 }
 
                 if (version_compare($oldversion, '2.10', '<')) {
-                    if (!mysql_table_exists($mysqlMainDb, 'course_description_type')) {
+                    if (!DBHelper::tableExists('course_description_type')) {
                         Database::get()->query("CREATE TABLE `course_description_type` (
                             `id` smallint(6) NOT NULL AUTO_INCREMENT,
                             `title` mediumtext,
@@ -729,7 +729,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
                     }
 
-                    if (!mysql_table_exists($mysqlMainDb, 'course_description')) {
+                    if (!DBHelper::tableExists('course_description')) {
                         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_description` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
                             `course_id` int(11) NOT NULL,
@@ -755,7 +755,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         });
                     }
 
-                    if (!mysql_table_exists($mysqlMainDb, 'oai_record')) {
+                    if (!DBHelper::tableExists('oai_record')) {
                         Database::get()->query("CREATE TABLE `oai_record` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
                             `course_id` int(11) NOT NULL UNIQUE,
@@ -844,7 +844,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                     Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
                     
-                    if (!mysql_field_exists($mysqlMainDb, 'document', 'editable')) {
+                    if (!DBHelper::fieldExists('document', 'editable')) {
                         Database::get()->query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
                                                          ADD lock_user_id INT(11) NOT NULL DEFAULT 0");
                     }
@@ -865,7 +865,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
                         'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
                     foreach ($new_tables as $table_name) {
-                        if (mysql_table_exists($mysqlMainDb, $table_name)) {
+                        if (DBHelper::tableExists($table_name)) {
                             if (Database::get()->query("SELECT COUNT(*) as value FROM `$table_name`")->value > 0) {
                                 echo "Warning: Database inconsistent - table '$table_name' already",
                                 " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
@@ -880,7 +880,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('actions_expire_interval', 12),
                                         ('course_metadata', 0)");
 
-                    if (!mysql_field_exists($mysqlMainDb, 'user_request', 'state')) {
+                    if (!DBHelper::fieldExists('user_request', 'state')) {
                         Database::get()->query("ALTER TABLE `user_request`
                     CHANGE `name` `givenname` VARCHAR(60) NOT NULL DEFAULT '',
                     CHANGE `surname` `surname` VARCHAR(60) NOT NULL DEFAULT '',
@@ -927,7 +927,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
 
                     // update table admin_announcement
-                    if (!mysql_table_exists($mysqlMainDb, 'admin_announcement')) {
+                    if (!DBHelper::tableExists('admin_announcement')) {
                         Database::get()->query("RENAME TABLE `admin_announcements` TO `admin_announcement`");
                         Database::get()->query("ALTER TABLE admin_announcement CHANGE `ordre` `order` MEDIUMINT(11)");
                         Database::get()->query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TEXT");
@@ -937,20 +937,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     // update table course_units and unit_resources
-                    if (!mysql_field_exists($mysqlMainDb, 'course_units', 'visible')) {
+                    if (!DBHelper::fieldExists('course_units', 'visible')) {
                         Database::get()->query("UPDATE `course_units` SET visibility = '1' WHERE visibility = 'v'");
                         Database::get()->query("UPDATE `course_units` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
                     }
 
-                    if (!mysql_field_exists($mysqlMainDb, 'unit_resources', 'visible')) {
+                    if (!DBHelper::fieldExists('unit_resources', 'visible')) {
                         Database::get()->query("UPDATE `unit_resources` SET visibility = '1' WHERE visibility = 'v'");
                         Database::get()->query("UPDATE `unit_resources` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
                     }
 
                     // update table document
-                    if (!mysql_field_exists($mysqlMainDb, 'document', 'visible')) {
+                    if (!DBHelper::fieldExists('document', 'visible')) {
                         Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
                         Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         Database::get()->query("ALTER TABLE `document`
@@ -958,7 +958,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     // Rename table `annonces` to `announcements`
-                    if (!mysql_table_exists($mysqlMainDb, 'announcement')) {
+                    if (!DBHelper::tableExists('announcement')) {
                         Database::get()->query("RENAME TABLE annonces TO announcement");
                         Database::get()->query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
                         Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
@@ -1030,7 +1030,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY (`id`))
                             $charset_spec");
                     
-                    if (!mysql_field_exists($mysqlMainDb, 'forum_topic', 'locked')) {
+                    if (!DBHelper::fieldExists('forum_topic', 'locked')) {
                         Database::get()->query("ALTER TABLE `forum_topic` ADD `locked` TINYINT DEFAULT 0 NOT NULL");
                     }
                     
@@ -1165,7 +1165,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')
                             $charset_spec");
                     //COMMENT='Record the last known status of the user in the course';
-                    mysql_index_exists('lp_user_module_progress', 'optimize') or
+                    DBHelper::indexExists('lp_user_module_progress', 'optimize') or
                             Database::get()->query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
 
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
@@ -1887,15 +1887,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 // Rename table `cours` to `course` and `cours_user` to `course_user`
-                if (!mysql_table_exists($mysqlMainDb, 'course')) {
-                    mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
+                if (!DBHelper::tableExists('course')) {
+                    DBHelper::fieldExists('cours', 'expand_glossary') or
                             Database::get()->query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
-                    mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
+                    DBHelper::fieldExists('cours', 'glossary_index') or
                             Database::get()->query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
                     Database::get()->query("RENAME TABLE `cours` TO `course`");
                     Database::get()->query("UPDATE course SET description = '' WHERE description IS NULL");
                     Database::get()->query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
-                    if (mysql_field_exists($mysqlMainDb, 'course', 'course_objectives')) {
+                    if (DBHelper::fieldExists('course', 'course_objectives')) {
                         Database::get()->query("ALTER TABLE course DROP COLUMN `course_objectives`,
                     DROP COLUMN `course_prerequisites`,
                     DROP COLUMN `course_references`");
@@ -1925,19 +1925,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query('ALTER TABLE `course_user`
                                 CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 0,
                                 CHANGE `cours_id` `course_id` INT(11) NOT NULL DEFAULT 0');
-                    if (mysql_field_exists($mysqlMainDb, 'course_user', 'code_cours')) {
+                    if (DBHelper::fieldExists('course_user', 'code_cours')) {
                         Database::get()->query('ALTER TABLE `course_user`
                                         DROP COLUMN `code_cours`');
                     }
                 }
 
-                mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
+                DBHelper::fieldExists('ebook', 'visible') or
                         Database::get()->query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
-                mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
+                DBHelper::fieldExists('admin', 'privilege') or
                         Database::get()->query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
-                mysql_field_exists($mysqlMainDb, 'course_user', 'editor') or
+                DBHelper::fieldExists('course_user', 'editor') or
                         Database::get()->query("ALTER TABLE `course_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
-                if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
+                if (!DBHelper::fieldExists('glossary', 'category_id')) {
                     Database::get()->query("ALTER TABLE glossary
                                 ADD category_id INT(11) DEFAULT NULL,
                                 ADD notes TEXT NOT NULL");
@@ -1971,157 +1971,157 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // ----------------------------------
         echo "<p>$langIndexCreation</p><br />";
         
-        mysql_index_exists('actions_daily', 'actions_daily_index') or
+        DBHelper::indexExists('actions_daily', 'actions_daily_index') or
                 Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
-        mysql_index_exists('actions_summary', 'actions_summary_index') or 
+        DBHelper::indexExists('actions_summary', 'actions_summary_index') or 
                 Database::get()->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
-        mysql_index_exists('admin', 'admin_index') or
+        DBHelper::indexExists('admin', 'admin_index') or
                 Database::get()->query("CREATE INDEX `admin_index` ON admin(user_id)");
-        mysql_index_exists('agenda', 'agenda_index') or
+        DBHelper::indexExists('agenda', 'agenda_index') or
                 Database::get()->query("CREATE INDEX `agenda_index` ON agenda(course_id)");
-        mysql_index_exists('announcement', 'ann_index') or
+        DBHelper::indexExists('announcement', 'ann_index') or
                 Database::get()->query("CREATE INDEX `ann_index` ON announcement(course_id)");
-        mysql_index_exists('assignment', 'assignment_index') or
+        DBHelper::indexExists('assignment', 'assignment_index') or
                 Database::get()->query("CREATE INDEX `assignment_index` ON assignment(course_id)");
-        mysql_index_exists('assignment_submit', 'assign_submit_index') or
+        DBHelper::indexExists('assignment_submit', 'assign_submit_index') or
                 Database::get()->query("CREATE INDEX `assign_submit_index` ON assignment_submit(uid, assignment_id)");
-        mysql_index_exists('assignment_to_specific', 'assign_spec_index') or
+        DBHelper::indexExists('assignment_to_specific', 'assign_spec_index') or
                 Database::get()->query("CREATE INDEX `assign_spec_index` ON assignment_to_specific(user_id)");
-        mysql_index_exists('attendance', 'att_index') or
+        DBHelper::indexExists('attendance', 'att_index') or
                 Database::get()->query("CREATE INDEX `att_index` ON attendance(course_id)");
-        mysql_index_exists('attendance_activities', 'att_act_index') or
+        DBHelper::indexExists('attendance_activities', 'att_act_index') or
                 Database::get()->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
-        mysql_index_exists('attendance_book', 'att_book_index') or
+        DBHelper::indexExists('attendance_book', 'att_book_index') or
                 Database::get()->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
-        mysql_index_exists('bbb_session', 'bbb_index') or
+        DBHelper::indexExists('bbb_session', 'bbb_index') or
                 Database::get()->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
-        mysql_index_exists('course', 'course_index') or
+        DBHelper::indexExists('course', 'course_index') or
                 Database::get()->query("CREATE INDEX `course_index` ON course(code)");
-        mysql_index_exists('course_department', 'course_index') or
+        DBHelper::indexExists('course_department', 'course_index') or
                 Database::get()->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
-        mysql_index_exists('course_description', 'cd_type_index') or                
+        DBHelper::indexExists('course_description', 'cd_type_index') or                
                 Database::get()->query('CREATE INDEX `cd_type_index` ON course_description(`type`)');
-        mysql_index_exists('course_description', 'cd_cid_type_index') or
+        DBHelper::indexExists('course_description', 'cd_cid_type_index') or
                 Database::get()->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
-        mysql_index_exists('course_description', 'cid') or
+        DBHelper::indexExists('course_description', 'cid') or
                 Database::get()->query('CREATE INDEX `cid` ON course_description (course_id)');
-        mysql_index_exists('course_module', 'visible_cid') or
+        DBHelper::indexExists('course_module', 'visible_cid') or
                 Database::get()->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
-        mysql_index_exists('course_review', 'crev_index') or
+        DBHelper::indexExists('course_review', 'crev_index') or
                 Database::get()->query("CREATE INDEX `crev_index` ON course_review(course_id)");
-        mysql_index_exists('course_units', 'course_units_index') or
+        DBHelper::indexExists('course_units', 'course_units_index') or
                 Database::get()->query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
-        mysql_index_exists('course_user', 'cu_index') or
+        DBHelper::indexExists('course_user', 'cu_index') or
                 Database::get()->query("CREATE INDEX `cu_index` ON course_user (course_id, user_id, status)");
-        mysql_index_exists('document', 'doc_path_index') or
+        DBHelper::indexExists('document', 'doc_path_index') or
                 Database::get()->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
-        mysql_index_exists('dropbox_attachment', 'drop_att_index') or
+        DBHelper::indexExists('dropbox_attachment', 'drop_att_index') or
                 Database::get()->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
-        mysql_index_exists('dropbox_index', 'drop_index') or
+        DBHelper::indexExists('dropbox_index', 'drop_index') or
                 Database::get()->query("CREATE INDEX `drop_index` ON dropbox_index(recipient_id, is_read)");
-        mysql_index_exists('dropbox_msg', 'drop_msg_index') or
+        DBHelper::indexExists('dropbox_msg', 'drop_msg_index') or
                 Database::get()->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
-        mysql_index_exists('ebook', 'ebook_index') or
+        DBHelper::indexExists('ebook', 'ebook_index') or
                 Database::get()->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
-        mysql_index_exists('ebook_section', 'ebook_sec_index') or
+        DBHelper::indexExists('ebook_section', 'ebook_sec_index') or
                 Database::get()->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");
-        mysql_index_exists('ebook_subsection', 'ebook_sub_sec_index') or
+        DBHelper::indexExists('ebook_subsection', 'ebook_sub_sec_index') or
                 Database::get()->query("CREATE INDEX `ebook_sub_sec_index` ON ebook_subsection(section_id)");
-        mysql_index_exists('exercise', 'exer_index') or
+        DBHelper::indexExists('exercise', 'exer_index') or
                 Database::get()->query('CREATE INDEX `exer_index` ON exercise (course_id)');
-        mysql_index_exists('exercise_user_record', 'eur_index1') or
+        DBHelper::indexExists('exercise_user_record', 'eur_index1') or
                 Database::get()->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
-        mysql_index_exists('exercise_user_record', 'eur_index2') or
+        DBHelper::indexExists('exercise_user_record', 'eur_index2') or
                 Database::get()->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
-        mysql_index_exists('exercise_answer_record', 'ear_index1') or
+        DBHelper::indexExists('exercise_answer_record', 'ear_index1') or
                 Database::get()->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
-        mysql_index_exists('exercise_answer_record', 'ear_index2') or
+        DBHelper::indexExists('exercise_answer_record', 'ear_index2') or
                 Database::get()->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
-        mysql_index_exists('exercise_with_questions', 'ewq_index') or
+        DBHelper::indexExists('exercise_with_questions', 'ewq_index') or
                 Database::get()->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
-        mysql_index_exists('exercise_question', 'eq_index') or
+        DBHelper::indexExists('exercise_question', 'eq_index') or
                 Database::get()->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
-        mysql_index_exists('exercise_answer', 'ea_index') or
+        DBHelper::indexExists('exercise_answer', 'ea_index') or
                 Database::get()->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
-        mysql_index_exists('forum', 'for_index') or
+        DBHelper::indexExists('forum', 'for_index') or
                 Database::get()->query("CREATE INDEX `for_index` ON forum(course_id)");
-        mysql_index_exists('forum_category', 'for_cat_index') or
+        DBHelper::indexExists('forum_category', 'for_cat_index') or
                 Database::get()->query("CREATE INDEX `for_cat_index` ON forum_category(course_id)");
-        mysql_index_exists('forum_notify', 'for_not_index') or
+        DBHelper::indexExists('forum_notify', 'for_not_index') or
                 Database::get()->query("CREATE INDEX `for_not_index` ON forum_notify(course_id)");
-        mysql_index_exists('forum_post', 'for_post_index') or
+        DBHelper::indexExists('forum_post', 'for_post_index') or
                 Database::get()->query("CREATE INDEX `for_post_index` ON forum_post(topic_id)");
-        mysql_index_exists('forum_topic', 'for_topic_index') or
+        DBHelper::indexExists('forum_topic', 'for_topic_index') or
                 Database::get()->query("CREATE INDEX `for_topic_index` ON forum_topic(forum_id)");
-        mysql_index_exists('glossary', 'glos_index') or
+        DBHelper::indexExists('glossary', 'glos_index') or
                 Database::get()->query("CREATE INDEX `glos_index` ON glossary(course_id)");
-        mysql_index_exists('glossary_category', 'glos_cat_index') or
+        DBHelper::indexExists('glossary_category', 'glos_cat_index') or
                 Database::get()->query("CREATE INDEX `glos_cat_index` ON glossary_category(course_id)");
-        mysql_index_exists('gradebook', 'grade_index') or
+        DBHelper::indexExists('gradebook', 'grade_index') or
                 Database::get()->query("CREATE INDEX `grade_index` ON gradebook(course_id)");
-        mysql_index_exists('gradebook_activities', 'grade_act_index') or
+        DBHelper::indexExists('gradebook_activities', 'grade_act_index') or
                 Database::get()->query("CREATE INDEX `grade_act_index` ON gradebook_activities(gradebook_id)");
-        mysql_index_exists('gradebook_book', 'grade_book_index') or
+        DBHelper::indexExists('gradebook_book', 'grade_book_index') or
                 Database::get()->query("CREATE INDEX `grade_book_index` ON gradebook_book(gradebook_activity_id)");
-        mysql_index_exists('group', 'group_index') or
+        DBHelper::indexExists('group', 'group_index') or
                 Database::get()->query("CREATE INDEX `group_index` ON `group`(course_id)");
-        mysql_index_exists('group_members', 'gr_mem_index') or
+        DBHelper::indexExists('group_members', 'gr_mem_index') or
                 Database::get()->query("CREATE INDEX `gr_mem_index` ON group_members(group_id,user_id)");
-        mysql_index_exists('group_properties', 'gr_prop_index') or
+        DBHelper::indexExists('group_properties', 'gr_prop_index') or
                 Database::get()->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
-        mysql_index_exists('hierarchy', 'hier_index') or
+        DBHelper::indexExists('hierarchy', 'hier_index') or
                 Database::get()->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
-        mysql_index_exists('link', 'link_index') or
+        DBHelper::indexExists('link', 'link_index') or
                 Database::get()->query("CREATE INDEX `link_index` ON link(course_id)");
-        mysql_index_exists('link_category', 'link_cat_index') or
+        DBHelper::indexExists('link_category', 'link_cat_index') or
                 Database::get()->query("CREATE INDEX `link_cat_index` ON link_category(course_id)");
-        mysql_index_exists('log', 'cmid') or
+        DBHelper::indexExists('log', 'cmid') or
                 Database::get()->query('CREATE INDEX `cmid` ON log (course_id, module_id)');
-        mysql_index_exists('logins', 'logins_id') or            
+        DBHelper::indexExists('logins', 'logins_id') or            
                 Database::get()->query("CREATE INDEX `logins_id` ON logins(user_id, course_id)");
-        mysql_index_exists('loginout', 'loginout_id') or
+        DBHelper::indexExists('loginout', 'loginout_id') or
                 Database::get()->query("CREATE INDEX `loginout_id` ON loginout(id_user)");
-        mysql_index_exists('lp_asset', 'lp_as_id') or
+        DBHelper::indexExists('lp_asset', 'lp_as_id') or
                 Database::get()->query("CREATE INDEX `lp_as_id` ON lp_asset(module_id)");
-        mysql_index_exists('lp_learnPath', 'lp_id') or
+        DBHelper::indexExists('lp_learnPath', 'lp_id') or
                 Database::get()->query("CREATE INDEX `lp_id` ON lp_learnPath(course_id)");
-        mysql_index_exists('lp_module', 'lp_mod_id') or
+        DBHelper::indexExists('lp_module', 'lp_mod_id') or
                 Database::get()->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
-        mysql_index_exists('lp_rel_learnPath_module', 'lp_rel_lp_id') or
+        DBHelper::indexExists('lp_rel_learnPath_module', 'lp_rel_lp_id') or
                 Database::get()->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
-        mysql_index_exists('lp_user_module_progress', 'optimize') or
+        DBHelper::indexExists('lp_user_module_progress', 'optimize') or
                 Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
-        mysql_index_exists('oai_record', 'cid') or
+        DBHelper::indexExists('oai_record', 'cid') or
                 Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
-        mysql_index_exists('oai_record', 'oaiid') or
+        DBHelper::indexExists('oai_record', 'oaiid') or
                 Database::get()->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
-        mysql_index_exists('poll', 'poll_index') or
+        DBHelper::indexExists('poll', 'poll_index') or
                 Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-        mysql_index_exists('poll_answer_record', 'poll_ans_id') or
+        DBHelper::indexExists('poll_answer_record', 'poll_ans_id') or
                 Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
-        mysql_index_exists('poll_question', 'poll_q_id') or
+        DBHelper::indexExists('poll_question', 'poll_q_id') or
                 Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
-        mysql_index_exists('poll_question_answer', 'poll_qa_id') or
+        DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
                 Database::get()->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
-        mysql_index_exists('unit_resources', 'unit_res_index') or
+        DBHelper::indexExists('unit_resources', 'unit_res_index') or
                 Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
-        mysql_index_exists('user', 'u_id') or
+        DBHelper::indexExists('user', 'u_id') or
                 Database::get()->query("CREATE INDEX `u_id` ON user(username)");
-        mysql_index_exists('user_department', 'udep_id') or
+        DBHelper::indexExists('user_department', 'udep_id') or
                 Database::get()->query("CREATE INDEX `udep_id` ON user_department(user, department)");
-        mysql_index_exists('video', 'cid') or
+        DBHelper::indexExists('video', 'cid') or
                 Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
-        mysql_index_exists('videolink', 'cid') or
+        DBHelper::indexExists('videolink', 'cid') or
                 Database::get()->query('CREATE INDEX `cid` ON videolink (course_id)');
-        mysql_index_exists('wiki_locks', 'wiki_id') or
+        DBHelper::indexExists('wiki_locks', 'wiki_id') or
                 Database::get()->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
-        mysql_index_exists('wiki_pages', 'wiki_pages_id') or
+        DBHelper::indexExists('wiki_pages', 'wiki_pages_id') or
                 Database::get()->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
-        mysql_index_exists('wiki_pages_content', 'wiki_pcon_id') or
+        DBHelper::indexExists('wiki_pages_content', 'wiki_pcon_id') or
                 Database::get()->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
-        mysql_index_exists('wiki_properties', 'wik_prop_id') or
+        DBHelper::indexExists('wiki_properties', 'wik_prop_id') or
                 Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
-        mysql_index_exists('idx_queue', 'idx_queue_cid') or
+        DBHelper::indexExists('idx_queue', 'idx_queue_cid') or
                 Database::get()->query("CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)");
                                                               
         // **********************************************
@@ -2162,7 +2162,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
-            mysql_select_db($mysqlMainDb);
 
             Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
                 SELECT
