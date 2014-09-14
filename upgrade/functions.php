@@ -1098,7 +1098,6 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
  * @param type $extramessage
  */
 function upgrade_course_2_10($code, $extramessage = '') {
-
     global $langUpgCourse, $webDir;
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
@@ -1112,10 +1111,10 @@ function upgrade_course_2_10($code, $extramessage = '') {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
     if (!DBHelper::fieldExists('poll', 'description', $code)) {
-        db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+        Database::get($code)->query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
                                    ADD end_message MEDIUMTEXT NOT NULL,
                                    ADD anonymized INT(1) NOT NULL DEFAULT 0');
-        db_query('ALTER TABLE poll_question
+        Database::get($code)->query('ALTER TABLE poll_question
                     CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
     }
 }

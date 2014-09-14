@@ -636,7 +636,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     DBHelper::fieldExists('cours', 'course_license') or
                             Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
 
-                    Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                    DBHelper::fieldExists("cours_user", "reviewer") or
+                            Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
 
                     // prevent dir list under video storage
                     if ($handle = opendir($webDir . '/video/')) {
