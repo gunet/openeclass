@@ -80,14 +80,16 @@ function list_docs() {
         $result = Database::get()->queryArray("SELECT * FROM document
                                     WHERE $group_sql AND
                                           visible = 1 AND
-                                          path LIKE " . quote("$path/%") . " AND
-                                          path NOT LIKE " . quote("$path/%/%"));
+                                          path LIKE ?s AND
+                                          path NOT LIKE ?s",
+                                    "$path/%", "$path/%/%");
     } else {
         $common_docs = false;
         $result = Database::get()->queryArray("SELECT * FROM document
                                     WHERE $group_sql AND
-                                          path LIKE " . quote("$path/%") . " AND
-                                          path NOT LIKE " . quote("$path/%/%"));
+                                          path LIKE ?s AND
+                                          path NOT LIKE ?s",
+                                    "$path/%", "$path/%/%");
     }
 
     $fileinfo = array();

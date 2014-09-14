@@ -39,7 +39,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     // A search has been submitted
     $search = isset($_GET['search']) ? $_GET['search'] : '';
-    $searchurl = "&search=yes";        
+    $searchurl = "&search=yes";
     $searchtitle = isset($_GET['formsearchtitle'])? $_GET['formsearchtitle'] : '';
     $searchcode  = isset($_GET['formsearchcode'])? $_GET['formsearchcode'] : '';
     $searchtype = isset($_GET['formsearchtype'])? intval($_GET['formsearchtype']) : '-1';
@@ -47,71 +47,81 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    
+
     // Search for courses
-    $searchcours = array();
+    $query = '';
+    $terms = array();
     if (!empty($searchtitle)) {
-        $searchcours[] = "title LIKE " . quote('%' . $searchtitle . '%');
+        $query .= ' AND title LIKE ?s';
+        $terms[] = '%' . $searchtitle . '%';
     }
     if (!empty($searchcode)) {
-        $searchcours[] = "course.code LIKE " . quote('%' . $searchcode . '%');
+        $query .= ' AND (course.code LIKE ?s OR public_code ?s)';
+        $terms[] = '%' . $searchcode . '%';
+        $terms[] = '%' . $searchcode . '%';
     }
     if ($searchtype != "-1") {
-        $searchcours[] = "visible = $searchtype";
+        $query .= ' AND visible = ?d';
+        $terms[] = $searchtype;
     }
     if ($searchfaculte) {
         $subs = $tree->buildSubtrees(array($searchfaculte));
-        $ids = '';
+        $ids = 0;
         foreach ($subs as $key => $id) {
-            $ids .= $id . ',';
+            $terms[] = $id;
+            $ids++;
         }
-        // remove last ',' from $ids
-        $facs = substr($ids, 0, -1);
-        $searchcours[] = "hierarchy.id IN ($facs)";
+        $query .= ' AND hierarchy.id IN (' . implode(', ', array_fill(0, $ids, '?d')) . ')';
     }
-    if (isset($_GET['reg_flag'])) {
-        $searchcours[] = "created " . (($_GET['reg_flag'] == 1) ? '>=' : '<=') . " '$_GET[date]'";
+    if (isset($_GET['reg_flag']) and !empty($_GET['date'])) {
+        $query .= ' AND created ' .  (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
+        $terms[] = $_GET['date'];
     }
-    $query = join(' AND ', $searchcours);
-    
-    ///internal search
+
+    // Datatables internal search
+    $filter_terms = array();
     if (!empty($_GET['sSearch'])) {
-        $keyword = quote('%' . $_GET['sSearch'] . '%');
-        $query .= "AND (title LIKE $keyword OR prof_names LIKE $keyword)";        
+        $filter_query = ' AND (title LIKE ?s OR prof_names LIKE ?s)';
+        $filter_terms[] = '%' . $_GET['sSearch'] . '%';
+        $filter_terms[] = '%' . $_GET['sSearch'] . '%';
     } else {
-        $query .= "";
-        $keyword = "'%%'";
+        $filter_query = '';
     }
-    $depwh = (isDepartmentAdmin()) ? ' AND course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ' : '';
-     
+
+    $query .= (isDepartmentAdmin()) ? ' AND course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ' : '';
+
     // sorting
-    $extra_query = "ORDER BY course.title ".$_GET['sSortDir_0'];   
+    $extra_query = "ORDER BY course.title " .
+        ($_GET['sSortDir_0'] == 'desc'? 'DESC': '');
     // pagination
-    ($limit > 0) ? $extra_query .= " LIMIT $offset,$limit" : $extra_query .= "";
-    
-    
+    if ($limit > 0) {
+        $extra_query .= " LIMIT ?d, ?d";
+        $extra_terms = array($offset, $limit);
+    } else {
+        $extra_terms = array();
+    }
+
     $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
-                                AND hierarchy.id = course_department.department AND $query $depwh $extra_query");       
-
-    $depq = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course " . $depwh : '';            
-    $depq .= (empty($depq)) ? "WHERE ": "AND ";
-        
+                                AND hierarchy.id = course_department.department
+                                    $query $filter_query $extra_query",
+                            $terms, $filter_terms, $extra_terms);
     $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
-                                                WHERE course.id = course_department.course 
-                                                AND hierarchy.id = course_department.department AND $query")->total;
+                                                WHERE course.id = course_department.course
+                                                AND hierarchy.id = course_department.department
+                                                $query", $terms)->total;
     $filtered_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
-                                                WHERE course.id = course_department.course 
-                                                AND hierarchy.id = course_department.department 
-                                                AND $query AND (title LIKE $keyword OR prof_names LIKE $keyword)")->total;
-                                                        
+                                                WHERE course.id = course_department.course
+                                                AND hierarchy.id = course_department.department
+                                                $query $filter_query", $terms, $filter_terms)->total;
+
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
-    
+
     $data['aaData'] = array();
-    
-    foreach ($sql as $logs) {                            
+
+    foreach ($sql as $logs) {
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
         // Define course type
@@ -122,35 +132,35 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 break;
             case COURSE_REGISTRATION:
                 $icon = 'lock_registration';
-                $title = $langRegCourse;                
+                $title = $langRegCourse;
                 break;
             case COURSE_OPEN:
                 $icon = 'lock_open';
-                $title = $langOpenCourse;                
+                $title = $langOpenCourse;
                 break;
             case COURSE_INACTIVE:
                 $icon = 'lock_inactive';
-                $title = $langCourseInactiveShort;                
+                $title = $langCourseInactiveShort;
                 break;
         }
 
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;
         $dep = '';
-        foreach ($departments as $dep) {
+        foreach ($departments as $department) {
             $br = ($i < count($departments)) ? '<br/>' : '';
-            $dep .= $tree->getFullPath($dep) . $br;
+            $dep .= $tree->getFullPath($department) . $br;
             $i++;
         }
-        
+
         // Add links to course users, delete course and course edit
         $icon_content = icon('user_list', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
         if (!isDepartmentAdmin()) {
-            $icon_content .= icon('user_list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
-        }        
+            $icon_content .= icon('action_log', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
+        }
         $icon_content .= icon('edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
         $icon_content .= icon('delete', $langDelete, "delcours.php?c=$logs->id");
-        
+
         $data['aaData'][] = array(
                         '0' => $course_title,
                         '1' => icon($icon, $title),
@@ -168,14 +178,14 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#course_results_table').DataTable ({            
+            $('#course_results_table').DataTable ({
                 'bProcessing': true,
-                'bServerSide': true,                
+                'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
-                ],                
+                ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': false,
                 'aoColumns': [
@@ -184,7 +194,7 @@ $head_content .= "<script type='text/javascript'>
                     {'bSortable' : false, 'sWidth': '25%' },
                     {'bSortable' : false },
                 ],
-                'oLanguage': {                       
+                'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '".$langNoResult."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -228,8 +238,8 @@ $tool_content .= "<table id='course_results_table' class='display'>
     <th width='$width'>$langActions</th>
     </tr></thead>";
 
-$tool_content .= "<tbody></tbody></table>";   
+$tool_content .= "<tbody></tbody></table>";
 $tool_content .= "<div align='center' style='margin-top: 60px; margin-bottom:10px;'>";
 $tool_content .= "<a href='searchcours.php'>$langReturnSearch</a></div>";
-    
+
 draw($tool_content, 3, null, $head_content);

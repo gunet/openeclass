@@ -8,8 +8,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-mysql_select_db($mysqlMainDb);
-
 $nameTools = $langEBook;
 $nameTools = $langEBookReplace;
 

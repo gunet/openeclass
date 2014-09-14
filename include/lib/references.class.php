@@ -154,7 +154,7 @@ class References {
      * @param int $objtype The object type (values from $ref_object_types). It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      * @return array of object type from $ref_object_types (i.e., array('objtable' => '', 'id_field' => '', 'title_field' => '', 'course_field' => ''))
      */
-    function get_module_from_objtype($objtype){
+    public static function get_module_from_objtype($objtype){
         foreach(self::$ref_object_types as $gt => $m){
             foreach($m as $mid => $minfo){
                 if(array_key_exists($objtype, $minfo)){
@@ -170,7 +170,7 @@ class References {
      * @param int $oid The object id which is formed by the object type (from $ref_object_types) and the object id (id in the corresponding db table), e.g., video_link:5
      * @return array of object info from the object's DB table.
      */
-    function get_ref_obj_field_values($oid){
+    public static function get_ref_obj_field_values($oid){
         $objtype = NULL;
         $objid = NULL;
         $objcourse = NULL;

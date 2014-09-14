@@ -544,8 +544,7 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
         claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
     }
 
-    // arrays used to store inserted ids in case
-    // will be used to build delete queries for mysql < 4.0.0
+    // arrays used to store inserted ids
     $insertedModule_id = array();
     $insertedAsset_id = array();
 

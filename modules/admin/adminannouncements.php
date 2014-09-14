@@ -98,17 +98,27 @@ if (isset($_GET['delete'])) {
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
     // submit announcement command
-    $start_sql = 'begin = ' . ((isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date']) ? autoquote($_POST['start_date']) : 'NULL');
-    $end_sql = 'end = ' . ((isset($_POST['end_date_active']) and isset($_POST['end_date']) and $_POST['end_date']) ? autoquote($_POST['end_date']) : 'NULL');
+    $dates = array();
+    if (isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date']) {
+        $start_sql = 'begin = ?s';
+        $dates[] = $_POST['start_date'];
+    } else {
+        $start_sql = 'begin = NULL';
+    }
+    if (isset($_POST['end_date_active']) and isset($_POST['end_date']) and $_POST['end_date']) {
+        $end_sql = 'end = ?s';
+        $dates[] = $_POST['end_date'];
+    } else {
+        $end_sql = 'end = NULL';
+    }
     $newContent = purify($newContent);
     if (isset($_POST['id'])) {
         // modify announcement
         $id = intval($_POST['id']);
         Database::get()->query("UPDATE admin_announcement
-                        SET title = ?s, body = ?s,
-			lang = ?s,
-			`date` = NOW(), $start_sql, $end_sql
-                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $id);
+                        SET title = ?s, body = ?s, lang = ?s,
+                            `date` = NOW(), $start_sql, $end_sql
+                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $id);
         $message = $langAdminAnnModify;
     } else {
         // add new announcement
@@ -123,7 +133,7 @@ if (isset($_GET['delete'])) {
                             `date` = NOW(), 
                             `order` = ?d, 
                             $start_sql, 
-                            $end_sql", $title, $newContent, $lang_admin_ann, $order);
+                            $end_sql", $title, $newContent, $lang_admin_ann, $order, $dates);
         $message = $langAdminAnnAdd;
     }
 }

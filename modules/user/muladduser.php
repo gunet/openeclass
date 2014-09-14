@@ -109,7 +109,7 @@ draw($tool_content, 2);
  */
 function finduser($user, $field) {
 
-    $result = Database::get()->querySingle("SELECT id FROM user WHERE $field=" . autoquote($user));
+    $result = Database::get()->querySingle("SELECT id FROM user WHERE `$field` = ?s", $user);
     if ($result) {
         $userid = $result->id;
     } else {

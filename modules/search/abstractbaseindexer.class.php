@@ -31,6 +31,10 @@ abstract class AbstractBaseIndexer {
      * @param Indexer $idxer - optional indexer object
      */
     public function __construct($idxer = null) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         if ($idxer == null) {
             $this->__indexer = new Indexer();
         } else {
@@ -97,6 +101,10 @@ abstract class AbstractBaseIndexer {
      * @param  boolean $optimize - whether to optimize after storing
      */
     public function store($id, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $resource = $this->fetch($id);
         if (!$resource) {
             return;
@@ -105,7 +113,7 @@ abstract class AbstractBaseIndexer {
         // delete existing resource from index
         $this->remove($id, false, false);
 
-        // add the forum post back to the index
+        // add the resource back to the index
         $this->__index->addDocument($this->makeDoc($resource));
 
         $this->optimizeOrCommit($optimize);
@@ -119,6 +127,10 @@ abstract class AbstractBaseIndexer {
      * @param boolean $optimize   - whether to optimize after removing
      */
     public function remove($id, $existCheck = false, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         if ($existCheck) {
             $resource = $this->fetch($id);
             if (!$resource) {
@@ -140,7 +152,11 @@ abstract class AbstractBaseIndexer {
      * @param boolean $optimize - whether to optimize after reindexing
      */
     public function reindex($optimize = false) {
-        // remove all forum posts from index
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
+        // remove all resources from index
         $docIds = $this->__index->termDocs($this->getTermForAllResources());
         foreach ($docIds as $id) {
             $this->__index->delete($id);

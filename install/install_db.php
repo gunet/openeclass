@@ -31,6 +31,8 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
+set_time_limit(0);
+
 Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
@@ -113,6 +115,8 @@ $db->query("CREATE TABLE announcement (
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
+    `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+    `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
     PRIMARY KEY (id)) $charset_spec");
 
 #
@@ -143,7 +147,7 @@ $db->query("CREATE TABLE `agenda` (
     `visible` TINYINT(4)
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    `source_event_id` int(11) DEFAULT NULL)
     $charset_spec");
 
 #
@@ -327,6 +331,55 @@ $db->query("CREATE TABLE loginout (
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
+
+$db->query("CREATE TABLE `personal_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `reference_obj_module` mediumint(11) DEFAULT NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+        `reference_obj_id` int(11) DEFAULT NULL,
+        `reference_obj_course` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`))");
+ 
+$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+        `user_id` int(11) NOT NULL,
+        `view_type` enum('day','month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT '#5882fa',
+        `course_color` varchar(30) DEFAULT '#acfa58',
+        `deadline_color` varchar(30) DEFAULT '#fa5882',
+        `admin_color` varchar(30) DEFAULT '#eeeeee',
+        `show_personal` bit(1) DEFAULT b'1',
+        `show_course` bit(1) DEFAULT b'1',
+        `show_deadline` bit(1) DEFAULT b'1',
+        `show_admin` bit(1) DEFAULT b'1',
+        PRIMARY KEY (`user_id`))");
+//create triggers
+$db->query("CREATE TRIGGER personal_calendar_settings_init "
+        . "AFTER INSERT ON `user` FOR EACH ROW "
+        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
+
+$db->query("CREATE TABLE `admin_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `visibility_level` int(11) DEFAULT '1',
+        `email_notification` time DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        KEY `user_events` (`user_id`),
+        KEY `admin_events_dates` (`start`))");
 
 // haniotak:
 // table for loginout rollups
@@ -525,8 +578,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
   `num_replies` INT(10) NOT NULL DEFAULT 0,
   `last_post_id` INT(10) NOT NULL DEFAULT 0,
   `forum_id` INT(10) NOT NULL DEFAULT 0,
+  `locked` TINYINT DEFAULT 0 NOT NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
+        `user_id` INT(11) NOT NULL,
+        `num_posts` INT(11) NOT NULL,
+        `course_id` INT(11) NOT NULL,
+        PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS video (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -566,18 +625,14 @@ $db->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
                 `msg_id` INT(11) UNSIGNED NOT NULL,
                 `filename` VARCHAR(250) NOT NULL,
                  real_filename varchar(255) NOT NULL,
-                `filesize` INT(11) UNSIGNED NOT NULL,
-                KEY `msg` (`msg_id`)) $charset_spec");
+                `filesize` INT(11) UNSIGNED NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_index (
                 `msg_id` INT(11) UNSIGNED NOT NULL,
                 `recipient_id` INT(11) UNSIGNED NOT NULL,
-                `thread_id` INT(11) UNSIGNED NOT NULL,
                 `is_read` BOOLEAN NOT NULL DEFAULT 0,
                 `deleted` BOOLEAN NOT NULL DEFAULT 0,
-                PRIMARY KEY (`msg_id`, `recipient_id`),
-                KEY `list` (`recipient_id`,`is_read`),
-                KEY `participants` (`thread_id`,`recipient_id`)) $charset_spec");
+                PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `lp_module` (
                 `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -667,6 +722,44 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
                 `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                 PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `title` VARCHAR(255) NOT NULL DEFAULT '',
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL,
+                `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `course_id` INT(11) NOT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `comments` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `rating` (
+                `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `value` TINYINT NOT NULL,
+                `widget` VARCHAR(30) NOT NULL,
+                `time` DATETIME NOT NULL,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `rating_source` VARCHAR(50) NOT NULL,
+                INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
+                INDEX `rating_index_2` (`rid`, `rtype`, `widget`, `user_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
+                `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `value` FLOAT NOT NULL DEFAULT 0,
+                `count` INT(11) NOT NULL DEFAULT 0,
+                `tag` VARCHAR(50),
+                INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
@@ -676,6 +769,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` INT(11) NOT NULL DEFAULT 0,
+                `description` MEDIUMTEXT NOT NULL,
+                `end_message` MEDIUMTEXT NOT NULL,
                 `anonymized` INT(1) NOT NULL DEFAULT 0) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -689,7 +784,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
                 `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
                 `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                `qtype` ENUM('multiple', 'fill') NOT NULL ) $charset_spec");
+                `qtype` tinyint(3) UNSIGNED NOT NULL,
+                `q_position` INT(11) DEFAULT 1 ) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                 `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pqid` INT(11) NOT NULL DEFAULT 0,
@@ -702,6 +798,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `description` TEXT NOT NULL,
                 `comments` TEXT NOT NULL,
                 `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` CHAR(1) NOT NULL DEFAULT 1,
                 `secret_directory` VARCHAR(30) NOT NULL,
@@ -778,14 +875,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `q_position` INT(11) DEFAULT 1,
                 `type` INT(11) DEFAULT 1) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
-                `id` INT(11) NOT NULL DEFAULT 0,
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `question_id` INT(11) NOT NULL DEFAULT 0,
                 `answer` TEXT,
                 `correct` INT(11) DEFAULT NULL,
                 `comment` TEXT,
                 `weight` FLOAT(5,2),
-                `r_position` INT(11) DEFAULT NULL,
-                PRIMARY KEY (id, question_id) ) $charset_spec");
+                `r_position` INT(11) DEFAULT NULL ) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
                 `question_id` INT(11) NOT NULL DEFAULT 0,
                 `exercise_id` INT(11) NOT NULL DEFAULT 0,
@@ -1135,6 +1231,12 @@ $restrict_owndep = intval($restrict_owndep);
 $restrict_teacher_owndep = intval($restrict_teacher_owndep);
 $student_upload_whitelist = $student_upload_whitelist;
 $teacher_upload_whitelist = $teacher_upload_whitelist;
+$enable_indexing = intval($enable_indexing);
+$enable_search = intval($enable_search);
+
+if ($enable_search == 1) {
+    $enable_indexing = 1;
+}
 
 // restrict_owndep and restrict_teacher_owndep are interdependent
 if ($restrict_owndep == 0) {
@@ -1198,6 +1300,8 @@ $default_config = array(
     'log_purge_interval', 12,
     'course_metadata', 0,
     'opencourses_enable', 0,
+    'enable_indexing', $enable_indexing,
+    'enable_search', $enable_search,
     'version', ECLASS_VERSION);
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
     implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')),
@@ -1296,6 +1400,7 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
     `external_users` varchar(255) DEFAULT NULL,
     `participants` varchar(255) DEFAULT NULL,
     `record` enum("true","false") DEFAULT "false",
+    `sessionUsers` int(11) DEFAULT 0,
     PRIMARY KEY (`id`))');
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
@@ -1336,7 +1441,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
                `gradebook_id` MEDIUMINT(11) NOT NULL,
                `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
 
-$db->query("CREATE TABLE `oai_record` (
+$db->query("CREATE TABLE IF NOT EXISTS `oai_record` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL UNIQUE,
     `oai_identifier` varchar(255) DEFAULT NULL,
@@ -1419,82 +1524,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `note` (
         `reference_obj_course` int(11) default NULL,
         PRIMARY KEY  (`id`))");
 
-$db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
-$db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
-$db->query("CREATE INDEX `admin_index` ON admin(user_id)");
-$db->query("CREATE INDEX `agenda_index` ON agenda(course_id)");
-$db->query("CREATE INDEX `ann_index` ON announcement(course_id)");
-$db->query("CREATE INDEX `assignment_index` ON assignment(course_id)");
-$db->query("CREATE INDEX `assign_submit_index` ON assignment_submit(uid, assignment_id)");
-$db->query("CREATE INDEX `assign_spec_index` ON assignment_to_specific(user_id)");
-$db->query("CREATE INDEX `att_index` ON attendance(course_id)");
-$db->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
-$db->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
-$db->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
-$db->query("CREATE INDEX `course_index` ON course(code)");
-$db->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
-$db->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
-$db->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
-$db->query('CREATE INDEX `cid` ON course_description (course_id)');
-$db->query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
-$db->query("CREATE INDEX `crev_index` ON course_review(course_id)");
-$db->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order`)");
-$db->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
-$db->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
-$db->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
-$db->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
-$db->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
-$db->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
-$db->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");
-$db->query("CREATE INDEX `ebook_sub_sec_index` ON ebook_subsection(section_id)");
-$db->query('CREATE INDEX `exer_index` ON exercise (course_id)');
-$db->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
-$db->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
-$db->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
-$db->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
-$db->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
-$db->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
-$db->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
-$db->query("CREATE INDEX `for_index` ON forum(course_id)");
-$db->query("CREATE INDEX `for_cat_index` ON forum_category(course_id)");
-$db->query("CREATE INDEX `for_not_index` ON forum_notify(course_id)");
-$db->query("CREATE INDEX `for_post_index` ON forum_post(topic_id)");
-$db->query("CREATE INDEX `for_topic_index` ON forum_topic(forum_id)");
-$db->query("CREATE INDEX `glos_index` ON glossary(course_id)");
-$db->query("CREATE INDEX `glos_cat_index` ON glossary_category(course_id)");
-$db->query("CREATE INDEX `grade_index` ON gradebook(course_id)");
-$db->query("CREATE INDEX `grade_act_index` ON gradebook_activities(gradebook_id)");
-$db->query("CREATE INDEX `grade_book_index` ON gradebook_book(gradebook_activity_id)");
-$db->query("CREATE INDEX `group_index` ON `group`(course_id)");
-$db->query("CREATE INDEX `gr_mem_index` ON group_members(group_id,user_id)");
-$db->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
-$db->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
-$db->query("CREATE INDEX `link_index` ON link(course_id)");
-$db->query("CREATE INDEX `link_cat_index` ON link_category(course_id)");
-$db->query("CREATE INDEX `cmid` ON log (course_id, module_id)");
-$db->query("CREATE INDEX `logins_id` ON logins(user_id, course_id)");
-$db->query("CREATE INDEX `loginout_id` ON loginout(id_user)");
-$db->query("CREATE INDEX `lp_as_id` ON lp_asset(module_id)");
-$db->query("CREATE INDEX `lp_id` ON lp_learnPath(course_id)");
-$db->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
-$db->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
-$db->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
-$db->query('CREATE INDEX `cid` ON oai_record (course_id)');
-$db->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
-$db->query("CREATE INDEX `poll_index` ON poll(course_id)");
-$db->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
-$db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
-$db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
-$db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
-$db->query("CREATE INDEX `u_id` ON user(username)");
-$db->query("CREATE INDEX `udep_id` ON user_department(user, department)");
-$db->query("CREATE INDEX `cid` ON video (course_id)");
-$db->query("CREATE INDEX `cid` ON videolink (course_id)");
-$db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
-$db->query("CREATE INDEX `wiki_pages_id` ON wiki_pages(wiki_id)");
-$db->query("CREATE INDEX `wiki_pcon_id` ON wiki_pages_content(pid)");
-$db->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
-$db->query("CREATE INDEX `user_notes` ON note (user_id)");
+$db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL UNIQUE,
+    PRIMARY KEY (`id`)) $charset_spec");
 
 
 $db->query("CREATE TABLE `personal_calendar` (
@@ -1553,7 +1586,7 @@ $db->query("CREATE INDEX `course_units_index` ON course_units (course_id, `order
 $db->query("CREATE INDEX `cu_index` ON course_user (user_id, status)");
 $db->query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 $db->query("CREATE INDEX `drop_att_index` ON dropbox_attachment(msg_id)");
-$db->query("CREATE INDEX `drop_index` ON dropbox_index(msg_id, recipient_id)");
+$db->query("CREATE INDEX `drop_index` ON dropbox_index(recipient_id, is_read)");
 $db->query("CREATE INDEX `drop_msg_index` ON dropbox_msg(course_id, author_id)");
 $db->query("CREATE INDEX `ebook_index` ON ebook(course_id)");
 $db->query("CREATE INDEX `ebook_sec_index` ON ebook_section(ebook_id)");
@@ -1610,3 +1643,4 @@ $db->query('CREATE INDEX `user_events` ON personal_calendar (user_id)');
 $db->query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start)');
 $db->query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
 $db->query('CREATE INDEX `deadline_dates` ON assignment (course_id, deadline)');
+$db->query('CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)');

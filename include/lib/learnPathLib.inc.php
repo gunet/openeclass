@@ -173,7 +173,7 @@ function commentBox($type, $mode) {
             }
         } else {
             // display comment
-            $output .= $currentComment;
+            $output .= q($currentComment);
             // display edit and delete links if user as the right to see it
             if ($is_editor) {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . "\n"
@@ -270,7 +270,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
 
         //$output .= '<strong>'
-        $output .= $currentName;
+        $output .= q($currentName);
 
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName">'

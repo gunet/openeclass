@@ -97,10 +97,12 @@ Database::get()->queryFunc("SELECT LEFT(title, 1) AS first_letter FROM course
     $letterlinks .= "<a href='$_SERVER[SCRIPT_NAME]?first=" . urlencode($first_letter) . "'>" . q($first_letter) . '</a> ';
 });
 
+$terms = array();
 if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
     $qry = "SELECT id, title FROM course
-                WHERE LEFT(title,1) = " . quote($firstletter);
+                WHERE LEFT(title,1) = ?s";
+    $terms = $firstletter;
 } else {
     $qry = "SELECT id, title FROM course";
 }
@@ -109,7 +111,7 @@ $cours_opts[-1] = $langAllCourses;
 Database::get()->queryFunc($qry
         , function ($row) use(&$cours_opts) {
     $cours_opts[$row->id] = $row->title;
-});
+}, $terms);
 
 // --------------------------------------
 // display form

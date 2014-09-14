@@ -40,11 +40,11 @@ if (isset($_REQUEST['username'])) {
                 WHERE username ";
 
     if (get_config('case_insensitive_usernames')) {
-        $sql .= "= " . quote($_REQUEST['username']);
+        $sql .= '= ?s';
     } else {
-        $sql .= "COLLATE utf8_bin = " . quote($_REQUEST['username']);
+        $sql .= 'COLLATE utf8_bin = ?s';
     }
-    $myrow = Database::get()->querySingle($sql);
+    $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {
         $_SESSION['uid'] = $myrow->id;
         $_SESSION['surname'] = $myrow->surname;

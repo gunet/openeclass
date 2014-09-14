@@ -21,7 +21,6 @@
 
 /**
  * @brief create course
- * @global type  $mysqlMainDb
  * @param  type  $fake_code
  * @param  type  $lang
  * @param  type  $title
@@ -122,10 +121,10 @@ function create_modules($cid) {
 
     $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
         MODULE_ID_FORUM, MODULE_ID_EXERCISE,
-        MODULE_ID_GRADEBOOK, MODULE_ID_GRADEBOOKTOTAL, MODULE_ID_ATTENDANCE, MODULE_ID_GROUPS,
+        MODULE_ID_GRADEBOOK, MODULE_ID_ATTENDANCE, MODULE_ID_GROUPS,
         MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
         MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BBB);
+        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, MODULE_ID_BBB);
 
     $vis_placeholders = array();
     $vis_args = array();

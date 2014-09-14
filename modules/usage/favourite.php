@@ -23,7 +23,7 @@
 * @file: favourite.php
 * @brief: Creates a pie-chart with the preferences of the users regarding the
 */
-   
+
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -43,14 +43,14 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jq
 <script type='text/javascript'>
 $(function() {
 $('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
+    dateFormat: 'yy-mm-dd',
     timeFormat: 'hh:mm'
     });
 });
 
 $(function() {
 $('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
+    dateFormat: 'yy-mm-dd',
     timeFormat: 'hh:mm'
     });
 });
@@ -87,11 +87,12 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 $date_fmt = '%Y-%m-%d';
-$date_where = " (day BETWEEN " . quote("$u_date_start") .
-        ' AND ' . quote("$u_date_end") . ") ";
+$date_where = " (day BETWEEN ?s AND ?s)";
+$terms = array($u_date_start, $u_date_end);
 
 if ($u_user_id != -1) {
-    $user_where = "AND user_id = " . intval($u_user_id) . "";
+    $user_where = "AND user_id = ?d";
+    $terms[] = intval($u_user_id);
 } else {
     $user_where = '';
 }
@@ -100,12 +101,12 @@ $chart_error = "";
 switch ($u_stats_value) {
     case "visits":
         $chart = new Plotter(400, 300);
-        $chart->setTitle("$langFavourite");        
+        $chart->setTitle($langFavourite);
         $result = Database::get()->queryArray("SELECT module_id, SUM(hits) AS cnt FROM actions_daily
                         WHERE $date_where AND
                               course_id = ?d
                               $user_where
-                        GROUP BY module_id", $course_id);        
+                        GROUP BY module_id", $course_id, $terms);
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course units
@@ -117,14 +118,14 @@ switch ($u_stats_value) {
         $chart_error = $langNoStatistics;
         break;
 
-    case "duration":        
+    case "duration":
         $chart = new Plotter(400, 300);
-        $chart->setTitle("$langFavourite");
+        $chart->setTitle($langFavourite);
         $result = Database::get()->queryArray("SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
                         WHERE $date_where
                         AND course_id = ?d
                         $user_where GROUP BY module_id", $course_id);
-                
+
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course inits
@@ -163,9 +164,9 @@ if (isset($_GET['first'])) {
 } else {
     $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = ?d", $course_id);    
+            WHERE b.course_id = ?d", $course_id);
 }
-  foreach ($result as $row) {  
+  foreach ($result as $row) {
     if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
@@ -199,7 +200,7 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
      </tr>
      <tr>
        <td rowspan='2' valign='top'>$langUser:</td>
-       <td>'$langFirstLetterUser': '$letterlinks'</td>
+       <td>$langFirstLetterUser: $letterlinks</td>
      </tr>
      <tr>
        <td><select name='u_user_id'>$user_opts</select></td>

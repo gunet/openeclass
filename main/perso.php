@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /* ========================================================================
  * Open eClass 3.0
@@ -23,8 +23,6 @@
  * @file perso.php
  * @brief displays user courses and courses activity
  */
-
-
 if (!isset($_SESSION['uid'])) {
     die("Unauthorized Access!");
     exit;
@@ -48,8 +46,8 @@ $result2 = Database::get()->queryArray("SELECT course.id cid, course.code code, 
                 WHERE course_user.user_id = ?d $extra ORDER BY status, course.title, course.prof_names", $uid);
 
 $courses = array();
-if (count($result2) > 0) {    
-        foreach ($result2 as $mycours) {
+if (count($result2) > 0) {
+    foreach ($result2 as $mycours) {
         $courses[$mycours->code] = $mycours->status;
     }
 }
@@ -63,7 +61,7 @@ $user_lesson_info = getUserLessonInfo($uid);
 //if user is registered to at least one lesson
 if (count($lesson_ids) > 0) {
     // get user assignments    
-    $user_assignments = getUserAssignments($lesson_ids);    
+    $user_assignments = getUserAssignments($lesson_ids);
     // get user announcements    
     $user_announcements = getUserAnnouncements($lesson_ids);
     // get user documents
@@ -87,11 +85,10 @@ if (count($lesson_ids) > 0) {
 $today = getdate();
 $day = $today['mday'];
 $month = $today['mon'];
-$year = $today['year']; 
+$year = $today['year'];
 Calendar_Events::get_calendar_settings();
-$user_personal_calendar = Calendar_Events::small_month_calendar($day,$month,$year);
+$user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
-
 // ==  BEGIN create array with personalised content
 
 $perso_tool_content = array(
@@ -103,7 +100,6 @@ $perso_tool_content = array(
     'forum_content' => $user_forumPosts,
     'personal_calendar_content' => $user_personal_calendar
 );
-
 
 /**
  * @brief display user courses
@@ -139,7 +135,7 @@ function getUserLessonInfo($uid) {
 	                        course_user.user_id = ?d AND
 	                        user.id = ?d
                        ORDER BY course.title, course.prof_names", $uid, $uid);
-    } else {        
+    } else {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
@@ -154,9 +150,9 @@ function getUserLessonInfo($uid) {
                                 course.visible != ?d
                        ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
     }
-    
+
     //getting user's lesson info
-    if ($myCourses) {        
+    if ($myCourses) {
         $lesson_content .= "<table width='100%' class='tbl_lesson'>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
@@ -172,14 +168,14 @@ function getUserLessonInfo($uid) {
                 $lesson_content .= "<a href='${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code . "'>
 				    <img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
             }
-            $lesson_content .= "</td></tr>";            
+            $lesson_content .= "</td></tr>";
         }
         $lesson_content .= "</table>";
     } else { // if we are not registered to courses
         $lesson_content .= "<p class='alert1'>$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
         $lesson_content .= "<table width='100%'>";
         $lesson_content .= "<tr>";
-        $lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";        
+        $lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";
         if ($session->status == USER_TEACHER) {
             $lesson_content .= "<td align='left'>$langWelcomeProfPerso</td>";
         } else {
@@ -188,9 +184,8 @@ function getUserLessonInfo($uid) {
         $lesson_content .= "</tr>";
         $lesson_content .= "</table>";
     }
-    return $lesson_content;                
+    return $lesson_content;
 }
-
 
 /**
  * @brief get last month course announcements 
@@ -204,7 +199,7 @@ function getUserLessonInfo($uid) {
 function getUserAnnouncements($lesson_id) {
 
     global $urlServer, $langMore, $dateFormatLong, $langNoAnnouncementsExist;
-        
+
     $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
 
     $found = false;
@@ -222,15 +217,15 @@ function getUserAnnouncements($lesson_id) {
         if ($q) { // if course has announcements
             $found = true;
             $ann_content .= "<tr><td class='sub_title1'>" . q(ellipsize(course_id_to_title($lid), 70)) . "</td></tr>";
-            foreach ($q as $data) {            
-                    $url = $urlServer . "modules/announcements/index.php?course=" . course_id_to_code($lid) . "&amp;an_id=";
-                    $ann_content .= "<tr><td><ul class='custom_list'><li><a href='$url$data->id'>" .
-                            "<b>" . q($data->title) ."</b></a>
-                            <span class='smaller'><b><br />".
-                            claro_format_locale_date($dateFormatLong, strtotime($data->date)) .
-                            "</b></span><div class='smaller'>" .
-                            standard_text_escape(ellipsize_html($data->content, 250, "<strong>&nbsp;...<a href='$url$data->id'>[$langMore]</a></strong>")) .
-                            "</div></li></ul></td></tr>";                
+            foreach ($q as $data) {
+                $url = $urlServer . "modules/announcements/index.php?course=" . course_id_to_code($lid) . "&amp;an_id=";
+                $ann_content .= "<tr><td><ul class='custom_list'><li><a href='$url$data->id'>" .
+                        "<b>" . q($data->title) . "</b></a>
+                            <span class='smaller'><b><br />" .
+                        claro_format_locale_date($dateFormatLong, strtotime($data->date)) .
+                        "</b></span><div class='smaller'>" .
+                        standard_text_escape(ellipsize_html($data->content, 250, "<strong>&nbsp;...<a href='$url$data->id'>[$langMore]</a></strong>")) .
+                        "</div></li></ul></td></tr>";
             }
         }
     }
@@ -241,7 +236,6 @@ function getUserAnnouncements($lesson_id) {
         return "<p class='alert1'>$langNoAnnouncementsExist</p>";
     }
 }
-
 
 /**
  * @brief displays last 5 course user agenda items
@@ -259,10 +253,10 @@ function getUserAnnouncements($lesson_id) {
  * @return string
  */
 function getUserAgenda($lesson_id) {
-    
+
     global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $langHours, $langHour;
     global $langExerciseStart, $urlServer, $dateFormatLong;
-            
+
     $course_id = $lesson_id;
     $found = false;
     $course_ids = array();
@@ -282,18 +276,18 @@ function getUserAgenda($lesson_id) {
         return "<p class='alert1'>$langNoEventsExist</p>";
     }
                
-    $mysql_query_result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
-                                                        agenda.duration, course.code, course.title AS course_title
-                                                        FROM agenda, course WHERE agenda.course_id IN ($course_ids)
-                                                        AND agenda.course_id = course.id
-                                                        AND agenda.visible = 1
-                                                        HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
-                                                    ORDER BY start ASC
-                                                    LIMIT 5");
+    $result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
+                                                  agenda.duration, course.code, course.title AS course_title
+                                             FROM agenda, course WHERE agenda.course_id IN ($course_ids)
+                                                  AND agenda.course_id = course.id
+                                                  AND agenda.visible = 1
+                                             HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= 0
+                                             ORDER BY start ASC
+                                             LIMIT 5");
           
     $agenda_content = "<table width='100%'>";
-    if ($mysql_query_result > 0) {        
-        foreach ($mysql_query_result as $data) {
+    if ($result > 0) {        
+        foreach ($result as $data) {
             $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data->start)) . "</td></tr>";                        
             $url = $urlServer . "modules/agenda/index.php?course=" . $data->code;
             if (strlen($data->duration) == 0) {
@@ -302,14 +296,13 @@ function getUserAgenda($lesson_id) {
                 $data->duration = $data->duration . " $langHour";
             } else {
                 $data->duration = $data->duration . " $langHours";
-            }                                
+            }
             $agenda_content .= "<tr><td><ul class='custom_list'>
                             <li><a href='$url'><b>" . q($data->title) . "</b></a><br /><b>" . q(ellipsize($data->course_title, 80)) . "</b>
                             <div class='smaller'>" . $langExerciseStart . ": <b>" . date('H:i', strtotime($data->start)) . "</b> | $langDuration: <b>" . $data->duration . "</b>
                             <br />" . standard_text_escape(ellipsize_html($data->content, 150, "... <a href='$url'>[$langMore]</a>")) . "</div></li></ul></td></tr>";
             $found = true;
         }
-        
     }
     $agenda_content .= "</table>";
     if ($found) {
@@ -317,9 +310,7 @@ function getUserAgenda($lesson_id) {
     } else {
         return "<p class='alert1'>$langNoEventsExist</p>";
     }
-            
 }
-
 
 /**
  * @brief display forum posts from users courses
@@ -331,11 +322,11 @@ function getUserAgenda($lesson_id) {
  * @return string
  */
 function getUserForumPosts($lesson_id) {
-    
+
     global $langNoPosts, $langMore, $urlServer;
-               
+
     $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
-    
+
     $found = false;
     $forum_content = '<table width="100%">';
     foreach ($lesson_id as $lid) {
@@ -371,13 +362,12 @@ function getUserForumPosts($lesson_id) {
         }
     }
     $forum_content .= "</table>";
-  
+
     if ($found) {
-        return $forum_content; 
+        return $forum_content;
     } else {
         return "<p class='alert1'>$langNoPosts</p>";
     }
-    
 }
 
 /**
@@ -387,11 +377,11 @@ function getUserForumPosts($lesson_id) {
  * @return string
  */
 function getUserDocuments($lesson_id) {
-    
+
     global $langNoDocsExist, $group_sql;
-      
-    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));        
-    
+
+    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
+
     $found = false;
     $doc_content = '<table width="100%">';
     foreach ($lesson_id as $lid) {
@@ -410,31 +400,29 @@ function getUserDocuments($lesson_id) {
                                             course_module.course_id = ?d
                                     ORDER BY date_modified DESC", $lid, $lid);
 
-            
+
         if ($q) {
-            $found = true;        
+            $found = true;
             $doc_content .= "<tr><td class='sub_title1'>" . q(ellipsize(course_id_to_title($lid), 70)) . "</td></tr>";
             foreach ($q as $course_file) {
-                    $group_sql = "course_id = " . $lid . " AND subsystem = " . MAIN;                    
-                    $url = file_url($course_file->path, $course_file->filename, course_id_to_code($lid));
-                    $dObj = MediaResourceFactory::initFromDocument($course_file);
-                    $dObj->setAccessURL($url);
-                    $dObj->setPlayURL(file_playurl($course_file->path, $course_file->filename, course_id_to_code($lid)));
-                    $href = MultimediaHelper::chooseMediaAhref($dObj);
-                    $doc_content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
-                            $href . ' - (' .nice_format(date('Y-m-d', strtotime($course_file->date_modified))) .")</li></ul></td></tr>";
+                $group_sql = "course_id = " . $lid . " AND subsystem = " . MAIN;
+                $url = file_url($course_file->path, $course_file->filename, course_id_to_code($lid));
+                $dObj = MediaResourceFactory::initFromDocument($course_file);
+                $dObj->setAccessURL($url);
+                $dObj->setPlayURL(file_playurl($course_file->path, $course_file->filename, course_id_to_code($lid)));
+                $href = MultimediaHelper::chooseMediaAhref($dObj);
+                $doc_content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
+                        $href . ' - (' . nice_format(date('Y-m-d', strtotime($course_file->date_modified))) . ")</li></ul></td></tr>";
             }
         }
     }
     $doc_content .= "</table>";
     if ($found) {
         return $doc_content;
-    } else {            
+    } else {
         return "<p class='alert1'>$langNoDocsExist</p>";
-    }        
+    }
 }
-
-
 
 /**
  * @brief display course user assingment
@@ -449,10 +437,10 @@ function getUserDocuments($lesson_id) {
  * @return string
  */
 function getUserAssignments($lesson_id) {
-           
+
     global $langNoAssignmentsExist, $langGroupWorkSubmitted, $langDays, $langDaysLeft,
-            $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted,$urlServer, $uid;
-             
+    $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $urlServer, $uid;
+
     $found = false;
     $assign_content = '<table width="100%">';
     foreach ($lesson_id as $lid) {
@@ -466,7 +454,7 @@ function getUserAssignments($lesson_id) {
                                         AND course_module.course_id = course.id
                                         AND course_module.visible = 1 AND course_module.module_id = " . MODULE_ID_ASSIGN . "
                                     ORDER BY assignment.deadline", $lid, $lid);
-    
+
         if ($q) {
             $found = true;
             $assign_content .= "<tr><td class='sub_title1'>" . q(ellipsize(course_id_to_title($lid), 70)) . "</td></tr>";
@@ -481,7 +469,7 @@ function getUserAssignments($lesson_id) {
                         q($data->title) .
                         "</b></a><div class='smaller'>$langGroupWorkDeadline_of_Submission: <b>" .
                         nice_format($data->deadline, true) . "</b><div class='grey'>" .
-                        $submit_status . "</div></div></li></ul></td></tr>";                
+                        $submit_status . "</div></div></li></ul></td></tr>";
             }
         }
     }

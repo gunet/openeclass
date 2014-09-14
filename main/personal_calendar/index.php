@@ -117,44 +117,70 @@ if (isset($_POST['submitEvent'])) {
     
     $newTitle = $_POST['newTitle'];       
     $newContent = $_POST['newContent'];
-    $refobjid = ($_POST['refobjid'] == "0")? $_POST['refcourse']:$_POST['refobjid'];
+    if(isset($_POST['visibility_level'])){
+        $visibility = $_POST['visibility_level'];
+        $refobjid = null;
+    } else {
+        $refobjid = ($_POST['refobjid'] == "0")? $_POST['refcourse']:$_POST['refobjid'];
+        $visibility = null;
+    }
+    
     $start = $_POST['startdate'];
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
-        Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, $refobjid);
+        if(is_null($visibility)){
+            Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, $refobjid);
+        } else {
+            Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility);
+        }
         $message = "<p class='success'>$langEventModify</p>";
     } else { // new event 
         $recursion = null;
         if(!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber'])>0 && !empty($_POST['enddate'])){
             $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
         }
-        $id = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid);
+        $id = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
         $message = "<p class='success'>$langEventAdd</p>";
     }    
 } // end of if $submit
 
 /* delete */
-if (isset($_GET['delete'])) {
+if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
     $thisEventId = intval($_GET['delete']);
-    Calendar_Events::delete_event($thisEventId);
+    Calendar_Events::delete_event($thisEventId, $_GET['et']);
     $message = "<p class='success'>$langEventDel</p>";
 }
 
 /* edit */
 if (isset($_GET['modify'])) {
     $modify = intval($_GET['modify']);
-    $event = Calendar_Events::get_event($modify);
-    if ($event) {
-        $eventToModify = $event->id;
-        $contentToModify = $event->content;
-        $titleToModify = q($event->title);
-        $datetimeToModify = q($event->start);
-        $durationToModify = q($event->duration);
-        $gen_type_selected = $event->reference_obj_module;
-        $course_selected = $event->reference_obj_course;
-        $type_selected = $event->reference_obj_type;
-        $object_selected = $event->reference_obj_id;
+    $displayForm = false;
+    if(isset($_GET['admin']) && $_GET['admin'] == 1){
+        $event = Calendar_Events::get_admin_event($modify);
+        if ($event) {
+            $eventToModify = $event->id;
+            $contentToModify = $event->content;
+            $titleToModify = q($event->title);
+            $datetimeToModify = q($event->start);
+            $durationToModify = q($event->duration);
+            $visibility_level = $event->visibility_level;
+            $displayForm = true;
+        }
+    } else {
+        $event = Calendar_Events::get_event($modify);
+        if ($event) {
+            $eventToModify = $event->id;
+            $contentToModify = $event->content;
+            $titleToModify = q($event->title);
+            $datetimeToModify = q($event->start);
+            $durationToModify = q($event->duration);
+            $gen_type_selected = $event->reference_obj_module;
+            $course_selected = $event->reference_obj_course;
+            $type_selected = $event->reference_obj_type;
+            $object_selected = $event->reference_obj_id;
+            $displayFom = true;
+        }
     }
 }
 
@@ -164,7 +190,7 @@ if (isset($message) && $message) {
 }
 
 /* display form */
-if ($displayForm and (isset($_GET['addEvent']) or isset($_GET['modify']))) {
+if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
     $tool_content .= "
     <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
@@ -233,17 +259,31 @@ if ($displayForm and (isset($_GET['addEvent']) or isset($_GET['modify']))) {
                 . " $langUntil: <input type='text' name='enddate' value=''></td>
         </tr>";
     }
+    if(!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])){
+        $tool_content .= "
+        <tr><th>$langReferencedObject:</th></tr>
+        <tr>
+          <td>".
+          References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
+       ."</td>";
+    }
+    else {
+        $selectedvis = array(0=>"", USER_TEACHER=>"",USER_STUDENT=>"",USER_GUEST=>"");
+        $selectedvis[$visibility_level] = "selected";
+        $tool_content .= "<tr><th>$langShowTo:</th></tr>"
+                . "<tr><td><select name='visibility_level'> "
+                . "<option value=\"0\" ".$selectedvis[0].">$langShowToAdminsOnly</option>"
+                . "<option value=\"".USER_TEACHER."\" ".$selectedvis[USER_TEACHER].">$langShowToAdminsandProfs</option>"
+                . "<option value=\"".USER_STUDENT."\" ".$selectedvis[USER_STUDENT].">$langShowToAllregistered</option>"
+                . "<option value=\"".USER_GUEST."\" ".$selectedvis[USER_GUEST].">$langShowToAll</option>"
+                . "</select></td></tr>";
+    }
     $tool_content .= "
-    <tr><th>$langReferencedObject:</th></tr>
-    <tr>
-      <td>".
-      References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
-   ."</td>
-    </tr>
-    <tr>
-      <td class='right'><input type='submit' name='submitEvent' value='$langAdd' /></td>
-    </tr>
-    </table>
+        </tr>
+        <tr>
+          <td class='right'><input type='submit' name='submitEvent' value='$langAdd' /></td>
+        </tr>";
+    $tool_content .= "</table>
     <input type='hidden' name='id' value='$eventToModify' />
     </fieldset>
     </form>";
@@ -252,8 +292,11 @@ if ($displayForm and (isset($_GET['addEvent']) or isset($_GET['modify']))) {
     $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?addEvent=1'>" . $langAddEvent . "</a></li>
-        <li><a href='icalendar.php'>" . $langiCalExport . "</a></li>
+        <li><a href='$_SERVER[SCRIPT_NAME]?addEvent=1'>" . $langAddEvent . "</a></li>";
+        if($is_admin){
+            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?addAdminEvent=1'>" . $langAddAdminEvent . "</a></li>";
+        }
+        $tool_content .= "<li><a href='icalendar.php'>" . $langiCalExport . "</a></li>
       </ul>
     </div>";
 }

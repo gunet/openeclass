@@ -24,6 +24,16 @@ body {
     background-position: left;
 }
 
+.success {
+    background-color: #e4f8aa;
+    border-top: 2px solid #a2d410;
+    border-bottom: 2px solid #a2d410;
+    padding: 10px 50px;
+    background-image: url(../template/classic/img/success.png); 
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
 
 .tbl_alt {
     padding: 5px;

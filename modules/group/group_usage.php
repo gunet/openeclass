@@ -82,13 +82,12 @@ if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits',
 
 $base = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
 
-
 if (isset($_POST['u_date_start']) and isset($_POST['u_date_end'])) {
     $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
+	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&amp;enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
 } else {
     $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
+	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&amp;enc=1253'>$langCodeWin</a>)</li>";
 }
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
@@ -110,24 +109,23 @@ if ($type == 'duration') {
 
     if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
-        $u_date_start = autounquote($_POST['u_date_start']);
-        $u_date_end = autounquote($_POST['u_date_end']);
+        $u_date_start = $_POST['u_date_start'];
+        $u_date_end = $_POST['u_date_end'];
     } else {
         $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
         $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
     }
     
-    $tool_content .= "<form method='post' action='$base $type'>
-                <table class = 'FormData' align = 'left'>
-                <tr><th class='left'>$langStartDate:</th>
-                <td><input type='text' name='u_date_start' value='$u_date_start'></td>
-                <tr><th class='left'>$langEndDate:</th>
-                <td><input type='text' name='u_date_end' value='$u_date_end'></td>    
-                </tr>                
-                <tr><th class='left'>&nbsp;</th>
-                <td><input type='submit' name='submit' value='$langSubmit' />
-                </td></tr></table>
-                </form>";
+    $tool_content .= "<form method='post' action='$base$type'>
+        <table class = 'FormData' align = 'left'>
+            <tr><th class='left'>$langStartDate:</th>
+                <td><input type='text' name='u_date_start' value='$u_date_start'></td></tr>
+            <tr><th class='left'>$langEndDate:</th>
+                <td><input type='text' name='u_date_end' value='$u_date_end'></td></tr>                
+            <tr><th class='left'>&nbsp;</th>
+                <td><input type='submit' name='submit' value='$langSubmit'></td></tr>
+        </table>
+      </form>";
 } elseif ($type == 'lp') {
     $label = $langProgress;
     // list available learning paths
@@ -169,7 +167,6 @@ if (count($result) > 0) {
             $am = uid_to_am($user_id);
             $iterator = 0;
             $progress = 0;
-            mysql_select_db($course_code);
             foreach ($learningPathList as $learningPath) {
                 $progress += get_learnPath_progress($learningPath->learnPath_id, $user_id);
                 $iterator++;
@@ -185,8 +182,8 @@ if (count($result) > 0) {
         $tool_content .= "<td width='30%'>" . q($name) . "</td><td width='30%'>" . q($am) . "</td><td align='center'>$group_name</td>"
                        . "<td>$value</td></tr>";
     }
-    $tool_content .= "</table>";
 }
+$tool_content .= "</table>";
 
 draw($tool_content, 2, null, $head_content);
 

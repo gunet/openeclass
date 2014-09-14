@@ -94,8 +94,7 @@ if ($attendance) {
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
                                GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
@@ -221,45 +220,44 @@ if ($is_editor) {
 
     //EDIT DB: add to the attendance module new activity from exersices or assignments
     elseif(isset($_GET['addCourseActivity'])){
-
         $id = intval($_GET['addCourseActivity']);
         $type = intval($_GET['type']);
         
         //check the type of the module (assignments)
-        if($type == 1){
+        if($type == 1) {
             //checking if it is new or not
             $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1) AND assignment.id = ?d",function ($errormsg) {
                 echo "An error has occured: " . $errormsg;
             }, $course_id, $id);
-        }
-        if($checkForAss){
-            $module_auto_id = $checkForAss->id;
-            $module_auto_type = 1; 
-            $module_auto = 1;
-            $actTitle = $checkForAss->title;
-            $actDate = $checkForAss->deadline;
-            $actDesc = $checkForAss->description;
-
-            Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
-        }
         
+            if($checkForAss){
+                $module_auto_id = $checkForAss->id;
+                $module_auto_type = 1; 
+                $module_auto = 1;
+                $actTitle = $checkForAss->title;
+                $actDate = $checkForAss->deadline;
+                $actDesc = $checkForAss->description;
+
+                Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+            }
+        }
         //check the type of the module (exercises)
         if($type == 2){
             //checking if it is new or not
             $checkForExer = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
                     . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2) "
-                    . "AND exercise.id = ?d", $course_id, $id);
-        }
-        if($checkForExer){
-            $module_auto_id = $checkForExer->id;
-            $module_auto_type = 2; 
-            $module_auto = 1;
-            $actTitle = $checkForExer->title;
-            $actDate = $checkForExer->end_date;
-            $actDesc = $checkForExer->description;
+                    . "AND exercise.id = ?d", $course_id, $id);        
+            if($checkForExer){
+                $module_auto_id = $checkForExer->id;
+                $module_auto_type = 2; 
+                $module_auto = 1;
+                $actTitle = $checkForExer->title;
+                $actDate = $checkForExer->end_date;
+                $actDesc = $checkForExer->description;
 
-            Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
-        }        
+                Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+            }
+        }
         $showAttendanceActivities = 1;
     }
 
@@ -392,11 +390,9 @@ if ($is_editor) {
             $userID = intval($_POST['userID']); //user
             //get all the activies
             $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d", $attendance_id);
-
-            if ($result){
+            if ($result){                
                 foreach ($result as $announce) {
-                    $attend = intval($_POST[$announce->id]); //get the record from the teacher (input name is the activity id)
-
+                    $attend = intval(@$_POST[$announce->id]); //get the record from the teacher (input name is the activity id)    
                     //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book  WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);
                     
@@ -514,9 +510,7 @@ if ($is_editor) {
                     }    
                     $tool_content .= ">
                     <input type='hidden' value='" . $userID . "' name='userID'>    
-                </td>
-
-                ";
+                </td>";
                     $k++;
                 } // end of while
             }
@@ -712,11 +706,10 @@ if ($is_editor) {
             //check the rest value and rearrange the table
             $newUsersQuery = Database::get()->queryArray("SELECT user.id as userID FROM course_user, user, actions_daily
                                WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
+                               AND (`course_user`.reg_date > ?t)
                                AND `course_user`.`course_id` = ?d
                                AND user.status = ?d 
-                               GROUP BY actions_daily.user_id", $limitDate, $course_id, USER_STUDENT);
+                               GROUP BY user.id", $limitDate, $course_id, USER_STUDENT);
             
             if($newUsersQuery){
                 foreach ($newUsersQuery as $newUsers){
@@ -958,7 +951,7 @@ if ($is_editor) {
         //=================
         //attendance limit
         //=================
-        $tool_content .= "<br>
+        @$tool_content .= "<br>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
             <legend>$langAttendanceLimitTitle</legend>

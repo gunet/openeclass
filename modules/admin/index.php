@@ -132,55 +132,56 @@ $tool_content .= "
 
 
 // INDEX RELATED
-require_once 'modules/search/indexer.class.php';
-$idx = new Indexer();
+if (get_config('enable_indexing')) {
+    require_once 'modules/search/indexer.class.php';
+    $idx = new Indexer();
 
-// optimize index
-if (isset($_GET['optimize'])) {
-    $idx->getIndex()->optimize();
-}
+    // optimize index
+    if (isset($_GET['optimize'])) {
+        $idx->getIndex()->optimize();
+    }
 
-$numDocs = $idx->getIndex()->numDocs();
-$isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
+    $numDocs = $idx->getIndex()->numDocs();
+    $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
 
-$tool_content .= "
-  <fieldset>
-  <legend>$langIndexInfo</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='260'>$langIndexNumDocs:</th>
-      <td>" . $numDocs . "</td>
-    </tr>
-    <tr>
-      <th>$langIndexIsOptimized</th>
-      <td>" . $isOpt . "</td>
-    </tr>";
-
-if ($idx->getIndex()->hasDeletions()) {
     $tool_content .= "
-    <tr>
-      <th></th>
-      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></td>
-    </tr>";
+      <fieldset>
+      <legend>$langIndexInfo</legend>
+        <table width='100%' class='tbl'>
+        <tr>
+          <th width='260'>$langIndexNumDocs:</th>
+          <td>" . $numDocs . "</td>
+        </tr>
+        <tr>
+          <th>$langIndexIsOptimized</th>
+          <td>" . $isOpt . "</td>
+        </tr>";
+
+    if ($idx->getIndex()->hasDeletions()) {
+        $tool_content .= "
+        <tr>
+          <th></th>
+          <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></td>
+        </tr>";
+    }
+
+    // Auto to koumpi kalytera na mhn emfanizetai se production,
+    // dioti eksartatai apo to php max exec time.
+    // Kalytera to indexing na ginetai mono transparently
+    // reindex everything
+    //if (isset($_GET['reindex']))
+    //    $idx->reindexAll();
+    //$tool_content .= "
+    //    <tr>
+    //      <th></th>
+    //      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
+    //    </tr>";
+
+    $tool_content .= "
+        </table>
+      </fieldset>
+      <br />";
 }
-
-// Auto to koumpi kalytera na mhn emfanizetai se production,
-// dioti eksartatai apo to php max exec time.
-// Kalytera to indexing na ginetai mono transparently
-// reindex everything
-//if (isset($_GET['reindex']))
-//    $idx->reindexAll();
-//$tool_content .= "
-//    <tr>
-//      <th></th>
-//      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
-//    </tr>";
-
-$tool_content .= "
-    </table>
-  </fieldset>
-  <br />";
-
 
 // CRON RELATED
 $tool_content .= "<img src='cron.php' width='2' height='1' alt=''/>";
@@ -195,8 +196,9 @@ if (count($res) >= 1) {
           <td>$langCronLastRun</td>
         </tr>";
 
-    foreach ($res as $row)
+    foreach ($res as $row) {
         $tool_content .= "<tr><th>" . $row->name . "</th><td>" . $row->last_run . "</td></tr>";
+    }
 
     $tool_content .= "
       </tbody>

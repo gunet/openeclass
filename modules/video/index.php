@@ -81,9 +81,7 @@ list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ?
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-
     load_js('jquery');
-    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -153,19 +151,24 @@ hContent;
                 $table = select_table($_POST['table']);
             }
             if ($table == 'video') {
-                Database::get()->query("UPDATE video SET title = ?s,
-                                                 description = ?s,
-                                                 creator = ?s,
-                                                 publisher = ?s
-                                             WHERE id = ?d"
-                        , $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
+                Database::get()->query("UPDATE video 
+                        SET title = ?s,
+                            description = ?s,
+                            creator = ?s,
+                            publisher = ?s
+                        WHERE id = ?d",
+                        $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
             } elseif ($table == 'videolink') {
-                Database::get()->query("UPDATE videolink SET url = ?s,
-                                                      title = ?s,
-                                                      description = ?s,
-                                                      creator = ?s,
-                                                      publisher = ?s
-                                                  WHERE id = ?d", canonicalize_url($_POST['url']), $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $id);
+                Database::get()->query("UPDATE videolink
+                        SET url = ?s,
+                            title = ?s,
+                            description = ?s,
+                            creator = ?s,
+                            publisher = ?s
+                        WHERE id = ?d",
+                        canonicalize_url($_POST['url']), $_POST['title'],
+                        $_POST['description'], $_POST['creator'],
+                        $_POST['publisher'], $id);
             }
             if ($table == 'video')
                 $vdx->store($id);
@@ -183,22 +186,27 @@ hContent;
     if (isset($_POST['add_submit'])) {  // add
         if (isset($_POST['URL'])) { // add videolinks
             $url = $_POST['URL'];
-            if ($_POST['title'] == '') {
-                $title = $url;
-            } else {
-                $title = $_POST['title'];
+            if (!is_url_accepted($url,"https?")){
+                $tool_content .= "<p class='error'>$langLinkNotPermitted</p><br />";
             }
-            $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
-                                                VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s)', 
-                                        $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
-            $id = $q->lastInsertID;
-            $vldx->store($id);
-            $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
-            Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
-                                                                    'url' => canonicalize_url($url),
-                                                                    'title' => $title,
-                                                                    'description' => $txt_description));
-            $tool_content .= "<p class='success'>$langLinkAdded</p><br />";
+            else{
+                if ($_POST['title'] == '') {
+                    $title = $url;
+                } else {
+                    $title = $_POST['title'];
+                }
+                $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, creator, publisher, date)
+                                                    VALUES (?s, ?s, ?s, ?s, ?s, ?s, ?s)', 
+                                            $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
+                $id = $q->lastInsertID;
+                $vldx->store($id);
+                $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
+                Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
+                                                                        'url' => canonicalize_url($url),
+                                                                        'title' => $title,
+                                                                        'description' => $txt_description));
+                $tool_content .= "<p class='success'>$langLinkAdded</p><br />";
+            }
         } else {  // add video
             if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 

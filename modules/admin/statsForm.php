@@ -27,16 +27,17 @@ foreach (Database::get()->queryArray($qry) as $row) {
     $letterlinks .= '<a href="?first=' . $first_letter . '">' . q($first_letter) . '</a> ';
 }
 
+
+$qry = "SELECT id, surname, givenname, username, email FROM user";
+$terms = array();
 if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
-    $qry = "SELECT id, surname, givenname, username, email
-                FROM user WHERE LEFT(surname, 1) = " . quote($firstletter);
-} else {
-    $qry = "SELECT id, surname, givenname, username, email FROM user";
+    $qry .= " WHERE surname LIKE ?s";
+    $terms[] = $firstletter . '%';
 }
 
-$user_opts = '<option value="-1">' . $langAllUsers . "</option>\n";
-foreach (Database::get()->queryArray($qry) as $row) {
+$user_opts = '<option value="-1">' . q($langAllUsers) . "</option>\n";
+foreach (Database::get()->queryArray($qry, $terms) as $row) {
     if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {

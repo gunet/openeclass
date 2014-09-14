@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'functions.php';
 
 $nameTools = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
@@ -39,6 +40,10 @@ if (!isset($_REQUEST['UseCase']))
     $_REQUEST['UseCase'] = "";
 if (!isset($_REQUEST['pid']))
     die();
+$p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
+if(!$p){
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 
 switch ($_REQUEST['UseCase']) {
     case 1:       
@@ -54,9 +59,9 @@ switch ($_REQUEST['UseCase']) {
 draw($tool_content, 2);
 
 function printPollForm() {
-    global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart,
+    global $course_id, $course_code, $tool_content, $langPollStart,
     $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
-    $langPollAlreadyParticipated;
+    $langPollAlreadyParticipated, $is_editor, $langBack;
 
     $pid = $_REQUEST['pid'];
     
@@ -85,42 +90,46 @@ function printPollForm() {
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 
-        <p class=\"title1\">" . $thePoll->name . "</p>\n";
+        <p class=\"title1\">" . q($thePoll->name) . "</p>\n";
+        if ($thePoll->description) {
+        $tool_content .= $thePoll->description.'<br>';
+        }        
 
         //*****************************************************************************
         //		Get answers + questions
         //******************************************************************************/
         $questions = Database::get()->queryArray("SELECT * FROM poll_question
 			WHERE pid = ?d ORDER BY pqid", $pid);
-        foreach ($questions as $theQuestion) {
+        foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $tool_content .= "
-        <p class=\"sub_title1\"><b>" . $theQuestion->question_text . "</b></p>
-        <p>
-	<input type='hidden' name='question[$pqid]' value='$qtype' />";
-            if ($qtype == 'multiple') {
-                $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
-					WHERE pqid = ?d ORDER BY pqaid", $pqid);
+            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".(($qtype==QTYPE_LABEL)? ($theQuestion->question_text) : q($theQuestion->question_text))."</b></div>
+            <p><input type='hidden' name='question[$pqid]' value='$qtype' />";
+            if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+                $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+                $type_attr = ($qtype == QTYPE_SINGLE)? "type='radio'": "type='checkbox'";
+                $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer 
+                            WHERE pqid = ?d ORDER BY pqaid", $pqid);
                 foreach ($answers as $theAnswer) {
-                    $tool_content .= "
-        <label><input type='radio' name='answer[$pqid]' value='$theAnswer->pqaid' />$theAnswer->answer_text </label><br />\n";
+                    $tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' />".q($theAnswer->answer_text)." </label><br />\n";
                 }
-                $tool_content .= "
-        <label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
-            } else {
-                $tool_content .= "
-        <label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
+                if ($qtype == QTYPE_SINGLE) {
+                    $tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
+                }
+            } elseif ($qtype == QTYPE_FILL) {
+                $tool_content .= "<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
             }
             $tool_content .= "<br /><br />";
         }
-        $tool_content .= "
-        <input name='submit' type='submit' value='$langSubmit' />
-        </p>
-        </form>";
+        if ($is_editor) {
+            $tool_content .= "<p><a href='index.php?course=$course_code'>".q($langBack)."</a></p>";
+        } else {
+            $tool_content .= "<input name='submit' type='submit' value='".q($langSubmit)."'></p></form>";
+        }
     } else {
         $tool_content .= $langPollInactive;
-    }
+    }	
 }
 
 function submitPoll() {
@@ -130,19 +139,32 @@ function submitPoll() {
     $user_id = $GLOBALS['uid'];
     $CreationDate = date("Y-m-d H:i");
     $pid = intval($_POST['pid']);
-    mysql_select_db($GLOBALS['mysqlMainDb']);
     $answer = $_POST['answer'];
     foreach ($_POST['question'] as $pqid => $qtype) {
         $pqid = intval($pqid);
-        if ($qtype == 'multiple') {
+        if ($qtype == QTYPE_MULTIPLE) {
+            foreach ($answer[$pqid] as $aid) {
+                $aid = intval($aid);
+                Database::get()->query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
+                    VALUES (?d, ?d, ?d, '', ?d , NOW())", $pid, $pqid, $aid, $user_id);
+            }
+            continue;
+        } elseif ($qtype == QTYPE_SINGLE) {
             $aid = intval($answer[$pqid]);
-            $answer_text = "''";
-        } else {
-            $answer_text = quote($answer[$pqid]);
+            $answer_text = '';
+        } elseif ($qtype == QTYPE_FILL) {
+            $answer_text = $answer[$pqid];
             $aid = 0;
+        } else {
+            continue;
         }
         Database::get()->query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
 			VALUES (?d, ?d, ?d, ?s, ?d , ?t)", $pid, $pqid, $aid, $answer_text, $user_id, $CreationDate);
     }
-    $tool_content .= "<p class='success'>" . $langPollSubmitted . "<br /><a href='index.php?course=$course_code'>" . $langBack . "</a></p>";
+    $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
+    $tool_content .= "<p class='success'>".$langPollSubmitted."</p>";
+    if (!empty($end_message)) {
+        $tool_content .=  $end_message;
+    }
+    $tool_content .= "<br /><p class=\"right\"><a href=\"index.php?course=$course_code\">".$langBack."</a></p>";
 }

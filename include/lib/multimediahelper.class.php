@@ -46,7 +46,7 @@ class MultimediaHelper {
     public static function chooseMediaAhrefRaw($mediaDL, $mediaPlay, $title, $filename) {
         $title = q($title);
         $filename = q($filename);
-        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='$title'>" . $title . "</a>";
+        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='".q($title)."'>" . $title . "</a>";
         $class = '';
         $extraParams = '';
 
@@ -63,9 +63,9 @@ class MultimediaHelper {
             else if (file_exists(ModalBoxHelper::getColorboxDir()))
                 $class = (self::isSupportedImage($filename)) ? 'colorbox' : 'colorboxframe';
 
-            $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='$title'>" . $title . "</a>";
+            $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='".q($title)."'>" . $title . "</a>";
             if (self::isSupportedImage($filename))
-                $ahref = "<a href='$mediaDL' class='$class fileURL' title='$title'>" . $title . "</a>";
+                $ahref = "<a href='$mediaDL' class='$class fileURL' title=''".q($title)."'>" . $title . "</a>";
         }
 
         return $ahref;

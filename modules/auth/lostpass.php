@@ -88,8 +88,9 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
             $hasher = new PasswordHash(8, false);
-            $q1 = Database::get()->query("UPDATE user SET password = " . quote($hasher->HasPassword($_POST['newpass'])) . "
-                                                      WHERE id = ?d", $userUID);
+            $q1 = Database::get()->query("UPDATE user SET password = ?s
+                                                      WHERE id = ?d",
+                    $hasher->HasPassword($_POST['newpass']), $userUID);
             if ($q1->affectedRows > 0) {
                 $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";

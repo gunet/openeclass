@@ -358,6 +358,7 @@ $modules = array(
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
+    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
@@ -382,7 +383,10 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'course_tools' => MODULE_ID_TOOLADMIN,
     'units' => MODULE_ID_UNITS,
     'search' => MODULE_ID_SEARCH,
-    'contact' => MODULE_ID_CONTACT);
+    'contact' => MODULE_ID_CONTACT,
+    'comments' => MODULE_ID_COMMENTS,
+    'rating' => MODULE_ID_RATING,
+    'sharing' => MODULE_ID_SHARING);
 
 // the system admin adn power users has rights to all courses
 if ($is_admin or $is_power_user) {

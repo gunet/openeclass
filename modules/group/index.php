@@ -36,6 +36,11 @@ require_once 'include/log.php';
 require_once 'modules/wiki/lib/class.wiki.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
+/* ***Required classes for forum deletion*** */
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/forumindexer.class.php';
+require_once 'modules/search/forumtopicindexer.class.php';
+require_once 'modules/search/forumpostindexer.class.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -193,6 +198,30 @@ if ($is_editor) {
             }
         }
         /*         * ******************************************** */
+        /*         * ************Delete All Group Forums********** */
+        $results = Database::get()->queryArray("SELECT `forum_id` FROM `group` WHERE `course_id` = ?d AND `forum_id` <> 0 AND `forum_id` IS NOT NULL", $course_id);
+        if (is_array($results)) {
+            $idx = new Indexer();
+            $fidx = new ForumIndexer($idx);
+            $ftdx = new ForumTopicIndexer($idx);
+            $fpdx = new ForumPostIndexer($idx);
+        
+            foreach ($results as $result) {
+                $forum_id = $result->forum_id;
+                $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
+                foreach ($result2 as $result_row2) {
+                    $topic_id = $result_row2->id;
+                    Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
+                    $fpdx->removeByTopic($topic_id);
+                }
+                Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
+                $ftdx->removeByForum($forum_id);
+                Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
+                Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
+                $fidx->remove($forum_id);
+            }
+        }
+        /*         * ******************************************** */
 
         Database::get()->query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $course_id);
         Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $course_id);
@@ -214,7 +243,30 @@ if ($is_editor) {
         $groupGarbage = uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
         rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
-
+        
+        /*         * ********Delete Group FORUM*********** */
+        $result = Database::get()->querySingle("SELECT `forum_id` FROM `group` WHERE `course_id` = ?d AND `id` = ?d AND `forum_id` <> 0 AND `forum_id` IS NOT NULL", $course_id, $id);
+        if ($result) {
+            $idx = new Indexer();
+            $fidx = new ForumIndexer($idx);
+            $ftdx = new ForumTopicIndexer($idx);
+            $fpdx = new ForumPostIndexer($idx);
+        
+            $forum_id = $result->forum_id;
+            $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
+            foreach ($result2 as $result_row2) {
+                $topic_id = $result_row2->id;
+                Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
+                $fpdx->removeByTopic($topic_id);
+            }
+            Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
+            $ftdx->removeByForum($forum_id);
+            Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
+            Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
+            $fidx->remove($forum_id);
+        }
+        /*         * *********************************** */
+        
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1 AND subsystem_id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM group_members WHERE group_id = ?d", $id);
         Database::get()->query("DELETE FROM `group` WHERE id = ?d", $id);

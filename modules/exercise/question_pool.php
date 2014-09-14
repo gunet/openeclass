@@ -28,17 +28,47 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
+load_js('jquery');
+load_js('jquery-ui');
+$head_content .= "
+<script>
+  $(function() {
+    $('.modal_warning').click( function(e){
+        var link = $(this).attr('href');
+        e.preventDefault();
+        $('#dialog').dialog({
+            resizable: false,
+            width: 500,
+            modal: true,
+            buttons: {
+               '$langModifyInAllExercises': function() {
+                $( this ).dialog( 'close' );
+                window.location = link;
+              },            
+              '$langModifyInQuestionPool': function() {
+                $( this ).dialog( 'close' );
+                window.location = link.concat('&clone=true');
+              }
+            }        
+        });
+    });
+  });
+</script>
+";
+$tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
+
 $nameTools = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
+
 if (isset($_GET['fromExercise'])) {
+    $objExercise = new Exercise();
     $fromExercise = $_GET['fromExercise'];
+    $objExercise->read($fromExercise);
     $navigation[] = array("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
 }
+
 if (isset($_GET['exerciseId'])) {
     $exerciseId = $_GET['exerciseId'];
-}
-if (isset($_SESSION['objExercise'])) {
-    $objExercise = $_SESSION['objExercise'];
 }
 
 // maximum number of questions on a same page
@@ -62,6 +92,8 @@ if ($is_editor) {
         }
         // destruction of the Question object
         unset($objQuestionTmp);
+        //Session::set_flashdata($message, $class);
+        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&amp;fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
     }
     // gets an existing question and copies it into a new exercise
     elseif (isset($_GET['recup']) && isset($fromExercise)) {
@@ -77,26 +109,14 @@ if ($is_editor) {
         unset($objQuestionTmp);
         // adds the question ID into the list of questions for the current exercise
         $objExercise->addToList($recup);
-        $tool_content .= "<div class='success'>$langQuestionReused</div><br>";
+        Session::set_flashdata($langQuestionReused, 'success');
+        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
     }
-
-    // get the number of available question (used for pagination)
-    if (isset($exerciseId) and $exerciseId != 0) {
-        if ($exerciseId > 0) {
-            $result = Database::get()->queryArray("SELECT * FROM `exercise_with_questions`, `exercise_question`
-				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d", $course_id, $exerciseId);
-        } elseif ($exerciseId == -1) {
-            $result = Database::get()->queryArray("SELECT * FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-				ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL", $course_id);            
-        }
-    } else {
-        $result = Database::get()->queryArray("SELECT * FROM `exercise_question` WHERE course_id = ?d", $course_id);
-    }
-    $num_of_questions = count($result);
-
+    
+    
     $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
     if (isset($fromExercise)) {
-        $tool_content .= "<a href=\"admin.php?course=$course_code\">&lt;&lt; " . $langGoBackToEx . "</a>";
+        $tool_content .= "<a href=\"admin.php?course=$course_code&amp;exerciseId=$fromExercise\">&lt;&lt; " . $langGoBackToEx . "</a>";
     } else {
         $tool_content .= "<a href=\"admin.php?course=$course_code&amp;newQuestion=yes\">" . $langNewQu . "</a>";
     }
@@ -145,9 +165,16 @@ if ($is_editor) {
 
     // if we have selected an exercise in the list-box 'Filter'
     if (isset($exerciseId) && $exerciseId > 0) {
-        $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
-			WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
-			ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE + 1);
+        if (isset($fromExercise)) {
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $exerciseId, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
+        } else {
+            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
+                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
+                            ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE + 1);
+        }
     }
     // if we have selected the option 'Orphan questions' in the list-box 'Filter'
     elseif (isset($exerciseId) && $exerciseId == -1) {
@@ -164,7 +191,7 @@ if ($is_editor) {
                             GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
         } else {
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL
+                            ON question_id = id WHERE course_id = ?d
                             GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
         }
         // forces the value to 0
@@ -185,6 +212,7 @@ if ($is_editor) {
     $tool_content .= "</tr>";
     $i = 1;
     foreach ($result as $row) {
+        $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
             if ($row->type == 1) {
                 $answerType = $langUniqueSelect;
@@ -211,9 +239,9 @@ if ($is_editor) {
 				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
-				  <a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
+				  <a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
 				</td>
-				<td width='3'><div align='center'><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
+				<td width='3'><div align='center'><a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
 				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
 				</td>";
             } else {
@@ -254,7 +282,7 @@ if ($is_editor) {
         $tool_content .= $langNoQuestion . "</td></tr>";
     }
     // questions pagination
-    $numpages = intval($num_of_questions / QUESTIONS_PER_PAGE);
+    $numpages = intval($nbrQuestions / QUESTIONS_PER_PAGE);
     if ($numpages > 0) {
         $tool_content .= "<tr>";
         if (isset($fromExercise)) {
@@ -291,4 +319,4 @@ if ($is_editor) {
 } else { // if not admin of course
     $tool_content .= $langNotAllowed;
 }
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);

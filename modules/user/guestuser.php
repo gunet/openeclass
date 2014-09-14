@@ -59,7 +59,7 @@ hContent;
 $default_guest_username = $langGuestUserName . $course_code;
 
 if (isset($_POST['submit'])) {
-    $password = autounquote($_POST['guestpassword']);
+    $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
     $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
             "<a href='index.php?course=$course_code'>$langBack</a>";

@@ -1009,7 +1009,7 @@ jContent;
      */
     private function useProcedures() {
         global $mysqlMainDb;        
-        $res = Database::get()->querySingle("SHOW PROCEDURE STATUS WHERE Db = '" . $mysqlMainDb . "' AND Name = 'add_node'");
+        $res = Database::get()->querySingle("SHOW PROCEDURE STATUS WHERE Db = ?s AND Name = 'add_node'", $mysqlMainDb);
         return ($res) ? true : false;
     }
 

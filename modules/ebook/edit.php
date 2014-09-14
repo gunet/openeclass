@@ -62,7 +62,7 @@ if (isset($_GET['delete'])) {
     exit;
 } elseif (isset($_POST['title_submit'])) {
     $info = Database::get()->querySingle("SELECT id, title FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
-    $ebook_title = trim(autounquote($_POST['ebook_title']));
+    $ebook_title = trim($_POST['ebook_title']);
     if (!empty($ebook_title) and $info->title != $ebook_title) {
         Database::get()->query("UPDATE `ebook` SET title = ?s WHERE id = ?d", $ebook_title, $info->id);
     }
@@ -74,8 +74,8 @@ if (isset($_GET['delete'])) {
         if (!empty($sid)) {
             $sid = intval($sid);
             $file_id = intval($file_id);
-            $qssid = autoquote($_POST['ssid'][$file_id]);
-            $qtitle = autoquote($_POST['title'][$file_id]);
+            $qssid = $_POST['ssid'][$file_id];
+            $qtitle = $_POST['title'][$file_id];
             if (isset($_POST['oldssid'][$file_id])) {
                 $oldssid = intval($_POST['oldssid'][$file_id]);
                 Database::get()->query("UPDATE ebook_subsection

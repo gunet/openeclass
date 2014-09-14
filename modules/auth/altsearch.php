@@ -151,7 +151,7 @@ if (!isset($_SESSION['was_validated']) or
     if ($is_valid) { // connection successful
         $_SESSION['was_validated'] = array('auth' => $auth,
             'uname' => $uname,
-            'uname_exists' => user_exists(autounquote($uname)));
+            'uname_exists' => user_exists($uname));
         if (isset($GLOBALS['auth_user_info'])) {
             $_SESSION['was_validated']['auth_user_info'] = $GLOBALS['auth_user_info'];
         }
@@ -232,13 +232,13 @@ if ($is_valid) {
 
     $uname = canonicalize_whitespace($uname);
     // user already exists
-    if (user_exists(autounquote($uname))) {
+    if (user_exists($uname)) {
         $_SESSION['uname_exists'] = 1;
     } elseif (isset($_SESSION['uname_exists'])) {
         unset($_SESSION['uname_exists']);
     }
     // user allready applied for account
-    if (user_app_exists(autounquote($uname))) {
+    if (user_app_exists($uname)) {
         $_SESSION['uname_app_exists'] = 1;
     } elseif (isset($_SESSION['uname_app_exists'])) {
         unset($_SESSION['uname_app_exists']);

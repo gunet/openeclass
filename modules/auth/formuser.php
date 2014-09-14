@@ -83,13 +83,13 @@ if (!email_seems_valid($usermail)) {
 
 // check if the username is already in use
 $username = canonicalize_whitespace($username);
-if (user_exists(autounquote($username))) {
+if (user_exists($username)) {
     $errors[] = $langUserFree;
     $all_set = false;
 }
 
 // check if exists user request with the same username
-if (user_app_exists(autounquote($username))) {
+if (user_app_exists($username)) {
     $errors[] = $langUserFree3;
     $all_set = false;
 }
@@ -112,6 +112,7 @@ if (isset($_POST['submit'])) {
 
 if ($all_set) {
     $email_verification_required = get_config('email_verification_required');
+    $emailhelpdesk = get_config('email_helpdesk');
     if (!$email_verification_required) {
         $verified_mail = 2;
     } else {
@@ -128,7 +129,7 @@ if ($all_set) {
 			comment = ?s, lang = ?s, request_ip = ?s",
             $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);   
     $request_id = $res->lastInsertID;
-    
+
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
         //----------------------------- Email Request Message --------------------------

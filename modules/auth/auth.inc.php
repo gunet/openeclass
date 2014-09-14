@@ -261,7 +261,7 @@ function get_auth_settings($auth) {
  * ************************************************************** */
 
 function auth_user_login($auth, $test_username, $test_password, $settings) {
-    global $mysqlMainDb, $webDir;
+    global $webDir;
 
     $testauth = false;
     switch ($auth) {
@@ -362,24 +362,14 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '5':
-            $link = mysql_connect($settings['dbhost'], $settings['dbuser'], $settings['dbpass'], true);
+            $link = new Database($settings['dbhost'], $settings['dbname'], $settings['dbuser'], $settings['dbpass']);
             if ($link) {
-                $db_ext = mysql_select_db($settings['dbname'], $link);
-                if ($db_ext) {
-                    $qry = "SELECT * FROM `$settings[dbname]`.`$settings[dbtable]`
-                                           WHERE `$settings[dbfielduser]` = " . quote($test_username);
-                    $res = mysql_query($qry, $link);
+                if ($link) {
+                    $res = $link->querySingle("SELECT `$settings[dbfieldpass]`
+                                                FROM `$settings[dbtable]`
+                                                WHERE `$settings[dbfielduser]` = ?s", $test_username);
                     if ($res) {
-                        if (($row = mysql_fetch_assoc($res)) > 0) {
-                            $testauth = external_DB_Check_Pass($test_password, $row[$settings['dbfieldpass']], $settings['dbpassencr']);
-                            mysql_close($link);
-                            // Reconnect to main database
-                            $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
-                                                           $GLOBALS['mysqlUser'],
-                                                           $GLOBALS['mysqlPassword']);                            
-                            mysql_query('SET NAMES utf8');
-                            mysql_select_db($mysqlMainDb);
-                        }
+                        $testauth = external_DB_Check_Pass($test_password, $res->$settings['dbfieldpass'], $settings['dbpassencr']);
                     }
                 }
             }
@@ -586,12 +576,12 @@ function process_login() {
     $auth_ids, $inactive_uid, $langTooManyFails;
 
     if (isset($_POST['uname'])) {
-        $posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
+        $posted_uname = canonicalize_whitespace($_POST['uname']);
     } else {
         $posted_uname = '';
     }
 
-    $pass = isset($_POST['pass']) ? autounquote($_POST['pass']) : '';
+    $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
     $auth = get_auth_active_methods();
     $is_eclass_unique = is_eclass_unique();
 
@@ -681,7 +671,7 @@ function process_login() {
                 $_SESSION['mail_verification_required'] = 1;
                 $next = "modules/auth/mail_verify_change.php";
             } elseif (isset($_POST['next'])) {
-                $next = autounquote($_POST['next']);
+                $next = $_POST['next'];
             } else {
                 $next = '';
             }

@@ -260,6 +260,15 @@ function profile_init()
         });
 }
 
+function toggleMenu(mid){
+	menuObj = document.getElementById(mid);
+	
+	if(menuObj.style.display=='none')
+		menuObj.style.display='block';
+	else
+		menuObj.style.display='none';
+}
+
 function exercise_enter_handler() {
     /* 
      * Make an array of possible inputs and everytime
@@ -327,4 +336,27 @@ function secondsToHms(d) {
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
+}
+// Questionnaire / Poll
+function poll_init() {
+    delete_init();
+    $('input[type=submit][value="+"]').on('click', function (event) {
+        //var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
+        var last_li = $(this).closest('tr').next().find('li').last();
+        last_li.after(last_li.clone()).next().find('input').removeAttr('value');
+        delete_init();
+        event.preventDefault();
+    });
+    $('.poll_answers').sortable();
+    $('.poll_answers').find('#moveIconImg').css('cursor', 'move');
+
+}
+function delete_init(){
+    $('.poll_answers img').not('#moveIconImg').css('cursor', 'pointer').on('click', function () {
+        $(this).closest('li').remove();
+    });
+}
+function icon_src_to_name(src) {
+    var spl = src.split(/[\/.]/);
+    return spl[spl.length - 2];
 }

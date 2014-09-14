@@ -147,7 +147,27 @@ if (!class_exists('Question')):
         function selectType() {
             return $this->type;
         }
-
+        /**
+         * returns the relative verbal answer type
+         */
+        function selectTypeWord($answerTypeId) {
+            global $langUniqueSelect, $langMultipleSelect, $langFillBlanks, 
+                   $langMatching, $langTrueFalse, $langFreeText;
+            switch ($answerTypeId) {
+                case UNIQUE_ANSWER:
+                    return $langUniqueSelect;
+                case MULTIPLE_ANSWER:
+                    return $langMultipleSelect;
+                case FILL_IN_BLANKS:
+                    return $langFillBlanks;
+                case MATCHING:
+                    return $langMatching;
+                case TRUE_FALSE:    
+                    return $langTrueFalse;
+                case FREE_TEXT:    
+                    return $langFreeText;
+            }            
+        }
         /**
          * returns the array with the exercise ID list
          *

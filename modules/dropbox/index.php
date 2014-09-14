@@ -33,6 +33,8 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
+$personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
+
 if (!isset($course_id)) {
     $course_id = 0;
 }
@@ -74,9 +76,11 @@ if ($course_id != 0) {
 } else {
     $tool_content .="
     <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>
-        <li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
+      <ul id='opslist'>";
+    if ($personal_msgs_allowed) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>";
+    }
+    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
       </ul>
     </div>";
 }
@@ -94,6 +98,12 @@ load_js('jquery-ui');
 
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
+        if (!$personal_msgs_allowed) {
+            $tool_content .= "<p class='alert1'>$langGeneralError</p>";
+            draw($tool_content, 1, null, $head_content);
+            exit;
+        }
+        
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
             $type = 'cm';
         } else {
@@ -132,7 +142,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                 if(!($.isEmptyObject(data))) {
                                   $('#select-recipients').empty();
                                   $.each(data, function(key,value){
-                                    $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                    if (key.charAt(0) == '_') {
+                                      $('#select-recipients').prepend('<option value=\'' + key + '\'>' + value + '</option>');
+                                    } else {
+                                      $('#select-recipients').append('<option value=\'' + key + '\'>' + value + '</option>');
+                                    }
                                   });
                                 }
                                 $('#select-recipients').multiselect('refresh');
@@ -143,9 +157,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         $tool_content .= "<tr>
             <th width='120'>".$langCourse.":</th>
               <td>
-                <select id='courseselect' name='course'>";
+                <select id='courseselect' name='course'>
+                  <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {    
-            $tool_content .="<option value='-1'>&nbsp;</option><option value='".$course->code."'>$course->title</option>";
+            $tool_content .="<option value='".$course->code."'>".q($course->title)."</option>";
         }
         $tool_content .="    </select>
                            </td>
@@ -176,18 +191,89 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
     
         if ($course_id != 0) {//course messages
-            //select all users from this course except yourself
-            $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
-                    FROM user u, course_user cu
-    			    WHERE cu.course_id = ?d
-                    AND cu.user_id = u.id
-                    AND cu.status != ?d
-                    AND u.id != ?d
-                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-            $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+            
+            $student_to_student_allow = get_config('dropbox_allow_student_to_student');
+            
+            if ($is_editor || $student_to_student_allow == 1) {
+                //select all users from this course except yourself
+                $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                        FROM user u, course_user cu
+        			    WHERE cu.course_id = ?d
+                        AND cu.user_id = u.id
+                        AND cu.status != ?d
+                        AND u.id != ?d
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                
+                $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+                
+                if ($is_editor) {
+                    $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d";
+                    $result_g = Database::get()->queryArray($sql_g, $course_id);
+                } else {//allow students to send messages only to groups they are members of
+                    $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm` 
+                              WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
+                    $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
+                }
+                
+                foreach ($result_g as $res_g)
+                {
+                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                }
+            } else {
+                //if user is student and student-student messages not allowed for course messages show teachers
+                $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
+                        FROM user u, course_user cu
+        			    WHERE cu.course_id = ?d
+                        AND cu.user_id = u.id
+                        AND (cu.status = ?d OR cu.editor = ?d)
+                        AND u.id != ?d
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                
+                $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
+                
+                //check if user is group tutor
+                 $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
+                WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d AND `gm`.is_tutor = ?d";
+                
+                $result_g = Database::get()->queryArray($sql_g, $course_id, $uid, 1);
+                foreach ($result_g as $res_g)
+                {
+                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                }
+                
+                //find user's group and their tutors
+                $tutors = array();
+                $sql_g = "SELECT `group`.id FROM `group`, group_members
+                          WHERE `group`.course_id = ?d 
+                          AND `group`.id = group_members.group_id 
+                          AND `group_members`.user_id = ?d";
+                $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);
+                foreach ($result_g as $res_g) {
+                    $sql_gt = "SELECT u.id, CONCAT(u.surname,' ', u.givenname) AS name
+                               FROM user u, group_members g
+                               WHERE g.group_id = ?d 
+                               AND g.is_tutor = ?d 
+                               AND g.user_id = u.id 
+                               AND u.id != ?d";
+                    $res_gt = Database::get()->queryArray($sql_gt, $res_g->id, 1, $uid);
+                    foreach ($res_gt as $t) {
+                        $tutors[$t->id] = $t->name; 
+                    }
+                }
+            }
             
             foreach ($res as $r) {
+                if (isset($tutors) && !empty($tutors)) {
+                    if (isset($tutors[$r->user_id])) {
+                        unset($tutors[$r->user_id]);
+                    }
+                }
                 $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+            }
+            if (isset($tutors)) {
+                foreach ($tutors as $key => $value) {
+                    $tool_content .= "<option value=" . $key . ">" . q($value) . "</option>";
+                }
             }
         } 
     
@@ -218,7 +304,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                   search: function() {
                                     // custom minLength
                                     var term = extractLast( this.value );
-                                    if ( term.length < 2 ) {
+                                    if ( term.length < 3 ) {
                                       return false;
                                     }
                                   },
@@ -248,7 +334,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         
         $tool_content .= "<tr>
     	                    <th>$langSendTo:</th>
-    	                    <td><input name='autocomplete' id='recipients' /></td>
+    	                    <td><input name='autocomplete' id='recipients' /><br/><em>$langSearchSurname</em></td>
                           </tr>";        
     }
     
@@ -276,6 +362,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	}
 } else {//mailbox
     load_js('datatables');
+    load_js('datatables_filtering_delay');
+    load_js('datatables_reload');
     $head_content .= "<script type='text/javascript'>
 		              $(function() {
 		                $( \"#tabs\" ).tabs({
@@ -292,16 +380,24 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                           },
                           //open links inside tabs
                           load: function(event, ui) {
-                            $(\".ui-tabs-panel.ui-widget-content\").delegate('a', 'click', function(event) {
-                              if (event.target.className != 'outtabs' && event.target.className != 'paginate_enabled_next' 
-                                  && event.target.className != 'paginate_disabled_previous' && event.target.className != 'paginate_disabled_next'
-                                  && event.target.className != 'paginate_enabled_previous') {
+                            //following line prevents double requests by unbinding click event on previously loaded tab content 
+                            $('.ui-tabs-panel.ui-widget-content-new').off('click', 'a'); 
+                            $('.ui-tabs-panel.ui-widget-content-new').on('click', 'a', function(event) {
+                              if (event.target.className != 'outtabs' && event.target.className.indexOf('paginate_button') == -1) {
                                 event.preventDefault();
-                                $(this).closest('.ui-tabs-panel.ui-widget-content').load(this.href);
+                                $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
                               }
                             });
                           }
                          })
+                        //remove some classes to avoid overriding of openeclass styling
+                        $('#tabs').removeClass('ui-widget');
+                        $('#tabs').removeClass('ui-widget-content');
+                        $('#ui-tabs-1').removeClass('ui-widget-content');
+                        $('#ui-tabs-2').removeClass('ui-widget-content');
+                        //add classes needed for opening links inside tabs (see above)
+                        $('#ui-tabs-1').addClass('ui-widget-content-new');
+                        $('#ui-tabs-2').addClass('ui-widget-content-new');
                       })
                       </script>";
     if ($course_id == 0) {

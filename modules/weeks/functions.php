@@ -759,7 +759,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
         }
     } else {        
         $eurl = urlencode($l->url);
-        $link = "<a href='${urlServer}modules/link/go.php?c=$course_code&amp;id=$link_id&amp;url=$eurl' target='_blank'>";
+        $link = "<a href='${urlServer}modules/link/go.php?course=$course_code&amp;id=$link_id&amp;url=$eurl' target='_blank'>";
         if ($title == '') {
             $title = q($l->url);
         }
@@ -844,7 +844,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                 $imagelink = "<img src='$themeimg/links_" .
                         ($visibility == 'i' ? 'off' : 'on') . ".png' />";
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?c=$course_code&amp;id=$l->id&amp;url=$l->url' target='_blank'>$ltitle</a>";
+                $linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?course=$course_code&amp;id=$l->id&amp;url=$l->url' target='_blank'>$ltitle</a>";
                 if (!$module_visible) {
                     $linkcontent .= " <i>($langInactiveModule)</i>";
                 }

@@ -135,6 +135,10 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
      * @param boolean $optimize
      */
     public function removeByTopic($topicId, $optimize = false) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+        
         $hits = $this->__index->find('doctype:fpost AND topicid:' . $topicId);
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);
