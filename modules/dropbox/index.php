@@ -220,20 +220,60 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                     $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
                 }
             } else {
-                //if user is student an student-student messages not allowed for course messages show teachers
+                //if user is student and student-student messages not allowed for course messages show teachers
                 $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
                         FROM user u, course_user cu
         			    WHERE cu.course_id = ?d
                         AND cu.user_id = u.id
-                        AND cu.status = ?d
+                        AND (cu.status = ?d OR cu.editor = ?d)
                         AND u.id != ?d
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
                 
-                $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, $uid);
+                $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
+                
+                //check if user is group tutor
+                 $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
+                WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d AND `gm`.is_tutor = ?d";
+                
+                $result_g = Database::get()->queryArray($sql_g, $course_id, $uid, 1);
+                foreach ($result_g as $res_g)
+                {
+                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                }
+                
+                //find user's group and their tutors
+                $tutors = array();
+                $sql_g = "SELECT `group`.id FROM `group`, group_members
+                          WHERE `group`.course_id = ?d 
+                          AND `group`.id = group_members.group_id 
+                          AND `group_members`.user_id = ?d";
+                $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);
+                foreach ($result_g as $res_g) {
+                    $sql_gt = "SELECT u.id, CONCAT(u.surname,' ', u.givenname) AS name
+                               FROM user u, group_members g
+                               WHERE g.group_id = ?d 
+                               AND g.is_tutor = ?d 
+                               AND g.user_id = u.id 
+                               AND u.id != ?d";
+                    $res_gt = Database::get()->queryArray($sql_gt, $res_g->id, 1, $uid);
+                    foreach ($res_gt as $t) {
+                        $tutors[$t->id] = $t->name; 
+                    }
+                }
             }
             
             foreach ($res as $r) {
+                if (isset($tutors) && !empty($tutors)) {
+                    if (isset($tutors[$r->user_id])) {
+                        unset($tutors[$r->user_id]);
+                    }
+                }
                 $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . "</option>";
+            }
+            if (isset($tutors)) {
+                foreach ($tutors as $key => $value) {
+                    $tool_content .= "<option value=" . $key . ">" . q($value) . "</option>";
+                }
             }
         } 
     
