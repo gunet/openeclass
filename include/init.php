@@ -168,6 +168,10 @@ if (!isset($_SESSION['theme'])) {
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
+if (file_exists("template/$theme/settings.php")) {
+    require_once "template/$theme/settings.php";
+}
+
 if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
     $errorMessagePath = "../../";

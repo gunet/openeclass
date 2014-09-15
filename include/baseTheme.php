@@ -87,7 +87,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $navigation, $page_name, $page_navi,
     $require_current_course, $require_help, $siteName, $siteName,
     $status, $switchLangURL, $theme, $themeimg,
-    $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer;
+    $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
+    $theme_settings;
 
     //get blocks content from $toolContent array
     if ($perso_tool_content) {
@@ -100,10 +101,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
-    $classes = array(
-        'tool_active' => 'tool_active',
-        'group_active' => 'group_active',
-    );
+    function get_theme_class($class) {
+        global $theme_settings;
+
+        if (isset($theme_settings['classes'][$class])) {
+            return $theme_settings['classes'][$class];
+        } else {
+            return $class;
+        }
+    }
 
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
@@ -114,10 +120,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $numOfToolGroups = count($toolArr);
 
     $GLOBALS['head_content'] = '';
-    $template_settings = 'template/' . $theme . '/settings.php';
-    if (file_exists($template_settings)) {
-        require $template_settings;
-    }
     $head_content .= $GLOBALS['head_content'];
     $t = new Template('template/' . $theme);
 
@@ -132,7 +134,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // template_callback() can be defined in theme settings.php
     if (function_exists('template_callback')) {
-	template_callback($t, $menuTypeID);
+        template_callback($t, $menuTypeID);
     }
 
     //	BEGIN constructing of left navigation
@@ -180,14 +182,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
                 $img_class = basename($toolArr [$i] [3] [$j], ".png");
                 $img_class = preg_replace('/_(on|off)$/', '', $img_class);
-                if (isset($icon_map[$img_class])) {
-                    $img_class = $icon_map[$img_class];
+                if (isset($theme_settings['icon_map'][$img_class])) {
+                    $img_class = $theme_settings['icon_map'][$img_class];
                 }
                 $t->set_var('IMG_CLASS', $img_class);
                 $module_dir = module_path($toolArr[$i][2][$j]);
                 if ($module_dir == $current_module_dir) {
-                    $t->set_var('TOOL_CLASS', $classes['tool_active']);
-                    $t->set_var('GROUP_CLASS', $classes['group_active']);
+                    $t->set_var('TOOL_CLASS', get_theme_class('tool_active'));
+                    $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                 } else {
                     $t->set_var('TOOL_CLASS', '');
                 }

@@ -151,8 +151,8 @@ function js_escape($s) {
 }
 
 // Include a JavaScript file from the main js directory
-function load_js($file, $init = '', $really_load=true) {
-    global $head_content, $urlAppend, $theme;
+function load_js($file, $init='') {
+    global $head_content, $urlAppend, $theme, $theme_settings;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -161,7 +161,9 @@ function load_js($file, $init = '', $really_load=true) {
         $loaded[$file] = true;
     }
 
-    if ($really_load) {
+    // Load file only if not provided by template
+    if (!(isset($theme_settings['js_loaded']) and
+          in_array($file, $theme_settings['js_loaded']))) {
         if ($file == 'jquery') {
             $file = 'jquery-2.1.1.min.js';
         } elseif ($file == 'jquery-ui') {
