@@ -144,7 +144,7 @@ $db->query("CREATE TABLE `agenda` (
     `content` TEXT NOT NULL,
     `start` DATETIME NOT NULL DEFAULT '0000-00-00',
     `duration` VARCHAR(20) NOT NULL,
-    `visible` TINYINT(4)
+    `visible` TINYINT(4),
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
     `source_event_id` int(11) DEFAULT NULL)
@@ -800,11 +800,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` CHAR(1) NOT NULL DEFAULT 1,
+                `active` CHAR(1) NOT NULL DEFAULT '1',
                 `secret_directory` VARCHAR(30) NOT NULL,
-                `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
+                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
                 `max_grade` FLOAT DEFAULT NULL,
-                `assign_to_specific` CHAR(1) NOT NULL,
+                `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
                 `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
 

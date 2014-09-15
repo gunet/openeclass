@@ -859,10 +859,10 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.assignment
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
-                          `active`, `secret_directory`, `group_submissions`)
+                          `active`, `secret_directory`, `group_submissions`, `assignment_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`
-                           FROM assignments ORDER BY id") != null);
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
+                                FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //
         $assignmentsubmitid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.assignment_submit")->max;

@@ -1316,6 +1316,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `pid` INT(11) NOT NULL DEFAULT 0,
                             `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+                            `qtype` tinyint(3) UNSIGNED NOT NULL,
                             `q_position` INT(11) DEFAULT 1)
                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
