@@ -589,6 +589,15 @@ fieldset table.th {
          padding-left: 20px;
          margin-right: 20px; }
 
+tr.error {  color: #e66d08;
+         background-image: none; 
+         padding-left: 0px;
+         margin-right: 0px; }
+
+tr.error input{
+    border: #e66d08 1px solid;
+}
+
 /* colors */ 
 
 .red {

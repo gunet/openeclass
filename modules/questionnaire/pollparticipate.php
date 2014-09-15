@@ -68,7 +68,7 @@ function printPollForm() {
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
     if ($has_participated > 0){
-        Session::set_flashdata($langPollAlreadyParticipated, 'alert1');
+        Session::Messages($langPollAlreadyParticipated);
         redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
     }        
     // *****************************************************************************

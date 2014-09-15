@@ -2051,7 +2051,7 @@ function invalidate_glossary_cache() {
 
 function redirect_to_home_page($path = '') {
     global $urlServer;
-
+    
     $path = preg_replace('+^/+', '', $path);
     header("Location: $urlServer$path");
     exit;

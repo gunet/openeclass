@@ -80,7 +80,7 @@ if (isset($_REQUEST['exerciseId'])) {
         // if the specified exercise is disabled (this only applies to students)
         // or doesn't exist redirects and shows error 
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
-            session::set_flashdata($langExerciseNotFound, 'alert1');
+            session::Messages($langExerciseNotFound);
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
         }
         // saves the object into the session
@@ -102,7 +102,7 @@ if (isset($_POST['buttonCancel'])) {
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         unset_exercise_var($exerciseId);
 
-        Session::set_flashdata($landAttemptCanceled, 'alert1');
+        Session::Messages($landAttemptCanceled);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
@@ -147,11 +147,11 @@ if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
-        Session::set_flashdata($langExerciseExpiredTime, 'alert1');
+        Session::Messages($langExerciseExpiredTime);
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
-        Session::set_flashdata($langExerciseExpired, 'alert1');
+        Session::Messages($langExerciseExpired);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
@@ -200,7 +200,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId]) || $paused_attempt) {
     // Check if allowed number of attempts surpassed and if so redirect 
    if ($exerciseAllowedAttempts > 0 && $attempt > $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
-        Session::set_flashdata($langExerciseMaxAttemptsReached, 'alert1');
+        Session::Messages($langExerciseMaxAttemptsReached);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
    } else {
         // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
@@ -276,7 +276,7 @@ if (isset($_POST['formSent'])) {
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
         if (isset($time_expired) && $time_expired) {
-            Session::set_flashdata($langExerciseExpiredTime, 'alert1');
+            Session::Messages($langExerciseExpiredTime);
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }

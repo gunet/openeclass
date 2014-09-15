@@ -335,12 +335,12 @@ if (!isset($_POST['create_course'])) {
     // validation in case it skipped JS validation
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
-        Session::set_flashdata($langEmptyAddNode, 'alert1');
+        Session::Messages($langEmptyAddNode);
         $validationFailed = true;
     }
     
     if (empty($title) || empty($prof_names)) {
-        Session::set_flashdata($langFieldsMissing, 'alert1');
+        Session::Messages($langFieldsMissing);
         $validationFailed = true;
     }
     

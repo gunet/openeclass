@@ -81,24 +81,79 @@ class Session {
         unset($this->courses);
         unset($this->language);
     }
-    public static function render_flashdata($item='default') {
-        if (!isset($_SESSION['messages'][$item])) {
+    
+    // Sets flash data
+    public static function flash($key, $data) {
+        $_SESSION[$key]['data'] = $data;
+        if (!isset($_SESSION['flash_new'])) {
+            $_SESSION['flash_new'] = array();
+        }
+        array_push($_SESSION['flash_new'], $key);       
+    }
+    public static function has($key) {
+        if (isset($_SESSION[$key]['data'])) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }   
+    }    
+    //Sets automatically generated on next request messages
+    public static function Messages($messages, $class='alert1'){
+        if ( !is_array($messages)) $messages = array($class => array($messages));
+        foreach ($messages as $message) {
+            if (is_array($message)) {
+                $i=0;
+                foreach ($message as $row) {
+                    $_SESSION['messages'][$class][$i] = $row;
+                    $i++;
+                }
+            } else {
+                $_SESSION['messages'][$class] = $message;
+            }
+        }
+        if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
+        array_push($_SESSION['flash_new'], 'messages');
+        return new self;
+    }
+    // Flashes posted variables
+    public static function flashPost() {
+        foreach ($_POST as $key => $value){
+          self::flash($key, $value);   
+        }
+        return new self;
+    }
+    // Flashes posted variable errors
+    public function Errors($errors){
+        foreach ($errors as $key => $error) {
+            $_SESSION[$key]['errors'] = $error;
+        }
+        return new self;
+    }      
+    public static function get($key) {
+        if(isset($_SESSION[$key]['data'])) {
+            return $_SESSION[$key]['data'];
+        } else {
+            return FALSE;
+        }
+    }   
+    public static function getError($key, $class='caution') {
+        if (isset($_SESSION[$key]['errors'][0])){
+            return "<div class='$class'>".$_SESSION[$key]['errors'][0]."</div>";
+        } else {
+            return FALSE;
+        }
+    }
+    public static function getMessages() {
+       if (!isset($_SESSION['messages'])) {
             return null;
         }
-        $item_messages = $_SESSION['messages'][$item];
-        unset($_SESSION['messages'][$item]);
+        $item_messages = $_SESSION['messages'];
         $msg_boxes = '';
-        foreach($item_messages as $row => $value){
-            $msg_boxes .= "<div class='$row'><ul><li>".implode('</li><li>', $value)."</li></ul></div>";
+
+        foreach($item_messages as $class => $value){
+            $msg_boxes .= "<div class='$class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
         return $msg_boxes;
-    }
-
-    public static function set_flashdata($message, $class, $item='default') {
-        if (!isset($_SESSION['messages'])) {
-            $_SESSION['messages'] = array();
-        }
-        $_SESSION['messages'][$item][$class][] = $message;
     }
     
     // Make sure a language code is valid - if not, default language is Greek

@@ -3514,3 +3514,8 @@ $langIndexingDone = "The indexing was completed successfully, you can now close 
 $langUpgIndexingNotice = "Because of the number of courses, the search and indexing engines have been deactivated. Please look for their corresponding setting under Platform Settings and follow the instructions for indexing.";
 $langNoRecipients = "No recipients specified";
 $langOnlineUsers = 'Online Users';
+/* * ***********************************************************
+ * Validation
+ * ************************************************************ */
+$langTheField = 'The field';
+$langFormErrors = 'Form contains errors. Please correct and resubmit form.';
