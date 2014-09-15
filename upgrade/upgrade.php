@@ -1592,6 +1592,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `course_id` int(11) NOT NULL UNIQUE,
                         PRIMARY KEY (`id`)) $charset_spec");
+                                        
+                    Database::get()->query("CREATE TABLE `course_weekly_view` (
+                        `id` INT(11) NOT NULL auto_increment,
+                        `course_id` INT(11) NOT NULL,
+                        `title` VARCHAR(255) NOT NULL DEFAULT '',
+                        `comments` MEDIUMTEXT,
+                        `start_week` DATE NOT NULL default '0000-00-00',
+                        `finish_week` DATE NOT NULL default '0000-00-00',
+                        `visible` TINYINT(4) NOT NULL DEFAULT 1,
+                        PRIMARY KEY  (`id`)) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE `course_weekly_view_activities` (
+                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                        `course_weekly_view_id` INT(11) NOT NULL ,
+                        `title` VARCHAR(255) NOT NULL DEFAULT '',
+                        `comments` MEDIUMTEXT,
+                        `res_id` INT(11) NOT NULL,
+                        `type` VARCHAR(255) NOT NULL DEFAULT '',
+                        `visible` TINYINT(4),
+                        `order` INT(11) NOT NULL DEFAULT 0,
+                        `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
                     
                     // hierarchy tables
                     $n = Database::get()->queryArray("SHOW TABLES LIKE 'faculte'");
@@ -1898,8 +1919,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     Database::get()->query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
                     if (DBHelper::fieldExists('course', 'course_objectives')) {
                         Database::get()->query("ALTER TABLE course DROP COLUMN `course_objectives`,
-                    DROP COLUMN `course_prerequisites`,
-                    DROP COLUMN `course_references`");
+                                                DROP COLUMN `course_prerequisites`,
+                                                DROP COLUMN `course_references`");
                     }
                     Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
@@ -1918,14 +1939,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                              DROP COLUMN `faculteid`,
                                              CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
                                              CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0,
+                                             ADD `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
+                                             ADD `start_date` DATE NOT NULL default '0000-00-00',
+                                             ADD `finish_date` DATE NOT NULL default '0000-00-00',
                                              DROP INDEX cours");
                     Database::get()->queryFunc("SELECT DISTINCT lang from course", function ($old_lang) {
                         Database::get()->query("UPDATE course SET lang = ?s WHERE lang = ?s", langname_to_code($old_lang->lang), $old_lang->lang);
                     });
                     Database::get()->query("RENAME TABLE `cours_user` TO `course_user`");
                     Database::get()->query('ALTER TABLE `course_user`
-                                CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 0,
-                                CHANGE `cours_id` `course_id` INT(11) NOT NULL DEFAULT 0');
+                                            CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 0,
+                                            CHANGE `cours_id` `course_id` INT(11) NOT NULL DEFAULT 0');
                     if (DBHelper::fieldExists('course_user', 'code_cours')) {
                         Database::get()->query('ALTER TABLE `course_user`
                                         DROP COLUMN `code_cours`');
