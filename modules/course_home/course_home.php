@@ -404,8 +404,187 @@ if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
 
+
+
+
+
+
+// Title and Toolbox
 $tool_content .= "
-<div id='content_course'>
+
+<div class='col-md-7'>
+    <h1 class='page-title'>Τίτλος Μαθήματος</h1>
+</div>
+
+<div class ='col-md-5'>
+    <div class='toolbox'>
+
+        <div type='button' class='button dropdown open-on-hover'>
+            <span class='txt' class='tooltip-left' data-tooltip='Syllabus'>Πληροφορίες Μαθήματος</span>
+            <span class='fa fa-caret-down'></span>
+            <ul class='dropdown-menu'>
+                <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-toc' href='#''>Επιλογή 2</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-books' href='#''>Επιλογή 3</a></li>
+                <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#''>Επιλογή 4</a></li>
+            </ul>
+        </div>
+";
+
+        // Button: email - contact professor
+        if ($status != USER_GUEST) {
+            if ($receive_mail) {
+                $tool_content .= "
+                    <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
+                        <button class='button hover-blue' title='$langContactProf' >
+                            <i class='fa fa-envelope'></i>
+                        </button>
+                    </a>";
+            }
+        }
+
+
+        // Button: star - bookmark the page
+        $tool_content .= "        
+                    <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
+                        <button class='button hover-blue' title='$langAddAsBookmark'>
+                            <i class='fa fa-star'></i>
+                        </button>
+                    </a>";
+
+
+        // Button: rss
+        if (visible_module(MODULE_ID_ANNOUNCE))
+        {
+            $tool_content .= "
+                    <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
+                        <button class='button hover-blue' title='" . q($langRSSFeed) . "'>
+                            <i class='fa fa-rss'></i>
+                        </button>
+                    </a>";
+        }
+
+        // Button: toggle student view
+        $tool_content .= "  
+                    <button class='button hover-blue' title='$langAddAsBookmark'>
+                            $toggle_student_view_close
+                            $toggle_student_view
+                    </button>";     
+           
+$tool_content .= "
+    </div>
+    
+</div>";
+
+
+
+
+
+
+
+
+// Contentbox: Course main contentbox
+$tool_content .= "
+<div class='col-md-12'>
+        <div id='lesson-banner' class='panel'>
+                <div class='banner-left'>
+                        <div class='banner-image'></div>
+                </div>
+                <div class='banner-content'>
+                        <div class='banner-description'>$main_content</p></div>
+                        <hr>
+                        $bar_content
+                </div>
+        </div>
+</div>";
+
+
+
+
+// Contentbox: Thematikes enotites
+// Contentbox: Calendar
+// Contentbox: Announcements
+$tool_content .= "
+
+<div class='col-md-8'>
+        <h5 class='content-title'>Θεματικες Ενoτητες</h5>
+        <div class='panel'>
+                $cunits_content
+        </div>
+</div>
+
+
+<div class='col-md-4'> 
+        <h5 class='content-title'>Ημερολογιο</h5>
+        <div class='panel padding'>
+                <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
+        </div>
+</div>
+
+<div class='col-md-4'>
+        <h5 class='content-title'>Ανακοινωσεις</h5>
+        <ul class='tablelist panel'>
+                
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 1</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 2</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>Ανακοίνωση 3</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+        </ul>
+</div>
+
+
+";
+
+
+
+
+
+
+
+// Contentbox: Keywords, Copyright and Opencourse mode
+$tool_content .= "
+<div class='col-md-4'>
+        <h5 class='content-title'>Αδεια χρησης</h5>
+        <div class='panel'>
+                $license_info_box
+        </div>
+</div>
+
+<div class='col-md-4'>
+        <h5 class='content-title'>Opencourses</h5>
+        <div class='panel'>
+                $opencourses_level
+        </div>
+</div>
+
+";
+
+
+
+
+
+
+
+
+$tool_content .= "
+<div id='content_course' style='display:none;'>
 <table width='100%'>
 <tr>
 <td valign='top'>$main_content</td>
