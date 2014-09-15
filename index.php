@@ -131,7 +131,10 @@ if ($uid AND !isset($_GET['logout'])) {
     $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
 
-    $tool_content .= "<p align='justify'>$langInfoAbout</p>";
+    $tool_content .= "
+        <div class='col-md-7'>
+                $langInfoAbout
+        </div>";
 
     $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
             WHERE `visible` = 1
@@ -186,6 +189,9 @@ if ($uid AND !isset($_GET['logout'])) {
     $tool_content .= "</div><div id='rightbar'>";
     if (!get_config('dont_display_login_form')) {
         $tool_content .= "
+
+        <div class='col-md-12 jumbotron'>
+                
                 <form action='$urlSecure' method='post'>
                  <table width='100%' class='tbl'>
                  <tr>
@@ -212,8 +218,11 @@ if ($uid AND !isset($_GET['logout'])) {
         if ($online_users > 0) {
             $tool_content .= "<th class='LoginHead'><br />$langOnlineUsers: $online_users</th>";
         }
-        $tool_content .= "</table></form>";
+        $tool_content .= "</table></form>
+                
+        </div>";
     }
+
     $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
 
     draw($tool_content, 0, null, $rss_link);

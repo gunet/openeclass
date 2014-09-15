@@ -64,32 +64,90 @@ jQuery(document).ready(function() {
 require_once 'perso.php';
 
 $tool_content = "
-<div class='panel_left'>
-<p class='panel_title'>{%LANG_MY_PERSO_LESSONS%}</p>
-<div class='panel_content_open'>{%LESSON_CONTENT%}</div>
+<div class='col-md-10'>
+    <h1 class='page-title'>Prosopiko Xartofylakio</h1>
+</div>
 
-<p class='panel_title'>{%LANG_MY_PERSONAL_CALENDAR%}</p>
-<div id='smallcal' class='panel_content_open'>{%PERSONAL_CALENDAR_CONTENT%}</div>
+<div class ='col-md-2'>
+        <div class='toolbox'>
+                <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
+                        <fe-ringbutton class='button hover-blue' title='' >
+                                <i class='fa fa-life-ring'></i>
+                        </button>
+                </a> 
+        </div>
+</div>    
+
+<div class='col-md-12' style='height:20px;'></div>
+
+<div class='col-md-7'>
+        <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+        <div class='panel'>
+                {%LESSON_CONTENT%}
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
 </div>
 
 
-<div class='panel_right'>
-<p class='panel_title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</p>
-<div class='panel_content'>{%ANNOUNCE_CONTENT%}</div>
 
-<p class='panel_title'>{%LANG_MY_PERSO_AGENDA%}</p>
-<div class='panel_content'>{%AGENDA_CONTENT%}</div>
-
-<p class='panel_title'>{%LANG_MY_PERSO_DEADLINES%}</p>
-<div class='panel_content'>{%ASSIGN_CONTENT%}</div>
-
-<p class='panel_title'>{%LANG_MY_PERSO_DOCS%}</p>
-<div class='panel_content'>{%DOCS_CONTENT%}</div>
-
-<p class='panel_title'>{%LANG_PERSO_FORUM%}</p>
-<div class='panel_content'>{%FORUM_CONTENT%}</div>
+<div class='col-md-5'>
+        <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
+        <div class='panel'>
+                {%PERSONAL_CALENDAR_CONTENT%}
+        </div>
+</div>
 
 
-</div>";
+
+<div class='col-md-5'>
+        <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
+        <div class='panel'>
+
+                <ul class='tablelist panel'>
+                
+            <li class='list-item'>
+                <span class='item-title'>.......... 1</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>.......... 2</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+
+            <li class='list-item'>
+                <span class='item-title'>.......... 3</span>
+                <div class='item-right-cols'>
+                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                </div>
+            </li>
+        
+                </ul>
+
+
+        </div>
+</div>
+
+
+<div class='col-md-12' style='height:20px;'></div>
+
+<div class='col-md-12'>
+        <div class='panel'>
+                <div class='col-sm-3'>
+                        <div><img src='../../ifeneris/template/bootstrap/img/user.jpg' class='img-circle' alt='Circular Image' ></div>
+                </div>
+                <div class='col-sm-9'>
+                        <div> <canvas id='canvas' height='150' width='600'></canvas></div>
+                </div> 
+
+        </div>
+</div>
+";
 
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

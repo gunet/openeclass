@@ -411,6 +411,7 @@ if (!empty($rec_mail)) {
 
 // Title and Toolbox
 $tool_content .= "
+<div class='col-md-12' style='height:20px;'></div>
 
 <div class='col-md-7'>
     <h1 class='page-title'>Τίτλος Μαθήματος</h1>
@@ -474,7 +475,11 @@ $tool_content .= "
 $tool_content .= "
     </div>
     
-</div>";
+</div>
+
+
+<div class='col-md-12' style='height:20px;'></div>
+";
 
 
 
