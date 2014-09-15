@@ -1,36 +1,39 @@
-/* SASStyling for new-UI of eclass v3.0 beta */
-/* File version 0.1 */
-/* line 51, main.scss */
+/* 
+=============================================
+    SASS for UI Theme v3.0 - version 1.03 
+=============================================
+*/
+/* line 57, main.scss */
 body {
   background: #232c3a;
   font-family: 'Open Sans';
 }
 
-/* line 56, main.scss */
+/* line 62, main.scss */
 body > .container {
   padding: 0 15px;
 }
 
-/* line 60, main.scss */
+/* line 66, main.scss */
 #Frame {
   margin: 1em 0em;
 }
 
 /* LEFTNAV - MAIN MENU, LOGO */
-/* line 65, main.scss */
+/* line 71, main.scss */
 #leftnav {
   background: #232c3a;
   padding: 0;
 }
-/* line 69, main.scss */
+/* line 75, main.scss */
 #leftnav .logo {
   margin: 2em 1em;
 }
-/* line 71, main.scss */
+/* line 77, main.scss */
 #leftnav .logo img {
   margin: 0 auto;
 }
-/* line 74, main.scss */
+/* line 80, main.scss */
 #leftnav .panel {
   border: none;
   margin: 0;
@@ -40,61 +43,61 @@ body > .container {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px 0px 0px 4px;
 }
-/* line 85, main.scss */
+/* line 91, main.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
 }
-/* line 89, main.scss */
+/* line 95, main.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px!important;
 }
-/* line 92, main.scss */
+/* line 98, main.scss */
 #leftnav .panel .panel-heading .panel-title {
   text-align: center;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 98, main.scss */
+/* line 104, main.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
 }
-/* line 104, main.scss */
+/* line 110, main.scss */
 #leftnav .panel > a {
   display: block;
   background: rgba(0, 0, 0, 0.2) !important;
 }
-/* line 108, main.scss */
+/* line 114, main.scss */
 #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 0px!important;
   color: #4da1e4;
 }
-/* line 113, main.scss */
+/* line 119, main.scss */
 #leftnav .panel > a:hover {
   background: rgba(255, 255, 255, 0.25);
 }
-/* line 117, main.scss */
+/* line 123, main.scss */
 #leftnav .panel > a:hover, #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 122, main.scss */
+/* line 128, main.scss */
 #leftnav .panel a {
   background: transparent;
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 128, main.scss */
+/* line 134, main.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
   padding: 1em;
   text-align: center;
 }
-/* line 135, main.scss */
+/* line 141, main.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 140, main.scss */
+/* line 146, main.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -102,7 +105,7 @@ body > .container {
   border-radius: 4px 0px 0px 4px;
   margin-left: 0px;
 }
-/* line 149, main.scss */
+/* line 155, main.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -112,71 +115,78 @@ body > .container {
   -moz-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
 }
-/* line 161, main.scss */
+/* line 167, main.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 165, main.scss */
+/* line 171, main.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
-/* line 174, main.scss */
+/* LOGO - Extent bootstrap style */
+/* line 183, main.scss */
+.logo {
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* line 190, main.scss */
 #main-content {
   overflow: hidden;
   box-shadow: 0px -5px 10px 0px black;
   -moz-box-shadow: 0px -5px 10px 0px black;
   -webkit-box-shadow: 0px -5px 10px 0px black;
 }
-/* line 182, main.scss */
+/* line 198, main.scss */
 #main-content #header.navbar {
   padding: 0;
   border: 0;
   background: #DBDBDB;
 }
-/* line 187, main.scss */
+/* line 203, main.scss */
 #main-content #header.navbar .navbar-nav {
   margin: 0;
   float: right;
 }
-/* line 191, main.scss */
+/* line 207, main.scss */
 #main-content #header.navbar .navbar-nav > li {
   border-left: 1px solid #e7e7e7;
   float: left;
 }
-/* line 195, main.scss */
+/* line 211, main.scss */
 #main-content #header.navbar .navbar-nav > li a {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 199, main.scss */
+/* line 215, main.scss */
 #main-content #header.navbar .navbar-nav > li a i.fa {
   margin: 0 1em;
 }
-/* line 204, main.scss */
+/* line 220, main.scss */
 #main-content #header.navbar .navbar-nav > li a:hover, #main-content #header.navbar .navbar-nav > li a:focus {
   background: #4da1e4;
   color: white;
 }
-/* line 210, main.scss */
+/* line 226, main.scss */
 #main-content #header.navbar .navbar-nav > li:last-child > a {
   border-radius: 0 4px 0px 0px;
 }
 
 /**/
-/* line 221, main.scss */
+/* line 237, main.scss */
 #main-content {
   background: #fafafa;
   border-radius: 4px;
 }
 
 /* BOOTSTRAP DEFAULT OVERWRITE */
-/* line 228, main.scss */
+/* line 244, main.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
-/* line 233, main.scss */
+/* line 249, main.scss */
 body.sidebar-opened #sidebar {
   right: 0px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
@@ -184,7 +194,7 @@ body.sidebar-opened #sidebar {
 }
 
 /* FOOTER */
-/* line 242, main.scss */
+/* line 258, main.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
@@ -194,12 +204,12 @@ footer.footer {
 }
 
 /* migrated sidebar */
-/* line 252, main.scss */
+/* line 268, main.scss */
 body.sidebar-opened .toggle-sidebar {
   background: #e3e4e6;
 }
 
-/* line 257, main.scss */
+/* line 273, main.scss */
 #sidebar {
   position: absolute;
   height: 100%;
@@ -224,14 +234,14 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 283, main.scss */
+/* line 299, main.scss */
 #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
   color: #686868;
   font-weight: 600;
   margin-bottom: 0.6em;
   margin-top: 0.3em;
 }
-/* line 290, main.scss */
+/* line 306, main.scss */
 #sidebar .toggle-sidebar {
   text-align: center;
   width: 3em;
@@ -244,23 +254,23 @@ body.sidebar-opened .toggle-sidebar {
   border: 1px solid #CFCFCF;
   cursor: default;
 }
-/* line 303, main.scss */
+/* line 319, main.scss */
 #sidebar .toggle-sidebar:hover {
   background: #4da1e4;
   border-color: #4da1e4;
   color: white;
 }
-/* line 310, main.scss */
+/* line 326, main.scss */
 #sidebar ul, #sidebar li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
-/* line 316, main.scss */
+/* line 332, main.scss */
 #sidebar .side-list {
   padding-bottom: 1em;
 }
-/* line 320, main.scss */
+/* line 336, main.scss */
 #sidebar .side-list .lesson-title {
   background: #344458;
   font-size: 0.85em;
@@ -280,87 +290,87 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 348, main.scss */
+/* line 364, main.scss */
 #sidebar .side-list .lesson-title:first-of-type {
   border-top-width: 1px;
   border-radius: 4px 4px 0px 0px;
   -webkit-border-radius: 4px 4px 0px 0px;
   -moz-border-radius: 4px 4px 0px 0px;
 }
-/* line 354, main.scss */
+/* line 370, main.scss */
 #sidebar .side-list .lesson-title:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 358, main.scss */
+/* line 374, main.scss */
 #sidebar .side-list .lesson-title:hover {
   background: #48586D;
   color: rgba(255, 255, 255, 0.85);
 }
-/* line 362, main.scss */
+/* line 378, main.scss */
 #sidebar .side-list .lesson-title:hover:after {
   color: rgba(255, 255, 255, 0.6);
 }
-/* line 367, main.scss */
+/* line 383, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active {
   border-bottom: none;
   color: white;
   background: #425164;
 }
-/* line 372, main.scss */
+/* line 388, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
   border-radius: 0px;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 376, main.scss */
+/* line 392, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
   color: #4da1e4;
 }
-/* line 382, main.scss */
+/* line 398, main.scss */
 #sidebar .side-list > div {
   background: #253447;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 16px;
 }
-/* line 392, main.scss */
+/* line 408, main.scss */
 #sidebar .side-list > div:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 397, main.scss */
+/* line 413, main.scss */
 #sidebar .side-list ul {
   padding: 0em 2em 1em 1.35em;
   font-size: 0.75em;
 }
-/* line 401, main.scss */
+/* line 417, main.scss */
 #sidebar .side-list ul > li {
   padding: 5px 0em;
 }
-/* line 406, main.scss */
+/* line 422, main.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 412, main.scss */
+/* line 428, main.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 417, main.scss */
+/* line 433, main.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 421, main.scss */
+/* line 437, main.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 425, main.scss */
+/* line 441, main.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -377,13 +387,13 @@ body.sidebar-opened .toggle-sidebar {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 447, main.scss */
+/* line 463, main.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 460, main.scss */
+/* line 476, main.scss */
 #sidebar .blocks .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -393,7 +403,7 @@ body.sidebar-opened .toggle-sidebar {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 471, main.scss */
+/* line 487, main.scss */
 #sidebar .blocks .title {
   margin: 0;
   padding: 2em 0em!important;
@@ -402,18 +412,18 @@ body.sidebar-opened .toggle-sidebar {
   text-align: center;
   overflow: hidden;
 }
-/* line 482, main.scss */
+/* line 498, main.scss */
 #sidebar .blocks .title .txt {
   text-transform: uppercase;
 }
-/* line 486, main.scss */
+/* line 502, main.scss */
 #sidebar .blocks .title i.fa {
   display: block;
   opacity: .9;
   font-size: 2.3em;
   margin-top: 0.4em;
 }
-/* line 495, main.scss */
+/* line 511, main.scss */
 #sidebar .blocks .title .tricky {
   margin-left: -100%;
   width: 200%;
@@ -425,7 +435,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: margin-left 120ms linear;
   transition: margin-left 120ms linear;
 }
-/* line 503, main.scss */
+/* line 519, main.scss */
 #sidebar .blocks .title .tricky > div {
   display: inline-block;
   width: 49%;
@@ -440,85 +450,85 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: opacity 60ms linear;
   transition: opacity 60ms linear;
 }
-/* line 515, main.scss */
+/* line 531, main.scss */
 #sidebar .blocks .title .tricky .icon {
   opacity: 1;
 }
-/* line 519, main.scss */
+/* line 535, main.scss */
 #sidebar .blocks .title .tricky .description {
   font-weight: 400;
   padding: 0.5em 1em;
   opacity: 0;
 }
-/* line 527, main.scss */
+/* line 543, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
   margin-left: 0%;
 }
-/* line 530, main.scss */
+/* line 546, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
   opacity: .55;
 }
-/* line 534, main.scss */
+/* line 550, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
   opacity: 0;
 }
-/* line 540, main.scss */
+/* line 556, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
   color: #4da1e4;
 }
-/* line 546, main.scss */
+/* line 562, main.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky {
   margin-left: 0%;
 }
-/* line 548, main.scss */
+/* line 564, main.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky .description {
   opacity: .55;
 }
-/* line 556, main.scss */
+/* line 572, main.scss */
 #sidebar .blocks li.block {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-/* line 560, main.scss */
+/* line 576, main.scss */
 #sidebar .blocks li.block > .ui-accordion-content,
 #sidebar .blocks li.block > .ui-accordion-header-active {
   background: rgba(255, 255, 255, 0.3);
 }
-/* line 564, main.scss */
+/* line 580, main.scss */
 #sidebar .blocks li.block > .ui-accordion-content {
   padding: 1em 0em;
 }
-/* line 568, main.scss */
+/* line 584, main.scss */
 #sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
   width: 90%;
   margin: 0em auto 1em auto;
   display: block;
 }
-/* line 574, main.scss */
+/* line 590, main.scss */
 #sidebar .blocks li.block textarea {
   min-height: 12em;
 }
-/* line 578, main.scss */
+/* line 594, main.scss */
 #sidebar .blocks li.block button {
   margin: 1.1em;
   margin-top: 0em;
   font-size: 0.8em;
 }
-/* line 584, main.scss */
+/* line 600, main.scss */
 #sidebar .blocks li.block .goto {
   float: right;
   color: #7E7E7E;
   padding: 0.5em;
   margin-right: 0.5em;
 }
-/* line 591, main.scss */
+/* line 607, main.scss */
 #sidebar .blocks li.block .input-parent {
   position: relative;
 }
-/* line 594, main.scss */
+/* line 610, main.scss */
 #sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
   padding-left: 2em;
 }
-/* line 598, main.scss */
+/* line 614, main.scss */
 #sidebar .blocks li.block .input-parent .fa {
   position: absolute;
   top: 0.7em;
@@ -527,20 +537,20 @@ body.sidebar-opened .toggle-sidebar {
   opacity: 0.2;
 }
 
-/* line 609, main.scss */
+/* line 625, main.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 613, main.scss */
+/* line 629, main.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 621, main.scss */
+/* line 637, main.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em!important;
@@ -549,7 +559,7 @@ body.sidebar-opened .toggle-sidebar {
   outline: none!important;
   cursor: pointer;
 }
-/* line 630, main.scss */
+/* line 646, main.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -574,7 +584,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 653, main.scss */
+/* line 669, main.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -591,47 +601,47 @@ body.sidebar-opened .toggle-sidebar {
 
 /* NO BREAKPOINTS BELLOW 1366 OR SMTH */
 @media (max-width: 1280px) {
-  /* line 662, main.scss */
+  /* line 678, main.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1200px) {
-  /* line 668, main.scss */
+  /* line 684, main.scss */
   .container {
     width: 1200px;
   }
 }
 @media (min-width: 992px) {
-  /* line 675, main.scss */
+  /* line 691, main.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 681, main.scss */
+  /* line 697, main.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 686, main.scss */
+  /* line 702, main.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 690, main.scss */
+  /* line 706, main.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 694, main.scss */
+  /* line 710, main.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 701, main.scss */
+  /* line 717, main.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,

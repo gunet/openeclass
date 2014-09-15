@@ -1,5 +1,11 @@
-/* SASStyling for new-UI of eclass v3.0 beta */
-/* File version 0.1 */
+
+/* 
+=============================================
+    SASS for UI Theme v3.0 - version 1.03 
+=============================================
+*/
+
+
 
 $color_sidebar: #232c3a;
 $color_hover: #4da1e4;
@@ -169,6 +175,16 @@ body > .container{
 		}
 	}
 }
+
+
+/* LOGO - Extent bootstrap style */
+
+.logo
+{
+  min-height: 20px;
+  min-width: 20px;
+}
+
 
 
 #main-content{
