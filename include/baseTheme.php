@@ -46,7 +46,7 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
 }
 
 if (isset($toolContent_ErrorExists)) {
-    Session::set_flashdata($toolContent_ErrorExists, 'alert1');
+    Session::Messages($toolContent_ErrorExists);
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
@@ -215,7 +215,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
         //If there is a message to display, show it (ex. Session timeout)
-        if ($messages = Session::render_flashdata()) {
+        if ($messages = Session::getMessages()) {
             $t->set_var('EXTRA_MSG', $messages);
         }
 

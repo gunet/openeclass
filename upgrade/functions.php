@@ -118,24 +118,6 @@ function merge_tables($table_destination, $table_source, $fields_destination, $f
     return $retString;
 }
 
-// check if a mysql table exists
-function mysql_table_exists($db, $table) {
-    $exists = Database::get()->queryArray('SHOW TABLES FROM `' . $db . '` LIKE \'' . $table . '\'');
-    return count($exists) == 1;
-}
-
-// check if a mysql table field exists
-function mysql_field_exists($db, $table, $field) {
-    $fields = Database::get($db)->queryArray("SHOW COLUMNS from $table LIKE '$field'");
-    return count($fields) > 0;
-}
-
-// check if a mysql index exists
-function mysql_index_exists($table, $index_name) {
-    $q = Database::get()->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = ?s", $index_name);
-    return count($q) > 0;
-}
-
 // add index/indexes in specific table columns
 function add_index($index, $table, $column) {
     global $langIndexAdded, $langIndexExists, $langToTable;
@@ -196,7 +178,7 @@ function update_assignment_submit() {
 function is_admin($username, $password) {
     global $mysqlMainDb;
 
-    if (mysql_field_exists($mysqlMainDb, 'user', 'user_id')) {
+    if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
 				WHERE admin.idUser = user.user_id AND
 				BINARY user.username = ?s", $username);
@@ -231,13 +213,12 @@ function is_admin($username, $password) {
             $_SESSION['status'] = $user->status;
         }
         $_SESSION['email'] = $user->email;
-        $_SESSION['uname'] = $username;        
+        $_SESSION['uname'] = $username;
         $_SESSION['is_admin'] = true;
 
         return true;
     }
 }
-
 
 /**
  * @brief Check whether an entry with the specified $define_var exists in the accueil table
@@ -245,7 +226,7 @@ function is_admin($username, $password) {
  * @return boolean
  */
 function accueil_tool_missing($db, $define_var) {
-        
+
     $r = Database::get($db)->querySingle("SELECT id FROM accueil WHERE define_var = '$define_var'");
     if ($r) {
         return false;
@@ -253,7 +234,6 @@ function accueil_tool_missing($db, $define_var) {
         return true;
     }
 }
-
 
 /**
  * @brief convert database and all tables to UTF-8
@@ -266,12 +246,12 @@ function convert_db_utf8($database) {
     Database::get()->query("ALTER DATABASE `$database` DEFAULT CHARACTER SET=utf8");
     $result = Database::get()->queryArray("SHOW TABLES FROM `openeclass30`");
     if (!$result) {
-        die("$langNotTablesList $database");             
+        die("$langNotTablesList $database");
     }
     foreach ($result as $row) {
         $value = "Tables_in_$database";
         Database::get($database)->query("ALTER TABLE " . $row->$value . " CONVERT TO CHARACTER SET utf8");
-    }    
+    }
 }
 
 // -------------------------------------
@@ -303,7 +283,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
  * @param type $code
  * @param type $lang
  */
-function upgrade_course($code, $lang) {    
+function upgrade_course($code, $lang) {
     upgrade_course_2_1_3($code);
     upgrade_course_2_2($code, $lang);
     upgrade_course_2_3($code);
@@ -312,10 +292,9 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_8($code, $lang);
     upgrade_course_2_9($code, $lang);
     upgrade_course_2_10($code);
+    upgrade_course_2_11($code);
     upgrade_course_3_0($code);
 }
-
-
 
 /**
  * @brief upgrade to 3.0
@@ -334,11 +313,10 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
 
     $course_id = course_code_to_id($code);
-    mysql_select_db($code);
     flush();
 
     // move forum tables to central db
-    if (mysql_table_exists($code, 'forums')) {
+    if (DBHelper::tableExists('forums', $code)) {
         $forumcatid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.forum_category")->max;
         if (is_null($forumcatid_offset)) {
             $forumcatid_offset = 0;
@@ -397,7 +375,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
     $video_map = array();
     // move video to central db and drop table
-    if (mysql_table_exists($code, 'video')) {
+    if (DBHelper::tableExists('video', $code)) {
 
         $videoid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.video")->max;
         if (is_null($videoid_offset)) {
@@ -413,8 +391,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video
-                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
+                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 0,
                                `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
         if ($ok) {
             Database::get($code)->query("DROP TABLE video");
@@ -426,7 +404,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
     $videolink_map = array();
     // move videolinks to central db and drop table
-    if (mysql_table_exists($code, 'videolinks')) {
+    if (DBHelper::tableExists('videolinks', $code)) {
 
         $linkid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
         if (is_null($linkid_offset)) {
@@ -442,8 +420,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.videolink
-                        (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
+                        (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, 0, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
 
         if ($ok) {
@@ -455,8 +433,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 
     // move dropbox to central db and drop tables
-    if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') &&
-            mysql_table_exists($code, 'dropbox_post')) {
+    if (DBHelper::tableExists('dropbox_file', $code) && DBHelper::tableExists('dropbox_person', $code) &&
+            DBHelper::tableExists('dropbox_post', $code)) {
 
         $fileid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.dropbox_msg")->max;
         if (is_null($fileid_offset)) {
@@ -496,9 +474,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
     $lp_map = array();
     // move learn path to central db and drop tables
-    if (mysql_table_exists($code, 'lp_learnPath') && mysql_table_exists($code, 'lp_module') &&
-            mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
-            mysql_table_exists($code, 'lp_user_module_progress')) {
+    if (DBHelper::tableExists('lp_learnPath', $code) && DBHelper::tableExists('lp_module', $code) &&
+            DBHelper::tableExists('lp_asset', $code) && DBHelper::tableExists('lp_rel_learnPath_module', $code) &&
+            DBHelper::tableExists('lp_user_module_progress', $code)) {
 
         // first change `visibility` field name and type to lp_learnPath table
         Database::get($code)->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
@@ -680,8 +658,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
     $wiki_map = array();
     // move wiki to central db and drop tables
-    if (mysql_table_exists($code, 'wiki_properties') && mysql_table_exists($code, 'wiki_acls') &&
-            mysql_table_exists($code, 'wiki_pages') && mysql_table_exists($code, 'wiki_pages_content')) {
+    if (DBHelper::tableExists('wiki_properties', $code) && DBHelper::tableExists('wiki_acls', $code) &&
+            DBHelper::tableExists('wiki_pages', $code) && DBHelper::tableExists('wiki_pages_content', $code)) {
 
         // ----- wiki_properties and wiki_acls DB Tables ----- //
         $wikiid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.wiki_properties")->max;
@@ -771,8 +749,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
 
     // move polls to central db and drop tables
-    if (mysql_table_exists($code, 'poll') && mysql_table_exists($code, 'poll_answer_record') &&
-            mysql_table_exists($code, 'poll_question') && mysql_table_exists($code, 'poll_question_answer')) {
+    if (DBHelper::tableExists('poll', $code) && DBHelper::tableExists('poll_answer_record', $code) &&
+            DBHelper::tableExists('poll_question', $code) && DBHelper::tableExists('poll_question_answer', $code)) {
 
         // ----- poll DB Table ----- //
         $pollid_offset = Database::get()->querySingle("SELECT MAX(pid) AS max FROM `$mysqlMainDb`.poll")->max;
@@ -860,13 +838,13 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
     $assignments_map = array();
     // move assignments to central db and drop tables
-    if (mysql_table_exists($code, 'assignments') && mysql_table_exists($code, 'assignment_submit')) {
+    if (DBHelper::tableExists('assignments', $code) && DBHelper::tableExists('assignment_submit', $code)) {
 
         // ----- assigments DB Table ----- //
         $assignmentid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.assignment")->max;
         if (is_null($assignmentid_offset)) {
             $assignmentid_offset = 0;
-    }
+        }
 
         if ($return_mapping) {
             Database::get($code)->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
@@ -882,10 +860,10 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.assignment
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
-                          `active`, `secret_directory`, `group_submissions`)
+                          `active`, `secret_directory`, `group_submissions`, `assignment_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`
-                           FROM assignments ORDER BY id") != null);
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
+                                FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //
         $assignmentsubmitid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.assignment_submit")->max;
@@ -923,7 +901,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 
     // move agenda to central db and drop table
-    if (mysql_table_exists($code, 'agenda')) {
+    if (DBHelper::tableExists('agenda', $code)) {
 
         // ----- agenda DB Table ----- //
         Database::get()->query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
@@ -947,11 +925,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     $exercise_map = array();
     $exercise_map[0] = 0;
     // move exercises to central db and drop tables
-    if (mysql_table_exists($code, 'exercices') &&
-            mysql_table_exists($code, 'exercise_user_record') &&
-            mysql_table_exists($code, 'questions') &&
-            mysql_table_exists($code, 'reponses') &&
-            mysql_table_exists($code, 'exercice_question')) {
+    if (DBHelper::tableExists('exercices', $code) &&
+            DBHelper::tableExists('exercise_user_record', $code) &&
+            DBHelper::tableExists('questions', $code) &&
+            DBHelper::tableExists('reponses', $code) &&
+            DBHelper::tableExists('exercice_question', $code)) {
 
         // ----- exercices DB Table ----- //
         $exerciseid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise")->max;
@@ -1111,6 +1089,38 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 }
 
+/**
+ * @brief upgrare to 2.11
+ * @global type $langUpgCourse
+ * @param type $code
+ * @param type $lang
+ * @param type $extramessage
+ */
+function upgrade_course_2_11($code, $extramessage = '') {
+    
+    global $langUpgCourse;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
+    flush();
+    
+    if (!DBHelper::fieldExists($code, 'video', 'category')) {
+        Database::get($code)->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!DBHelper::fieldExists($code, 'videolinks', 'category')) {
+        Database::get($code)->query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!DBHelper::tableExists($code, 'video_category')) {
+        Database::get($code)->query("CREATE TABLE video_category (
+            id int(6) NOT NULL auto_increment, 
+            name varchar(255) NOT NULL, 
+            description text DEFAULT NULL, 
+            `order` int(6) NOT NULL,                
+            PRIMARY KEY (id)) DEFAULT CHARACTER SET=utf8");
+    }
+}
 
 /**
  * @brief upgrade to 2.10
@@ -1122,26 +1132,25 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
  * @param type $extramessage
  */
 function upgrade_course_2_10($code, $extramessage = '') {
-
     global $langUpgCourse, $webDir;
-    
+
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
     flush();
 
     Database::get($code)->query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
-    
+
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
     }
-    if (!mysql_field_exists($code, 'poll', 'description')) {
-        db_query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+    if (!DBHelper::fieldExists('poll', 'description', $code)) {
+        Database::get($code)->query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
                                    ADD end_message MEDIUMTEXT NOT NULL,
                                    ADD anonymized INT(1) NOT NULL DEFAULT 0');
-        db_query('ALTER TABLE poll_question
+        Database::get($code)->query('ALTER TABLE poll_question
                     CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
-    }    
+    }
 }
 
 /**
@@ -1155,13 +1164,13 @@ function upgrade_course_2_10($code, $extramessage = '') {
 function upgrade_course_2_9($code, $lang, $extramessage = '') {
 
     global $langUpgCourse, $global_messages;
-    
+
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
     flush();
-    
-    if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
-            Database::get($code)->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
-            Database::get($code)->query("UPDATE dropbox_file SET real_filename = filename");
+
+    if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
+        Database::get($code)->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+        Database::get($code)->query("UPDATE dropbox_file SET real_filename = filename");
     }
 }
 
@@ -1177,21 +1186,21 @@ function upgrade_course_2_9($code, $lang, $extramessage = '') {
 function upgrade_course_2_8($code, $lang, $extramessage = '') {
 
     global $langUpgCourse, $global_messages;
-    
+
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
     flush();
 
-    mysql_field_exists(null, 'exercices', 'public') or
+    DBHelper::fieldExists('exercices', 'public') or
             Database::get($code)->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
-    mysql_field_exists(null, 'video', 'visible') or
+    DBHelper::fieldExists('video', 'visible') or
             Database::get($code)->query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    mysql_field_exists(null, 'video', 'public') or
+    DBHelper::fieldExists('video', 'public') or
             Database::get($code)->query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    mysql_field_exists(null, 'videolinks', 'visible') or
+    DBHelper::fieldExists('videolinks', 'visible') or
             Database::get($code)->query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    mysql_field_exists(null, 'videolinks', 'public') or
+    DBHelper::fieldExists('videolinks', 'public') or
             Database::get($code)->query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    if (mysql_index_exists('dropbox_file', 'UN_filename')) {
+    if (DBHelper::indexExists('dropbox_file', 'UN_filename')) {
         Database::get($code)->query("ALTER TABLE dropbox_file DROP index UN_filename");
     }
     Database::get($code)->query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
@@ -1210,7 +1219,7 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
 
     global $langUpgCourse, $global_messages;
-    
+
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
     flush();
 
@@ -1272,7 +1281,7 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
 function upgrade_course_2_4($code, $lang, $extramessage = '') {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
 
-    $course_id = course_code_to_id($code);    
+    $course_id = course_code_to_id($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
     flush();
 
@@ -1290,7 +1299,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
     Database::get($code)->query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT");
 
     // move main documents to central table and if successful drop table
-    if (mysql_table_exists($code, 'document')) {
+    if (DBHelper::tableExists('document', $code)) {
         $doc_id = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.document")->max;
         if (!$doc_id) {
             $doc_id = 1;
@@ -1309,7 +1318,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
     }
 
     // move user group information to central tables and if successful drop original tables
-    if (mysql_table_exists($code, 'group_properties')) {
+    if (DBHelper::tableExists('group_properties', $code)) {
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.`group_properties`
                                 (`course_id`, `self_registration`, `private_forum`, `forum`, `documents`,
                                  `wiki`, `agenda`)
@@ -1356,7 +1365,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
     }
 
     // move links to central tables and if successful drop original tables
-    if (mysql_table_exists($code, 'liens')) {
+    if (DBHelper::tableExists('liens', $code)) {
         Database::get()->query("INSERT INTO `$mysqlMainDb`.link
                                 (`id`, `course_id`, `url`, `title`, `description`, `category`, `order`)
                                 SELECT `id`, $course_id, `url`, `titre`, `description`, `category`, `ordre` FROM liens") and
@@ -1414,11 +1423,10 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
 function upgrade_course_2_3($code, $extramessage = '') {
     global $langUpgCourse;
 
-    mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
     flush();
     // upgrade exercises
-    if (!mysql_field_exists("$code", 'exercices', 'score'))
+    if (!DBHelper::fieldExists('exercices', 'score', $code))
         echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
 }
 
@@ -1433,7 +1441,6 @@ function upgrade_course_2_3($code, $extramessage = '') {
 function upgrade_course_2_2($code, $lang, $extramessage = '') {
     global $langUpgCourse, $global_messages;
 
-    mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
     flush();
 
@@ -1442,7 +1449,7 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
 		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     Database::get($code)->query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-    if (!mysql_field_exists("$code", 'exercices', 'results'))
+    if (!DBHelper::fieldExists('exercices', 'results', $code))
         echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
     Database::get($code)->query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
     Database::get($code)->query("ALTER TABLE `reponses` CHANGE `ponderation` `ponderation` FLOAT(5,2) NULL DEFAULT NULL");
@@ -1470,7 +1477,6 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
     add_index('actionsindex', 'actions', 'module_id', 'date_time');
 }
 
-
 /**
  * upgrade to 2.1.3
  * @global type $mysqlMainDb
@@ -1482,13 +1488,11 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
 function upgrade_course_2_1_3($code, $extramessage = '') {
     global $mysqlMainDb, $langEncodeDropBoxDocuments, $langUpgCourse;
 
-    mysql_select_db($code);
-
     echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
     flush();
 
     // added field visibility in agenda
-    if (!mysql_field_exists("$code", 'agenda', 'visibility'))
+    if (!DBHelper::fieldExists('agenda', 'visibility', $code))
         echo add_field('agenda', 'visibility', "CHAR(1) NOT NULL DEFAULT 'v'");
 
     // upgrade dropbox
@@ -1535,13 +1539,11 @@ function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
 function convert_description_to_units($code, $course_id) {
     global $mysqlMainDb, $langCourseDescription;
 
-    mysql_select_db($mysqlMainDb);
-
     $desc = $addon = '';
     $qdesc = Database::get()->querySingle("SELECT description, course_addon FROM cours WHERE course_id = ?d", $course_id);
     if ($qdesc) {
         $desc = trim($qdesc->description);
-        $addon = trim($qdesc->course_addon);        
+        $addon = trim($qdesc->course_addon);
     }
 
     $q = Database::get()->queryArray("SELECT * FROM `$code`.course_description");

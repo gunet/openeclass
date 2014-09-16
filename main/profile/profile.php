@@ -123,7 +123,6 @@ if (isset($_POST['submit'])) {
         else
             $departments = $_POST['department'];
     }
-
     $email_public = valid_access($email_public);
     $phone_public = valid_access($phone_public);
     $am_public = valid_access($am_public);
@@ -194,7 +193,7 @@ if (isset($_POST['submit'])) {
                              $verified_mail_sql
                          WHERE id = ?d", 
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
-        if ($q->affectedRows > 0) {
+        if ($q->affectedRows > 0 or isset($departments)) {
             $userObj->refresh($uid, $departments);
             Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                                  'modifyprofile' => 1,

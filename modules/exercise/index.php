@@ -94,11 +94,11 @@ if ($is_editor) {
                 case 'delete': // deletes an exercise
                     $objExerciseTmp->delete();
                     $eidx->remove($exerciseId);
-                    Session::set_flashdata($langPurgeExerciseSuccess, 'success');
+                    Session::Messages($langPurgeExerciseSuccess, 'success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'purge': // purge exercise results
                     $objExerciseTmp->purge();
-                    Session::set_flashdata($langPurgeExerciseResultsSuccess, 'alert1');
+                    Session::Messages($langPurgeExerciseResultsSuccess);
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();

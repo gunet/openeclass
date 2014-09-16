@@ -87,6 +87,7 @@ define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
 
 // user modules
@@ -503,11 +504,11 @@ function check_guest($id = FALSE) {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;        
-        if ($status == USER_GUEST) {
-            return TRUE;
-        } else {
-            return false;
+        if (DBHelper::fieldExists("user", "status")) {
+            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
+            if ($status && $status->status == USER_GUEST) {
+                return TRUE;
+            }
         }
     }
     return false;
@@ -2037,7 +2038,7 @@ function invalidate_glossary_cache() {
 
 function redirect_to_home_page($path = '') {
     global $urlServer;
-
+    
     $path = preg_replace('+^/+', '', $path);
     header("Location: $urlServer$path");
     exit;

@@ -45,6 +45,11 @@ load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
+
+//Datepicker
+load_js('tools.js');
+load_js('jquery-ui-timepicker-addon.min.js');
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -84,6 +89,42 @@ $head_content .= <<<hContent
     }
         
     $(document).ready(function() {
+        
+        $('input[name=start_date]').datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (date) {
+                var date2 = $('input[name=start_date]').datepicker('getDate');
+                if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                    date2.setDate(date2.getDate() + 1);
+                    $('input[name=finish_date]').datepicker('setDate', date2);
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }
+            }
+        });
+        
+        $('input[name=finish_date]').datepicker({
+            dateFormat: 'yy-mm-dd', 
+            onClose: function () {
+                var dt1 = $('input[name=start_date]').datepicker('getDate');
+                var dt2 = $('input[name=finish_date]').datepicker('getDate');
+                if (dt2 <= dt1) {
+                    var minDate = $('input[name=finish_date]').datepicker('option', 'minDate');
+                    $('input[name=finish_date]').datepicker('setDate', minDate);
+            }
+        }
+        });
+        
+        $('#weekly_info').hide();
+        
+        $('#view_type').change(function(){
+            if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
+                $('#weekly_info').show();
+            }else{
+                $('#weekly_info').hide();
+            }
+            
+        });
+        
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
@@ -168,7 +209,94 @@ if (isset($_POST['submit'])) {
             if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
                 $deps_valid = false;
         }
-
+        
+        //===================course format and start and finish date===============
+        //check if there is a start and finish date if weekly selected
+        if($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']){
+            if(!$_POST['start_date']){
+                //if no start date do not allow weekly view and show alert message
+                $view_type = 'units';
+                $noWeeklyMessage = 1;
+            }
+            else{ //if there is start date create the weeks from that start date
+                
+                //Number of the previous week records for this course
+                $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
+                //count of previous weeks
+                if($previousWeeks){
+                    foreach ($previousWeeks as $previousWeek) {
+                        //array to hold all the previous records
+                        $previousWeeksArray[] = $previousWeek->id;
+                    }
+                    $countPreviousWeeks = count($previousWeeksArray);
+                }else{
+                    $countPreviousWeeks = 0;
+                }
+                
+                //counter for the new records
+                $cnt = 1;
+                
+                //counter for the old records
+                $cntOld = 0;
+                
+                $noWeeklyMessage = 0;
+                
+                $view_type = $_POST['view_type'];
+                $begin = new DateTime($_POST['start_date']);
+                
+                //check if there is no end date
+                if($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00'){
+                    $end = new DateTime($begin->format("Y-m-d"));;
+                    $end->add(new DateInterval('P26W'));
+                }else{
+                    $end = new DateTime($_POST['finish_date']);
+                }
+                
+                $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
+                
+                
+                foreach($daterange as $date){
+                    //===============================
+                    //new weeks
+                    //get the end week day
+                    $endWeek = new DateTime($date->format("Y-m-d"));
+                    $endWeek->modify('+6 day');
+                    
+                    //value for db
+                    $startWeekForDB = $date -> format("Y-m-d");
+                    
+                    if($endWeek->format("Y-m-d") < $end->format("Y-m-d")){
+                        $endWeekForDB = $endWeek->format("Y-m-d");
+                    }else{
+                        $endWeekForDB = $end->format("Y-m-d");
+                    }
+                    //================================
+                    //update the DB or insert new weeks
+                    if($cnt <= $countPreviousWeeks){
+                        //update the weeks in DB
+                        Database::get()->query("UPDATE course_weekly_view SET start_week = ?t, finish_week = ?t WHERE course_id = ?d AND id = ?d", $startWeekForDB, $endWeekForDB, $course_id, $previousWeeksArray[$cntOld]);
+                        //update the cntOLD records
+                        $cntOld++;
+                    }else{
+                        //create the weeks in DB
+                        Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
+                    }
+                    //update the counter
+                    $cnt++;
+                }
+                //check if left from the previous weeks and they are out of the new period
+                //if so delete them
+                if(--$cnt < $countPreviousWeeks){
+                    $week2delete = $countPreviousWeeks - $cnt;
+                    for($i=0; $i<$week2delete; $i++){
+                        Database::get()->query("DELETE FROM course_weekly_view WHERE id = ?d", $previousWeeksArray[$cntOld]);
+                        $cntOld++;
+                    }
+                }
+            }
+        }
+        //=======================================================
+        
         // Check if the teacher is allowed to create in the departments he chose
         if (!$deps_valid) {
             $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
@@ -182,9 +310,12 @@ if (isset($_POST['submit'])) {
                                 course_license = ?d,
                                 prof_names = ?s,
                                 lang = ?s,
-                                password = ?s
+                                password = ?s,
+                                view_type = ?s,
+                                start_date = ?t,
+                                finish_date = ?t
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], 
-                                            $course_license, $_POST['titulary'], $session->language, $password, $course_id);            
+                                            $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);            
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
@@ -193,8 +324,13 @@ if (isset($_POST['submit'])) {
                 'prof_names' => $_POST['titulary'],
                 'lang' => $language));
 
-            $tool_content .= "<p class='success'>$langModifDone</p>
-                            <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
+            $tool_content .= "<p class='success'>$langModifDone</p>";
+            
+            if($noWeeklyMessage){
+                $tool_content .= "<p class='alert1'>Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος</p>";
+            }
+                                    
+            $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
                             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
         
@@ -230,7 +366,7 @@ if (isset($_POST['submit'])) {
 	</div>";
          
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id
+                	       course_license, password, id, view_type, start_date, finish_date
                       FROM course WHERE code = ?s", $course_code);    
     $title = $c->title;
     $visible = $c->visible;
@@ -284,7 +420,48 @@ if (isset($_POST['submit'])) {
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-         </fieldset>";
+         </fieldset>
+                    
+         <fieldset>
+	    <legend>$langMore</legend>
+	    <table class='tbl'>
+                <tr>
+                    <th width='170'>$langDisplay:</th>
+                    <td width='1'>
+                        <select name='view_type' id='view_type'>
+                            <option value='units'";
+                            if($c->view_type == "units"){
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .=">$langCourseUnits</option>
+                            
+                            <option value='weekly'";
+                            if($c->view_type == "weekly"){
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .=">$langWeekly</option>
+                        </select>
+                        <div class='info' id='weekly_info'>Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width='170'>$langStartDate:</th>
+                    <td width='1'><input class='dateInForm' type='text' name='start_date' value='";
+                if($c->start_date != "0000-00-00"){
+                    $tool_content .= $c->start_date;
+                }
+                $tool_content .= "'></td>
+                </tr>
+                <tr>
+                    <th width='170'>$langFinish:</th>
+                    <td width='1'><input class='dateInForm' type='text' name='finish_date' value='";
+                    if($c->finish_date != "0000-00-00"){
+                    $tool_content .= $c->finish_date;
+                }
+                $tool_content .= "'></td>
+                </tr>
+            </table>
+        </fieldset>";
         if ($isOpenCourseCertified) {
             $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
         }

@@ -61,7 +61,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
     })
-    </script>";         
+    </script>";
 
 // For statistics: record login
 Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
@@ -84,7 +84,7 @@ $course_license = $result->course_license;
 $main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
-    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)    
+    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
 $main_extra .= "<div class = 'course_description' style='width: 520px;'>";
@@ -103,9 +103,9 @@ foreach ($res as $row) {
             q($row->title) .
             "</a></div>";
 }
-$main_extra .= "</div>";    
+$main_extra .= "</div>";
 $tool_content .= "</div>";
-    
+
 if ($is_editor) {
     $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
@@ -208,7 +208,7 @@ if ($is_editor) {
 } else {
     $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
-if ($is_editor) {    
+if ($is_editor) {
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -392,7 +392,7 @@ if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $cour
 // display `contact teacher via email` link if teacher actually receives email from his course
 $receive_mail = FALSE;
 $rec_mail = array();
-$q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d 
+$q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d
                                 AND status = ?d", $course_id, USER_TEACHER);
 foreach ($q as $p) {
     $prof_uid = $p->user_id;
@@ -446,7 +446,7 @@ $tool_content .= "
 
 
         // Button: star - bookmark the page
-        $tool_content .= "        
+        $tool_content .= "
                     <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
                         <button class='button hover-blue' title='$langAddAsBookmark'>
                             <i class='fa fa-star'></i>
@@ -466,15 +466,15 @@ $tool_content .= "
         }
 
         // Button: toggle student view
-        $tool_content .= "  
+        $tool_content .= "
                     <button class='button hover-blue' title='$langAddAsBookmark'>
                             $toggle_student_view_close
                             $toggle_student_view
-                    </button>";     
-           
+                    </button>";
+
 $tool_content .= "
     </div>
-    
+
 </div>
 
 
@@ -519,7 +519,7 @@ $tool_content .= "
 </div>
 
 
-<div class='col-md-4'> 
+<div class='col-md-4'>
         <h5 class='content-title'>Ημερολογιο</h5>
         <div class='panel padding'>
                 <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
@@ -529,7 +529,7 @@ $tool_content .= "
 <div class='col-md-4'>
         <h5 class='content-title'>Ανακοινωσεις</h5>
         <ul class='tablelist panel'>
-                
+
             <li class='list-item'>
                 <span class='item-title'>Ανακοίνωση 1</span>
                 <div class='item-right-cols'>
@@ -580,10 +580,6 @@ $tool_content .= "
 </div>
 
 ";
-
-
-
-
 
 
 

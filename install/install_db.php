@@ -172,7 +172,40 @@ $db->query("CREATE TABLE `course` (
   `password` VARCHAR(50) NOT NULL DEFAULT '',
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
+  `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
+  `start_date` DATE NOT NULL default '0000-00-00',
+  `finish_date` DATE NOT NULL default '0000-00-00',
   PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view`
+#
+
+$db->query("CREATE TABLE `course_weekly_view` (
+  `id` INT(11) NOT NULL auto_increment,
+  `course_id` INT(11) NOT NULL,
+  `title` VARCHAR(255) NOT NULL DEFAULT '',
+  `comments` MEDIUMTEXT,
+  `start_week` DATE NOT NULL default '0000-00-00',
+  `finish_week` DATE NOT NULL default '0000-00-00',
+  `visible` TINYINT(4) NOT NULL DEFAULT 1,
+  PRIMARY KEY  (`id`)) $charset_spec");
+
+#
+# table `course_weekly_view_activities`
+#
+
+$db->query("CREATE TABLE `course_weekly_view_activities` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `course_weekly_view_id` INT(11) NOT NULL ,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `comments` MEDIUMTEXT,
+    `res_id` INT(11) NOT NULL,
+    `type` VARCHAR(255) NOT NULL DEFAULT '',
+    `visible` TINYINT(4),
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+
 
 
 #
@@ -560,6 +593,7 @@ $db->query("CREATE TABLE IF NOT EXISTS video (
                 `path` VARCHAR(255) NOT NULL,
                 `url` VARCHAR(200) NOT NULL,
                 `title` VARCHAR(200) NOT NULL,
+                `category` INT(6) DEFAULT NULL,
                 `description` TEXT NOT NULL,
                 `creator` VARCHAR(200) NOT NULL,
                 `publisher` VARCHAR(200) NOT NULL,
@@ -573,11 +607,19 @@ $db->query("CREATE TABLE IF NOT EXISTS videolink (
                 `url` VARCHAR(200) NOT NULL DEFAULT '',
                 `title` VARCHAR(200) NOT NULL DEFAULT '',
                 `description` TEXT NOT NULL,
+                `category` INT(6) DEFAULT NULL,
                 `creator` VARCHAR(200) NOT NULL DEFAULT '',
                 `publisher` VARCHAR(200) NOT NULL DEFAULT '',
                 `date` DATETIME NOT NULL,
                 `visible` TINYINT(4) NOT NULL DEFAULT 1,
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+
+$db->query("CREATE TABLE video_category (
+                id INT(11) NOT NULL auto_increment, 
+                name VARCHAR(255) NOT NULL, 
+                description TEXT DEFAULT NULL, 
+                `order` INT(6) NOT NULL,            
+                PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -767,11 +809,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` CHAR(1) NOT NULL DEFAULT 1,
+                `active` CHAR(1) NOT NULL DEFAULT '1',
                 `secret_directory` VARCHAR(30) NOT NULL,
-                `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
+                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
                 `max_grade` FLOAT DEFAULT NULL,
-                `assign_to_specific` CHAR(1) NOT NULL,
+                `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
                 `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
 
@@ -1495,6 +1537,39 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL UNIQUE,
     PRIMARY KEY (`id`)) $charset_spec");
+
+
+$db->query("CREATE TABLE `personal_calendar` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(200) NOT NULL,
+        `content` text NOT NULL,
+        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `duration` time NOT NULL,
+        `recursion_period` varchar(30) DEFAULT NULL,
+        `recursion_end` date DEFAULT NULL,
+        `source_event_id` int(11) DEFAULT NULL,
+        `reference_obj_module` mediumint(11) DEFAULT NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
+        `reference_obj_id` int(11) DEFAULT NULL,
+        `reference_obj_course` int(11) DEFAULT NULL,
+        PRIMARY KEY (`id`))");
+ 
+$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+        `user_id` int(11) NOT NULL,
+        `view_type` enum('month','week') DEFAULT 'month',
+        `personal_color` varchar(30) DEFAULT NULL,
+        `course_color` varchar(30) DEFAULT NULL,
+        `deadline_color` varchar(30) DEFAULT NULL,
+        `show_personal` bit(1) DEFAULT b'1',
+        `show_course` bit(1) DEFAULT b'1',
+        `show_deadline` bit(1) DEFAULT b'1',
+        PRIMARY KEY (`user_id`))");
+
+//create triggers
+$db->query("CREATE TRIGGER personal_calendar_settings_init "
+        . "AFTER INSERT ON `user` FOR EACH ROW "
+        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
 
 // create indexes
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");

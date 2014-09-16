@@ -42,5 +42,5 @@ if ($course_id !== false) {
         exit;
     }
 }
-Session::set_flashdata($langAccountResetInvalidLink, 'caution');
+Session::Messages($langAccountResetInvalidLink, 'caution');
 header('Location: ' . $urlServer);

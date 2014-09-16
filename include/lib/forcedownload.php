@@ -350,7 +350,7 @@ function not_found($path) {
 function error($message) {
     global $urlServer;
     
-    Session::set_flashdata($message, 'caution');
+    Session::Messages($message, 'caution');
     session_write_close();
 
     header("Location: $urlServer");

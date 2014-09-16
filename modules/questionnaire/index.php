@@ -55,11 +55,11 @@ if ($is_editor) {
             switch ($_GET['visibility']) {
                 case 'activate':
                     Database::get()->query("UPDATE poll SET active = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::set_flashdata($langPollActivated, 'success');
+                    Session::Messages($langPollActivated, 'success');
                     break;
                 case 'deactivate':
                     Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::set_flashdata($langPollDeactivated, 'success');
+                    Session::Messages($langPollDeactivated, 'success');
                     break;
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -72,12 +72,12 @@ if ($is_editor) {
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
             Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
-            Session::set_flashdata($langPollDeleted, 'success');
+            Session::Messages($langPollDeleted, 'success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);       
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
             Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
-            Session::set_flashdata($langPollResultsDeleted, 'success');
+            Session::Messages($langPollResultsDeleted, 'success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         //clone poll
         } elseif (isset($_GET['clone']) and $_GET['clone'] == 'yes') {

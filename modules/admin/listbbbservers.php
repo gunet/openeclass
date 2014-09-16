@@ -126,11 +126,11 @@ if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
  * Get data to display
  */
 
-$rResult = Database::get()->queryArray("SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
+$rResult = Database::get()->queryArray("SELECT SQL_CALC_FOUND_ROWS `" . implode("`, `", $aColumns) . "`
     FROM bbb_servers
     $sWhere
     $sOrder
-    $sLimit");
+    $sLimit", $terms);
 
 /* Data set length after filtering */
 $aResultFilterTotal = Database::get()->querySingle("SELECT FOUND_ROWS() AS cnt");

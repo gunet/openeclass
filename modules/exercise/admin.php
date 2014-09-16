@@ -31,8 +31,10 @@ require_once 'include/jscalendar/calendar.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+load_js('jquery');
+load_js('jquery-ui');
 $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
+$head_content .= $jscalendar->get_load_files_code();
 ModalBoxHelper::loadModalBox();
 
 $nameTools = $langExercices;
@@ -44,7 +46,7 @@ $picturePath = "courses/$course_code/image";
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, $langFreeText);
 
 if (!$is_editor) {
-    Session::set_flashdata($langNotAllowed, 'alert1');
+    Session::Messages($langNotAllowed);
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
@@ -102,7 +104,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
         }
         // if question not found
         if (!$objQuestion->read($question_id)) {
-            Session::set_flashdata($langQuestionNotFound, 'alert1');
+            Session::Messages($langQuestionNotFound);
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         }
         

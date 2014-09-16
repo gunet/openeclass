@@ -780,6 +780,7 @@ $langDeleteAllMsgs = "Delete all messages";
 $langConfirmDeleteAllMsgs = "This action will delete all messages in this mailbox!";
 $langMessageDeleteAllSuccess = "Messages deleted succesfully!";
 $langMsgRe = "Re:";
+$langSearchSurname = "Search recipients by surname";
 $langExercicesView = "Exercise View";
 $langExercicesResult = "Exercise Results";
 $langQuestion = "Question";
@@ -3504,7 +3505,7 @@ $langBBBImportRecordingsOK = "Recording successfully imported to multimedia!";
 $langEnableIndexing = "Enable search indexing";
 $langEnableSearch = "Enable search engine";
 $langConfirmEnableIndexTitle = "Confirmation for starting indexing";
-$langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
+$langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/>Furthermore, indexing <u>is not</u> available if platform is installed on <u>NFS filesystem</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
 $langIndexingNeeded = "If the indexing window is not yet open, i.e. blocked by the browser, allow it to open or press";
 $langIndexingAlert1 = "Please wait while indexing all data, this could take a while.";
 $langIndexingAlert2 = "Do not close this window or else the indexing process will be terminated.";
@@ -3513,3 +3514,8 @@ $langIndexingDone = "The indexing was completed successfully, you can now close 
 $langUpgIndexingNotice = "Because of the number of courses, the search and indexing engines have been deactivated. Please look for their corresponding setting under Platform Settings and follow the instructions for indexing.";
 $langNoRecipients = "No recipients specified";
 $langOnlineUsers = 'Online Users';
+/* * ***********************************************************
+ * Validation
+ * ************************************************************ */
+$langTheField = 'The field';
+$langFormErrors = 'Form contains errors. Please correct and resubmit form.';
