@@ -237,7 +237,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (isset($_SESSION['uid'])) {
             $t->set_var('LANG_USER', $langUserHeader);
             $t->set_var('USER_NAME', q($_SESSION['givenname']));
-            $t->set_var('USER_SURNAME', q($_SESSION['surname']) . ", ");
+            $t->set_var('USER_SURNAME', q($_SESSION['surname']));
+            $t->set_var('USERNAME', q($_SESSION['username']));
             $t->set_var('LANG_LOGOUT', $langLogout);
             $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
 	    $t->set_var('LOGGED_IN', 'true');

@@ -30,3 +30,13 @@ $theme_settings = array(
     ),
 );
 
+function template_callback($template, $menuTypeID)
+{
+    global $uid;
+
+    if ($uid) {
+        $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+    } else {
+        $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    }
+}
