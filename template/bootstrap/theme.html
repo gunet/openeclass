@@ -90,10 +90,23 @@
 	        <div id="main-content" class="col-xs-11 col-sm-11 col-md-10">
 		        <nav id="header" class="row navbar navbar-default navbar-collapse" role="navigation">
 		        	<ul class="nav navbar-nav navbar-right">
-		              <li><a href="#"><i class="fa fa-folder"></i></a></li>
+<!-- BEGIN LoggedInBlock -->
+		              <li><a href="../main/portfolio.php"><i class="fa fa-book"></i></a></li>
+
 		              <li><a href="#"><i class="fa fa-search"></i></a></li>
-		              <li class="dropdown"><a href="#"><i class="fa fa-user"></i>panchara</a></li>
-		              <li><a class="toggle-sidebar"><i class="fa fa-bars"></i></a></li>
+
+		              <li class="dropdown"><a href="#"><i class="fa fa-user"></i>{%USER_NAME%} {%USER_SURNAME%}</a></li>
+
+		              <li><a class="toggle-sidebar"><i class="fa fa-columns"></i></a></li>
+<!-- END LoggedInBlock -->
+<!-- BEGIN LoggedOutBlock -->
+                              <li><a href="#"><i class="fa fa-search"></i></a></li>
+
+                              <li><a href="#"><i class="fa fa-globe"></i></a></li>
+
+                              <li><a href="../main/login_form.php"><i class="fa fa-sign-in"></i></a></li>
+<!-- END LoggedOutBlock -->
+
 		            </ul>
 		        </nav>
 	        	<div class="">
