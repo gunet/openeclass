@@ -28,6 +28,7 @@ if(isset($_GET['course'])) {//course messages
 $guest_allowed = FALSE;
 
 include '../../include/baseTheme.php';
+include 'include/lib/fileDisplayLib.inc.php';
 require_once("class.msg.php");
 
 if (!isset($course_id)) {
@@ -65,7 +66,8 @@ if (isset($_GET['mid'])) {
         $out .= "<tr><td>$langMessage:</td><td>".standard_text_escape($msg->body)."</td></tr>";
 
         if ($msg->filename != '') {
-            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename</a></td></tr>";
+            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+            <img class='outtabs' src='$themeimg/save.png' /></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</td></tr>";
         }
         
         $out .= "</table><br/>";
@@ -102,12 +104,12 @@ if (isset($_GET['mid'])) {
     $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
     $out .= "<table id=\"outbox_table\">
                <thead>
-                 <tr>";
+                 <tr>
+                    <th>$langSubject</th>";
     if ($course_id == 0) {
         $out .= "<th>$langCourse</th>";
     }
-    $out .= "      <th>$langSubject</th>
-                   <th>$langRecipients</th>
+    $out .= "      <th>$langRecipients</th>
                    <th>$langDate</th>
                    <th>$langDelete</th>
                  </tr>
@@ -130,6 +132,7 @@ if (isset($_GET['mid'])) {
                      ],
                     'sPaginationType': 'full_numbers',
                     'bSort': false,
+                    'bAutoWidth' : false,
                     'oLanguage': {
                             'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                             'sZeroRecords':  '".$langNoResult."',

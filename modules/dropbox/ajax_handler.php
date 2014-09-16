@@ -23,6 +23,7 @@ $require_login = TRUE;
 $guest_allowed = FALSE;
 
 include '../../include/baseTheme.php';
+include 'include/lib/fileDisplayLib.inc.php';
 
 require_once("class.msg.php");
 require_once("class.mailbox.php");
@@ -102,22 +103,32 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $urlstr = "&amp;course=".course_id_to_code($course_id);
         }
         
+        if (($msg->filename != '') and ($msg->filesize != 0)) {
+            $ahref = "dropbox_download.php?course=".course_id_to_code($course_id)."&amp;id=".$msg->id;
+            $filename = "&nbsp;&nbsp;<a class='outtabs' href='$ahref' target='_blank'><img class='outtabs' src='$themeimg/save.png' />
+            </a><span class='smaller'>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</span><br />";
+        } else {
+            $filename = '';
+        }
+        
+        $i = 0;
+        
+        if ($mbox_type == 'inbox') {
+            $td[$i++] = "<img src='$themeimg/message.png' title='".q($msg->subject)."' /> $bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename.$bold_end;
+        } else {
+            $td[$i++] = "<img src='$themeimg/message.png' title='".q($msg->subject)."' /> <a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
+        }
+        
         if ($course_id == 0) {
             if ($msg->course_id != 0) {
-                $td[0] = "$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end";
+                $td[$i++] = "$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end";
             } else {
-                $td[0] = "";
+                $td[$i++] = "";
             }
-        }
-    
-        if ($mbox_type == 'inbox') {
-            $td[1] = "$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>$bold_end";
-        } else {
-            $td[1] = "<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>";
         }
         
         if ($mbox_type == 'inbox') {
-            $td[2] = $bold_start.display_user($msg->author_id, false, false, "outtabs").$bold_end;
+            $td[$i++] = $bold_start.display_user($msg->author_id, false, false, "outtabs").$bold_end;
         } else {
             $recipients = '';
             foreach ($msg->recipients as $r) {
@@ -125,10 +136,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     $recipients .= display_user($r, false, false, "outtabs").'<br/>';
                 }
             }
-            $td[2] = $recipients;
+            $td[$i++] = $recipients;
         }
-        $td[3] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
-        $td[4] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/>";
+        $td[$i++] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
+        $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/>";
         
         if ($course_id == 0) {
             $data['aaData'][] = array(
@@ -142,10 +153,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         } else {
             $data['aaData'][] = array(
                     'DT_RowId' => $msg->id,
-                    '0' => $td[1],
-                    '1' => $td[2],
-                    '2' => $td[3],
-                    '3' => $td[4]
+                    '0' => $td[0],
+                    '1' => $td[1],
+                    '2' => $td[2],
+                    '3' => $td[3]
             );
         }
     }

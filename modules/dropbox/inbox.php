@@ -28,6 +28,7 @@ if(isset($_GET['course'])) {//course messages
 $guest_allowed = FALSE;
 
 include '../../include/baseTheme.php';
+include 'include/lib/fileDisplayLib.inc.php';
 require_once("class.msg.php");
 
 if (!isset($course_id)) {
@@ -65,8 +66,9 @@ if (isset($_GET['mid'])) {
         $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
         $out .= "<tr><td>$langMessage:</td><td>".standard_text_escape($msg->body)."</td></tr>";
 
-        if ($msg->filename != '') {
-            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename</a></td></tr>";
+        if ($msg->filename != '' && $msg->filesize != 0) {
+            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+            <img class='outtabs' src='$themeimg/save.png' /></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</td></tr>";
         }
         
         $out .= "</table><br/>";
@@ -173,12 +175,12 @@ if (isset($_GET['mid'])) {
     
     $out .= "<table id=\"inbox_table\">
                   <thead>
-                    <tr>";
+                    <tr>
+                      <th>$langSubject</th>";
     if ($course_id == 0) {
         $out .= "    <th>$langCourse</th>";
     }
-    $out .= "         <th>$langSubject</th>
-                      <th>$langSender</th>
+    $out .= "         <th>$langSender</th>
                       <th>$langDate</th>
                       <th>$langDelete</th>
                     </tr>
