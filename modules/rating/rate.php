@@ -43,6 +43,7 @@ if (setting_get($setting_id, $course_id) == 1) {
         $response = array();
         
         $rating = new Rating($widget, $rtype, $rid);
+        $had_rated = $rating->userHasRated($uid);
         $action = $rating->castRating($value, $uid);
         
         if ($widget == 'up_down') {
@@ -53,12 +54,39 @@ if (setting_get($setting_id, $course_id) == 1) {
             $response[1] = $down_value;//negative rating
             $response[2] = $action;//new rating or deletion of old one
             $response[3] = $langUserHasRated;//necessary string
+            
+            if ($had_rated === false && $value == 1) {
+                $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
+                $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
+            } elseif ($had_rated === false && $value == -1) {
+                $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+                $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
+            } elseif ($had_rated !== false) {
+                if ($action == 'del') {
+                    $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+                    $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
+                } else {
+                    if ($value == 1) {
+                        $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
+                        $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
+                    } elseif ($value == -1) {
+                        $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+                        $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
+                    }
+                }
+            }
+            
         } elseif ($widget == 'thumbs_up') {
             $up_value = $rating->getThumbsUpRating();
             
             $response[0] = $up_value;//positive rating
             $response[1] = $action;//new rating or deletion of old one
             $response[2] = $langUserHasRated;//necessary string
+            if ($had_rated === false) {
+                $response[3] = $urlServer."modules/rating/thumbs_up_active.png";
+            } else {
+                $response[3] = $urlServer."modules/rating/thumbs_up_inactive.png";
+            }
         } elseif ($widget == 'fivestar') {
             $response[0] = "";
             
