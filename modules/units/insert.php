@@ -267,20 +267,32 @@ function insert_video($id) {
     global $course_code, $course_id, $cidx, $urdx;
 
     $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['video'] as $video_id) {
-        $order++;
-        list($table, $res_id) = explode(':', $video_id);        
-        $table = ($table == 'video') ? 'video' : 'videolink';
-        $row = Database::get()->querySingle("SELECT * FROM $table
-			WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
-        $q = Database::get()->query("INSERT INTO unit_resources 
-                                SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                            $id, $row->title, $row->description, $res_id);
-        $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+    if (isset($_POST['videocatlink']) and count($_POST['videocatlink'] > 0)) {
+        foreach ($_POST['videocatlink'] as $videocatlink_id) {
+            $order++;
+            $videolinkcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videocatlink_id, $course_id);
+            Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='videolinkcategory', title = ?s,
+                        comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                    $id, $videolinkcat->name, $videolinkcat->description, $videolinkcat->id);
+        }
     }
-    $cidx->store($course_id, true);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
+    if (isset($_POST['video']) and count($_POST['video'] > 0)) {    
+        foreach ($_POST['video'] as $video_id) {
+            $order++;
+            list($table, $res_id) = explode(':', $video_id);        
+            $table = ($table == 'video') ? 'video' : 'videolink';
+            $row = Database::get()->querySingle("SELECT * FROM $table
+                            WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
+            $q = Database::get()->query("INSERT INTO unit_resources 
+                                    SET unit_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                                $id, $row->title, $row->description, $res_id);
+            $uresId = $q->lastInsertID;
+            $urdx->store($uresId, false);
+
+        }
+        $cidx->store($course_id, true);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
