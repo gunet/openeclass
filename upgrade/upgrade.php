@@ -1066,6 +1066,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `path` VARCHAR(255),
                             `url` VARCHAR(200),
                             `title` VARCHAR(200),
+                            `category` INT(6) DEFAULT NULL,
                             `description` TEXT,
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
@@ -1079,6 +1080,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `url` VARCHAR(200) NOT NULL DEFAULT '',
                             `title` VARCHAR(200) NOT NULL DEFAULT '',
+                            `category` INT(6) DEFAULT NULL,
                             `description` TEXT NOT NULL,
                             `creator` VARCHAR(200) NOT NULL DEFAULT '',
                             `publisher` VARCHAR(200) NOT NULL DEFAULT '',
@@ -1086,7 +1088,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `visible` TINYINT(4) NOT NULL DEFAULT 1,
                             `public` TINYINT(4) NOT NULL DEFAULT 1)
                             $charset_spec");
-
+                        
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS video_category (
+                            id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+                            name VARCHAR(255) NOT NULL, 
+                            description TEXT DEFAULT NULL, 
+                            `order` INT(6) NOT NULL) $charset_spec");
+                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,

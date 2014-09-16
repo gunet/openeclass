@@ -3265,6 +3265,7 @@ $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά 
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
 $langVideoDirectory = "Πολυμεσικά αρχεία";
+$langCatVideoDirectory = "Κατηγοριοποιημένα πολυμεσικά αρχεία";
 
 /* * ***********************************************************
  * wiki.php

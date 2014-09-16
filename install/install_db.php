@@ -593,6 +593,7 @@ $db->query("CREATE TABLE IF NOT EXISTS video (
                 `path` VARCHAR(255) NOT NULL,
                 `url` VARCHAR(200) NOT NULL,
                 `title` VARCHAR(200) NOT NULL,
+                `category` INT(6) DEFAULT NULL,
                 `description` TEXT NOT NULL,
                 `creator` VARCHAR(200) NOT NULL,
                 `publisher` VARCHAR(200) NOT NULL,
@@ -606,11 +607,19 @@ $db->query("CREATE TABLE IF NOT EXISTS videolink (
                 `url` VARCHAR(200) NOT NULL DEFAULT '',
                 `title` VARCHAR(200) NOT NULL DEFAULT '',
                 `description` TEXT NOT NULL,
+                `category` INT(6) DEFAULT NULL,
                 `creator` VARCHAR(200) NOT NULL DEFAULT '',
                 `publisher` VARCHAR(200) NOT NULL DEFAULT '',
                 `date` DATETIME NOT NULL,
                 `visible` TINYINT(4) NOT NULL DEFAULT 1,
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+
+$db->query("CREATE TABLE video_category (
+                id INT(11) NOT NULL auto_increment, 
+                name VARCHAR(255) NOT NULL, 
+                description TEXT DEFAULT NULL, 
+                `order` INT(6) NOT NULL,            
+                PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

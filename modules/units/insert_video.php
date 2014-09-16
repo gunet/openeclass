@@ -23,55 +23,78 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 
 function list_videos() {
-    global $id, $tool_content, $urlServer,
-    $langTitle, $langDescr, $langDate, $langChoice,
-    $langAddModulesButton, $langNoVideo, $course_code,
-    $themeimg, $course_id, $mysqlMainDb;
-
-    $table_started = false;
+    global $id, $tool_content, $themeimg, $course_id,
+    $langTitle, $langDescr, $langDate, $langChoice, $langCatVideoDirectory,
+    $langAddModulesButton, $langNoVideo, $course_code;
+    
+            
     $count = 0;
-    foreach (array('video', 'videolink') as $table) {
-        $result = Database::get()->queryArray("SELECT * FROM $table WHERE course_id = $course_id");
-        $count += count($result);
-        $numLine = 0;
-        foreach ($result as $row) {
-            if (!$table_started) {
-                $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
-                $tool_content .= "<table class='tbl_alt' width='99%'>";
-                $tool_content .= "<tr>" .
-                        "<th><div align='left'>&nbsp;$langTitle</div></th>" .
-                        "<th><div align='left'>$langDescr</div></th>" .
-                        "<th width='100'>$langDate</th>" .
-                        "<th width='80'>$langChoice</th>" .
-                        "</tr>";
-                $table_started = true;
-            }
-
-            if ($table == 'video') {
-                $vObj = MediaResourceFactory::initFromVideo($row);
-                $videolink = MultimediaHelper::chooseMediaAhref($vObj);
-            } else {
-                $vObj = MediaResourceFactory::initFromVideoLink($row);
-                $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
-            }
-
-            if ($numLine % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-
-            $tool_content .= "<td>&nbsp;<img src='$themeimg/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>" .
-                    "<td>" . htmlspecialchars($row->description) . "</td>" .
-                    "<td class='center'>" . nice_format($row->date, true, true) . "</td>" .
-                    "<td class='center'><input type='checkbox' name='video[]' value='$table:$row->id /></td>" .
-                    "</tr>";
-            $numLine++;
-        }
-    }
+    $video_found = FALSE;
+    $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
+    $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
+    $count = $cnt1 + $cnt2;
+    $numLine = 0;
     if ($count > 0) {
-        $tool_content .= "<tr><th colspan='4'><div align='right'><input type='submit' name='submit_video' value='$langAddModulesButton' />&nbsp;&nbsp;</div></th></tr></table></form>";
-    } else {
-        $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+        $video_found = TRUE;
+        $tool_content .= " <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
+                    $tool_content .= "<table class='tbl_alt' width='99%'>";
+                    $tool_content .= "<tr>" .
+                                     "<th width='200'><div align='left'>&nbsp;$langTitle</div></th>" .
+                                     "<th><div align='left'>$langDescr</div></th>" .
+                                     "<th width='100'>$langDate</th>" .
+                                     "<th width='80'>$langChoice</th>" .
+                                     "</tr>";
+        foreach (array('video', 'videolink') as $table) {
+            $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d", $course_id);
+            foreach ($result as $row) {
+                $row->course_id = $course_id;
+                if ($table == 'video') {
+                    $vObj = MediaResourceFactory::initFromVideo($row);
+                    $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                } else {
+                    $vObj = MediaResourceFactory::initFromVideoLink($row);
+                    $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+                }
+                if ($numLine%2 == 0) {
+                    $tool_content .= "<tr class='even'>";
+                } else {
+                    $tool_content .= "<tr class='odd'>";
+                }
+                $tool_content .= "<td>&nbsp;<img src='$themeimg/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>".
+                                 "<td>" . q($row->description) . "</td>".
+                                 "<td class='center'>" . nice_format($row->date, true, true) . "</td>" .
+                                 "<td class='center'><input type='checkbox' name='video[]' value='$table:$row->id' /></td>" .
+                                 "</tr>";
+                $numLine++;
+            }
+        }
+        $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
+        if ($sql) {
+            $tool_content .= "<tr class='odd'><td colspan='3' class='bold'>&nbsp;$langCatVideoDirectory</td></tr>";
+            foreach ($sql as $videocat) {
+                $tool_content .= "<tr class='even'>";
+                $tool_content .= "<td><img src='$themeimg/folder_open.png' />&nbsp;&nbsp;" .
+                                 q($videocat->name) . "</td>";
+                $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
+                $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
+                $tool_content .= "</tr>";
+                foreach (array('video', 'videolink') as $table) {
+                    $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d", $videocat->id);
+                    foreach ($sql2 as $linkvideocat) {
+                            $tool_content .= "<tr class='even'>";
+                            $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                                    q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
+                            $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
+                            $tool_content .= "<td class='center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                            $tool_content .= "<td align='center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
+                            $tool_content .= "</tr>";	
+                    }
+                }
+            }
+        }
+        $tool_content .= "<tr><th colspan='4'><div align='right'><input type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></th></tr></table></form>";
     }
+    if (!$video_found) {
+        $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+    }                     
 }

@@ -292,6 +292,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_8($code, $lang);
     upgrade_course_2_9($code, $lang);
     upgrade_course_2_10($code);
+    upgrade_course_2_11($code);
     upgrade_course_3_0($code);
 }
 
@@ -390,8 +391,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video
-                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
+                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 0,
                                `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
         if ($ok) {
             Database::get($code)->query("DROP TABLE video");
@@ -419,8 +420,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.videolink
-                        (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
+                        (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, 0, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
 
         if ($ok) {
@@ -1085,6 +1086,39 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
+    }
+}
+
+/**
+ * @brief upgrare to 2.11
+ * @global type $langUpgCourse
+ * @param type $code
+ * @param type $lang
+ * @param type $extramessage
+ */
+function upgrade_course_2_11($code, $extramessage = '') {
+    
+    global $langUpgCourse;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
+    flush();
+    
+    if (!DBHelper::fieldExists($code, 'video', 'category')) {
+        Database::get($code)->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!DBHelper::fieldExists($code, 'videolinks', 'category')) {
+        Database::get($code)->query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
+    }
+    
+    if (!DBHelper::tableExists($code, 'video_category')) {
+        Database::get($code)->query("CREATE TABLE video_category (
+            id int(6) NOT NULL auto_increment, 
+            name varchar(255) NOT NULL, 
+            description text DEFAULT NULL, 
+            `order` int(6) NOT NULL,                
+            PRIMARY KEY (id)) DEFAULT CHARACTER SET=utf8");
     }
 }
 
