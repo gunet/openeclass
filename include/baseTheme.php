@@ -622,6 +622,11 @@ function module_path($path) {
         return 'main/profile';
     } elseif (strpos($path, '/main/') !== false) {
         return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
+    } elseif (preg_match('+/auth/(opencourses|listfaculte)\.php+', $path)) {
+        return '/auth/opencourses.php';
+    } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
+        return '/auth/registration.php';
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
+
