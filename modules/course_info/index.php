@@ -324,7 +324,7 @@ if (isset($_POST['submit'])) {
                                                         'public_code' => $_POST['fcode'],
                                                         'visible' => $_POST['formvisible'],
                                                         'prof_names' => $_POST['titulary'],
-                                                        'lang' => $language));
+                                                        'lang' => $session->language));
 
             $tool_content .= "<p class='success'>$langModifDone</p>";
             

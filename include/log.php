@@ -169,13 +169,13 @@ class Log {
                 if ($course_id == -1) { // all courses
                     $tool_content .= "<td>" . course_id_to_title($r->course_id) . "</td>";
                 }
-                if ($module_id == -1) { // all modules                                                
+                if ($module_id == -1) { // all modules                    
                     $mid = $r->module_id;
                     if ($mid == MODULE_ID_USERS) {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
-                    } else {
+                    } else {                        
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
@@ -236,7 +236,7 @@ class Log {
     private function course_action_details($module_id, $details) {
 
         global $langUnknownModule;
-
+        
         switch ($module_id) {
             case MODULE_ID_AGENDA: $content = $this->agenda_action_details($details);
                 break;
@@ -264,7 +264,7 @@ class Log {
                 break;
             case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                 break;
-            case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
+            case MODULE_ID_USERS: $content = $this->course_user_action_details($details);            
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
@@ -741,7 +741,7 @@ class Log {
         $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
 
         $details = unserialize($details);
-
+        
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
                 break;
@@ -749,7 +749,7 @@ class Log {
                 break;
             case '+1': $content = "$langGiveRightAdmin $langToUser";
                 break;
-            case '+2': $content = "$langGiveRightΕditor $langToUser";
+            case '+2': $content = "$langGiveRightEditor $langToUser";
                 break;
             case '+3': $content = "$langGiveRightTutor $langToUser";
                 break;
