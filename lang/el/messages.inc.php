@@ -818,7 +818,7 @@ $langForbidden = "Μη επιτρεπτή ενέργεια";
 $langConfTip = "Επιλέξτε τον τύπο πρόσβασης του μαθήματος από τους χρήστες.";
 $langOptPassword = "Προαιρετικό συνθηματικό εγγραφής: ";
 $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο του μαθήματος";
-
+$langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";
 $langTheCourse = "Tο μάθημα";

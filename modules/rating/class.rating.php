@@ -326,19 +326,19 @@ Class Rating {
     /**
      * check if a user has rated the resource
      * @param int the user id
-     * @return boolean
+     * @return false if user hasn't rated, rating value otherwise
      */
     public function userHasRated($user_id) {
         if ($user_id == 0) {//anonymous users
-            $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+            $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
             $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
         } else {
-            $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
+            $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
             $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id);
         }
         
-        if ($res->c > 0) {
-            return true;
+        if ($res) {
+            return $res->value;
         } else {
             return false;
         }
@@ -378,13 +378,30 @@ Class Rating {
                 $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
             }
             
-            $out .= "<img src=\"".$urlServer."modules/rating/up.png\" ".$onclick_up."/>&nbsp;";
+            $has_rated = $this->userHasRated($uid);
+            if ($has_rated !== false) {
+                $value = $has_rated;
+                $has_rated = true;
+                if ($value == 1) {
+                    $img_up = 'thumbs_up_active.png';
+                    $img_down = 'thumbs_down_inactive.png';
+                } elseif ($value == -1) {
+                    $img_up = 'thumbs_up_inactive.png';
+                    $img_down = 'thumbs_down_active.png';
+                }
+            } else {
+                $has_rated = false;
+                $img_up = 'thumbs_up_inactive.png';
+                $img_down = 'thumbs_down_inactive.png';
+            }
+            
+            $out .= "<img id=\"rate_".$this->rid."_img_up\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
-            $out .= "<img src=\"".$urlServer."modules/rating/down.png\" ".$onclick_down."/>&nbsp;";
+            $out .= "<img id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
             $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
             
-            if ($this->userHasRated($uid)) {
+            if ($has_rated) {
                 $out .= $langUserHasRated;
             }
             
@@ -401,11 +418,20 @@ Class Rating {
                 $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
             }
             
-            $out .= "<img src=\"".$urlServer."modules/rating/up.png\" ".$onclick_up."/>&nbsp;";
+            $has_rated = $this->userHasRated($uid);
+            if ($has_rated !== false) {
+                $has_rated = true;
+                $img_up = 'thumbs_up_active.png';
+            } else {
+                $has_rated = false;
+                $img_up = 'thumbs_up_inactive.png';
+            }
+            
+            $out .= "<img id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
             $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
             
-            if ($this->userHasRated($uid)) {
+            if ($has_rated) {
                 $out .= $langUserHasRated;
             }
             
@@ -438,7 +464,7 @@ Class Rating {
                 $out .= '<div id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" ><a href="javascript:void(0)">'.$langRateIt.'</a></div>';
                 
                 $userRating = "";
-                if ($this->userHasRated($uid)) {
+                if ($this->userHasRated($uid) !== false) {
                     $userRating = 'data-rateit-value="'.$this->getFivestarUserRating($uid).'"';
                 }
                 $out .= '<div class="hideratewidget" id="rateitwidgetdiv-'.$this->rtype.'-'.$this->rid.'">';

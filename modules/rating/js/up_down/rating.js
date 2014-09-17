@@ -30,6 +30,8 @@ function Rate(widget, rid, rtype, value, url) {
             response = JSON.parse(xmlhttp.responseText);
             document.getElementById('rate_'+rid+'_up').innerHTML = response[0];
             document.getElementById('rate_'+rid+'_down').innerHTML = response[1];
+            document.getElementById('rate_'+rid+'_img_up').src = response[4];
+            document.getElementById('rate_'+rid+'_img_down').src = response[5];
             if (response[2] == 'ins') {
                 document.getElementById('rate_msg_'+rid).innerHTML = response[3];
             } else if (response[2] == 'del' ) {

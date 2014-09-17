@@ -298,19 +298,19 @@ $db->query("CREATE TABLE user (
       password VARCHAR(60) NOT NULL DEFAULT 'empty',
       email VARCHAR(100) NOT NULL DEFAULT '',
       status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
-      phone VARCHAR(20) NOT NULL DEFAULT '',
-      am VARCHAR(20) NOT NULL DEFAULT '',
+      phone VARCHAR(20) DEFAULT '',
+      am VARCHAR(20) DEFAULT '',
       registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
       expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
       lang VARCHAR(16) NOT NULL DEFAULT 'el',
-      description TEXT NOT NULL,
+      description TEXT,
       has_icon TINYINT(1) NOT NULL DEFAULT 0,
       verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
       receive_mail TINYINT(1) NOT NULL DEFAULT 1,
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
-      whitelist TEXT NOT NULL,
+      whitelist TEXT,
       last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 $db->query("CREATE TABLE admin (
@@ -617,8 +617,7 @@ $db->query("CREATE TABLE IF NOT EXISTS videolink (
 $db->query("CREATE TABLE video_category (
                 id INT(11) NOT NULL auto_increment, 
                 name VARCHAR(255) NOT NULL, 
-                description TEXT DEFAULT NULL, 
-                `order` INT(6) NOT NULL,            
+                description TEXT DEFAULT NULL,
                 PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
