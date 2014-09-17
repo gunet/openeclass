@@ -11,9 +11,7 @@
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
 	<!-- jQuery UI custom - selected only the importants -->
-    <script type="text/javascript" src="{%URL_PATH%}js/jquery-ui-1.11.1.custom.min.js"></script>
-    <link rel="stylesheet" href="{%URL_PATH%}js/jquery-ui-css/lightness/jquery-ui.1.11.1.min.css">
-    
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-ui-1.10.4.custom.min.js"></script>
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -97,14 +95,38 @@
 
 		              <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
 
-		              <li class="dropdown"><a href="#"><i><img alt="" class="img-circle user-icon" src="../../ifeneris/template/bootstrap/img/user.jpg"></i>{%USERNAME%}</a></li>
+		              <li class="dropdown">
+		              	<a href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+    						<img alt="" class="img-circle user-icon" src="../../ifeneris/template/bootstrap/img/user.jpg">{%USERNAME%}
+						    <span class="caret"></span>
+						</a>
+						
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+								<a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-sign-out"></i>{%LANG_LOGOUT%}</a>
+							</li>
+						</ul>
+
+		              </li>
 
 		              <li><a class="toggle-sidebar"><i class="fa fa-columns"></i></a></li>
 <!-- END LoggedInBlock -->
 <!-- BEGIN LoggedOutBlock -->
                       <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
 
-                      <li><a href="#"><i class="fa fa-globe"></i></a></li>
+                      <li class="dropdown">
+		              	<a href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+    						<i class="fa fa-globe"></i>
+						    <span class="caret"></span>
+						</a>
+						
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation">
+								<a role="menuitem" tabindex="-1" href="#"><i class="fa fa-globe"></i>test lang</a>
+							</li>
+						</ul>
+
+		              </li>
 
                       <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-sign-in"></i></a></li>
 <!-- END LoggedOutBlock -->
