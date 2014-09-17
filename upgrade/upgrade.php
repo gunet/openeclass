@@ -843,7 +843,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $crevcnt++;
                         }
                     }
-                    Database::get()->query("ALTER TABLE course_review ADD UNIQUE cid (course_id)");
+                    Database::get()->query("ALTER TABLE course_review ADD UNIQUE crid (course_id)");
                     
                     if (!DBHelper::fieldExists('document', 'editable')) {
                         Database::get()->query("ALTER TABLE `document` ADD editable TINYINT(1) NOT NULL DEFAULT 0,
@@ -1090,10 +1090,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $charset_spec");
                         
                     Database::get()->query("CREATE TABLE IF NOT EXISTS video_category (
-                            id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+                            id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
                             name VARCHAR(255) NOT NULL, 
-                            description TEXT DEFAULT NULL, 
-                            `order` INT(6) NOT NULL) $charset_spec");
+                            description TEXT DEFAULT NULL) 
+                            $charset_spec");
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1346,9 +1347,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `secret_directory` VARCHAR(30) NOT NULL,
                             `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                             `max_grade` FLOAT DEFAULT NULL,
-                            `assign_to_specific` CHAR(1) NOT NULL,
-                            file_path VARCHAR(200) NOT NULL,
-                            file_name VARCHAR(200) NOT NULL)
+                            `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,                            
+                            file_path VARCHAR(200) DEFAULT '' NOT NULL,
+                            file_name VARCHAR(200) DEFAULT '' NOT NULL)
                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

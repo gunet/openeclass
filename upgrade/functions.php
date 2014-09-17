@@ -881,7 +881,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.assignment
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
-                          `active`, `secret_directory`, `group_submissions`, `assignment_to_specific`)
+                          `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
                                 `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
                                 FROM assignments ORDER BY id") != null);
@@ -902,7 +902,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
                                 assignment_submit.comments,
-                                CAST(assignment_submit.grade AS DECIMAL(10,2)), assignment_submit.grade_comments,
+                                CAST(NULLIF(assignment_submit.grade, '') AS DECIMAL(10,2)), 
+                                assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
                            FROM assignment_submit, assignments_map
