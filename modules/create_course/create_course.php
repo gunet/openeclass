@@ -102,16 +102,16 @@ $head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
 $head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
-    
-    function showCCFields() {           
-        $('#cc').show();        
+
+    function showCCFields() {
+        $('#cc').show();
     }
-    function hideCCFields() {           
-        $('#cc').hide();        
+    function hideCCFields() {
+        $('#cc').hide();
     }
-                
+
     $(document).ready(function() {
-        
+
         $('input[name=start_date]').datepicker({
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {
@@ -123,9 +123,9 @@ $head_content .= <<<hContent
                 }
             }
         });
-        
+
         $('input[name=finish_date]').datepicker({
-            dateFormat: 'yy-mm-dd', 
+            dateFormat: 'yy-mm-dd',
             onClose: function () {
                 var dt1 = $('input[name=start_date]').datepicker('getDate');
                 var dt2 = $('input[name=finish_date]').datepicker('getDate');
@@ -135,24 +135,24 @@ $head_content .= <<<hContent
             }
         }
         });
-        
+
         $('#weekly_info').hide();
-        
+
         $('#view_type').change(function(){
             if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
                 $('#weekly_info').show();
             }else{
                 $('#weekly_info').hide();
             }
-            
+
         });
-        
+
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
-        
+
         displayCoursePassword();
-        
+
         $('#courseopen').click(function(event) {
                 activate_input_password();
         });
@@ -165,7 +165,7 @@ $head_content .= <<<hContent
         $('#courseinactive').click(function(event) {
                 deactivate_input_password();
         });
-       
+
         $('input[name=l_radio]').change(function () {
             if ($('#cc_license').is(":checked")) {
                 showCCFields();
@@ -205,8 +205,8 @@ if (!$deps_valid) {
     exit();
 }
 
-   
-// display form   
+
+// display form
 if (!isset($_POST['create_course'])) {
         $tool_content .= "
         <fieldset>
@@ -214,7 +214,7 @@ if (!isset($_POST['create_course'])) {
             <table class='tbl' width='100%'>
             <tr>
               <th>$langTitle:</th>
-              <td><input type='text' name='title' size='60' value='" . $title . "' /></td>              
+              <td><input type='text' name='title' size='60' value='" . $title . "' /></td>
             </tr>
             <tr>
               <th>$langFaculty:</th>
@@ -224,22 +224,22 @@ if (!isset($_POST['create_course'])) {
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>";
-        
+
         $tool_content .= "
         <tr>
         <th>$langTeachers:</th>
-        <td><input type='text' name='prof_names' size='60' value='" . q($prof_names) . "' /></td>        
+        <td><input type='text' name='prof_names' size='60' value='" . q($prof_names) . "' /></td>
         </tr>
         <tr>
         <th class='left'>$langLanguage:</th>
-        <td>" . lang_select_options('localize') . "</td>        
+        <td>" . lang_select_options('localize') . "</td>
         </tr>";
-        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";                        
+        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
                         @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langUncompulsory</span>
-                            <br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";        
+                            <br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
          $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 
-         
+
         $tool_content .="
         <tr><td class='sub_title1' colspan='2'>$langMore</td></tr>
         <tr>
@@ -263,22 +263,22 @@ if (!isset($_POST['create_course'])) {
             <td ><input class='dateInForm' type='text' name='finish_date' value=''></td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-        
-        
+
+
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
         }
-        
-        
-        
-        
+
+
+
+
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
         <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
             {$license[0]['title']}
         </td>
-        </tr>           
+        </tr>
         <tr><td colspan='2'><input type='radio' name='l_radio' value='10'>
             {$license[10]['title']}
         </td>
@@ -286,18 +286,18 @@ if (!isset($_POST['create_course'])) {
         <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='cc'/>
             $langCMeta[course_license]
         </td>
-        </tr>            
+        </tr>
         <tr id = 'cc'><td>&nbsp;</td><td>" . selection($cc_license, 'cc_use') . "</td></tr>";
 
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
         <tr>
-        <td colspan='2'>        
+        <td colspan='2'>
         <table class='sub_title1' width='100%'>
-         <tr>		            
-        <th width='170'>$langOptPassword</th>    
+         <tr>
+        <th width='170'>$langOptPassword</th>
             <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off' /></td>
-        </tr>            
+        </tr>
         <tr>
             <th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
             <td width='1'><input id='courseopen' type='radio' name='formvisible' value='2'checked='checked' /></td>
@@ -307,7 +307,7 @@ if (!isset($_POST['create_course'])) {
             <th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
             <td><input id='coursewithregistration' type='radio' name='formvisible' value='1' /></td>
             <td class='smaller'>$langPrivOpen</td>
-        </tr>	    
+        </tr>
         <tr>
             <th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
             <td><input id='courseclose' type='radio' name='formvisible' value='0' /></td>
@@ -318,32 +318,32 @@ if (!isset($_POST['create_course'])) {
             <td><input id='courseinactive' type='radio' name='formvisible' value='3' /></td>
             <td class='smaller'>$langCourseInactive</td>
         </tr>
-        </table>";       
+        </table>";
         $tool_content .= "</td>
-        </tr>            
+        </tr>
         <tr>
           <td class='right'>&nbsp;
             <input type='submit' name='create_course' value='".q($langCourseCreate)."' />
           </td>
         </tr>
-        </table>";     
+        </table>";
         $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
         $tool_content .= "</fieldset>";
-        $tool_content .= "</form>";            
-    
-} else  { // create the course and the course database    
+        $tool_content .= "</form>";
+
+} else  { // create the course and the course database
     // validation in case it skipped JS validation
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);
         $validationFailed = true;
     }
-    
+
     if (empty($title) || empty($prof_names)) {
         Session::Messages($langFieldsMissing);
         $validationFailed = true;
     }
-    
+
     if ($validationFailed) {
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
         exit;
@@ -354,7 +354,7 @@ if (!isset($_POST['create_course'])) {
     // create new course code: uppercase, no spaces allowed
     $code = strtoupper(new_code($departments[0]));
     $code = str_replace(' ', '', $code);
-      
+
     // include_messages
     include "lang/$language/common.inc.php";
     $extra_messages = "config/{$language_codes[$language]}.inc.php";
@@ -367,9 +367,9 @@ if (!isset($_POST['create_course'])) {
     if ($extra_messages) {
         include $extra_messages;
     }
-    
+
     // create course directories
-    create_course_dirs($code);    
+    create_course_dirs($code);
 
     // get default quota values
     $doc_quota = get_config('doc_quota');
@@ -394,16 +394,22 @@ if (!isset($_POST['create_course'])) {
                 break;
         }
     }
-    
-    if(ctype_alnum($_POST['view_type'])){
+
+    if (ctype_alnum($_POST['view_type'])) {
         $view_type = $_POST['view_type'];
-        if($view_type == "weekly" && ($_POST['start_date'] !='' && $_POST['start_date'] !='0000-00-00')){
+        if ($view_type == "weekly" && ($_POST['start_date'] != '' && $_POST['start_date'] != '0000-00-00')) {
             $view_type == "weekly";
-        }else{
-            $view_type = "units";    
+        } else {
+            $view_type = "units";
         }
     }
-    
+    if (empty($_POST['start_date'])) {
+        $_POST['start_date'] = '0000-00-00';
+    }
+    if (empty($_POST['finish_date'])) {
+        $_POST['finish_date'] = '0000-00-00';
+    }
+
     $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -423,18 +429,22 @@ if (!isset($_POST['create_course'])) {
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
-                        glossary_index = 1", $code, $language, $title, $_POST['formvisible'], 
-            intval($course_license), $prof_names, $code, $doc_quota * 1024 * 1024, 
-            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024, 
+                        glossary_index = 1", $code, $language, $title, $_POST['formvisible'],
+            intval($course_license), $prof_names, $code, $doc_quota * 1024 * 1024,
+            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
             $dropbox_quota * 1024 * 1024, $password, $view_type, $_POST['start_date'], $_POST['finish_date']);
     $new_course_id = $result->lastInsertID;
+    if (!$new_course_id) {
+        Session::Messages($langGeneralError);
+        redirect_to_home_page($_SERVER['SCRIPT_NAME']);
+    }
 
     //===================course format and start and finish date===============
     if ($view_type == "weekly") {
 
         //get the last inserted id as the course id
         $course_id = $new_course_id;
-        
+
         $begin = new DateTime($_POST['start_date']);
 
         //check if there is no end date
@@ -444,7 +454,7 @@ if (!isset($_POST['create_course'])) {
         } else {
             $end = new DateTime($_POST['finish_date']);
         }
-        
+
         $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
 
         foreach ($daterange as $date) {
@@ -466,11 +476,11 @@ if (!isset($_POST['create_course'])) {
             Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
         }
     }
-   
-    //=======================================================
-    
 
-    // create course  modules              
+    //=======================================================
+
+
+    // create course  modules
     create_modules($new_course_id);
 
     Database::get()->query("INSERT INTO course_user SET
@@ -492,21 +502,21 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     $description = purify($_POST['description']);
-    $unit_id = description_unit_id($new_course_id);    
+    $unit_id = description_unit_id($new_course_id);
     if (!empty($description)) {
         add_unit_resource($unit_id, 'description', -1, $langDescription, $description);
     }
-    
+
     // creation of course index.php
     course_index($code);
-    
+
     //add a default forum category
     Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
-    
+
     $_SESSION['courses'][$code] = USER_TEACHER;
-    
+
     $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
                         <span class='smaller'>$langEnterMetadata</span></p>
                         <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
