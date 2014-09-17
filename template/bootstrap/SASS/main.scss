@@ -194,12 +194,13 @@ body > .container{
 	box-shadow: 0px -5px 10px 0px black;
 	-moz-box-shadow: 0px -5px 10px 0px black;
 	-webkit-box-shadow: 0px -5px 10px 0px black;
+        
 
 	#header.navbar{
 		padding: 0;
 		border: 0;
 		background: #EEEEEE;
-    border-bottom: 1px solid #DBDBDB;
+                border-bottom: 1px solid #DBDBDB;
 
 		.navbar-nav{
 			margin: 0;
@@ -238,6 +239,16 @@ body > .container{
 		}
 
 	}
+        
+        .add-gutter{
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        
+        .remove-gutter{
+            padding-left: 0px;
+            padding-right: 0px;
+        }
 
 }
 
@@ -680,6 +691,7 @@ body.sidebar-opened .toggle-sidebar{
     @include transition(all 100ms linear);
   }  
 }
+
 
 /* NO BREAKPOINTS BELLOW 1366 OR SMTH */
 

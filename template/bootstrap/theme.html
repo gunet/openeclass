@@ -89,41 +89,43 @@
                     </div>
 	        </div>
 	        <div id="main-content" class="col-xs-10 col-sm-11 col-md-10">
-		        <nav id="header" class="row navbar navbar-default navbar-collapse" role="navigation">
-		        	<ul class="nav navbar-nav navbar-right">
-<!-- BEGIN LoggedInBlock -->
-                              <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-book"></i></a></li>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 remove-gutter">
+                            <nav id="header" class="navbar navbar-default navbar-collapse" role="navigation">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <!-- BEGIN LoggedInBlock -->
+                                    <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-book"></i></a></li>
 
-		              <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+                                    <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
 
-		              <li class="dropdown">
-		              	<a href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                            <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
-						</a>
-						
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							<li role="presentation">
-								<a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-sign-out"></i>{%LANG_LOGOUT%}</a>
-							</li>
-						</ul>
-		              </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                            <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
+                                        </a>
 
-		              <li><a class="toggle-sidebar"><i class="fa fa-columns"></i></a></li>
-<!-- END LoggedInBlock -->
-<!-- BEGIN LoggedOutBlock -->
-                      <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-sign-out"></i>{%LANG_LOGOUT%}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-                      {%LANG_SELECT%}
+                                    <li><a class="toggle-sidebar"><i class="fa fa-columns"></i></a></li>
+                                    <!-- END LoggedInBlock -->
+                                    <!-- BEGIN LoggedOutBlock -->
+                                    <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
 
-                      <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-sign-in"></i></a></li>
-<!-- END LoggedOutBlock -->
+                                    {%LANG_SELECT%}
 
-		            </ul>
-		        </nav>
-	            <div class="row padding-col-align">
-	            	<div class="col-md-12">
-	                    
+                                    <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-sign-in"></i></a></li>
+                                    <!-- END LoggedOutBlock -->
 
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+	            <div class="row">
+	            	<div class="col-md-12 add-gutter">
 	                    <div class="breadcrumb_wrapper row">
 	                        <div class="col-md-12">
 		                        <!-- BEGIN breadCrumbHomeBlock -->
@@ -156,12 +158,15 @@
 	                   </div>
                 </div>
 
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 remove-gutter">
+                            <footer class="footer">
 
-                <footer class="footer row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <span>GUNET © eClass</span>
+                                <span>GUNET © eClass</span>
+
+                            </footer>
+                        </div>
                     </div>
-                </footer>
 
 
 	        	<aside id="sidebar">		
