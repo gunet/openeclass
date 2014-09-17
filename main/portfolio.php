@@ -64,88 +64,91 @@ jQuery(document).ready(function() {
 require_once 'perso.php';
 
 $tool_content = "
-<div class='col-md-10'>
-    <h1 class='page-title'>Prosopiko Xartofylakio</h1>
+<div class='row'>
+        <div class='col-md-10'>
+            <h1 class='page-title'>Prosopiko Xartofylakio</h1>
+        </div>
+
+        <div class ='col-md-2'>
+                <div class='toolbox'>
+                        <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
+                                <fe-ringbutton class='button hover-blue' title='' >
+                                        <i class='fa fa-life-ring'></i>
+                                </button>
+                        </a> 
+                </div>
+        </div>    
 </div>
 
-<div class ='col-md-2'>
-        <div class='toolbox'>
-                <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
-                        <fe-ringbutton class='button hover-blue' title='' >
-                                <i class='fa fa-life-ring'></i>
-                        </button>
-                </a> 
+<div class='row'>
+        <div class='col-md-7'>
+                <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+                <div class='panel'>
+                        {%LESSON_CONTENT%}
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                </div>
         </div>
-</div>    
 
-<div class='col-md-12' style='height:20px;'></div>
 
-<div class='col-md-7'>
-        <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
-        <div class='panel'>
-                {%LESSON_CONTENT%}
-                <br/><br/><br/><br/><br/><br/><br/><br/>
-                <br/><br/><br/><br/><br/><br/><br/><br/>
-                <br/><br/><br/><br/><br/><br/><br/><br/>
+
+        <div class='col-md-5'>
+                <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
+                <div class='panel'>
+                        {%PERSONAL_CALENDAR_CONTENT%}
+                </div>
         </div>
-</div>
 
 
 
-<div class='col-md-5'>
-        <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
-        <div class='panel'>
-                {%PERSONAL_CALENDAR_CONTENT%}
-        </div>
-</div>
+        <div class='col-md-5'>
+                <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
+                <div class='panel'>
 
-
-
-<div class='col-md-5'>
-        <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
-        <div class='panel'>
-
-                <ul class='tablelist panel'>
+                        <ul class='tablelist panel'>
                 
-            <li class='list-item'>
-                <span class='item-title'>.......... 1</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
+                <li class='list-item'>
+                        <span class='item-title'>.......... 1</span>
+                        <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                </li>
 
-            <li class='list-item'>
-                <span class='item-title'>.......... 2</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
+                <li class='list-item'>
+                        <span class='item-title'>.......... 2</span>
+                        <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                </li>
 
-            <li class='list-item'>
-                <span class='item-title'>.......... 3</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
+                <li class='list-item'>
+                        <span class='item-title'>.......... 3</span>
+                        <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                </li>
         
-                </ul>
+                        </ul>
 
 
+                </div>
         </div>
+
+
 </div>
 
+<div class='row'>
+        <div class='col-md-12'>
+                <div class='panel'>
+                        <div class='col-sm-3'>
+                                <div><img src='../../ifeneris/template/bootstrap/img/user.jpg' class='img-circle' alt='Circular Image' ></div>
+                        </div>
+                        <div class='col-sm-9'>
+                                <div> <canvas id='canvas' height='150' width='600'></canvas></div>
+                        </div> 
 
-<div class='col-md-12' style='height:20px;'></div>
-
-<div class='col-md-12'>
-        <div class='panel'>
-                <div class='col-sm-3'>
-                        <div><img src='../../ifeneris/template/bootstrap/img/user.jpg' class='img-circle' alt='Circular Image' ></div>
                 </div>
-                <div class='col-sm-9'>
-                        <div> <canvas id='canvas' height='150' width='600'></canvas></div>
-                </div> 
-
         </div>
 </div>
 ";

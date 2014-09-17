@@ -46,7 +46,7 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
 }
 
 if (isset($toolContent_ErrorExists)) {
-    Session::set_flashdata($toolContent_ErrorExists, 'alert1');
+    Session::Messages($toolContent_ErrorExists);
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
@@ -215,7 +215,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
         //If there is a message to display, show it (ex. Session timeout)
-        if ($messages = Session::render_flashdata()) {
+        if ($messages = Session::getMessages()) {
             $t->set_var('EXTRA_MSG', $messages);
         }
 
@@ -237,7 +237,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (isset($_SESSION['uid'])) {
             $t->set_var('LANG_USER', $langUserHeader);
             $t->set_var('USER_NAME', q($_SESSION['givenname']));
-            $t->set_var('USER_SURNAME', q($_SESSION['surname']) . ", ");
+            $t->set_var('USER_SURNAME', q($_SESSION['surname']));
+            $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
+            $t->set_var('USERNAME', q($_SESSION['uname']));
             $t->set_var('LANG_LOGOUT', $langLogout);
             $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
 	    $t->set_var('LOGGED_IN', 'true');
@@ -622,6 +624,11 @@ function module_path($path) {
         return 'main/profile';
     } elseif (strpos($path, '/main/') !== false) {
         return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
+    } elseif (preg_match('+/auth/(opencourses|listfaculte)\.php+', $path)) {
+        return '/auth/opencourses.php';
+    } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
+        return '/auth/registration.php';
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
+

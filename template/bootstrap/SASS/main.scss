@@ -674,15 +674,15 @@ body.sidebar-opened .toggle-sidebar{
 
 /* NO BREAKPOINTS BELLOW 1366 OR SMTH */
 
-@media (max-width: 1280px){
+@media (max-width: 1339px){
   body > .container {
     width: 100%;
   }
 }
 
-@media (min-width: 1200px){
+@media (min-width: 1340px){
   .container {
-    width: 1200px;
+    width: 1340px;
   }
 }
 

@@ -40,7 +40,6 @@ if (!session_id()) {
 
 header('Content-Type: text/html; charset=UTF-8');
 
-
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
 } else {
@@ -91,6 +90,25 @@ if (isset($language)) {
     $session = new Session();
     $uid = $session->user_id;
     $language = $session->language;
+}
+
+//Initializing Valitron (form validation library)
+require_once 'include/Valitron/Validator.php';
+use Valitron\Validator as V;
+V::langDir(__DIR__.'/valitron/lang'); // always set langDir before lang.
+V::lang($language);
+
+//Managing Session Flash Data
+if (isset($_SESSION['flash_old'])){
+    foreach($_SESSION['flash_old'] as $row){
+        unset($_SESSION[$row]);
+    }
+    unset($_SESSION['flash_old']);
+}
+
+if (isset($_SESSION['flash_new'])) {
+    $_SESSION['flash_old'] = $_SESSION['flash_new'];
+    unset($_SESSION['flash_new']);
 }
 
 $session = new Session();
@@ -367,7 +385,8 @@ $modules = array(
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
     MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference'),
-    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes')
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes'),
+    MODULE_ID_WEEKS => array('title' => $langWeeks, 'link' => 'weeks', 'image' => 'weeks')
 );
 // ----------------------------------------
 // course admin modules

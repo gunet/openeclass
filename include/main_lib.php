@@ -87,6 +87,7 @@ define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
 
 // user modules
@@ -326,29 +327,26 @@ function uid_to_am($uid) {
 }
 
 /**
- * @brief only for http://eclass.uoa.gr  
- * do we need this ???
-  Show a selection box with division of departments.
-  The function returns a value( a formatted select box with division of departments)
-  and their values as keys in the array/select box
- * @param type $department_value the predefined/selected department value
- * @return int string (a formatted select box)
+ * @brief Return the URL for a user profile image
+ * @param int $uid user id
+ * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
+ * @return string
  */
-function list_divisions($department_value) {
-     
-    $div = Database::get()->queryArray("SELECT id, name FROM division WHERE faculte_id = ?d ORDER BY name", $department_value);
-    if ($div) {
-        $divisions_select = "";
-        $divisions = array();
-        foreach ($div as $row) {
-            $id = $row->id;
-            $name = $row->name;
-            $divisions[$id] = $name;
+function user_icon($uid, $size=null) {
+    global $themeimg;
+
+    if (!$size) {
+        $size = IMAGESIZE_SMALL;
+    }
+    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
+    if ($user) {
+        if ($user->has_icon) {
+            return "${urlAppend}courses/userimg/${uid}_$size.jpg";
+        } else {
+            return "$themeimg/default_$size.jpg";
         }
-        $divisions_select = selection($divisions, "division");
-        return $divisions_select;
     } else {
-        return 0;
+        return '';
     }
 }
 
@@ -503,11 +501,11 @@ function check_guest($id = FALSE) {
         $uid = $GLOBALS['uid'];
     }
     if (isset($uid) and $uid) {
-        $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;        
-        if ($status == USER_GUEST) {
-            return TRUE;
-        } else {
-            return false;
+        if (DBHelper::fieldExists("user", "status")) {
+            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
+            if ($status && $status->status == USER_GUEST) {
+                return TRUE;
+            }
         }
     }
     return false;
@@ -2037,7 +2035,7 @@ function invalidate_glossary_cache() {
 
 function redirect_to_home_page($path = '') {
     global $urlServer;
-
+    
     $path = preg_replace('+^/+', '', $path);
     header("Location: $urlServer$path");
     exit;

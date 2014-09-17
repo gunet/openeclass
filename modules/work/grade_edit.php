@@ -97,7 +97,7 @@ function show_edit_form($id, $sid, $assign) {
                 </fieldset>
                 </form><br>";
     } else {
-        Session::set_flashdata($m['WorkNoSubmission'], 'caution');
+        Session::Messages($m['WorkNoSubmission'], 'caution');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
 }

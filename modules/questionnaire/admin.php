@@ -68,26 +68,42 @@ if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
 }
 
 if (isset($_POST['submitPoll'])) {
-    $PollName = $_POST['PollName'];
-    $PollStart = date('Y-m-d H:i', strtotime($_POST['PollStart']));
-    $PollEnd = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
-    $PollDescription = purify($_POST['PollDescription']);
-    $PollEndMessage = purify($_POST['PollEndMessage']);    
-    $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
-    if(isset($_GET['pid'])) {
-        $pid = $_GET['pid'];
-        Database::get()->query("UPDATE poll SET name = ?s,
-		start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
-        Session::set_flashdata($langPollEdited, 'success');
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['PollName']);
+    $v->rule('alpha', ['PollName']);
+    $v->labels(array(
+        'PollName' => "$langTheField $langTitle"
+    ));
+    if($v->validate()) {
+        $PollName = $_POST['PollName'];
+        $PollStart = date('Y-m-d H:i', strtotime($_POST['PollStart']));
+        $PollEnd = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
+        $PollDescription = purify($_POST['PollDescription']);
+        $PollEndMessage = purify($_POST['PollEndMessage']);    
+        $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
+        if(isset($_GET['pid'])) {
+            $pid = $_GET['pid'];
+            Database::get()->query("UPDATE poll SET name = ?s,
+                    start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
+            Session::Messages($langPollEdited, 'success');
+        } else {
+            $PollActive = 1;
+            $pid = Database::get()->query("INSERT INTO poll
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized)->lastInsertID;
+            Session::Messages($langPollCreated, 'success');
+        }
+        redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     } else {
-        $PollActive = 1;
-        $pid = Database::get()->query("INSERT INTO poll
-                    (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized)
-                    VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized)->lastInsertID;
-        Session::set_flashdata($langPollCreated, 'success');
-    
-    }
-    redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
+        // Errors
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        if(isset($_GET['pid'])) {
+            $pid = $_GET['pid']; 
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyPoll=yes");
+        } else {        
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&newPoll=yes");
+        }
+    } 
 }
 if (isset($_POST['submitQuestion'])) {
     $question_text = $_POST['questionName'];
@@ -160,6 +176,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     } else {
         $nameTools = $langCreatePoll;
     }
+    $PollName = Session::has('PollName') ? Session::get('PollName') : (isset($poll) ? $poll->name : '');
+    $PollDescription = Session::has('PollDescription') ? Session::get('PollDescription') : (isset($poll) ? $poll->description : '');
+    $PollEndMessage = Session::has('PollEndMessage') ? Session::get('PollEndMessage') : (isset($poll) ? $poll->end_message : '');
+    $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
+    $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
+
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>";
     $tool_content .= "
         <div id=\"operations_container\">
@@ -171,16 +193,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
         <legend>$langInfoPoll</legend>
 	<table width=\"100%\" class='tbl'>
-	<tr>
+	<tr ".(Session::getError('PollName') ? "class='error'" : "").">
 	  <th width='100'>$langTitle:</th>
-	  <td><input type='text' size='50' name='PollName' value='".(isset($poll->name)?q($poll->name):"")."'></td>
+	  <td><input type='text' size='50' name='PollName' value='$PollName'>".Session::getError('PollName', 'caution')."</td>
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
-	  <td><input type='text' size='47' name='PollStart' value='".date('d-m-Y H:i',(isset($poll->start_date) ? strtotime($poll->start_date):strtotime('now')))."'></td></tr>
+	  <td><input type='text' size='47' name='PollStart' value='$PollStart'></td></tr>
 	<tr>
 	  <th>$langPollEnd:</th>
-	  <td><input type='text' size='47' name='PollEnd' value='".date('d-m-Y H:i',(isset($poll->end_date) ? strtotime($poll->end_date):strtotime('now +1 year')))."'></td>
+	  <td><input type='text' size='47' name='PollEnd' value='$PollEnd'></td>
 	</tr>
 	<tr>
 	  <th>$langPollAnonymize:</th>
@@ -188,11 +210,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 	</tr>
 	<tr>
 	  <th>$langDescription:</th>
-	  <td>".rich_text_editor('PollDescription', 4, 52, (isset($poll->description) ? $poll->description : ""))."</td>
+	  <td>".rich_text_editor('PollDescription', 4, 52, $PollDescription)."</td>
 	</tr>
 	<tr>
 	  <th>$langPollEndMessage:</th>
-	  <td>".rich_text_editor('PollEndMessage', 4, 52, (isset($poll->end_message) ? $poll->end_message : ""))."</td>
+	  <td>".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."</td>
 	</tr>        
 	<tr>
         <th>&nbsp;</th>";

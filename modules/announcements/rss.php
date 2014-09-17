@@ -43,7 +43,7 @@ if ($course_id === false) {
     exit;
 }
 if (!visible_module(MODULE_ID_ANNOUNCE)) {
-    Session::set_flashdata($langCheckPublicTools, 'alert1');
+    Session::Messages($langCheckPublicTools);
     session_write_close();
     $errorMessagePath = "../../";    
     if (!$uid) {

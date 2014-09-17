@@ -129,6 +129,14 @@ function show_resources($unit_id) {
     }
 }
 
+/**
+ * display unit resources
+ * @global type $tool_content
+ * @global type $langUnknownResType
+ * @global type $is_editor
+ * @param type $info
+ * @return type
+ */
 function show_resource($info) {
     global $tool_content, $langUnknownResType, $is_editor;
 
@@ -151,6 +159,9 @@ function show_resource($info) {
         case 'video':
         case 'videolink':
             $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
+        case 'videolinkcategory':                    
+            $tool_content .= show_videocat($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'exercise':
             $tool_content .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
@@ -413,6 +424,86 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
           <td>$videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
+
+/**
+ * @brief display resource video category
+ * @global type $is_editor
+ * @global type $course_id
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param array $table
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $videolinkcat_id
+ * @param type $visibility
+ * @return string
+ */
+function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id, $visibility)
+{   
+    	global $is_editor, $course_id, $themeimg, $langInactiveModule;
+	
+	$content = $linkcontent = '';
+        $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
+        
+        if (!$module_visible and !$is_editor) {
+                       return '';
+        }        
+	$comment_box = $class_vis = $imagelink = $link = '';
+        $class_vis = ($visibility == 0 or !$module_visible)?
+                     ' class="invisible"': ' class="even"';	
+        $title = q($title);
+	$sql = Database::get()->queryArray("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
+        foreach ($sql as $vlcat) {
+            $content .= "
+            <tr$class_vis>
+              <td width='1'><img src='$themeimg/folder_open.png' /></td>
+              <td>" . q($vlcat->name);
+            if (!empty($vlcat->description)) {
+                $comment_box = "<br />$vlcat->description";
+            } else {
+                $comment_box = '';
+            }
+            foreach (array('video', 'videolink') as $table) {
+                $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d AND course_id = ?d", $vlcat->id, $course_id);
+                foreach ($sql2 as $row) {                            
+                    if (!$is_editor and (!resource_access(1, $row->public))) {
+                        return '';
+                    }
+                    $status = $row->public;
+
+                    if ($table == 'video') {
+                        $vObj = MediaResourceFactory::initFromVideo($row);
+                        $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                    } else {
+                        $vObj = MediaResourceFactory::initFromVideoLink($row);
+                        $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+                    }
+                    if (!$module_visible) {
+                            $videolink .= " <i>($langInactiveModule)</i>";
+                    }
+                    $imagelink = "<img src='$themeimg/videos_" .
+                                 ($visibility == 'i'? 'off': 'on') . ".png' />";
+                    if (!empty($comments)) {
+                            $comment_box = "<br />$comments";
+                    } else {
+                            $comment_box = "";
+                    }
+                    $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="invisible"': ' class="even"';                            
+                    $ltitle = q(($row->title == '')? $row->url: $row->title);
+                    $linkcontent .= "<br />$imagelink&nbsp;&nbsp;$videolink</a>";
+                    if (!$module_visible) {
+                            $linkcontent .= " <i>($langInactiveModule)</i>";
+                    }
+                }
+            }
+        }
+	
+	return $content . $comment_box . $linkcontent .'
+           </td>'. actions('videolinkcategory', $resource_id, $visibility) .
+		'</tr>';
+}
+
 
 /**
  * @brief display resource work (assignment)

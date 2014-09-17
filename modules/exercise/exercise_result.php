@@ -61,7 +61,7 @@ if (isset($_GET['eurId'])) {
 
     if (!$exercise_user_record) {
         //No record matches with thiw exercise user record id
-        Session::set_flashdata($langExerciseNotFound, 'alert1');
+        Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status==ATTEMPT_PAUSED) {

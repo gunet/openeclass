@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
-        Session::set_flashdata($langEmptyAddNode, 'alert1');
+        Session::Messages($langEmptyAddNode);
         header("Location:" . $urlServer . "modules/admin/multicourse.php");
         exit;
     }

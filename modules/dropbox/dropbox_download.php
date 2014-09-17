@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
     header("Location: $urlServer");
 }
 
-$work = new Msg($id, $uid);
+$work = new Msg($id, $uid, 'any');
 if (!$work->error) {
     $path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
     $file = $work->real_filename;
