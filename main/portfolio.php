@@ -65,12 +65,9 @@ require_once 'perso.php';
 
 $tool_content = "
 <div class='row'>
-        <div class='col-md-10'>
-            <h1 class='page-title'>Prosopiko Xartofylakio</h1>
-        </div>
 
-        <div class ='col-md-2'>
-                <div class='toolbox'>
+        <div class ='col-md-12'>
+                <div class='toolbox pull-right'>
                         <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
                                 <fe-ringbutton class='button hover-blue' title='' >
                                         <i class='fa fa-life-ring'></i>

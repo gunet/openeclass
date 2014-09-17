@@ -409,14 +409,17 @@ if (!empty($rec_mail)) {
 
 // Title and Toolbox
 $tool_content .= "
-<div class='row'>
+<div class='row title-row'>
 
-    <div class='col-md-7'>
-        <h1 class='page-title'>Τίτλος Μαθήματος</h1>
+    <div class='col-md-10'>
+        <h1 class='page-title'>Εδώ να μπει ο τίτλος μαθήματος</h1>
+        <h5 class='page-title'>Εδώ να μπει ο καθηγητής</h5>
     </div>
+</div>
 
-    <div class ='col-md-5'>
-        <div class='toolbox'>
+<div class='row'>
+    <div class ='col-md-12'>
+        <div class='toolbox pull-right'>
 
             <div type='button' class='button dropdown open-on-hover'>
                 <span class='txt' class='tooltip-left' data-tooltip='Syllabus'>Πληροφορίες Μαθήματος</span>
