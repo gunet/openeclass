@@ -373,11 +373,33 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
     }
 
+    // move videolink categories to central db and drop table
+    $videolinkcat_map = array();
+    $videolink_map = array();
     $video_map = array();
-    // move video to central db and drop table
-    if (DBHelper::tableExists('video', $code)) {
+    if (DBHelper::tableExists('video_category', $code) and DBHelper::tableExists('video', $code) and DBHelper::tableExists('videolinks', $code)) {        
+        $videolinkcatid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
+        if (is_null($videolinkcatid_offset)) {
+            $videolinkcatid_offset = 0;
+        }
+        if ($return_mapping) {
+            Database::get()->queryFunc("SELECT id FROM video_category ORDER BY id", function ($row) use($videolinkcatid_offset, &$videolinkcat_map) {
+                $oldid = intval($row->id);
+                $newid = $oldid + $videolinkcatid_offset;
+                $videolinkcat_map[$oldid] = $newid;
+            });
+        }
 
-        $videoid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.video")->max;
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video_category
+                        (`id`, `course_id`, `name`, `description`)
+                        SELECT `id` + $videolinkcatid_offset, $course_id, `name`, `description` FROM video_category ORDER by id") != null) && $ok;
+        
+        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + $videolinkcatid_offset
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinkcategory'");
+           
+        // move video to central db
+        $videoid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
         if (is_null($videoid_offset)) {
             $videoid_offset = 0;
         }
@@ -390,22 +412,18 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             });
         }
 
-        $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 0,
-                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
-        if ($ok) {
-            Database::get($code)->query("DROP TABLE video");
-        }
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
+                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
+        
+                
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $videoid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
-    }
-
-    $videolink_map = array();
-    // move videolinks to central db and drop table
-    if (DBHelper::tableExists('videolinks', $code)) {
-
+   
+    
+        // move videolinks to central db
         $linkid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
         if (is_null($linkid_offset)) {
             $linkid_offset = 0;
@@ -419,17 +437,20 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             });
         }
 
-        $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.videolink
+        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, 0, `creator`,
-                               `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
-
-        if ($ok) {
-            Database::get($code)->query("DROP TABLE videolinks");
-        }
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset, `creator`,
+                               `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
+        
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
+        
+        if (false !== $ok) { // drop old tables
+            Database::get($code)->query("DROP TABLE videolinks");
+            Database::get($code)->query("DROP TABLE video_category");
+            Database::get($code)->query("DROP TABLE video");
+        }
     }
 
     // move dropbox to central db and drop tables
