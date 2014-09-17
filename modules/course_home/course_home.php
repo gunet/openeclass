@@ -278,7 +278,7 @@ if ($total_cunits > 0) {
                                                     </li>";
             }
             $cunits_content .= "<li class='action delete-action' title='$langDelete'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?del=$cu->id'><span><i class='fa fa-times'></i></span></a>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' onClick=\"return confirmation('$langConfirmDelete');\"><span><i class='fa fa-times'></i></span></a>
                                                     </li>                                            
                                                 </ul>      
                                             </div>
@@ -510,10 +510,8 @@ $tool_content .= "
 $tool_content .= "
 <div class='row'>
     <div class='col-md-8'>
-            <h5 class='content-title'>Θεματικες Ενoτητες</h5>
-        <div class='panel'>
+            <h2>$langCourseUnits</h5>
                 $cunits_content
-        </div>
     </div>
 
 
