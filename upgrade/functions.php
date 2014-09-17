@@ -477,14 +477,37 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         SELECT `id` + $fileid_offset, `filename`, `real_filename`, `filesize`
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
+        Database::get($code)->query("CREATE TEMPORARY TABLE dropbox_temp_index (
+                                    msg_id INT NOT NULL,
+                                    recipient_id INT NOT NULL,
+                                    is_read TINYINT NOT NULL DEFAULT 1,
+                                    deleted TINYINT NOT NULL DEFAULT 1
+                                    )");
+        
+        //we use dropbox_post to fill temp table with recipients and dropbox_file with senders
+        Database::get($code)->query("INSERT INTO dropbox_temp_index
+                        (`msg_id`, `recipient_id`)
+                        SELECT id, uploaderId FROM dropbox_file");
+        
+        Database::get($code)->query("INSERT INTO dropbox_temp_index
+                        (`msg_id`, `recipient_id`)
+                        SELECT fileID, recipientId FROM dropbox_post");
+        
+        //Users present at dropbox_person but not in temp haven't deleted their messages
+        Database::get($code)->query("UPDATE dropbox_temp_index t
+                                       INNER JOIN dropbox_person p
+                                         ON t.msg_id = p.fileID AND t.recipient_id = p.personId
+                                     SET deleted = ?d", 0);
+        
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
                          (`msg_id`, `recipient_id`, `is_read`, `deleted`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, 1, 0
-                           FROM dropbox_person, dropbox_map
-                          WHERE dropbox_person.fileId = dropbox_map.old_id
-                          ORDER BY dropbox_person.fileId") != null) && $ok;
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_temp_index.recipient_id, dropbox_temp_index.is_read, dropbox_temp_index.deleted
+                           FROM dropbox_temp_index, dropbox_map
+                          WHERE dropbox_temp_index.msg_id = dropbox_map.old_id
+                          ORDER BY dropbox_temp_index.msg_id") != null) && $ok;
 
         Database::get($code)->query("DROP TEMPORARY TABLE dropbox_map");
+        Database::get($code)->query("DROP TEMPORARY TABLE dropbox_temp_index");
 
         if (false !== $ok) {
             Database::get($code)->query("DROP TABLE dropbox_file");
