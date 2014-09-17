@@ -123,21 +123,29 @@
 		        </nav>
 	            <div class="row">
 	            	<div class="col-md-12">
-	                    <div class="breadcrumb_wrapper row padding-col-align">
-	                        <!-- BEGIN breadCrumbHomeBlock -->
-	                        <ol class="breadcrumb">
-	                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
-	                            <!-- END breadCrumbHomeBlock -->
-	                            <!-- BEGIN breadCrumbStartBlock -->
-	                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
-	                            <!-- END breadCrumbStartBlock -->
-	                            <!-- BEGIN breadCrumbEndBlock -->
-	                            <!-- END breadCrumbEndBlock -->
-	                        </ol>
+	                    
+
+	                    <div class="breadcrumb_wrapper row">
+	                        <div class="col-md-12">
+		                        <!-- BEGIN breadCrumbHomeBlock -->
+		                        <ol class="breadcrumb">
+		                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+		                            <!-- END breadCrumbHomeBlock -->
+		                            <!-- BEGIN breadCrumbStartBlock -->
+		                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+		                            <!-- END breadCrumbStartBlock -->
+		                            <!-- BEGIN breadCrumbEndBlock -->
+		                            <!-- END breadCrumbEndBlock -->
+		                        </ol>
+		        			</div>
 	                    </div>
 
 	                    <!-- BEGIN toolTitleBlock -->
-	                    <h3>{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small></h3>
+	                    <div class="row">
+	                    	<div class="col-md-12">
+	                    		<h3>{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small></h3>
+	                    	</div>
+	                    </div>
 	                    <!-- END toolTitleBlock -->
 
 	                    <!-- BEGIN TOOL CONTENT -->
@@ -154,7 +162,7 @@
                             </div>
                 </footer>
 
-                
+
 	        	<aside id="sidebar">		
 
 					<div class="blocks">
