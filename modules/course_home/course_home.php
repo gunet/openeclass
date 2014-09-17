@@ -60,8 +60,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
-            $('.edit-action').tooltip();
-            $('.item-title').tooltip();
+            $('.action').tooltip();
     })
     </script>";
 
@@ -204,12 +203,6 @@ if ($is_editor) {
     }
 }
 
-// add course units
-if ($is_editor) {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
-} else {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
-}
 if ($is_editor) {
     $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
@@ -225,107 +218,78 @@ if ($is_editor) {
 		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
+
 $sql = Database::get()->queryArray($query);
-$first = true;
-$count_index = 1;
-foreach ($sql as $cu) {
-    // access status
-    $access = $cu->public;
-    // Visibility icon
-    $vis = $cu->visible;
-    $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
-    $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
-    $class_vis = ($vis == 0) ? 'invisible' : '';
-    $cunits_content .=  "<div class='panel'>
-                            <ul class='boxlist'>
-                                <li class='list-item contentbox'>
-                                    <div class='item-content'>
-                                            <div class='item-header'>
-                                                <h3 class='item-title' data-toggle='tooltip' title='Edit this announcement'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
-                                            </div>	    
-                                            <div class='item-body'>    
-                                                $cu->comments
-                                            </div>			      
-                                    </div>";
-    if ($is_editor) {                                                
-        $cunits_content .= "<div class='item-side'>
-                                        <div class='item-options'>
-                                            <span class='option-button'><i class='fa fa-gear'></i></span>
-                                            <ul>
-                                                <li class='hide-action' title='Hide this announcement'>
-                                                    <span><i class='fa fa-eye'></i></span>
-                                                </li>
-                                                <li class='edit-action' data-toggle='tooltip' data-placement='bottom' title='Edit this announcement'>
-                                                    <span><i class='fa fa-edit'></i></span>
-                                                </li>
-                                                <li class='delete-action' title='Delete this announcement'>
-                                                    <span><i class='fa fa-times'></i></span>
-                                                </li>
-                                            </ul>      
-                                        </div>
-                                    </div>";
-    }
-        $cunits_content .=      "</li>
-                            </ul>                          
-                        </div>";    
-//    $cunits_content .= "<table class='tbl' width='100%'>";
-//    if ($is_editor) {
-//        $cunits_content .= "<tr>" .
-//                "<th width='25' class='right'>$count_index.</th>" .
-//                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
-//    } elseif (resource_access($vis, $access)) {
-//        $cunits_content .= "<tr>" .
-//                "<th width='25' class='right'>$count_index.</th>" .
-//                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
-//    }
-//    if ($is_editor) { // display actions
-//        $cunits_content .= "<th width='80' class='center'>" .
-//                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
-//                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
-//                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
-//                "onClick=\"return confirmation('$langConfirmDelete');\">" .
-//                "<img src='$themeimg/delete.png' " .
-//                "title='$langDelete' alt='$langDelete'></a>" .
-//                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
-//                "<img src='$themeimg/$icon_vis' " .
-//                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
-//        if ($visible == COURSE_OPEN) { // public accessibility actions
-//            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
-//            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
-//                    "<img src='$themeimg/$icon_access' " .
-//                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
-//            $cunits_content .= "&nbsp;&nbsp;</th>";
-//        }
-//        if ($cu->id != $last_id) {
-//            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
-//                    "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
-//        } else {
-//            $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
-//        }
-//        if (!$first) {
-//            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
-//                    "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
-//        } else {
-//            $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
-//        }
-//    }
-//    $cunits_content .= "</tr><tr><td ";
-//    if ($is_editor) {
-//        $cunits_content .= "colspan='8' $class1_vis>";
-//    } else {
-//        $cunits_content .= "colspan='2'>";
-//    }
-//    if (resource_access($vis, $access)) {
-//        $cunits_content .= standard_text_escape($cu->comments);
-//        $count_index++;
-//    } else {
-//        $cunits_content .= "&nbsp;";
-//    }
-//    $cunits_content .= "</td></tr></table>";
-//    $first = false;
+$total_cunits = count($sql);
+
+// add course units
+if ($is_editor) {
+    $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+} elseif ($total_cunits != 0) {
+    $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
-if ($first and ! $is_editor) {
-    $cunits_content = '';
+
+if ($total_cunits > 0) {
+    $count_index = 1;
+    foreach ($sql as $cu) {
+        // access status
+        $access = $cu->public;
+        // Visibility icon
+        $vis = $cu->visible;
+        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
+        $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
+        $class_vis = ($vis == 0) ? 'invisible' : '';
+        $cunits_content .=  "<div class='panel'>
+                                <ul class='boxlist'>
+                                    <li class='list-item contentbox'>
+                                        <div class='item-content'>
+                                                <div class='item-header'>
+                                                    <h3 class='item-title' data-toggle='tooltip' title='Edit this announcement'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
+                                                </div>	    
+                                                <div class='item-body'>    
+                                                    $cu->comments
+                                                </div>			      
+                                        </div>";
+        if ($is_editor) {                                                
+            $cunits_content .= "<div class='item-side'>
+                                            <div class='item-options'>
+                                                <span class='option-button'><i class='fa fa-gear'></i></span>
+                                                <ul>
+                                                    <li class='action' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'><span><i class='fa fa-eye'></i></span></a>
+                                                    </li>
+                                                    <li class='action' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
+                                                        <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'><span><i class='fa fa-edit'></i></span></a>
+                                                    </li>";
+            if ($visible == COURSE_OPEN) {
+                $icon_access = ($access == 1) ? '<i class="fa fa-unlock"></i>' : '<i class="fa fa-lock"></i>';
+                                $cunits_content .= "<li class='action' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'><span>$icon_access</span></a>
+                                                    </li>";
+            }
+            if ($cu->id != $last_id) {
+                $cunits_content .= "<li class='action' title='$langDown'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'><span><i class='fa fa-arrow-down'></i></span></a>
+                                                    </li>";
+            }
+            if ($count_index != 1) {        
+                $cunits_content .= "<li class='action' title='$langUp'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'><span><i class='fa fa-arrow-up'></i></span></a>
+                                                    </li>";
+            }
+            $cunits_content .= "<li class='action delete-action' title='$langDelete'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?del=$cu->id'><span><i class='fa fa-times'></i></span></a>
+                                                    </li>                                            
+                                                </ul>      
+                                            </div>
+                                        </div>";
+        }
+        $cunits_content .= "</li>
+                                </ul>                          
+                            </div>"; 
+
+    $count_index++;
+    }
 }
 
 $bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
