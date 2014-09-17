@@ -1561,10 +1561,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 KEY `admin_events_dates` (`start`))");
 
                     //create triggers
+                    Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
                     Database::get()->query("CREATE TRIGGER personal_calendar_settings_init "
                             . "AFTER INSERT ON `user` FOR EACH ROW "
                             . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
-                    Database::get()->query("INSERT INTO personal_calendar_settings(user_id) SELECT id FROM user");
+                    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) SELECT id FROM user");
                     
                     // bbb_sessions tables
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
