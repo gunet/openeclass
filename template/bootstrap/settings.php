@@ -32,11 +32,28 @@ $theme_settings = array(
 
 function template_callback($template, $menuTypeID)
 {
-    global $uid;
+    global $uid, $session, $native_language_names_init;
 
     if ($uid) {
         $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     } else {
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    }
+
+    if ($menuTypeID != 2) {
+        $lang_select = "<li class='dropdown'>
+          <a href='#' class='btn btn-default dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
+              <i class='fa fa-globe'></i>
+            <span class='caret'></span>
+          </a>
+          <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
+        foreach ($session->active_ui_languages as $code) {
+            $lang_select .=
+                "<li role='presentation'>
+                    <a role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>" .
+                        q($native_language_names_init[$code]) . "</a></li>";
+        }
+        $lang_select .= "</ul></li>";
+        $template->set_var('LANG_SELECT', $lang_select);
     }
 }

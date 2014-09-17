@@ -95,9 +95,11 @@
 
 		              <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
 
+                      {%LANG_SELECT%}
+
 		              <li class="dropdown">
 		              	<a href="#" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-    						<img alt="" class="img-circle user-icon" src="../../ifeneris/template/bootstrap/img/user.jpg">{%USERNAME%}
+                            <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
 						    <span class="caret"></span>
 						</a>
 						
@@ -106,7 +108,6 @@
 								<a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-sign-out"></i>{%LANG_LOGOUT%}</a>
 							</li>
 						</ul>
-
 		              </li>
 
 		              <li><a class="toggle-sidebar"><i class="fa fa-columns"></i></a></li>
