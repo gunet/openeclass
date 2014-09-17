@@ -1,7 +1,7 @@
 
 /* 
 =============================================
-    SASS for UI Theme v3.0 - version 1.03 
+    SASS for UI Theme v3.0 - version 1.05 
 =============================================
 */
 
@@ -198,7 +198,8 @@ body > .container{
 	#header.navbar{
 		padding: 0;
 		border: 0;
-		background: #DBDBDB;
+		background: #EEEEEE;
+    border-bottom: 1px solid #DBDBDB;
 
 		.navbar-nav{
 			margin: 0;
@@ -222,6 +223,12 @@ body > .container{
 						color: white;							
 					}
 				}
+
+        .user-icon
+        {
+          width: 20px;
+          margin-right: 10px;
+        }
 
 				&:last-child > a{
 					border-radius: 0 4px 0px 0px;
@@ -261,6 +268,7 @@ footer.footer{
   background: #eee;
   margin-top: 2em;
   color: rgb(167, 167, 167);
+  border-top: 1px solid #DBDBDB;
 }
 
 /* migrated sidebar */
