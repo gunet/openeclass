@@ -278,37 +278,37 @@ foreach ($sql as $cu) {
 //                "<th width='25' class='right'>$count_index.</th>" .
 //                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
 //    }
-    if ($is_editor) { // display actions
-        $cunits_content .= "<th width='80' class='center'>" .
-                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
-                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
-                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
-                "onClick=\"return confirmation('$langConfirmDelete');\">" .
-                "<img src='$themeimg/delete.png' " .
-                "title='$langDelete' alt='$langDelete'></a>" .
-                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
-                "<img src='$themeimg/$icon_vis' " .
-                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
-        if ($visible == COURSE_OPEN) { // public accessibility actions
-            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
-            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
-                    "<img src='$themeimg/$icon_access' " .
-                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
-            $cunits_content .= "&nbsp;&nbsp;</th>";
-        }
-        if ($cu->id != $last_id) {
-            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
-                    "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
-        } else {
-            $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
-        }
-        if (!$first) {
-            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
-                    "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
-        } else {
-            $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
-        }
-    }
+//    if ($is_editor) { // display actions
+//        $cunits_content .= "<th width='80' class='center'>" .
+//                "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
+//                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
+//                "<a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' " .
+//                "onClick=\"return confirmation('$langConfirmDelete');\">" .
+//                "<img src='$themeimg/delete.png' " .
+//                "title='$langDelete' alt='$langDelete'></a>" .
+//                "<a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'>" .
+//                "<img src='$themeimg/$icon_vis' " .
+//                "title='$langVisibility' alt='$langVisibility'></a>&nbsp;";
+//        if ($visible == COURSE_OPEN) { // public accessibility actions
+//            $icon_access = ($access == 1) ? 'access_public.png' : 'access_limited.png';
+//            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'>" .
+//                    "<img src='$themeimg/$icon_access' " .
+//                    "title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' /></a>";
+//            $cunits_content .= "&nbsp;&nbsp;</th>";
+//        }
+//        if ($cu->id != $last_id) {
+//            $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'>" .
+//                    "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
+//        } else {
+//            $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
+//        }
+//        if (!$first) {
+//            $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'>" .
+//                    "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
+//        } else {
+//            $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
+//        }
+//    }
 //    $cunits_content .= "</tr><tr><td ";
 //    if ($is_editor) {
 //        $cunits_content .= "colspan='8' $class1_vis>";
@@ -587,8 +587,6 @@ $tool_content .= "
 
             </ul>
     </div>
-// Contentbox: Copyright and Opencourse mode
-$tool_content .= "
     <div class='col-md-4'>
             <h5 class='content-title'>Αδεια χρησης</h5>
             <div class='panel'>
