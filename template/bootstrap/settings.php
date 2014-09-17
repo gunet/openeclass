@@ -44,12 +44,12 @@ function template_callback($template, $menuTypeID)
         $lang_select = "<li class='dropdown'>
           <a href='#' class='dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
               <i class='fa fa-globe'></i>
-            <span class='caret'></span>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
         foreach ($session->active_ui_languages as $code) {
+            $class = ($code == $session->language)? ' class="active"': '';
             $lang_select .=
-                "<li role='presentation'>
+                "<li role='presentation'$class>
                     <a role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>" .
                         q($native_language_names_init[$code]) . "</a></li>";
         }
