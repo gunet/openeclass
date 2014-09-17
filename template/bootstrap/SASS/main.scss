@@ -220,7 +220,8 @@ body > .container{
 					&:hover,
 					&:focus{
 						background: $color_hover;
-						color: white;							
+						color: white;
+            @include transition(all 120ms linear);							
 					}
 				}
 
