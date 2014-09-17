@@ -42,7 +42,7 @@ function template_callback($template, $menuTypeID)
 
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
-          <a href='#' class='btn btn-default dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
+          <a href='#' class='dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
               <i class='fa fa-globe'></i>
             <span class='caret'></span>
           </a>
