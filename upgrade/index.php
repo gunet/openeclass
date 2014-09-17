@@ -36,7 +36,6 @@ if ($language == 'el') {
     $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
     $link_changes_file = 'http://wiki.openeclass.org/en:changes';
 }
-
 // Main body
 $tool_content .= "
 <div class='alert1'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>

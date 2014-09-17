@@ -61,17 +61,15 @@ try {
     require_once 'include/not_installed.php';
 }
 
-if (isset($language)) {    
+if (isset($language)) {
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);    
+    $language = langname_to_code($language);        
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
     }
     $session = new Session();
-    $uid = $session->user_id;
-    if (isset($active_ui_languages)) {
-        $active_ui_languages = explode(' ', $active_ui_languages);
-    } else {
+    $uid = $session->user_id;    
+    if (!isset($active_ui_languages)) {
         $active_ui_languages = array('el');
     }
     if (!defined('UPGRADE')) {
@@ -86,10 +84,10 @@ if (isset($language)) {
     $urlSecure = get_config('secure_url');
     if (empty($urlSecure)) {
         $urlSecure = $urlServer;
-    }    
+    }
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;
+    $language = $session->language;    
 }
 
 //Initializing Valitron (form validation library)
