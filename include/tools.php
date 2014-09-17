@@ -190,7 +190,7 @@ function loggedInMenu() {
                 (isset($is_power_user) and $is_power_user) or
                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                 (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-            array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
+            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
             array_push($sideMenuLink, q($urlServer . 'modules/admin/?course=' . $course_code));
         }
 
