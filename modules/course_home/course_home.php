@@ -60,6 +60,8 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
+            $('.edit-action').tooltip();
+            $('.item-title').tooltip();
     })
     </script>";         
 
@@ -234,16 +236,48 @@ foreach ($sql as $cu) {
     $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
     $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
     $class_vis = ($vis == 0) ? 'invisible' : '';
-    $cunits_content .= "<table class='tbl' width='770'>";
-    if ($is_editor) {
-        $cunits_content .= "<tr>" .
-                "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
-    } elseif (resource_access($vis, $access)) {
-        $cunits_content .= "<tr>" .
-                "<th width='25' class='right'>$count_index.</th>" .
-                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
+    $cunits_content .=  "<div class='panel'>
+                            <ul class='boxlist'>
+                                <li class='list-item contentbox'>
+                                    <div class='item-content'>
+                                            <div class='item-header'>
+                                                <h3 class='item-title' data-toggle='tooltip' title='Edit this announcement'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
+                                            </div>	    
+                                            <div class='item-body'>    
+                                                $cu->comments
+                                            </div>			      
+                                    </div>";
+    if ($is_editor) {                                                
+        $cunits_content .= "<div class='item-side'>
+                                        <div class='item-options'>
+                                            <span class='option-button'><i class='fa fa-gear'></i></span>
+                                            <ul>
+                                                <li class='hide-action' title='Hide this announcement'>
+                                                    <span><i class='fa fa-eye'></i></span>
+                                                </li>
+                                                <li class='edit-action' data-toggle='tooltip' data-placement='bottom' title='Edit this announcement'>
+                                                    <span><i class='fa fa-edit'></i></span>
+                                                </li>
+                                                <li class='delete-action' title='Delete this announcement'>
+                                                    <span><i class='fa fa-times'></i></span>
+                                                </li>
+                                            </ul>      
+                                        </div>
+                                    </div>";
     }
+        $cunits_content .=      "</li>
+                            </ul>                          
+                        </div>";    
+//    $cunits_content .= "<table class='tbl' width='100%'>";
+//    if ($is_editor) {
+//        $cunits_content .= "<tr>" .
+//                "<th width='25' class='right'>$count_index.</th>" .
+//                "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
+//    } elseif (resource_access($vis, $access)) {
+//        $cunits_content .= "<tr>" .
+//                "<th width='25' class='right'>$count_index.</th>" .
+//                "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></th>";
+//    }
     if ($is_editor) { // display actions
         $cunits_content .= "<th width='80' class='center'>" .
                 "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'>" .
@@ -275,20 +309,20 @@ foreach ($sql as $cu) {
             $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
         }
     }
-    $cunits_content .= "</tr><tr><td ";
-    if ($is_editor) {
-        $cunits_content .= "colspan='8' $class1_vis>";
-    } else {
-        $cunits_content .= "colspan='2'>";
-    }
-    if (resource_access($vis, $access)) {
-        $cunits_content .= standard_text_escape($cu->comments);
-        $count_index++;
-    } else {
-        $cunits_content .= "&nbsp;";
-    }
-    $cunits_content .= "</td></tr></table>";
-    $first = false;
+//    $cunits_content .= "</tr><tr><td ";
+//    if ($is_editor) {
+//        $cunits_content .= "colspan='8' $class1_vis>";
+//    } else {
+//        $cunits_content .= "colspan='2'>";
+//    }
+//    if (resource_access($vis, $access)) {
+//        $cunits_content .= standard_text_escape($cu->comments);
+//        $count_index++;
+//    } else {
+//        $cunits_content .= "&nbsp;";
+//    }
+//    $cunits_content .= "</td></tr></table>";
+//    $first = false;
 }
 if ($first and ! $is_editor) {
     $cunits_content = '';
@@ -510,82 +544,63 @@ $tool_content .= "
 // Contentbox: Calendar
 // Contentbox: Announcements
 $tool_content .= "
-
-<div class='col-md-8'>
-        <h5 class='content-title'>Θεματικες Ενoτητες</h5>
-        <div class='panel'>
-                $cunits_content
-        </div>
-</div>
-
-
-<div class='col-md-4'> 
-        <h5 class='content-title'>Ημερολογιο</h5>
-        <div class='panel padding'>
-                <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
-        </div>
-</div>
-
-<div class='col-md-4'>
-        <h5 class='content-title'>Ανακοινωσεις</h5>
-        <ul class='tablelist panel'>
-                
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 1</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 2</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-            <li class='list-item'>
-                <span class='item-title'>Ανακοίνωση 3</span>
-                <div class='item-right-cols'>
-                    <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                </div>
-            </li>
-
-        </ul>
-</div>
+<div class='row'>
+    <div class='col-md-8'>
+            <h5 class='content-title'>Θεματικες Ενoτητες</h5>
+            $cunits_content
+ 
+    </div>
 
 
+    <div class='col-md-4'> 
+            <h5 class='content-title'>Ημερολογιο</h5>
+            <div class='panel padding'>
+                    <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
+            </div>
+    </div>
+
+    <div class='col-md-4'>
+            <h5 class='content-title'>Ανακοινωσεις</h5>
+            <ul class='tablelist panel'>
+
+                <li class='list-item'>
+                    <span class='item-title'>Ανακοίνωση 1</span>
+                    <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                    </div>
+                </li>
+
+                <li class='list-item'>
+                    <span class='item-title'>Ανακοίνωση 2</span>
+                    <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                    </div>
+                </li>
+
+                <li class='list-item'>
+                    <span class='item-title'>Ανακοίνωση 3</span>
+                    <div class='item-right-cols'>
+                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                    </div>
+                </li>
+
+            </ul>
+    </div>
+    <div class='col-md-4'>
+            <h5 class='content-title'>Αδεια χρησης</h5>
+            <div class='panel'>
+                    $license_info_box
+            </div>
+    </div>
+
+    <div class='col-md-4'>
+            <h5 class='content-title'>Opencourses</h5>
+            <div class='panel'>
+                    $opencourses_level
+            </div>
+    </div>
+</div>    
 ";
-
-
-
-
-
-
-
-// Contentbox: Keywords, Copyright and Opencourse mode
-$tool_content .= "
-<div class='col-md-4'>
-        <h5 class='content-title'>Αδεια χρησης</h5>
-        <div class='panel'>
-                $license_info_box
-        </div>
-</div>
-
-<div class='col-md-4'>
-        <h5 class='content-title'>Opencourses</h5>
-        <div class='panel'>
-                $opencourses_level
-        </div>
-</div>
-
-";
-
-
-
-
-
-
 
 
 $tool_content .= "
