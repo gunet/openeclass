@@ -213,12 +213,14 @@ if (isset($_POST['submit'])) {
         //===================course format and start and finish date===============
         //check if there is a start and finish date if weekly selected
         if($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']){
-            if(!$_POST['start_date']){
+            if (!$_POST['start_date']) {
                 //if no start date do not allow weekly view and show alert message
                 $view_type = 'units';
+                $_POST['start_date'] = '0000-00-00';
+                $_POST['finish_date'] = '0000-00-00';
                 $noWeeklyMessage = 1;
             }
-            else{ //if there is start date create the weeks from that start date
+            else { //if there is start date create the weeks from that start date
                 
                 //Number of the previous week records for this course
                 $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
@@ -301,7 +303,7 @@ if (isset($_POST['submit'])) {
         if (!$deps_valid) {
             $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
                                       <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-        } else {
+        } else {            
             Database::get()->query("UPDATE course
                             SET title = ?s,
                                 public_code = ?s,
@@ -315,14 +317,14 @@ if (isset($_POST['submit'])) {
                                 start_date = ?t,
                                 finish_date = ?t
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], 
-                                            $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);            
+                                            $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
-                'public_code' => $_POST['fcode'],
-                'visible' => $_POST['formvisible'],
-                'prof_names' => $_POST['titulary'],
-                'lang' => $language));
+                                                        'public_code' => $_POST['fcode'],
+                                                        'visible' => $_POST['formvisible'],
+                                                        'prof_names' => $_POST['titulary'],
+                                                        'lang' => $language));
 
             $tool_content .= "<p class='success'>$langModifDone</p>";
             
@@ -441,7 +443,7 @@ if (isset($_POST['submit'])) {
                             }
                             $tool_content .=">$langWeekly</option>
                         </select>
-                        <div class='info' id='weekly_info'>Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος</div>
+                        <div class='info' id='weekly_info'>$langCourseWeeklyFormatNotice</div>
                     </td>
                 </tr>
                 <tr>
@@ -453,15 +455,15 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "'></td>
                 </tr>
                 <tr>
-                    <th width='170'>$langFinish:</th>
-                    <td width='1'><input class='dateInForm' type='text' name='finish_date' value='";
-                    if($c->finish_date != "0000-00-00"){
+                <th width='170'>$langFinish:</th>
+                <td width='1'><input class='dateInForm' type='text' name='finish_date' value='";
+                if($c->finish_date != "0000-00-00") {
                     $tool_content .= $c->finish_date;
                 }
                 $tool_content .= "'></td>
                 </tr>
-            </table>
-        </fieldset>";
+                </table>
+                </fieldset>";
         if ($isOpenCourseCertified) {
             $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
         }
