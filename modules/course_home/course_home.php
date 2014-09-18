@@ -510,60 +510,75 @@ $tool_content .= "
 // Contentbox: Thematikes enotites
 // Contentbox: Calendar
 // Contentbox: Announcements
+if ($total_cunits > 0 || $is_editor) {
+    $alter_layout = FALSE;
+    $cunits_sidebar_columns = 4; 
+    $cunits_sidebar_subcolumns = 12;
+} else {
+    $alter_layout = TRUE;
+    $cunits_sidebar_columns = 12; 
+    $cunits_sidebar_subcolumns = 4;
+}
 $tool_content .= "
-<div class='row'>
-    <div class='col-md-8'>
+<div class='row'>";
+if (!$alter_layout){
+    $tool_content .= "<div class='col-md-8'>
             <h2>$langCourseUnits</h5>
                 $cunits_content
-    </div>
+    </div>";
+}
 
-
-<div class='col-md-4'> 
-            <h5 class='content-title'>Ημερολογιο</h5>
-            <div class='panel padding'>
-                    <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
+$tool_content .= "
+    <div class='col-md-$cunits_sidebar_columns'>
+        <div class='row'>
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>Ημερολογιο</h5>
+                <div class='panel padding'>
+                        <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
+                </div>
             </div>
-    </div>
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>Ανακοινωσεις</h5>
+                <ul class='tablelist panel'>
 
-    <div class='col-md-4'>
-            <h5 class='content-title'>Ανακοινωσεις</h5>
-            <ul class='tablelist panel'>
+                    <li class='list-item'>
+                        <span class='item-title'>Ανακοίνωση 1</span>
+                        <div class='item-right-cols'>
+                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                    </li>
 
-                <li class='list-item'>
-                    <span class='item-title'>Ανακοίνωση 1</span>
-                    <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                    </div>
-                </li>
+                    <li class='list-item'>
+                        <span class='item-title'>Ανακοίνωση 2</span>
+                        <div class='item-right-cols'>
+                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                    </li>
 
-                <li class='list-item'>
-                    <span class='item-title'>Ανακοίνωση 2</span>
-                    <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                    </div>
-                </li>
+                    <li class='list-item'>
+                        <span class='item-title'>Ανακοίνωση 3</span>
+                        <div class='item-right-cols'>
+                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
+                        </div>
+                    </li>
 
-                <li class='list-item'>
-                    <span class='item-title'>Ανακοίνωση 3</span>
-                    <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                    </div>
-                </li>
-
-            </ul>
-    </div>
-    <div class='col-md-4'>
-            <h5 class='content-title'>Αδεια χρησης</h5>
-            <div class='panel'>
-                    $license_info_box
+                </ul>
             </div>
-    </div>
-
-    <div class='col-md-4'>
-            <h5 class='content-title'>Opencourses</h5>
-            <div class='panel'>
-                    $opencourses_level
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>Αδεια χρησης</h5>
+                <div class='panel'>
+                        $license_info_box
+                </div>
             </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>Opencourses</h5>
+                <div class='panel'>
+                        $opencourses_level
+                </div>
+            </div>
+        </div>
     </div>
 </div>    
 ";
