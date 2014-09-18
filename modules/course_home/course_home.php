@@ -60,7 +60,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
-            $('.action').tooltip();
+            $('[rel=\"tooltip\"]').tooltip();
     })
     </script>";
 
@@ -222,12 +222,7 @@ if ($is_editor) {
 $sql = Database::get()->queryArray($query);
 $total_cunits = count($sql);
 
-// add course units
-if ($is_editor) {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
-} elseif ($total_cunits != 0) {
-    $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
-}
+
 
 if ($total_cunits > 0) {
     $count_index = 1;
@@ -244,7 +239,7 @@ if ($total_cunits > 0) {
                                     <li class='list-item contentbox'>
                                         <div class='item-content'>
                                                 <div class='item-header'>
-                                                    <h3 class='item-title' data-toggle='tooltip' title='Edit this announcement'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
+                                                    <h3 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
                                                 </div>	    
                                                 <div class='item-body'>    
                                                     $cu->comments
@@ -255,29 +250,29 @@ if ($total_cunits > 0) {
                                             <div class='item-options'>
                                                 <span class='option-button'><i class='fa fa-gear'></i></span>
                                                 <ul>
-                                                    <li class='action' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
+                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'><span><i class='fa fa-eye'></i></span></a>
                                                     </li>
-                                                    <li class='action' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
+                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
                                                         <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'><span><i class='fa fa-edit'></i></span></a>
                                                     </li>";
             if ($visible == COURSE_OPEN) {
                 $icon_access = ($access == 1) ? '<i class="fa fa-unlock"></i>' : '<i class="fa fa-lock"></i>';
-                                $cunits_content .= "<li class='action' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
+                                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'><span>$icon_access</span></a>
                                                     </li>";
             }
             if ($cu->id != $last_id) {
-                $cunits_content .= "<li class='action' title='$langDown'>
+                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'><span><i class='fa fa-arrow-down'></i></span></a>
                                                     </li>";
             }
             if ($count_index != 1) {        
-                $cunits_content .= "<li class='action' title='$langUp'>
+                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'><span><i class='fa fa-arrow-up'></i></span></a>
                                                     </li>";
             }
-            $cunits_content .= "<li class='action delete-action' title='$langDelete'>
+            $cunits_content .= "<li rel='tooltip' delete-action' data-toggle='tooltip' data-placement='bottom' title='$langDelete'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' onClick=\"return confirmation('$langConfirmDelete');\"><span><i class='fa fa-times'></i></span></a>
                                                     </li>                                            
                                                 </ul>      
@@ -422,7 +417,7 @@ $tool_content .= "
         <div class='toolbox pull-right'>
 
             <div type='button' class='button dropdown open-on-hover'>
-                <span class='txt' class='tooltip-left' data-tooltip='Syllabus'>Πληροφορίες Μαθήματος</span>
+                <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='bottom'>Πληροφορίες Μαθήματος</span>
                 <span class='fa fa-caret-down'></span>
                 <ul class='dropdown-menu'>
                     <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
@@ -523,7 +518,7 @@ $tool_content .= "
 <div class='row'>";
 if (!$alter_layout){
     $tool_content .= "<div class='col-md-8'>
-            <h2>$langCourseUnits</h5>
+            <h2>$langCourseUnits ".(($is_editor)? "<a rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' href='{$urlServer}modules/units/info.php?course=$course_code'><i class='fa fa-plus-circle'></i></a>" : "")."</h2>
                 $cunits_content
     </div>";
 }
