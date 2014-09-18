@@ -139,7 +139,7 @@ $tool_content = "
         <div class='col-md-12'>
                 <div class='panel'>
                         <div class='col-sm-3'>
-                                <div><img src='../../ifeneris/template/bootstrap/img/user.jpg' class='img-circle' alt='Circular Image' ></div>
+                                <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' class='img-circle' alt='Circular Image'></div>
                         </div>
                         <div class='col-sm-9'>
                                 <div> <canvas id='canvas' height='150' width='600'></canvas></div>
