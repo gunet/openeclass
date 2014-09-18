@@ -287,9 +287,9 @@ if ($total_cunits > 0) {
     }
 }
 
-$bar_content .= "<ul class='custom_list'><li><b>" . $langCode . "</b>: " . q($public_code) . "</li>" .
-        "<li><b>" . $langTeachers . "</b>: " . q($professor) . "</li>" .
-        "<li><b>" . $langFaculty . "</b>: ";
+$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'>" . $langCode . ":</b> " . q($public_code) . "" .
+        "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
+        "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langFaculty . ":</b> ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -299,7 +299,7 @@ foreach ($departments as $dep) {
     $i++;
 }
 
-$bar_content .= "</li>\n";
+$bar_content .= "  ";
 
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
@@ -324,13 +324,13 @@ switch ($visible) {
             break;
         }
 }
-$bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
+$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / $langConfidentiality:</b> $lessonStatus";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / $langUsers:</b> $link";
 
 // display course license
 if ($course_license) {
@@ -478,18 +478,28 @@ $tool_content .= "
 $tool_content .= "
 <div class='row margin-top-thin'>
     <div class='col-md-12'>
-            <div id='lesson-banner' class='panel'>
-                    <div class='banner-left'>
-                            <div class='banner-image'></div>
-                    </div>
-                    <div class='banner-content'>
-                            <div class='banner-description'>$main_content</p></div>
-                            <hr>
-                            $bar_content
-                    </div>
+        <div class='panel row'>
+
+            <div class='col-md-5 col-sm-5 col-xs-12'>
+                <div >
+                    <img class='banner-image' src='../../template/bootstrap/img/ph1.jpg'/>
+                </div>
             </div>
+
+            <div class='col-md-7 col-sm-7 col-xs-12'>
+                <div class=''>$main_content</div>
+            </div>
+            
+            <div class ='col-md-7 col-sm-12 col-xs-12'>
+                <hr>
+                $bar_content
+            </div>
+
+
+        </div>
     </div>
-</div>";
+<div>
+";
 
 
 
