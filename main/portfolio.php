@@ -136,17 +136,20 @@ $tool_content = "
 </div>
 
 <div class='row'>
-        <div class='col-md-12'>
-                <div class='panel'>
-                        <div class='col-sm-3'>
-                                <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' class='img-circle' alt='Circular Image'></div>
-                        </div>
-                        <div class='col-sm-9'>
-                                <div> <canvas id='canvas' height='150' width='600'></canvas></div>
-                        </div> 
-
+    <div class='col-md-12'>
+        <div class='panel'>
+            <div class='panel-body'>
+                <div class='row'>
+                    <div class='col-sm-3'>
+                            <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle' alt='Circular Image'></div>
+                    </div>
+                    <div class='col-sm-9'>
+                        <div> <canvas id='canvas' height='150' width='600'></canvas></div>
+                    </div> 
                 </div>
+            </div>
         </div>
+    </div>
 </div>
 ";
 
