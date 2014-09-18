@@ -54,9 +54,38 @@ $color-red: #CE6B6B;
   -ms-transform:rotate($value);
 }
 
+
+/* Global style - remove outlines from links */
 a, a:hover, a:active, a:focus{
   outline: 0;
 }
+
+
+/* Extend bootstrap style - paddings to align with bootstrap columns */
+.padding-col-align
+{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Extend bootstrap style - margins */
+.margin-top
+{
+  margin-top: 15px;
+}
+
+.margin-top-thin
+{
+  margin-top: 10px;
+}
+.margin-top-fat
+{
+  margin-top: 20px;
+}
+
+
+
+
 
 body{
 	background: $color_sidebar;

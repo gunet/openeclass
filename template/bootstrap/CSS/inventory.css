@@ -408,20 +408,13 @@ ul.tablelist li.list-item:hover {
   -webkit-box-shadow: inset 0px -2px 8px #dddddd;
 }
 
-/* PADDING CLASS for alignment with bootstrap columns */
-/* line 574, inventory.scss */
-.padding-col-align {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
 /* COURSE MAIN INFO CONTAINER */
-/* line 582, inventory.scss */
+/* line 575, inventory.scss */
 #lesson-banner {
   position: relative;
   min-height: 13em;
 }
-/* line 588, inventory.scss */
+/* line 581, inventory.scss */
 #lesson-banner .banner-left {
   width: 40%;
   position: absolute;
@@ -430,7 +423,7 @@ ul.tablelist li.list-item:hover {
   height: 100%;
   margin-right: 1em;
 }
-/* line 598, inventory.scss */
+/* line 591, inventory.scss */
 #lesson-banner .banner-left .banner-image {
   background: url("../../img/ph1.jpg") no-repeat center;
   width: 100%;
@@ -444,7 +437,7 @@ ul.tablelist li.list-item:hover {
   -o-background-size: cover;
   background-size: cover;
 }
-/* line 608, inventory.scss */
+/* line 601, inventory.scss */
 #lesson-banner .banner-left .banner-image:after {
   position: absolute;
   top: 0px;
@@ -468,7 +461,7 @@ ul.tablelist li.list-item:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
   /* IE6-9 */
 }
-/* line 629, inventory.scss */
+/* line 622, inventory.scss */
 #lesson-banner .banner-content {
   margin-left: 40%;
   padding: 1em;
@@ -476,23 +469,23 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 634, inventory.scss */
+/* line 627, inventory.scss */
 #lesson-banner .banner-content .banner-description {
   font-size: 0.8em;
   min-height: 6em;
   line-height: 1.7em;
 }
-/* line 640, inventory.scss */
+/* line 633, inventory.scss */
 #lesson-banner .banner-content hr {
   margin-bottom: 0.8em;
 }
 
-/* line 647, inventory.scss */
+/* line 640, inventory.scss */
 #lesson-footer {
   font-size: 0.85em;
   text-align: center;
 }
-/* line 651, inventory.scss */
+/* line 644, inventory.scss */
 #lesson-footer img {
   position: relative;
   height: 100%;
@@ -501,20 +494,20 @@ ul.tablelist li.list-item:hover {
   margin-right: 1em;
   height: 3em;
 }
-/* line 660, inventory.scss */
+/* line 653, inventory.scss */
 #lesson-footer .title {
   position: relative;
   display: block;
   text-align: center;
   margin: 1em auto;
 }
-/* line 667, inventory.scss */
+/* line 660, inventory.scss */
 #lesson-footer .contentbox > div {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 673, inventory.scss */
+/* line 666, inventory.scss */
 #lesson-footer .label-group {
   padding: 1em;
   padding-top: 0em;
@@ -522,7 +515,7 @@ ul.tablelist li.list-item:hover {
 }
 
 /* Button */
-/* line 687, inventory.scss */
+/* line 680, inventory.scss */
 .button {
   font-family: "Open Sans";
   font-size: 0.85em;
@@ -553,24 +546,24 @@ ul.tablelist li.list-item:hover {
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 718, inventory.scss */
+/* line 711, inventory.scss */
 .button > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 722, inventory.scss */
+/* line 715, inventory.scss */
 .button > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 726, inventory.scss */
+/* line 719, inventory.scss */
 .button > .fa.fa-caret-down {
   margin-right: 0px!important;
 }
-/* line 732, inventory.scss */
+/* line 725, inventory.scss */
 .button:hover, .button:focus {
   background: #F3F3F3;
   outline: 0;
 }
-/* line 738, inventory.scss */
+/* line 731, inventory.scss */
 .button:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -582,7 +575,7 @@ ul.tablelist li.list-item:hover {
 }
 
 /* flippin btn */
-/* line 755, inventory.scss */
+/* line 748, inventory.scss */
 .flippin-btn {
   position: relative;
   border: 0;
@@ -598,7 +591,7 @@ ul.tablelist li.list-item:hover {
   -webkit-touch-callout: none;
 }
 
-/* line 772, inventory.scss */
+/* line 765, inventory.scss */
 .flippin-btn,
 .flippin-btn:after,
 .flippin-btn:before {
@@ -613,7 +606,7 @@ ul.tablelist li.list-item:hover {
   transform-style: preserve-3d;
 }
 
-/* line 785, inventory.scss */
+/* line 778, inventory.scss */
 .flippin-btn:after,
 .flippin-btn:before {
   position: absolute;
@@ -628,13 +621,13 @@ ul.tablelist li.list-item:hover {
   backface-visibility: hidden;
 }
 
-/* line 799, inventory.scss */
+/* line 792, inventory.scss */
 .flippin-btn:hover:before {
   background: #4da1e4;
   color: white;
 }
 
-/* line 804, inventory.scss */
+/* line 797, inventory.scss */
 .flippin-btn:before {
   z-index: 2;
   color: #fff;
@@ -644,7 +637,7 @@ ul.tablelist li.list-item:hover {
   content: attr(data-label);
 }
 
-/* line 813, inventory.scss */
+/* line 806, inventory.scss */
 .flippin-btn:after {
   z-index: 1;
   background-color: #999;
@@ -658,12 +651,12 @@ ul.tablelist li.list-item:hover {
   content: '';
 }
 
-/* line 826, inventory.scss */
+/* line 819, inventory.scss */
 .flippin-btn:active:before {
   background-color: #3571c8;
 }
 
-/* line 830, inventory.scss */
+/* line 823, inventory.scss */
 .flippin-btn.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
@@ -672,7 +665,7 @@ ul.tablelist li.list-item:hover {
 }
 
 /* BUTTON COLORS */
-/* line 842, inventory.scss */
+/* line 835, inventory.scss */
 .button.color-green {
   color: white;
   background: #6bce6b;
@@ -682,12 +675,12 @@ ul.tablelist li.list-item:hover {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 852, inventory.scss */
+/* line 845, inventory.scss */
 .button.color-green:hover {
   background: #83DE83;
 }
 
-/* line 859, inventory.scss */
+/* line 852, inventory.scss */
 .button.color-red {
   color: white;
   background: #ce6b6b;
@@ -697,12 +690,12 @@ ul.tablelist li.list-item:hover {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 869, inventory.scss */
+/* line 862, inventory.scss */
 .button.color-red:hover {
   background: #E58080;
 }
 
-/* line 875, inventory.scss */
+/* line 868, inventory.scss */
 .button.hover-blue:hover {
   background: #4da1e4;
   border-color: #4da1e4;
@@ -711,29 +704,29 @@ ul.tablelist li.list-item:hover {
 }
 
 /* BUTTON SIZES */
-/* line 885, inventory.scss */
+/* line 878, inventory.scss */
 .button.size-xl {
   font-size: 2em;
 }
 
-/* line 889, inventory.scss */
+/* line 882, inventory.scss */
 .button.size-l {
   font-size: 1.5em;
 }
 
-/* line 893, inventory.scss */
+/* line 886, inventory.scss */
 .button.size-s {
   font-size: 0.85em;
 }
 
 /* DROPDOWN */
-/* line 901, inventory.scss */
+/* line 894, inventory.scss */
 .button.dropdown.opened {
   background: #4da1e4 !important;
   border-bottom-color: #3F87C1;
   color: white;
 }
-/* line 909, inventory.scss */
+/* line 902, inventory.scss */
 .button.dropdown.opened .dropdown-menu {
   display: block;
   -webkit-transition: all 150ms linear 1s;
@@ -743,12 +736,12 @@ ul.tablelist li.list-item:hover {
   transition: all 150ms linear 1s;
 }
 
-/* line 918, inventory.scss */
+/* line 911, inventory.scss */
 .button.dropdown.open-on-hover:hover .dropdown-menu {
   display: block;
 }
 
-/* line 923, inventory.scss */
+/* line 916, inventory.scss */
 ul.dropdown-menu {
   display: none;
   position: absolute;
@@ -772,13 +765,13 @@ ul.dropdown-menu {
   -webkit-box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.175);
 }
 
-/* line 952, inventory.scss */
+/* line 945, inventory.scss */
 .float-right .dropdown-menu {
   right: -1px;
   left: auto;
 }
 
-/* line 958, inventory.scss */
+/* line 951, inventory.scss */
 ul.dropdown-menu:before {
   content: "";
   position: absolute;
@@ -790,7 +783,7 @@ ul.dropdown-menu:before {
   z-index: -1;
 }
 
-/* line 969, inventory.scss */
+/* line 962, inventory.scss */
 ul.dropdown-menu li a {
   display: block;
   text-align: left;
@@ -802,7 +795,7 @@ ul.dropdown-menu li a {
   white-space: nowrap;
 }
 
-/* line 981, inventory.scss */
+/* line 974, inventory.scss */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: white;
@@ -810,21 +803,21 @@ ul.dropdown-menu li a {
 }
 
 /* PAGINATION */
-/* line 992, inventory.scss */
+/* line 985, inventory.scss */
 .my-pager {
   margin: 1em 0em;
   text-align: right;
   font-size: 0.85em;
 }
 
-/* line 1000, inventory.scss */
+/* line 993, inventory.scss */
 .my-pager .items > .button {
   padding: 0.5em 0.8em;
   vertical-align: middle;
   cursor: pointer;
 }
 
-/* line 1011, inventory.scss */
+/* line 1004, inventory.scss */
 .my-pager .active {
   color: #4da1e4 !important;
   border-top: none;
@@ -837,23 +830,23 @@ ul.dropdown-menu li a {
   -webkit-box-shadow: inset 0px 2px 5px lightgrey;
 }
 
-/* line 1024, inventory.scss */
+/* line 1017, inventory.scss */
 .my-pager .items > span:hover {
   color: #4da1e4;
 }
 
 /* TOGGLE SWTICH */
-/* line 1032, inventory.scss */
+/* line 1025, inventory.scss */
 .my-toggle > * {
   vertical-align: middle;
 }
 
-/* line 1037, inventory.scss */
+/* line 1030, inventory.scss */
 .my-toggle .txt {
   font-size: 0.75em;
 }
 
-/* line 1042, inventory.scss */
+/* line 1035, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -876,7 +869,7 @@ input.toggle {
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* line 1069, inventory.scss */
+/* line 1062, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -897,30 +890,30 @@ input.toggle:after {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* line 1089, inventory.scss */
+/* line 1082, inventory.scss */
 input.toggle:hover:after {
   background: white;
 }
 
-/* line 1094, inventory.scss */
+/* line 1087, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
   background-color: #dddddd;
 }
 
-/* line 1101, inventory.scss */
+/* line 1094, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
   left: 0px;
 }
 
 /* INPUT TEXTAREA SELECT */
-/* line 1109, inventory.scss */
+/* line 1102, inventory.scss */
 input,
 textarea {
   width: 100%;
 }
 
-/* line 1115, inventory.scss */
+/* line 1108, inventory.scss */
 input,
 textarea, select {
   font-family: "Open Sans";
@@ -935,7 +928,7 @@ textarea, select {
   @inlcude transition(all 150ms linear);
 }
 
-/* line 1131, inventory.scss */
+/* line 1124, inventory.scss */
 input:focus,
 textarea:focus,
 select:focus {
@@ -946,13 +939,13 @@ select:focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-/* line 1139, inventory.scss */
+/* line 1132, inventory.scss */
 textarea {
   resize: vertical;
 }
 
 /* TAG & LABEL */
-/* line 1146, inventory.scss */
+/* line 1139, inventory.scss */
 .tag {
   display: inline;
   padding: 0.4em;
@@ -968,12 +961,12 @@ textarea {
   -moz-border-radius: 0.25em;
 }
 
-/* line 1159, inventory.scss */
+/* line 1152, inventory.scss */
 .label-group {
   padding: 2em 0em;
   padding-top: 2.5em;
 }
-/* line 1162, inventory.scss */
+/* line 1155, inventory.scss */
 .label-group .title {
   display: inline-block;
   margin-right: 1em;
@@ -982,7 +975,7 @@ textarea {
   opacity: 0.6;
 }
 
-/* line 1173, inventory.scss */
+/* line 1166, inventory.scss */
 .label {
   font-size: 0.75em;
   display: inline-block;
@@ -999,48 +992,48 @@ textarea {
   -ms-transition: background 100ms linear;
   transition: background 100ms linear;
 }
-/* line 1189, inventory.scss */
+/* line 1182, inventory.scss */
 .label > span {
   font-weight: 600;
   color: #808080;
 }
-/* line 1194, inventory.scss */
+/* line 1187, inventory.scss */
 .label:hover {
   background: #e7e7e7;
   color: #3D3D3D;
 }
 
 /* HEADINGS */
-/* line 1202, inventory.scss */
+/* line 1195, inventory.scss */
 h1 {
   font-size: 2em;
   font-weight: 300;
 }
 
-/* line 1208, inventory.scss */
+/* line 1201, inventory.scss */
 h1.page-title {
   margin: 0em;
   font-weight: 400!important;
   color: #333;
 }
 
-/* line 1215, inventory.scss */
+/* line 1208, inventory.scss */
 #main h1 {
   color: #444;
 }
-/* line 1219, inventory.scss */
+/* line 1212, inventory.scss */
 #main h2, #main h3, #main h4, #main h5, #main h6 {
   color: #777;
 }
 
-/* line 1224, inventory.scss */
+/* line 1217, inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
   color: #4da1e4;
 }
 
-/* line 1230, inventory.scss */
+/* line 1223, inventory.scss */
 hr {
   height: 1px;
   border: none;
@@ -1056,74 +1049,74 @@ hr {
   opacity:0.5;
 }
 */
-/* line 1247, inventory.scss */
+/* line 1240, inventory.scss */
 .button-row {
   margin: 1em 0em;
 }
 
-/* line 1251, inventory.scss */
+/* line 1244, inventory.scss */
 .button-row > * {
   display: inline-block!important;
 }
 
-/* line 1255, inventory.scss */
+/* line 1248, inventory.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 1259, inventory.scss */
+/* line 1252, inventory.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 1263, inventory.scss */
+/* line 1256, inventory.scss */
 .align-left {
   text-align: left;
 }
 
-/* line 1267, inventory.scss */
+/* line 1260, inventory.scss */
 .float-right {
   float: right;
 }
 
-/* line 1271, inventory.scss */
+/* line 1264, inventory.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 1275, inventory.scss */
+/* line 1268, inventory.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 1279, inventory.scss */
+/* line 1272, inventory.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 1283, inventory.scss */
+/* line 1276, inventory.scss */
 .displaynone {
   display: none;
 }
 
-/* line 1287, inventory.scss */
+/* line 1280, inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
 }
 
-/* line 1292, inventory.scss */
+/* line 1285, inventory.scss */
 a:hover {
   text-decoration: underline;
 }
 
-/* line 1296, inventory.scss */
+/* line 1289, inventory.scss */
 a.goto {
   position: relative;
   padding-right: 1.5em!important;
   font-size: 0.75em;
 }
-/* line 1302, inventory.scss */
+/* line 1295, inventory.scss */
 a.goto:after {
   content: "\f105";
   font-family: "FontAwesome";
@@ -1137,39 +1130,39 @@ a.goto:after {
 }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-/* line 1318, inventory.scss */
+/* line 1311, inventory.scss */
 .fa {
   font-size: 1em;
 }
 
-/* line 1322, inventory.scss */
+/* line 1315, inventory.scss */
 h3 {
   font-weight: 600;
 }
 
-/* line 1326, inventory.scss */
+/* line 1319, inventory.scss */
 img {
   max-width: 100%;
   position: relative;
 }
 
 /* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ */
-/* line 1339, inventory.scss */
+/* line 1332, inventory.scss */
 .md-modal.color-dark .md-content {
   background: #2E3033!important;
 }
 
-/* line 1343, inventory.scss */
+/* line 1336, inventory.scss */
 .md-modal .md-content p {
   font-size: 0.65em;
 }
 
-/* line 1347, inventory.scss */
+/* line 1340, inventory.scss */
 .md-modal .modal-icon {
   margin-right: 10px;
 }
 
-/* line 1351, inventory.scss */
+/* line 1344, inventory.scss */
 .md-modal .md-close {
   background: rgba(0, 0, 0, 0.2);
   border: none;
@@ -1183,19 +1176,19 @@ img {
   -moz-border-radius: 2px;
 }
 
-/* line 1369, inventory.scss */
+/* line 1362, inventory.scss */
 .md-modal .md-close:hover {
   background: rgba(0, 0, 0, 0.3);
   color: white;
 }
 
-/* line 1374, inventory.scss */
+/* line 1367, inventory.scss */
 .modal-overlay-bg-dark {
   background: rgba(35, 35, 35, 0.8) !important;
 }
 
 /* COLUMNS */
-/* line 1386, inventory.scss */
+/* line 1379, inventory.scss */
 .column-one-half,
 .column-one-third,
 .column-one-fourth,
@@ -1204,7 +1197,7 @@ img {
   margin-left: 2.564102564102564%;
 }
 
-/* line 1395, inventory.scss */
+/* line 1388, inventory.scss */
 .column-one-half .contentbox,
 .column-one-third .contentbox,
 .column-one-fourth .contentbox,
@@ -1212,34 +1205,34 @@ img {
   margin: 1em 0em;
 }
 
-/* line 1400, inventory.scss */
+/* line 1393, inventory.scss */
 .column-one-half {
   width: 48.717948717948715%;
 }
 
-/* line 1404, inventory.scss */
+/* line 1397, inventory.scss */
 .column-one-third {
   width: 31.623931623931625%;
 }
 
-/* line 1408, inventory.scss */
+/* line 1401, inventory.scss */
 .column-one-fourth {
   width: 23.076923076923077%;
 }
 
-/* line 1412, inventory.scss */
+/* line 1405, inventory.scss */
 .column-three-fourth {
   width: 74.35897435897436%;
 }
 
-/* line 1416, inventory.scss */
+/* line 1409, inventory.scss */
 .column-first {
   clear: both;
   margin-left: 0;
 }
 
 /* CSS ANIMATIONS */
-/* line 1425, inventory.scss */
+/* line 1418, inventory.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -1249,68 +1242,68 @@ img {
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 1431, inventory.scss */
+  /* line 1424, inventory.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 1432, inventory.scss */
+  /* line 1425, inventory.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 1433, inventory.scss */
+  /* line 1426, inventory.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 1439, inventory.scss */
+  /* line 1432, inventory.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 1440, inventory.scss */
+  /* line 1433, inventory.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 1441, inventory.scss */
+  /* line 1434, inventory.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 1447, inventory.scss */
+  /* line 1440, inventory.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 1448, inventory.scss */
+  /* line 1441, inventory.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 1449, inventory.scss */
+  /* line 1442, inventory.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 1455, inventory.scss */
+  /* line 1448, inventory.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 1456, inventory.scss */
+  /* line 1449, inventory.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 1457, inventory.scss */
+  /* line 1450, inventory.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
