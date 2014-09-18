@@ -310,7 +310,7 @@ if (isset($_POST['add_submit'])) {  // add
               <tr><th>$langCategory:</th>
                 <td><select name='selectcategory'>
                 <option value='0'>--</option>";
-                $resultcategories = db_query("SELECT * FROM video_category ORDER BY `order`", $currentCourseID);
+                $resultcategories = db_query("SELECT * FROM video_category ORDER BY `name`", $currentCourseID);
                 while ($myrow = mysql_fetch_array($resultcategories)) {
                     $tool_content .=  "<option value='$myrow[id]'";                
                     $tool_content .= '>' . q($myrow['name']) . "</option>";
@@ -362,7 +362,7 @@ if (isset($_POST['add_submit'])) {  // add
             <tr><th>$langCategory:</th>
                 <td><select name='selectcategory'>
                 <option value='0'>--</option>";
-                $resultcategories = db_query("SELECT * FROM video_category ORDER BY `order`", $currentCourseID);
+                $resultcategories = db_query("SELECT * FROM video_category ORDER BY `name`", $currentCourseID);
                 while ($myrow = mysql_fetch_array($resultcategories)) {
                     $tool_content .=  "<option value='$myrow[id]'";                
                     $tool_content .= '>' . q($myrow['name']) . "</option>";
@@ -430,7 +430,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
         <tr><th>$langCategory:</th>
             <td><select name='selectcategory'>
             <option value='0'>--</option>";
-            $resultcategories = db_query("SELECT * FROM video_category ORDER BY `order`", $currentCourseID);
+            $resultcategories = db_query("SELECT * FROM video_category ORDER BY `name`", $currentCourseID);
             while ($myrow = mysql_fetch_array($resultcategories)) {
                 $tool_content .=  "<option value='$myrow[id]'";
                 if (isset($category) and $category == $myrow['id']) {
@@ -489,7 +489,7 @@ ModalBoxHelper::loadModalBox(true);
 $num_of_categories = db_query_get_single_value("SELECT COUNT(*) FROM `video_category`", $currentCourseID);
 
 if ($num_of_categories > 0) { // categories found ?
-    $resultcategories = db_query("SELECT * FROM `video_category` ORDER BY `order`", $currentCourseID);                       
+    $resultcategories = db_query("SELECT * FROM `video_category` ORDER BY `name`", $currentCourseID);                       
     $tool_content .= "<br />
     <table width='100%' class='tbl'>
     <tr>
@@ -614,11 +614,8 @@ function submit_video_category()
                 $id = intval($_POST['id']);
                 db_query("UPDATE `video_category` $set_sql WHERE id = $id", $currentCourseID);
                 $catlinkstatus = $langCategoryModded;
-        } else {
-                $q = db_query("SELECT MAX(`order`) FROM `video_category`", $currentCourseID);
-                list($order) = mysql_fetch_row($q);
-                $order++;
-                db_query("INSERT INTO `video_category` $set_sql, `order` = $order", $currentCourseID);
+        } else {                
+                db_query("INSERT INTO `video_category` $set_sql", $currentCourseID);
                 $catlinkstatus = $langCategoryAdded;
         }
 }
