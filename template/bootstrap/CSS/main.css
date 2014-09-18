@@ -33,49 +33,42 @@ a, a:hover, a:active, a:focus {
 }
 
 /* line 87, main.scss */
-.row.no-gutters {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-/* line 92, main.scss */
-.row.no-gutters [class^="col-"],
-.row.no-gutters [class*=" col-"] {
+.no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 101, main.scss */
+/* line 97, main.scss */
 body {
   background: #232c3a;
   font-family: 'Open Sans';
 }
 
-/* line 106, main.scss */
+/* line 102, main.scss */
 body > .container {
   padding: 0 15px;
 }
 
-/* line 110, main.scss */
+/* line 106, main.scss */
 #Frame {
   margin: 1em 0em;
 }
 
 /* LEFTNAV - MAIN MENU, LOGO */
-/* line 115, main.scss */
+/* line 111, main.scss */
 #leftnav {
   background: #232c3a;
   padding: 0;
 }
-/* line 119, main.scss */
+/* line 115, main.scss */
 #leftnav .logo {
   margin: 2em 1em;
 }
-/* line 121, main.scss */
+/* line 117, main.scss */
 #leftnav .logo img {
   margin: 0 auto;
 }
-/* line 124, main.scss */
+/* line 120, main.scss */
 #leftnav .panel {
   border: none;
   margin: 0;
@@ -85,21 +78,21 @@ body > .container {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px 0px 0px 4px;
 }
-/* line 135, main.scss */
+/* line 131, main.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
 }
-/* line 139, main.scss */
+/* line 135, main.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px!important;
 }
-/* line 142, main.scss */
+/* line 138, main.scss */
 #leftnav .panel .panel-heading .panel-title {
   text-align: center;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 148, main.scss */
+/* line 144, main.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -108,44 +101,44 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 156, main.scss */
+/* line 152, main.scss */
 #leftnav .panel > a {
   outline: 0;
   display: block;
   background: rgba(0, 0, 0, 0.2) !important;
 }
-/* line 161, main.scss */
+/* line 157, main.scss */
 #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 0px!important;
   color: #4da1e4;
 }
-/* line 166, main.scss */
+/* line 162, main.scss */
 #leftnav .panel > a:hover {
   background: rgba(255, 255, 255, 0.25);
 }
-/* line 170, main.scss */
+/* line 166, main.scss */
 #leftnav .panel > a:hover, #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 175, main.scss */
+/* line 171, main.scss */
 #leftnav .panel a {
   background: transparent;
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 181, main.scss */
+/* line 177, main.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
   padding: 1em;
   text-align: center;
 }
-/* line 188, main.scss */
+/* line 184, main.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 193, main.scss */
+/* line 189, main.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -158,7 +151,7 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 204, main.scss */
+/* line 200, main.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -168,68 +161,68 @@ body > .container {
   -moz-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
 }
-/* line 216, main.scss */
+/* line 212, main.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 220, main.scss */
+/* line 216, main.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 /* LOGO - Extent bootstrap style */
-/* line 232, main.scss */
+/* line 228, main.scss */
 .logo {
   min-height: 20px;
   min-width: 20px;
 }
 
-/* line 237, main.scss */
+/* line 233, main.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 242, main.scss */
+/* line 238, main.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
 }
 
-/* line 247, main.scss */
+/* line 243, main.scss */
 #main-content {
   overflow: hidden;
   box-shadow: 0px -5px 10px 0px black;
   -moz-box-shadow: 0px -5px 10px 0px black;
   -webkit-box-shadow: 0px -5px 10px 0px black;
 }
-/* line 255, main.scss */
+/* line 251, main.scss */
 #main-content #header.navbar {
   padding: 0;
   border: 0;
   background: #EEEEEE;
   border-bottom: 1px solid #DBDBDB;
 }
-/* line 261, main.scss */
+/* line 257, main.scss */
 #main-content #header.navbar .navbar-nav {
   margin: 0;
   float: right;
 }
-/* line 265, main.scss */
+/* line 261, main.scss */
 #main-content #header.navbar .navbar-nav > li {
   border-left: 1px solid #e7e7e7;
   float: left;
 }
-/* line 269, main.scss */
+/* line 265, main.scss */
 #main-content #header.navbar .navbar-nav > li a {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 273, main.scss */
+/* line 269, main.scss */
 #main-content #header.navbar .navbar-nav > li a i.fa {
   margin: 0 1em;
 }
-/* line 278, main.scss */
+/* line 274, main.scss */
 #main-content #header.navbar .navbar-nav > li a:hover, #main-content #header.navbar .navbar-nav > li a:focus {
   background: #4da1e4;
   color: white;
@@ -239,30 +232,30 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 286, main.scss */
+/* line 282, main.scss */
 #main-content #header.navbar .navbar-nav > li .user-icon {
   width: 20px;
   margin-right: 10px;
 }
-/* line 291, main.scss */
+/* line 287, main.scss */
 #main-content #header.navbar .navbar-nav > li:last-child > a {
   border-radius: 0 4px 0px 0px;
 }
 
 /**/
-/* line 302, main.scss */
+/* line 298, main.scss */
 #main-content {
   background: #fafafa;
   border-radius: 4px;
 }
 
 /* BOOTSTRAP DEFAULT OVERWRITE */
-/* line 309, main.scss */
+/* line 305, main.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
-/* line 314, main.scss */
+/* line 310, main.scss */
 body.sidebar-opened #sidebar {
   right: 0px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
@@ -270,7 +263,7 @@ body.sidebar-opened #sidebar {
 }
 
 /* FOOTER */
-/* line 323, main.scss */
+/* line 319, main.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
@@ -281,12 +274,12 @@ footer.footer {
 }
 
 /* migrated sidebar */
-/* line 334, main.scss */
+/* line 330, main.scss */
 body.sidebar-opened .toggle-sidebar {
   background: #e3e4e6;
 }
 
-/* line 339, main.scss */
+/* line 335, main.scss */
 #sidebar {
   position: absolute;
   height: 100%;
@@ -311,14 +304,14 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 365, main.scss */
+/* line 361, main.scss */
 #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
   color: #686868;
   font-weight: 600;
   margin-bottom: 0.6em;
   margin-top: 0.3em;
 }
-/* line 372, main.scss */
+/* line 368, main.scss */
 #sidebar .toggle-sidebar {
   text-align: center;
   width: 3em;
@@ -331,23 +324,23 @@ body.sidebar-opened .toggle-sidebar {
   border: 1px solid #CFCFCF;
   cursor: default;
 }
-/* line 385, main.scss */
+/* line 381, main.scss */
 #sidebar .toggle-sidebar:hover {
   background: #4da1e4;
   border-color: #4da1e4;
   color: white;
 }
-/* line 392, main.scss */
+/* line 388, main.scss */
 #sidebar ul, #sidebar li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
-/* line 398, main.scss */
+/* line 394, main.scss */
 #sidebar .side-list {
   padding-bottom: 1em;
 }
-/* line 402, main.scss */
+/* line 398, main.scss */
 #sidebar .side-list .lesson-title {
   background: #344458;
   font-size: 0.85em;
@@ -367,87 +360,87 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 430, main.scss */
+/* line 426, main.scss */
 #sidebar .side-list .lesson-title:first-of-type {
   border-top-width: 1px;
   border-radius: 4px 4px 0px 0px;
   -webkit-border-radius: 4px 4px 0px 0px;
   -moz-border-radius: 4px 4px 0px 0px;
 }
-/* line 436, main.scss */
+/* line 432, main.scss */
 #sidebar .side-list .lesson-title:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 440, main.scss */
+/* line 436, main.scss */
 #sidebar .side-list .lesson-title:hover {
   background: #48586D;
   color: rgba(255, 255, 255, 0.85);
 }
-/* line 444, main.scss */
+/* line 440, main.scss */
 #sidebar .side-list .lesson-title:hover:after {
   color: rgba(255, 255, 255, 0.6);
 }
-/* line 449, main.scss */
+/* line 445, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active {
   border-bottom: none;
   color: white;
   background: #425164;
 }
-/* line 454, main.scss */
+/* line 450, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
   border-radius: 0px;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 458, main.scss */
+/* line 454, main.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
   color: #4da1e4;
 }
-/* line 464, main.scss */
+/* line 460, main.scss */
 #sidebar .side-list > div {
   background: #253447;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 16px;
 }
-/* line 474, main.scss */
+/* line 470, main.scss */
 #sidebar .side-list > div:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 479, main.scss */
+/* line 475, main.scss */
 #sidebar .side-list ul {
   padding: 0em 2em 1em 1.35em;
   font-size: 0.75em;
 }
-/* line 483, main.scss */
+/* line 479, main.scss */
 #sidebar .side-list ul > li {
   padding: 5px 0em;
 }
-/* line 488, main.scss */
+/* line 484, main.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 494, main.scss */
+/* line 490, main.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 499, main.scss */
+/* line 495, main.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 503, main.scss */
+/* line 499, main.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 507, main.scss */
+/* line 503, main.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -464,13 +457,13 @@ body.sidebar-opened .toggle-sidebar {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 529, main.scss */
+/* line 525, main.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 542, main.scss */
+/* line 538, main.scss */
 #sidebar .blocks .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -480,7 +473,7 @@ body.sidebar-opened .toggle-sidebar {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 553, main.scss */
+/* line 549, main.scss */
 #sidebar .blocks .title {
   margin: 0;
   padding: 2em 0em!important;
@@ -489,18 +482,18 @@ body.sidebar-opened .toggle-sidebar {
   text-align: center;
   overflow: hidden;
 }
-/* line 564, main.scss */
+/* line 560, main.scss */
 #sidebar .blocks .title .txt {
   text-transform: uppercase;
 }
-/* line 568, main.scss */
+/* line 564, main.scss */
 #sidebar .blocks .title i.fa {
   display: block;
   opacity: .9;
   font-size: 2.3em;
   margin-top: 0.4em;
 }
-/* line 577, main.scss */
+/* line 573, main.scss */
 #sidebar .blocks .title .tricky {
   margin-left: -100%;
   width: 200%;
@@ -512,7 +505,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: margin-left 120ms linear;
   transition: margin-left 120ms linear;
 }
-/* line 585, main.scss */
+/* line 581, main.scss */
 #sidebar .blocks .title .tricky > div {
   display: inline-block;
   width: 49%;
@@ -527,85 +520,85 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: opacity 60ms linear;
   transition: opacity 60ms linear;
 }
-/* line 597, main.scss */
+/* line 593, main.scss */
 #sidebar .blocks .title .tricky .icon {
   opacity: 1;
 }
-/* line 601, main.scss */
+/* line 597, main.scss */
 #sidebar .blocks .title .tricky .description {
   font-weight: 400;
   padding: 0.5em 1em;
   opacity: 0;
 }
-/* line 609, main.scss */
+/* line 605, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
   margin-left: 0%;
 }
-/* line 612, main.scss */
+/* line 608, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
   opacity: .55;
 }
-/* line 616, main.scss */
+/* line 612, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
   opacity: 0;
 }
-/* line 622, main.scss */
+/* line 618, main.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
   color: #4da1e4;
 }
-/* line 628, main.scss */
+/* line 624, main.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky {
   margin-left: 0%;
 }
-/* line 630, main.scss */
+/* line 626, main.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky .description {
   opacity: .55;
 }
-/* line 638, main.scss */
+/* line 634, main.scss */
 #sidebar .blocks li.block {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-/* line 642, main.scss */
+/* line 638, main.scss */
 #sidebar .blocks li.block > .ui-accordion-content,
 #sidebar .blocks li.block > .ui-accordion-header-active {
   background: rgba(255, 255, 255, 0.3);
 }
-/* line 646, main.scss */
+/* line 642, main.scss */
 #sidebar .blocks li.block > .ui-accordion-content {
   padding: 1em 0em;
 }
-/* line 650, main.scss */
+/* line 646, main.scss */
 #sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
   width: 90%;
   margin: 0em auto 1em auto;
   display: block;
 }
-/* line 656, main.scss */
+/* line 652, main.scss */
 #sidebar .blocks li.block textarea {
   min-height: 12em;
 }
-/* line 660, main.scss */
+/* line 656, main.scss */
 #sidebar .blocks li.block button {
   margin: 1.1em;
   margin-top: 0em;
   font-size: 0.8em;
 }
-/* line 666, main.scss */
+/* line 662, main.scss */
 #sidebar .blocks li.block .goto {
   float: right;
   color: #7E7E7E;
   padding: 0.5em;
   margin-right: 0.5em;
 }
-/* line 673, main.scss */
+/* line 669, main.scss */
 #sidebar .blocks li.block .input-parent {
   position: relative;
 }
-/* line 676, main.scss */
+/* line 672, main.scss */
 #sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
   padding-left: 2em;
 }
-/* line 680, main.scss */
+/* line 676, main.scss */
 #sidebar .blocks li.block .input-parent .fa {
   position: absolute;
   top: 0.7em;
@@ -614,20 +607,20 @@ body.sidebar-opened .toggle-sidebar {
   opacity: 0.2;
 }
 
-/* line 691, main.scss */
+/* line 687, main.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 695, main.scss */
+/* line 691, main.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 703, main.scss */
+/* line 699, main.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em!important;
@@ -636,7 +629,7 @@ body.sidebar-opened .toggle-sidebar {
   outline: none!important;
   cursor: pointer;
 }
-/* line 712, main.scss */
+/* line 708, main.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -661,7 +654,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 735, main.scss */
+/* line 731, main.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -678,47 +671,47 @@ body.sidebar-opened .toggle-sidebar {
 
 /* NO BREAKPOINTS BELLOW 1366 OR SMTH */
 @media (max-width: 1339px) {
-  /* line 744, main.scss */
+  /* line 740, main.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 750, main.scss */
+  /* line 746, main.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 757, main.scss */
+  /* line 753, main.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 763, main.scss */
+  /* line 759, main.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 768, main.scss */
+  /* line 764, main.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 772, main.scss */
+  /* line 768, main.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 776, main.scss */
+  /* line 772, main.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 783, main.scss */
+  /* line 779, main.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,
