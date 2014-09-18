@@ -274,7 +274,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
 			('video_quota', '100'),
 			('group_quota', '100')");
 
-        if ($oldversion < '2.1.3') {
+        if (version_compare($oldversion, '2.1.3', '<')) {
         	// delete useless field
         	if (mysql_field_exists($mysqlMainDb, 'cours', 'scoreShow')) {
 	        	echo delete_field('cours', 'scoreShow');
@@ -285,8 +285,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
 	        db_query("DELETE from annonces WHERE contenu='$langAnnounceExample'");
         }
 
-        if ($oldversion < '2.2') {
-                // course units
+        if (version_compare($oldversion, '2.2', '<')) {                // course units
 		db_query("CREATE TABLE IF NOT EXISTS `course_units` (
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 			`title` VARCHAR(255) NOT NULL DEFAULT '',
@@ -306,7 +305,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
 			`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
 	}
 
-        if ($oldversion < '2.2.1') {
+        if (version_compare($oldversion, '2.2.1', '<')) {
                 db_query("ALTER TABLE `cours` CHANGE `doc_quota` `doc_quota` FLOAT NOT NULL DEFAULT '104857600'");
                 db_query("ALTER TABLE `cours` CHANGE `video_quota` `video_quota` FLOAT NOT NULL DEFAULT '104857600'");
                 db_query("ALTER TABLE `cours` CHANGE `group_quota` `group_quota` FLOAT NOT NULL DEFAULT '104857600'");
@@ -338,7 +337,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                         db_query('ALTER TABLE annonces DROP code_cours');
                 }
         }
-	if ($oldversion < '2.3.1') {
+	if (version_compare($oldversion, '2.3.1', '<')) {
 		if (!mysql_field_exists($mysqlMainDb, 'prof_request', 'am')) {
 			db_query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
 		}
@@ -349,7 +348,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                                 ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
                                 ADD `phone_public` TINYINT(1) NOT NULL DEFAULT 0,
                                 ADD `am_public` TINYINT(1) NOT NULL DEFAULT 0");
-        if ($oldversion < '2.4') {
+        if (version_compare($oldversion, '2.4', '<')) {
         	if (mysql_field_exists($mysqlMainDb, 'cours', 'faculte')) {
 	        	echo delete_field('cours', 'faculte');
                 }
@@ -512,7 +511,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
 		}
         }
 
-        if ($oldversion < '2.5') {
+        if (version_compare($oldversion, '2.5', '<')) {
                 db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                         ('disable_eclass_stud_reg', '0'),
                         ('disable_eclass_prof_reg', '0'),
@@ -534,12 +533,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
         }
         
-        if ($oldversion < '2.5.2') {
+        if (version_compare($oldversion, '2.5.2', '<')) {
         	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
                 db_query("DROP TABLE IF EXISTS passwd_reset");
         }
         
-        if ($oldversion < '2.6') {
+        if (version_compare($oldversion, '2.6', '<')) {
             db_query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
             $old_close_user_registration = intval(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'close_user_registration'"));
             if ($old_close_user_registration == 0) {
@@ -588,7 +587,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 UNIQUE KEY ip (ip)) $charset_spec");
         }
         
-        if ($oldversion < '2.6.1') {
+        if (version_compare($oldversion, '2.6.1', '<')) {
             db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('login_fail_check', 1),
                                         ('login_fail_threshold', 15),
@@ -596,7 +595,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                                         ('login_fail_forgive_interval', 24)");
         }
 
-        if ($oldversion < '2.7') {
+        if (version_compare($oldversion, '2.7', '<')) {
                 mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
                         db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
 		mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
@@ -611,7 +610,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                         `course_id` int(11) NOT NULL,
                          PRIMARY KEY (`id`)) $charset_spec");
         }
-        if ($oldversion < '2.8') {
+        if (version_compare($oldversion, '2.8', '<')) {
                 db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('course_metadata', 0),
                                         ('opencourses_enable', 0)");
@@ -634,7 +633,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 }
         }
         
-        if ($oldversion < '2.8.3') {
+        if (version_compare($oldversion, '2.8.3', '<')) {
             db_query("CREATE TABLE IF NOT EXISTS course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
@@ -679,7 +678,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             }
         }
         
-        if ($oldversion < '2.9.1') {
+        if (version_compare($oldversion, '2.9.1') == 1) {
             mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
                 db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
         }
@@ -881,30 +880,30 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         while ($code = mysql_fetch_row($res)) {
                 // get course language
                 $lang = $code[1];
-                if ($oldversion < '2.1.3') {
+                if (version_compare($oldversion, '2.1.3', '<')) {
                         db_query('SET NAMES greek');
         		upgrade_course_old($code[0], $lang, "($i / $total)");
                         db_query('SET NAMES utf8');
                	        upgrade_course_2_1_3($code[0], "($i / $total)");
                 }
-                if ($oldversion <= '2.2') {
+                if (version_compare($oldversion, '2.2', '<')) {
                	        upgrade_course_2_2($code[0], $lang, "($i / $total)");
 		}
-                if ($oldversion < '2.3') {
+                if (version_compare($oldversion, '2.3', '<')) {
 			upgrade_course_2_3($code[0], "($i / $total)");
 		}
-                if ($oldversion < '2.4') {
+                if (version_compare($oldversion, '2.4', '<')) {
                         convert_description_to_units($code[0], $code[2]);
                         upgrade_course_index_php($code[0]);
 			upgrade_course_2_4($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.5') {
+                if (version_compare($oldversion, '2.5', '<')) {
 			upgrade_course_2_5($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.8.3') {
+                if (version_compare($oldversion, '2.8.3', '<')) {
 			upgrade_course_2_8($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.9') {
+                if (version_compare($oldversion, '2.9', '<')) {
 			upgrade_course_2_9($code[0], $lang, "($i / $total)");
                 }
                 if (version_compare($oldversion, '2.10', '<')) {
@@ -918,7 +917,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         }
 	echo "<hr>";
 
-        if ($oldversion < '2.1.3') {
+        if (version_compare($oldversion, '2.1.3', '<')) {
 	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
                 convert_db_utf8($mysqlMainDb);
         }
