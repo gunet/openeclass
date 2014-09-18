@@ -404,7 +404,7 @@ if (!empty($rec_mail)) {
 
 // Title and Toolbox
 $tool_content .= "
-<div class='row title-row'>
+<div class='row title-row margin-top'>
 
     <div class='col-md-10'>
         <h1 class='page-title'>Εδώ να μπει ο τίτλος μαθήματος</h1>
@@ -412,7 +412,7 @@ $tool_content .= "
     </div>
 </div>
 
-<div class='row'>
+<div class='row margin-top-thin'>
     <div class ='col-md-12'>
         <div class='toolbox pull-right'>
 
@@ -484,7 +484,7 @@ $tool_content .= "
 
 // Contentbox: Course main contentbox
 $tool_content .= "
-<div class='row'>
+<div class='row margin-top-thin'>
     <div class='col-md-12'>
             <div id='lesson-banner' class='panel'>
                     <div class='banner-left'>

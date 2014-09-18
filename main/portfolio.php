@@ -64,7 +64,7 @@ jQuery(document).ready(function() {
 require_once 'perso.php';
 
 $tool_content = "
-<div class='row'>
+<div class='row margin-top-thin'>
 
         <div class ='col-md-12'>
                 <div class='toolbox pull-right'>
@@ -77,7 +77,7 @@ $tool_content = "
         </div>    
 </div>
 
-<div class='row'>
+<div class='row margin-top-thin'>
         <div class='col-md-7'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
                 <div class='panel'>
