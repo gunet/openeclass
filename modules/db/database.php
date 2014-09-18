@@ -69,6 +69,19 @@ final class Database {
     }
 
     /**
+     * Remove a database from the cache. Since for every database, a new database connection is
+     * established (and this conenction is cached), with this option it is possible to remove
+     * from cache a connection that is known that it is no longer needed.
+     *
+     * In case the database is needed again, a new conenction will be created, thus it is safe to
+     * use this function.
+     * @param Database $dbase The name of the database
+     */
+    public static function forget($dbase) {
+        unset(self::$dbs[$dbase]);
+    }
+
+    /**
      * Get a Database object which does not point to a specific database. 
      * This is useful to perform DBMS queries, such as creating/destroying a database.
      * @return Database|null The database object

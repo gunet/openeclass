@@ -294,6 +294,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_10($code);
     upgrade_course_2_11($code);
     upgrade_course_3_0($code);
+    Database::forget($code);
 }
 
 /**
