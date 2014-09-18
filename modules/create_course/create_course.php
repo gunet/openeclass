@@ -437,7 +437,7 @@ if (!isset($_POST['create_course'])) {
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::Messages($langGeneralError);
-        redirect_to_home_page($_SERVER['SCRIPT_NAME']);
+        redirect_to_home_page('modules/create_course/create_course.php');
     }
 
     //===================course format and start and finish date===============
