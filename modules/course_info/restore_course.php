@@ -53,10 +53,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $tool_content .= "<fieldset>
         <legend>" . $langFileSent . "</legend>
         <table class='tbl' width='100%'>
-                   <tr><th width='150'>$langFileSentName</td><td>" . $_FILES['archiveZipped']['name'] . "</th></tr>
-                   <tr><th>$langFileSentSize</td><td>" . $_FILES['archiveZipped']['size'] . "</th></tr>
-                   <tr><th>$langFileSentType</td><td>" . $_FILES['archiveZipped']['type'] . "</th></tr>
-                   <tr><th>$langFileSentTName</td><td>" . $_FILES['archiveZipped']['tmp_name'] . "</th></tr>
+                   <tr><th width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
+                   <tr><th>$langFileSentSize</td><td>" . q($_FILES['archiveZipped']['size']) . "</th></tr>
+                   <tr><th>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
+                   <tr><th>$langFileSentTName</td><td>" . q($_FILES['archiveZipped']['tmp_name']) . "</th></tr>
                 </table></fieldset>
                         <fieldset>
         <legend>" . $langFileUnzipping . "</legend>
