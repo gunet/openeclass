@@ -1,7 +1,7 @@
 
 /* 
 ============================================================================
-    SASS for UI Inventory v3.0 - version 1.05 (based on 0.84 - 30/7/2014)
+    SASS for UI Inventory v3.0 - version 1.18 (based on 0.84 - 30/7/2014)
 ============================================================================
 */
 
@@ -133,7 +133,7 @@ $icon-font: 'FontAwesome';
 
 /* PANEL - Extent bootstrap style (to match old contebox)*/
 
-.panel
+#main-content .panel
 {
   background:white !important;
 

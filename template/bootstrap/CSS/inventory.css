@@ -1,6 +1,6 @@
 /* 
 ============================================================================
-    SASS for UI Inventory v3.0 - version 1.05 (based on 0.84 - 30/7/2014)
+    SASS for UI Inventory v3.0 - version 1.18 (based on 0.84 - 30/7/2014)
 ============================================================================
 */
 /* SASS VARIABLES */
@@ -39,7 +39,7 @@
 
 /* PANEL - Extent bootstrap style (to match old contebox)*/
 /* line 137, inventory.scss */
-.panel {
+#main-content .panel {
   background: white !important;
   min-height: 2.4em  !important;
   box-sizing: border-box;

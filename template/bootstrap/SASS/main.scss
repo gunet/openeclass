@@ -1,7 +1,7 @@
 
 /* 
 =============================================
-    SASS for UI Theme v3.0 - version 1.05 
+    SASS for UI Theme v3.0 - version 1.18 
 =============================================
 */
 
@@ -54,6 +54,10 @@ $color-red: #CE6B6B;
   -ms-transform:rotate($value);
 }
 
+a, a:hover, a:active, a:focus{
+  outline: 0;
+}
+
 body{
 	background: $color_sidebar;
   font-family: 'Open Sans';
@@ -103,11 +107,14 @@ body > .container{
 
 			&:hover{
 				color: $color_hover;
+
+        @include transition(all 120ms linear);
 			}
 		}
 
 
     > a{
+      outline: 0;
       display: block;
       background: rgba(0, 0, 0, 0.2)!important;
 
@@ -150,6 +157,8 @@ body > .container{
           border-radius: 4px 0px 0px 4px;
 
           margin-left: 0px;
+
+          @include transition(all 120ms linear);
         }
 
         &.active{
@@ -185,7 +194,15 @@ body > .container{
   min-width: 20px;
 }
 
-
+.add-gutter{
+  padding-left: 30px;
+  padding-right: 30px;
+ }
+      
+.remove-gutter{
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 #main-content{
 
@@ -194,13 +211,12 @@ body > .container{
 	box-shadow: 0px -5px 10px 0px black;
 	-moz-box-shadow: 0px -5px 10px 0px black;
 	-webkit-box-shadow: 0px -5px 10px 0px black;
-        
 
 	#header.navbar{
 		padding: 0;
 		border: 0;
 		background: #EEEEEE;
-                border-bottom: 1px solid #DBDBDB;
+    border-bottom: 1px solid #DBDBDB;
 
 		.navbar-nav{
 			margin: 0;
@@ -239,16 +255,6 @@ body > .container{
 		}
 
 	}
-        
-        .add-gutter{
-            padding-left: 30px;
-            padding-right: 30px;
-        }
-        
-        .remove-gutter{
-            padding-left: 0px;
-            padding-right: 0px;
-        }
 
 }
 
@@ -691,7 +697,6 @@ body.sidebar-opened .toggle-sidebar{
     @include transition(all 100ms linear);
   }  
 }
-
 
 /* NO BREAKPOINTS BELLOW 1366 OR SMTH */
 
