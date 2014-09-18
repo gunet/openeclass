@@ -67,7 +67,7 @@ if (isset($_GET['get'])) {
         $file_type = NULL;
     }
     if (!send_file(intval($_GET['get']), $file_type)) {
-        Session::Messages($langFileNotFound, 'caution');
+        Session::Messages($langFileNotFound, 'alert-danger');
     }
 }
 
@@ -79,7 +79,7 @@ if ($is_editor) {
         // Allow unlimited time for creating the archive
         set_time_limit(0);
         if (!download_assignments($as_id)) {          
-            Session::Messages($langNoAssignmentsExist, 'caution');
+            Session::Messages($langNoAssignmentsExist, 'alert-danger');
             redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$as_id);
         }
     }
@@ -179,11 +179,11 @@ if ($is_editor) {
     } elseif (isset($_POST['new_assign'])) {
         if($_POST['title']) {
             if(add_assignment()) {
-                Session::Messages($langNewAssignSuccess,'success');
+                Session::Messages($langNewAssignSuccess,'alert-success');
                 show_assignments();
             }
         } else {
-            Session::Messages($m['WorkTitleValidation'],'caution');
+            Session::Messages($m['WorkTitleValidation'],'alert-danger');
             $nameTools = $langNewAssign;
             $navigation[] = $works_url;
             new_assignment();
@@ -192,9 +192,9 @@ if ($is_editor) {
         $as_id = intval($_GET['as_id']);
         $id = intval($_GET['id']);
         if(delete_user_assignment($as_id)){
-            Session::Messages($langDeleted, 'success');
+            Session::Messages($langDeleted, 'alert-success');
         } else {
-            Session::Messages($langDelError, 'caution');
+            Session::Messages($langDelError, 'alert-danger');
         }
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades'])) {
@@ -220,31 +220,31 @@ if ($is_editor) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
                 if (Database::get()->query("UPDATE assignment SET active = 0 WHERE id = ?d", $id)->affectedRows > 0) {
-                    Session::Messages($langAssignmentDeactivated, 'success');
+                    Session::Messages($langAssignmentDeactivated, 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
                 if (Database::get()->query("UPDATE assignment SET active = 1 WHERE id = ?d", $id)->affectedRows > 0) {
-                    Session::Messages($langAssignmentActivated, 'success');
+                    Session::Messages($langAssignmentActivated, 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete') {
                 if(delete_assignment($id)) {
-                    Session::Messages($langDeleted, 'success');
+                    Session::Messages($langDeleted, 'alert-success');
                 } else {
-                    Session::Messages($langDelError, 'caution');
+                    Session::Messages($langDelError, 'alert-danger');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete_file') {
                 if(delete_teacher_assignment_file($id)){
-                    Session::Messages($langDelF, 'success');
+                    Session::Messages($langDelF, 'alert-success');
                 } else {
-                    Session::Messages($langDelF, 'caution');
+                    Session::Messages($langDelF, 'alert-danger');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
             } elseif ($choice == 'do_purge') {
                 if (purge_assignment_subs($id)) {
-                    Session::Messages($langAssignmentSubsDeleted, 'success');
+                    Session::Messages($langAssignmentSubsDeleted, 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
@@ -258,11 +258,11 @@ if ($is_editor) {
                 $navigation[] = $work_id_url;
                 if($_POST['title']){
                     if (edit_assignment($id)) {
-                        Session::Messages($langEditSuccess,'success');
+                        Session::Messages($langEditSuccess,'alert-success');
                     }
                     redirect_to_home_page('modules/work/index.php?course='.$course_code);
                 } else {
-                    Session::Messages($m['WorkTitleValidation'],'caution');
+                    Session::Messages($m['WorkTitleValidation'],'alert-danger');
                     redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
                 }         
             } elseif ($choice == 'add') {
@@ -1026,7 +1026,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                         selection($groups_with_no_submissions, 'group_id') . "</td></tr>";
             }else{
-                Session::Messages($m['NoneWorkGroupNoSubmission'], 'caution');
+                Session::Messages($m['NoneWorkGroupNoSubmission'], 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);                
             }
         }
@@ -1036,7 +1036,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
                         selection($users_with_no_submissions, 'user_id') . "</td></tr>";
             } else {
-                Session::Messages($m['NoneWorkUserNoSubmission'], 'caution');
+                Session::Messages($m['NoneWorkUserNoSubmission'], 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
@@ -1660,9 +1660,9 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
                 'title' => $title,
                 'grade' => $grade,
                 'comments' => $comment));
-       Session::Messages($langGrades, 'success'); 
+       Session::Messages($langGrades, 'alert-success'); 
     } else {
-        Session::Messages($langGrades, 'alert1');
+        Session::Messages($langGrades);
     }
     if ($email) {
         grade_email_notify($id, $sid, $grade, $comment);
@@ -1691,7 +1691,7 @@ function submit_grades($grades_id, $grades, $email = false) {
                 if ($email) {
                     grade_email_notify($grades_id, $sid, $grade, '');
                 }          
-                Session::Messages($langGrades, 'success');
+                Session::Messages($langGrades, 'alert-success');
             }
         }
     }

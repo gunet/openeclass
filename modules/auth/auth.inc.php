@@ -881,7 +881,7 @@ function shib_cas_login($type) {
                 unset($_SESSION['cas_email']);
                 unset($_SESSION['cas_surname']);
                 unset($_SESSION['cas_givenname']);
-                Session::Messages($langUserAltAuth, 'caution');
+                Session::Messages($langUserAltAuth, 'alert-danger');
                 redirect_to_home_page();
             } else {
                 // don't force email address from CAS/Shibboleth.

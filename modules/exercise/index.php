@@ -94,7 +94,7 @@ if ($is_editor) {
                 case 'delete': // deletes an exercise
                     $objExerciseTmp->delete();
                     $eidx->remove($exerciseId);
-                    Session::Messages($langPurgeExerciseSuccess, 'success');
+                    Session::Messages($langPurgeExerciseSuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'purge': // purge exercise results
                     $objExerciseTmp->purge();

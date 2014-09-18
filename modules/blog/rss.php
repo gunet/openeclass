@@ -41,7 +41,7 @@ if ($course_id === false) {
     exit;
 }
 if (!visible_module(MODULE_ID_BLOG)) {
-    Session::Messages($langCheckPublicTools, 'caution');
+    Session::Messages($langCheckPublicTools, 'alert-danger');
     session_write_close();
     $errorMessagePath = "../../";
     if (!$uid) {

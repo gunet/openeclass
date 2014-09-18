@@ -98,7 +98,7 @@ class Session {
         }   
     }    
     //Sets automatically generated on next request messages
-    public static function Messages($messages, $class='alert1'){
+    public static function Messages($messages, $class='alert-warning'){
         if ( !is_array($messages)) $messages = array($class => array($messages));
         foreach ($messages as $message) {
             if (is_array($message)) {
@@ -136,9 +136,9 @@ class Session {
             return FALSE;
         }
     }   
-    public static function getError($key, $class='caution') {
+    public static function getError($key, $class='alert-danger') {
         if (isset($_SESSION[$key]['errors'][0])){
-            return "<div class='$class'>".$_SESSION[$key]['errors'][0]."</div>";
+            return "<div class='alert $class'>".$_SESSION[$key]['errors'][0]."</div>";
         } else {
             return FALSE;
         }
@@ -151,7 +151,7 @@ class Session {
         $msg_boxes = '';
 
         foreach($item_messages as $class => $value){
-            $msg_boxes .= "<div class='$class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
+            $msg_boxes .= "<div class='alert $class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
         return $msg_boxes;
     }

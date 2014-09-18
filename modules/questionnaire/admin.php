@@ -85,13 +85,13 @@ if (isset($_POST['submitPoll'])) {
             $pid = $_GET['pid'];
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
-            Session::Messages($langPollEdited, 'success');
+            Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
                         (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized)
                         VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized)->lastInsertID;
-            Session::Messages($langPollCreated, 'success');
+            Session::Messages($langPollCreated, 'alert-success');
         }
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     } else {
