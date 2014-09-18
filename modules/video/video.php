@@ -695,8 +695,7 @@ function showlinksofcategory($cat_id = 0) {
         $results['videolinks'] = db_query("SELECT * FROM videolinks $filterl WHERE (category IS NULL OR category = 0) $vis_q ORDER BY titre", $currentCourseID);
     }
     
-    $i = 0;     
-    //$tool_content .= "<tr>";
+    $i = 0;         
     foreach($results as $table => $result) {
         while ($myrow = mysql_fetch_array($result)) {
                 $myrow['course_id'] = $cours_id;
@@ -748,7 +747,7 @@ function showlinksofcategory($cat_id = 0) {
                     }
                     $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>$link_to_add";
                     if ($is_editor) {
-                        $width = '';
+                        $width = '17%';
                     } else {
                         $width = '5%';
                     }
