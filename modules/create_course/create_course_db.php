@@ -521,8 +521,7 @@ db_query("CREATE TABLE agenda (
         db_query("CREATE TABLE video_category (
             id int(6) NOT NULL auto_increment, 
             name varchar(255) NOT NULL, 
-            description text DEFAULT NULL, 
-            `order` int(6) NOT NULL,            
+            description text DEFAULT NULL,                         
             PRIMARY KEY (id))
         $charset_spec");
 
