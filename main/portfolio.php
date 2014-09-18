@@ -69,11 +69,14 @@ $tool_content = "
         <div class ='col-md-12'>
                 <div class='toolbox pull-right'>
                         <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
-                                <fe-ringbutton class='button hover-blue' title='' >
+                                <button class='button hover-blue' title='' >
                                         <i class='fa fa-life-ring'></i>
                                 </button>
                         </a> 
                 </div>
+                        <button>{%HELP_LINK_ICON%}</button>
+                        <button>{%RSS_LINK_ICON%}</button>
+                        <small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
         </div>    
 </div>
 
