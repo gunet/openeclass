@@ -519,9 +519,21 @@ if ($total_cunits > 0 || $is_editor) {
 $tool_content .= "
 <div class='row'>";
 if (!$alter_layout){
-    $tool_content .= "<div class='col-md-8'>
-            <h2>$langCourseUnits ".(($is_editor)? "<a rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' href='{$urlServer}modules/units/info.php?course=$course_code'><i class='fa fa-plus-circle'></i></a>" : "")."</h2>
-                $cunits_content
+    $tool_content .= "
+    <div class='col-md-8'>
+            <h5 class='content-title'>$langCourseUnits</h5>".
+
+            (($is_editor)? "<div class='toolbox'>
+                                <a rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' href='{$urlServer}modules/units/info.php?course=$course_code'>
+                                    <button class='button color-green'>
+                                        <i class='fa fa-plus-circle'></i>
+                                        <span class='txt'>$langAddUnit</span>
+                                    </button>
+                                </a>
+                            </div>" : "")."
+            
+            $cunits_content
+
     </div>";
 }
 
