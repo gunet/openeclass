@@ -254,20 +254,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         // set the text and icon on the third bar (header)
         if ($menuTypeID == 2) {
-            $t->set_var('THIRD_BAR_TEXT', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>');
-            $t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
+            $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>');
         } elseif ($menuTypeID == 3) {
-            $t->set_var('THIRD_BAR_TEXT', $langAdmin);
-            $t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
+            $t->set_var('SECTION_TITLE', $langAdmin);
         } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
-            $t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
-            $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+            $t->set_var('SECTION_TITLE', $langUserBriefcase);
         } elseif ($menuTypeID > 0) {
-            $t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
-            $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+            $t->set_var('SECTION_TITLE', $langPersonalisedBriefcase);
         } else {
-            $t->set_var('THIRD_BAR_TEXT', $langEclass);
-            $t->set_var('THIRDBAR_LEFT_ICON', 'logo_icon');
+            $t->set_var('SECTION_TITLE', $langEclass);
         }
 
         //set the appropriate search action for the searchBox form

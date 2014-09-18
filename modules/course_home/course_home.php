@@ -404,14 +404,6 @@ if (!empty($rec_mail)) {
 
 // Title and Toolbox
 $tool_content .= "
-<div class='row title-row margin-top'>
-
-    <div class='col-md-10'>
-        <h1 class='page-title'>Εδώ να μπει ο τίτλος μαθήματος</h1>
-        <h5 class='page-title'>Εδώ να μπει ο καθηγητής</h5>
-    </div>
-</div>
-
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
         <div class='toolbox pull-right'>

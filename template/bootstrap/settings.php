@@ -32,12 +32,18 @@ $theme_settings = array(
 
 function template_callback($template, $menuTypeID)
 {
-    global $uid, $session, $native_language_names_init;
+    global $uid, $session, $native_language_names_init, $course_id, $professor;
 
     if ($uid) {
         $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     } else {
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    }
+
+    if (!$course_id or !isset($professor) or !$professor) {
+        $template->set_block('mainBlock', 'professorBlock', 'delete');
+    } else {
+        $template->set_var('PROFESSOR', q($professor));
     }
 
     if ($menuTypeID != 2) {
