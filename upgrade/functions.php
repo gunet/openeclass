@@ -1753,14 +1753,14 @@ function quote($s) {
  */
 function fix_multiple_usernames()  {
 
-    global $langUpgradeMulUsernames, $langUpgradeChangeUsername;
+    global $langUpgradeMulUsernames, $langUpgradeChangeUsername, $tool_content;
 
     $q1 = Database::get()->queryArray("SELECT username, COUNT(*) AS nb
                                        FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
     if ($q1) {
-        echo "<div class='alert1'>";
-        echo $langUpgradeMulUsernames;
-        echo "<p>&nbsp;</p>";
+        $tool_content .= "<div class='alert1'>";
+        $tool_content .= $langUpgradeMulUsernames;
+        $tool_content .= "<p>&nbsp;</p>";
 
         foreach ($q1 as $u) {
             $q2 = Database::get()->queryArray("SELECT user_id, username FROM user WHERE BINARY username = '$u->username'");
@@ -1772,13 +1772,13 @@ function fix_multiple_usernames()  {
                     if (!$q3) {
                             Database::get()->query("UPDATE user SET username = CONCAT('$uid->username', '$i') WHERE user_id = $uid->user_id");
                             $newusername = $uid->username . "$i";
-                            echo sprintf($langUpgradeChangeUsername, $uid->username, $newusername);
-                            echo "<br />";
+                            $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $newusername);
+                            $tool_content .= "<br />";
                             break;
                     }
                 }
             }
         }
-        echo "</div>";
+        $tool_content .= "</div>";
     }
 }
