@@ -754,7 +754,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
                                 course_id = ?d, title = ?s, comments = ?s,
-                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), $ures->date);
+                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, $ures->comments, intval($newvis), intval($ures->order), $ures->date);
                             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", intval($ures->id));
                         });
                     }
