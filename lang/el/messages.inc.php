@@ -3034,7 +3034,8 @@ $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισ�
 $langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
 $langUpgradeCourseDone = "Ολοκληρώθηκε!";
-
+$langUpgradeMulUsernames = "Bρέθηκαν χρήστες με πολλαπλά usernames οπότε πραγματοποιήθηκαν οι παρακάτω αλλαγές:";
+$langUpgradeChangeUsername = "Αλλαγή του ονόματος χρήστη από %s σε %s";
 /* * *****************************************************************
  * course_tools.php
  * ****************************************************************** */

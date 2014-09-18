@@ -85,6 +85,9 @@ if (!DBHelper::tableExists('config')) {
 
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
+    // check for mulitple usernames
+    fix_multiple_usernames();
+    
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
