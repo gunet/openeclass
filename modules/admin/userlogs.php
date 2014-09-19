@@ -137,9 +137,9 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
       <legend>$langUserLog</legend>
       <table class='tbl'>
         <tr><th width='220' class='left'>$langStartDate</th>
-            <td><input type='text' name = 'u_date_start' value = '$u_date_start'></td></tr>
+            <td><input type='text' name = 'u_date_start' value = '" . q($u_date_start) . "'></td></tr>
         <tr><th class='left'>$langEndDate</th>
-            <td><input type='text' name = 'u_date_end' value = '$u_date_end'></td></tr>
+            <td><input type='text' name = 'u_date_end' value = '" . q($u_date_end) . "'></td></tr>
         <tr><th class='left'>$langLogTypes :</th>
             <td>" . selection($log_types, 'logtype', $logtype) . "</td></tr>
         <tr class='course'><th class='left'>$langFirstLetterCourse</th>

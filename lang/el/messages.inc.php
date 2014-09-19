@@ -288,6 +288,10 @@ $langStatsCourse = "Στατιστικά Μαθήματος";
 $langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή στοιχείων μαθήματος";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του μαθήματος";
+$langCourseFormat = "Mορφή μαθήματος";
+$langCourseWeeklyFormatInfo = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormatNotice = "Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
@@ -3034,7 +3038,8 @@ $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισ�
 $langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
 $langUpgradeCourseDone = "Ολοκληρώθηκε!";
-
+$langUpgradeMulUsernames = "Bρέθηκαν χρήστες με πολλαπλά usernames οπότε πραγματοποιήθηκαν οι παρακάτω αλλαγές:";
+$langUpgradeChangeUsername = "Αλλαγή του ονόματος χρήστη από %s σε %s";
 /* * *****************************************************************
  * course_tools.php
  * ****************************************************************** */

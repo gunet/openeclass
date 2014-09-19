@@ -294,6 +294,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_10($code);
     upgrade_course_2_11($code);
     upgrade_course_3_0($code);
+    Database::forget($code);
 }
 
 /**
@@ -477,14 +478,41 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         SELECT `id` + $fileid_offset, `filename`, `real_filename`, `filesize`
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
+        Database::get($code)->query("CREATE TEMPORARY TABLE dropbox_temp_index (
+                                    msg_id INT NOT NULL,
+                                    recipient_id INT NOT NULL,
+                                    is_read TINYINT NOT NULL DEFAULT 1,
+                                    deleted TINYINT NOT NULL DEFAULT 1
+                                    )");
+        
+        //we use dropbox_post to fill temp table with recipients and dropbox_file with senders
+        Database::get($code)->query("INSERT INTO dropbox_temp_index
+                        (`msg_id`, `recipient_id`)
+
+                        SELECT id, uploaderId FROM dropbox_file");
+        
+        Database::get($code)->query("INSERT INTO dropbox_temp_index
+
+                        (`msg_id`, `recipient_id`)
+
+                        SELECT fileID, recipientId FROM dropbox_post");
+        
+        //Users present at dropbox_person but not in temp haven't deleted their messages
+
+        Database::get($code)->query("UPDATE dropbox_temp_index t
+                                       INNER JOIN dropbox_person p
+                                         ON t.msg_id = p.fileID AND t.recipient_id = p.personId
+                                     SET deleted = ?d", 0);
+        
         $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
                          (`msg_id`, `recipient_id`, `is_read`, `deleted`)
-                         SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId, 1, 0
-                           FROM dropbox_person, dropbox_map
-                          WHERE dropbox_person.fileId = dropbox_map.old_id
-                          ORDER BY dropbox_person.fileId") != null) && $ok;
+                         SELECT DISTINCT dropbox_map.new_id, dropbox_temp_index.recipient_id, dropbox_temp_index.is_read, dropbox_temp_index.deleted
+                           FROM dropbox_temp_index, dropbox_map
+                          WHERE dropbox_temp_index.msg_id = dropbox_map.old_id
+                          ORDER BY dropbox_temp_index.msg_id") != null) && $ok;
 
         Database::get($code)->query("DROP TEMPORARY TABLE dropbox_map");
+        Database::get($code)->query("DROP TEMPORARY TABLE dropbox_temp_index");
 
         if (false !== $ok) {
             Database::get($code)->query("DROP TABLE dropbox_file");
@@ -1716,4 +1744,42 @@ function html_cleanup($s) {
 // Quote string for output in config.php file
 function quote($s) {
     return "'" . addslashes(canonicalize_whitespace($s)) . "'";
+}
+
+
+/**
+ * @brief fix multiple usernames if exist
+ * @global type $langUpgradeMulUsernames
+ * @global type $langUpgradeChangeUsername
+ */
+function fix_multiple_usernames()  {
+
+    global $langUpgradeMulUsernames, $langUpgradeChangeUsername, $tool_content;
+
+    $q1 = Database::get()->queryArray("SELECT username, COUNT(*) AS nb
+                                       FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
+    if ($q1) {
+        $tool_content .= "<div class='alert1'>";
+        $tool_content .= $langUpgradeMulUsernames;
+        $tool_content .= "<p>&nbsp;</p>";
+
+        foreach ($q1 as $u) {
+            $q2 = Database::get()->queryArray("SELECT user_id, username FROM user WHERE BINARY username = '$u->username'");
+            $i = 0;
+            foreach ($q2 as $uid) {
+                while (++$i) {
+                    // check if new username exists 
+                    $q3 = Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = CONCAT('$uid->username', '$i')");
+                    if (!$q3) {
+                            Database::get()->query("UPDATE user SET username = CONCAT('$uid->username', '$i') WHERE user_id = $uid->user_id");
+                            $newusername = $uid->username . "$i";
+                            $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $newusername);
+                            $tool_content .= "<br />";
+                            break;
+                    }
+                }
+            }
+        }
+        $tool_content .= "</div>";
+    }
 }

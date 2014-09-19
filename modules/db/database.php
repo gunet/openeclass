@@ -57,8 +57,9 @@ final class Database {
      */
     public static function get($dbase = null) {
         global $mysqlServer, $mysqlUser, $mysqlPassword, $mysqlMainDb;
-        if (is_null($dbase))
+        if (is_null($dbase)) {
             $dbase = $mysqlMainDb;
+        }
         if (array_key_exists($dbase, self::$dbs)) {
             $db = self::$dbs[$dbase];
         } else {
@@ -66,6 +67,23 @@ final class Database {
             self::$dbs[$dbase] = $db;
         }
         return $db;
+    }
+
+    /**
+     * Remove a database from the cache. Since for every database, a new database connection is
+     * established (and this conenction is cached), with this option it is possible to remove
+     * from cache a connection that is known that it is no longer needed.
+     *
+     * In case the database is needed again, a new conenction will be created, thus it is safe to
+     * use this function.
+     * @param Database $dbase The name of the database
+     */
+    public static function forget($dbase) {
+        $dbhandler = self::$dbs[$dbase];
+        if (!is_null($dbhandler)) {
+            $dbhandler->__destruct();
+            unset(self::$dbs[$dbase]);
+        }
     }
 
     /**
@@ -435,6 +453,10 @@ final class Database {
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
         Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
+    }
+
+    public function __destruct() {
+        $this->dbh = null;
     }
 
 }

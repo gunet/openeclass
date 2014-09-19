@@ -973,8 +973,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        DROP INDEX annonces");
                     } else {
                         Database::get()->query("ALTER TABLE announcement 
-                                       ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
-                                       ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
+                                       ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
                     }
 
                     // create forum tables

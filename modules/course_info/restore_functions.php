@@ -250,7 +250,7 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                    <tr><td>&nbsp;</td></tr>
                    <tr><td colspan='2'>
                       <input type='submit' name='create_restored_course' value='$langOk' />
-                      <input type='hidden' name='restoreThis' value='$_POST[restoreThis]' /></td></tr>
+                      <input type='hidden' name='restoreThis' value='" . q($_POST[restoreThis]) . "' /></td></tr>
                 </tbody></table>
                 </form>";
 }
