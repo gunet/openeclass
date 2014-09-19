@@ -85,9 +85,6 @@ if (!DBHelper::tableExists('config')) {
 
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
-    // check for mulitple usernames
-    fix_multiple_usernames();
-    
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -754,7 +751,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
                                 course_id = ?d, title = ?s, comments = ?s,
-                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, $ures->comments, intval($newvis), intval($ures->order), $ures->date);
+                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), $ures->date);
                             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", intval($ures->id));
                         });
                     }
@@ -976,8 +973,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        DROP INDEX annonces");
                     } else {
                         Database::get()->query("ALTER TABLE announcement 
-                                       ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
-                                       ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
+                                       ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
                     }
 
                     // create forum tables
@@ -1564,11 +1561,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 KEY `admin_events_dates` (`start`))");
 
                     //create triggers
-                    Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
                     Database::get()->query("CREATE TRIGGER personal_calendar_settings_init "
                             . "AFTER INSERT ON `user` FOR EACH ROW "
                             . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
-                    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) SELECT id FROM user");
+                    Database::get()->query("INSERT INTO personal_calendar_settings(user_id) SELECT id FROM user");
                     
                     // bbb_sessions tables
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
