@@ -1,62 +1,107 @@
 /* 
 ==========================================================
-    SASS for structure of eclass v3.0 - version 0.0919b 
+    SASS for structure of eclass v3.0 - version 0.0919c 
 ==========================================================
 */
 /* 
-==============================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0919b
-==============================================================
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0919c
+================================================================
 */
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-/* line 38, D:/SASS/global.scss */
-.padding {
-  padding: 0.5em;
-}
-
-/* line 43, D:/SASS/global.scss */
+/* line 35, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 48, D:/SASS/global.scss */
+/* line 36, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
+/* line 38, global.scss */
+.align-left {
+  text-align: left;
+}
+
+/* line 39, global.scss */
+.align-right {
+  text-align: right;
+}
+
 /* Extend bootstrap style - margins */
-/* line 58, D:/SASS/global.scss */
+/* line 43, global.scss */
+.no-margin {
+  margin: 0px;
+}
+
+/* line 44, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 63, D:/SASS/global.scss */
+/* line 45, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 67, D:/SASS/global.scss */
+/* line 46, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
-/* Extend bootstrap style - gutters */
-/* line 73, D:/SASS/global.scss */
+/* line 47, global.scss */
+.margin-bottom {
+  margin-bottom: 15px;
+}
+
+/* line 48, global.scss */
+.margin-bottom-thin {
+  margin-bottom: 10px;
+}
+
+/* line 49, global.scss */
+.margin-bottom-fat {
+  margin-bottom: 20px;
+}
+
+/* line 51, global.scss */
+.float-left {
+  float: left;
+}
+
+/* line 52, global.scss */
+.float-right {
+  float: right;
+}
+
+/* Extend bootstrap style - gutters and paddings */
+/* line 57, global.scss */
+.padding {
+  padding: 0.5em;
+}
+
+/* line 58, global.scss */
+.no-padding {
+  padding: 0px;
+}
+
+/* line 61, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 77, D:/SASS/global.scss */
+/* line 66, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 82, D:/SASS/global.scss */
+/* line 72, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -64,7 +109,7 @@
 
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 171, D:/SASS/global.scss */
+/* line 161, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -74,68 +119,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 177, D:/SASS/global.scss */
+  /* line 167, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 178, D:/SASS/global.scss */
+  /* line 168, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 179, D:/SASS/global.scss */
+  /* line 169, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 185, D:/SASS/global.scss */
+  /* line 175, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 186, D:/SASS/global.scss */
+  /* line 176, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 187, D:/SASS/global.scss */
+  /* line 177, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 193, D:/SASS/global.scss */
+  /* line 183, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 194, D:/SASS/global.scss */
+  /* line 184, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 195, D:/SASS/global.scss */
+  /* line 185, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 201, D:/SASS/global.scss */
+  /* line 191, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 202, D:/SASS/global.scss */
+  /* line 192, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 203, D:/SASS/global.scss */
+  /* line 193, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

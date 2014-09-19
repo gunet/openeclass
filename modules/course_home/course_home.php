@@ -577,14 +577,20 @@ $tool_content .= "
 if (!$alter_layout){
     $tool_content .= "
     <div class='col-md-8'>
-            <h5 class='content-title'>$langCourseUnits</h5>".
-            (($is_editor)? "<div class='toolbox'>
-                                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-success'>
-                                        <i class='fa fa-plus-circle'></i>
-                                        $langAddUnit
-                                    </a>                          
-                            </div>" : "")."
+        <h5 class='content-title'>$langCourseUnits</h5>".
+        (($is_editor)? "
+            <hr class='no-margin'/>
+            <div class='align-right'>
+                <div class='toolbox margin-bottom-thin margin-top-thin'>
+                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass color-green'>
+                        <i class='fa fa-plus-circle'></i>
+                        $langAddUnit
+                    </a>
+                </div>                          
+            </div>" : "")."
+                
             $cunits_content
+
     </div>";
 }
 

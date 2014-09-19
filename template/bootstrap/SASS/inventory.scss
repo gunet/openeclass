@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0919b
+    SASS for UI Inventory of eclass v3.0 - version 0.0919c
 =============================================================
 */
 
@@ -93,6 +93,7 @@ hr
 }
 
 
+
 /* Font awesome icons seem to be looking better on specific sizes */
 .fa
 {
@@ -110,8 +111,12 @@ img
   position: relative;
 }
 
-
-
+.content-title
+{
+  text-transform: uppercase;
+  color: #888888;
+  font-weight: 400;
+}
 
 
 
@@ -158,6 +163,7 @@ img
   position:relative;
   text-align: right;
   margin-right:0em;  
+  display: inline-block;
 
   ul
   {
@@ -293,6 +299,7 @@ input.toggle[type=checkbox]:checked:after
 /* BUTTONS and styles -------------------------------------------------------------------*/
 .btn-default-eclass
 {  
+  outline: 0;
   font-family: $font-default;
   font-size:0.85em;
   padding:0.5em 1.2em;
@@ -349,7 +356,7 @@ input.toggle[type=checkbox]:checked:after
 
 
 /* BUTTON COLORS */
-.button.color-green
+.btn-default-eclass.color-green
 {
   color:white;
   background: $color-green;
@@ -357,14 +364,22 @@ input.toggle[type=checkbox]:checked:after
   border-top: none;
   @include box-shadow(none);
 
-  &:hover
+  &:hover,&:focus
   {
     background:#83DE83;
   }
 
+  &:active
+  {
+    background:#83DE83 !important;    
+    outline: 0 !important;
+    border-bottom-color: #4AA04A !important;
+    @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+  }
+
 }
 
-.button.color-red
+.btn-default-eclass.color-red
 {
   color:white;
   background: $color-red;
@@ -372,14 +387,22 @@ input.toggle[type=checkbox]:checked:after
   border-top: none;
   @include box-shadow(none);
 
-  &:hover
+  &:hover, &:focus
   {
     background:#E58080;
   }
 
+  &:active
+  { 
+    background:#E58080 !important;
+    outline: 0 !important;   
+    border-bottom-color: #984B4B !important;
+    @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+  }
+
 }
 
-.button.hover-blue:hover
+.btn-default-eclass.hover-blue:hover
 {
   background: $color-hover;
   border-color: $color-hover;
@@ -389,17 +412,17 @@ input.toggle[type=checkbox]:checked:after
 
 
 /* BUTTON SIZES */
-.button.size-xl
+.btn-default-eclass.size-xl
 {
   font-size:2em;
 }
 
-.button.size-l
+.btn-default-eclass.size-l
 {
   font-size:1.5em;
 }
 
-.button.size-s
+.btn-default-eclass.size-s
 {
   font-size:0.85em;
 }

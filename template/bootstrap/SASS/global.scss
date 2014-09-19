@@ -1,7 +1,7 @@
 /* 
-==============================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0919b
-==============================================================
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0919c
+================================================================
 */
 
 
@@ -30,58 +30,48 @@ $font-icon: 'FontAwesome';
 
 
 
-
-
-
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-.padding
-{
-  padding:0.5em;
-}
 
-.delete-action
-{
-  color:$color-red;
-}
+.delete-action {color:$color-red;}
+.delete-action:hover {background:$color-red!important; color:white!important;}
 
-.delete-action:hover
-{
-  background:$color-red!important;
-  color:white!important;
-}
-
-
+.align-left {text-align: left;}
+.align-right {text-align: right;}
 
 
 /* Extend bootstrap style - margins */
-.margin-top
-{
-  margin-top: 15px;
-}
+.no-margin {margin: 0px;}
+.margin-top {margin-top: 15px;}
+.margin-top-thin {margin-top: 10px;}
+.margin-top-fat {margin-top: 20px;}
+.margin-bottom {margin-bottom: 15px;}
+.margin-bottom-thin {margin-bottom: 10px;}
+.margin-bottom-fat {margin-bottom: 20px;}
 
-.margin-top-thin
-{
-  margin-top: 10px;
-}
-.margin-top-fat
-{
-  margin-top: 20px;
-}
+.float-left {float: left;}
+.float-right {float: right;}
 
-/* Extend bootstrap style - gutters */
+
+/* Extend bootstrap style - gutters and paddings */
+
+.padding {padding:0.5em;}
+.no-padding {padding: 0px;}
+
 .no-gutters
 {
   padding-right: 0;
   padding-left: 0;
 }
-.add-gutter{
+.add-gutter
+{
   padding-left: 30px;
   padding-right: 30px;
  }
       
-.remove-gutter{
-    padding-left: 0px;
-    padding-right: 0px;
+.remove-gutter
+{
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 
