@@ -329,7 +329,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<p class='success'>$langModifDone</p>";
             
             if($noWeeklyMessage){
-                $tool_content .= "<p class='alert1'>Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος</p>";
+                $tool_content .= "<p class='alert1'>$langCourseWeeklyFormatNotice</p>";
             }
                                     
             $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>

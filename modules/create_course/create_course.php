@@ -240,39 +240,34 @@ if (!isset($_POST['create_course'])) {
          $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 
 
-        $tool_content .="
-        <tr><td class='sub_title1' colspan='2'>$langMore</td></tr>
-        <tr>
-            <th >$langDisplay:</th>
-            <td >
+        $tool_content .= "
+        <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
+        <tr>            
+            <td>
                 <select name='view_type' id='view_type'>
                     <option value='units'";
                     $tool_content .=">$langCourseUnits</option>
                     <option value='weekly'";
                     $tool_content .=">$langWeekly</option>
                 </select>
-                <div class='info' id='weekly_info'>Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος</div>
+                
+                <div class='info' id='weekly_info'>$langCourseWeeklyFormatInfo</div>
             </td>
         </tr>
-        <tr>
-            <th >$langStartDate:</th>
-            <td ><input class='dateInForm' type='text' name='start_date' value=''></td>
-        </tr>
-        <tr>
-            <th >$langFinish:</th>
-            <td ><input class='dateInForm' type='text' name='finish_date' value=''></td>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='units' selected>&nbsp;$langCourseUnits</td></tr>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly'>&nbsp;$langWeekly</td></tr>
+        <tr>            
+            <th>$langStartDate</th><th>$langDuration</th></tr>
+                <tr><td colspan='2'><input class='dateInForm' type='text' name='start_date' value=''>
+                    $langDuration<input class='dateInForm' type='text' name='finish_date' value=''></td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-
 
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
         }
-
-
-
 
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
         <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>

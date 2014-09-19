@@ -493,7 +493,7 @@ if($viewCourse == "weekly"){
     }else{
         $visibleFlag = "";
     }
-    
+    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";    
     $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
