@@ -332,8 +332,8 @@
                 <p>Are you sure about this ?</p>
               </div>
               <div class='modal-footer'>
-                <a class='btn btn-default' data-dismiss='modal'>$langCancel</a>
-                <button type='button' class='btn btn-danger' id='confirm'>$langDelete</button>
+                <a id='cancel-btn' class='btn btn-default' data-dismiss='modal'></a>
+                <button type='button' class='btn' id='confirm'></button>
               </div>
             </div>
           </div>
@@ -345,7 +345,13 @@
               $(this).find('.modal-body p').text(message);
               var title = $(e.relatedTarget).attr('data-title');
               $(this).find('.modal-title').text(title);
-
+              var cancel_text = $(e.relatedTarget).attr('data-cancel-txt');
+              $(this).find('#cancel-btn').text(cancel_text);
+              var action_text = $(e.relatedTarget).attr('data-action-txt');
+              $(this).find('#confirm').text(action_text);
+              var action_btn_class = $(e.relatedTarget).attr('data-action-class');
+              $(this).find('#confirm').addClass(action_btn_class);
+              
               // Pass form reference to modal for submission on yes/ok
               var form = $(e.relatedTarget).closest('form');
               $(this).find('.modal-footer #confirm').data('form', form);

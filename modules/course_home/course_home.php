@@ -274,7 +274,7 @@ if ($total_cunits > 0) {
             }
             $cunits_content .= "<li rel='tooltip' delete-action' data-toggle='tooltip' data-placement='bottom' title='$langDelete'>
                                     <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
-                                        <a class='btn btn-xs' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm'>                                        
+                                        <a class='btn btn-xs' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
                                             <i class='fa fa-times'></i>
                                         </a>    
                                     </form>
