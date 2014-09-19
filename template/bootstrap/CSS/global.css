@@ -63,40 +63,45 @@
   margin-bottom: 20px;
 }
 
-/* line 51, global.scss */
+/* line 50, global.scss */
+.space-after-icon {
+  margin-right: 5px;
+}
+
+/* line 52, global.scss */
 .float-left {
   float: left;
 }
 
-/* line 52, global.scss */
+/* line 53, global.scss */
 .float-right {
   float: right;
 }
 
 /* Extend bootstrap style - gutters and paddings */
-/* line 57, global.scss */
+/* line 58, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 58, global.scss */
+/* line 59, global.scss */
 .no-padding {
   padding: 0px;
 }
 
-/* line 61, global.scss */
+/* line 62, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 66, global.scss */
+/* line 67, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 72, global.scss */
+/* line 73, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -104,7 +109,7 @@
 
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 161, global.scss */
+/* line 160, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -114,68 +119,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 167, global.scss */
+  /* line 166, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 168, global.scss */
+  /* line 167, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 169, global.scss */
+  /* line 168, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 175, global.scss */
+  /* line 174, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 176, global.scss */
+  /* line 175, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 177, global.scss */
+  /* line 176, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 183, global.scss */
+  /* line 182, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 184, global.scss */
+  /* line 183, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 185, global.scss */
+  /* line 184, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 191, global.scss */
+  /* line 190, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 192, global.scss */
+  /* line 191, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 193, global.scss */
+  /* line 192, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
