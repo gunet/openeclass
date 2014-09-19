@@ -1,14 +1,16 @@
 /* 
 =============================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.1
+    SASS for eclass UI v3.0 - Global styles - version 0.0919
 =============================================================
 */
 
 
 /* Colors */
+$color-panel: #FFFFFF;
+$color-header: #eeeeee;
+$color-footer: #eeeeee;
+$color-main-content: #FAFAFA;
 $color-sidebar: #232c3a;
-$color-content_top: #DBDBDB;
-$color-main_content: #FAFAFA;
 
 $color-hover: #4da1e4;
 $color-green: #6BCE6B;
@@ -20,7 +22,7 @@ $color-main-text-reversed: #F4F4F4;
 
 /* Font families */
 $font-default: 'Open Sans';
-$icon-font: 'FontAwesome';
+$font-icon: 'FontAwesome';
 
 
 

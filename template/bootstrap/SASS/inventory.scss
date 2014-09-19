@@ -1,8 +1,7 @@
-
 /* 
-============================================================================
-    SASS for UI Inventory v3.0 - version 1.18 (based on 0.84 - 30/7/2014)
-============================================================================
+=============================================================
+    SASS for UI Inventory of eclass v3.0 - version 0.0919
+=============================================================
 */
 
 @import 'global';
@@ -36,7 +35,7 @@ a
     &:after
     {
       content: "\f105";
-      font-family: $icon-font;
+      font-family: $font-icon;
       position: absolute;
       display:block;
       right:0px;
@@ -135,7 +134,7 @@ img
 /* PANEL - Extent bootstrap style (to match old contebox)*/
 #main-content .panel
 {
-  background:white !important;
+  background: $color-panel !important;
   min-height: 2.4em  !important;
   @include box-sizing(border-box);
   @include border-radius(2px);

@@ -1,8 +1,7 @@
-
 /* 
-=============================================
-    SASS for UI Theme v3.0 - version 1.18 
-=============================================
+=========================================================
+    SASS for structure of eclass v3.0 - version 0.0919 
+=========================================================
 */
 
 @import 'global';
@@ -156,7 +155,10 @@ body > .container{
 
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-#main-content{
+#main-content
+{
+  background: $color-main-content;
+  border-radius: 4px;
 
 	overflow: hidden;
 	
@@ -167,7 +169,7 @@ body > .container{
 	#header.navbar{
 		padding: 0;
 		border: 0;
-		background: #EEEEEE;
+		background: $color-header;
     border-bottom: 1px solid #DBDBDB;
 
 		.navbar-nav{
@@ -210,11 +212,6 @@ body > .container{
 
 }
 
-#main-content
-{
-	background: $color_main_content;
-	border-radius: 4px;
-}
 
 .navbar-default
 {

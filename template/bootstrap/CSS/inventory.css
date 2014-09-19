@@ -1,107 +1,107 @@
 /* 
-============================================================================
-    SASS for UI Inventory v3.0 - version 1.18 (based on 0.84 - 30/7/2014)
-============================================================================
+=============================================================
+    SASS for UI Inventory of eclass v3.0 - version 0.0919
+=============================================================
 */
 /* 
 =============================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.1
+    SASS for eclass UI v3.0 - Global styles - version 0.0919
 =============================================================
 */
 /* Colors */
 /* Font families */
 /* Global classes for alignments ------------------------------------*/
-/* line 32, D:/SASS/global.scss */
+/* line 34, global.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 37, D:/SASS/global.scss */
+/* line 39, global.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 42, D:/SASS/global.scss */
+/* line 44, global.scss */
 .align-left {
   text-align: left;
 }
 
 /* Global classes for floatings ---------------------------------------*/
-/* line 51, D:/SASS/global.scss */
+/* line 53, global.scss */
 .float-right {
   float: right;
 }
 
 /* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 61, D:/SASS/global.scss */
+/* line 63, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 65, D:/SASS/global.scss */
+/* line 67, global.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 69, D:/SASS/global.scss */
+/* line 71, global.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 73, D:/SASS/global.scss */
+/* line 75, global.scss */
 .displaynone {
   display: none;
 }
 
 /* Style for delete */
-/* line 84, D:/SASS/global.scss */
+/* line 86, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 89, D:/SASS/global.scss */
+/* line 91, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 102, D:/SASS/global.scss */
+/* line 104, global.scss */
 .padding-col-align {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Extend bootstrap style - margins */
-/* line 110, D:/SASS/global.scss */
+/* line 112, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 115, D:/SASS/global.scss */
+/* line 117, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 119, D:/SASS/global.scss */
+/* line 121, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 125, D:/SASS/global.scss */
+/* line 127, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 129, D:/SASS/global.scss */
+/* line 131, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 134, D:/SASS/global.scss */
+/* line 136, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -109,7 +109,7 @@
 
 /* Mixins */
 /* CSS ANIMATIONS */
-/* line 218, D:/SASS/global.scss */
+/* line 220, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,96 +119,96 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 224, D:/SASS/global.scss */
+  /* line 226, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 225, D:/SASS/global.scss */
+  /* line 227, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 226, D:/SASS/global.scss */
+  /* line 228, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 232, D:/SASS/global.scss */
+  /* line 234, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 233, D:/SASS/global.scss */
+  /* line 235, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 234, D:/SASS/global.scss */
+  /* line 236, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 240, D:/SASS/global.scss */
+  /* line 242, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 241, D:/SASS/global.scss */
+  /* line 243, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 242, D:/SASS/global.scss */
+  /* line 244, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 248, D:/SASS/global.scss */
+  /* line 250, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 249, D:/SASS/global.scss */
+  /* line 251, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 250, D:/SASS/global.scss */
+  /* line 252, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 /* Style for links -------------------------------------------------*/
-/* line 14, inventory.scss */
+/* line 13, inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
   outline: 0;
 }
-/* line 20, inventory.scss */
+/* line 19, inventory.scss */
 a:hover {
   text-decoration: underline;
   outline: 0;
 }
-/* line 26, inventory.scss */
+/* line 25, inventory.scss */
 a:focus {
   outline: 0;
 }
-/* line 31, inventory.scss */
+/* line 30, inventory.scss */
 a.goto {
   position: relative;
   padding-right: 1.5em!important;
   font-size: 0.75em;
 }
-/* line 37, inventory.scss */
+/* line 36, inventory.scss */
 a.goto:after {
   content: "\f105";
   font-family: "FontAwesome";
@@ -222,36 +222,36 @@ a.goto:after {
 }
 
 /* Styles for headings --------------------------------------------------*/
-/* line 57, inventory.scss */
+/* line 56, inventory.scss */
 h1 {
   font-size: 2em;
   font-weight: 300;
 }
 
-/* line 63, inventory.scss */
+/* line 62, inventory.scss */
 h1.page-title {
   margin: 0em;
   font-weight: 400!important;
   color: #333;
 }
 
-/* line 72, inventory.scss */
+/* line 71, inventory.scss */
 #main h1 {
   color: #444;
 }
-/* line 77, inventory.scss */
+/* line 76, inventory.scss */
 #main h2, #main h3, #main h4, #main h5, #main h6 {
   color: #777;
 }
 
-/* line 83, inventory.scss */
+/* line 82, inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
   color: #4da1e4;
 }
 
-/* line 90, inventory.scss */
+/* line 89, inventory.scss */
 hr {
   height: 1px;
   border: none;
@@ -259,24 +259,24 @@ hr {
 }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-/* line 99, inventory.scss */
+/* line 98, inventory.scss */
 .fa {
   font-size: 1em;
 }
 
-/* line 104, inventory.scss */
+/* line 103, inventory.scss */
 h3 {
   font-weight: 600;
 }
 
-/* line 109, inventory.scss */
+/* line 108, inventory.scss */
 img {
   max-width: 100%;
   position: relative;
 }
 
 /* BREADCRUMB - Extend bootstrap style */
-/* line 122, inventory.scss */
+/* line 121, inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
@@ -287,7 +287,7 @@ img {
 }
 
 /* PANEL - Extent bootstrap style (to match old contebox)*/
-/* line 137, inventory.scss */
+/* line 136, inventory.scss */
 #main-content .panel {
   background: white !important;
   min-height: 2.4em  !important;
@@ -303,7 +303,7 @@ img {
 }
 
 /* TOOGLES */
-/* line 151, inventory.scss */
+/* line 150, inventory.scss */
 #doc-toggle {
   float: right;
   margin: 1em 0em;
@@ -316,13 +316,13 @@ img {
   user-select: none;
 }
 
-/* line 159, inventory.scss */
+/* line 158, inventory.scss */
 .toggle-sidebar {
   cursor: pointer;
 }
 
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 172, inventory.scss */
+/* line 171, inventory.scss */
 .btn-default-eclass {
   font-family: "Open Sans";
   font-size: 0.85em;
@@ -353,24 +353,24 @@ img {
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 195, inventory.scss */
+/* line 194, inventory.scss */
 .btn-default-eclass > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 200, inventory.scss */
+/* line 199, inventory.scss */
 .btn-default-eclass > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 205, inventory.scss */
+/* line 204, inventory.scss */
 .btn-default-eclass > .fa.fa-caret-down {
   margin-right: 0px!important;
 }
-/* line 211, inventory.scss */
+/* line 210, inventory.scss */
 .btn-default-eclass:hover, .btn-default-eclass:focus {
   background: #F3F3F3;
   outline: 0;
 }
-/* line 217, inventory.scss */
+/* line 216, inventory.scss */
 .btn-default-eclass:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -382,7 +382,7 @@ img {
 }
 
 /* BUTTON COLORS */
-/* line 230, inventory.scss */
+/* line 229, inventory.scss */
 .button.color-green {
   color: white;
   background: #6bce6b;
@@ -392,12 +392,12 @@ img {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 238, inventory.scss */
+/* line 237, inventory.scss */
 .button.color-green:hover {
   background: #83DE83;
 }
 
-/* line 245, inventory.scss */
+/* line 244, inventory.scss */
 .button.color-red {
   color: white;
   background: #ce6b6b;
@@ -407,12 +407,12 @@ img {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 253, inventory.scss */
+/* line 252, inventory.scss */
 .button.color-red:hover {
   background: #E58080;
 }
 
-/* line 260, inventory.scss */
+/* line 259, inventory.scss */
 .button.hover-blue:hover {
   background: #4da1e4;
   border-color: #4da1e4;
@@ -421,23 +421,23 @@ img {
 }
 
 /* BUTTON SIZES */
-/* line 270, inventory.scss */
+/* line 269, inventory.scss */
 .button.size-xl {
   font-size: 2em;
 }
 
-/* line 275, inventory.scss */
+/* line 274, inventory.scss */
 .button.size-l {
   font-size: 1.5em;
 }
 
-/* line 280, inventory.scss */
+/* line 279, inventory.scss */
 .button.size-s {
   font-size: 0.85em;
 }
 
 /* flippin btn */
-/* line 291, inventory.scss */
+/* line 290, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -453,7 +453,7 @@ img {
   -webkit-touch-callout: none;
 }
 
-/* line 308, inventory.scss */
+/* line 307, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -468,7 +468,7 @@ img {
   transform-style: preserve-3d;
 }
 
-/* line 321, inventory.scss */
+/* line 320, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -483,13 +483,13 @@ img {
   backface-visibility: hidden;
 }
 
-/* line 335, inventory.scss */
+/* line 334, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
   color: white;
 }
 
-/* line 340, inventory.scss */
+/* line 339, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
@@ -499,7 +499,7 @@ img {
   content: attr(data-label);
 }
 
-/* line 349, inventory.scss */
+/* line 348, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -513,12 +513,12 @@ img {
   content: '';
 }
 
-/* line 362, inventory.scss */
+/* line 361, inventory.scss */
 .btn-flippin:active:before {
   background-color: #3571c8;
 }
 
-/* line 366, inventory.scss */
+/* line 365, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
@@ -527,14 +527,14 @@ img {
 }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 384, inventory.scss */
+/* line 383, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
   cursor: default;
 }
-/* line 391, inventory.scss */
+/* line 390, inventory.scss */
 ul.tablelist li.list-item {
   position: relative;
   box-sizing: border-box;
@@ -545,20 +545,20 @@ ul.tablelist li.list-item {
   background: white;
   overflow: hidden;
 }
-/* line 400, inventory.scss */
+/* line 399, inventory.scss */
 ul.tablelist li.list-item .max-height {
   max-height: 3.35em;
 }
-/* line 405, inventory.scss */
+/* line 404, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
   border-right: 1px solid #eee;
 }
-/* line 410, inventory.scss */
+/* line 409, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:first-child {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
-/* line 416, inventory.scss */
+/* line 415, inventory.scss */
 ul.tablelist li.list-item .item-right-cols {
   float: right;
   position: absolute;
@@ -566,23 +566,23 @@ ul.tablelist li.list-item .item-right-cols {
   right: 0px;
   max-width: 95%;
 }
-/* line 426, inventory.scss */
+/* line 425, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span,
 ul.tablelist li.list-item .item-title {
   padding: 1em;
   display: inline-block;
 }
-/* line 432, inventory.scss */
+/* line 431, inventory.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 1em;
   padding-right: 60px;
   display: inline-block;
 }
-/* line 439, inventory.scss */
+/* line 438, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-content {
   font-size: 0.9em;
 }
-/* line 444, inventory.scss */
+/* line 443, inventory.scss */
 ul.tablelist li.list-item .item-right-cols a {
   width: 1em;
   padding: 1em 1.4em;
@@ -590,7 +590,7 @@ ul.tablelist li.list-item .item-right-cols a {
   text-align: center;
   cursor: pointer;
 }
-/* line 454, inventory.scss */
+/* line 453, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-date {
   color: rgba(0, 0, 0, 0.6);
   background: white;
@@ -598,13 +598,13 @@ ul.tablelist li.list-item .item-right-cols .item-date {
   text-align: center;
   vertical-align: top;
 }
-/* line 463, inventory.scss */
+/* line 462, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options {
   padding: 0px;
   margin-left: -0.26em;
   padding-right: 3.8em;
 }
-/* line 470, inventory.scss */
+/* line 469, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   position: absolute;
   display: inline-block;
@@ -616,12 +616,12 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   color: #7E7E7E;
   background: #F8F8F8;
 }
-/* line 483, inventory.scss */
+/* line 482, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
 }
-/* line 489, inventory.scss */
+/* line 488, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
   margin-right: -25em;
@@ -633,21 +633,21 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 501, inventory.scss */
+/* line 500, inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
   margin-right: 0em;
   background: #333333;
 }
-/* line 507, inventory.scss */
+/* line 506, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a {
   color: white;
 }
-/* line 511, inventory.scss */
+/* line 510, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
 }
-/* line 520, inventory.scss */
+/* line 519, inventory.scss */
 ul.tablelist li.list-item:first-child,
 ul.tablelist li.list-item:first-child .item-date {
   -webkit-animation: NEW-ITEM-FX 3s 1;
@@ -655,17 +655,17 @@ ul.tablelist li.list-item:first-child .item-date {
   -o-animation: NEW-ITEM-FX 3s 1;
   animation: NEW-ITEM-FX 3s 1;
 }
-/* line 528, inventory.scss */
+/* line 527, inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 540, inventory.scss */
+/* line 539, inventory.scss */
 .boxlist {
   padding: 0px;
 }
-/* line 545, inventory.scss */
+/* line 544, inventory.scss */
 .boxlist .list-item {
   display: block;
   position: relative;
@@ -680,19 +680,19 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 558, inventory.scss */
+/* line 557, inventory.scss */
 .boxlist .list-item.hidden {
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 563, inventory.scss */
+/* line 562, inventory.scss */
 .boxlist .list-item.hidden .item-content {
   opacity: 0.6;
 }
-/* line 568, inventory.scss */
+/* line 567, inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
 }
-/* line 573, inventory.scss */
+/* line 572, inventory.scss */
 .boxlist .list-item .item-content {
   width: 93%;
   /* a fallback for calc */
@@ -706,27 +706,27 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 585, inventory.scss */
+/* line 584, inventory.scss */
 .boxlist .item-header {
   padding: 1em 0em 0.5em 0em;
   border-bottom: 1px solid #eee;
 }
-/* line 591, inventory.scss */
+/* line 590, inventory.scss */
 .boxlist .item-header .item-title {
   margin: 0px;
 }
-/* line 596, inventory.scss */
+/* line 595, inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 602, inventory.scss */
+/* line 601, inventory.scss */
 .boxlist .item-body {
   padding: 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 609, inventory.scss */
+/* line 608, inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -739,7 +739,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 624, inventory.scss */
+/* line 623, inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -757,12 +757,12 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 638, inventory.scss */
+/* line 637, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
 }
-/* line 645, inventory.scss */
+/* line 644, inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -777,19 +777,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 657, inventory.scss */
+/* line 656, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 662, inventory.scss */
+/* line 661, inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 667, inventory.scss */
+/* line 666, inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 672, inventory.scss */
+/* line 671, inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -802,13 +802,13 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 685, inventory.scss */
+/* line 684, inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
 }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 703, inventory.scss */
+/* line 702, inventory.scss */
 .toolbox {
   padding: 0.65em;
   color: #333;
@@ -828,35 +828,35 @@ ul.tablelist li.list-item:hover {
   text-align: right;
   margin-right: 0em;
 }
-/* line 717, inventory.scss */
+/* line 716, inventory.scss */
 .toolbox ul {
   display: block;
   display: inline-block;
   margin: 0px;
   padding: 0px;
 }
-/* line 725, inventory.scss */
+/* line 724, inventory.scss */
 .toolbox li {
   list-style-type: none;
   display: inline-block;
 }
-/* line 731, inventory.scss */
+/* line 730, inventory.scss */
 .toolbox ul.toolbox-submenu {
   display: none;
 }
 
-/* line 739, inventory.scss */
+/* line 738, inventory.scss */
 .toolbox:hover .toolbox-submenu {
   display: inline-block;
 }
 
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
-/* line 756, inventory.scss */
+/* line 755, inventory.scss */
 #lesson-banner {
   position: relative;
   min-height: 13em;
 }
-/* line 761, inventory.scss */
+/* line 760, inventory.scss */
 #lesson-banner .banner-left {
   width: 40%;
   position: absolute;
@@ -866,7 +866,7 @@ ul.tablelist li.list-item:hover {
   margin-right: 1em;
   padding: 1em;
 }
-/* line 771, inventory.scss */
+/* line 770, inventory.scss */
 #lesson-banner .banner-left .banner-image {
   width: 100%;
   height: 100%;
@@ -879,7 +879,7 @@ ul.tablelist li.list-item:hover {
   -o-background-size: cover;
   background-size: cover;
 }
-/* line 779, inventory.scss */
+/* line 778, inventory.scss */
 #lesson-banner .banner-left .banner-image:after {
   position: absolute;
   top: 0px;
@@ -903,7 +903,7 @@ ul.tablelist li.list-item:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
   /* IE6-9 */
 }
-/* line 801, inventory.scss */
+/* line 800, inventory.scss */
 #lesson-banner .banner-content {
   margin-left: 40%;
   padding: 1em;
@@ -911,25 +911,25 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 807, inventory.scss */
+/* line 806, inventory.scss */
 #lesson-banner .banner-content .banner-description {
   font-size: 0.8em;
   min-height: 6em;
   line-height: 1.7em;
 }
-/* line 814, inventory.scss */
+/* line 813, inventory.scss */
 #lesson-banner .banner-content hr {
   margin-bottom: 0.8em;
 }
 
 /* DROPDOWN */
-/* line 840, inventory.scss */
+/* line 839, inventory.scss */
 .button.dropdown.opened {
   background: #4da1e4 !important;
   border-bottom-color: #3F87C1;
   color: white;
 }
-/* line 848, inventory.scss */
+/* line 847, inventory.scss */
 .button.dropdown.opened .dropdown-menu {
   display: block;
   -webkit-transition: all 150ms linear 1s;
@@ -939,12 +939,12 @@ ul.tablelist li.list-item:hover {
   transition: all 150ms linear 1s;
 }
 
-/* line 857, inventory.scss */
+/* line 856, inventory.scss */
 .button.dropdown.open-on-hover:hover .dropdown-menu {
   display: block;
 }
 
-/* line 862, inventory.scss */
+/* line 861, inventory.scss */
 ul.dropdown-menu {
   display: none;
   position: absolute;
@@ -968,13 +968,13 @@ ul.dropdown-menu {
   -webkit-box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.175);
 }
 
-/* line 891, inventory.scss */
+/* line 890, inventory.scss */
 .float-right .dropdown-menu {
   right: -1px;
   left: auto;
 }
 
-/* line 897, inventory.scss */
+/* line 896, inventory.scss */
 ul.dropdown-menu:before {
   content: "";
   position: absolute;
@@ -986,7 +986,7 @@ ul.dropdown-menu:before {
   z-index: -1;
 }
 
-/* line 908, inventory.scss */
+/* line 907, inventory.scss */
 ul.dropdown-menu li a {
   display: block;
   text-align: left;
@@ -998,7 +998,7 @@ ul.dropdown-menu li a {
   white-space: nowrap;
 }
 
-/* line 920, inventory.scss */
+/* line 919, inventory.scss */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: white;
@@ -1006,21 +1006,21 @@ ul.dropdown-menu li a {
 }
 
 /* PAGINATION */
-/* line 931, inventory.scss */
+/* line 930, inventory.scss */
 .my-pager {
   margin: 1em 0em;
   text-align: right;
   font-size: 0.85em;
 }
 
-/* line 939, inventory.scss */
+/* line 938, inventory.scss */
 .my-pager .items > .button {
   padding: 0.5em 0.8em;
   vertical-align: middle;
   cursor: pointer;
 }
 
-/* line 950, inventory.scss */
+/* line 949, inventory.scss */
 .my-pager .active {
   color: #4da1e4 !important;
   border-top: none;
@@ -1033,23 +1033,23 @@ ul.dropdown-menu li a {
   -webkit-box-shadow: inset 0px 2px 5px lightgrey;
 }
 
-/* line 963, inventory.scss */
+/* line 962, inventory.scss */
 .my-pager .items > span:hover {
   color: #4da1e4;
 }
 
 /* TOGGLE SWTICH */
-/* line 971, inventory.scss */
+/* line 970, inventory.scss */
 .my-toggle > * {
   vertical-align: middle;
 }
 
-/* line 976, inventory.scss */
+/* line 975, inventory.scss */
 .my-toggle .txt {
   font-size: 0.75em;
 }
 
-/* line 981, inventory.scss */
+/* line 980, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -1072,7 +1072,7 @@ input.toggle {
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* line 1008, inventory.scss */
+/* line 1007, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -1093,30 +1093,30 @@ input.toggle:after {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* line 1028, inventory.scss */
+/* line 1027, inventory.scss */
 input.toggle:hover:after {
   background: white;
 }
 
-/* line 1033, inventory.scss */
+/* line 1032, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
   background-color: #dddddd;
 }
 
-/* line 1040, inventory.scss */
+/* line 1039, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
   left: 0px;
 }
 
 /* INPUT TEXTAREA SELECT */
-/* line 1048, inventory.scss */
+/* line 1047, inventory.scss */
 input,
 textarea {
   width: 100%;
 }
 
-/* line 1054, inventory.scss */
+/* line 1053, inventory.scss */
 input,
 textarea, select {
   font-family: "Open Sans";
@@ -1131,7 +1131,7 @@ textarea, select {
   @inlcude transition(all 150ms linear);
 }
 
-/* line 1070, inventory.scss */
+/* line 1069, inventory.scss */
 input:focus,
 textarea:focus,
 select:focus {
@@ -1142,13 +1142,13 @@ select:focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-/* line 1078, inventory.scss */
+/* line 1077, inventory.scss */
 textarea {
   resize: vertical;
 }
 
 /* TAG & LABEL */
-/* line 1085, inventory.scss */
+/* line 1084, inventory.scss */
 .tag {
   display: inline;
   padding: 0.4em;
@@ -1164,12 +1164,12 @@ textarea {
   -moz-border-radius: 0.25em;
 }
 
-/* line 1098, inventory.scss */
+/* line 1097, inventory.scss */
 .label-group {
   padding: 2em 0em;
   padding-top: 2.5em;
 }
-/* line 1101, inventory.scss */
+/* line 1100, inventory.scss */
 .label-group .title {
   display: inline-block;
   margin-right: 1em;
@@ -1178,7 +1178,7 @@ textarea {
   opacity: 0.6;
 }
 
-/* line 1112, inventory.scss */
+/* line 1111, inventory.scss */
 .label {
   font-size: 0.75em;
   display: inline-block;
@@ -1195,34 +1195,34 @@ textarea {
   -ms-transition: background 100ms linear;
   transition: background 100ms linear;
 }
-/* line 1128, inventory.scss */
+/* line 1127, inventory.scss */
 .label > span {
   font-weight: 600;
   color: #808080;
 }
-/* line 1133, inventory.scss */
+/* line 1132, inventory.scss */
 .label:hover {
   background: #e7e7e7;
   color: #3D3D3D;
 }
 
 /* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ */
-/* line 1155, inventory.scss */
+/* line 1154, inventory.scss */
 .md-modal.color-dark .md-content {
   background: #2E3033!important;
 }
 
-/* line 1159, inventory.scss */
+/* line 1158, inventory.scss */
 .md-modal .md-content p {
   font-size: 0.65em;
 }
 
-/* line 1163, inventory.scss */
+/* line 1162, inventory.scss */
 .md-modal .modal-icon {
   margin-right: 10px;
 }
 
-/* line 1167, inventory.scss */
+/* line 1166, inventory.scss */
 .md-modal .md-close {
   background: rgba(0, 0, 0, 0.2);
   border: none;
@@ -1236,13 +1236,13 @@ textarea {
   -moz-border-radius: 2px;
 }
 
-/* line 1185, inventory.scss */
+/* line 1184, inventory.scss */
 .md-modal .md-close:hover {
   background: rgba(0, 0, 0, 0.3);
   color: white;
 }
 
-/* line 1190, inventory.scss */
+/* line 1189, inventory.scss */
 .modal-overlay-bg-dark {
   background: rgba(35, 35, 35, 0.8) !important;
 }
