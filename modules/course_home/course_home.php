@@ -273,11 +273,15 @@ if ($total_cunits > 0) {
                                                     </li>";
             }
             $cunits_content .= "<li rel='tooltip' delete-action' data-toggle='tooltip' data-placement='bottom' title='$langDelete'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?del=$cu->id' onClick=\"return confirmation('$langConfirmDelete');\"><span><i class='fa fa-times'></i></span></a>
-                                                    </li>                                            
-                                                </ul>      
-                                            </div>
-                                        </div>";
+                                    <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
+                                        <a class='btn btn-xs' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm'>                                        
+                                            <i class='fa fa-times'></i>
+                                        </a>    
+                                    </form>
+                                </li>                                            
+                            </ul>      
+                        </div>
+                    </div>";
         }
         $cunits_content .= "</li>
                                 </ul>                          
@@ -286,7 +290,12 @@ if ($total_cunits > 0) {
     $count_index++;
     }
 }
-
+//<form method="POST" action="http://example.com/admin/user/delete/12" accept-charset="UTF-8" style="display:inline">
+//    <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete User" data-message="Are you sure you want to delete this user ?">
+//        <i class="glyphicon glyphicon-trash"></i> Delete
+//    </button>
+//</form>
+//onClick=\"return confirmation('$langConfirmDelete');\"
 $bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'>" . $langCode . ":</b> " . q($public_code) . "" .
         "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
         "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langFaculty . ":</b> ";
@@ -396,11 +405,6 @@ foreach ($q as $p) {
 if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
-
-
-
-
-
 
 // Title and Toolbox
 $tool_content .= "
@@ -584,7 +588,7 @@ $tool_content .= "
             </div>
         </div>
     </div>
-</div>    
+</div>
 ";
 
 

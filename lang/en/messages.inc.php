@@ -2616,6 +2616,7 @@ $langUnitDescr = "Short description";
 $langUnitUnknown = "Unknown course unit";
 $langEmptyUnitTitle = "Please enter the title of the course unit";
 $langCourseUnits = "Course Units";
+$langCourseUnitDeleteConfirm = "Are you sure you want to delete the specific Course unit?";
 $langCourseUnitDeleted = "Course unit was deleted";
 $langCourseUnitAdded = "Course unit was added";
 $langCourseUnitModified = "Course unit details modified";

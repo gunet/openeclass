@@ -320,9 +320,42 @@
 	    </div>
 	</div>	
     <!-- BEGIN modalWindowBlock -->
-    <div>
-        ...
-    </div>
+    <!-- Modal Dialog -->
+        <div class='modal fade' id='confirmAction' role='dialog' aria-labelledby='confirmActionLabel' aria-hidden='true'>
+          <div class='modal-dialog'>
+            <div class='modal-content'>
+              <div class='modal-header'>
+                <a class='close' data-dismiss='modal' aria-hidden='true'>&times;</a>
+                <h4 class='modal-title'>Delete Parmanently</h4>
+              </div>
+              <div class='modal-body'>
+                <p>Are you sure about this ?</p>
+              </div>
+              <div class='modal-footer'>
+                <a class='btn btn-default' data-dismiss='modal'>$langCancel</a>
+                <button type='button' class='btn btn-danger' id='confirm'>$langDelete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Dialog show event handler -->
+        <script type='text/javascript'>
+          $('#confirmAction').on('show.bs.modal', function (e) {
+              var message = $(e.relatedTarget).attr('data-message');
+              $(this).find('.modal-body p').text(message);
+              var title = $(e.relatedTarget).attr('data-title');
+              $(this).find('.modal-title').text(title);
+
+              // Pass form reference to modal for submission on yes/ok
+              var form = $(e.relatedTarget).closest('form');
+              $(this).find('.modal-footer #confirm').data('form', form);
+          });
+
+          <!-- Form confirm (yes/ok) handler, submits form -->
+          $('#confirmAction').find('.modal-footer #confirm').on('click', function(){
+              $(this).data('form').submit();
+          });
+        </script>
     <!-- END modalWindowBlock -->
 </body>
 </html>
