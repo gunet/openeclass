@@ -13,4 +13,7 @@ syntax: regexp
 ^\.project$
 ^\.settings$
 ^\.htaccess$
+
 syntax: glob
+*.orig
+*.map
