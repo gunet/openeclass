@@ -11,97 +11,97 @@
 /* Colors */
 /* Font families */
 /* Global classes for alignments ------------------------------------*/
-/* line 32, global.scss */
+/* line 32, D:/SASS/global.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 37, global.scss */
+/* line 37, D:/SASS/global.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 42, global.scss */
+/* line 42, D:/SASS/global.scss */
 .align-left {
   text-align: left;
 }
 
 /* Global classes for floatings ---------------------------------------*/
-/* line 51, global.scss */
+/* line 51, D:/SASS/global.scss */
 .float-right {
   float: right;
 }
 
 /* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 61, global.scss */
+/* line 61, D:/SASS/global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 65, global.scss */
+/* line 65, D:/SASS/global.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 69, global.scss */
+/* line 69, D:/SASS/global.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 73, global.scss */
+/* line 73, D:/SASS/global.scss */
 .displaynone {
   display: none;
 }
 
 /* Style for delete */
-/* line 84, global.scss */
+/* line 84, D:/SASS/global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 89, global.scss */
+/* line 89, D:/SASS/global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 102, global.scss */
+/* line 102, D:/SASS/global.scss */
 .padding-col-align {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Extend bootstrap style - margins */
-/* line 110, global.scss */
+/* line 110, D:/SASS/global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 115, global.scss */
+/* line 115, D:/SASS/global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 119, global.scss */
+/* line 119, D:/SASS/global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 125, global.scss */
+/* line 125, D:/SASS/global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 129, global.scss */
+/* line 129, D:/SASS/global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 134, global.scss */
+/* line 134, D:/SASS/global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -109,7 +109,7 @@
 
 /* Mixins */
 /* CSS ANIMATIONS */
-/* line 218, global.scss */
+/* line 218, D:/SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,68 +119,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 224, global.scss */
+  /* line 224, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 225, global.scss */
+  /* line 225, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 226, global.scss */
+  /* line 226, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 232, global.scss */
+  /* line 232, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 233, global.scss */
+  /* line 233, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 234, global.scss */
+  /* line 234, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 240, global.scss */
+  /* line 240, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 241, global.scss */
+  /* line 241, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 242, global.scss */
+  /* line 242, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 248, global.scss */
+  /* line 248, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 249, global.scss */
+  /* line 249, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 250, global.scss */
+  /* line 250, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

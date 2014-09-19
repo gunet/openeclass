@@ -481,7 +481,7 @@ ul.tablelist
 
     .item-right-cols .item-options:hover .options-icon
     {
-      background: $hover-color;
+      background: $color-hover;
       color:white;
     }
 
@@ -510,7 +510,7 @@ ul.tablelist
     .item-right-cols .item-options a:hover
     {
       color:white;
-      background: $hover-color;
+      background: $color-hover;
     }
 
 
@@ -636,7 +636,7 @@ ul.tablelist
 
   .list-item .item-side .item-options:hover .option-button
   {
-    background: $hover-color;
+    background: $color-hover;
     color:white;
   }
 
@@ -683,7 +683,7 @@ ul.tablelist
 
   .list-item .item-options ul li:hover
   {
-    background:$hover-color;
+    background:$color-hover;
   }
 }
 
