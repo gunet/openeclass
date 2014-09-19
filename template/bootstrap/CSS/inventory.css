@@ -4,104 +4,104 @@
 =============================================================
 */
 /* 
-=============================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0919
-=============================================================
+==============================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0919b
+==============================================================
 */
 /* Colors */
 /* Font families */
 /* Global classes for alignments ------------------------------------*/
-/* line 38, global.scss */
+/* line 36, global.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 43, global.scss */
+/* line 41, global.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 48, global.scss */
+/* line 46, global.scss */
 .align-left {
   text-align: left;
 }
 
 /* Global classes for floatings ---------------------------------------*/
-/* line 57, global.scss */
+/* line 55, global.scss */
 .float-right {
   float: right;
 }
 
 /* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 67, global.scss */
+/* line 65, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 71, global.scss */
+/* line 69, global.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 75, global.scss */
+/* line 73, global.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 79, global.scss */
+/* line 77, global.scss */
 .displaynone {
   display: none;
 }
 
 /* Style for delete */
-/* line 90, global.scss */
+/* line 88, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 95, global.scss */
+/* line 93, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 108, global.scss */
+/* line 106, global.scss */
 .padding-col-align {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Extend bootstrap style - margins */
-/* line 116, global.scss */
+/* line 114, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 121, global.scss */
+/* line 119, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 125, global.scss */
+/* line 123, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 131, global.scss */
+/* line 129, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 135, global.scss */
+/* line 133, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 140, global.scss */
+/* line 138, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -109,7 +109,7 @@
 
 /* Mixins */
 /* CSS ANIMATIONS */
-/* line 224, global.scss */
+/* line 222, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,68 +119,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 230, global.scss */
+  /* line 228, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 231, global.scss */
+  /* line 229, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 232, global.scss */
+  /* line 230, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 238, global.scss */
+  /* line 236, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 239, global.scss */
+  /* line 237, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 240, global.scss */
+  /* line 238, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 246, global.scss */
+  /* line 244, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 247, global.scss */
+  /* line 245, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 248, global.scss */
+  /* line 246, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 254, global.scss */
+  /* line 252, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 255, global.scss */
+  /* line 253, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 256, global.scss */
+  /* line 254, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
