@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0919
+    SASS for UI Inventory of eclass v3.0 - version 0.0919b
 =============================================================
 */
 /* 
@@ -11,97 +11,97 @@
 /* Colors */
 /* Font families */
 /* Global classes for alignments ------------------------------------*/
-/* line 34, global.scss */
+/* line 38, global.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 39, global.scss */
+/* line 43, global.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 44, global.scss */
+/* line 48, global.scss */
 .align-left {
   text-align: left;
 }
 
 /* Global classes for floatings ---------------------------------------*/
-/* line 53, global.scss */
+/* line 57, global.scss */
 .float-right {
   float: right;
 }
 
 /* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 63, global.scss */
+/* line 67, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 67, global.scss */
+/* line 71, global.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 71, global.scss */
+/* line 75, global.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 75, global.scss */
+/* line 79, global.scss */
 .displaynone {
   display: none;
 }
 
 /* Style for delete */
-/* line 86, global.scss */
+/* line 90, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 91, global.scss */
+/* line 95, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 104, global.scss */
+/* line 108, global.scss */
 .padding-col-align {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Extend bootstrap style - margins */
-/* line 112, global.scss */
+/* line 116, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 117, global.scss */
+/* line 121, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 121, global.scss */
+/* line 125, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 127, global.scss */
+/* line 131, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 131, global.scss */
+/* line 135, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 136, global.scss */
+/* line 140, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -109,7 +109,7 @@
 
 /* Mixins */
 /* CSS ANIMATIONS */
-/* line 220, global.scss */
+/* line 224, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,68 +119,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 226, global.scss */
+  /* line 230, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 227, global.scss */
+  /* line 231, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 228, global.scss */
+  /* line 232, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 234, global.scss */
+  /* line 238, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 235, global.scss */
+  /* line 239, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 236, global.scss */
+  /* line 240, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 242, global.scss */
+  /* line 246, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 243, global.scss */
+  /* line 247, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 244, global.scss */
+  /* line 248, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 250, global.scss */
+  /* line 254, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 251, global.scss */
+  /* line 255, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 252, global.scss */
+  /* line 256, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
@@ -812,7 +812,7 @@ ul.tablelist li.list-item:hover {
 .toolbox {
   padding: 0.65em;
   color: #333;
-  background: #F0F4F6;
+  background: #f0f4f6;
   border-top: 1px solid #d8d8d8;
   border-bottom: 1px solid #f8f8f8;
   box-sizing: border-box;

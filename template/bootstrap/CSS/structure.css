@@ -1,7 +1,7 @@
 /* 
-=========================================================
-    SASS for structure of eclass v3.0 - version 0.0919 
-=========================================================
+==========================================================
+    SASS for structure of eclass v3.0 - version 0.0919b 
+==========================================================
 */
 /* 
 =============================================================
@@ -11,97 +11,97 @@
 /* Colors */
 /* Font families */
 /* Global classes for alignments ------------------------------------*/
-/* line 34, D:/SASS/global.scss */
+/* line 38, global.scss */
 .align-center {
   text-align: center;
 }
 
-/* line 39, D:/SASS/global.scss */
+/* line 43, global.scss */
 .align-right {
   text-align: right;
 }
 
-/* line 44, D:/SASS/global.scss */
+/* line 48, global.scss */
 .align-left {
   text-align: left;
 }
 
 /* Global classes for floatings ---------------------------------------*/
-/* line 53, D:/SASS/global.scss */
+/* line 57, global.scss */
 .float-right {
   float: right;
 }
 
 /* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 63, D:/SASS/global.scss */
+/* line 67, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 67, D:/SASS/global.scss */
+/* line 71, global.scss */
 .a-wrapper {
   margin: 2em 0em;
 }
 
-/* line 71, D:/SASS/global.scss */
+/* line 75, global.scss */
 .content-title {
   text-transform: uppercase;
 }
 
-/* line 75, D:/SASS/global.scss */
+/* line 79, global.scss */
 .displaynone {
   display: none;
 }
 
 /* Style for delete */
-/* line 86, D:/SASS/global.scss */
+/* line 90, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 91, D:/SASS/global.scss */
+/* line 95, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 104, D:/SASS/global.scss */
+/* line 108, global.scss */
 .padding-col-align {
   padding-left: 15px;
   padding-right: 15px;
 }
 
 /* Extend bootstrap style - margins */
-/* line 112, D:/SASS/global.scss */
+/* line 116, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 117, D:/SASS/global.scss */
+/* line 121, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 121, D:/SASS/global.scss */
+/* line 125, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 127, D:/SASS/global.scss */
+/* line 131, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 131, D:/SASS/global.scss */
+/* line 135, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 136, D:/SASS/global.scss */
+/* line 140, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -109,7 +109,7 @@
 
 /* Mixins */
 /* CSS ANIMATIONS */
-/* line 220, D:/SASS/global.scss */
+/* line 224, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,104 +119,104 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 226, D:/SASS/global.scss */
+  /* line 230, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 227, D:/SASS/global.scss */
+  /* line 231, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 228, D:/SASS/global.scss */
+  /* line 232, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 234, D:/SASS/global.scss */
+  /* line 238, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 235, D:/SASS/global.scss */
+  /* line 239, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 236, D:/SASS/global.scss */
+  /* line 240, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 242, D:/SASS/global.scss */
+  /* line 246, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 243, D:/SASS/global.scss */
+  /* line 247, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 244, D:/SASS/global.scss */
+  /* line 248, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 250, D:/SASS/global.scss */
+  /* line 254, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 251, D:/SASS/global.scss */
+  /* line 255, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 252, D:/SASS/global.scss */
+  /* line 256, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
-/* line 13, structure.scss */
+/* line 14, structure.scss */
 body {
   background: #232c3a;
   font-family: 'Open Sans';
 }
 
-/* line 18, structure.scss */
+/* line 19, structure.scss */
 body > .container {
   padding: 0 15px;
 }
 
-/* line 22, structure.scss */
+/* line 23, structure.scss */
 #Frame {
   margin: 1em 0em;
 }
 
 /* LEFTNAV - MAIN MENU, LOGO */
-/* line 29, structure.scss */
+/* line 30, structure.scss */
 #leftnav {
   background: #232c3a;
   padding: 0;
 }
-/* line 33, structure.scss */
+/* line 34, structure.scss */
 #leftnav .logo {
   margin: 2em 1em;
 }
-/* line 35, structure.scss */
+/* line 36, structure.scss */
 #leftnav .logo img {
   margin: 0 auto;
 }
-/* line 38, structure.scss */
+/* line 39, structure.scss */
 #leftnav .panel {
   border: none;
   margin: 0;
@@ -226,21 +226,21 @@ body > .container {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px 0px 0px 4px;
 }
-/* line 49, structure.scss */
+/* line 50, structure.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
 }
-/* line 53, structure.scss */
+/* line 54, structure.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px!important;
 }
-/* line 56, structure.scss */
+/* line 57, structure.scss */
 #leftnav .panel .panel-heading .panel-title {
   text-align: center;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 62, structure.scss */
+/* line 63, structure.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -249,44 +249,44 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 70, structure.scss */
+/* line 71, structure.scss */
 #leftnav .panel > a {
   outline: 0;
   display: block;
   background: rgba(0, 0, 0, 0.2) !important;
 }
-/* line 75, structure.scss */
+/* line 76, structure.scss */
 #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 0px!important;
   color: #4da1e4;
 }
-/* line 80, structure.scss */
+/* line 81, structure.scss */
 #leftnav .panel > a:hover {
   background: rgba(255, 255, 255, 0.25);
 }
-/* line 84, structure.scss */
+/* line 85, structure.scss */
 #leftnav .panel > a:hover, #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 89, structure.scss */
+/* line 90, structure.scss */
 #leftnav .panel a {
   background: transparent;
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 95, structure.scss */
+/* line 96, structure.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
   padding: 1em;
   text-align: center;
 }
-/* line 102, structure.scss */
+/* line 103, structure.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 107, structure.scss */
+/* line 108, structure.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -299,7 +299,7 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 118, structure.scss */
+/* line 119, structure.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -309,24 +309,24 @@ body > .container {
   -moz-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
 }
-/* line 130, structure.scss */
+/* line 131, structure.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 134, structure.scss */
+/* line 135, structure.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 /* LOGO - Extent bootstrap style -------------------------------------*/
-/* line 149, structure.scss */
+/* line 150, structure.scss */
 .logo {
   min-height: 20px;
   min-width: 20px;
 }
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-/* line 159, structure.scss */
+/* line 160, structure.scss */
 #main-content {
   background: #fafafa;
   border-radius: 4px;
@@ -335,33 +335,33 @@ body > .container {
   -moz-box-shadow: 0px -5px 10px 0px black;
   -webkit-box-shadow: 0px -5px 10px 0px black;
 }
-/* line 169, structure.scss */
+/* line 170, structure.scss */
 #main-content #header.navbar {
   padding: 0;
   border: 0;
   background: #eeeeee;
   border-bottom: 1px solid #DBDBDB;
 }
-/* line 175, structure.scss */
+/* line 176, structure.scss */
 #main-content #header.navbar .navbar-nav {
   margin: 0;
   float: right;
 }
-/* line 179, structure.scss */
+/* line 180, structure.scss */
 #main-content #header.navbar .navbar-nav > li {
   border-left: 1px solid #e7e7e7;
   float: left;
 }
-/* line 183, structure.scss */
+/* line 184, structure.scss */
 #main-content #header.navbar .navbar-nav > li a {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 187, structure.scss */
+/* line 188, structure.scss */
 #main-content #header.navbar .navbar-nav > li a i.fa {
   margin: 0 1em;
 }
-/* line 192, structure.scss */
+/* line 193, structure.scss */
 #main-content #header.navbar .navbar-nav > li a:hover, #main-content #header.navbar .navbar-nav > li a:focus {
   background: #4da1e4;
   color: white;
@@ -371,46 +371,46 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 200, structure.scss */
+/* line 201, structure.scss */
 #main-content #header.navbar .navbar-nav > li .user-icon {
   width: 20px;
   margin-right: 10px;
 }
-/* line 205, structure.scss */
+/* line 206, structure.scss */
 #main-content #header.navbar .navbar-nav > li:last-child > a {
   border-radius: 0 4px 0px 0px;
 }
 
-/* line 217, structure.scss */
+/* line 218, structure.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
 /* FOOTER --------------------------------------------------------------------------------------*/
-/* line 233, structure.scss */
+/* line 234, structure.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
-  background: #eee;
+  background: #eeeeee;
   margin-top: 2em;
   color: #a7a7a7;
   border-top: 1px solid #DBDBDB;
 }
 
 /* SIDEBAR ------------------------------------------------------------------------------------ */
-/* line 253, structure.scss */
+/* line 254, structure.scss */
 body.sidebar-opened #sidebar {
   right: 0px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   opacity: 1;
 }
 
-/* line 262, structure.scss */
+/* line 263, structure.scss */
 body.sidebar-opened .toggle-sidebar {
   background: #e3e4e6;
 }
 
-/* line 267, structure.scss */
+/* line 268, structure.scss */
 #sidebar {
   position: absolute;
   height: 100%;
@@ -435,14 +435,14 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 293, structure.scss */
+/* line 294, structure.scss */
 #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
   color: #686868;
   font-weight: 600;
   margin-bottom: 0.6em;
   margin-top: 0.3em;
 }
-/* line 300, structure.scss */
+/* line 301, structure.scss */
 #sidebar .toggle-sidebar {
   text-align: center;
   width: 3em;
@@ -455,23 +455,23 @@ body.sidebar-opened .toggle-sidebar {
   border: 1px solid #CFCFCF;
   cursor: default;
 }
-/* line 313, structure.scss */
+/* line 314, structure.scss */
 #sidebar .toggle-sidebar:hover {
   background: #4da1e4;
   border-color: #4da1e4;
   color: white;
 }
-/* line 320, structure.scss */
+/* line 321, structure.scss */
 #sidebar ul, #sidebar li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
-/* line 326, structure.scss */
+/* line 327, structure.scss */
 #sidebar .side-list {
   padding-bottom: 1em;
 }
-/* line 330, structure.scss */
+/* line 331, structure.scss */
 #sidebar .side-list .lesson-title {
   background: #344458;
   font-size: 0.85em;
@@ -491,87 +491,87 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 358, structure.scss */
+/* line 359, structure.scss */
 #sidebar .side-list .lesson-title:first-of-type {
   border-top-width: 1px;
   border-radius: 4px 4px 0px 0px;
   -webkit-border-radius: 4px 4px 0px 0px;
   -moz-border-radius: 4px 4px 0px 0px;
 }
-/* line 364, structure.scss */
+/* line 365, structure.scss */
 #sidebar .side-list .lesson-title:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 368, structure.scss */
+/* line 369, structure.scss */
 #sidebar .side-list .lesson-title:hover {
   background: #48586D;
   color: rgba(255, 255, 255, 0.85);
 }
-/* line 372, structure.scss */
+/* line 373, structure.scss */
 #sidebar .side-list .lesson-title:hover:after {
   color: rgba(255, 255, 255, 0.6);
 }
-/* line 377, structure.scss */
+/* line 378, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active {
   border-bottom: none;
   color: white;
   background: #425164;
 }
-/* line 382, structure.scss */
+/* line 383, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
   border-radius: 0px;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 386, structure.scss */
+/* line 387, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
   color: #4da1e4;
 }
-/* line 392, structure.scss */
+/* line 393, structure.scss */
 #sidebar .side-list > div {
   background: #253447;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 16px;
 }
-/* line 402, structure.scss */
+/* line 403, structure.scss */
 #sidebar .side-list > div:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 407, structure.scss */
+/* line 408, structure.scss */
 #sidebar .side-list ul {
   padding: 0em 2em 1em 1.35em;
   font-size: 0.75em;
 }
-/* line 411, structure.scss */
+/* line 412, structure.scss */
 #sidebar .side-list ul > li {
   padding: 5px 0em;
 }
-/* line 416, structure.scss */
+/* line 417, structure.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 422, structure.scss */
+/* line 423, structure.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 427, structure.scss */
+/* line 428, structure.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 431, structure.scss */
+/* line 432, structure.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 435, structure.scss */
+/* line 436, structure.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -588,13 +588,13 @@ body.sidebar-opened .toggle-sidebar {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 457, structure.scss */
+/* line 458, structure.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 472, structure.scss */
+/* line 473, structure.scss */
 #sidebar .blocks .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -604,7 +604,7 @@ body.sidebar-opened .toggle-sidebar {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 484, structure.scss */
+/* line 485, structure.scss */
 #sidebar .blocks .title {
   margin: 0;
   padding: 2em 0em!important;
@@ -613,18 +613,18 @@ body.sidebar-opened .toggle-sidebar {
   text-align: center;
   overflow: hidden;
 }
-/* line 496, structure.scss */
+/* line 497, structure.scss */
 #sidebar .blocks .title .txt {
   text-transform: uppercase;
 }
-/* line 501, structure.scss */
+/* line 502, structure.scss */
 #sidebar .blocks .title i.fa {
   display: block;
   opacity: .9;
   font-size: 2.3em;
   margin-top: 0.4em;
 }
-/* line 511, structure.scss */
+/* line 512, structure.scss */
 #sidebar .blocks .title .tricky {
   margin-left: -100%;
   width: 200%;
@@ -636,7 +636,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: margin-left 120ms linear;
   transition: margin-left 120ms linear;
 }
-/* line 519, structure.scss */
+/* line 520, structure.scss */
 #sidebar .blocks .title .tricky > div {
   display: inline-block;
   width: 49%;
@@ -651,85 +651,85 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: opacity 60ms linear;
   transition: opacity 60ms linear;
 }
-/* line 531, structure.scss */
+/* line 532, structure.scss */
 #sidebar .blocks .title .tricky .icon {
   opacity: 1;
 }
-/* line 535, structure.scss */
+/* line 536, structure.scss */
 #sidebar .blocks .title .tricky .description {
   font-weight: 400;
   padding: 0.5em 1em;
   opacity: 0;
 }
-/* line 543, structure.scss */
+/* line 544, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
   margin-left: 0%;
 }
-/* line 546, structure.scss */
+/* line 547, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
   opacity: .55;
 }
-/* line 550, structure.scss */
+/* line 551, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
   opacity: 0;
 }
-/* line 556, structure.scss */
+/* line 557, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
   color: #4da1e4;
 }
-/* line 562, structure.scss */
+/* line 563, structure.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky {
   margin-left: 0%;
 }
-/* line 564, structure.scss */
+/* line 565, structure.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky .description {
   opacity: .55;
 }
-/* line 572, structure.scss */
+/* line 573, structure.scss */
 #sidebar .blocks li.block {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-/* line 576, structure.scss */
+/* line 577, structure.scss */
 #sidebar .blocks li.block > .ui-accordion-content,
 #sidebar .blocks li.block > .ui-accordion-header-active {
   background: rgba(255, 255, 255, 0.3);
 }
-/* line 580, structure.scss */
+/* line 581, structure.scss */
 #sidebar .blocks li.block > .ui-accordion-content {
   padding: 1em 0em;
 }
-/* line 584, structure.scss */
+/* line 585, structure.scss */
 #sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
   width: 90%;
   margin: 0em auto 1em auto;
   display: block;
 }
-/* line 590, structure.scss */
+/* line 591, structure.scss */
 #sidebar .blocks li.block textarea {
   min-height: 12em;
 }
-/* line 594, structure.scss */
+/* line 595, structure.scss */
 #sidebar .blocks li.block button {
   margin: 1.1em;
   margin-top: 0em;
   font-size: 0.8em;
 }
-/* line 600, structure.scss */
+/* line 601, structure.scss */
 #sidebar .blocks li.block .goto {
   float: right;
   color: #7E7E7E;
   padding: 0.5em;
   margin-right: 0.5em;
 }
-/* line 607, structure.scss */
+/* line 608, structure.scss */
 #sidebar .blocks li.block .input-parent {
   position: relative;
 }
-/* line 610, structure.scss */
+/* line 611, structure.scss */
 #sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
   padding-left: 2em;
 }
-/* line 614, structure.scss */
+/* line 615, structure.scss */
 #sidebar .blocks li.block .input-parent .fa {
   position: absolute;
   top: 0.7em;
@@ -739,20 +739,20 @@ body.sidebar-opened .toggle-sidebar {
 }
 
 /* ACCORDIONS --------------------------------------------------------------------*/
-/* line 631, structure.scss */
+/* line 632, structure.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 635, structure.scss */
+/* line 636, structure.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 644, structure.scss */
+/* line 645, structure.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em!important;
@@ -761,7 +761,7 @@ body.sidebar-opened .toggle-sidebar {
   outline: none!important;
   cursor: pointer;
 }
-/* line 653, structure.scss */
+/* line 654, structure.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -786,7 +786,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
 }
-/* line 676, structure.scss */
+/* line 677, structure.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -804,47 +804,47 @@ body.sidebar-opened .toggle-sidebar {
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 698, structure.scss */
+  /* line 699, structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 704, structure.scss */
+  /* line 705, structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 711, structure.scss */
+  /* line 712, structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 717, structure.scss */
+  /* line 718, structure.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 722, structure.scss */
+  /* line 723, structure.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 726, structure.scss */
+  /* line 727, structure.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 730, structure.scss */
+  /* line 731, structure.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 737, structure.scss */
+  /* line 738, structure.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,

@@ -1,7 +1,7 @@
 /* 
-=========================================================
-    SASS for structure of eclass v3.0 - version 0.0919 
-=========================================================
+==========================================================
+    SASS for structure of eclass v3.0 - version 0.0919b 
+==========================================================
 */
 
 @import 'global';
@@ -10,8 +10,9 @@
 
 
 
-body{
-	background: $color_sidebar;
+body
+{
+	background: $color-background;
   font-family: 'Open Sans';
 }
  
@@ -27,7 +28,7 @@ body > .container{
 
 /* LEFTNAV - MAIN MENU, LOGO */
 #leftnav{
-	background: $color_sidebar;
+	background: $color-background;
   padding: 0;
 
 	.logo{
@@ -60,7 +61,7 @@ body > .container{
 			}
 
 			&:hover{
-				color: $color_hover;
+				color: $color-hover;
 
         @include transition(all 120ms linear);
 			}
@@ -74,7 +75,7 @@ body > .container{
 
       &:not(.collapsed){
         border-radius: 4px 0px 0px 0px!important;
-        color: $color_hover;
+        color: $color-hover;
       }
 
       &:hover{
@@ -107,7 +108,7 @@ body > .container{
         &:hover{
           text-decoration: none;
           color: #eee;
-          background: $color_hover;
+          background: $color-hover;
           border-radius: 4px 0px 0px 4px;
 
           margin-left: 0px;
@@ -116,7 +117,7 @@ body > .container{
         }
 
         &.active{
-          background: $color_main_content;
+          background: $color-main-content;
           text-shadow: none;
           color: #333;
           border-radius: 4px 0px 0px 4px;
@@ -190,7 +191,7 @@ body > .container{
 
 					&:hover,
 					&:focus{
-						background: $color_hover;
+						background: $color-hover;
 						color: white;
             @include transition(all 120ms linear);							
 					}
@@ -233,7 +234,7 @@ footer.footer
 {
   text-align: center;
   padding: 1em;
-  background: #eee;
+  background: $color-footer;
   margin-top: 2em;
   color: rgb(167, 167, 167);
   border-top: 1px solid #DBDBDB;
@@ -277,7 +278,7 @@ body.sidebar-opened .toggle-sidebar
 
   z-index:10001;
 
-  background: rgb(222, 224, 226);
+  background: $color-sidebar;
 
   word-wrap:break-word;
 
