@@ -524,12 +524,11 @@ if (!$alter_layout){
             <h5 class='content-title'>$langCourseUnits</h5>".
 
             (($is_editor)? "<div class='toolbox'>
-                                <a rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' href='{$urlServer}modules/units/info.php?course=$course_code'>
-                                    <button class='button color-green'>
+                                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-success'>
                                         <i class='fa fa-plus-circle'></i>
-                                        <span class='txt'>$langAddUnit</span>
-                                    </button>
-                                </a>
+                                        $langAddUnit
+                                    </a>
+                            
                             </div>" : "")."
             
             $cunits_content
