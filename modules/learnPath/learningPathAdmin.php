@@ -555,7 +555,7 @@ foreach ($flatElementList as $module) {
         }
     } else {
         $style = "";
-        $image_bullet = "on";
+        $image_bullet = "on"; // to be revised as it not used in font awsome
     }
     $spacingString = "";
     for ($i = 0; $i < $module['children']; $i++) {
@@ -580,15 +580,15 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "exercise_$image_bullet";
+            $moduleImg = "fa-pencil-square-o";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "links_$image_bullet";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "description_$image_bullet";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTDOCUMENT_) {
-            $moduleImg = "docs_$image_bullet";
+            $moduleImg = "fa-folder-open-o";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "videos_$image_bullet";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }

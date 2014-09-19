@@ -265,15 +265,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($mail_ver_required) {
             switch ($logs->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
-                    $icon = 'pending';
+                    $icon = 'fa-clock-o';
                     $tip = $langMailVerificationPendingU;
                     break;
                 case EMAIL_VERIFIED:
-                    $icon = 'tick_1';
+                    $icon = 'fa-check-square-o';
                     $tip = $langMailVerificationYesU;
                     break;
                 default:
-                    $icon = 'not_confirmed';
+                    $icon = 'fa-circle';
                     $tip = $langMailVerificationNoU;
                     break;
             }
@@ -283,15 +283,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
         switch ($logs->status) {
             case USER_TEACHER:
-                $icon = 'teacher';
+                $icon = 'fa-university';
                 $tip = $langTeacher;
                 break;
             case USER_STUDENT:
-                $icon = 'student';
+                $icon = 'fa-graduation-cap';
                 $tip = $langStudent;
                 break;
             case USER_GUEST:
-                $icon = 'guest';
+                $icon = 'fa-male';
                 $tip = $langVisitor;
                 break;
             default:
@@ -305,12 +305,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $icon_content = "&mdash;&nbsp;";
         } else {
             $changetip = q("$langChangeUserAs $logs->username");
-            $icon_content = icon('edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
-                                icon('delete', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
-                                icon('platform_stats', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                                icon('platform_stats', $langActions, "userlogs.php?u=$logs->id");
+            $icon_content = icon('fa-edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-pie-chart', $langActions, "userlogs.php?u=$logs->id");
             if (!isDepartmentAdmin()) {
-                    $icon_content .= '&nbsp;' . icon('log_as', $changetip, 'change_user.php?username=' . urlencode($logs->username));
+                    $icon_content .= '&nbsp;' . icon('fa-key', $changetip, 'change_user.php?username=' . urlencode($logs->username));
             }
         }
         $data['aaData'][] = array(

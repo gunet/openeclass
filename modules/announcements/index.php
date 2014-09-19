@@ -90,28 +90,30 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
-                $vis_icon = 'invisible';
+                $vis_icon = 'fa-eye-slash';
+                $vis_class = 'not_visible';
             } else {
                 $visible = 0;
-                $vis_icon = 'visible';
+                $vis_icon = 'fa-eye';
+                $vis_class= 'visible';
             }
             //checking ordering status and initializing appropriate arrows
             $up_arrow = $down_arrow = '';
             if ($iterator != 1 or $offset > 0)  {
-                $up_arrow = icon('up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id");
+                $up_arrow = icon('fa-arrow-up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id");
             }
             if ($offset + $iterator < $all_announc->total) {
-                $down_arrow = icon('down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id");
+                $down_arrow = icon('fa-arrow-down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id");
             }
             //setting datables column data
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
-                'DT_RowClass' => $vis_icon,
+                'DT_RowClass' => $vis_class,
                 '0' => date('d-m-Y', strtotime($myrow->date)),
                 '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
-                '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id")  .
-                       "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\"") .
-                       "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visible\"") .
+                '2' => icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id")  .
+                       "&nbsp;" . icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .
+                       "&nbsp;" . icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .
                        "&nbsp;" . $down_arrow . $up_arrow
                 );
             $iterator++;
@@ -167,7 +169,15 @@ $head_content .= "<script type='text/javascript'>
                 e.preventDefault();
                 if (confirmation('$langSureToDelAnnounce')) {
                     var row_id = $(this).closest('tr').attr('id');
-                    $.post('', { action: 'delete', value: row_id}, function() {
+                    $.ajax({
+                      type: 'POST',
+                      url: '',
+                      datatype: 'json',
+                      data: {
+                         action: 'delete', 
+                         value: row_id
+                      },
+                      success: function(data){
                         var num_page_records = oTable.fnGetData().length;
                         var per_page = oTable.fnPagingInfo().iLength;
                         var page_number = oTable.fnPagingInfo().iPage;
@@ -176,21 +186,40 @@ $head_content .= "<script type='text/javascript'>
                                 page_number--;
                             }
                         }
-                        $('#tool_title').after('<p class=\"success\">$langAnnDel</p>');
-                        $('.success').delay(3000).fadeOut(1500);
                         oTable.fnPageChange(page_number);
-                    }, 'json');
-                 }
+                      },
+                      error: function(xhr, textStatus, error){
+                          console.log(xhr.statusText);
+                          console.log(textStatus);
+                          console.log(error);
+                      }
+                    });                    
+                }
             });
             $(document).on( 'click','.vis_btn', function (g) {
                 g.preventDefault();
                 var vis = $(this).data('vis');
                 var row_id = $(this).closest('tr').attr('id');
-                $.post('', { action: 'visible', value: row_id, visible: vis}, function() {
+                $.ajax({
+                  type: 'POST',
+                  url: '',
+                  datatype: 'json',
+                  data: {
+                        action: 'visible', 
+                        value: row_id, 
+                        visible: vis
+                  },
+                  success: function(data){
                     var page_number = oTable.fnPagingInfo().iPage;
-                    var per_page = oTable.fnPagingInfo().iLength;
+                    var per_page = oTable.fnPagingInfo().iLength
                     oTable.fnPageChange(page_number);
-                }, 'json');
+                  },
+                  error: function(xhr, textStatus, error){
+                      console.log(xhr.statusText);
+                      console.log(textStatus);
+                      console.log(error);
+                  }
+                });                
             });
             $('.success').delay(3000).fadeOut(1500);
             $('.dataTables_filter input').attr('placeholder', '$langTitle');

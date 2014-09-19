@@ -432,13 +432,13 @@ function display_path_content() {
             $output .= '<b>' . $module['name'] . '</b>';
         } else { // module
             if ($module['contentType'] == CTEXERCISE_) {
-                $moduleImg = 'exercise_on';
+                $moduleImg = 'fa-pencil-square-o';
             } else if ($module['contentType'] == CTLINK_) {
-                $moduleImg = 'links_on';
+                $moduleImg = 'fa-link';
             } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-                $moduleImg = 'description_on';
+                $moduleImg = 'fa-info-circle';
             } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-                $moduleImg = 'videos_on';
+                $moduleImg = 'fa-film';
             } else {
                 $moduleImg = choose_image(basename($module['path']));
             }
@@ -727,7 +727,7 @@ function display_my_documents($dialogBox, $style) {
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
             } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
-                $image = 'folder';
+                $image = 'fa-folder';
                 $size = '&nbsp;';
                 $date = '&nbsp;';
                 $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';

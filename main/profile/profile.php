@@ -379,7 +379,7 @@ $tool_content .= "<tr><th>$langLanguage:</th>
 if ($icon) {
     $message_pic = $langReplacePicture;
     $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $delete = '&nbsp;' . icon('delete', $langDelete, null, 'id="delete"') . '&nbsp;';
+    $delete = '&nbsp;' . icon('fa-times', $langDelete, null, 'id="delete"') . '&nbsp;';
 } else {
     $picture = $delete = '';
     $message_pic = $langAddPicture;

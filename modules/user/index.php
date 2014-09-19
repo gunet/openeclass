@@ -120,32 +120,32 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //Create appropriate role control buttons
             //Tutor right
             if ($myrow->tutor == '0') {
-                $user_role_controls = icon('group_manager_add', $langGiveRightTutor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow->id");                
+                $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow->id'><img src='$themeimg/group_manager_add.png' alt='$langGiveRightTutor' title='$langGiveRightTutor'></a>";                
             } else {
-                $user_role_controls = icon('group_manager_remove', $langRemoveRightTutor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow->id");                
+                $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow->id'><img src='$themeimg/group_manager_remove.png' alt='$langRemoveRightTutor' title='$langRemoveRightTutor'></a>";              
             }
             //Editor right
             if ($myrow->editor == '0') {
-                $user_role_controls .= icon('assistant_add', $langGiveRightEditor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow->id");                
+                $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow->id'><img src='$themeimg/assistant_add.png' alt='$langGiveRightEditor' title='$langGiveRightEditor'></a>";                
             } else {
-                $user_role_controls .= icon('assistant_remove', $langRemoveRightEditor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow->id");                
+                $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow->id'><img src='$themeimg/assistant_remove.png' alt='$langRemoveRightEditor' title='$langRemoveRightEditor'></a>";                
             }
             // Admin right
             if ($myrow->id != $_SESSION["uid"]) {
                     if ($myrow->status == '1') {
                         if (get_config('opencourses_enable') && $myrow->reviewer == '1') {
-                            $user_role_controls .= icon('teacher', $langTutor);                            
+                            $user_role_controls .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor'>";                            
                         } else {
-                            $user_role_controls .= icon('teacher_remove', $langRemoveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow->id");                            
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow->id'><img src='$themeimg/teacher_remove.png' alt='$langRemoveRightAdmin' title='$langRemoveRightAdmin'></a>";                            
                         }
                     } else {
-                            $user_role_controls .= icon('teacher_add', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id");                            
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id'><img src='$themeimg/teacher_add.png' alt='$langGiveRightAdmin' title='$langGiveRightAdmin'></a>";                            
                     }                 
             } else {
                     if ($myrow->status == '1') {
-                            $user_role_controls .= icon('teacher', $langTutor);                            
+                            $user_role_controls .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor'>";                            
                     } else {
-                            $user_role_controls .= icon('add', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id");                            
+                            $user_role_controls .= icon('fa-plus', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id");                            
                     }
             }
             // opencourses reviewer right
@@ -156,14 +156,14 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         $user_role_controls .= "";
                     } else {
                         if ($myrow->reviewer == '1') {
-                            $user_role_controls .= icon('reviewer_remove', $langRemoveRightReviewer, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id");                            
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";                            
                         } else {
-                            $user_role_controls .= icon('reviewer_add', $langGiveRightReviewer, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id");                            
+                            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";                            
                         }
                     }
                 } else {
                     if ($myrow->reviewer == '1') {
-                        $user_role_controls .= icon('reviewer', $langOpenCoursesReviewer);                                 
+                        $user_role_controls .= "<img src='$themeimg/reviewer.png' alt='$langOpenCoursesReviewer' title='$langOpenCoursesReviewer'>";                                 
                     } else {
                         // do nothing as the course teacher cannot make himeself a reviewer
                         $user_role_controls .= "";

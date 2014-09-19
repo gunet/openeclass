@@ -526,15 +526,15 @@ if ($num_of_categories > 0) { // categories found ?
     foreach ($resultcategories as $myrow) {
         $description = standard_text_escape($myrow->description);
         if ((isset($_GET['d']) and $_GET['d'] == 1) or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-            $folder_icon = icon('folder_open', $shownone);
+            $folder_icon = icon('fa-folder-open-o', $shownone);
         } else {
-            $folder_icon = icon('folder_closed', $showall);
+            $folder_icon = icon('fa-folder-o', $showall);
         }
         $tool_content .= "<tr><th width='15' valign='top'>$folder_icon</th>";
         $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
         if ($is_editor) {
-            $tool_content .= "<span style='padding-left: 15px;'>".icon('edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
-                             icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</span>";
+            $tool_content .= "<span style='padding-left: 15px;'>".icon('fa-edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
+                             icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</span>";
         }
         if (!empty($description)) {
                 $tool_content .= "<br />$description</th>";

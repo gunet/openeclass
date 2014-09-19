@@ -129,7 +129,7 @@ function list_docs() {
             $dirname = "/" . htmlspecialchars($dirname);
             $parentlink = $urlbase . $parentpath;
             $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> " .
-                    icon('folder_up', $langUp, $parentlink) . "</th>";
+                    icon('fa-upload', $langUp, $parentlink) . "</th>";
             $colspan = 4;
         }
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
@@ -153,7 +153,7 @@ function list_docs() {
                 }
                 $dir = $entry['path'];
                 if ($is_dir) {
-                    $image = 'folder';
+                    $image = 'fa-folder-o';
                     $file_url = $urlbase . $dir;
                     $link_text = $entry['name'];
 

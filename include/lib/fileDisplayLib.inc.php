@@ -88,22 +88,22 @@ function choose_image($fileName) {
         );
 
         $image = array(
-            'word' => 'doc',
-            'web' => 'html',
-            'css' => 'css',
-            'image' => 'gif',
-            'audio' => 'wav',
-            'midi' => 'midi',
-            'video' => 'mpg',
-            'ram' => 'ram',
-            'flash' => 'flash',
-            'excel' => 'xls',
-            'compressed' => 'zip',
-            'rar' => 'rar',
-            'code' => 'js',
-            'acrobat' => 'pdf',
-            'powerpoint' => 'ppt',
-            'text' => 'txt',
+            'word' => 'fa-file-word-o',
+            'web' => 'fa-file-code-o',
+            'css' => 'fa-file-code-o',
+            'image' => 'fa-file-image-o',
+            'audio' => 'fa-file-audio-o',
+            'midi' => 'fa-file-audio-o',
+            'video' => 'fa-file-video-o',
+            'ram' => 'fa-file-audio-o',
+            'flash' => 'fa-bolt',
+            'excel' => 'fa-file-excel-o',
+            'compressed' => 'fa-file-archive-o',
+            'rar' => 'fa-file-archive-o',
+            'code' => 'fa-file-code-o',
+            'acrobat' => 'fa-file-pdf-o',
+            'powerpoint' => 'fa-file-powerpoint-o',
+            'text' => 'fa-file-text-o',
         );
     }
 

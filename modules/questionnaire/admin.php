@@ -239,7 +239,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     );            
     $tool_content .= "
         <fieldset>
-            <legend>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</legend>
+            <legend>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</legend>
             <em><small>".$aType[$question->qtype - 1]."</small><br>
             <b>$question->question_text</b></em><br>
         </fieldset>        
@@ -251,7 +251,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <tr>
                 <th>
                     <b><u>$langQuestionAnswers</u>:</b>&nbsp;&nbsp;
-                    " . icon('edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "<br>
+                    " . icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "<br>
                 </th>
             </tr>
             </tbody>
@@ -351,17 +351,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         foreach ($answers as $answer) {
             $tool_content .= "
                 <li>
-                    <input type='text' name='answers[]' value='$answer->answer_text' size='80'>&nbsp;" . icon('delete', $langDelete) . "&nbsp;" . icon('move_order', $langMove, null, "id='moveIconImg'") . "
+                    <input type='text' name='answers[]' value='$answer->answer_text' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
                 </li>            
             ";
         }
     } else {
         $tool_content .= "
             <li>
-                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('delete', $langDelete) . "&nbsp;" . icon('move_order', $langMove, null, "id='moveIconImg'") . "
+                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
             </li>
             <li>
-                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('delete', $langDelete) . "&nbsp;" . icon('move_order', $langMove, null, "id='moveIconImg'") . "
+                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
             </li>             
         ";        
     }
@@ -386,7 +386,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= "
         <fieldset>
-            <legend>$langInfoPoll &nbsp;".icon('edit', $langEditPoll, "admin.php?course=TMAPOST104&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
+            <legend>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=TMAPOST104&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
             <table width='99%' class='tbl'>
             <tbody><tr>
               <th width='180'>$langTitle:</th>
@@ -434,9 +434,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <td align='right' width='1'>$i.</td>
                             <td>$question->question_text<br>".
                             $aType[$question->qtype - 1]."</td>
-                            <td class='right' width='50'>".  icon('edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&editQuestion=$question->pqid")."&nbsp;".  icon('delete', $langDelete, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&deleteQuestion=$question->pqid", "onclick='return confirm(\"$langConfirmYourChoice\");'")."</td>
-                            <td width='20'>".(($i!=1) ? icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid") : '')."</td>
-                            <td width='20'>".(($i!=$nbrQuestions) ? icon('down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid") : '')."</td>
+                            <td class='right' width='50'>".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&editQuestion=$question->pqid")."&nbsp;".  icon('fa-times', $langDelete, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&deleteQuestion=$question->pqid", "onclick='return confirm(\"$langConfirmYourChoice\");'")."</td>
+                            <td width='20'>".(($i!=1) ? icon('fa-arrow-up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid") : '')."</td>
+                            <td width='20'>".(($i!=$nbrQuestions) ? icon('fa-arrow-down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid") : '')."</td>
                         </tr>";
             $i++;
         }

@@ -389,12 +389,12 @@ if (count($result) > 0) {
 
         if ($is_editor) {
             $tool_content .= "<td class='right' width='70'>                        
-                        " . icon('edit', $langModify, "?course=$course_code&amp;id=$myrow->id&amp;edit=true") . "&nbsp;
-                        " . icon('delete', $langDelete, "?course=$course_code&amp;id=$myrow->id&amp;delete=yes", "onClick=\"return confirmation('$langConfirmDelete');\"") . "&nbsp;";
+                        " . icon('fa-edit', $langModify, "?course=$course_code&amp;id=$myrow->id&amp;edit=true") . "&nbsp;
+                        " . icon('fa-times', $langDelete, "?course=$course_code&amp;id=$myrow->id&amp;delete=yes", "onClick=\"return confirmation('$langConfirmDelete');\"") . "&nbsp;";
             if ($myrow->visible == 1) {
-                $tool_content .= icon('visible', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkInvisibl=true");
+                $tool_content .= icon('fa-eye', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkInvisibl=true");
             } else {
-                $tool_content .= icon('invisible', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkVisibl=true");
+                $tool_content .= icon('fa-eye-slash', $langVisible, "?course=$course_code&amp;id=$myrow->id&amp;mkVisibl=true");
             }
             $tool_content .= "</td>";
         }

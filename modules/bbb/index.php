@@ -749,7 +749,7 @@ function bbb_session_details() {
                     <td class='center'>".q($start_date)."</td>
                     <td class='center'>$type</td>
                     <td class='center'>
-                    ".icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
+                    ".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
                     <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video' >

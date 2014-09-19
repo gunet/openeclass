@@ -1099,7 +1099,7 @@ function assignment_details($id, $row) {
         <fieldset>
         <legend>" . $m['WorkInfo'];
     if ($is_editor) {
-        $tool_content .= "&nbsp;" . icon('edit', $m['edit'],
+        $tool_content .= "&nbsp;" . icon('fa-edit', $m['edit'],
                  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit");
     }
     $tool_content .= "</legend>
@@ -1615,24 +1615,24 @@ function show_assignments() {
             }                         
            $tool_content .= "</td>
               <td class='right'>" .
-                  icon('edit', $m['edit'],
+                  icon('fa-edit', $m['edit'],
                       "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit") .
                   '&nbsp;';
            if (is_numeric($num_submitted) && $num_submitted > 0) {
-                $tool_content .= icon('clear', $m['WorkSubsDelete'],
+                $tool_content .= icon('fa-eraser', $m['WorkSubsDelete'],
                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                     "onClick='return confirmation(\"$langWarnForSubmissions. $langDelSure\")'") .
                     '&nbsp;';
            }
-            $tool_content .= icon('delete', $m['delete'],
+            $tool_content .= icon('fa-times', $m['delete'],
                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                 "onClick='return confirmation(\"$langConfirmDelete\")'") .
                 '&nbsp;';
             if ($row->active) {
-                $tool_content .= icon('visible', $m['deactivate'],
+                $tool_content .= icon('fa-eye', $m['deactivate'],
                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id");
             } else {
-                $tool_content .= icon('invisible', $m['activate'],
+                $tool_content .= icon('fa-eye-slash', $m['activate'],
                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id");
             }
             $tool_content .= "</td></tr>";

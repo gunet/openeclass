@@ -415,8 +415,8 @@ if (isset($level) && !empty($level)) {
         <tr class='title1'>
             <td class='title1'>${langOpenCourseShort}</td>
             <td style='text-align: right; padding-right: 1.2em'><a href='$metadataUrl'>" .
-            icon('lom', $langCourseMetadata, $metadataUrl) . "</td></tr>
-        <tr><td colspan='2'><div class='center'>" . icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) . "</div>
+            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td></tr>
+        <tr><td colspan='2'><div class='center'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'></div>
                 <div class='center'><b>${langOpenCoursesLevel}: $level</b></div></td></tr>
         </table>
         <br/>";

@@ -547,7 +547,7 @@ if ($is_editor) {
                         <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
-                        <td class='center'>". icon('edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"). "</td>
+                        <td class='center'>". icon('fa-edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"). "</td>
                     </tr>";
             }
 
@@ -654,7 +654,7 @@ if ($is_editor) {
                                     $tool_content .= "</td>";
 
                                     $tool_content .= "<td class='center'>". userAttendTotal($attendance_id, $myrow->userID). "/" . $attendance_limit . "</td>";
-                                    $tool_content .= "<td class='center'>". icon('edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$myrow->userID"). "</td>";
+                                    $tool_content .= "<td class='center'>". icon('fa-edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$myrow->userID"). "</td>";
                                     $i++;
                                 }, 
                         $limitDate, $course_id, USER_STUDENT, $order_sql);
@@ -891,7 +891,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1")."&nbsp;";
                 $k++;         
             }
             $tool_content .= "</table></fieldset>";
@@ -939,7 +939,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToAttendance->id&amp;type=2")."&nbsp;";                     
+                $tool_content .= "<td width='70' class='center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToAttendance->id&amp;type=2")."&nbsp;";                     
                 $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
@@ -1048,11 +1048,11 @@ if ($is_editor) {
             $tool_content .= "<td width='70' class='center'>";
                     
             if ($userAttend) {
-                $tool_content .= icon('tick', $langAttendanceΑbsencesYes); 
+                $tool_content .= icon('fa-check-square-o', $langAttendanceΑbsencesYes); 
             } elseif($announce->date > date("Y-m-d")) {
                 $tool_content .= "-";
             } else {
-                $tool_content .= icon('delete', $langAttendanceΑbsencesΝο);
+                $tool_content .= icon('fa-times', $langAttendanceΑbsencesΝο);
             }
             $tool_content .= "</td>";            
             $k++;

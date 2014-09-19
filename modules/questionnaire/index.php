@@ -185,13 +185,13 @@ function printPolls() {
                     } else {
                         $visibility_css = " class=\"odd\"";
                     }
-                    $visibility_gif = "visible";
+                    $visibility_gif = "fa-eye";
                     $visibility_func = "deactivate";
                     $arrow_png = "arrow";
                     $k++;
                 } else {
                     $visibility_css = " class=\"invisible\"";
-                    $visibility_gif = "invisible";
+                    $visibility_gif = "fa-eye-slash";
                     $visibility_func = "activate";
                     $arrow_png = "arrow";
                     $k++;
@@ -241,22 +241,22 @@ function printPolls() {
                     $tool_content .= "
                         <td class='center'>$countAnswers</td>
                         <td class='center'>" .
-                            icon('search', $langSee, "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid") .
+                            icon('fa-search', $langSee, "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid") .
                             "&nbsp;" . 
-                            icon('edit', $langEdit, "admin.php?course=$course_code&amp;pid=$pid") .
+                            icon('fa-edit', $langEdit, "admin.php?course=$course_code&amp;pid=$pid") .
                             "&nbsp;" . 
-                            icon('clear', $langPurgeExercises,
+                            icon('fa-eraser', $langPurgeExercises,
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
                                 "onClick=\"return confirmation('" . js_escape($langConfirmPurgeExercises) . "');\"") .
                             "&nbsp;" .
-                            icon('delete', $langDelete,
+                            icon('fa-times', $langDelete,
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
                                 "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") .
                             "&nbsp;" .
                             icon($visibility_gif, $langVisible,
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}") .
                             "&nbsp;" .
-                            icon('duplicate', $langCreateDuplicate,
+                            icon('fa-copy', $langCreateDuplicate,
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;clone=yes&amp;pid={$pid}") .
                             "</td></tr>";
                 } else {

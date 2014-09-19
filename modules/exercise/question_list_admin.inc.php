@@ -113,15 +113,15 @@ if ($nbrQuestions) {
 			<td> " . q($objQuestionTmp->selectTitle()) . "<br />
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
 			<td class='right' width='50'>" .
-                icon('edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='modal_warning'" : "")) . "&nbsp;" .
-                icon('delete', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
+                icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='modal_warning'" : "")) . "&nbsp;" .
+                icon('fa-times', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
                 "</td><td width='20'>";
         if ($i != 1) {
-            $tool_content .= icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id");
+            $tool_content .= icon('fa-arrow-up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id");
         }
         $tool_content .= "</td><td width='20'>";
         if ($i != $nbrQuestions) {
-            $tool_content .= icon('down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id");
+            $tool_content .= icon('fa-arrow-down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id");
         }
         $tool_content .= "</td></tr>";
         $i++;

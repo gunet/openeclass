@@ -83,17 +83,17 @@ function showlinksofcategory($catid) {
                 $editlink .= "&amp;category=$category";
             }
 
-            $tool_content .= icon('edit', $langModify, $editlink) .
+            $tool_content .= icon('fa-edit', $langModify, $editlink) .
                     "&nbsp;&nbsp;" .
-                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview", "onclick=\"javascript:if(!confirm('" . $langLinkDelconfirm . "')) return false;\"") .
+                    icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview", "onclick=\"javascript:if(!confirm('" . $langLinkDelconfirm . "')) return false;\"") .
                     "</td><td width='35' valign='top' align='right'>";
             // Display move up command only if it is not the top link
             if ($i != 1) {
-                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id");
+                $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id");
             }
             // Display move down command only if it is not the bottom link
             if ($i < $numberoflinks) {
-                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id");
+                $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id");
             }
             $tool_content .= "</td>";
         }
@@ -109,18 +109,18 @@ function showcategoryadmintools($categoryid) {
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= "<th width='45' valign='top' class='right'>" .
-            icon('edit', $langModify, $basecaturl . 'action=editcategory') .
+            icon('fa-edit', $langModify, $basecaturl . 'action=editcategory') .
             '&nbsp;&nbsp;' .
-            icon('delete', $langDelete, $basecaturl . 'action=deletecategory', "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"") .
+            icon('fa-times', $langDelete, $basecaturl . 'action=deletecategory', "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"") .
             "</th>
 	                   <th width='35' valign='top' class='right'>";
     // Display move up command only if it is not the top link
     if ($catcounter != 1) {
-        $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid");
+        $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid");
     }
     // Display move down command only if it is not the bottom link
     if ($catcounter < $aantalcategories) {
-        $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid");
+        $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid");
     }
     $tool_content .= "</th>";
     $catcounter++;

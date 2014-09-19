@@ -310,7 +310,7 @@ if ($u) {
                         $tool_content .= $langVisitor;
                     }
                     $tool_content .= "</td><td align='center'>" .
-                            icon('cunregister', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>\n";
+                            icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>\n";
                 }
                 $k++;
             }

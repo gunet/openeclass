@@ -269,9 +269,9 @@ if (!$nbrExercises) {
             }
             if (course_status($course_id) == COURSE_OPEN) {
                 if ($row->public) {
-                    $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
+                    $tool_content .= icon('fa-unlock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
                 } else {
-                    $tool_content .= icon('access_limited', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
+                    $tool_content .= icon('fa-lock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
                 }
                 $tool_content .= "&nbsp;";
             }

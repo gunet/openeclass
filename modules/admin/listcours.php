@@ -154,12 +154,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // Add links to course users, delete course and course edit
-        $icon_content = icon('user_list', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
+        $icon_content = icon('fa-user', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
         if (!isDepartmentAdmin()) {
-            $icon_content .= icon('action_log', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
+            $icon_content .= icon('fa-list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
         }
-        $icon_content .= icon('edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
-        $icon_content .= icon('delete', $langDelete, "delcours.php?c=$logs->id");
+        $icon_content .= icon('fa-edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
+        $icon_content .= icon('fa-times', $langDelete, "delcours.php?c=$logs->id");
 
         $data['aaData'][] = array(
                         '0' => $course_title,

@@ -1018,8 +1018,8 @@ class Calendar_Events {
         }
         $formatted_calendar_item .= "<td class='right' width='70'>";
         if($event->event_type == "personal" || ($event->event_type == "admin" && $is_admin)){
-            $formatted_calendar_item .= icon('edit', $langModify, str_replace('thisid',$event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type])). "&nbsp;
-                        ".icon('delete', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
+            $formatted_calendar_item .= icon('fa-edit', $langModify, str_replace('thisid',$event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type])). "&nbsp;
+                        ".icon('fa-times', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
         }
         $formatted_calendar_item .= "</td>";
         $formatted_calendar_item .= "</tr>";
@@ -1074,8 +1074,8 @@ class Calendar_Events {
         }
         $formatted_calendar_item .= "<td class='right' width='70'>";
         if($event->event_type == "personal" || ($event->event_type == "admin" && $is_admin)){
-            $formatted_calendar_item .= icon('edit', $langModify, str_replace('thisid',$event->id,Calendar_Events::$event_type_url[$event->event_type])). "&nbsp;
-                        ".icon('delete', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
+            $formatted_calendar_item .= icon('fa-edit', $langModify, str_replace('thisid',$event->id,Calendar_Events::$event_type_url[$event->event_type])). "&nbsp;
+                        ".icon('fa-times', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
         }
         $formatted_calendar_item .= "</td>";
         $formatted_calendar_item .= "</tr>";

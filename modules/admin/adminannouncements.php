@@ -271,11 +271,11 @@ if ($displayAnnouncementList == true) {
                 } else {
                     $classvis = 'odd';
                 }
-                $icon = 'visible';
+                $icon = 'fa-eye';
             } else {
                 $visibility = 1;
                 $classvis = 'invisible';
-                $icon = 'invisible';
+                $icon = 'fa-eye-slash';
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>
@@ -283,19 +283,19 @@ if ($displayAnnouncementList == true) {
                 <td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
                 <td>" . standard_text_escape($myrow->body) . "</td>
                 <td width='60'>" .
-                    icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?modify=$myrow->id") . ' ' .
-                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?delete=$myrow->id", 
+                    icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?modify=$myrow->id") . ' ' .
+                    icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?delete=$myrow->id", 
                          "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") . ' ' .
                     icon($icon, $langVisibility, "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility") . "
                 <td class='right' width='40'>";
             if ($iterator != 1) {
-                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?up=$myrow->id");
+                $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?up=$myrow->id");
             } else {
                 $tool_content .= "&nbsp;&nbsp;";
             }
             $tool_content .= "&nbsp;";
             if ($iterator < $bottomAnnouncement) {
-                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?down=$myrow->id");
+                $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?down=$myrow->id");
             }
             $tool_content .= "</td></tr>";
             $iterator++;

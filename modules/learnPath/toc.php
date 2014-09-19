@@ -128,7 +128,7 @@ foreach ($flatElementList as $module) {
         }
     } else {
         $style = "";
-        $image_bullet = "on";
+        $image_bullet = "on"; //image bullet no longer used in fa icons. Should be checked.
     }
 
     // indent a child based on label ownership
@@ -141,17 +141,17 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "exercise_$image_bullet";
+            $moduleImg = "fa-pencil-square-o";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "links_$image_bullet";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "description_$image_bullet";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "lp_check";
+            $moduleImg = "fa-square-o";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "videos_on";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -162,14 +162,14 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'tick';
+                $moduleImg = 'fa-check-square-o';
             } else {
-                $imagePassed = icon('tick', $module['lesson_status']);
+                $imagePassed = icon('fa-check-square-o', $module['lesson_status']);
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'lp_failed';
+            $moduleImg = 'fa-times-circle';
         }
 
         echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg, '');

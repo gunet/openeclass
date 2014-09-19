@@ -169,13 +169,13 @@ foreach ($result as $list) {
 
     //CHECKBOX, NAME, RENAME, COMMENT
     if ($list->contentType == CTEXERCISE_) {
-        $moduleImg = 'exercise_on';
+        $moduleImg = 'fa-pencil-square-o';
     } else if ($list->contentType == CTLINK_) {
-        $moduleImg = 'links_on';
+        $moduleImg = 'fa-link';
     } else if ($list->contentType == CTCOURSE_DESCRIPTION_) {
-        $moduleImg = 'description_on';
+        $moduleImg = 'fa-info-circle';
     } else if ($list->contentType == CTMEDIA_ || $list->contentType == CTMEDIALINK_) {
-        $moduleImg = 'videos_on';
+        $moduleImg = 'fa-film';
     } else {
         $moduleImg = choose_image(basename($list->path));
     }

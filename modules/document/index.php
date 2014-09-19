@@ -1126,7 +1126,7 @@ if ($doc_count == 0) {
                 $style = ' class="invisible"';
             }
             if ($is_dir) {
-                $img_href = icon('folder');
+                $img_href = icon('fa-folder-o');
                 $file_url = $base_url . "openDir=$cmdDirName";
                 $link_title = q($entry['filename']);
                 $dload_msg = $langDownloadDir;
@@ -1171,7 +1171,7 @@ if ($doc_count == 0) {
                 // External document
                 $download_url = $entry['extra_path'];
             }
-            $download_icon = icon('save_s', $dload_msg, $download_url);
+            $download_icon = icon('fa-save', $dload_msg, $download_url);
             $tool_content .= "<tr $style>
                                                <td class='center' valign='top'>$img_href</td>
                                                <td>$link_href $link_title_extra";
@@ -1213,29 +1213,29 @@ if ($doc_count == 0) {
                     /*                     * * delete command ** */
                     $tool_content .= "<input type='image' src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('" . js_escape($langConfirmDelete . ' ' . $entry['filename']) . "');\" />&nbsp;" . $padding2;
                     if ($entry['format'] != '.meta') {
-                        $tool_content .= icon('move', $langMove, "{$base_url}move=$cmdDirName") .
-                                "&nbsp;" . icon('rename', $langRename, "{$base_url}rename=$cmdDirName") .
-                                "&nbsp;" . icon('comment_edit', $langComment, "{$base_url}comment=$cmdDirName") .
+                        $tool_content .= icon('fa-arrows', $langMove, "{$base_url}move=$cmdDirName") .
+                                "&nbsp;" . icon('fa-terminal', $langRename, "{$base_url}rename=$cmdDirName") .
+                                "&nbsp;" . icon('fa-comment-o', $langComment, "{$base_url}comment=$cmdDirName") .
                                 "&nbsp;";
                     }
                     /*                     * * metadata command ** */
                     if (get_config("insert_xml_metadata")) {
                         $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
-                        $tool_content .= icon('lom', $langMetadata, "{$base_url}metadata=$xmlCmdDirName") .
+                        $tool_content .= icon('fa-tags', $langMetadata, "{$base_url}metadata=$xmlCmdDirName") .
                                 "&nbsp;";
                     }
                     if ($entry['visible']) {
-                        $tool_content .= icon('visible', $langVisible, "{$base_url}mkInvisibl=$cmdDirName");
+                        $tool_content .= icon('fa-eye', $langVisible, "{$base_url}mkInvisibl=$cmdDirName");
                     } else {
-                        $tool_content .= icon('invisible', $langVisible, "{$base_url}mkVisibl=$cmdDirName");
+                        $tool_content .= icon('fa-eye-slash', $langVisible, "{$base_url}mkVisibl=$cmdDirName");
                     }
                     $tool_content .= "&nbsp;";
                     // For common docs, $course_id = -1 - disable public icon there
                     if ($course_id > 0 and course_status($course_id) == COURSE_OPEN) {
                         if ($entry['public']) {
-                            $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
+                            $tool_content .= icon('fa-unlock', $langResourceAccess, "{$base_url}limited=$cmdDirName");
                         } else {
-                            $tool_content .= icon('access_limited', $langResourceAccess, "{$base_url}public=$cmdDirName");
+                            $tool_content .= icon('fa-lock', $langResourceAccess, "{$base_url}public=$cmdDirName");
                         }
                         $tool_content .= "&nbsp;";
                     }
