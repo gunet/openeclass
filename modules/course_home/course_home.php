@@ -290,12 +290,7 @@ if ($total_cunits > 0) {
     $count_index++;
     }
 }
-//<form method="POST" action="http://example.com/admin/user/delete/12" accept-charset="UTF-8" style="display:inline">
-//    <button class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete User" data-message="Are you sure you want to delete this user ?">
-//        <i class="glyphicon glyphicon-trash"></i> Delete
-//    </button>
-//</form>
-//onClick=\"return confirmation('$langConfirmDelete');\"
+
 $bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'>" . $langCode . ":</b> " . q($public_code) . "" .
         "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
         "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langFaculty . ":</b> ";

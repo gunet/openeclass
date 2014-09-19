@@ -342,23 +342,23 @@
         <script type='text/javascript'>
           $('#confirmAction').on('show.bs.modal', function (e) {
               var message = $(e.relatedTarget).attr('data-message');
-              $(this).find('.modal-body p').text(message);
+              $('.modal-body p').text(message);
               var title = $(e.relatedTarget).attr('data-title');
-              $(this).find('.modal-title').text(title);
+              $('.modal-title').text(title);
               var cancel_text = $(e.relatedTarget).attr('data-cancel-txt');
-              $(this).find('#cancel-btn').text(cancel_text);
+              $('#cancel-btn').text(cancel_text);
               var action_text = $(e.relatedTarget).attr('data-action-txt');
-              $(this).find('#confirm').text(action_text);
+              $('.modal-footer #confirm').text(action_text);
               var action_btn_class = $(e.relatedTarget).attr('data-action-class');
-              $(this).find('#confirm').addClass(action_btn_class);
+              $('.modal-footer #confirm').addClass(action_btn_class);
               
               // Pass form reference to modal for submission on yes/ok
               var form = $(e.relatedTarget).closest('form');
-              $(this).find('.modal-footer #confirm').data('form', form);
+              $('.modal-footer #confirm').data('form', form);
           });
 
           <!-- Form confirm (yes/ok) handler, submits form -->
-          $('#confirmAction').find('.modal-footer #confirm').on('click', function(){
+          $('.modal-footer #confirm').on('click', function(){
               $(this).data('form').submit();
           });
         </script>
