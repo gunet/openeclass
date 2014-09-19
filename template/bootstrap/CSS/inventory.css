@@ -8,108 +8,63 @@
     SASS for eclass UI v3.0 - Global styles - version 0.0919b
 ==============================================================
 */
-/* Colors */
-/* Font families */
-/* Global classes for alignments ------------------------------------*/
-/* line 36, global.scss */
-.align-center {
-  text-align: center;
-}
-
-/* line 41, global.scss */
-.align-right {
-  text-align: right;
-}
-
-/* line 46, global.scss */
-.align-left {
-  text-align: left;
-}
-
-/* Global classes for floatings ---------------------------------------*/
-/* line 55, global.scss */
-.float-right {
-  float: right;
-}
-
-/* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-/* line 65, global.scss */
+/* COLORS ---------------------------------------------------------------------- */
+/* FONTS ------------------------------------------------------------------------- */
+/* GLOBAL STYLES -----------------------------------------------------------------*/
+/* line 38, global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 69, global.scss */
-.a-wrapper {
-  margin: 2em 0em;
-}
-
-/* line 73, global.scss */
-.content-title {
-  text-transform: uppercase;
-}
-
-/* line 77, global.scss */
-.displaynone {
-  display: none;
-}
-
-/* Style for delete */
-/* line 88, global.scss */
+/* line 43, global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 93, global.scss */
+/* line 48, global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
-/* Extend bootstrap style - paddings to align with bootstrap columns */
-/* line 106, global.scss */
-.padding-col-align {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
 /* Extend bootstrap style - margins */
-/* line 114, global.scss */
+/* line 58, global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 119, global.scss */
+/* line 63, global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 123, global.scss */
+/* line 67, global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 129, global.scss */
+/* line 73, global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 133, global.scss */
+/* line 77, global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 138, global.scss */
+/* line 82, global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
 }
 
-/* Mixins */
-/* CSS ANIMATIONS */
-/* line 222, global.scss */
+/* MIXINS ------------------------------------------------------------------------------- */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
+/* line 171, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,68 +74,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 228, global.scss */
+  /* line 177, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 229, global.scss */
+  /* line 178, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 230, global.scss */
+  /* line 179, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 236, global.scss */
+  /* line 185, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 237, global.scss */
+  /* line 186, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 238, global.scss */
+  /* line 187, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 244, global.scss */
+  /* line 193, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 245, global.scss */
+  /* line 194, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 246, global.scss */
+  /* line 195, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 252, global.scss */
+  /* line 201, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 253, global.scss */
+  /* line 202, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 254, global.scss */
+  /* line 203, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
@@ -969,12 +924,6 @@ ul.dropdown-menu {
 }
 
 /* line 890, inventory.scss */
-.float-right .dropdown-menu {
-  right: -1px;
-  left: auto;
-}
-
-/* line 896, inventory.scss */
 ul.dropdown-menu:before {
   content: "";
   position: absolute;
@@ -986,7 +935,7 @@ ul.dropdown-menu:before {
   z-index: -1;
 }
 
-/* line 907, inventory.scss */
+/* line 901, inventory.scss */
 ul.dropdown-menu li a {
   display: block;
   text-align: left;
@@ -998,7 +947,7 @@ ul.dropdown-menu li a {
   white-space: nowrap;
 }
 
-/* line 919, inventory.scss */
+/* line 913, inventory.scss */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: white;
@@ -1006,21 +955,21 @@ ul.dropdown-menu li a {
 }
 
 /* PAGINATION */
-/* line 930, inventory.scss */
+/* line 924, inventory.scss */
 .my-pager {
   margin: 1em 0em;
   text-align: right;
   font-size: 0.85em;
 }
 
-/* line 938, inventory.scss */
+/* line 932, inventory.scss */
 .my-pager .items > .button {
   padding: 0.5em 0.8em;
   vertical-align: middle;
   cursor: pointer;
 }
 
-/* line 949, inventory.scss */
+/* line 943, inventory.scss */
 .my-pager .active {
   color: #4da1e4 !important;
   border-top: none;
@@ -1033,23 +982,23 @@ ul.dropdown-menu li a {
   -webkit-box-shadow: inset 0px 2px 5px lightgrey;
 }
 
-/* line 962, inventory.scss */
+/* line 956, inventory.scss */
 .my-pager .items > span:hover {
   color: #4da1e4;
 }
 
 /* TOGGLE SWTICH */
-/* line 970, inventory.scss */
+/* line 964, inventory.scss */
 .my-toggle > * {
   vertical-align: middle;
 }
 
-/* line 975, inventory.scss */
+/* line 969, inventory.scss */
 .my-toggle .txt {
   font-size: 0.75em;
 }
 
-/* line 980, inventory.scss */
+/* line 974, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -1072,7 +1021,7 @@ input.toggle {
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* line 1007, inventory.scss */
+/* line 1001, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -1093,30 +1042,30 @@ input.toggle:after {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* line 1027, inventory.scss */
+/* line 1021, inventory.scss */
 input.toggle:hover:after {
   background: white;
 }
 
-/* line 1032, inventory.scss */
+/* line 1026, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
   background-color: #dddddd;
 }
 
-/* line 1039, inventory.scss */
+/* line 1033, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
   left: 0px;
 }
 
 /* INPUT TEXTAREA SELECT */
-/* line 1047, inventory.scss */
+/* line 1041, inventory.scss */
 input,
 textarea {
   width: 100%;
 }
 
-/* line 1053, inventory.scss */
+/* line 1047, inventory.scss */
 input,
 textarea, select {
   font-family: "Open Sans";
@@ -1131,7 +1080,7 @@ textarea, select {
   @inlcude transition(all 150ms linear);
 }
 
-/* line 1069, inventory.scss */
+/* line 1063, inventory.scss */
 input:focus,
 textarea:focus,
 select:focus {
@@ -1142,13 +1091,13 @@ select:focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-/* line 1077, inventory.scss */
+/* line 1071, inventory.scss */
 textarea {
   resize: vertical;
 }
 
 /* TAG & LABEL */
-/* line 1084, inventory.scss */
+/* line 1078, inventory.scss */
 .tag {
   display: inline;
   padding: 0.4em;
@@ -1164,12 +1113,12 @@ textarea {
   -moz-border-radius: 0.25em;
 }
 
-/* line 1097, inventory.scss */
+/* line 1091, inventory.scss */
 .label-group {
   padding: 2em 0em;
   padding-top: 2.5em;
 }
-/* line 1100, inventory.scss */
+/* line 1094, inventory.scss */
 .label-group .title {
   display: inline-block;
   margin-right: 1em;
@@ -1178,7 +1127,7 @@ textarea {
   opacity: 0.6;
 }
 
-/* line 1111, inventory.scss */
+/* line 1105, inventory.scss */
 .label {
   font-size: 0.75em;
   display: inline-block;
@@ -1195,34 +1144,34 @@ textarea {
   -ms-transition: background 100ms linear;
   transition: background 100ms linear;
 }
-/* line 1127, inventory.scss */
+/* line 1121, inventory.scss */
 .label > span {
   font-weight: 600;
   color: #808080;
 }
-/* line 1132, inventory.scss */
+/* line 1126, inventory.scss */
 .label:hover {
   background: #e7e7e7;
   color: #3D3D3D;
 }
 
 /* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ */
-/* line 1154, inventory.scss */
+/* line 1148, inventory.scss */
 .md-modal.color-dark .md-content {
   background: #2E3033!important;
 }
 
-/* line 1158, inventory.scss */
+/* line 1152, inventory.scss */
 .md-modal .md-content p {
   font-size: 0.65em;
 }
 
-/* line 1162, inventory.scss */
+/* line 1156, inventory.scss */
 .md-modal .modal-icon {
   margin-right: 10px;
 }
 
-/* line 1166, inventory.scss */
+/* line 1160, inventory.scss */
 .md-modal .md-close {
   background: rgba(0, 0, 0, 0.2);
   border: none;
@@ -1236,13 +1185,13 @@ textarea {
   -moz-border-radius: 2px;
 }
 
-/* line 1184, inventory.scss */
+/* line 1178, inventory.scss */
 .md-modal .md-close:hover {
   background: rgba(0, 0, 0, 0.3);
   color: white;
 }
 
-/* line 1189, inventory.scss */
+/* line 1183, inventory.scss */
 .modal-overlay-bg-dark {
   background: rgba(35, 35, 35, 0.8) !important;
 }

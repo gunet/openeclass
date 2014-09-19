@@ -5,7 +5,7 @@
 */
 
 
-/* Colors */
+/* COLORS ---------------------------------------------------------------------- */
 $color-panel: #FFFFFF;
 $color-toolbox: #F0F4F6;
 
@@ -17,12 +17,13 @@ $color-main-content: #FAFAFA;
 $color-sidebar: #DEE0E2;
 
 $color-hover: #4da1e4;
+
 $color-green: #6BCE6B;
 $color-red: #CE6B6B;
 
 
 
-/* Font families */
+/* FONTS ------------------------------------------------------------------------- */
 $font-default: 'Open Sans';
 $font-icon: 'FontAwesome';
 
@@ -31,59 +32,13 @@ $font-icon: 'FontAwesome';
 
 
 
-/* Global classes for alignments ------------------------------------*/
-.align-center
+
+/* GLOBAL STYLES -----------------------------------------------------------------*/
+.padding
 {
-  text-align:center;
-}
-
-.align-right
-{
-  text-align: right;
-}
-
-.align-left
-{
-  text-align: left;
-}
-
-
-
-
-/* Global classes for floatings ---------------------------------------*/
-.float-right
-{
-  float: right;
-}
-
-
-
-
-
-/* MISC - TODO - CAN I REMOVE THESE? ---------------------------------- */
-
-.padding{
   padding:0.5em;
 }
 
-.a-wrapper{
-  margin:2em 0em;
-}
-
-.content-title{
-  text-transform: uppercase;
-}
-
-.displaynone{
-  display: none;
-}
-
-
-
-
-
-
-/* Style for delete */
 .delete-action
 {
   color:$color-red;
@@ -96,17 +51,6 @@ $font-icon: 'FontAwesome';
 }
 
 
-
-
-
-
-
-/* Extend bootstrap style - paddings to align with bootstrap columns */
-.padding-col-align
-{
-  padding-left: 15px;
-  padding-right: 15px;
-}
 
 
 /* Extend bootstrap style - margins */
@@ -145,7 +89,12 @@ $font-icon: 'FontAwesome';
 
 
 
-/* Mixins */
+
+
+
+
+
+/* MIXINS ------------------------------------------------------------------------------- */
 
 @mixin user-select($value)
 {
@@ -217,7 +166,7 @@ $font-icon: 'FontAwesome';
 
 
 
-/* CSS ANIMATIONS */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
 .transition
 {
   @include transition(all 150ms linear);
