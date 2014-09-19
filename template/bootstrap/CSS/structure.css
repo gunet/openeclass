@@ -11,52 +11,52 @@
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-/* line 38, global.scss */
+/* line 38, D:/SASS/global.scss */
 .padding {
   padding: 0.5em;
 }
 
-/* line 43, global.scss */
+/* line 43, D:/SASS/global.scss */
 .delete-action {
   color: #ce6b6b;
 }
 
-/* line 48, global.scss */
+/* line 48, D:/SASS/global.scss */
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
 }
 
 /* Extend bootstrap style - margins */
-/* line 58, global.scss */
+/* line 58, D:/SASS/global.scss */
 .margin-top {
   margin-top: 15px;
 }
 
-/* line 63, global.scss */
+/* line 63, D:/SASS/global.scss */
 .margin-top-thin {
   margin-top: 10px;
 }
 
-/* line 67, global.scss */
+/* line 67, D:/SASS/global.scss */
 .margin-top-fat {
   margin-top: 20px;
 }
 
 /* Extend bootstrap style - gutters */
-/* line 73, global.scss */
+/* line 73, D:/SASS/global.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 77, global.scss */
+/* line 77, D:/SASS/global.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 82, global.scss */
+/* line 82, D:/SASS/global.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
@@ -64,7 +64,7 @@
 
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 171, global.scss */
+/* line 171, D:/SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -74,68 +74,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 177, global.scss */
+  /* line 177, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 178, global.scss */
+  /* line 178, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 179, global.scss */
+  /* line 179, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 185, global.scss */
+  /* line 185, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 186, global.scss */
+  /* line 186, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 187, global.scss */
+  /* line 187, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 193, global.scss */
+  /* line 193, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 194, global.scss */
+  /* line 194, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 195, global.scss */
+  /* line 195, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 201, global.scss */
+  /* line 201, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 202, global.scss */
+  /* line 202, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 203, global.scss */
+  /* line 203, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
