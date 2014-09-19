@@ -116,7 +116,7 @@ img
 
 
 
-/* BREADCRUMB - Extend bootstrap style */
+/* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
 .breadcrumb
 {
   padding-left: 0px !important;
@@ -131,7 +131,7 @@ img
 
 
 
-/* PANEL - Extent bootstrap style (to match old contebox)*/
+/* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
 #main-content .panel
 {
   background: $color-panel !important;
@@ -144,8 +144,56 @@ img
 
 
 
+/* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
+.toolbox
+{
+  padding: 0.65em;
+  color: #333;
+  background: $color-toolbox;
+  border-top: 1px solid rgb(216, 216, 216);
+  border-bottom: 1px solid rgb(248, 248, 248);
+  @include box-sizing(border-box);
+  @include box-shadow(inset 0px -2px 8px rgb(221, 221, 221));
+  @include border-radius(4px);
+  position:relative;
+  text-align: right;
+  margin-right:0em;  
 
-/* TOOGLES */
+  ul
+  {
+    display:block;
+    display: inline-block;
+    margin:0px;
+    padding:0px;
+  }
+
+  li
+  {
+    list-style-type: none;
+    display: inline-block;
+  }
+
+  ul.toolbox-submenu
+  {
+    display:none;
+  }
+}
+
+.toolbox:hover
+{
+  .toolbox-submenu
+  {
+    display:inline-block;
+  }
+}
+
+
+
+
+
+
+
+/* TOOGLES -----------------------------------------------------------------------------*/
 #doc-toggle
 {
   float: right;
@@ -157,6 +205,82 @@ img
 .toggle-sidebar
 {
   cursor: pointer;
+}
+
+/* TOGGLE SWTICH */
+
+.my-toggle > *
+{
+  vertical-align: middle;
+}
+
+.my-toggle .txt
+{
+  font-size:0.75em;
+}
+
+input.toggle
+{
+  position:relative;
+  padding-left:5px;
+  padding-right:5px;
+
+  @include border-radius(15px);
+
+  -webkit-appearance:button;
+
+  cursor:pointer;  
+
+  border: 1px solid #3D79A8;
+  background-color: $color-hover;
+
+  color:#FFF;
+  white-space: nowrap;
+  overflow:hidden;
+
+  width:4em;
+  height:2em;
+  
+  outline:none;
+
+  @include box-shadow(inset 0px 1px 4px rgba(0, 0, 0,0.2));
+}
+
+input.toggle:after
+{
+  position:absolute;
+  content:"";
+  top:0px;
+  right:0px;
+  width:50%;
+  height:100%;
+
+  background:#eee;
+
+  border-top: 0.2em solid rgb(253, 253, 253);
+
+  @include border-radius(50%);
+
+  @include box-sizing(border-box);
+
+  @include box-shadow(0px 2px 5px rgba(0, 0, 0,0.5));
+}
+
+input.toggle:hover:after
+{
+  background:white;
+}
+
+input.toggle[type=checkbox]:checked
+{
+  border: 1px solid #aaaaaa;
+
+  background-color: #dddddd;
+}
+
+input.toggle[type=checkbox]:checked:after
+{
+  left:0px;
 }
 
 
@@ -693,62 +817,6 @@ ul.tablelist
 
 
 
-
-
-
-
-/* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-.toolbox
-{
-  padding: 0.65em;
-  color: #333;
-  background: $color-toolbox;
-  border-top: 1px solid rgb(216, 216, 216);
-  border-bottom: 1px solid rgb(248, 248, 248);
-  @include box-sizing(border-box);
-  @include box-shadow(inset 0px -2px 8px rgb(221, 221, 221));
-  @include border-radius(4px);
-  position:relative;
-  text-align: right;
-  margin-right:0em;  
-
-  ul
-  {
-    display:block;
-    display: inline-block;
-    margin:0px;
-    padding:0px;
-  }
-
-  li
-  {
-    list-style-type: none;
-    display: inline-block;
-  }
-
-  ul.toolbox-submenu
-  {
-    display:none;
-  }
-}
-
-.toolbox:hover
-{
-  .toolbox-submenu
-  {
-    display:inline-block;
-  }
-}
-
-
-
-
-
-
-
-
-
-
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
 
 #lesson-banner
@@ -958,81 +1026,7 @@ ul.dropdown-menu li a{
 }
 
 
-/* TOGGLE SWTICH */
 
-.my-toggle > *
-{
-  vertical-align: middle;
-}
-
-.my-toggle .txt
-{
-  font-size:0.75em;
-}
-
-input.toggle
-{
-  position:relative;
-  padding-left:5px;
-  padding-right:5px;
-
-  @include border-radius(15px);
-
-  -webkit-appearance:button;
-
-  cursor:pointer;  
-
-  border: 1px solid #3D79A8;
-  background-color: $color-hover;
-
-  color:#FFF;
-  white-space: nowrap;
-  overflow:hidden;
-
-  width:4em;
-  height:2em;
-  
-  outline:none;
-
-  @include box-shadow(inset 0px 1px 4px rgba(0, 0, 0,0.2));
-}
-
-input.toggle:after
-{
-  position:absolute;
-  content:"";
-  top:0px;
-  right:0px;
-  width:50%;
-  height:100%;
-
-  background:#eee;
-
-  border-top: 0.2em solid rgb(253, 253, 253);
-
-  @include border-radius(50%);
-
-  @include box-sizing(border-box);
-
-  @include box-shadow(0px 2px 5px rgba(0, 0, 0,0.5));
-}
-
-input.toggle:hover:after
-{
-  background:white;
-}
-
-input.toggle[type=checkbox]:checked
-{
-  border: 1px solid #aaaaaa;
-
-  background-color: #dddddd;
-}
-
-input.toggle[type=checkbox]:checked:after
-{
-  left:0px;
-}
 
 
 /* INPUT TEXTAREA SELECT */
