@@ -288,6 +288,11 @@ $langStatsCourse = "Στατιστικά Μαθήματος";
 $langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή στοιχείων μαθήματος";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του μαθήματος";
+$langCourseFormat = "Mορφή μαθήματος";
+$langCourseWeeklyFormatInfo = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormatNotice = "Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
+$langCourseSimpleFormat = 'Απλή μορφή';
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
@@ -1326,6 +1331,9 @@ $langMessageDeleteAllSuccess = "Η διαγραφή των μηνυμάτων π
 $langMsgRe = "Απ:";
 $langNoRecipients = "Δεν έχετε ορίσει παραλήπτες";
 $langSearchSurname = "Η αναζήτηση παραληπτών γίνεται με βάση το επώνυμο";
+$langDropboxFreeSpace = "Διαγραφή παλιών συνημμένων αρχείων για την απελευθέρωση χώρου %s MB";
+$langDropboxFreeSpaceConfirm = "Αυτή η ενέργεια θα διαγράψει τα συνημμένα αρχεία στα παλαιότερα μηνύματα του μαθήματος ώστε να απελευθερωθεί χώρος %s MB! Οι χρήστες δε θα μπορούν πλέον να τα κατεβάσουν!";
+$langDropboxFreeSpaceSuccess = "Απελευθερώθηκαν επιτυχώς %s ΜΒ χώρου!";
 
 /* * ********************************************************
  * exercise
