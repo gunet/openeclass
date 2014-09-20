@@ -85,7 +85,7 @@ $result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
 
 foreach ($result as $row) {
     $first_letter = $row->first_letter;
-    $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . $first_letter . '">' . $first_letter . '</a> ';
+    $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . urlencode($first_letter) . '">' . q($first_letter) . '</a> ';
 }
 
 $user_opts = "<option value='-1'>$langAllUsers</option>";
@@ -146,11 +146,11 @@ $tool_content .= selection($log_types, 'logtype', $logtype);
 $tool_content .= "</td></tr>
         <tr>
         <th class='left'>$langStartDate :</th>
-        <td><input type='text' name ='u_date_start' value='$u_date_start'></td>
+        <td><input type='text' name ='u_date_start' value='" . q($u_date_start) . "'></td>
         </tr>
         <tr>
         <th class='left'>$langEndDate :</th>
-        <td><input type='text' name ='u_date_end' value='$u_date_end'></td>
+        <td><input type='text' name ='u_date_end' value='" . q($u_date_end) . "'></td>
         </tr>
         <tr>
         <th class='left' rowspan='2' valign='top'>$langUser:</td>
