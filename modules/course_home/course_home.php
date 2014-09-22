@@ -74,7 +74,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date
+$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date, view_type
                   FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($result->keywords));
@@ -83,6 +83,7 @@ $professor = $result->prof_names;
 $public_code = $result->public_code;
 $course_license = $result->course_license;
 $course_finishDate = $result->finish_date;
+$course_viewType = $result->view_type;
 $main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
@@ -227,10 +228,18 @@ if ($is_editor) {
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['access'])) {
-        $id = intval($_REQUEST['access']);
-        $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
-        $newaccess = ($access->public == '1') ? '0' : '1';
-        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        if($course_viewType == "weekly"){
+            $id = intval($_REQUEST['access']);
+            $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
+            $newaccess = ($access->public == '1') ? '0' : '1';
+            Database::get()->query("UPDATE course_weekly_view SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        }else{
+            $id = intval($_REQUEST['access']);
+            $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
+            $newaccess = ($access->public == '1') ? '0' : '1';
+            Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        }
+        
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
         $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
@@ -538,10 +547,11 @@ if($viewCourse == "weekly"){
     }
     $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/weeks/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";    
     
-    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
         $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
+        $icon_access = ($week->public == 1) ? 'access_public.png' : 'access_limited.png';
         
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
@@ -553,6 +563,9 @@ if($viewCourse == "weekly"){
                             <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
                                 <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
                             </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?access=$week->id'>
+                                <img src='$themeimg/$icon_access' title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' />
+                            </a>
                             <div $class_vis>$week->comments</div>
                             <hr>";
                             show_resourcesWeeks($week->id);
@@ -560,6 +573,7 @@ if($viewCourse == "weekly"){
         
     }
 }
+
 
 if($viewCourse == "units"){
     $tool_content .= "<table width='100%' class='tbl'><tr><td>$cunits_content</td>
