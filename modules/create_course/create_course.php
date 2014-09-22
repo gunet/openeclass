@@ -120,9 +120,11 @@ $head_content .= <<<hContent
                     date2.setDate(date2.getDate() + 7);
                     $('input[name=finish_date]').datepicker('setDate', date2);
                     $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }else{
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
                 }
             }
-        }).datepicker("setDate", new Date());
+        });
 
         $('input[name=finish_date]').datepicker({
             dateFormat: 'yy-mm-dd',
@@ -134,7 +136,22 @@ $head_content .= <<<hContent
                     $('input[name=finish_date]').datepicker('setDate', minDate);
             }
         }
-        }).datepicker("setDate", 7);
+        });
+        
+        if($('input[name=start_date]').datepicker("getDate") === null){
+            $('input[name=start_date]').datepicker("setDate", new Date());
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('input[name=finish_date]').datepicker('setDate', date2);
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }else{
+            var date2 = $('input[name=finish_date]').datepicker('getDate');
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }
+        
+        if($('input[name=finish_date]').datepicker("getDate") === null){
+            $('input[name=finish_date]').datepicker("setDate", 7);
+        }
         
         $('#weeklyDates').hide();
         
@@ -248,7 +265,7 @@ if (!isset($_POST['create_course'])) {
         
         <tr id='weeklyDates'>
             <td colspan=4>$langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly='true'>
-            $langDuration <input class='dateInForm' type='text' name='finish_date' value=''></td>
+            $langDuration <input class='dateInForm' type='text' name='finish_date' value='' readonly='true'></td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 

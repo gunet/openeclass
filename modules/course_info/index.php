@@ -95,8 +95,10 @@ $head_content .= <<<hContent
             onSelect: function (date) {
                 var date2 = $('input[name=start_date]').datepicker('getDate');
                 if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                    date2.setDate(date2.getDate() + 1);
+                    date2.setDate(date2.getDate() + 7);
                     $('input[name=finish_date]').datepicker('setDate', date2);
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }else{
                     $('input[name=finish_date]').datepicker('option', 'minDate', date2);
                 }
             }
@@ -114,16 +116,30 @@ $head_content .= <<<hContent
         }
         });
         
-        $('#weekly_info').hide();
+        if($('input[name=start_date]').datepicker("getDate") === null){
+            $('input[name=start_date]').datepicker("setDate", new Date());
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('input[name=finish_date]').datepicker('setDate', date2);
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }else{
+            var date2 = $('input[name=finish_date]').datepicker('getDate');
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }
         
-        $('#view_type').change(function(){
-            if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
-                $('#weekly_info').show();
-            }else{
-                $('#weekly_info').hide();
+        if($('input[name=finish_date]').datepicker("getDate") === null){
+            $('input[name=finish_date]').datepicker("setDate", 7);
+        }
+        
+        $('#weeklyDates').hide();
+        
+        $('input[name=view_type]').change(function () {
+            if ($('#weekly').is(":checked")) {
+                $('#weeklyDates').show();
+            } else {
+                $('#weeklyDates').hide();
             }
-            
-        });
+        }).change();
         
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
@@ -427,43 +443,49 @@ if (isset($_POST['submit'])) {
          <fieldset>
 	    <legend>$langMore</legend>
 	    <table class='tbl'>
-                <tr>
-                    <th width='170'>$langDisplay:</th>
-                    <td width='1'>
-                        <select name='view_type' id='view_type'>
-                            <option value='units'";
-                            if($c->view_type == "units"){
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .=">$langCourseUnits</option>
-                            
-                            <option value='weekly'";
-                            if($c->view_type == "weekly"){
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .=">$langWeekly</option>
-                        </select>
-                        <div class='info' id='weekly_info'>$langCourseWeeklyFormatNotice</div>
+                
+                <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
+                
+                <tr><td><input type='radio' name='view_type' value='units'";
+                if($c->view_type == "units"){
+                    $tool_content .= " checked ";
+                }
+                $tool_content .= "id='units'><label for='units'>&nbsp;$langCourseUnits</label></td></tr>
+                
+                <tr><td><input type='radio' name='view_type' value='weekly' ";
+                if($c->view_type == "weekly"){
+                    $tool_content .= " checked ";
+                }
+                $tool_content .= "id='weekly'><label for='weekly'>&nbsp;$langWeekly</label></td></tr>
+                    
+                <tr id='weeklyDates'>
+                    <td>
+                        $langStartDate 
+                        <input class='dateInForm' type='text' name='start_date' value='";
+                        if($c->start_date != "0000-00-00"){
+                            $tool_content .= $c->start_date;
+                        }
+                        $tool_content .= "' readonly='true'>
+                        
+                        $langDuration
+                        <input class='dateInForm' type='text' name='finish_date' value='";
+                        if($c->finish_date != "0000-00-00") {
+                            $tool_content .= $c->finish_date;
+                        }
+                        $tool_content .= "' readonly='true'>
                     </td>
                 </tr>
-                <tr>
-                    <th width='170'>$langStartDate:</th>
-                    <td width='1'><input class='dateInForm' type='text' name='start_date' value='";
-                if($c->start_date != "0000-00-00"){
-                    $tool_content .= $c->start_date;
+                
+                <tr><td><input type='radio' name='view_type' value='simple' ";
+                if($c->view_type == "simple"){
+                    $tool_content .= " checked ";
                 }
-                $tool_content .= "'></td>
-                </tr>
-                <tr>
-                <th width='170'>$langFinish:</th>
-                <td width='1'><input class='dateInForm' type='text' name='finish_date' value='";
-                if($c->finish_date != "0000-00-00") {
-                    $tool_content .= $c->finish_date;
-                }
-                $tool_content .= "'></td>
-                </tr>
+                $tool_content .= "id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
+
+                
                 </table>
                 </fieldset>";
+        
         if ($isOpenCourseCertified) {
             $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
         }
