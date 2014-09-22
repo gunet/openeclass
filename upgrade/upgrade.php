@@ -2007,7 +2007,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `actionsdailycourseindex` (`course_id`) )");
 
 
-        // ----------------------------------
+        // drop stale full text indexes
+        Database::get()->query("ALTER TABLE document DROP INDEX document");        
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_title");
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_comments");
+        Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
+        
+        // // ----------------------------------
         // creation of indexes
         // ----------------------------------
         echo "<p>$langIndexCreation</p><br />";
