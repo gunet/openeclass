@@ -64,7 +64,7 @@ function list_polls() {
                 $rowClass = "class='even'";
             }
             $tool_content .= "<tr $rowClass>";
-            $tool_content .= "<td>&nbsp;<img src='$themeimg/questionnaire_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>$entry[title]</a></td>";            
+            $tool_content .= "<td>&nbsp;<img src='$themeimg/questionnaire_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry[title]) . "</a></td>";            
             $tool_content .= "<td align='center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
             $i++;
