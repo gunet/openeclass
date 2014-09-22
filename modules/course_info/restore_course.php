@@ -350,6 +350,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map_function_data' => array($blog_map,
             $course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
+        
+        //Course_settings
+        if (file_exists("$restoreThis/course_settings")) {
+            restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        }
 
         // Polls
         $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $course_id),
