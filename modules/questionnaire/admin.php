@@ -291,7 +291,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 	  <table class='tbl'>
 	  <tr>
 	    <th>$langQuestion:</th>
-	    <td>".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' name='questionName'" . "size='50' value='".(isset($question)? $question->question_text : '')."'>")."</td>
+	    <td>".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' name='questionName'" . "size='50' value='".(isset($question)? q($question->question_text) : '')."'>")."</td>
 	  </tr>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
         $tool_content .= "<tr><th>&nbsp;</th><td><input type='hidden' name='answerType' value='".QTYPE_LABEL."'></td></tr><tr><th>&nbsp;</th>";   
@@ -331,7 +331,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
             <legend>$langQuestion</legend>
             <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>$question->question_text</b></em><br>
+            <b>".q($question->question_text)."</b></em><br>
         </fieldset>        
     ";
     $tool_content .= "
@@ -351,7 +351,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         foreach ($answers as $answer) {
             $tool_content .= "
                 <li>
-                    <input type='text' name='answers[]' value='$answer->answer_text' size='80'>&nbsp;" . icon('delete', $langDelete) . "&nbsp;" . icon('move_order', $langMove, null, "id='moveIconImg'") . "
+                    <input type='text' name='answers[]' value='".q($answer->answer_text)."' size='80'>&nbsp;" . icon('delete', $langDelete) . "&nbsp;" . icon('move_order', $langMove, null, "id='moveIconImg'") . "
                 </li>            
             ";
         }
@@ -406,11 +406,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </tr>
             <tr>
               <th>$langDescription:</th>
-              <td>".$poll->description."</td>
+              <td>$poll->description</td>
             </tr>
             <tr>
                 <th>$langPollEndMessage:</th>
-                <td>".$poll->end_message."</td>
+                <td>$poll->end_message</td>
             </tr>
             </tbody></table>
         </fieldset>
@@ -432,7 +432,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         foreach ($questions as $question) {
         $tool_content .= "<tr class='even'>
                             <td align='right' width='1'>$i.</td>
-                            <td>$question->question_text<br>".
+                            <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text) : $question->question_text)."<br>".
                             $aType[$question->qtype - 1]."</td>
                             <td class='right' width='50'>".  icon('edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&editQuestion=$question->pqid")."&nbsp;".  icon('delete', $langDelete, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&deleteQuestion=$question->pqid", "onclick='return confirm(\"$langConfirmYourChoice\");'")."</td>
                             <td width='20'>".(($i!=1) ? icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid") : '')."</td>
