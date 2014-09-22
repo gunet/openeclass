@@ -615,7 +615,8 @@ $db->query("CREATE TABLE IF NOT EXISTS videolink (
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 $db->query("CREATE TABLE video_category (
-                id INT(11) NOT NULL auto_increment, 
+                id INT(11) NOT NULL auto_increment,
+                `course_id` INT(11) NOT NULL,
                 name VARCHAR(255) NOT NULL, 
                 description TEXT DEFAULT NULL,
                 PRIMARY KEY (id)) $charset_spec");
