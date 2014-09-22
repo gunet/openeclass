@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0919c
+    SASS for UI Inventory of eclass v3.0 - version 0.0922a
 =============================================================
 */
 
@@ -152,7 +152,7 @@ img
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
 .toolbox
 {
-  padding: 0.65em;
+  padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
   background: $color-toolbox;
   border-top: 1px solid rgb(216, 216, 216);

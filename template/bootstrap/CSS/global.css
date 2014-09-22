@@ -1,6 +1,6 @@
 /* 
 ================================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0919c
+    SASS for eclass UI v3.0 - Global styles - version 0.0922a
 ================================================================
 */
 /* COLORS ---------------------------------------------------------------------- */
@@ -107,9 +107,14 @@
   padding-right: 0px;
 }
 
+/* line 81, global.scss */
+.place-at-toolbox {
+  margin: 0em 0.2em 0.65em 0.2em !important;
+}
+
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 160, global.scss */
+/* line 166, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -119,68 +124,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 166, global.scss */
+  /* line 172, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 167, global.scss */
+  /* line 173, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 168, global.scss */
+  /* line 174, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 174, global.scss */
+  /* line 180, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 175, global.scss */
+  /* line 181, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 176, global.scss */
+  /* line 182, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 182, global.scss */
+  /* line 188, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 183, global.scss */
+  /* line 189, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 184, global.scss */
+  /* line 190, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 190, global.scss */
+  /* line 196, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 191, global.scss */
+  /* line 197, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 192, global.scss */
+  /* line 198, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

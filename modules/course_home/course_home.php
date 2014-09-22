@@ -464,7 +464,7 @@ $tool_content .= "
     <div class ='col-md-12'>
         <div class='toolbox pull-right'>
 
-            <div type='button' class='btn-default-eclass dropdown open-on-hover'>
+            <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
                 <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='bottom'>Πληροφορίες Μαθήματος</span>
                 <span class='fa fa-caret-down'></span>
                 <ul class='dropdown-menu'>
@@ -481,7 +481,7 @@ $tool_content .= "
                 if ($receive_mail) {
                     $tool_content .= "
                         <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                            <button class='btn-default-eclass' title='$langContactProf' >
+                            <button class='btn-default-eclass place-at-toolbox' title='$langContactProf' >
                                 <i class='fa fa-envelope'></i>
                             </button>
                         </a>";
@@ -492,7 +492,7 @@ $tool_content .= "
             // Button: star - bookmark the page
             $tool_content .= "
                         <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-                            <button class='btn-default-eclass' title='$langAddAsBookmark'>
+                            <button class='btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
                                 <i class='fa fa-star'></i>
                             </button>
                         </a>";
@@ -503,7 +503,7 @@ $tool_content .= "
             {
                 $tool_content .= "
                         <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                            <button class='btn-default-eclass' title='" . q($langRSSFeed) . "'>
+                            <button class='btn-default-eclass place-at-toolbox' title='" . q($langRSSFeed) . "'>
                                 <i class='fa fa-rss'></i>
                             </button>
                         </a>";
@@ -511,7 +511,7 @@ $tool_content .= "
 
             // Button: toggle student view
             $tool_content .= "
-                        <button class='btn-default-eclass' title='$langAddAsBookmark'>
+                        <button class='btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
                                 $toggle_student_view_close
                                 $toggle_student_view
                         </button>";
@@ -582,7 +582,7 @@ if (!$alter_layout){
             <hr class='no-margin'/>
             <div class='align-right'>
                 <div class='toolbox margin-bottom-thin margin-top-thin'>
-                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass color-green'>
+                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox color-green'>
                         <i class='fa fa-plus-circle space-after-icon'></i>
                         $langAddUnit
                     </a>
