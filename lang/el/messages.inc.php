@@ -293,6 +293,8 @@ $langCourseWeeklyFormatInfo = "Για εβδομαδιαία απεικόνισ�
 $langCourseWeeklyFormatNotice = "Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 $langCourseSimpleFormat = 'Απλή μορφή';
+$langAddWeek = 'Προσθήκη εβδομάδας';
+$langEditWeek = 'Εεξεργασία εβδομάδας';
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
