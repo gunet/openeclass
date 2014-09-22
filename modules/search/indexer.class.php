@@ -151,6 +151,9 @@ class Indexer {
             fwrite($fd, "deny from all\n");
             fclose($fd);
         }
+        if (!file_exists($index_path . '/index.php')) {
+            touch($index_path . '/index.php');
+        }
     }
 
     /**

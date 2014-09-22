@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
     // First process language changes
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
-        touch($webDir."courses/userimg/index.htm");
+        touch($webDir."courses/userimg/index.php");
     }
     $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';

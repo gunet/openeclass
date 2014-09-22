@@ -134,10 +134,10 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
-touch_or_error('courses/temp/index.htm');
+touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/userimg');
-touch_or_error('courses/userimg/index.htm');
-touch_or_error($webDir . '/video/index.htm');
+touch_or_error('courses/userimg/index.php');
+touch_or_error($webDir . '/video/index.php');
 
 // ********************************************
 // upgrade config.php
@@ -648,7 +648,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     if ($handle = opendir($webDir . '/video/')) {
                         while (false !== ($entry = readdir($handle))) {
                             if (is_dir($webDir . '/video/' . $entry) && $entry != "." && $entry != "..") {
-                                touch_or_error($webDir . '/video/' . $entry . '/index.htm');
+                                touch_or_error($webDir . '/video/' . $entry . '/index.php');
                             }
                         }
                         closedir($handle);
