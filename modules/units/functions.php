@@ -96,8 +96,8 @@ function check_admin_unit_resource($resource_id) {
 
     if ($is_editor) {
         $q = Database::get()->querySingle("SELECT course_units.id AS cuid FROM course_units,unit_resources WHERE
-			course_units.course_id = ?d AND course_units.id = unit_resources.unit_id
-			AND unit_resources.id = ?d", $course_id, $resource_id);
+            course_units.course_id = ?d AND course_units.id = unit_resources.unit_id
+            AND unit_resources.id = ?d", $course_id, $resource_id);
         if ($q) {
             $unit_id = $q->cuid;
             return $unit_id;
@@ -248,7 +248,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     return "
         <tr$class_vis>
           <td width='1'>$link" . icon($image, '') . "</a></td>
-          <td align='left'>$link$title</a>$comment</td>" .
+          <td align='left'>$link" . q($title) . "</a>$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }
@@ -441,19 +441,19 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  */
 function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id, $visibility)
 {   
-    	global $is_editor, $course_id, $themeimg, $langInactiveModule;
-	
-	$content = $linkcontent = '';
+        global $is_editor, $course_id, $themeimg, $langInactiveModule;
+    
+    $content = $linkcontent = '';
         $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }        
-	$comment_box = $class_vis = $imagelink = $link = '';
+    $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';	
+                     ' class="invisible"': ' class="even"'; 
         $title = q($title);
-	$sql = Database::get()->queryArray("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
+    $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
         foreach ($sql as $vlcat) {
             $content .= "
             <tr$class_vis>
@@ -498,10 +498,10 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                 }
             }
         }
-	
-	return $content . $comment_box . $linkcontent .'
+    
+    return $content . $comment_box . $linkcontent .'
            </td>'. actions('videolinkcategory', $resource_id, $visibility) .
-		'</tr>';
+        '</tr>';
 }
 
 
@@ -1023,13 +1023,13 @@ function show_ebook_section($title, $comments, $resource_id, $section_id, $visib
     global $course_id;
 
     $data = Database::get()->querySingle("SELECT ebook.id AS ebook_id, ebook_subsection.id AS ssid
-				FROM ebook, ebook_section, ebook_subsection
-				WHERE ebook.course_id = ?d AND
-				    ebook_section.ebook_id = ebook.id AND
-				    ebook_section.id = ebook_subsection.section_id AND
-				    ebook_section.id = ?d
-				ORDER BY CONVERT(ebook_subsection.public_id, UNSIGNED), ebook_subsection.public_id
-				LIMIT 1", $course_id, $section_id);
+                FROM ebook, ebook_section, ebook_subsection
+                WHERE ebook.course_id = ?d AND
+                    ebook_section.ebook_id = ebook.id AND
+                    ebook_section.id = ebook_subsection.section_id AND
+                    ebook_section.id = ?d
+                ORDER BY CONVERT(ebook_subsection.public_id, UNSIGNED), ebook_subsection.public_id
+                LIMIT 1", $course_id, $section_id);
     if (!$data) { // check if it was deleted
         $deleted = true;
         $display_id = $ebook_id = false;
@@ -1055,12 +1055,12 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
     global $course_id;
     
     $data = Database::get()->queryArray("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
-				FROM ebook, ebook_section, ebook_subsection
-				WHERE ebook.course_id = ?d AND
-				    ebook_section.ebook_id = ebook.id AND
-				    ebook_section.id = ebook_subsection.section_id AND
-				    ebook_subsection.id = ?d
-				LIMIT 1", $course_id, $subsection_id);
+                FROM ebook, ebook_section, ebook_subsection
+                WHERE ebook.course_id = ?d AND
+                    ebook_section.ebook_id = ebook.id AND
+                    ebook_section.id = ebook_subsection.section_id AND
+                    ebook_subsection.id = ?d
+                LIMIT 1", $course_id, $subsection_id);
     if (!$data) { // check if it was deleted
         $deleted = true;
         $display_id = $ebook_id = false;
