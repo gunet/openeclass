@@ -1938,7 +1938,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                                 DROP COLUMN `course_prerequisites`,
                                                 DROP COLUMN `course_references`");
                     }
-                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
+                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
                                              CHANGE `description` `description` MEDIUMTEXT NOT NULL,
