@@ -229,7 +229,7 @@ if ($is_editor) {
     } elseif (isset($_REQUEST['access'])) {
         $id = intval($_REQUEST['access']);
         $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
-        $newaccess = ($access == '1') ? '0' : '1';
+        $newaccess = ($access->public == '1') ? '0' : '1';
         Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
