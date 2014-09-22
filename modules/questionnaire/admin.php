@@ -241,7 +241,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
             <legend>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</legend>
             <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>$question->question_text</b></em><br>
+            <b>".q($question->question_text)."</b></em><br>
         </fieldset>        
     ";
     if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL) {
