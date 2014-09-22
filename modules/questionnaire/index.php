@@ -87,7 +87,7 @@ if ($is_editor) {
             $poll->name .= " ($langCopy2)";
             $poll_data = array(
                 $poll->creator_id, 
-                $poll->course_id, 
+                $course_id, 
                 $poll->name, 
                 $poll->creation_date, 
                 $poll->start_date, 
