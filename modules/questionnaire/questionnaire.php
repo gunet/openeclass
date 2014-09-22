@@ -157,7 +157,7 @@ function printPolls() {
 		
                 if ($is_editor) {
                     $tool_content .= "<th class='center' width='16'>$langAnswers</th>
-                                      <th class='center'>$langActions</th>";
+                                      <th class='center' width='125'>$langActions</th>";
                 } else {
                     $tool_content .= "<th class='center'>$langParticipate</th>";
                 }
