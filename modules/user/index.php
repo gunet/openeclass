@@ -115,7 +115,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //create date field with unregister button
             $date_field = ($myrow->reg_date == '0000-00-00')? $langUnknownDate : nice_format($myrow->reg_date);
             if ($myrow->status != '1') {
-                $date_field .= "&nbsp;&nbsp;<a href='' class='delete_btn'><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";
+                $date_field .= "&nbsp;&nbsp;".icon('fa-times', $langUnregCourse, '', 'class="delete_btn"');
             }            
             //Create appropriate role control buttons
             //Tutor right
@@ -230,7 +230,15 @@ $head_content .= "
                 e.preventDefault();
                 if (confirmation('".js_escape($langDeleteUser)." ".js_escape($langDeleteUser2). "')) {
                     var row_id = $(this).closest('tr').attr('id');
-                    $.post('', { action: 'delete', value: row_id}, function() {
+                    $.ajax({
+                      type: 'POST',
+                      url: '',
+                      datatype: 'json',
+                      data: {
+                        action: 'delete', 
+                        value: row_id
+                      },
+                      success: function(data){
                         var num_page_records = oTable.fnGetData().length;
                         var per_page = oTable.fnPagingInfo().iLength;
                         var page_number = oTable.fnPagingInfo().iPage;
@@ -242,7 +250,13 @@ $head_content .= "
                         $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
                         $('.success').delay(3000).fadeOut(1500);    
                         oTable.fnPageChange(page_number);
-                    }, 'json');
+                      },
+                      error: function(xhr, textStatus, error){
+                          console.log(xhr.statusText);
+                          console.log(textStatus);
+                          console.log(error);
+                      }
+                    });                    
                  }
             });
             $('.dataTables_filter input').attr('placeholder', '$langName, Username, Email');
