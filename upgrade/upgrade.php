@@ -2181,16 +2181,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             if (version_compare($oldversion, '2.4', '<')) {
                 convert_description_to_units($row->code, $row->id);
                 upgrade_course_index_php($row->code);
-                upgrade_course_2_4($row->code, $row->lang, "($i / $total)");
+                upgrade_course_2_4($row->code, $row->id, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.5', '<')) {
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '2.10', '<')) {
-                upgrade_course_2_10($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.8', '<')) {
+                upgrade_course_2_8($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '3.0', '')) {
-                upgrade_course_3_0($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.9', '<')) {
+                upgrade_course_2_9($row->code, $row->lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.10', '<')) {
+                upgrade_course_2_10($row->code, $row->id, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.11', '<')) {
+                upgrade_course_2_11($row->code, "($i / $total)");
+            }
+            if (version_compare($oldversion, '3.0', '<')) {
+                upgrade_course_3_0($row->code, $row->id, "($i / $total)");
             }
             echo "</p>";
             $i++;

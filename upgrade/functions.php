@@ -284,6 +284,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
  * @param type $lang
  */
 function upgrade_course($code, $lang) {
+            
     upgrade_course_2_1_3($code);
     upgrade_course_2_2($code, $lang);
     upgrade_course_2_3($code);
@@ -294,7 +295,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_10($code);
     upgrade_course_2_11($code);
     upgrade_course_3_0($code);
-    Database::forget($code);
+    Database::forget();
 }
 
 /**
@@ -308,22 +309,23 @@ function upgrade_course($code, $lang) {
  * @param type $return_mapping
  * @return type
  */
-function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) {
+function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mapping = false) {
     global $langUpgCourse, $mysqlMainDb, $webDir, $langUpgradeCourseDone;
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
-
-    $course_id = course_code_to_id($code);
+    
     flush();
-
+    
+    Database::get()->query("USE `$code`");
+    
     // move forum tables to central db
     if (DBHelper::tableExists('forums', $code)) {
         $forumcatid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.forum_category")->max;
         if (is_null($forumcatid_offset)) {
             $forumcatid_offset = 0;
         }
-        Database::get($code)->query("UPDATE catagories SET cat_order = 0 WHERE cat_order IS NULL OR cat_order = ''");
-        $ok = Database::get($code)->query("INSERT INTO `$mysqlMainDb`.`forum_category`
+        Database::get()->query("UPDATE catagories SET cat_order = 0 WHERE cat_order IS NULL OR cat_order = ''");
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.`forum_category`
                         (`id`, `cat_title`, `cat_order`, `course_id`)
                         SELECT `cat_id` + $forumcatid_offset, `cat_title`,
                                `cat_order`, $course_id FROM catagories") != null;
@@ -331,7 +333,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         if (is_null($forumid_offset)) {
             $forumid_offset = 0;
         }
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.`forum`
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.`forum`
                         (`id`, `name`, `desc`, `num_topics`, `num_posts`, `last_post_id`, `cat_id`, `course_id`)
                         SELECT forum_id + $forumid_offset, forum_name, forum_desc, forum_topics,
                                forum_posts, forum_last_post_id, cat_id + $forumcatid_offset, $course_id
@@ -342,7 +344,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         if (is_null($forumtopicid_offset)) {
             $forumtopicid_offset = 0;
         }
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.`forum_topic`
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.`forum_topic`
                         (`id`, `title`, `poster_id`, `topic_time`, `num_views`, `num_replies`, `last_post_id`, `forum_id`)
                         SELECT topic_id + $forumtopicid_offset, topic_title, topic_poster, topic_time, topic_views,
                                topic_replies, topic_last_post_id, forum_id + $forumid_offset
@@ -351,7 +353,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         if (is_null($forumpostid_offset)) {
             $forumpostid_offset = 0;
         }
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.`forum_post`
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.`forum_post`
                         (`id`, `topic_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`)
                         SELECT p.post_id + $forumpostid_offset, p.topic_id + $forumtopicid_offset,
                                pt.post_text, p.poster_id, p.post_time, p.poster_ip
@@ -369,7 +371,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                        WHERE course_id = $course_id") != null) && $ok;
         if ($ok) {
             foreach (array('posts', 'topics', 'forums', 'catagories') as $table) {
-                Database::get($code)->query('DROP TABLE ' . $table);
+                Database::get()->query('DROP TABLE ' . $table);
             }
         }
     }
@@ -391,7 +393,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             });
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video_category
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video_category
                         (`id`, `course_id`, `name`, `description`)
                         SELECT `id` + $videolinkcatid_offset, $course_id, `name`, `description` FROM video_category ORDER by id") != null) && $ok;
         
@@ -413,7 +415,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             });
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.video
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
                                `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
@@ -431,14 +433,14 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         if ($return_mapping) {
-            Database::get($code)->queryFunc("SELECT id FROM videolinks ORDER by id", function ($row) use ($linkid_offset, &$videolink_map) {
+            Database::get()->queryFunc("SELECT id FROM videolinks ORDER by id", function ($row) use ($linkid_offset, &$videolink_map) {
                 $oldid = intval($row->id);
                 $newid = $oldid + $linkid_offset;
                 $videolink_map[$oldid] = $newid;
             });
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.videolink
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
@@ -448,9 +450,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
         
         if (false !== $ok) { // drop old tables
-            Database::get($code)->query("DROP TABLE videolinks");
-            Database::get($code)->query("DROP TABLE video_category");
-            Database::get($code)->query("DROP TABLE video");
+            Database::get()->query("DROP TABLE videolinks");
+            Database::get()->query("DROP TABLE video_category");
+            Database::get()->query("DROP TABLE video");
         }
     }
 
@@ -463,22 +465,22 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $fileid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE dropbox_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE dropbox_map AS
                    SELECT old.id AS old_id, old.id + $fileid_offset AS new_id
                      FROM dropbox_file AS old ORDER by id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_msg
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_msg
                         (`id`, `course_id`, `author_id`, `subject`,
                          `body`, `timestamp`)
                         SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `title`, `description`, UNIX_TIMESTAMP(`uploadDate`)
                                FROM dropbox_file ORDER BY id") != null) && $ok;
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_attachment
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_attachment
                         (`msg_id`, `filename`, `real_filename`, `filesize`)
                         SELECT `id` + $fileid_offset, `filename`, `real_filename`, `filesize`
                                FROM dropbox_file WHERE `filename` != '' AND `filesize` != 0 ORDER BY id") != null) && $ok;
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE dropbox_temp_index (
+        Database::get()->query("CREATE TEMPORARY TABLE dropbox_temp_index (
                                     msg_id INT NOT NULL,
                                     recipient_id INT NOT NULL,
                                     is_read TINYINT NOT NULL DEFAULT 1,
@@ -486,12 +488,12 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                     )");
         
         //we use dropbox_post to fill temp table with recipients and dropbox_file with senders
-        Database::get($code)->query("INSERT INTO dropbox_temp_index
+        Database::get()->query("INSERT INTO dropbox_temp_index
                         (`msg_id`, `recipient_id`)
 
                         SELECT id, uploaderId FROM dropbox_file");
         
-        Database::get($code)->query("INSERT INTO dropbox_temp_index
+        Database::get()->query("INSERT INTO dropbox_temp_index
 
                         (`msg_id`, `recipient_id`)
 
@@ -499,25 +501,25 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         
         //Users present at dropbox_person but not in temp haven't deleted their messages
 
-        Database::get($code)->query("UPDATE dropbox_temp_index t
+        Database::get()->query("UPDATE dropbox_temp_index t
                                        INNER JOIN dropbox_person p
                                          ON t.msg_id = p.fileID AND t.recipient_id = p.personId
                                      SET deleted = ?d", 0);
         
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.dropbox_index
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_index
                          (`msg_id`, `recipient_id`, `is_read`, `deleted`)
                          SELECT DISTINCT dropbox_map.new_id, dropbox_temp_index.recipient_id, dropbox_temp_index.is_read, dropbox_temp_index.deleted
                            FROM dropbox_temp_index, dropbox_map
                           WHERE dropbox_temp_index.msg_id = dropbox_map.old_id
                           ORDER BY dropbox_temp_index.msg_id") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE dropbox_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE dropbox_temp_index");
+        Database::get()->query("DROP TEMPORARY TABLE dropbox_map");
+        Database::get()->query("DROP TEMPORARY TABLE dropbox_temp_index");
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE dropbox_file");
-            Database::get($code)->query("DROP TABLE dropbox_person");
-            Database::get($code)->query("DROP TABLE dropbox_post");
+            Database::get()->query("DROP TABLE dropbox_file");
+            Database::get()->query("DROP TABLE dropbox_person");
+            Database::get()->query("DROP TABLE dropbox_post");
         }
     }
 
@@ -528,16 +530,16 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             DBHelper::tableExists('lp_user_module_progress', $code)) {
 
         // first change `visibility` field name and type to lp_learnPath table
-        Database::get($code)->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
-        Database::get($code)->query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
-        Database::get($code)->query("UPDATE lp_learnPath SET visibility = '0' WHERE visibility = 'HIDE'");
-        Database::get($code)->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
+        Database::get()->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
+        Database::get()->query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
+        Database::get()->query("UPDATE lp_learnPath SET visibility = '0' WHERE visibility = 'HIDE'");
+        Database::get()->query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
 
         // first change `visibility` field name and type to lp_rel_learnPath_module table
-        Database::get($code)->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` VARCHAR(5)");
-        Database::get($code)->query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
-        Database::get($code)->query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
-        Database::get($code)->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
+        Database::get()->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` VARCHAR(5)");
+        Database::get()->query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
+        Database::get()->query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
+        Database::get()->query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
 
         $asset_map = array();
         $rel_map = array();
@@ -557,11 +559,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             });
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE lp_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE lp_map AS
                    SELECT old.learnPath_id AS old_id, old.learnPath_id + $lpid_offset AS new_id
                      FROM lp_learnPath AS old ORDER by learnPath_id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_learnPath
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_learnPath
                          (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visible`, `rank`)
                          SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`,
                          `visible`, `rank` FROM lp_learnPath ORDER BY learnPath_id") != null);
@@ -572,11 +574,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $moduleid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE module_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE module_map AS
                    SELECT old.module_id AS old_id, old.module_id + $moduleid_offset AS new_id
                      FROM lp_module AS old ORDER by module_id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_module
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_module
                          (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`,
                           `contentType`, `launch_data`)
                          SELECT `module_id` + $moduleid_offset, $course_id, `name`, `comment`,
@@ -595,7 +597,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $asset_map[$oldid] = $newid;
         });
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_asset
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_asset
                          (`asset_id`, `module_id`, `path`, `comment`)
                          SELECT DISTINCT lp_asset.asset_id + $assetid_offset, module_map.new_id,
                                 lp_asset.path, lp_asset.comment
@@ -614,18 +616,18 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $relid_offset = 0;
         }
 
-        Database::get($code)->queryFunc("SELECT learnPath_module_id FROM lp_rel_learnPath_module ORDER by learnPath_module_id", function ($row) use($relid_offset, &$rel_map) {
+        Database::get()->queryFunc("SELECT learnPath_module_id FROM lp_rel_learnPath_module ORDER by learnPath_module_id", function ($row) use($relid_offset, &$rel_map) {
             $oldid = intval($row->learnPath_module_id);
             $newid = $oldid + $relid_offset;
             $rel_map[$oldid] = $newid;
         });
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE rel_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE rel_map AS
                    SELECT old.learnPath_module_id AS old_id, old.learnPath_module_id + $relid_offset AS new_id
                      FROM lp_rel_learnPath_module AS old ORDER by learnPath_module_id");
-        Database::get($code)->query("INSERT INTO rel_map (old_id, new_id) VALUES (0, 0)");
+        Database::get()->query("INSERT INTO rel_map (old_id, new_id) VALUES (0, 0)");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
                          (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visible`, `specificComment`,
                           `rank`, `parent`, `raw_to_pass`)
                          SELECT DISTINCT lp_rel_learnPath_module.learnPath_module_id + $relid_offset,
@@ -650,7 +652,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $lumid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
                          (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`,
                           `lesson_location`, `lesson_status`, `entry`, `raw`, `scoreMin`, `scoreMax`,
                           `total_time`, `session_time`, `suspend_data`, `credit`)
@@ -671,9 +673,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                             AND lp_user_module_progress.learnPath_id = lp_map.old_id
                           ORDER BY lp_user_module_progress.user_module_progress_id") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE lp_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE module_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE rel_map");
+        Database::get()->query("DROP TEMPORARY TABLE lp_map");
+        Database::get()->query("DROP TEMPORARY TABLE module_map");
+        Database::get()->query("DROP TEMPORARY TABLE rel_map");
 
         if (false !== $ok) {
             $scormPkgDir = $webDir . '/courses/' . $code . '/scormPackages';
@@ -693,11 +695,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                 }
             }
 
-            Database::get($code)->query("DROP TABLE lp_learnPath");
-            Database::get($code)->query("DROP TABLE lp_module");
-            Database::get($code)->query("DROP TABLE lp_asset");
-            Database::get($code)->query("DROP TABLE lp_rel_learnPath_module");
-            Database::get($code)->query("DROP TABLE lp_user_module_progress");
+            Database::get()->query("DROP TABLE lp_learnPath");
+            Database::get()->query("DROP TABLE lp_module");
+            Database::get()->query("DROP TABLE lp_asset");
+            Database::get()->query("DROP TABLE lp_rel_learnPath_module");
+            Database::get()->query("DROP TABLE lp_user_module_progress");
         }
 
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -717,23 +719,23 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         if ($return_mapping) {
-            Database::get($code)->queryFunc("SELECT id FROM wiki_properties ORDER BY id", function ($row) use($wikiid_offset, &$wiki_map) {
+            Database::get()->queryFunc("SELECT id FROM wiki_properties ORDER BY id", function ($row) use($wikiid_offset, &$wiki_map) {
                 $oldid = intval($row->id);
                 $newid = $oldid + $wikiid_offset;
                 $wiki_map[$oldid] = $newid;
             });
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE wiki_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE wiki_map AS
                    SELECT old.id AS old_id, old.id + $wikiid_offset AS new_id
                      FROM wiki_properties AS old ORDER by id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.wiki_properties
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.wiki_properties
                          (`id`, `course_id`, `title`, `description`, `group_id`)
                          SELECT `id` + $wikiid_offset, $course_id, `title`, `description`, `group_id`
                            FROM wiki_properties ORDER BY id") != null);
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.wiki_acls
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.wiki_acls
                          (`wiki_id`, `flag`, `value`)
                          SELECT DISTINCT wiki_map.new_id, wiki_acls.flag, wiki_acls.value
                            FROM wiki_acls, wiki_map
@@ -747,17 +749,17 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         $wiki_page_map = array();
-        Database::get($code)->queryFunc("SELECT id FROM wiki_pages ORDER by id", function ($row) use($wikipageid_offset, &$wiki_page_map) {
+        Database::get()->queryFunc("SELECT id FROM wiki_pages ORDER by id", function ($row) use($wikipageid_offset, &$wiki_page_map) {
             $oldid = intval($row->id);
             $newid = $oldid + $wikipageid_offset;
             $wiki_page_map[$oldid] = $newid;
         });
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE wikipage_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE wikipage_map AS
                    SELECT old.id AS old_id, old.id + $wikipageid_offset AS new_id
                      FROM wiki_pages AS old ORDER by id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.wiki_pages
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.wiki_pages
                          (`id`, `wiki_id`, `owner_id`, `title`, `ctime`, `last_version`, `last_mtime`)
                          SELECT DISTINCT wiki_pages.id + $wikipageid_offset, wiki_map.new_id,
                                 wiki_pages.owner_id, wiki_pages.title, wiki_pages.ctime,
@@ -772,7 +774,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $wikipagecontentid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
                          (`id`, `pid`, `editor_id`, `mtime`, `content`)
                          SELECT DISTINCT wiki_pages_content.id + $wikipagecontentid_offset,
                                 wikipage_map.new_id, wiki_pages_content.editor_id,
@@ -781,14 +783,14 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                           WHERE wiki_pages_content.pid = wikipage_map.old_id
                           ORDER BY wiki_pages_content.id") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE wiki_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE wikipage_map");
+        Database::get()->query("DROP TEMPORARY TABLE wiki_map");
+        Database::get()->query("DROP TEMPORARY TABLE wikipage_map");
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE wiki_properties");
-            Database::get($code)->query("DROP TABLE wiki_acls");
-            Database::get($code)->query("DROP TABLE wiki_pages");
-            Database::get($code)->query("DROP TABLE wiki_pages_content");
+            Database::get()->query("DROP TABLE wiki_properties");
+            Database::get()->query("DROP TABLE wiki_acls");
+            Database::get()->query("DROP TABLE wiki_pages");
+            Database::get()->query("DROP TABLE wiki_pages_content");
         }
 
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -807,11 +809,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $pollid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE poll_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE poll_map AS
                    SELECT old.pid AS old_id, old.pid + $pollid_offset AS new_id
                      FROM poll AS old ORDER by pid");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.poll
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll
                          (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
                          SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
                                 `end_date`, `active`
@@ -823,11 +825,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $pollquestionid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE pollquestion_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE pollquestion_map AS
                    SELECT old.pqid AS old_id, old.pqid + $pollquestionid_offset AS new_id
                      FROM poll_question AS old ORDER by pqid");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.poll_question
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll_question
                          (`pqid`, `pid`, `question_text`, `qtype`)
                          SELECT DISTINCT poll_question.pqid + $pollquestionid_offset, poll_map.new_id,
                                 poll_question.question_text, poll_question.qtype
@@ -841,13 +843,13 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $pollanswerid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE pollanswer_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE pollanswer_map AS
                    SELECT old.pqaid AS old_id, old.pqaid + $pollanswerid_offset AS new_id
                      FROM poll_question_answer AS old ORDER by pqaid");
-        Database::get($code)->query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (0, 0)");
-        Database::get($code)->query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (-1, -1)");
+        Database::get()->query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (0, 0)");
+        Database::get()->query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (-1, -1)");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.poll_question_answer
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll_question_answer
                          (`pqaid`, `pqid`, `answer_text`)
                          SELECT DISTINCT poll_question_answer.pqaid + $pollanswerid_offset,
                                 pollquestion_map.new_id, poll_question_answer.answer_text
@@ -861,7 +863,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $pollrecordid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.poll_answer_record
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll_answer_record
                          (`arid`, `pid`, `qid`, `aid`, `answer_text`, `user_id`, `submit_date`)
                          SELECT DISTINCT poll_answer_record.arid + $pollrecordid_offset,
                                 poll_map.new_id, pollquestion_map.new_id, pollanswer_map.new_id,
@@ -873,15 +875,15 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                             AND poll_answer_record.aid = pollanswer_map.old_id
                           ORDER BY poll_answer_record.arid") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE poll_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE pollquestion_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE pollanswer_map");
+        Database::get()->query("DROP TEMPORARY TABLE poll_map");
+        Database::get()->query("DROP TEMPORARY TABLE pollquestion_map");
+        Database::get()->query("DROP TEMPORARY TABLE pollanswer_map");
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE poll");
-            Database::get($code)->query("DROP TABLE poll_answer_record");
-            Database::get($code)->query("DROP TABLE poll_question");
-            Database::get($code)->query("DROP TABLE poll_question_answer");
+            Database::get()->query("DROP TABLE poll");
+            Database::get()->query("DROP TABLE poll_answer_record");
+            Database::get()->query("DROP TABLE poll_question");
+            Database::get()->query("DROP TABLE poll_question_answer");
         }
     }
 
@@ -896,18 +898,18 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         if ($return_mapping) {
-            Database::get($code)->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
+            Database::get()->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
                 $oldid = intval($row['id']);
                 $newid = $oldid + $assignmentid_offset;
                 $assignments_map[$oldid] = $newid;
             });
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE assignments_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE assignments_map AS
                    SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
                      FROM assignments AS old ORDER by id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.assignment
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.assignment
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
@@ -920,8 +922,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $assignmentsubmitid_offset = 0;
         }
 
-        Database::get($code)->query("UPDATE assignment_submit SET group_id = 0 WHERE group_id IS NULL");
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.assignment_submit
+        Database::get()->query("UPDATE assignment_submit SET group_id = 0 WHERE group_id IS NULL");
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.assignment_submit
                          (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`,
                           `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`,
                           `group_id`)
@@ -938,11 +940,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                           WHERE assignment_submit.assignment_id = assignments_map.old_id
                           ORDER BY assignment_submit.id") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE assignments_map");
+        Database::get()->query("DROP TEMPORARY TABLE assignments_map");
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE assignments");
-            Database::get($code)->query("DROP TABLE assignment_submit");
+            Database::get()->query("DROP TABLE assignments");
+            Database::get()->query("DROP TABLE assignment_submit");
         }
 
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -962,13 +964,13 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $agendaid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.agenda
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.agenda
                          (`id`, `course_id`, `title`, `content`, `start`, `duration`, `visible`)
                          SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, CONCAT(day,' ',hour), `lasting`,
                                 `visibility` FROM agenda ORDER BY id") != null);
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE agenda");
+            Database::get()->query("DROP TABLE agenda");
         }
     }
 
@@ -988,20 +990,20 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         }
 
         if ($return_mapping) {
-            Database::get($code)->queryFunc("SELECT id FROM exercices ORDER by id", function ($row) use($exerciseid_offset, &$exercise_map) {
-                $oldid = intval($row['id']);
+            Database::get()->queryFunc("SELECT id FROM exercices ORDER by id", function ($row) use($exerciseid_offset, &$exercise_map) {
+                $oldid = intval($row->id);
                 $newid = $oldid + $exerciseid_offset;
                 $exercise_map[$oldid] = $newid;
             });
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE exercise_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE exercise_map AS
                    SELECT old.id AS old_id, old.id + $exerciseid_offset AS new_id
                      FROM exercices AS old ORDER by id");
-        Database::get($code)->query("INSERT INTO exercise_map (`old_id`, `new_id`) VALUES (0, 0)");
+        Database::get()->query("INSERT INTO exercise_map (`old_id`, `new_id`) VALUES (0, 0)");
 
-        Database::get($code)->query("UPDATE exercices SET active = 0 WHERE active IS NULL");
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.exercise
+        Database::get()->query("UPDATE exercices SET active = 0 WHERE active IS NULL");
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.exercise
                          (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`,
                           `time_constraint`, `attempts_allowed`, `random`, `active`, `public`, `results`, `score`)
                          SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`,
@@ -1015,7 +1017,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $eurid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.exercise_user_record
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.exercise_user_record
                          (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`,
                           `total_weighting`, `attempt`)
                          SELECT DISTINCT exercise_user_record.eurid + $eurid_offset, exercise_map.new_id,
@@ -1032,11 +1034,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $questionid_offset = 0;
         }
 
-        Database::get($code)->query("CREATE TEMPORARY TABLE question_map AS
+        Database::get()->query("CREATE TEMPORARY TABLE question_map AS
                    SELECT old.id AS old_id, old.id + $questionid_offset AS new_id
                      FROM questions AS old ORDER by id");
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.exercise_question
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.exercise_question
                          (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
                          SELECT `id` + $questionid_offset, $course_id, `question`, `description`, `ponderation`,
                                 `q_position`, `type`
@@ -1048,7 +1050,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             $answerid_offset = 0;
         }
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.exercise_answer
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.exercise_answer
                          (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
                          SELECT DISTINCT reponses.id + $answerid_offset, question_map.new_id,
                                 reponses.reponse, reponses.correct, reponses.comment, reponses.ponderation,
@@ -1057,22 +1059,22 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                           WHERE reponses.question_id = question_map.old_id
                           ORDER BY reponses.id") != null) && $ok;
 
-        $ok = (Database::get($code)->query("INSERT INTO `$mysqlMainDb`.exercise_with_questions
+        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.exercise_with_questions
                          (`question_id`, `exercise_id`)
                          SELECT DISTINCT question_map.new_id, exercise_map.new_id
                            FROM exercice_question, exercise_map, question_map
                           WHERE exercice_question.exercice_id = exercise_map.old_id
                             AND exercice_question.question_id = question_map.old_id") != null) && $ok;
 
-        Database::get($code)->query("DROP TEMPORARY TABLE exercise_map");
-        Database::get($code)->query("DROP TEMPORARY TABLE question_map");
+        Database::get()->query("DROP TEMPORARY TABLE exercise_map");
+        Database::get()->query("DROP TEMPORARY TABLE question_map");
 
         if (false !== $ok) {
-            Database::get($code)->query("DROP TABLE exercices");
-            Database::get($code)->query("DROP TABLE exercise_user_record");
-            Database::get($code)->query("DROP TABLE questions");
-            Database::get($code)->query("DROP TABLE reponses");
-            Database::get($code)->query("DROP TABLE exercice_question");
+            Database::get()->query("DROP TABLE exercices");
+            Database::get()->query("DROP TABLE exercise_user_record");
+            Database::get()->query("DROP TABLE questions");
+            Database::get()->query("DROP TABLE reponses");
+            Database::get()->query("DROP TABLE exercice_question");
         }
 
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -1084,7 +1086,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     }
 
     // move table `actions`, `actions_summary`, `login` in main DB
-    Database::get($code)->queryFunc("SELECT `user_id`, `module_id`, $course_id AS `course_id`,
+    Database::get()->queryFunc("SELECT `user_id`, `module_id`, $course_id AS `course_id`,
                                COUNT(`id`) AS `hits`, SUM(`duration`) AS `duration`,
                                DATE(`date_time`) AS `day`
                             FROM `actions`
@@ -1095,12 +1097,12 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                         (NULL, $row->user_id, $row->module_id, $row->course_id, $row->hits, $row->duration, '$row->day', NOW())");
     });
 
-    Database::get($code)->query("INSERT INTO `$mysqlMainDb`.actions_summary
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.actions_summary
                 (module_id, visits, start_date, end_date, duration, course_id)
                 SELECT module_id, visits, start_date, end_date, duration, $course_id
                 FROM actions_summary");
 
-    Database::get($code)->query("INSERT INTO `$mysqlMainDb`.logins
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.logins
                 (user_id, ip, date_time, course_id)
                 SELECT user_id, ip, date_time, $course_id
                 FROM logins");
@@ -1110,13 +1112,13 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     // Move table `accueil` to table `course_module` in main DB
     // -------------------------------------------------------
     // external links are moved to table `links` with category = -1
-    $q1 = Database::get($code)->query("INSERT IGNORE INTO `$mysqlMainDb`.link
+    $q1 = Database::get()->query("INSERT IGNORE INTO `$mysqlMainDb`.link
                                (course_id, url, title, category, description)
                                SELECT $course_id, lien, rubrique, -1, '' FROM accueil
                                       WHERE define_var = 'HTML_PAGE' OR
                                             image = 'external_link'");
 
-    $q2 = Database::get($code)->query("INSERT IGNORE INTO `$mysqlMainDb`.course_module
+    $q2 = Database::get()->query("INSERT IGNORE INTO `$mysqlMainDb`.course_module
                         (module_id, visible, course_id)
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',
@@ -1149,21 +1151,22 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
 function upgrade_course_2_11($code, $extramessage = '') {
     
     global $langUpgCourse;
-
-    mysql_select_db($code);
+       
+    Database::get()->query("USE `$code`");
+    
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
     flush();
     
-    if (!DBHelper::fieldExists($code, 'video', 'category')) {
-        Database::get($code)->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
+    if (!DBHelper::fieldExists('video', 'category', $code)) {
+        Database::get()->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
     }
     
-    if (!DBHelper::fieldExists($code, 'videolinks', 'category')) {
-        Database::get($code)->query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
+    if (!DBHelper::fieldExists('videolinks', 'category', $code)) {
+        Database::get()->query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
     }
     
-    if (!DBHelper::tableExists($code, 'video_category')) {
-        Database::get($code)->query("CREATE TABLE video_category (
+    if (!DBHelper::tableExists('video_category', $code)) {
+        Database::get()->query("CREATE TABLE video_category (
             id int(6) NOT NULL auto_increment, 
             name varchar(255) NOT NULL, 
             description text DEFAULT NULL, 
@@ -1181,24 +1184,26 @@ function upgrade_course_2_11($code, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_10($code, $extramessage = '') {
-    global $langUpgCourse, $webDir;
+function upgrade_course_2_10($code, $course_id, $extramessage = '') {
+    global $langUpgCourse;
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
     flush();
 
-    Database::get($code)->query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
+    Database::get()->query("USE `$code`");
+    
+    Database::get()->query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
 
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
-        CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
+        CourseXMLElement::refreshCourse($course_id, $code, true);
     }
     if (!DBHelper::fieldExists('poll', 'description', $code)) {
-        Database::get($code)->query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
+        Database::get()->query('ALTER TABLE poll ADD description MEDIUMTEXT NOT NULL,
                                    ADD end_message MEDIUMTEXT NOT NULL,
                                    ADD anonymized INT(1) NOT NULL DEFAULT 0');
-        Database::get($code)->query('ALTER TABLE poll_question
+        Database::get()->query('ALTER TABLE poll_question
                     CHANGE qtype qtype tinyint(3) UNSIGNED NOT NULL');
     }
 }
@@ -1213,14 +1218,16 @@ function upgrade_course_2_10($code, $extramessage = '') {
  */
 function upgrade_course_2_9($code, $lang, $extramessage = '') {
 
-    global $langUpgCourse, $global_messages;
+    global $langUpgCourse;
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
     flush();
-
+    
+    Database::get()->query("USE `$code`");
+    
     if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
-        Database::get($code)->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
-        Database::get($code)->query("UPDATE dropbox_file SET real_filename = filename");
+        Database::get()->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+        Database::get()->query("UPDATE dropbox_file SET real_filename = filename");
     }
 }
 
@@ -1240,21 +1247,23 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
     flush();
 
+    Database::get()->query("USE `$code`");
+    
     DBHelper::fieldExists('exercices', 'public') or
-            Database::get($code)->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
+            Database::get()->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
     DBHelper::fieldExists('video', 'visible') or
-            Database::get($code)->query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
+            Database::get()->query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
     DBHelper::fieldExists('video', 'public') or
-            Database::get($code)->query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+            Database::get()->query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
     DBHelper::fieldExists('videolinks', 'visible') or
-            Database::get($code)->query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
+            Database::get()->query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
     DBHelper::fieldExists('videolinks', 'public') or
-            Database::get($code)->query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+            Database::get()->query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
     if (DBHelper::indexExists('dropbox_file', 'UN_filename')) {
-        Database::get($code)->query("ALTER TABLE dropbox_file DROP index UN_filename");
+        Database::get()->query("ALTER TABLE dropbox_file DROP index UN_filename");
     }
-    Database::get($code)->query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
-    Database::get($code)->query("UPDATE accueil SET rubrique = " . quote($global_messages['langDropBox'][$lang]) . "
+    Database::get()->query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
+    Database::get()->query("UPDATE accueil SET rubrique = " . quote($global_messages['langDropBox'][$lang]) . "
                                     WHERE id = 16 AND define_var = 'MODULE_ID_DROPBOX'");
 }
 
@@ -1272,48 +1281,50 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
     flush();
-
-    Database::get($code)->query("UPDATE `accueil` SET `rubrique` = " .
+    
+    Database::get()->query("USE `$code`");
+    
+    Database::get()->query("UPDATE `accueil` SET `rubrique` = " .
             quote($global_messages['langVideo'][$lang]) . "
                         WHERE `define_var` = 'MODULE_ID_VIDEO'");
 
-    Database::get($code)->query("ALTER TABLE `assignments`
+    Database::get()->query("ALTER TABLE `assignments`
                         CHANGE `deadline` `deadline` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `assignments`
+    Database::get()->query("ALTER TABLE `assignments`
                         CHANGE `submission_date` `submission_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `assignment_submit`
+    Database::get()->query("ALTER TABLE `assignment_submit`
                         CHANGE `submission_date` `submission_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `poll`
+    Database::get()->query("ALTER TABLE `poll`
                         CHANGE `start_date` `start_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `poll`
+    Database::get()->query("ALTER TABLE `poll`
                         CHANGE `end_date` `end_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `poll`
+    Database::get()->query("ALTER TABLE `poll`
                         CHANGE `creation_date` `creation_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `poll_answer_record`
+    Database::get()->query("ALTER TABLE `poll_answer_record`
                         CHANGE `submit_date` `submit_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
-    Database::get($code)->query("ALTER TABLE `exercices`
+    Database::get()->query("ALTER TABLE `exercices`
                         CHANGE `StartDate` `StartDate` DATETIME
                         DEFAULT NULL");
 
-    Database::get($code)->query("ALTER TABLE `exercices`
+    Database::get()->query("ALTER TABLE `exercices`
                         CHANGE `EndDate` `EndDate` DATETIME
                         DEFAULT NULL");
 
-    Database::get($code)->query("ALTER TABLE `lp_module`
+    Database::get()->query("ALTER TABLE `lp_module`
                         CHANGE `contentType`
                         `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK')");
 }
@@ -1328,25 +1339,26 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_4($code, $lang, $extramessage = '') {
+function upgrade_course_2_4($code, $course_id, $lang, $extramessage = '') {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
-
-    $course_id = course_code_to_id($code);
+    
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
     flush();
 
+    Database::get()->query("USE `$code`");
+    
     // not needed anymore
     delete_table('stat_accueil');
     delete_table('users');
 
-    Database::get($code)->query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php'
+    Database::get()->query("UPDATE accueil SET lien = '../../modules/course_info/infocours.php'
                                  WHERE id = 14 AND define_var = 'MODULE_ID_COURSEINFO'");
-    Database::get($code)->query("UPDATE accueil SET rubrique = " .
+    Database::get()->query("UPDATE accueil SET rubrique = " .
             quote($global_messages['langCourseDescription'][$lang]) . "
                                         WHERE id = 20 AND define_var = 'MODULE_ID_DESCRIPTION'");
-    Database::get($code)->query("UPDATE accueil SET lien = REPLACE(lien, ' \"target=_blank', '')
+    Database::get()->query("UPDATE accueil SET lien = REPLACE(lien, ' \"target=_blank', '')
                                  WHERE lien LIKE '% \"target=_blank'");
-    Database::get($code)->query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT");
+    Database::get()->query("ALTER TABLE `poll_answer_record` CHANGE `answer_text` `answer_text` TEXT");
 
     // move main documents to central table and if successful drop table
     if (DBHelper::tableExists('document', $code)) {
@@ -1375,7 +1387,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
                                 SELECT $course_id, `self_registration`, `private`, `forum`, `document`,
                                         `wiki`, `agenda` FROM group_properties") != null);
         if ($ok) {
-            Database::get($code)->query("DROP TABLE group_properties");
+            Database::get()->query("DROP TABLE group_properties");
         }
 
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.`group`
@@ -1408,9 +1420,9 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
         $ok = move_group_documents_to_main_db($code, $course_id) && $ok;
 
         if ($ok) {
-            Database::get($code)->query("DROP TABLE student_group");
-            Database::get($code)->query("DROP TABLE user_group");
-            Database::get($code)->query("DROP TABLE group_documents");
+            Database::get()->query("DROP TABLE student_group");
+            Database::get()->query("DROP TABLE user_group");
+            Database::get()->query("DROP TABLE group_documents");
         }
     }
 
@@ -1419,16 +1431,16 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
         Database::get()->query("INSERT INTO `$mysqlMainDb`.link
                                 (`id`, `course_id`, `url`, `title`, `description`, `category`, `order`)
                                 SELECT `id`, $course_id, `url`, `titre`, `description`, `category`, `ordre` FROM liens") and
-                Database::get($code)->query("DROP TABLE liens");
+                Database::get()->query("DROP TABLE liens");
         Database::get()->query("INSERT INTO `$mysqlMainDb`.link_category
                                 (`id`, `course_id`, `name`, `description`, `order`)
                                 SELECT `id`, $course_id, `categoryname`, `description`, `ordre` FROM link_categories") and
-                Database::get($code)->query("DROP TABLE link_categories");
+                Database::get()->query("DROP TABLE link_categories");
     }
 
     // upgrade acceuil for glossary
     if (accueil_tool_missing($code, 'MODULE_ID_GLOSSARY')) {
-        Database::get($code)->query("INSERT IGNORE INTO accueil VALUES (
+        Database::get()->query("INSERT IGNORE INTO accueil VALUES (
                                 '17',
                                 '{$global_messages['langGlossary'][$lang]}',
                                 '../../modules/glossary/glossary.php',
@@ -1441,7 +1453,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
 
     // upgrade acceuil for glossary
     if (accueil_tool_missing($code, 'MODULE_ID_EBOOK')) {
-        Database::get($code)->query("INSERT IGNORE INTO accueil VALUES (
+        Database::get()->query("INSERT IGNORE INTO accueil VALUES (
                                 '18',
                                 '{$global_messages['langEBook'][$lang]}',
                                 '../../modules/ebook/index.php',
@@ -1452,7 +1464,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '') {
                                 'MODULE_ID_EBOOK')");
     }
     // upgrade poll_question
-    Database::get($code)->query("ALTER TABLE `poll_question` CHANGE `pqid` `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE `poll_question` CHANGE `pqid` `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT");
 
     // move old chat files
     $courses_dir = "$webDir/courses/";
@@ -1475,6 +1487,9 @@ function upgrade_course_2_3($code, $extramessage = '') {
 
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
     flush();
+        
+    Database::get()->query("USE `$code`");
+    
     // upgrade exercises
     if (!DBHelper::fieldExists('exercices', 'score', $code))
         echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
@@ -1494,20 +1509,22 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
     flush();
 
+    Database::get()->query("USE `$code`");
+
     // upgrade exercises
-    Database::get($code)->query("ALTER TABLE `exercise_user_record`
+    Database::get()->query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-    Database::get($code)->query("ALTER TABLE `exercise_user_record`
+    Database::get()->query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     if (!DBHelper::fieldExists('exercices', 'results', $code))
         echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
-    Database::get($code)->query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
-    Database::get($code)->query("ALTER TABLE `reponses` CHANGE `ponderation` `ponderation` FLOAT(5,2) NULL DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `reponses` CHANGE `ponderation` `ponderation` FLOAT(5,2) NULL DEFAULT NULL");
     // not needed anymore
     echo delete_table('mc_scoring');
 
     if (accueil_tool_missing($code, 'MODULE_ID_UNITS')) {
-        Database::get($code)->query("INSERT INTO accueil VALUES (
+        Database::get()->query("INSERT INTO accueil VALUES (
                                 '27',
                                 '" . $global_messages['langCourseUnits'][$lang] . "',
                                 '../../modules/units/index.php',
@@ -1518,10 +1535,10 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
                                 'MODULE_ID_UNITS')");
     }
     // upgrade lp_module me to kainourio content type
-    Database::get($code)->query("ALTER TABLE `lp_module`
+    Database::get()->query("ALTER TABLE `lp_module`
 		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
-    Database::get($code)->query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL");
-    Database::get($code)->query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL");
+    Database::get()->query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL");
     // indexes creation
     add_index('optimize', 'lp_user_module_progress', 'user_id', 'learnPath_module_id');
     add_index('actionsindex', 'actions', 'module_id', 'date_time');
@@ -1536,10 +1553,12 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
  * @param type $extramessage
  */
 function upgrade_course_2_1_3($code, $extramessage = '') {
-    global $mysqlMainDb, $langEncodeDropBoxDocuments, $langUpgCourse;
+    global $langEncodeDropBoxDocuments, $langUpgCourse;
 
     echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
     flush();
+    
+    Database::get()->query("USE `$code`");
 
     // added field visibility in agenda
     if (!DBHelper::fieldExists('agenda', 'visibility', $code))
@@ -1547,12 +1566,12 @@ function upgrade_course_2_1_3($code, $extramessage = '') {
 
     // upgrade dropbox
     echo "$langEncodeDropBoxDocuments<br>";
-    Database::get($code)->queryFunc("SELECT id, filename, title FROM dropbox_file", function ($dbox) use ($code) {
+    Database::get()->queryFunc("SELECT id, filename, title FROM dropbox_file", function ($dbox) use ($code) {
         encode_dropbox_documents($code, $dbox->id, $dbox->filename, $dbox->title);
     });
 
     // upgrade lp_module me to kainourio content type
-    Database::get($code)->query("ALTER TABLE `lp_module`
+    Database::get()->query("ALTER TABLE `lp_module`
 		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
 }
 
