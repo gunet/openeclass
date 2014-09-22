@@ -79,9 +79,9 @@ if ($is_editor) {
         $tool_content .= "<p class='success'>".q($langPollPurged)."</p>";
     } elseif (isset($_GET['clone']) and $_GET['clone'] == 'yes') {
         $poll = db_query_get_single_row("SELECT * FROM poll WHERE pid = $pid");
-        $questions = db_query("SELECT * FROM poll_question WHERE pid = $pid");
+        $questions = db_query("SELECT * FROM poll_question WHERE pid = $pid ORDER BY pqid");
         $poll['name'] .= " ($langCopy2)";
-	db_query("INSERT INTO poll
+        db_query("INSERT INTO poll
                             SET creator_id = $poll[creator_id],
                                 course_id = $cours_id,
                                 name = " . quote($poll['name']) . ",
@@ -92,14 +92,14 @@ if ($is_editor) {
                                 end_message = " . quote($poll['end_message']) .",
                                 anonymized = $poll[anonymized],    
                                 active = 1");
-	$new_pid = mysql_insert_id();
+        $new_pid = mysql_insert_id();
         while ($question = mysql_fetch_array($questions)) {
             db_query("INSERT INTO poll_question
                                        SET pid = $new_pid,
                                            question_text = " . quote($question['question_text']) .",
                                            qtype = $question[qtype]");
             $new_pqid = mysql_insert_id();
-            $answers = db_query("SELECT * FROM poll_question_answer WHERE pqid = $question[pqid]");
+            $answers = db_query("SELECT * FROM poll_question_answer WHERE pqid = $question[pqid] ORDER BY pqaid");
             while ($answer = mysql_fetch_array($answers)) {
                 db_query("INSERT INTO poll_question_answer
                                         SET pqid = $new_pqid,
