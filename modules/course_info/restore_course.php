@@ -65,7 +65,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
     $pathToArchive = $_POST['pathToArchive'];
-    if (file_exists($pathToArchive)) {
+    validateUploadedFile(basename($pathToArchive), 3);
+    if (get_file_extension($pathToArchive) !== 'zip') {
+        $tool_content .= "<p class='caution'>" . $langErrorFileMustBeZip . "</p>";
+    } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
         <table class='tbl' width='100%'>";
