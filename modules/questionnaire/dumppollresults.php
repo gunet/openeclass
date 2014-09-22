@@ -21,7 +21,7 @@
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
