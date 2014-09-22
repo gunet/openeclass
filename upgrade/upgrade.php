@@ -25,6 +25,8 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 
+stop_output_buffering();
+
 // set default storage engine
 Database::get()->query("SET storage_engine = InnoDB");
 
