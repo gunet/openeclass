@@ -83,7 +83,7 @@ if ($is_editor) {
         $poll['name'] .= " ($langCopy2)";
 	db_query("INSERT INTO poll
                             SET creator_id = $poll[creator_id],
-                                course_id = $poll[course_id],
+                                course_id = $cours_id,
                                 name = " . quote($poll['name']) . ",
                                 creation_date = " . quote($poll['creation_date']) .",
                                 start_date = " . quote($poll['start_date']) .",
