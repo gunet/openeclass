@@ -3515,6 +3515,8 @@ $langIndexingAlert2 = "Do not close this window or else the indexing process wil
 $langIndexingRemain = "Remaining courses for indexing";
 $langIndexingDone = "The indexing was completed successfully, you can now close this window.";
 $langUpgIndexingNotice = "Because of the number of courses, the search and indexing engines have been deactivated. Please look for their corresponding setting under Platform Settings and follow the instructions for indexing.";
+$langConfirmEnableMobileAPITitle = "Confirmation for enabling Smartphone/Tablet communication support";
+$langConfirmEnableMobileAPI = "Communication with Smartphone/Tablet devices does not support authentication through Shibboleth or CAS.<br/><br/>Cancel your choice for avoiding end user confusion.";
 $langNoRecipients = "No recipients specified";
 $langOnlineUsers = 'Online Users';
 /* * ***********************************************************
