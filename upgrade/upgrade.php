@@ -2212,7 +2212,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
-
+            Database::get()->query("USE `$mysqlMainDb`");
+            
             Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
                 SELECT
                 `user_id`,

@@ -1178,10 +1178,8 @@ function upgrade_course_2_11($code, $extramessage = '') {
 /**
  * @brief upgrade to 2.10
  * @global type $langUpgCourse
- * @global type $global_messages
- * @global type $webDir
  * @param type $code
- * @param type $lang
+ * @param type $course_id
  * @param type $extramessage
  */
 function upgrade_course_2_10($code, $course_id, $extramessage = '') {
@@ -1210,8 +1208,7 @@ function upgrade_course_2_10($code, $course_id, $extramessage = '') {
 
 /**
  * @brief upgrade to 2.9
- * @global type $langUpgCourse
- * @global type $global_messages
+ * @global type $langUpgCourse* 
  * @param type $code
  * @param type $lang
  * @param type $extramessage
