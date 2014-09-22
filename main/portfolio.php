@@ -148,7 +148,27 @@ $tool_content = "
                             <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle' alt='Circular Image'></div>
                     </div>
                     <div class='col-sm-9'>
-                        <div> <canvas id='canvas' height='150' width='600'></canvas></div>
+                        <div> 
+                                Test area:
+                                <div class='btn-group'>
+                                        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+                                            Πληροφορίες Μαθήματος
+                                            <span class='caret'></span>
+                                        </button>
+
+                                        <ul class='dropdown-menu' role='menu'>
+                                            <li><a href='#''>Επιλογή 1</a></li>
+                                            <li><a href='#''>Επιλογή 2/a></li>
+                                            <li><a href='#''>Επιλογή 3</a></li>
+                                            <li class='divider'></li>
+                                            <li><a href='#''>Επιλογή 4</a></li>
+                                        </ul>
+                                </div>
+
+        
+                                <canvas id='canvas' height='150' width='600'></canvas>
+
+                        </div>
                     </div> 
                 </div>
             </div>
