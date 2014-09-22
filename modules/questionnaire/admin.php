@@ -47,6 +47,13 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jqu
         $('.success').delay(3000).fadeOut(1500);
     });
     </script>";
+if (isset($_GET['pid'])) {
+    $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
+}
 if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
     if(isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$_GET[pid]");          
@@ -57,6 +64,10 @@ if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_PO
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
     $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     $position = Database::get()->querySingle("SELECT q_position FROM `poll_question`
 				  WHERE pid = ?d AND pqid = ?d", $pid, $pqid)->q_position;
     $new_position = isset($_GET['moveUp']) ? $position - 1 : $position + 1;
@@ -111,6 +122,10 @@ if (isset($_POST['submitQuestion'])) {
     $pid = intval($_GET['pid']);  
     if(isset($_GET['modifyQuestion'])) {
         $pqid = intval($_GET['modifyQuestion']);
+        $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+        if(!$poll){
+            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+        }
         Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
 		WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
     } else {
@@ -128,6 +143,10 @@ if (isset($_POST['submitQuestion'])) {
 if (isset($_POST['submitAnswers'])) {
     $pqid = intval($_GET['modifyAnswers']); 
     $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     $answers = $_POST['answers'];
     
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
@@ -145,7 +164,10 @@ if (isset($_POST['submitAnswers'])) {
 if (isset($_GET['deleteQuestion'])) {
     $pqid = intval($_GET['deleteQuestion']);    
     $pid = intval($_GET['pid']);  
-
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $pqid);
     Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $pqid);
     
