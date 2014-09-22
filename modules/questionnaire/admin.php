@@ -55,8 +55,8 @@ if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_PO
     }
 }
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
-    $pqid = isset($_GET['moveUp']) ? $_GET['moveUp'] : $_GET['moveDown'];
-    $pid = $_GET['pid'];
+    $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
+    $pid = intval($_GET['pid']);
     $position = Database::get()->querySingle("SELECT q_position FROM `poll_question`
 				  WHERE pid = ?d AND pqid = ?d", $pid, $pqid)->q_position;
     $new_position = isset($_GET['moveUp']) ? $position - 1 : $position + 1;
@@ -82,7 +82,7 @@ if (isset($_POST['submitPoll'])) {
         $PollEndMessage = purify($_POST['PollEndMessage']);    
         $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
         if(isset($_GET['pid'])) {
-            $pid = $_GET['pid'];
+            $pid = intval($_GET['pid']);
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
             Session::Messages($langPollEdited, 'success');
@@ -98,7 +98,7 @@ if (isset($_POST['submitPoll'])) {
         // Errors
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         if(isset($_GET['pid'])) {
-            $pid = $_GET['pid']; 
+            $pid = intval($_GET['pid']); 
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyPoll=yes");
         } else {        
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&newPoll=yes");
@@ -108,9 +108,9 @@ if (isset($_POST['submitPoll'])) {
 if (isset($_POST['submitQuestion'])) {
     $question_text = $_POST['questionName'];
     $qtype = $_POST['answerType'];    
-    $pid = $_GET['pid'];  
+    $pid = intval($_GET['pid']);  
     if(isset($_GET['modifyQuestion'])) {
-        $pqid = $_GET['modifyQuestion'];
+        $pqid = intval($_GET['modifyQuestion']);
         Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
 		WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
     } else {
@@ -126,8 +126,8 @@ if (isset($_POST['submitQuestion'])) {
     }
 }
 if (isset($_POST['submitAnswers'])) {
-    $pqid = $_GET['modifyAnswers']; 
-    $pid = $_GET['pid'];
+    $pqid = intval($_GET['modifyAnswers']); 
+    $pid = intval($_GET['pid']);
     $answers = $_POST['answers'];
     
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
@@ -143,8 +143,8 @@ if (isset($_POST['submitAnswers'])) {
     
 }
 if (isset($_GET['deleteQuestion'])) {
-    $pqid = $_GET['deleteQuestion'];    
-    $pid = $_GET['pid'];  
+    $pqid = intval($_GET['deleteQuestion']);    
+    $pid = intval($_GET['pid']);  
 
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $pqid);
     Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $pqid);
@@ -152,7 +152,7 @@ if (isset($_GET['deleteQuestion'])) {
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 if (isset($_GET['pid'])) {
-    $pid = $_GET['pid'];
+    $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
