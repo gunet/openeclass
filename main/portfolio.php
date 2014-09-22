@@ -156,6 +156,10 @@ $tool_content = "
                                             <span class='caret'></span>
                                         </button>
 
+                                        
+                                        
+                                        
+
                                         <ul class='dropdown-menu' role='menu'>
                                             <li><a href='#''>Επιλογή 1</a></li>
                                             <li><a href='#''>Επιλογή 2/a></li>
@@ -165,7 +169,7 @@ $tool_content = "
                                         </ul>
                                 </div>
 
-        
+
                                 <canvas id='canvas' height='150' width='600'></canvas>
 
                         </div>

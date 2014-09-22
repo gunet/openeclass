@@ -120,6 +120,15 @@ img
 
 
 
+/* Extend bootstrap style - forms */
+.form-control
+{
+  @include border-radius(2px 2px 2px 2px !important);
+}
+
+
+
+
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
 .breadcrumb
@@ -922,8 +931,10 @@ ul.tablelist
 
 
 
-/* DROPDOWN */
 
+
+/* DROPDOWN */
+/*
 .button.dropdown.opened{
 
   background: $color-hover!important;
@@ -1002,12 +1013,12 @@ ul.dropdown-menu li a{
   text-decoration: none;
   color: white;
   background-color: #4da1e4;
-}
+}*/
 
 
 
-/* PAGINATION */
-
+/* PAGINATION ------------------------------------------------------------------- */
+/*
 .my-pager
 {
   margin:1em 0em;
@@ -1043,14 +1054,14 @@ ul.dropdown-menu li a{
 .my-pager .items > span:hover
 {
   color:$color-hover;
-}
+}*/
 
 
 
 
 
-/* INPUT TEXTAREA SELECT */
-
+/* INPUT TEXTAREA SELECT ----------------------------------------------------------------- */
+/*
 input,
 textarea{
   width: 100%;
@@ -1084,11 +1095,16 @@ select:focus{
 
 textarea{
   resize: vertical;
-}
+}*/
 
 
-/* TAG & LABEL */
 
+
+
+
+
+/* TAG & LABEL ------------------------------------------------------------------- */
+/*
 .tag {
   display: inline;
   padding: 0.4em;
@@ -1141,7 +1157,7 @@ textarea{
     background: #e7e7e7;
     color: #3D3D3D;
   }
-}
+}*/
 
 
 
