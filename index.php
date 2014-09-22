@@ -168,19 +168,21 @@ if ($uid AND !isset($_GET['logout'])) {
     }
 
     // check for shibboleth authentication
-    $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'")->auth_default;
-    if ($shibactive == 1) {
-        $shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
-    } else {
-        $shibboleth_link = "";
-    }
+    $shibboleth_link = "";
+    $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
+    if ($shibactive) {
+	    if ($shibactive->auth_default == 1) {
+     	   $shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
+	    }
+	}
 
     // check for CAS authentication
-    $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'")->auth_default;
-    if ($casactive == 1) {
-        $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
-    } else {
-        $cas_link = "";
+    $cas_link = "";
+    $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
+    if ($casactive) {
+    	if ($casactive->auth_default == 1) {
+        	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
+    	}
     }
 
     $tool_content .= "</div><div id='rightbar'>";
