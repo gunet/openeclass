@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.11
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -20,26 +20,27 @@
 
 header('Content-Type: application/xml; charset=utf-8');
 
-if (isset($_POST['token']))
-{
+if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
     require_once ('minit.php');
     
-    if (isset($_REQUEST['logout']))
-    {
+    if (isset($_REQUEST['logout'])) {
         require_once ('../../include/CAS/CAS.php');
         require_once ('../auth/auth.inc.php');
 
-        if (isset($_SESSION['uid']))
+        if (isset($_SESSION['uid'])) {
             db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                     VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+        }
 
-        if (isset($_SESSION['cas_uname'])) // if we are CAS user
+        if (isset($_SESSION['cas_uname'])) { // if we are CAS user
             define('CAS', true);
+        }
 
-        foreach(array_keys($_SESSION) as $key)
+        foreach(array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
+        }
 
         session_destroy();
 
@@ -55,8 +56,7 @@ if (isset($_POST['token']))
         exit();
     }
     
-    if (isset($_REQUEST['redirect']))
-    {
+    if (isset($_REQUEST['redirect'])) {
         header('Location: '. urldecode($_REQUEST['redirect']));
         exit();
     }
@@ -66,8 +66,7 @@ if (isset($_POST['token']))
 }
 
 
-if (isset($_POST['uname']) && isset($_POST['pass']))
-{
+if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $require_noerrors = true;
     require_once ('minit.php');
     require_once ('../../include/CAS/CAS.php');
@@ -77,8 +76,9 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     $uname = autounquote(canonicalize_whitespace($_POST['uname']));
     $pass = autounquote($_POST['pass']);
     
-    foreach(array_keys($_SESSION) as $key)
+    foreach(array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
+    }
     $_SESSION['user_perso_active'] = false;
     
     $sqlLogin = "SELECT *
@@ -106,15 +106,15 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
         session_regenerate_id();
         set_session_mvars();
         echo session_id();
-    } else
+    } else {
         echo RESPONSE_FAILED;
+    }
 
     exit();
 }
 
 
-function set_session_mvars()
-{
+function set_session_mvars() {
     $status = array();
     
     $sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
@@ -129,19 +129,24 @@ function set_session_mvars()
                 AND cours.visible != ".COURSE_INACTIVE."
            ORDER BY statut, cours.intitule, cours.titulaires";
 
-    if ($_SESSION['statut'] == 1)
+    if ($_SESSION['statut'] == 1) {
         $result = db_query($sql);
+    }
 
-    if ($_SESSION['statut'] == 5)
+    if ($_SESSION['statut'] == 5) {
         $result = db_query($sql2);
+    }
 
-    if ($result and mysql_num_rows($result) > 0)
-        while ($mycours = mysql_fetch_array($result))
+    if ($result and mysql_num_rows($result) > 0) {
+        while ($mycours = mysql_fetch_array($result)) {
             $status[$mycours['code']] = $mycours['statut'];
+        }
+    }
 
     $_SESSION['status'] = $status;
     $_SESSION['mobile'] = true;
     
-    if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no')
+    if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
         $_SESSION['user_perso_active'] = true;
+    }
 }
