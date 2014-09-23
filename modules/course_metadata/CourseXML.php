@@ -919,8 +919,9 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($ts > 0) {
             $firstCreateDate = quote(date('Y-m-d H:i:s', $ts));
         } else {
-            $firstCreateDate = 'NOW()';
+            $firstCreateDate = quote(gmdate('Y-m-d H:i:s'));
         }
+        $nowdatestamp = quote(gmdate('Y-m-d H:i:s'));
         
         // insert or update oai_record
         $exists = db_query_get_single_value("SELECT 1 FROM `$mysqlMainDb`.oai_record WHERE course_id = " . $courseId);
@@ -928,7 +929,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $deleted = ($is_certified) ? 0 : 1;
             db_query("UPDATE `$mysqlMainDb`.oai_record SET
                 `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
-                `datestamp` = NOW(),
+                `datestamp` = " . $nowdatestamp . ",
                 `deleted` = " . $deleted . ",
                 `dc_title` = " . quote(self::serialize($xml->title)) . ",
                 `dc_description` = " . quote(self::serialize($xml->description)) . ",
@@ -994,7 +995,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 db_query("INSERT INTO `$mysqlMainDb`.oai_record SET
                     `course_id` = " . intval($courseId) . ",
                     `oai_identifier` = " . quote("oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId) . ",
-                    `datestamp` = NOW(),
+                    `datestamp` = " . $nowdatestamp . ",
                     `deleted` = 0,
                     `dc_title` = " . quote(self::serialize($xml->title)) . ",
                     `dc_description` = " . quote(self::serialize($xml->description)) . ",
