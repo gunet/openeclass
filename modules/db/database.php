@@ -79,11 +79,7 @@ final class Database {
      * @param Database $dbase The name of the database
      */
     public static function forget($dbase) {
-        $dbhandler = self::$dbs[$dbase];
-        if (!is_null($dbhandler)) {
-            $dbhandler->__destruct();
-            unset(self::$dbs[$dbase]);
-        }
+        unset(self::$dbs[$dbase]);
     }
 
     /**
@@ -453,10 +449,6 @@ final class Database {
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
         Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
-    }
-
-    public function __destruct() {
-        $this->dbh = null;
     }
 
 }
