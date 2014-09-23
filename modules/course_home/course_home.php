@@ -463,25 +463,6 @@ $tool_content .= "
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
 
-    <div class='btn-group'>
-                                        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-                                            Πληροφορίες Μαθήματος
-                                            <span class='caret'></span>
-                                        </button>
-
-                                        
-                                        
-                                        
-
-                                        <ul class='dropdown-menu' role='menu'>
-                                            <li><a href='#''>Επιλογή 1</a></li>
-                                            <li><a href='#''>Επιλογή 2/a></li>
-                                            <li><a href='#''>Επιλογή 3</a></li>
-                                            <li class='divider'></li>
-                                            <li><a href='#''>Επιλογή 4</a></li>
-                                        </ul>
-                                </div>
-
         <div class='toolbox pull-right'>
 
     
@@ -503,10 +484,8 @@ $tool_content .= "
             if ($status != USER_GUEST) {
                 if ($receive_mail) {
                     $tool_content .= "
-                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                            <button class='btn-default-eclass place-at-toolbox' title='$langContactProf' >
+                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' title='$langContactProf' >
                                 <i class='fa fa-envelope'></i>
-                            </button>
                         </a>";
                 }
             }
@@ -514,10 +493,8 @@ $tool_content .= "
 
             // Button: star - bookmark the page
             $tool_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-                            <button class='btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
+                        <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
                                 <i class='fa fa-star'></i>
-                            </button>
                         </a>";
 
 
@@ -525,16 +502,14 @@ $tool_content .= "
             if (visible_module(MODULE_ID_ANNOUNCE))
             {
                 $tool_content .= "
-                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                            <button class='btn-default-eclass place-at-toolbox' title='" . q($langRSSFeed) . "'>
+                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' title='" . q($langRSSFeed) . "'>
                                 <i class='fa fa-rss'></i>
-                            </button>
                         </a>";
             }
 
             // Button: toggle student view
             $tool_content .= "
-                        <button class='btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
+                        <button class='btn-default-eclass place-at-toolbox' title=''>
                                 $toggle_student_view_close
                                 $toggle_student_view
                         </button>";

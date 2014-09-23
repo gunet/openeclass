@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{%URL_PATH%}js/jquery-ui-css/lightness/jquery-ui.1.11.1.min.css">
 
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="{%template_base%}/CSS/bootstrap.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -40,10 +40,7 @@
 
 	<!-- Open Sans font from google -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,300,600,700,800&amp;subset=latin,greek-ext' rel='stylesheet' type='text/css'>
-        <script>
-var btn = $.fn.button.noConflict() // reverts $.fn.button to jqueryui btn
-$.fn.btn = btn // assigns bootstrap button functionality to $.fn.btn          
-        </script>
+
     {%EXTRA_CSS%}
     {%TOOL_CSS%}
     {%HEAD_EXTRAS%}
@@ -150,27 +147,35 @@ $.fn.btn = btn // assigns bootstrap button functionality to $.fn.btn
 	                    </div>
 
                         <!-- BEGIN pageTitleBlock -->
-                        <div class='row title-row margin-top'>
-                            <div class='col-md-10'>
+                        <div class="row title-row margin-top">
+                            <div class="col-md-9">
                                 <h1 class='page-title'>{%SECTION_TITLE%}</h1>
                                 <!-- BEGIN professorBlock -->
                                 <h5 class='page-title'>{%PROFESSOR%}</h5>
                                 <!-- END professorBlock -->
                             </div>
-                            <div class="col-md-2">
-                            	<div class="toolbox pull-right">
-                            		Εμφάνιση σαν:
-                            		<i class="fa fa-users"></i>
-                            		<input id="docon" class="toggle" type="checkbox"/>
-                            		<i class="fa fa-graduation-cap"></i>
+                            <div class='col-md-3'>
+                            	<div class='toolbox pull-right'>
+                            		<div class='btn-group place-at-toolbox'>
+                                        <button type='button' class='btn-default-eclass dropdown-toggle' data-toggle='dropdown'>
+                                            Εμφάνιση σαν
+                                            <span class='caret'></span>
+                                        </button>
+
+                                        <ul class='dropdown-menu' role='menu'>
+                                            <li><a href='#'>Καθηγητής</a></li>
+                                            <li><a href='#'>Εκπαιδευόμενος</a></li>
+                                            
+                                        </ul>
+                                </div>
                             	</div>
                             </div>
                         </div>
                         <!-- END pageTitleBlock -->
 
 	                    <!-- BEGIN toolTitleBlock -->
-	                    <div class="row title-row margin-top">
-	                    	<div class="col-md-10">
+	                    <div class='row title-row margin-top'>
+	                    	<div class='col-md-10'>
 	                    		<h1 class='page-title'>
 	                    			{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
 	                    		</h1>

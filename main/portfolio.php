@@ -170,6 +170,11 @@ $tool_content = "
                                 </div>
 
 
+                                <div class='tbl'>
+                                    TEST
+                                </div>
+
+
                                 <canvas id='canvas' height='150' width='600'></canvas>
 
                         </div>

@@ -5,6 +5,7 @@
 */
 
 @import 'global';
+@import 'bootstrap';
 
 
 
@@ -923,12 +924,39 @@ ul.tablelist
 
 
 
-/* Extent bootstrap style - tables ---------------------------------------------------------------------------------  */
-.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other
-{  
-    @extend .table, .table-striped;  
-}
 
+
+
+
+
+/* LABEL -------------------------------------------------------------------------------- */
+/*.label
+{
+  font-size: 0.75em !important;
+  display: inline-block;
+  margin: 0 0.5em 0.8em 0;
+  position: relative;
+
+  border: 1px solid rgb(231, 231, 231);
+  padding: .5em;
+  border-radius: 2px;
+
+  cursor: default;
+
+  color:#A7A7A7;
+
+  @include transition(background 100ms linear);
+
+  > span{        
+    font-weight: 600;
+    color: #808080;
+  }
+
+  &:hover{
+    background: #e7e7e7;
+    color: #3D3D3D;
+  }
+}*/
 
 
 
@@ -1145,32 +1173,6 @@ textarea{
   }  
 }
 
-.label
-{
-  font-size: 0.75em;
-  display: inline-block;
-  margin: 0 0.5em 0.8em 0;
-  position: relative;
-
-  border: 1px solid rgb(231, 231, 231);
-  padding: .5em;
-  border-radius: 2px;
-
-  cursor: default;
-
-  color:#A7A7A7;
-
-  @include transition(background 100ms linear);
-
-  > span{        
-    font-weight: 600;
-    color: #808080;
-  }
-
-  &:hover{
-    background: #e7e7e7;
-    color: #3D3D3D;
-  }
 }*/
 
 
