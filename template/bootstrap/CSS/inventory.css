@@ -118,8 +118,15 @@
 }
 
 /* MIXINS ------------------------------------------------------------------------------- */
+/* line 173, global.scss */
+.color-add-item {
+  box-shadow: 0 0px 7px #6bce6b !important;
+  -moz-box-shadow: 0 0px 7px #6bce6b !important;
+  -webkit-box-shadow: 0 0px 7px #6bce6b !important;
+}
+
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 166, global.scss */
+/* line 189, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -129,68 +136,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 172, global.scss */
+  /* line 195, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 173, global.scss */
+  /* line 196, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 174, global.scss */
+  /* line 197, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 180, global.scss */
+  /* line 203, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 181, global.scss */
+  /* line 204, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 182, global.scss */
+  /* line 205, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 188, global.scss */
+  /* line 211, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 189, global.scss */
+  /* line 212, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 190, global.scss */
+  /* line 213, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 196, global.scss */
+  /* line 219, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 197, global.scss */
+  /* line 220, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 198, global.scss */
+  /* line 221, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
@@ -327,8 +334,15 @@ img {
   -webkit-box-shadow: 0 0px 7px #dddddd;
 }
 
+/* line 159, inventory.scss */
+.panel .color-add-item {
+  box-shadow: 0 0px 7px #6bce6b !important;
+  -moz-box-shadow: 0 0px 7px #6bce6b !important;
+  -webkit-box-shadow: 0 0px 7px #6bce6b !important;
+}
+
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 163, inventory.scss */
+/* line 168, inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
@@ -349,30 +363,30 @@ img {
   margin-right: 0em;
   display: inline-block;
 }
-/* line 178, inventory.scss */
+/* line 183, inventory.scss */
 .toolbox ul {
   display: block;
   display: inline-block;
   margin: 0px;
   padding: 0px;
 }
-/* line 186, inventory.scss */
+/* line 191, inventory.scss */
 .toolbox li {
   list-style-type: none;
   display: inline-block;
 }
-/* line 192, inventory.scss */
+/* line 197, inventory.scss */
 .toolbox ul.toolbox-submenu {
   display: none;
 }
 
-/* line 200, inventory.scss */
+/* line 205, inventory.scss */
 .toolbox:hover .toolbox-submenu {
   display: inline-block;
 }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-/* line 213, inventory.scss */
+/* line 218, inventory.scss */
 #doc-toggle {
   float: right;
   margin: 1em 0em;
@@ -385,23 +399,23 @@ img {
   user-select: none;
 }
 
-/* line 221, inventory.scss */
+/* line 226, inventory.scss */
 .toggle-sidebar {
   cursor: pointer;
 }
 
 /* TOGGLE SWTICH */
-/* line 228, inventory.scss */
+/* line 233, inventory.scss */
 .my-toggle > * {
   vertical-align: middle;
 }
 
-/* line 233, inventory.scss */
+/* line 238, inventory.scss */
 .my-toggle .txt {
   font-size: 0.75em;
 }
 
-/* line 238, inventory.scss */
+/* line 243, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -424,7 +438,7 @@ input.toggle {
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* line 265, inventory.scss */
+/* line 270, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -445,24 +459,24 @@ input.toggle:after {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* line 285, inventory.scss */
+/* line 290, inventory.scss */
 input.toggle:hover:after {
   background: white;
 }
 
-/* line 290, inventory.scss */
+/* line 295, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
   background-color: #dddddd;
 }
 
-/* line 297, inventory.scss */
+/* line 302, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
   left: 0px;
 }
 
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 310, inventory.scss */
+/* line 315, inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -495,19 +509,19 @@ input.toggle[type=checkbox]:checked:after {
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 335, inventory.scss */
+/* line 340, inventory.scss */
 .btn-default-eclass > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 340, inventory.scss */
+/* line 345, inventory.scss */
 .btn-default-eclass > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 345, inventory.scss */
+/* line 350, inventory.scss */
 .btn-default-eclass > .fa.fa-caret-down {
   margin-right: 0px!important;
 }
-/* line 351, inventory.scss */
+/* line 356, inventory.scss */
 .btn-default-eclass:hover, .btn-default-eclass:focus {
   outline: 0;
   background: #4da1e4;
@@ -515,7 +529,7 @@ input.toggle[type=checkbox]:checked:after {
   border-bottom-color: #3F87C1;
   color: white;
 }
-/* line 360, inventory.scss */
+/* line 365, inventory.scss */
 .btn-default-eclass:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -527,7 +541,7 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* BUTTON COLORS */
-/* line 373, inventory.scss */
+/* line 378, inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
   background: #6bce6b;
@@ -537,11 +551,11 @@ input.toggle[type=checkbox]:checked:after {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 381, inventory.scss */
+/* line 386, inventory.scss */
 .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
   background: #83DE83;
 }
-/* line 386, inventory.scss */
+/* line 391, inventory.scss */
 .btn-default-eclass.color-green:active {
   background: #83DE83 !important;
   outline: 0 !important;
@@ -551,7 +565,7 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
-/* line 396, inventory.scss */
+/* line 401, inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
   background: #ce6b6b;
@@ -561,11 +575,11 @@ input.toggle[type=checkbox]:checked:after {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 404, inventory.scss */
+/* line 409, inventory.scss */
 .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
   background: #E58080;
 }
-/* line 409, inventory.scss */
+/* line 414, inventory.scss */
 .btn-default-eclass.color-red:active {
   background: #E58080 !important;
   outline: 0 !important;
@@ -576,23 +590,23 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* BUTTON SIZES */
-/* line 422, inventory.scss */
+/* line 427, inventory.scss */
 .btn-default-eclass.size-xl {
   font-size: 2em;
 }
 
-/* line 427, inventory.scss */
+/* line 432, inventory.scss */
 .btn-default-eclass.size-l {
   font-size: 1.5em;
 }
 
-/* line 432, inventory.scss */
+/* line 437, inventory.scss */
 .btn-default-eclass.size-s {
   font-size: 0.85em;
 }
 
 /* flippin btn */
-/* line 443, inventory.scss */
+/* line 448, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -608,7 +622,7 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-touch-callout: none;
 }
 
-/* line 460, inventory.scss */
+/* line 465, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -623,7 +637,7 @@ input.toggle[type=checkbox]:checked:after {
   transform-style: preserve-3d;
 }
 
-/* line 473, inventory.scss */
+/* line 478, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -638,13 +652,13 @@ input.toggle[type=checkbox]:checked:after {
   backface-visibility: hidden;
 }
 
-/* line 487, inventory.scss */
+/* line 492, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
   color: white;
 }
 
-/* line 492, inventory.scss */
+/* line 497, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
@@ -654,7 +668,7 @@ input.toggle[type=checkbox]:checked:after {
   content: attr(data-label);
 }
 
-/* line 501, inventory.scss */
+/* line 506, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -668,12 +682,12 @@ input.toggle[type=checkbox]:checked:after {
   content: '';
 }
 
-/* line 514, inventory.scss */
+/* line 519, inventory.scss */
 .btn-flippin:active:before {
   background-color: #3571c8;
 }
 
-/* line 518, inventory.scss */
+/* line 523, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
@@ -682,14 +696,14 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 536, inventory.scss */
+/* line 541, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
   cursor: default;
 }
-/* line 543, inventory.scss */
+/* line 548, inventory.scss */
 ul.tablelist li.list-item {
   position: relative;
   box-sizing: border-box;
@@ -700,20 +714,20 @@ ul.tablelist li.list-item {
   background: white;
   overflow: hidden;
 }
-/* line 552, inventory.scss */
+/* line 557, inventory.scss */
 ul.tablelist li.list-item .max-height {
   max-height: 3.35em;
 }
-/* line 557, inventory.scss */
+/* line 562, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
   border-right: 1px solid #eee;
 }
-/* line 562, inventory.scss */
+/* line 567, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:first-child {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
-/* line 568, inventory.scss */
+/* line 573, inventory.scss */
 ul.tablelist li.list-item .item-right-cols {
   float: right;
   position: absolute;
@@ -721,23 +735,23 @@ ul.tablelist li.list-item .item-right-cols {
   right: 0px;
   max-width: 95%;
 }
-/* line 578, inventory.scss */
+/* line 583, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span,
 ul.tablelist li.list-item .item-title {
   padding: 1em;
   display: inline-block;
 }
-/* line 584, inventory.scss */
+/* line 589, inventory.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 1em;
   padding-right: 60px;
   display: inline-block;
 }
-/* line 591, inventory.scss */
+/* line 596, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-content {
   font-size: 0.9em;
 }
-/* line 596, inventory.scss */
+/* line 601, inventory.scss */
 ul.tablelist li.list-item .item-right-cols a {
   width: 1em;
   padding: 1em 1.4em;
@@ -745,7 +759,7 @@ ul.tablelist li.list-item .item-right-cols a {
   text-align: center;
   cursor: pointer;
 }
-/* line 606, inventory.scss */
+/* line 611, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-date {
   color: rgba(0, 0, 0, 0.6);
   background: white;
@@ -753,13 +767,13 @@ ul.tablelist li.list-item .item-right-cols .item-date {
   text-align: center;
   vertical-align: top;
 }
-/* line 615, inventory.scss */
+/* line 620, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options {
   padding: 0px;
   margin-left: -0.26em;
   padding-right: 3.8em;
 }
-/* line 622, inventory.scss */
+/* line 627, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   position: absolute;
   display: inline-block;
@@ -771,12 +785,12 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   color: #7E7E7E;
   background: #F8F8F8;
 }
-/* line 635, inventory.scss */
+/* line 640, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
 }
-/* line 641, inventory.scss */
+/* line 646, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
   margin-right: -25em;
@@ -788,21 +802,21 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 653, inventory.scss */
+/* line 658, inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
   margin-right: 0em;
   background: #333333;
 }
-/* line 659, inventory.scss */
+/* line 664, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a {
   color: white;
 }
-/* line 663, inventory.scss */
+/* line 668, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
 }
-/* line 672, inventory.scss */
+/* line 677, inventory.scss */
 ul.tablelist li.list-item:first-child,
 ul.tablelist li.list-item:first-child .item-date {
   -webkit-animation: NEW-ITEM-FX 3s 1;
@@ -810,17 +824,17 @@ ul.tablelist li.list-item:first-child .item-date {
   -o-animation: NEW-ITEM-FX 3s 1;
   animation: NEW-ITEM-FX 3s 1;
 }
-/* line 680, inventory.scss */
+/* line 685, inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 692, inventory.scss */
+/* line 697, inventory.scss */
 .boxlist {
   padding: 0px;
 }
-/* line 697, inventory.scss */
+/* line 702, inventory.scss */
 .boxlist .list-item {
   display: block;
   position: relative;
@@ -835,19 +849,19 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 710, inventory.scss */
+/* line 715, inventory.scss */
 .boxlist .list-item.hidden {
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 715, inventory.scss */
+/* line 720, inventory.scss */
 .boxlist .list-item.hidden .item-content {
   opacity: 0.6;
 }
-/* line 720, inventory.scss */
+/* line 725, inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
 }
-/* line 725, inventory.scss */
+/* line 730, inventory.scss */
 .boxlist .list-item .item-content {
   width: 93%;
   /* a fallback for calc */
@@ -861,27 +875,27 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 737, inventory.scss */
+/* line 742, inventory.scss */
 .boxlist .item-header {
   padding: 1em 0em 0.5em 0em;
   border-bottom: 1px solid #eee;
 }
-/* line 743, inventory.scss */
+/* line 748, inventory.scss */
 .boxlist .item-header .item-title {
   margin: 0px;
 }
-/* line 748, inventory.scss */
+/* line 753, inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 754, inventory.scss */
+/* line 759, inventory.scss */
 .boxlist .item-body {
   padding: 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 761, inventory.scss */
+/* line 766, inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -894,7 +908,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 776, inventory.scss */
+/* line 781, inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -912,12 +926,12 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 790, inventory.scss */
+/* line 795, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
 }
-/* line 797, inventory.scss */
+/* line 802, inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -932,19 +946,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 809, inventory.scss */
+/* line 814, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 814, inventory.scss */
+/* line 819, inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 819, inventory.scss */
+/* line 824, inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 824, inventory.scss */
+/* line 829, inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -957,18 +971,18 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 837, inventory.scss */
+/* line 842, inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
 }
 
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
-/* line 852, inventory.scss */
+/* line 857, inventory.scss */
 #lesson-banner {
   position: relative;
   min-height: 13em;
 }
-/* line 857, inventory.scss */
+/* line 862, inventory.scss */
 #lesson-banner .banner-left {
   width: 40%;
   position: absolute;
@@ -978,7 +992,7 @@ ul.tablelist li.list-item:hover {
   margin-right: 1em;
   padding: 1em;
 }
-/* line 867, inventory.scss */
+/* line 872, inventory.scss */
 #lesson-banner .banner-left .banner-image {
   width: 100%;
   height: 100%;
@@ -991,7 +1005,7 @@ ul.tablelist li.list-item:hover {
   -o-background-size: cover;
   background-size: cover;
 }
-/* line 875, inventory.scss */
+/* line 880, inventory.scss */
 #lesson-banner .banner-left .banner-image:after {
   position: absolute;
   top: 0px;
@@ -1015,7 +1029,7 @@ ul.tablelist li.list-item:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
   /* IE6-9 */
 }
-/* line 897, inventory.scss */
+/* line 902, inventory.scss */
 #lesson-banner .banner-content {
   margin-left: 40%;
   padding: 1em;
@@ -1023,13 +1037,13 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 903, inventory.scss */
+/* line 908, inventory.scss */
 #lesson-banner .banner-content .banner-description {
   font-size: 0.8em;
   min-height: 6em;
   line-height: 1.7em;
 }
-/* line 910, inventory.scss */
+/* line 915, inventory.scss */
 #lesson-banner .banner-content hr {
   margin-bottom: 0.8em;
 }
@@ -1244,43 +1258,43 @@ textarea{
     color: #3D3D3D;
   }
 }*/
-/* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ */
-/* line 1178, inventory.scss */
-.md-modal.color-dark .md-content {
+/* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ -------------------------------------------*/
+/*
+.md-modal.color-dark .md-content{
   background: #2E3033!important;
 }
 
-/* line 1182, inventory.scss */
-.md-modal .md-content p {
+.md-modal .md-content p{
   font-size: 0.65em;
 }
 
-/* line 1186, inventory.scss */
-.md-modal .modal-icon {
-  margin-right: 10px;
+.md-modal .modal-icon{
+  margin-right:10px;
 }
 
-/* line 1190, inventory.scss */
-.md-modal .md-close {
-  background: rgba(0, 0, 0, 0.2);
-  border: none;
+.md-modal .md-close{
+  background:rgba(0,0,0,.2);
+
+  border:none;
+
   text-transform: uppercase;
-  color: #eee;
-  padding: 0.5em 1em;
-  font-size: 0.75em;
-  cursor: pointer;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
+
+  color:#eee;
+
+  padding:0.5em 1em;
+
+  font-size:0.75em;
+
+  cursor:pointer;
+
+  @include border-radius(2px);
 }
 
-/* line 1208, inventory.scss */
-.md-modal .md-close:hover {
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
+.md-modal .md-close:hover{  
+  background:rgba(0,0,0,.3);
+  color:white;
 }
 
-/* line 1213, inventory.scss */
-.modal-overlay-bg-dark {
-  background: rgba(35, 35, 35, 0.8) !important;
-}
+.modal-overlay-bg-dark{
+  background: rgba(35, 35, 35, 0.8)!important;
+}*/

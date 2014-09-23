@@ -89,6 +89,9 @@ $font-icon: 'FontAwesome';
 
 
 
+
+
+
 /* MIXINS ------------------------------------------------------------------------------- */
 
 @mixin user-select($value)
@@ -155,6 +158,26 @@ $font-icon: 'FontAwesome';
   -ms-transform-origin: $value;
   transform-origin: $value;
 }
+
+
+
+
+
+
+
+
+
+
+
+.color-add-item
+{
+  @include box-shadow(0 0px 7px $color-green !important);
+}
+
+
+
+
+
 
 
 

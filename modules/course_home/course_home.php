@@ -463,7 +463,24 @@ $tool_content .= "
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
 
+    <div class='btn-group'>
+                                        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+                                            Πληροφορίες Μαθήματος
+                                            <span class='caret'></span>
+                                        </button>
 
+                                        
+                                        
+                                        
+
+                                        <ul class='dropdown-menu' role='menu'>
+                                            <li><a href='#''>Επιλογή 1</a></li>
+                                            <li><a href='#''>Επιλογή 2/a></li>
+                                            <li><a href='#''>Επιλογή 3</a></li>
+                                            <li class='divider'></li>
+                                            <li><a href='#''>Επιλογή 4</a></li>
+                                        </ul>
+                                </div>
 
         <div class='toolbox pull-right'>
 

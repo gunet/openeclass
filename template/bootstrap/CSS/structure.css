@@ -118,8 +118,15 @@
 }
 
 /* MIXINS ------------------------------------------------------------------------------- */
+/* line 173, global.scss */
+.color-add-item {
+  box-shadow: 0 0px 7px #6bce6b !important;
+  -moz-box-shadow: 0 0px 7px #6bce6b !important;
+  -webkit-box-shadow: 0 0px 7px #6bce6b !important;
+}
+
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 166, global.scss */
+/* line 189, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -129,68 +136,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 172, global.scss */
+  /* line 195, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 173, global.scss */
+  /* line 196, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 174, global.scss */
+  /* line 197, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 180, global.scss */
+  /* line 203, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 181, global.scss */
+  /* line 204, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 182, global.scss */
+  /* line 205, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 188, global.scss */
+  /* line 211, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 189, global.scss */
+  /* line 212, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 190, global.scss */
+  /* line 213, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 196, global.scss */
+  /* line 219, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 197, global.scss */
+  /* line 220, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 198, global.scss */
+  /* line 221, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
