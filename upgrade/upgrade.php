@@ -73,7 +73,7 @@ $fromadmin = !isset($_POST['submit_upgrade']);
 if (!isset($_POST['submit2']) and ! $command_line) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
         $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
-            <center><a href=\"index.php\">$langBack</a></center>";
+            <center><a href='index.php'>$langBack</a></center>";
         draw($tool_content, 0);
         exit;
     }
@@ -219,7 +219,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                     if (!isset($durationAccount)) {
                         $durationAccount = 4 * 365;
                     } else {
-                        $durationAccount = $durationAccount / 60 / 60 / 24;
+                        $durationAccount = round($durationAccount / 86400);
                     }
                     set_config('site_name', $siteName);
                     set_config('account_duration', $durationAccount);
@@ -1283,6 +1283,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `grade` FLOAT NOT NULL DEFAULT -1,
                             `comments` TEXT NOT NULL) $charset_spec");
                     
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_id` MEDIUMINT(11) NOT NULL,
+                            `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance` (
                                 `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
@@ -1304,7 +1309,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                                 `uid` int(11) NOT NULL DEFAULT 0,
                                 `attend` TINYINT(4) NOT NULL DEFAULT 0,
-                                `comments` TEXT NOT NULL) $charset_spec");                    
+                                `comments` TEXT NOT NULL) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_id` MEDIUMINT(11) NOT NULL,
+                                `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
