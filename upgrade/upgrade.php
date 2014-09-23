@@ -216,11 +216,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                     if (!copy('config/config.php', 'config/config_backup.php')) {
                         die($langConfigError1);
                     }
+                    
                     if (!isset($durationAccount)) {
-                        $durationAccount = 4 * 365;
+                        $durationAccount = 4 * 30 * 24 * 60 * 60; // 4 years
                     } else {
-                        $durationAccount = round($durationAccount / 86400);
-                    }
+                        $durationAccount = round($durationAccount / (30 * 24 * 60 * 60));
+                    }                   
                     set_config('site_name', $siteName);
                     set_config('account_duration', $durationAccount);
                     set_config('institution', $_POST['Institution']);
