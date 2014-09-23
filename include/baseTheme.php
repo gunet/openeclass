@@ -195,7 +195,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
-
+            if ($i == 0 and $current_module_dir == 'course_home') {
+                $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
+            }
             $t->parse('leftNavCategory', 'leftNavCategoryBlock', true);
             $t->clear_var('leftNavLink'); //clear inner block
         }
@@ -625,6 +627,9 @@ function module_path($path) {
         return '/auth/opencourses.php';
     } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
         return '/auth/registration.php';
+    } elseif (isset($GLOBALS['course_code']) and
+              strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
+        return 'course_home';
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
