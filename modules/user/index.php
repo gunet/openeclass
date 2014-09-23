@@ -196,7 +196,7 @@ load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#users_table{$course_id}').DataTable ({
+           var oTable = $('#users_table{$course_id}').dataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,

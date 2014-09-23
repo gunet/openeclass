@@ -48,7 +48,7 @@ $(function() {
         dateFormat: 'yy-mm-dd', 
         timeFormat: 'hh:mm'
         });
-    var oTable = $('#users_table{$course_id}').DataTable ({
+    var oTable = $('#users_table{$course_id}').dataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here

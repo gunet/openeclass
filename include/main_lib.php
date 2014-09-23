@@ -201,7 +201,10 @@ function load_js($file, $init='') {
                 $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
-            $file = 'datatables/media/js/jquery.dataTables.min.js';                
+            $file = 'datatables/media/js/jquery.dataTables.min.js';     
+        } elseif ($file == 'datatables_bootstrap') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/dataTables.bootstrap.css' />";            
+            $file = 'datatables/media/js/dataTables.bootstrap.js';                
         } elseif ($file == 'datatables_filtering_delay') {
                 $file = 'datatables/media/js/jquery.dataTables_delay.js';
         } elseif ($file == 'datatables_reload') {

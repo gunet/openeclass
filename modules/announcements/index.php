@@ -133,13 +133,16 @@ load_js('jquery');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
+load_js('datatables_bootstrap');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#ann_table{$course_id}').DataTable ({
+           var oTable = $('#ann_table{$course_id}').dataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
+                'sScrollX': true,
+                'responsive': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
@@ -471,11 +474,11 @@ if ($is_editor) {
         $tool_content .= $row->content;
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-        $tool_content .= "<table id='ann_table{$course_id}' class='display'>";
+        $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table table-bordered' width='100%'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";
+        $tool_content .= "<tr><th>$langDate</th><th>$langAnnouncement</th>";
         if ($is_editor) {
-            $tool_content .= "<th width='100' class='center'>$langActions</th>";
+            $tool_content .= "<th class='center'>$langActions</th>";
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
