@@ -129,7 +129,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 load_js('tools.js');
-load_js('jquery');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
@@ -142,7 +141,6 @@ $head_content .= "<script type='text/javascript'>
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
-                'responsive': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
@@ -483,15 +481,6 @@ if ($is_editor) {
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
 add_units_navigation(TRUE);
-load_js('jquery-ui');
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
-        });
-});</script>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+
+
 draw($tool_content, 2, null, $head_content);
