@@ -755,7 +755,8 @@ $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
 $langAddAsBookmark = 'Προσθήκη στους σελιδοδείκτες';
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
-
+$langCitation = 'Βιβλιογραφική αναφορά μαθήματος';
+$langAccessed = 'Ανακτήθηκε την %s από %s';
 
 /*********************************************
 * course_info.php

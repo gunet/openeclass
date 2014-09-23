@@ -43,6 +43,7 @@ $path2add = 1;
 require_once '../../include/baseTheme.php';
 require_once '../../include/lib/modalboxhelper.class.php';
 require_once '../../include/lib/multimediahelper.class.php';
+require_once '../../include/lib/textLib.inc.php';
 
 $nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";
@@ -91,9 +92,9 @@ $res = db_query("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM cou
         LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
         WHERE cd.course_id = $cours_id AND cd.visible = 1 ORDER BY cd.order");
 
+$tool_content .= "<div style='display: none'>";
 if ($res and mysql_num_rows($res) > 0) {
     $main_extra .= "<div class = 'course_description' style='width: 520px;'>";
-    $tool_content .= "<div style='display: none'>";
     while ($row = mysql_fetch_array($res)) {
         $desctype = intval($row['type']) - 1;
         $descicon = (!empty($row['icon'])) ? $row['icon'] : 'default.png';
@@ -109,8 +110,13 @@ if ($res and mysql_num_rows($res) > 0) {
             "</a></div>\n";
     }
     $main_extra .= "</div>";    
-    $tool_content .= "</div>";
 }
+$course_url = $urlServer . 'courses/' . $currentCourseID . '/';
+$citation_text = '<p class="panel_content">' . q($professor) . '. <i>' . q($intitule) . 
+    '</i>. ' . sprintf($langAccessed, claro_format_locale_date($dateFormatLong, strtotime('now')), $course_url) . '</p>';
+$tool_content .= 
+    "<div id='citation'><h1>" . q($langCitation) . "</h1>$citation_text</div>" .
+    "</div>";
 
 if ($is_editor) {
     $edit_link = "&nbsp;" .
@@ -340,7 +346,9 @@ if ($is_course_admin) {
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+$bar_content .= "<li><b>$langUsers</b>: $link</li>
+    <li><a href='#citation' class='inline'>" . q($langCitation) . "</a></li>
+</ul>";
 
 // display course license
 if ($course_license) {
