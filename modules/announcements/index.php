@@ -141,7 +141,7 @@ $head_content .= "<script type='text/javascript'>
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
-                'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                'responsive': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -435,6 +435,7 @@ if ($is_editor) {
                $tool_content .= "<option value='{$cu->email}'>{$cu->name} ($cu->email)</option>"; 
             } 
             $tool_content .= "</select>
+            <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
           </td>
 	</tr>
 	<tr>
@@ -481,6 +482,25 @@ if ($is_editor) {
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
 add_units_navigation(TRUE);
+load_js('select2');
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#select-recipients').select2();       
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-recipients').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-recipients').val(stringVal).trigger('change');
+        });
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-recipients').val(stringVal).trigger('change');
+        });         
+    });
 
-
+    </script>
+";
 draw($tool_content, 2, null, $head_content);

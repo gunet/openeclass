@@ -213,7 +213,11 @@ function load_js($file, $init='') {
             $file = 'taginput/jquery.tagsinput.min.js';
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
-        }
+        } elseif ($file == 'select2') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2-bootstrap.css'>";
+            $file = 'select2-3.5.1/select2.min.js';
+        }        
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";

@@ -12,19 +12,19 @@ $(document).ready( function () {
     });
 
     // Lesson accordion - jQuery ui
-    $( ".accordion" ).accordion({
-      heightStyle: "content",
-      active: false,
-      collapsible: true,
-      animate: 200
-    });
-
-    $( ".accordion-first-active" ).accordion({
-      heightStyle: "fill",
-      autoHeight: false,
-      collapsible: true,
-      animate: 200
-    });
+//    $( ".accordion" ).accordion({
+//      heightStyle: "content",
+//      active: false,
+//      collapsible: true,
+//      animate: 200
+//    });
+//
+//    $( ".accordion-first-active" ).accordion({
+//      heightStyle: "fill",
+//      autoHeight: false,
+//      collapsible: true,
+//      animate: 200
+//    });
 
     /* Dropdown menu toggle on click */
     $(document).click(function() {
@@ -71,8 +71,8 @@ $(document).ready( function () {
     }
 
     //window resize
-    $(window).resize(function() {
-        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
-    });
+//    $(window).resize(function() {
+//        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
+//    });
 
 }); 
