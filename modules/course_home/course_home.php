@@ -465,7 +465,7 @@ $tool_content .= "
 
         <div class='toolbox pull-right'>
 
-    
+
 
             <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
                 <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='bottom'>Πληροφορίες Μαθήματος</span>
