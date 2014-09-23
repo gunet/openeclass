@@ -1023,16 +1023,84 @@ if ($can_upload) {
     // available actions
     if (!$is_in_tinymce) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-        $tool_content .= "<div id='operations_container'>
-                    <ul id='opslist'>
-                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>
-                       <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
-                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
+        $tool_content .= "
+
+
+        <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
+
+
+                <a href='{$base_url}createDir=$cmdCurDirPath'
+                    class='btn-default-eclass place-at-toolbox'
+                    data-placement='down' data-toggle='tooltip' rel='tooltip'
+                    title='$langCreateDir'>
+                        <i class='fa fa-folder'></i>
+                </a>
+
+
+
+                <a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath' 
+                    class='btn-default-eclass place-at-toolbox color-green' 
+                    data-placement='down' data-toggle='tooltip' rel='tooltip'
+                    title='$langDownloadFile'>
+                        <i class='fa fa-plus-circle space-after-icon'></i>
+                        $langDownloadFile
+                </a>
+
+        </div>
+
+
+        <div class='toolbox pull-right margin-top-thin margin-bottom-thin' style='margin-right:15px;'>
+            <ul class='toolbox-submenu'>
+                ";
+
         if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
-            $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
+            $tool_content .= "
+
+                <li>
+                
+                    <a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1' 
+                        class='btn-default-eclass place-at-toolbox submenu-button'
+                        data-placement='down' data-toggle='tooltip' rel='tooltip'
+                        title='$langCommonDocs'>
+                        
+                            $langCommonDocs
+                    </a>
+                </li>
+
+                        ";
         }
-        $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>
-            </ul></div>";
+
+
+        $tool_content .= "
+
+                <li>
+                    <a href='{$base_url}showQuota=true' 
+                        class='btn-default-eclass place-at-toolbox submenu-button'
+                        data-placement='down' data-toggle='tooltip' rel='tooltip'
+                        title='$langQuotaBar'>
+                            
+                            $langQuotaBar
+                    </a>
+                </li>
+            
+                
+
+                <li>
+                    <a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true' 
+                        class='btn-default-eclass place-at-toolbox submenu-button'
+                        data-placement='down' data-toggle='tooltip' rel='tooltip'
+                        title='$langExternalFile'>
+                            
+                            $langExternalFile
+                    </a>
+                </li>
+            </ul>
+            <button class='btn-default-eclass place-at-toolbox' title=''><i class='fa fa-th-large'></i></button>
+        
+        </div>
+
+
+        ";
     }
 
     // Dialog Box
