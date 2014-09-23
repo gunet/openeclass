@@ -531,7 +531,7 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langBBBConfig']);
         array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
         array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langStats']);
+        array_push($sideMenuText, $GLOBALS['langStat']);
         array_push($sideMenuLink, "../admin/stateclass.php");
         array_push($sideMenuImg, "arrow.png");
         if (get_config('enable_common_docs')) {

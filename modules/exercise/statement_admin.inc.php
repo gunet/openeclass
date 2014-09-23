@@ -41,8 +41,9 @@ if (isset($_POST['submitQuestion'])) {
     if (empty($questionName)) {
         $msgErr = $langGiveQuestion;
     }
-
-    $objQuestion->read($_GET['modifyQuestion']);
+    if (isset($_GET['modifyQuestion'])) {
+        $objQuestion->read($_GET['modifyQuestion']);
+    }
     $objQuestion->updateTitle($questionName);
     $objQuestion->updateDescription($questionDescription);
     $objQuestion->updateType($answerType);
