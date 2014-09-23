@@ -1,11 +1,11 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0922a
+    SASS for UI Inventory of eclass v3.0 - version 0.0923a
 =============================================================
 */
 /* 
 ================================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0922a
+    SASS for eclass UI v3.0 - Global styles - version 0.0923a
 ================================================================
 */
 /* COLORS ---------------------------------------------------------------------- */
@@ -1048,6 +1048,7 @@ ul.tablelist li.list-item:hover {
   margin-bottom: 0.8em;
 }
 
+/* Extent bootstrap style - tables ---------------------------------------------------------------------------------  */
 /* DROPDOWN */
 /*
 .button.dropdown.opened{

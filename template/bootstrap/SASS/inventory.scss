@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0922a
+    SASS for UI Inventory of eclass v3.0 - version 0.0923a
 =============================================================
 */
 
@@ -923,6 +923,11 @@ ul.tablelist
 
 
 
+/* Extent bootstrap style - tables ---------------------------------------------------------------------------------  */
+.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other
+{  
+    @extend .table, .table-striped;  
+}
 
 
 
