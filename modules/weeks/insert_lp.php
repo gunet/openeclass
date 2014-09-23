@@ -72,8 +72,8 @@ function list_lps() {
                 }
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>$entry[name]</a></td>";
-            $tool_content .= "<td>$entry[comment]</td>";
+            $tool_content .= "<td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>" . q($entry[name]) . "</a></td>";
+            $tool_content .= "<td>" . q($entry[comment]) . "</td>";
             $tool_content .= "<td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
             $i++;
