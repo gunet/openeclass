@@ -429,7 +429,7 @@ if ($is_editor) {
         </tr>
         <tr>
           <td>
-            <select name='recipients[]' multiple='true' class='auth_input' id='select-recipients' style='min-width:400px;'>";
+            <select name='recipients[]' multiple='true' class='form-control' id='select-recipients'>";
             $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
             foreach($course_users as $cu){
                $tool_content .= "<option value='{$cu->email}'>{$cu->name} ($cu->email)</option>"; 

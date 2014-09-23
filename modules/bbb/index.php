@@ -53,8 +53,6 @@ if (check_guest()) {
 }
 load_js('tools.js');
 load_js('tagsinput');
-load_js('jquery');
-load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 load_js('validation.js');
 
@@ -67,17 +65,27 @@ $('input[name=start_session]').datetimepicker({
     });
 });
 </script>";
-
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-groups').multiselect({
-            selectedText: '$langJQSelectNum',
-            noneSelectedText: '$langJQNoneSelected',
-            checkAllText: '$langJQCheckAll',
-            uncheckAllText: '$langJQUncheckAll'
+load_js('select2');
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#select-groups').select2();       
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-groups').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-groups').val(stringVal).trigger('change');
         });
-});</script>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-groups').val(stringVal).trigger('change');
+        });         
+    });
+
+    </script>
+";
         
 $head_content .= "
 <script type='text/javascript'>
@@ -210,7 +218,7 @@ function new_bbb_session() {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
-    global $langΒΒΒAlertTitle,$langΒΒΒAlertMaxParticipants;
+    global $langΒΒΒAlertTitle,$langΒΒΒAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_session = strftime('%Y-%m-%d', strtotime('now'));
@@ -234,7 +242,7 @@ function new_bbb_session() {
         <tr>
         <th valign='top'>$langParticipants:</th>
         <td>
-    	<select name='groups[]' multiple='multiple' class='auth_input' id='select-groups'>";
+    	<select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
             //select all users from this course except yourself
             $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
             $res = Database::get()->queryArray($sql,$course_code);
@@ -242,7 +250,7 @@ function new_bbb_session() {
                     foreach ($res as $r) {
                         if(isset($r->id)) {$tool_content .= "<option value=" . $r->id . ">" . q($r->name) . "</option>";}
                     }
-        $tool_content .= "</select></td>";
+        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td>";
         $tool_content .="</th>
         </tr>
         <tr>
@@ -521,7 +529,7 @@ function edit_bbb_session($session_id) {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
-    global $langΒΒΒAlertTitle, $langΒΒΒAlertMaxParticipants;
+    global $langΒΒΒAlertTitle, $langΒΒΒAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
 
     
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -554,7 +562,7 @@ function edit_bbb_session($session_id) {
                     <tr>
                     <th valign='top'>$langParticipants:</th>
                     <td>
-                    <select name='groups[]' multiple='multiple' class='auth_input' id='select-groups'>";
+                    <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
                     //select all users from this course except yourself
                     $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
                     $res = Database::get()->queryArray($sql,$course_code);
@@ -575,7 +583,7 @@ function edit_bbb_session($session_id) {
                                 $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
                             }
                     }
-                    $tool_content .= "</select></td>";
+                    $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td>";
                     $tool_content .="</th>
                     </tr>	
                     <tr>
