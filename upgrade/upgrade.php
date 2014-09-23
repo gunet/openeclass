@@ -1627,6 +1627,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `start_week` DATE NOT NULL default '0000-00-00',
                         `finish_week` DATE NOT NULL default '0000-00-00',
                         `visible` TINYINT(4) NOT NULL DEFAULT 1,
+                        `public` TINYINT(4) NOT NULL DEFAULT 1,
                         PRIMARY KEY  (`id`)) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE `course_weekly_view_activities` (
