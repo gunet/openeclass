@@ -53,6 +53,7 @@ $archive_conditions = array(
     'user' => "id IN (SELECT user_id FROM course_user
                                       WHERE course_id = $course_id)",
     'course_user' => "course_id = $course_id",
+    'course_settings' => "course_id = $course_id",
     'course_department' => "course = $course_id",
     'course_module' => $sql_course,
     'hierarchy' => "id IN (SELECT department FROM course_department

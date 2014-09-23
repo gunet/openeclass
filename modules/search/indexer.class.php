@@ -128,7 +128,7 @@ class Indexer {
 
         $index_path = $webDir . '/courses/idx';
         // Give read-writing permissions only for current user and group
-        Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0664);
+        Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0600);
         // Utilize UTF-8 compatible text analyzer
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
 
@@ -150,6 +150,9 @@ class Indexer {
             $fd = fopen($htaccess, "w");
             fwrite($fd, "deny from all\n");
             fclose($fd);
+        }
+        if (!file_exists($index_path . '/index.php')) {
+            touch($index_path . '/index.php');
         }
     }
 

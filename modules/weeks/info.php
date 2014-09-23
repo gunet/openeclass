@@ -30,8 +30,6 @@ $require_help = true;
 $helpTopic = '';
 require_once '../../include/baseTheme.php';
 
-//$nameTools = $langEditUnit;
-$nameTools = "Επεξεργασία εβδομάδας";
 
 load_js('tools.js');
 
@@ -41,8 +39,9 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $weekdescr = $cu->comments;
     $week_id = $cu->id;
+    $nameTools = $langEditWeek;
 } else {
-    $nameTools = $langAddUnit;
+    $nameTools = $langAddWeek;
     $weekdescr = $weektitle = '';
 }
 

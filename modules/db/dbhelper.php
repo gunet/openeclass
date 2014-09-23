@@ -130,11 +130,17 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function fieldExistsImpl($table, $field, $db) {
-        return count(Database::get($db)->queryArray("SHOW COLUMNS from $table LIKE '$field'")) > 0;
+    	global $mysqlMainDb;
+        if ($db == null)
+            $db = $mysqlMainDb;
+        return count(Database::get()->queryArray("SHOW COLUMNS from `$db`.`$table` LIKE '$field'")) > 0;
     }
 
     protected function indexExistsImpl($table, $index_name, $db) {
-        return count(Database::get($db)->queryArray("SHOW INDEX FROM `$table` WHERE Key_name = ?s", $index_name)) > 0;
+        global $mysqlMainDb;
+        if ($db == null)
+            $db = $mysqlMainDb;
+        return count(Database::get()->queryArray("SHOW INDEX FROM `$db`.`$table` WHERE Key_name = ?s", $index_name)) > 0;
     }
 
     public function writeLockTablesImpl($function, $tables) {

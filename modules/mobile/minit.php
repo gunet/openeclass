@@ -23,12 +23,14 @@
 define('RESPONSE_OK', 'OK');
 define('RESPONSE_FAILED', 'FAILED');
 define('RESPONSE_EXPIRED', 'EXPIRED');
+define('RESPONSE_NOTENABLED', 'NOTENABLED');
 define('M_INIT', 1);
 header('Content-Type: application/xml; charset=utf-8');
 
 if (isset($require_noerrors) && $require_noerrors) {
-    if (ini_get('display_errors'))
+    if (ini_get('display_errors')) {
         ini_set('display_errors', 0);
+    }
 }
 
 if (isset($require_mlogin) && $require_mlogin) {
@@ -56,17 +58,20 @@ if (isset($require_mcourse) && $require_mcourse) {
         exit();
     } else {
         $require_current_course = true;
-        if (!isset($_GET['course']))
+        if (!isset($_GET['course'])) {
             $_GET['course'] = $_REQUEST['course'];
+        }
     }
 }
 require_once ('../../include/init.php');
 // reset the header because init also sets the header
 header('Content-Type: application/xml; charset=utf-8');
 
-
-if (isset($_REQUEST['profile']))
+if (isset($_REQUEST['profile'])) {
     $_SESSION['profile'] = $_REQUEST['profile'];
+}
 
-if (!get_config('enable_mobileapi'))
+if (!get_config('enable_mobileapi')) {
+    echo RESPONSE_NOTENABLED;
     exit();
+}

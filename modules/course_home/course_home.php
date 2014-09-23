@@ -33,7 +33,11 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
-
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
 
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/weeks/functions.php';
@@ -74,7 +78,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license
+$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date
                   FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($result->keywords));
@@ -82,6 +86,7 @@ $visible = $result->visible;
 $professor = $result->prof_names;
 $public_code = $result->public_code;
 $course_license = $result->course_license;
+$course_finishDate = $result->finish_date;
 $main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
@@ -133,6 +138,24 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+
+if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+    $rating = new Rating('fivestar', 'course', $course_id);
+    $main_content .= $rating->put($is_editor, $uid, $course_id);
+}
+
+if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+    commenting_add_js();
+    $comm = new Commenting('course', $course_id);
+    $main_content .= $comm->put($course_code, $is_editor, $uid);
+}
+
+if (is_sharing_allowed($course_id)) {
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
+    }
+}
+
 $main_content .= $main_extra;
 
 units_set_maxorder();
@@ -153,6 +176,48 @@ if ($is_editor) {
 
     if (isset($_REQUEST['edit_submit'])) {
         $main_content .= handle_unit_info_edit();
+    } elseif (isset($_REQUEST['edit_submitW'])){
+        $title = $_REQUEST['weektitle'];
+        $descr = $_REQUEST['weekdescr'];
+        
+        if(isset($_REQUEST['week_id'])){ //edit week
+            $weekid = $_REQUEST['week_id'];
+            Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
+                                    WHERE id = ?d ", $title, $descr, $weekid);
+        }else{ //new week
+            
+            //check if the final week is complete
+            $diffDate = Database::get()->querySingle("SELECT DATEDIFF(finish_week, start_week) AS diffDate, id FROM course_weekly_view WHERE course_id = ?d ORDER BY id DESC LIMIT 1", $course_id);
+            
+            if($diffDate->diffDate == 6){ //if there is a whole week add one
+                $endWeek = new DateTime($course_finishDate);
+                $endWeek->modify('+6 day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+            }else{
+                $days2add = 6-$diffDate->diffDate;
+                $endWeek = new DateTime($course_finishDate);
+                $endWeek->modify('+'.$days2add.' day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+                
+                //fill the week
+                $q = Database::get()->query("UPDATE course_weekly_view SET finish_week = ?t WHERE id = ?d ", $endWeekForDB, $diffDate->id);
+                //add the final week
+                $endWeek->modify('+1 day');
+                $startWeekForDB = $endWeek->format("Y-m-d");
+                
+                $endWeek->modify('+6 day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+                $q = Database::get()->query("INSERT INTO course_weekly_view SET
+                                  title = ?s, comments = ?s, visible = 1, start_week = ?t, finish_week = ?t,
+                                  course_id = ?d", $title, $descr, $startWeekForDB, $endWeekForDB, $course_id);
+            }
+            
+            //update the finish date at the course table
+            Database::get()->query("UPDATE course SET finish_date = ?t
+                                    WHERE id = ?d ", $endWeekForDB, $course_id);
+            
+        }
+        
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
         $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
@@ -493,7 +558,8 @@ if($viewCourse == "weekly"){
     }else{
         $visibleFlag = "";
     }
-    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";    
+    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/weeks/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";    
+    
     $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';

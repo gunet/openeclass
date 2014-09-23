@@ -25,6 +25,8 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 
+stop_output_buffering();
+
 // set default storage engine
 Database::get()->query("SET storage_engine = InnoDB");
 
@@ -132,10 +134,10 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
-touch_or_error('courses/temp/index.htm');
+touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/userimg');
-touch_or_error('courses/userimg/index.htm');
-touch_or_error($webDir . '/video/index.htm');
+touch_or_error('courses/userimg/index.php');
+touch_or_error($webDir . '/video/index.php');
 
 // ********************************************
 // upgrade config.php
@@ -646,7 +648,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     if ($handle = opendir($webDir . '/video/')) {
                         while (false !== ($entry = readdir($handle))) {
                             if (is_dir($webDir . '/video/' . $entry) && $entry != "." && $entry != "..") {
-                                touch_or_error($webDir . '/video/' . $entry . '/index.htm');
+                                touch_or_error($webDir . '/video/' . $entry . '/index.php');
                             }
                         }
                         closedir($handle);
@@ -1936,7 +1938,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                                 DROP COLUMN `course_prerequisites`,
                                                 DROP COLUMN `course_references`");
                     }
-                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
+                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
                                              CHANGE `description` `description` MEDIUMTEXT NOT NULL,
@@ -2005,7 +2007,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `actionsdailycourseindex` (`course_id`) )");
 
 
-        // ----------------------------------
+        // drop stale full text indexes
+        Database::get()->query("ALTER TABLE document DROP INDEX document");        
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_title");
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_comments");
+        Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
+        
+        // // ----------------------------------
         // creation of indexes
         // ----------------------------------
         echo "<p>$langIndexCreation</p><br />";
@@ -2179,16 +2187,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             if (version_compare($oldversion, '2.4', '<')) {
                 convert_description_to_units($row->code, $row->id);
                 upgrade_course_index_php($row->code);
-                upgrade_course_2_4($row->code, $row->lang, "($i / $total)");
+                upgrade_course_2_4($row->code, $row->id, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.5', '<')) {
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '2.10', '<')) {
-                upgrade_course_2_10($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.8', '<')) {
+                upgrade_course_2_8($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '3.0', '')) {
-                upgrade_course_3_0($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.9', '<')) {
+                upgrade_course_2_9($row->code, $row->lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.10', '<')) {
+                upgrade_course_2_10($row->code, $row->id, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.11', '<')) {
+                upgrade_course_2_11($row->code, "($i / $total)");
+            }
+            if (version_compare($oldversion, '3.0', '<')) {
+                upgrade_course_3_0($row->code, $row->id, "($i / $total)");
             }
             echo "</p>";
             $i++;
@@ -2201,7 +2218,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
-
+            Database::get()->query("USE `$mysqlMainDb`");
+            
             Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
                 SELECT
                 `user_id`,
