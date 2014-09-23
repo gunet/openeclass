@@ -146,14 +146,40 @@
 		        			</div>
 	                    </div>
 
-                        <!-- BEGIN pageTitleBlock -->
+                        
                         <div class="row title-row margin-top">
+
                             <div class="col-md-9">
-                                <h1 class='page-title'>{%SECTION_TITLE%}</h1>
-                                <!-- BEGIN professorBlock -->
-                                <h5 class='page-title'>{%PROFESSOR%}</h5>
-                                <!-- END professorBlock -->
+
+
+                            	<!-- BEGIN pageTitleBlock -->
+                            	<div class="row">
+                            		<div class="col-md-12">
+
+		                                <h1 class='page-title'>{%SECTION_TITLE%}</h1>
+		                                <!-- BEGIN professorBlock -->
+		                                <h5 class='page-subtitle-name'>{%PROFESSOR%}</h5>
+		                                <!-- END professorBlock -->
+
+		                            </div>
+		                        </div>
+		                        <!-- END pageTitleBlock -->
+
+
+								<!-- BEGIN toolTitleBlock -->
+			                    <div class='row'>
+			                    	<div class='col-md-12'>
+			                    		<h3 class='page-subtitle margin-top-thin margin-bottom-thin'>
+			                    			{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}
+			                    			<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
+			                    		</h3>
+			                    	</div>
+			                    </div>
+			                    <!-- END toolTitleBlock -->
+
                             </div>
+
+
                             <div class='col-md-3'>
                             	<div class='toolbox pull-right'>
                             		<div class='btn-group place-at-toolbox'>
@@ -167,21 +193,14 @@
                                             <li><a href='#'>Εκπαιδευόμενος</a></li>
                                             
                                         </ul>
-                                </div>
+                                	</div>
                             	</div>
                             </div>
-                        </div>
-                        <!-- END pageTitleBlock -->
 
-	                    <!-- BEGIN toolTitleBlock -->
-	                    <div class='row title-row margin-top'>
-	                    	<div class='col-md-10'>
-	                    		<h1 class='page-title'>
-	                    			{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
-	                    		</h1>
-	                    	</div>
-	                    </div>
-	                    <!-- END toolTitleBlock -->
+
+                        </div>
+                        
+
 
 	                    <!-- BEGIN TOOL CONTENT -->
 	                    {%EXTRA_MSG%}
