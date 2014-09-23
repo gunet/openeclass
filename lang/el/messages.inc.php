@@ -294,7 +294,8 @@ $langCourseWeeklyFormatNotice = "Προσοχή δεν μπορείτε να ε�
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
-$langEditWeek = 'Εεξεργασία εβδομάδας';
+$langEditWeek = 'Επεξεργασία εβδομάδας';
+$langWeekTitle = "Τίτλος εβδομάδας";
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;

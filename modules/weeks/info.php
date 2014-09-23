@@ -57,7 +57,7 @@ if (isset($week_id)) {
 $tool_content .= "
     <table class='tbl' width='100%'>
     <tr>
-      <th width='150'>Τίτλος εβδομάδας ($langOptionalCfgSetting):</th>
+      <th width='150'>$langWeekTitle ($langOptionalCfgSetting):</th>
     </tr>
     <tr>
       <td><input type='text' name='weektitle' size='50' maxlength='255' $weektitle ></td>
