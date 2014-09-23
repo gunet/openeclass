@@ -475,7 +475,12 @@ if ($can_upload) {
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
         $createDir = q($_GET['createDir']);
-        $dialogBox .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+        $dialogBox .= "
+
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='panel color-add-item'>
+            <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 $group_hidden_input
                 <fieldset>
                         <input type='hidden' name='newDirPath' value='$createDir' />
@@ -487,7 +492,10 @@ if ($can_upload) {
                         </tr>
                         </table>
                 </fieldset>
-                </form>
+            </form>
+        </div>
+    </div>
+</div>
                 <br />\n";
     }
 
@@ -1025,7 +1033,8 @@ if ($can_upload) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
         $tool_content .= "
 
-
+<div class='row'>
+    <div class='col-md-12'>
         <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
 
 
@@ -1098,7 +1107,8 @@ if ($can_upload) {
             <button class='btn-default-eclass place-at-toolbox' title=''><i class='fa fa-th-large'></i></button>
         
         </div>
-
+    </div>
+</div>
 
         ";
     }
