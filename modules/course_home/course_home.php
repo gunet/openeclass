@@ -33,7 +33,11 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
-
+require_once 'include/course_settings.php';
+require_once 'modules/sharing/sharing.php';
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
 
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/weeks/functions.php';
@@ -135,6 +139,24 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
+
+if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+    $rating = new Rating('fivestar', 'course', $course_id);
+    $main_content .= $rating->put($is_editor, $uid, $course_id);
+}
+
+if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+    commenting_add_js();
+    $comm = new Commenting('course', $course_id);
+    $main_content .= $comm->put($course_code, $is_editor, $uid);
+}
+
+if (is_sharing_allowed($course_id)) {
+    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
+        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
+    }
+}
+
 $main_content .= $main_extra;
 
 units_set_maxorder();

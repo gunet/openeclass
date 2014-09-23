@@ -643,17 +643,17 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
 
     // create config, courses directories etc.
     mkdir_try('config');
-    touch_try('config/index.htm');
+    touch_try('config/index.php');
     mkdir_try('courses');
-    touch_try('courses/index.htm');
+    touch_try('courses/index.php');
     mkdir_try('courses/temp');
-    touch_try('courses/temp/index.htm');
+    touch_try('courses/temp/index.php');
     mkdir_try('courses/userimg');
-    touch_try('courses/userimg/index.htm');
+    touch_try('courses/userimg/index.php');
     mkdir_try('courses/commondocs');
-    touch_try('courses/commondocs/index.htm');
+    touch_try('courses/commondocs/index.php');
     mkdir_try('video');
-    touch_try('video/index.htm');
+    touch_try('video/index.php');
 
     if ($configErrorExists) {
         $tool_content .= implode("<br />", $errorContent);

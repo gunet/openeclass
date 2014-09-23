@@ -35,7 +35,7 @@ load_js('tools.js');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
-    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_weekly_view WHERE id = ?d",$id);    
+    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_weekly_view WHERE id = ?d  AND course_id = ?d",$id,$course_id);    
     $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $weekdescr = $cu->comments;
     $week_id = $cu->id;

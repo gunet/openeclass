@@ -237,7 +237,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     return "
         <tr$class_vis>
           <td width='1'>$link" . icon($image, '') . "</a></td>
-          <td align='left'>$link$title</a>$comment</td>" .
+          <td align='left'>$link" . q($title) . "</a>$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }

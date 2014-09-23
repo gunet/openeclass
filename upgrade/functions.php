@@ -1128,10 +1128,17 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
                                          'HTML_PAGE') AND
                       image <> 'external_link'");
 
-
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_GRADEBOOK.", 0, $course_id)");
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_ATTENDANCE.", 0, $course_id)");
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_BLOG.", 0, $course_id)");    
+    
+    
     if ($q1 and $q2) { // if everything ok drop course db
         echo $langUpgradeCourseDone;
-        // Do not drop database yet so we can run upgrade many times
+        // finally drop database
         //Database::get()->query("DROP DATABASE $code");
     }
 
