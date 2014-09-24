@@ -42,7 +42,36 @@ $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 load_js('jquery');
 load_js('jquery-ui');
 load_js('tools.js');
+load_js('datatables');
+load_js('datatables_filtering_delay');
 load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#log_results_table').DataTable ({                                
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,                
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '".$langNoResult."',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '".$langSearch."',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            }).fnSetFilteringDelay(1000);
+            $('.dataTables_filter input').attr('placeholder', '$langDetail');
+        });
+        </script>";
+
 
 $head_content .= '<script type="text/javascript">
         var platform_actions = ["-2", "' . LOG_PROFILE . '", "' . LOG_CREATE_COURSE . '", "' . LOG_DELETE_COURSE . '" , "' . LOG_MODIFY_COURSE . '"];
