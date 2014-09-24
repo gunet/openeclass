@@ -24,6 +24,7 @@
 // Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -96,7 +97,7 @@ $(document).ready(function() {
     // Search Engine checkboxes
     $("#confirmIndexDialog").dialog({
         autoOpen: false,
-        height: 300,
+        height: 400,
         width: 600,
         modal: true,
         dialogClass: "no-close",
@@ -137,6 +138,31 @@ $(document).ready(function() {
     $('#index_enable').change(function(event) {
         if ($('#index_enable').is(":checked")) {
             $("#confirmIndexDialog").dialog("open");
+        }
+    });
+        
+    // Mobile API Confirmations    
+    $("#confirmMobileAPIDialog").dialog({
+        autoOpen: false,
+        height: 200,
+        width: 600,
+        modal: true,
+        dialogClass: "no-close",
+        closeOnEscape: false,
+        buttons: {
+            "$langCancel": function() {
+                $('#mobileapi_enable').prop('checked', false);
+                $(this).dialog("close");
+            },
+            "$langOk": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+        
+    $('#mobileapi_enable').change(function(event) {
+        if ($('#mobileapi_enable').is(":checked")) {
+            $("#confirmMobileAPIDialog").dialog("open");
         }
     });
 
@@ -505,6 +531,7 @@ else {
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
+    $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
     $tool_content .= "<fieldset>
         
@@ -546,7 +573,7 @@ else {
                 <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
         </tr>        
         <tr>		
-                <td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
+                <td><input $id_enable_mobileapi type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
         </tr>
         <tr>
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
@@ -640,9 +667,12 @@ else {
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
     
-    // Modal dialog
+    // Modal dialogs
     $tool_content .= "<div id='confirmIndexDialog' title='" . $langConfirmEnableIndexTitle . "'>
             <p>" . $langConfirmEnableIndex . "</p>
+        </div>";
+    $tool_content .= "<div id='confirmMobileAPIDialog' title='" . $langConfirmEnableMobileAPITitle . "'>
+            <p>" . $langConfirmEnableMobileAPI . "</p>
         </div>";
     
     // After restored values have been inserted into form then bring back

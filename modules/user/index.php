@@ -190,16 +190,16 @@ $limit = isset($_REQUEST['limit'])? intval($_REQUEST['limit']): 0;
 
 $nameTools = $langAdminUsers;
 load_js('tools.js');
-load_js('jquery');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#users_table{$course_id}').DataTable ({
+           var oTable = $('#users_table{$course_id}').dataTable ({
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
+                'sScrollX': true,
                 'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',                   
                 'aLengthMenu': [

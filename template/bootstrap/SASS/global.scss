@@ -1,6 +1,6 @@
 /* 
 ================================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0919c
+    SASS for eclass UI v3.0 - Global styles - version 0.0923a
 ================================================================
 */
 
@@ -77,6 +77,15 @@ $font-icon: 'FontAwesome';
 
 
 
+.place-at-toolbox
+{
+  margin: 0em 0.2em 0.65em 0.2em !important;
+}
+
+
+
+
+
 
 
 
@@ -149,6 +158,26 @@ $font-icon: 'FontAwesome';
   -ms-transform-origin: $value;
   transform-origin: $value;
 }
+
+
+
+
+
+
+
+
+
+
+
+.color-add-item
+{
+  @include box-shadow(0 0px 7px $color-green !important);
+}
+
+
+
+
+
 
 
 

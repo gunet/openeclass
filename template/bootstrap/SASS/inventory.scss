@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0919c
+    SASS for UI Inventory of eclass v3.0 - version 0.0923a
 =============================================================
 */
 
@@ -100,10 +100,7 @@ hr
   font-size:1em;
 }
 
-h3
-{
-  font-weight: 600;
-}
+
 
 img
 {
@@ -117,6 +114,26 @@ img
   color: #888888;
   font-weight: 400;
 }
+
+.page-subtitle
+{
+  color:#555555;
+  font-size:22px;
+}
+
+.page-subtitle-name
+{
+  color:#555555;
+  font-size:18px;
+}
+
+
+/* Extend bootstrap style - forms */
+.form-control
+{
+  @include border-radius(2px 2px 2px 2px !important);
+}
+
 
 
 
@@ -146,13 +163,18 @@ img
   @include box-shadow(0 0px 7px #DDDDDD);
 }
 
+.panel .color-add-item
+{
+  @include box-shadow(0 0px 7px $color-green !important);
+}
+
 
 
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
 .toolbox
 {
-  padding: 0.65em;
+  padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
   background: $color-toolbox;
   border-top: 1px solid rgb(216, 216, 216);
@@ -914,6 +936,40 @@ ul.tablelist
 
 
 
+/* LABEL -------------------------------------------------------------------------------- */
+/*.label
+{
+  font-size: 0.75em !important;
+  display: inline-block;
+  margin: 0 0.5em 0.8em 0;
+  position: relative;
+
+  border: 1px solid rgb(231, 231, 231);
+  padding: .5em;
+  border-radius: 2px;
+
+  cursor: default;
+
+  color:#A7A7A7;
+
+  @include transition(background 100ms linear);
+
+  > span{        
+    font-weight: 600;
+    color: #808080;
+  }
+
+  &:hover{
+    background: #e7e7e7;
+    color: #3D3D3D;
+  }
+}*/
+
+
+
+
+
+
 
 
 
@@ -923,7 +979,7 @@ ul.tablelist
 
 
 /* DROPDOWN */
-
+/*
 .button.dropdown.opened{
 
   background: $color-hover!important;
@@ -1002,12 +1058,16 @@ ul.dropdown-menu li a{
   text-decoration: none;
   color: white;
   background-color: #4da1e4;
-}
+}*/
 
 
 
-/* PAGINATION */
 
+
+
+
+/* PAGINATION ------------------------------------------------------------------- */
+/*
 .my-pager
 {
   margin:1em 0em;
@@ -1043,14 +1103,14 @@ ul.dropdown-menu li a{
 .my-pager .items > span:hover
 {
   color:$color-hover;
-}
+}*/
 
 
 
 
 
-/* INPUT TEXTAREA SELECT */
-
+/* INPUT TEXTAREA SELECT ----------------------------------------------------------------- */
+/*
 input,
 textarea{
   width: 100%;
@@ -1084,11 +1144,16 @@ select:focus{
 
 textarea{
   resize: vertical;
-}
+}*/
 
 
-/* TAG & LABEL */
 
+
+
+
+
+/* TAG & LABEL ------------------------------------------------------------------- */
+/*
 .tag {
   display: inline;
   padding: 0.4em;
@@ -1115,33 +1180,7 @@ textarea{
   }  
 }
 
-.label
-{
-  font-size: 0.75em;
-  display: inline-block;
-  margin: 0 0.5em 0.8em 0;
-  position: relative;
-
-  border: 1px solid rgb(231, 231, 231);
-  padding: .5em;
-  border-radius: 2px;
-
-  cursor: default;
-
-  color:#A7A7A7;
-
-  @include transition(background 100ms linear);
-
-  > span{        
-    font-weight: 600;
-    color: #808080;
-  }
-
-  &:hover{
-    background: #e7e7e7;
-    color: #3D3D3D;
-  }
-}
+}*/
 
 
 
@@ -1157,8 +1196,8 @@ textarea{
 
 
 
-/* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ */
-
+/* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ -------------------------------------------*/
+/*
 .md-modal.color-dark .md-content{
   background: #2E3033!important;
 }
@@ -1196,4 +1235,4 @@ textarea{
 
 .modal-overlay-bg-dark{
   background: rgba(35, 35, 35, 0.8)!important;
-}
+}*/

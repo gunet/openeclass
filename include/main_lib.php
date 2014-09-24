@@ -201,7 +201,10 @@ function load_js($file, $init='') {
                 $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
-            $file = 'datatables/media/js/jquery.dataTables.min.js';                
+            $file = 'datatables/media/js/jquery.dataTables.min.js';     
+        } elseif ($file == 'datatables_bootstrap') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/dataTables.bootstrap.css' />";            
+            $file = 'datatables/media/js/dataTables.bootstrap.js';                
         } elseif ($file == 'datatables_filtering_delay') {
                 $file = 'datatables/media/js/jquery.dataTables_delay.js';
         } elseif ($file == 'datatables_reload') {
@@ -210,7 +213,11 @@ function load_js($file, $init='') {
             $file = 'taginput/jquery.tagsinput.min.js';
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
-        }
+        } elseif ($file == 'select2') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2-bootstrap.css'>";
+            $file = 'select2-3.5.1/select2.min.js';
+        }        
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
@@ -1421,6 +1428,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {

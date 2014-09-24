@@ -79,11 +79,7 @@ final class Database {
      * @param Database $dbase The name of the database
      */
     public static function forget($dbase) {
-        $dbhandler = self::$dbs[$dbase];
-        if (!is_null($dbhandler)) {
-            $dbhandler->__destruct();
-            unset(self::$dbs[$dbase]);
-        }
+        unset(self::$dbs[$dbase]);
     }
 
     /**
@@ -358,7 +354,7 @@ final class Database {
         /* Bind values - with type safety and '?' notation  */
         for ($i = 0; $i < $variable_size; $i++) {
             if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
-                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $stm->errorInfo(), $statement, $init_time, $backtrace_info, false);
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter'$variables[$i]' with type $variable_types[$i] at location #$i", $stm->errorInfo(), $statement, $init_time, $backtrace_info, false);
         }
 
         /* Execute statement */
@@ -441,10 +437,10 @@ final class Database {
         if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
         if ($pdo_error)
-            $pdo_error_text = " with error: \"" . $pdo_error[2] . "\" (SQLSTATE=" . $pdo_error[1] . " ERROR=" . $pdo_error[0] . ")";
+            $pdo_error_text = ":\"" . $pdo_error[2] . "\", sqlstate:\"" . $pdo_error[1] . "\", errornum:\"" . $pdo_error[0] . "\"";
         else
             $pdo_error_text = "";
-        Database::dbg("Error: " . $error_msg . $pdo_error_text, $statement, $init_time, $backtrace_info);
+        Database::dbg($error_msg . $pdo_error_text, $statement, $init_time, $backtrace_info);
         return null;
     }
 
@@ -452,11 +448,8 @@ final class Database {
      * Private function to call master Debug object
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed=" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
-    }
-
-    public function __destruct() {
-        $this->dbh = null;
+        $statement_pure = str_replace(array("\n", "\r", "\t"), array("", "", ""), $statement);
+        Debug::message($message . ", \tstatement:\"$statement_pure\", \telapsed:" . (microtime() - $init_time), $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }

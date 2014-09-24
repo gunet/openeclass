@@ -67,7 +67,7 @@ function list_assignments() {
                 $rowClass = "class='even'";
             }
             $tool_content .= "<tr $rowClass>" .
-                    "<td>&laquo; $row->title $description</td>" .
+                    "<td>&laquo; " . q($row->title) . " $description</td>" .
                     "<td class='center'>$visible</td>" .
                     "<td class='center'>$row->submission_date</td>" .
                     "<td class='center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .

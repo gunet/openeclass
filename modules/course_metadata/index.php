@@ -103,7 +103,7 @@ $head_content .= <<<EOF
         
         $( "#tabs" ).tabs();
         
-        $( "#multiselect" ).multiselect();
+        $( "#multiselect" ).select2();
         
         $( "#course_coursePhoto_delete" ).on('click', function() {
             $( "#course_coursePhoto_image" ).remove();

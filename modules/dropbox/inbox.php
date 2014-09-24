@@ -125,16 +125,26 @@ if (isset($_GET['mid'])) {
                </form>
                <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
-             $out .= "<script type='text/javascript' src='{$urlAppend}js/jquery.multiselect.min.js'></script>\n";
-             $out .= "<script type='text/javascript'>$(document).ready(function () {
-                                  $('#select-recipients').multiselect({
-                                    selectedText: '$langJQSelectNum',
-                                    noneSelectedText: '$langJQNoneSelected',
-                                    checkAllText: '$langJQCheckAll',
-                                    uncheckAllText: '$langJQUncheckAll'
-                                  });
-                                });</script>
-            <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+             $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
+                 <script type='text/javascript'>
+                        $(document).ready(function () {
+                            $('#select-recipients').select2();       
+                            $('#selectAll').click(function(e) {
+                                e.preventDefault();
+                                var stringVal = [];
+                                $('#select-recipients').find('option').each(function(){
+                                    stringVal.push($(this).val());
+                                });
+                                $('#select-recipients').val(stringVal).trigger('change');
+                            });
+                            $('#removeAll').click(function(e) {
+                                e.preventDefault();
+                                var stringVal = [];
+                                $('#select-recipients').val(stringVal).trigger('change');
+                            });         
+                        });
+
+                        </script>";
         }
         /******End of Reply Form ********/
         

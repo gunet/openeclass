@@ -102,13 +102,13 @@ $tool_content = "
         <div class ='col-md-12'>
                 <div class='toolbox pull-right'>
                         <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
-                                <button class='btn-default-eclass' title='' >
+                                <button class='btn-default-eclass place-at-toolbox' title='' >
                                         <i class='fa fa-life-ring'></i>
                                 </button>
                         </a> 
                 
-                        <button class='btn-default-eclass'>{%HELP_LINK_ICON%}</button>
-                        <button class='btn-default-eclass'>{%RSS_LINK_ICON%}</button>
+                        <button class='btn-default-eclass place-at-toolbox'>{%HELP_LINK_ICON%}</button>
+                        <button class='btn-default-eclass place-at-toolbox'>{%RSS_LINK_ICON%}</button>
                         <small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
                 </div>
         </div>    
@@ -181,7 +181,36 @@ $tool_content = "
                             <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle' alt='Circular Image'></div>
                     </div>
                     <div class='col-sm-9'>
-                        <div> <canvas id='canvas' height='150' width='600'></canvas></div>
+                        <div> 
+                                Test area:
+                                <div class='btn-group'>
+                                        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+                                            Πληροφορίες Μαθήματος
+                                            <span class='caret'></span>
+                                        </button>
+
+                                        
+                                        
+                                        
+
+                                        <ul class='dropdown-menu' role='menu'>
+                                            <li><a href='#''>Επιλογή 1</a></li>
+                                            <li><a href='#''>Επιλογή 2/a></li>
+                                            <li><a href='#''>Επιλογή 3</a></li>
+                                            <li class='divider'></li>
+                                            <li><a href='#''>Επιλογή 4</a></li>
+                                        </ul>
+                                </div>
+
+
+                                <div class='tbl'>
+                                    TEST
+                                </div>
+
+
+                                <canvas id='canvas' height='150' width='600'></canvas>
+
+                        </div>
                     </div> 
                 </div>
             </div>

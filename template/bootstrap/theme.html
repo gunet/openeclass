@@ -7,6 +7,8 @@
 
     <title>{%PAGE_TITLE%}</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<!-- jQuery -->
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
     
@@ -16,16 +18,16 @@
     <link rel="stylesheet" href="{%URL_PATH%}js/jquery-ui-css/lightness/jquery-ui.1.11.1.min.css">
 
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{%template_base%}/CSS/bootstrap.css">
 
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-theme.min.css">
 
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="{%template_base%}/js/bootstrap.min.js"></script>
 
 	<!-- Font Awesome - A font of icons -->
-	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
 	<!-- Our javascript -->
     <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
@@ -144,26 +146,61 @@
 		        			</div>
 	                    </div>
 
-                        <!-- BEGIN pageTitleBlock -->
-                        <div class='row title-row margin-top'>
-                            <div class='col-md-10'>
-                                <h1 class='page-title'>{%SECTION_TITLE%}</h1>
-                                <!-- BEGIN professorBlock -->
-                                <h5 class='page-title'>{%PROFESSOR%}</h5>
-                                <!-- END professorBlock -->
-                            </div>
-                        </div>
-                        <!-- END pageTitleBlock -->
+                        
+                        <div class="row title-row margin-top">
 
-	                    <!-- BEGIN toolTitleBlock -->
-	                    <div class="row title-row margin-top">
-	                    	<div class="col-md-10">
-	                    		<h1 class='page-title'>
-	                    			{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
-	                    		</h1>
-	                    	</div>
-	                    </div>
-	                    <!-- END toolTitleBlock -->
+                            <div class="col-md-9">
+
+
+                            	<!-- BEGIN pageTitleBlock -->
+                            	<div class="row">
+                            		<div class="col-md-12">
+
+		                                <h1 class='page-title'>{%SECTION_TITLE%}</h1>
+		                                <!-- BEGIN professorBlock -->
+		                                <h5 class='page-subtitle-name'>{%PROFESSOR%}</h5>
+		                                <!-- END professorBlock -->
+
+		                            </div>
+		                        </div>
+		                        <!-- END pageTitleBlock -->
+
+
+								<!-- BEGIN toolTitleBlock -->
+			                    <div class='row'>
+			                    	<div class='col-md-12'>
+			                    		<h3 class='page-subtitle margin-top-thin margin-bottom-thin'>
+			                    			{%TOOL_NAME%}{%HELP_LINK_ICON%}{%RSS_LINK_ICON%}
+			                    			<small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
+			                    		</h3>
+			                    	</div>
+			                    </div>
+			                    <!-- END toolTitleBlock -->
+
+                            </div>
+
+
+                            <div class='col-md-3'>
+                            	<div class='toolbox pull-right'>
+                            		<div class='btn-group place-at-toolbox'>
+                                        <button type='button' class='btn-default-eclass dropdown-toggle' data-toggle='dropdown'>
+                                            Εμφάνιση σαν
+                                            <span class='caret'></span>
+                                        </button>
+
+                                        <ul class='dropdown-menu' role='menu'>
+                                            <li><a href='#'>Καθηγητής</a></li>
+                                            <li><a href='#'>Εκπαιδευόμενος</a></li>
+                                            
+                                        </ul>
+                                	</div>
+                            	</div>
+                            </div>
+
+
+                        </div>
+                        
+
 
 	                    <!-- BEGIN TOOL CONTENT -->
 	                    {%EXTRA_MSG%}

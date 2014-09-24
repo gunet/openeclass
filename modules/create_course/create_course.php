@@ -117,8 +117,10 @@ $head_content .= <<<hContent
             onSelect: function (date) {
                 var date2 = $('input[name=start_date]').datepicker('getDate');
                 if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                    date2.setDate(date2.getDate() + 1);
+                    date2.setDate(date2.getDate() + 7);
                     $('input[name=finish_date]').datepicker('setDate', date2);
+                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+                }else{
                     $('input[name=finish_date]').datepicker('option', 'minDate', date2);
                 }
             }
@@ -135,18 +137,33 @@ $head_content .= <<<hContent
             }
         }
         });
-
-        $('#weekly_info').hide();
-
-        $('#view_type').change(function(){
-            if($('#view_type option:selected').val() == 'weekly' && ($('input[name=start_date]').val() == '' || $('input[name=start_date]').val() == '0000-00-00') ){
-                $('#weekly_info').show();
-            }else{
-                $('#weekly_info').hide();
+        
+        if($('input[name=start_date]').datepicker("getDate") === null){
+            $('input[name=start_date]').datepicker("setDate", new Date());
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('input[name=finish_date]').datepicker('setDate', date2);
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }else{
+            var date2 = $('input[name=finish_date]').datepicker('getDate');
+            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+        }
+        
+        if($('input[name=finish_date]').datepicker("getDate") === null){
+            $('input[name=finish_date]').datepicker("setDate", 7);
+        }
+        
+        $('#weeklyDates').hide();
+        
+        $('input[name=view_type]').change(function () {
+            if ($('#weekly').is(":checked")) {
+                $('#weeklyDates').show();
+            } else {
+                $('#weeklyDates').hide();
             }
-
-        });
-
+        }).change();
+        
+        
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
@@ -242,24 +259,13 @@ if (!isset($_POST['create_course'])) {
 
         $tool_content .= "
         <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
-        <tr>            
-            <td>
-                <select name='view_type' id='view_type'>
-                    <option value='units'";
-                    $tool_content .=">$langCourseUnits</option>
-                    <option value='weekly'";
-                    $tool_content .=">$langWeekly</option>
-                </select>
-                
-                <div class='info' id='weekly_info'>$langCourseWeeklyFormatInfo</div>
-            </td>
-        </tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='units' selected>&nbsp;$langCourseUnits</td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly'>&nbsp;$langWeekly</td></tr>
-        <tr>            
-            <th>$langStartDate</th><th>$langDuration</th></tr>
-                <tr><td colspan='2'><input class='dateInForm' type='text' name='start_date' value=''>
-                    $langDuration<input class='dateInForm' type='text' name='finish_date' value=''></td>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='units' checked id='units'><label for='units'>&nbsp;$langCourseUnits</label></td></tr>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly' id='weekly'><label for='weekly'>&nbsp;$langWeekly</label></td></tr>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='simple' id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
+        
+        <tr id='weeklyDates'>
+            <td colspan=4>$langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly='true'>
+            $langDuration <input class='dateInForm' type='text' name='finish_date' value='' readonly='true'></td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 

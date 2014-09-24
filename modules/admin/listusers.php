@@ -308,7 +308,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $icon_content = icon('fa-edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
                                 icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
                                 icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                                icon('fa-pie-chart', $langActions, "userlogs.php?u=$logs->id");
+                                icon('fa-list-alt', $langActions, "userlogs.php?u=$logs->id");
             if (!isDepartmentAdmin()) {
                     $icon_content .= '&nbsp;' . icon('fa-key', $changetip, 'change_user.php?username=' . urlencode($logs->username));
             }
@@ -332,7 +332,7 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#search_results_table').DataTable ({
+            $('#search_results_table').dataTable ({
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',

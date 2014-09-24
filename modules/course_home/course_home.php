@@ -77,7 +77,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license
+$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date, view_type
                   FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($result->keywords));
@@ -116,7 +116,7 @@ if ($is_editor) {
     $edit_link = '';
 }
 
-$main_content .= "\n      <div class='course_info'>";
+$main_content .= "<div class='course_info'>";
 $desccomm = Database::get()->querySingle("SELECT comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
                         AND res_id = -1 ORDER BY `order`", $course_id);
@@ -154,7 +154,6 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 
-
 $main_content .= $main_extra;
 
 units_set_maxorder();
@@ -175,6 +174,48 @@ if ($is_editor) {
 
     if (isset($_REQUEST['edit_submit'])) {
         $main_content .= handle_unit_info_edit();
+    } elseif (isset($_REQUEST['edit_submitW'])){
+        $title = $_REQUEST['weektitle'];
+        $descr = $_REQUEST['weekdescr'];
+
+        if (isset($_REQUEST['week_id'])) { //edit week
+            $weekid = $_REQUEST['week_id'];
+            Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
+                                    WHERE id = ?d ", $title, $descr, $weekid);
+        } else { //new week
+            
+            //check if the final week is complete
+            $diffDate = Database::get()->querySingle("SELECT DATEDIFF(finish_week, start_week) AS diffDate, id FROM course_weekly_view WHERE course_id = ?d ORDER BY id DESC LIMIT 1", $course_id);
+            
+            if ($diffDate->diffDate == 6) { //if there is a whole week add one
+                $endWeek = new DateTime($course_finishDate);
+                $endWeek->modify('+6 day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+            } else {
+                $days2add = 6-$diffDate->diffDate;
+                $endWeek = new DateTime($course_finishDate);
+                $endWeek->modify('+'.$days2add.' day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+                
+                //fill the week
+                $q = Database::get()->query("UPDATE course_weekly_view SET finish_week = ?t WHERE id = ?d ", $endWeekForDB, $diffDate->id);
+                //add the final week
+                $endWeek->modify('+1 day');
+                $startWeekForDB = $endWeek->format("Y-m-d");
+                
+                $endWeek->modify('+6 day');
+                $endWeekForDB = $endWeek->format("Y-m-d");
+                $q = Database::get()->query("INSERT INTO course_weekly_view SET
+                                  title = ?s, comments = ?s, visible = 1, start_week = ?t, finish_week = ?t,
+                                  course_id = ?d", $title, $descr, $startWeekForDB, $endWeekForDB, $course_id);
+            }
+            
+            //update the finish date at the course table
+            Database::get()->query("UPDATE course SET finish_date = ?t
+                                    WHERE id = ?d ", $endWeekForDB, $course_id);
+            
+        }
+
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
         $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
@@ -206,10 +247,17 @@ if ($is_editor) {
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['access'])) {
-        $id = intval($_REQUEST['access']);
-        $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
-        $newaccess = ($access == '1') ? '0' : '1';
-        Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        if ($course_viewType == "weekly") {
+            $id = intval($_REQUEST['access']);
+            $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
+            $newaccess = ($access->public == '1') ? '0' : '1';
+            Database::get()->query("UPDATE course_weekly_view SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        } else {
+            $id = intval($_REQUEST['access']);
+            $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
+            $newaccess = ($access->public == '1') ? '0' : '1';
+            Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
+        }
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
         $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
@@ -258,6 +306,7 @@ $courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish
 $viewCourse = $courseInfo->view_type;
 $start_date = $courseInfo->start_date;
 $finish_date = $courseInfo->finish_date;
+$course_viewType = $result->view_type;
 
 // add course units
 if ($is_editor) {
@@ -304,40 +353,50 @@ if ($total_cunits > 0) {
                                         </div>";
         if ($is_editor) {                                                
             $cunits_content .= "<div class='item-side'>
-                                            <div class='item-options'>
-                                                <span class='option-button'><i class='fa fa-gear'></i></span>
-                                                <ul>
-                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'><span><i class='fa fa-eye'></i></span></a>
-                                                    </li>
-                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
-                                                        <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'><span><i class='fa fa-edit'></i></span></a>
-                                                    </li>";
+                                            <div class='opt-btn-wrapper'>
+                                                <div class='opt-btn-more-wrapper'>
+                                                    <div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
+                                                            <i class='fa fa-eye '></i>
+                                                        </a>
+                                                    </div>                     
+                                                    <div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
+                                                            <i class='fa fa-edit '></i>
+
+                                                        </a>
+                                                    </div>";
             if ($visible == COURSE_OPEN) {
                 $icon_access = ($access == 1) ? '<i class="fa fa-unlock"></i>' : '<i class="fa fa-lock"></i>';
-                                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'><span>$icon_access</span></a>
-                                                    </li>";
+                                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'><a href='$_SERVER[SCRIPT_NAME]?access=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
+                                                        $icon_access
+                                                    </a></div>";
             }
             if ($cu->id != $last_id) {
-                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'><span><i class='fa fa-arrow-down'></i></span></a>
-                                                    </li>";
+                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
+                                            <i class='fa fa-arrow-down'></i>
+                                        </a>
+                                    </div>";
             }
             if ($count_index != 1) {        
-                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'><span><i class='fa fa-arrow-up'></i></span></a>
-                                                    </li>";
+                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
+                                                            <i class='fa fa-arrow-up'></i>
+                                                        </a>
+                                                    </div>";
             }
-            $cunits_content .= "<li rel='tooltip' delete-action' data-toggle='tooltip' data-placement='bottom' title='$langDelete'>
+            $cunits_content .= "<div class='opt-btn-more-tool tool-btn delete'>
                                     <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
-                                        <a class='btn btn-xs' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
+                                        <a href='#' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
                                             <i class='fa fa-times'></i>
                                         </a>    
-                                    </form>
-                                </li>                                            
-                            </ul>      
-                        </div>
+                                </form>
+                                </div> 
+                            </div>    
+                            <div class='opt-btn tool-btn'>
+                                <i class='fa fa-gear '></i>
+                            </div>
                     </div>";
         }
         $cunits_content .= "</li>
@@ -462,11 +521,15 @@ if (!empty($rec_mail)) {
 $tool_content .= "
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
+
         <div class='toolbox pull-right'>
 
-            <div type='button' class='btn-default-eclass dropdown open-on-hover'>
+
+
+            <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
                 <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='bottom'>Πληροφορίες Μαθήματος</span>
                 <span class='fa fa-caret-down'></span>
+
                 <ul class='dropdown-menu'>
                     <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
                     <li><a class='md-trigger' data-modal='syllabus-toc' href='#''>Επιλογή 2</a></li>
@@ -480,10 +543,8 @@ $tool_content .= "
             if ($status != USER_GUEST) {
                 if ($receive_mail) {
                     $tool_content .= "
-                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                            <button class='btn-default-eclass' title='$langContactProf' >
+                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' title='$langContactProf' >
                                 <i class='fa fa-envelope'></i>
-                            </button>
                         </a>";
                 }
             }
@@ -491,10 +552,8 @@ $tool_content .= "
 
             // Button: star - bookmark the page
             $tool_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-                            <button class='btn-default-eclass' title='$langAddAsBookmark'>
+                        <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
                                 <i class='fa fa-star'></i>
-                            </button>
                         </a>";
 
 
@@ -502,16 +561,14 @@ $tool_content .= "
             if (visible_module(MODULE_ID_ANNOUNCE))
             {
                 $tool_content .= "
-                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                            <button class='btn-default-eclass' title='" . q($langRSSFeed) . "'>
+                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' title='" . q($langRSSFeed) . "'>
                                 <i class='fa fa-rss'></i>
-                            </button>
                         </a>";
             }
 
             // Button: toggle student view
             $tool_content .= "
-                        <button class='btn-default-eclass' title='$langAddAsBookmark'>
+                        <button class='btn-default-eclass place-at-toolbox' title=''>
                                 $toggle_student_view_close
                                 $toggle_student_view
                         </button>";
@@ -582,7 +639,7 @@ if (!$alter_layout){
             <hr class='no-margin'/>
             <div class='align-right'>
                 <div class='toolbox margin-bottom-thin margin-top-thin'>
-                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass color-green'>
+                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox color-green'>
                         <i class='fa fa-plus-circle space-after-icon'></i>
                         $langAddUnit
                     </a>
@@ -691,28 +748,33 @@ $tool_content .= "</td>
 
 $tool_content .= "</td></tr></table>";
 
-if($viewCourse == "weekly"){
+if ($viewCourse == "weekly") {
     
-    if(!$is_editor){
+    if (!$is_editor){
         $visibleFlag = " AND visible = 1";
-    }else{
+    } else {
         $visibleFlag = "";
     }
-    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";    
-    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
+    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/weeks/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";
+
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
     foreach ($weeklyQuery as $week){
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
         $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
+        $icon_access = ($week->public == 1) ? 'access_public.png' : 'access_limited.png';
         
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                                <h2 $class_vis>$langWeek: $week->start_week - $week->finish_week - $week->title</h2>
+                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - " . q($week->title) . "</h2>
                             </a>
                             <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
                                 <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
                             </a>
                             <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
                                 <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?access=$week->id'>
+                                <img src='$themeimg/$icon_access' title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' />
                             </a>
                             <div $class_vis>$week->comments</div>
                             <hr>";
@@ -721,6 +783,7 @@ if($viewCourse == "weekly"){
         
     }
 }
+
 
 if($viewCourse == "units"){
     $tool_content .= "<table width='100%' class='tbl'><tr><td>$cunits_content</td>
