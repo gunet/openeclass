@@ -580,13 +580,15 @@ class Calendar_Events {
         $eventlist = Calendar_Events::get_calendar_events("month", "$year-$month-$day");
 
         $events = array();
-        foreach($eventlist as $event){
-            $eventday = new DateTime($event->startdate);
-            $eventday = $eventday->format('j');
-            if(!array_key_exists($eventday,$events)){
-                    $events[$eventday] = array();
+        if ($eventlist) {
+            foreach($eventlist as $event){
+                $eventday = new DateTime($event->startdate);
+                $eventday = $eventday->format('j');
+                if(!array_key_exists($eventday,$events)){
+                        $events[$eventday] = array();
+                }
+                array_push($events[$eventday], $event);
             }
-            array_push($events[$eventday], $event);
         }
 
         //Get the first day of the month
@@ -674,13 +676,15 @@ class Calendar_Events {
         $eventlist = Calendar_Events::get_calendar_events("month", "$year-$month-$day");
 
         $events = array();
-        foreach($eventlist as $event){
-            $eventday = new DateTime($event->startdate);
-            $eventday = $eventday->format('d');
-            if(!array_key_exists($eventday,$events)){
-                    $events[$eventday] = array();
+        if ($eventlist) {
+            foreach($eventlist as $event){
+                $eventday = new DateTime($event->startdate);
+                $eventday = $eventday->format('d');
+                if(!array_key_exists($eventday,$events)){
+                        $events[$eventday] = array();
+                }
+                array_push($events[$eventday], $event);
             }
-            array_push($events[$eventday], $event);
         }
 
         //Get the first day of the month
