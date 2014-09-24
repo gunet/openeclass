@@ -89,7 +89,7 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-        $langCourse, $langModule, $langAdminUsers, $langExternalLinks;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
