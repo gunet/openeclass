@@ -359,6 +359,12 @@ if ($total_cunits > 0) {
                                                         <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
                                                             <i class='fa fa-eye '></i>
                                                         </a>
+                                                    </div>                     
+                                                    <div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
+                                                            <i class='fa fa-edit '></i>
+
+                                                        </a>
                                                     </div>";
             if ($visible == COURSE_OPEN) {
                 $icon_access = ($access == 1) ? '<i class="fa fa-unlock"></i>' : '<i class="fa fa-lock"></i>';
