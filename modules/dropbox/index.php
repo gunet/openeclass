@@ -189,7 +189,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     	$tool_content .= "<tr>
     	  <th>$langSendTo:</th>
     	  <td>
-    	<select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>";
+    	<select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
     
         if ($course_id != 0) {//course messages
             
@@ -278,7 +278,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             }
         } 
     
-        $tool_content .= "</select></td></tr>";
+        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td></tr>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
         $head_content .= " <script type='text/javascript'>
                              var selected = [];
