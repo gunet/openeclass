@@ -353,40 +353,44 @@ if ($total_cunits > 0) {
                                         </div>";
         if ($is_editor) {                                                
             $cunits_content .= "<div class='item-side'>
-                                            <div class='item-options'>
-                                                <span class='option-button'><i class='fa fa-gear'></i></span>
-                                                <ul>
-                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id'><span><i class='fa fa-eye'></i></span></a>
-                                                    </li>
-                                                    <li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
-                                                        <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id'><span><i class='fa fa-edit'></i></span></a>
-                                                    </li>";
+                                            <div class='opt-btn-wrapper'>
+                                                <div class='opt-btn-more-wrapper'>
+                                                    <div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langVisibility'>
+                                                            <i class='fa fa-eye '></i>
+                                                        </a>
+                                                    </div>";
             if ($visible == COURSE_OPEN) {
                 $icon_access = ($access == 1) ? '<i class="fa fa-unlock"></i>' : '<i class="fa fa-lock"></i>';
-                                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?access=$cu->id'><span>$icon_access</span></a>
-                                                    </li>";
+                                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'><a href='$_SERVER[SCRIPT_NAME]?access=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langResourceAccess'>
+                                                        $icon_access
+                                                    </a></div>";
             }
             if ($cu->id != $last_id) {
-                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id'><span><i class='fa fa-arrow-down'></i></span></a>
-                                                    </li>";
+                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
+                                            <i class='fa fa-arrow-down'></i>
+                                        </a>
+                                    </div>";
             }
             if ($count_index != 1) {        
-                $cunits_content .= "<li rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
-                                                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id'><span><i class='fa fa-arrow-up'></i></span></a>
-                                                    </li>";
+                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
+                                                            <i class='fa fa-arrow-up'></i>
+                                                        </a>
+                                                    </div>";
             }
-            $cunits_content .= "<li rel='tooltip' delete-action' data-toggle='tooltip' data-placement='bottom' title='$langDelete'>
+            $cunits_content .= "<div class='opt-btn-more-tool tool-btn delete'>
                                     <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
-                                        <a class='btn btn-xs' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
+                                        <a href='#' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
                                             <i class='fa fa-times'></i>
                                         </a>    
-                                    </form>
-                                </li>                                            
-                            </ul>      
-                        </div>
+                                </form>
+                                </div> 
+                            </div>    
+                            <div class='opt-btn tool-btn'>
+                                <i class='fa fa-gear '></i>
+                            </div>
                     </div>";
         }
         $cunits_content .= "</li>

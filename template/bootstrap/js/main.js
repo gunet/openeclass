@@ -74,5 +74,5 @@ $(document).ready( function () {
 //    $(window).resize(function() {
 //        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
 //    });
-
+$(".opt-btn-wrapper").hover(function(){$(this).children(".opt-btn-more-wrapper").animate({width:"300px"},150);},function(){$(this).children(".opt-btn-more-wrapper").animate({width:"50px"},150);});
 }); 
