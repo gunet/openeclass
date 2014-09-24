@@ -149,7 +149,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                     }
                                   });
                                 }
-                                $('#select-recipients').multiselect('refresh');
+                                $('#select-recipients').select2('destroy');
+                                $('#select-recipients').select2();
                               });
                             });
                           </script>";
@@ -188,7 +189,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     	$tool_content .= "<tr>
     	  <th>$langSendTo:</th>
     	  <td>
-    	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
+    	<select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>";
     
         if ($course_id != 0) {//course messages
             
@@ -349,16 +350,27 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	<p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
-    	load_js('jquery.multiselect.min.js');
-        $head_content .= "<script type='text/javascript'>$(document).ready(function () {
-                $('#select-recipients').multiselect({
-                    selectedText: '$langJQSelectNum',
-                    noneSelectedText: '$langJQNoneSelected',
-                    checkAllText: '$langJQCheckAll',
-                    uncheckAllText: '$langJQUncheckAll'
+        load_js('select2');
+        $head_content .= "<script type='text/javascript'>
+            $(document).ready(function () {
+                $('#select-recipients').select2();       
+                $('#selectAll').click(function(e) {
+                    e.preventDefault();
+                    var stringVal = [];
+                    $('#select-recipients').find('option').each(function(){
+                        stringVal.push($(this).val());
+                    });
+                    $('#select-recipients').val(stringVal).trigger('change');
                 });
-        });</script>
-        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+                $('#removeAll').click(function(e) {
+                    e.preventDefault();
+                    var stringVal = [];
+                    $('#select-recipients').val(stringVal).trigger('change');
+                });         
+            });
+
+            </script>
+        ";
 	}
 } else {//mailbox
     load_js('datatables');
