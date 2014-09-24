@@ -3337,6 +3337,7 @@ $langEventsDeleted = "Your personal events have been deleted.";
 $langEventTitle = "Title";
 $langEvery = "every";
 $langiCalExport = "Export iCal";
+$langLanguageCode = "";
 $langLastUpdate = "Last update";
 $langModifEvent = "Modify event";
 $langMonthsAbstract = "months";

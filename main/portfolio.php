@@ -39,8 +39,16 @@ $nameTools = $langWelcomeToPortfolio;
 
 ModalBoxHelper::loadModalBox();
 
+if(!empty($langLanguageCode)){
+    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
+}
+load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+
 // jquery is already loaded via index.php and modal box
-$head_content .= "<script type='text/javascript'>
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
+."<script type='text/javascript'>
 jQuery(document).ready(function() {
   jQuery('.panel_content').hide();
    jQuery('.panel_content_open').show();
@@ -53,8 +61,33 @@ jQuery(document).ready(function() {
     } else {
     $(this).addClass('active');
     }
-  });
-});
+  });"
+  .'var calendar = $("#bootstrapcalendar").calendar({
+                    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
+                    events_source: "'.$urlAppend.'main/calendar_data.php",
+                    language: "'.$langLanguageCode.'",
+                    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
+                    onAfterViewLoad: function(view) {
+                                $("#current-month").text(this.getTitle());
+                                $(".btn-group button").removeClass("active");
+                                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                                }
+        });
+        
+        $(".btn-group button[data-calendar-nav]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.navigate($this.data("calendar-nav"));
+            });
+        });
+
+        $(".btn-group button[data-calendar-view]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.view($this.data("calendar-view"));
+            });
+        });'
+."});
 ".
 'function show_month(day,month,year){
     $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});    
@@ -156,5 +189,4 @@ $tool_content = "
     </div>
 </div>
 ";
-
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

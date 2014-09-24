@@ -3777,6 +3777,7 @@ $langEventsDeleted = "Τα γεγονότα σας διαγράφηκαν.";
 $langEventTitle = "Τίτλος";
 $langEvery = "κάθε";
 $langiCalExport = "Εξαγωγή iCal";
+$langLanguageCode = "el-GR";
 $langLastUpdate = "Τελευταία ενημέρωση";
 $langModifEvent = "Αλλαγή γεγονότος";
 $langMonthsAbstract = "μήνες";

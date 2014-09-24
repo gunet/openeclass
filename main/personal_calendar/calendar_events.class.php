@@ -173,7 +173,7 @@ class Calendar_Events {
         Calendar_Events::get_calendar_settings();
         if(Calendar_Events::$calsettings->show_personal == 1){
             $dc = str_replace('start','pc.start',$datecond);
-            $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, content, 'personal' event_group, 'personal' event_type, null as course FROM personal_calendar pc "
+            $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, date_format(start + duration, '%Y-%m-%d %H:%s') `end`, content, 'personal' event_group, 'event-special' class, 'personal' event_type, null as course FROM personal_calendar pc "
                     . "WHERE user_id = ?d " . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
         }
@@ -184,7 +184,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','adm.start',$datecond);
-            $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, content, 'admin' event_group, 'admin' event_type, null as course FROM admin_calendar adm "
+            $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, date_format(start + duration, '%Y-%m-%d %H:%s') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
                     . "WHERE (visibility_level>=$st OR user_id = ?d) " . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
         }
@@ -194,7 +194,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ag.start',$datecond);
-            $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, content, 'course' event_group, 'agenda' event_type,  c.code course "
+            $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                     . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
@@ -205,7 +205,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, bbb.description content, 'course' event_group, 'teleconference' event_type,  c.code course "
+            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
@@ -218,7 +218,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ass.deadline',$datecond);
-            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'assignment' event_type, c.code course "
+            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
@@ -229,7 +229,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ex.end_date',$datecond);
-            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'exercise' event_type, c.code course "
+            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d "
                     . $dc;
@@ -651,6 +651,12 @@ class Calendar_Events {
 
         /* Legend */
         $calendar_content .= Calendar_Events::calendar_legend();
+        
+        
+        /***************************************  Bootstrap calendar  ******************************************************/
+        
+        $calendar_content .=  '<div id="bootstrapcalendar"></div>';
+        
         return $calendar_content;
     }
 
@@ -664,6 +670,9 @@ class Calendar_Events {
      */
    public static function small_month_calendar($day, $month, $year) {
        global $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
+       if($_SESSION['theme'] == 'bootstrap'){
+           return Calendar_Events::small_month_bootstrap_calendar();
+       }
        $calendar_content = "";
         //Handle leap year
         $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -1146,4 +1155,42 @@ class Calendar_Events {
        $ical .= "END:VCALENDAR".PHP_EOL;
        return $ical;
    }
+   
+   public static function bootstrap_events($from, $to){
+       global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
+       $fromdatetime = date("Y-m-d H:i:s",$from/1000);
+       $todatetime = date("Y-m-d H:i:s",$to/1000);
+       /* The type of calendar here defines how detailed the events are going to be. Default:month  */
+        $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
+        
+        $events = array();
+        foreach($eventlist as $event){
+            $startdatetime = new DateTime($event->start);
+            $event->start = $startdatetime->getTimestamp()*1000;
+            $enddatetime = new DateTime($event->end);
+            $event->end = $enddatetime->getTimestamp()*1000;
+            $event->url = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
+            if($event->event_type != 'personal' && $event->event_type != 'admin'){
+                $event->url = str_replace('thiscourse', $event->course, $event->url);
+            }
+            array_push($events, $event);
+        }
+        return json_encode(array('success'=>1, 'result'=>$events));
+   }
+   
+   public static function small_month_bootstrap_calendar()
+   {
+       global $langNext, $langPrevious;
+       
+       $calendar = '<div id="cal-header" class="btn-group btn-group-justified btn-group-sm">
+                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="prev">&larr; '.$langPrevious.'</button></div>
+                            <div class="btn-group btn-group-sm"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
+                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="next">'.$langNext.' &rarr;</button></div>
+                    </div>';
+       
+       $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
+
+        return $calendar;
+   }
+   
 }

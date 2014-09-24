@@ -55,8 +55,14 @@ load_js('tools.js');
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
+if(!empty($langLanguageCode)){
+    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
+}
+load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
 $(function() {
 $('input[name=startdate]').datetimepicker({
@@ -306,9 +312,64 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 $day = (isset($_GET['day']))? intval($_GET['day']):null;
 $month = (isset($_GET['month']))? intval($_GET['month']):null;
 $year = (isset($_GET['year']))? intval($_GET['year']):null;
-$tool_content .= '<div id="monthcalendar" style="width:100%">';
-$tool_content .= Calendar_Events::calendar_view($day, $month, $year);
-$tool_content .= '</div>';
+if($_SESSION['theme'] != 'bootstrap')
+{
+    $tool_content .= '<div id="monthcalendar" style="width:100%">';
+    $tool_content .= Calendar_Events::calendar_view($day, $month, $year);
+    $tool_content .= '</div>';
+}
+else{
+    $tool_content .= ''
+            . '<div class="row page-header">
+                    <div class="pull-right form-inline">
+                            <div class="btn-group">
+                                    <button class="btn btn-primary" data-calendar-nav="prev">&larr; '.$langPrevious.'</button>
+                                    <button class="btn" data-calendar-nav="today">'.$langToday.'</button>
+                                    <button class="btn btn-primary" data-calendar-nav="next">'.$langNext.' &rarr;</button>
+                            </div>
+                            <div class="btn-group">
+                                    <button class="btn btn-warning" data-calendar-view="year">'.$langYear.'</button>
+                                    <button class="btn btn-warning active" data-calendar-view="month">'.$langMonth.'</button>
+                                    <button class="btn btn-warning" data-calendar-view="week">'.$langWeek.'</button>
+                                    <button class="btn btn-warning" data-calendar-view="day">'.$langDay.'</button>
+                            </div>
+                    </div>
+                    <h3></h3>
+            </div>'
+            . '<div class="row"><div id="bootstrapcalendar" class="col-xs-6 col-sm-7 col-md-6 add-gutter"></div></div>'.
+    "<script type='text/javascript'>".
+    '$(document).ready(function(){
+
+    var calendar = $("#bootstrapcalendar").calendar(
+            {
+                tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
+                events_source: "'.$urlAppend.'main/calendar_data.php",
+                language: "el-GR",
+                onAfterViewLoad: function(view) {
+                            $(".page-header h3").text(this.getTitle());
+                            $(".btn-group button").removeClass("active");
+                            $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                            }
+            }
+        );
+
+    $(".btn-group button[data-calendar-nav]").each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.navigate($this.data("calendar-nav"));
+        });
+    });
+
+    $(".btn-group button[data-calendar-view]").each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.view($this.data("calendar-view"));
+        });
+    });    
+    });
+
+    </script>';
+}
 
 add_units_navigation(TRUE);
 
