@@ -74,5 +74,7 @@ $(document).ready( function () {
 //    $(window).resize(function() {
 //        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
 //    });
-$(".opt-btn-wrapper").hover(function(){$(this).children(".opt-btn-more-wrapper").animate({width:"300px"},150);},function(){$(this).children(".opt-btn-more-wrapper").animate({width:"50px"},150);});
+
+var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
+$(".opt-btn-wrapper").hover(function(){$(this).children(".opt-btn-more-wrapper").animate({width:tool_length},150);},function(){$(this).children(".opt-btn-more-wrapper").animate({width:"53px"},150);});
 }); 
