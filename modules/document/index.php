@@ -484,13 +484,11 @@ if ($can_upload) {
                 $group_hidden_input
                 <fieldset>
                         <input type='hidden' name='newDirPath' value='$createDir' />
-                        <table class='tbl' width='100%'>
-                        <tr>
-                                <th>$langNameDir</th>
-                                <td width='190'><input type='text' name='newDirName' /></td>
-                                <td><input type='submit' value='$langCreateDir' /></td>
-                        </tr>
-                        </table>
+                        
+                        $langNameDir</th>
+                        <input type='text' name='newDirName' />
+                        <input type='submit' class='btn-default-eclass color-green' value='$langCreateDir' />
+                        
                 </fieldset>
             </form>
         </div>
