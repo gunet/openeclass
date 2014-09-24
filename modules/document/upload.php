@@ -53,7 +53,7 @@ if ($can_upload) {
   <div class='col-md-12'>
 
     <h5 class='content-title'>$langUpload</h5>
-    <div class='panel color-add-item'>
+    <div class='panel padding-fat focused'>
 
     <form class='form-horizontal' role='form'>
       
@@ -172,18 +172,20 @@ if ($can_upload) {
       </div>      
 
       <div class='form-group'>
-        <div class='col-sm-offset-2 col-sm-10'>
-          <button type='submit' class='btn-default-eclass color-green'>$langUpload</button>
+        <div class='col-sm-offset-5 col-sm-12'>
+          <button type='submit' class='btn-default-eclass color-green size-l'>
+            <i class='fa fa-arrow-up space-after-icon'></i>
+            $langUpload
+          </button>
         </div>
       </div>
 
 
     </form>
 
+    </div>
 
-
-
-    <br/><br/>
+    <div class='panel'>
 
 
     <form action='$upload_target_url' method='post' enctype='multipart/form-data'>

@@ -56,6 +56,8 @@ $font-icon: 'FontAwesome';
 /* Extend bootstrap style - gutters and paddings */
 
 .padding {padding:0.5em;}
+.padding-thin {padding:2em;}
+.padding-fat {padding:4em;}
 .no-padding {padding: 0px;}
 
 .no-gutters
@@ -81,6 +83,8 @@ $font-icon: 'FontAwesome';
 {
   margin: 0em 0.2em 0.65em 0.2em !important;
 }
+
+
 
 
 
@@ -168,12 +172,10 @@ $font-icon: 'FontAwesome';
 
 
 
-
-.color-add-item
+.focused
 {
-  @include box-shadow(0 0px 7px $color-green !important);
+  @include box-shadow(0 0px 10px #BBBBBB !important);
 }
-
 
 
 

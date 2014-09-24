@@ -138,6 +138,8 @@ img
 
 
 
+
+
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
 .breadcrumb
 {
@@ -161,11 +163,6 @@ img
   @include box-sizing(border-box);
   @include border-radius(2px);
   @include box-shadow(0 0px 7px #DDDDDD);
-}
-
-.panel .color-add-item
-{
-  @include box-shadow(0 0px 7px $color-green !important);
 }
 
 
@@ -433,12 +430,12 @@ input.toggle[type=checkbox]:checked:after
 /* BUTTON SIZES */
 .btn-default-eclass.size-xl
 {
-  font-size:2em;
+  font-size:1.2em;
 }
 
 .btn-default-eclass.size-l
 {
-  font-size:1.5em;
+  font-size:1.1em;
 }
 
 .btn-default-eclass.size-s

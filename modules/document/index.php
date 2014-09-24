@@ -479,7 +479,29 @@ if ($can_upload) {
 
 <div class='row'>
     <div class='col-md-12'>
-        <div class='panel color-add-item'>
+
+        <h5 class='content-title'>$langCreateDir</h5>
+        <div class='panel padding-thin focused'>
+            <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
+                
+                <div class='form-group'>
+                    <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
+                </div>
+
+                <button type='submit' class='btn-default-eclass color-green'>
+                    <i class='fa fa-plus space-after-icon'></i>
+                    $langCreateDir
+                </button>
+
+            </form>
+
+        </div>
+   </div>
+</div>
+
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='panel'>
             <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 $group_hidden_input
                 <fieldset>
@@ -1124,7 +1146,12 @@ if ($doc_count == 0) {
     $tool_content .= "<p class='alert1'>$langNoDocuments</p>";
 } else {
     // Current Directory Line
-    $tool_content .= "<table width='100%' class='tbl'>";
+    $tool_content .= "
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel'>
+                <table width='100%' class='tbl'>";
 
     if ($can_upload) {
         $cols = 4;
@@ -1167,11 +1194,20 @@ if ($doc_count == 0) {
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content .= "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='$langUp'/></a>";
     }
-    $tool_content .= "</div></td>
-    </tr>
-    </table>
-    <table width='100%' class='tbl_alt'>
-    <tr>";
+    $tool_content .= "
+
+                        </div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel'>
+                <table width='100%' class='tbl_alt'>
+                    <tr>";
     $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
             "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
             "<th width='60' class='center'><b>$langSize</b></th>" .
@@ -1330,7 +1366,11 @@ if ($doc_count == 0) {
             $counter++;
         }
     }
-    $tool_content .= "\n    </table>\n";
+    $tool_content .= "\n    
+                </table>
+            </div>
+        </div>
+    </div>\n";
     if ($can_upload && !$is_in_tinymce) {
         $tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
     }
