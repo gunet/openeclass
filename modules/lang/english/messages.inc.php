@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2014-07-22 12:08:35
+// Generated 2014-09-24 08:07:08
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -598,8 +598,6 @@ $langCourseS = "course";
 $langRSSFeed = 'RSS feed';
 $langAddAsBookmark = 'Add to bookmarks';
 $langNoUserEmailNotification = "You are not receiving email notifications from this course.";
-$langCitation = 'Cite this course';
-$langAccessed = 'Retrieved %s, from %s';
 $langCourseIden = "Course Info";
 $langBackupCourse = "Archive this course";
 $langModifInfo = "Course Administration";
@@ -3238,7 +3236,7 @@ $langCMeta['hisarch'] = "History and Archaeology";
 $langCMeta['langlit'] = "Languages and Literature";
 $langCMeta['philosophy'] = "Philosophy, Ethics and Religion";
 $langCMeta['arts'] = "Arts";
-$langCMeta['paidagogy'] = "Paidagogy";
+$langCMeta['pedagogy'] = "Pedagogy";
 $langNotAvailable = "Not available";
 $langFreeText = "Free Text";
 $langPollPurged = "Questionnaire results have been purged.";
@@ -3250,3 +3248,8 @@ $langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
 $langCMeta['instructor_add'] = "Add instructor";
+$langCitation = 'Cite this course';
+$langAccessed = 'Retrieved %s, from %s';
+$langCMeta['paidagogy'] = "Paidagogy";
+$lang_error_db = "The platform is unable to create new databases. Unable to continue!";
+$langCatVideoDirectory = "Categorized multimedia files";

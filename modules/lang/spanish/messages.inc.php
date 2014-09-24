@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2014-07-25 10:15:31
+// Generated 2014-09-24 08:07:08
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3224,3 +3224,8 @@ $langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
 $langCMeta['instructor_add'] = "Add instructor";
+$langCitation = 'Cite this course';
+$langAccessed = 'Retrieved %s, from %s';
+$langCMeta['paidagogy'] = "Paidagogy";
+$lang_error_db = "The platform is unable to create new databases. Unable to continue!";
+$langCatVideoDirectory = "Categorized multimedia files";
