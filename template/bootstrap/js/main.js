@@ -75,6 +75,12 @@ $(document).ready( function () {
 //        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
 //    });
 
-var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
-$(".opt-btn-wrapper").hover(function(){$(this).children(".opt-btn-more-wrapper").animate({width:tool_length},150);},function(){$(this).children(".opt-btn-more-wrapper").animate({width:"53px"},150);});
+//var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
+//alert(tool_length);
+$(".opt-btn-wrapper").hover(
+        function(){
+            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*53)+"px";
+            $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
+        function(){
+            $(this).children(".opt-btn-more-wrapper").animate({width:"53px"},150);});
 }); 
