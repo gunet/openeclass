@@ -170,6 +170,8 @@ class Log {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
+                    } elseif ($mid == MODULE_ID_SETTINGS) {
+                        $tool_content .= "<td>" . $langCourseInfo . "</td>";
                     } else {                        
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
