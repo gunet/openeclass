@@ -60,8 +60,8 @@ function list_forums() {
         foreach ($foruminfo as $entry) {
             $tool_content .= "<tr class='odd'>";
             $tool_content .= "<td>
-			<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$entry[id]'>$entry[name]</a></td>";
-            $tool_content .= "<td>$entry[comment]</td>";
+            <a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$entry[id]'>" . q($entry[name]). "</a></td>";
+            $tool_content .= "<td>" . q($entry[comment]) . "</td>";
             $tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
             $tool_content .= "</tr>";
             $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d", $entry['id']);
@@ -75,7 +75,7 @@ function list_forums() {
                 }
                 foreach ($topicinfo as $topicentry) {
                     $tool_content .= "<tr class='even'>";
-                    $tool_content .= "<td>&nbsp;<img src='$themeimg/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
+                    $tool_content .= "<td>&nbsp;<img src='$themeimg/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>" . q($topicentry[topic_title]) . "</a></td>";
                     $tool_content .= "<td>&nbsp;</td>";
                     $tool_content .= "<td class='center'><input type='checkbox' name='forum[]'  value='$entry[id]:$topicentry[topic_id]' /></td>";
                     $tool_content .= "</tr>";

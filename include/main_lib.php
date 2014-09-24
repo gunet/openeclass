@@ -1428,6 +1428,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {

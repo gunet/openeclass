@@ -65,7 +65,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
     $pathToArchive = $_POST['pathToArchive'];
-    if (file_exists($pathToArchive)) {
+    validateUploadedFile(basename($pathToArchive), 3);
+    if (get_file_extension($pathToArchive) !== 'zip') {
+        $tool_content .= "<p class='caution'>" . $langErrorFileMustBeZip . "</p>";
+    } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
         <table class='tbl' width='100%'>";
@@ -83,7 +86,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'course_vis' => true,
         'course_prof' => true), 'all', 'autounquote');
     
-    Database::get()->transaction(function() use ($restoreThis, $course_code, $course_lang, $course_title, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
+    $new_course_code = null;
+    $course_id = null;
+    
+    Database::get()->transaction(function() use (&$new_course_code, &$course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
         $departments = array();
         if (isset($_POST['department'])) {
             foreach ($_POST['department'] as $did) {
@@ -329,7 +335,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         //Comments
         if (file_exists("$restoreThis/comments")) {
-            restore_table($restoreThis, 'rating', array('delete' => array('id'),
+            restore_table($restoreThis, 'comments', array('delete' => array('id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'comments_map_function',
             'map_function_data' => array($blog_map,
@@ -349,6 +355,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map_function' => 'ratings_map_function',
             'map_function_data' => array($blog_map,
             $course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
+        //Course_settings
+        if (file_exists("$restoreThis/course_settings")) {
+            restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         // Polls
@@ -431,6 +442,30 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>" . $GLOBALS['langBack'] . "</a></p></center>";
     });
+    
+    // check/cleanup video files after restore transaction
+    if ($new_course_code != null && $course_id != null) {
+        $videodir = $webDir . "/video/" . $new_course_code;
+        $videos = scandir($videodir);
+        foreach ($videos as $videofile) {
+            if (is_dir($videofile)) {
+                continue;
+            }
+            
+            $vlike = '/' . $videofile;
+            
+            if (!isWhitelistAllowed($videofile)) {
+                unlink($videodir . "/" . $videofile);
+                Database::get()->query("DELETE FROM `video` WHERE course_id = ?d AND path LIKE ?s", $course_id, $vlike);
+                continue;
+            }
+            
+            $vcnt = Database::get()->querySingle("SELECT count(id) AS count FROM `video` WHERE course_id = ?d AND path LIKE ?s", $course_id, $vlike)->count;
+            if ($vcnt <= 0) {
+                unlink($videodir . "/" . $videofile);
+            }
+        }
+    }
 } elseif (isset($_POST['do_restore'])) {
     $base = $_POST['restoreThis'];
     if (!file_exists($base . '/config_vars')) {

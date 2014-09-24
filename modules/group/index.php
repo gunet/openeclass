@@ -116,8 +116,8 @@ if ($is_editor) {
             // avoiding groups entering other groups area
             $secretDirectory = uniqid('');
             mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
-            touch("courses/$course_code/group/index.htm");
-            touch("courses/$course_code/group/$secretDirectory/index.htm");
+            touch("courses/$course_code/group/index.php");
+            touch("courses/$course_code/group/$secretDirectory/index.php");
 
             Database::get()->query("INSERT INTO `group` (max_members, secret_directory)
                                 VALUES (?d, ?s)", $group_max, $secretDirectory);
@@ -230,10 +230,10 @@ if ($is_editor) {
         $groupGarbage = uniqid(20);
 
         @mkdir("../../courses/garbage");
-        @touch("../../courses/garbage/index.htm");
+        @touch("../../courses/garbage/index.php");
         rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
         mkdir("../../courses/$course_code/group", 0777);
-        touch("../../courses/$course_code/group/index.htm");
+        touch("../../courses/$course_code/group/index.php");
 
         $message = $langGroupsDeleted;
     } elseif (isset($_REQUEST['delete'])) {

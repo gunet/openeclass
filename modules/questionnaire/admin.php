@@ -47,6 +47,13 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jqu
         $('.success').delay(3000).fadeOut(1500);
     });
     </script>";
+if (isset($_GET['pid'])) {
+    $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
+}
 if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
     if(isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$_GET[pid]");          
@@ -55,8 +62,12 @@ if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_PO
     }
 }
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
-    $pqid = isset($_GET['moveUp']) ? $_GET['moveUp'] : $_GET['moveDown'];
-    $pid = $_GET['pid'];
+    $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
+    $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     $position = Database::get()->querySingle("SELECT q_position FROM `poll_question`
 				  WHERE pid = ?d AND pqid = ?d", $pid, $pqid)->q_position;
     $new_position = isset($_GET['moveUp']) ? $position - 1 : $position + 1;
@@ -82,7 +93,7 @@ if (isset($_POST['submitPoll'])) {
         $PollEndMessage = purify($_POST['PollEndMessage']);    
         $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
         if(isset($_GET['pid'])) {
-            $pid = $_GET['pid'];
+            $pid = intval($_GET['pid']);
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
             Session::Messages($langPollEdited, 'alert-success');
@@ -98,7 +109,7 @@ if (isset($_POST['submitPoll'])) {
         // Errors
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         if(isset($_GET['pid'])) {
-            $pid = $_GET['pid']; 
+            $pid = intval($_GET['pid']); 
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyPoll=yes");
         } else {        
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&newPoll=yes");
@@ -108,9 +119,13 @@ if (isset($_POST['submitPoll'])) {
 if (isset($_POST['submitQuestion'])) {
     $question_text = $_POST['questionName'];
     $qtype = $_POST['answerType'];    
-    $pid = $_GET['pid'];  
+    $pid = intval($_GET['pid']);  
     if(isset($_GET['modifyQuestion'])) {
-        $pqid = $_GET['modifyQuestion'];
+        $pqid = intval($_GET['modifyQuestion']);
+        $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+        if(!$poll){
+            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+        }
         Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
 		WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
     } else {
@@ -126,8 +141,12 @@ if (isset($_POST['submitQuestion'])) {
     }
 }
 if (isset($_POST['submitAnswers'])) {
-    $pqid = $_GET['modifyAnswers']; 
-    $pid = $_GET['pid'];
+    $pqid = intval($_GET['modifyAnswers']); 
+    $pid = intval($_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     $answers = $_POST['answers'];
     
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
@@ -143,16 +162,19 @@ if (isset($_POST['submitAnswers'])) {
     
 }
 if (isset($_GET['deleteQuestion'])) {
-    $pqid = $_GET['deleteQuestion'];    
-    $pid = $_GET['pid'];  
-
+    $pqid = intval($_GET['deleteQuestion']);    
+    $pid = intval($_GET['pid']);  
+    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$poll){
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $pqid);
     Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $pqid);
     
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 if (isset($_GET['pid'])) {
-    $pid = $_GET['pid'];
+    $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -241,7 +263,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
             <legend>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</legend>
             <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>$question->question_text</b></em><br>
+            <b>".q($question->question_text)."</b></em><br>
         </fieldset>        
     ";
     if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL) {
@@ -291,7 +313,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 	  <table class='tbl'>
 	  <tr>
 	    <th>$langQuestion:</th>
-	    <td>".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' name='questionName'" . "size='50' value='".(isset($question)? $question->question_text : '')."'>")."</td>
+	    <td>".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' name='questionName'" . "size='50' value='".(isset($question)? q($question->question_text) : '')."'>")."</td>
 	  </tr>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
         $tool_content .= "<tr><th>&nbsp;</th><td><input type='hidden' name='answerType' value='".QTYPE_LABEL."'></td></tr><tr><th>&nbsp;</th>";   
@@ -331,7 +353,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
             <legend>$langQuestion</legend>
             <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>$question->question_text</b></em><br>
+            <b>".q($question->question_text)."</b></em><br>
         </fieldset>        
     ";
     $tool_content .= "
@@ -351,7 +373,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         foreach ($answers as $answer) {
             $tool_content .= "
                 <li>
-                    <input type='text' name='answers[]' value='$answer->answer_text' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
+                    <input type='text' name='answers[]' value='".q($answer->answer_text)."' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
                 </li>            
             ";
         }
@@ -406,11 +428,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </tr>
             <tr>
               <th>$langDescription:</th>
-              <td>".$poll->description."</td>
+              <td>$poll->description</td>
             </tr>
             <tr>
                 <th>$langPollEndMessage:</th>
-                <td>".$poll->end_message."</td>
+                <td>$poll->end_message</td>
             </tr>
             </tbody></table>
         </fieldset>
@@ -432,7 +454,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         foreach ($questions as $question) {
         $tool_content .= "<tr class='even'>
                             <td align='right' width='1'>$i.</td>
-                            <td>$question->question_text<br>".
+                            <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text) : $question->question_text)."<br>".
                             $aType[$question->qtype - 1]."</td>
                             <td class='right' width='50'>".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&editQuestion=$question->pqid")."&nbsp;".  icon('fa-times', $langDelete, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&deleteQuestion=$question->pqid", "onclick='return confirm(\"$langConfirmYourChoice\");'")."</td>
                             <td width='20'>".(($i!=1) ? icon('fa-arrow-up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid") : '')."</td>

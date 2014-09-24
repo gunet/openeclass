@@ -382,9 +382,7 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_GRADEBOOKTOTAL => array('title' => $langGradeTotal, 'link' => 'gradebookUserTotal', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference'),
-    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes'),
-    MODULE_ID_WEEKS => array('title' => $langWeeks, 'link' => 'weeks', 'image' => 'weeks')
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')        
 );
 // ----------------------------------------
 // course admin modules
@@ -402,11 +400,13 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'course_info' => MODULE_ID_COURSEINFO,
     'course_tools' => MODULE_ID_TOOLADMIN,
     'units' => MODULE_ID_UNITS,
+    'weeks' => MODULE_ID_WEEKS,
     'search' => MODULE_ID_SEARCH,
     'contact' => MODULE_ID_CONTACT,
     'comments' => MODULE_ID_COMMENTS,
     'rating' => MODULE_ID_RATING,
-    'sharing' => MODULE_ID_SHARING);
+    'sharing' => MODULE_ID_SHARING,
+    'notes' => MODULE_ID_NOTES);
 
 // the system admin adn power users has rights to all courses
 if ($is_admin or $is_power_user) {

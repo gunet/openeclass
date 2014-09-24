@@ -189,6 +189,7 @@ $db->query("CREATE TABLE `course_weekly_view` (
   `start_week` DATE NOT NULL default '0000-00-00',
   `finish_week` DATE NOT NULL default '0000-00-00',
   `visible` TINYINT(4) NOT NULL DEFAULT 1,
+  `public` TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #
@@ -615,7 +616,8 @@ $db->query("CREATE TABLE IF NOT EXISTS videolink (
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 $db->query("CREATE TABLE video_category (
-                id INT(11) NOT NULL auto_increment, 
+                id INT(11) NOT NULL auto_increment,
+                `course_id` INT(11) NOT NULL,
                 name VARCHAR(255) NOT NULL, 
                 description TEXT DEFAULT NULL,
                 PRIMARY KEY (id)) $charset_spec");

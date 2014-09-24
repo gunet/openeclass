@@ -88,7 +88,36 @@ if ($course_id != 0) {
 if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
     $nameTools = $langQuotaBar;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
-    $tool_content .= showquota($diskQuotaDropbox, $diskUsed);
+    $space_released = 0;
+    if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.9)) { 
+        $space_to_free = ($diskQuotaDropbox/1024/1024/10);
+        
+        if (isset($_GET['free']) && $_GET['free'] == TRUE) { //free some space
+            $sql = "SELECT da.filename, da.id, da.filesize FROM dropbox_attachment as da, dropbox_msg as dm
+                    WHERE da.msg_id = dm.id
+                    AND dm.course_id = ?d
+                    ORDER BY dm.timestamp ASC";   
+            $result = Database::get()->queryArray($sql, $course_id); 
+            foreach ($result as $file) {
+                unlink($dropbox_dir . "/" . $file->filename);
+                $space_released += $file->filesize;
+                Database::get()->query("DELETE FROM dropbox_attachment WHERE id = ?d", $file->id);
+                if ($space_released >= $diskQuotaDropbox/10) {
+                    break;
+                }
+            }
+            $tool_content .= "<p class='success'>".sprintf($langDropboxFreeSpaceSuccess, $space_released/1024/1024)."</p>";
+        } else { //provide option to free some space
+            $tool_content .= "<div id='operations_container'>
+                                <ul id='opslist'>
+                                  <li><a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a></li>
+                                </ul>
+                              </div>";
+        }
+    }
+    
+    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released);
+    
     draw($tool_content, 2);
     exit;
 }

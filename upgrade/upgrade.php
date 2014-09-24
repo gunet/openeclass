@@ -25,6 +25,8 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 
+stop_output_buffering();
+
 // set default storage engine
 Database::get()->query("SET storage_engine = InnoDB");
 
@@ -71,7 +73,7 @@ $fromadmin = !isset($_POST['submit_upgrade']);
 if (!isset($_POST['submit2']) and ! $command_line) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
         $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
-            <center><a href=\"index.php\">$langBack</a></center>";
+            <center><a href='index.php'>$langBack</a></center>";
         draw($tool_content, 0);
         exit;
     }
@@ -85,6 +87,9 @@ if (!DBHelper::tableExists('config')) {
 
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
+    // check for mulitple usernames
+    fix_multiple_usernames();
+    
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -129,10 +134,10 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
-touch_or_error('courses/temp/index.htm');
+touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/userimg');
-touch_or_error('courses/userimg/index.htm');
-touch_or_error($webDir . '/video/index.htm');
+touch_or_error('courses/userimg/index.php');
+touch_or_error($webDir . '/video/index.php');
 
 // ********************************************
 // upgrade config.php
@@ -211,11 +216,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                     if (!copy('config/config.php', 'config/config_backup.php')) {
                         die($langConfigError1);
                     }
+                    
                     if (!isset($durationAccount)) {
-                        $durationAccount = 4 * 365;
+                        $durationAccount = 4 * 30 * 24 * 60 * 60; // 4 years
                     } else {
-                        $durationAccount = $durationAccount / 60 / 60 / 24;
-                    }
+                        $durationAccount = round($durationAccount / (30 * 24 * 60 * 60));
+                    }                   
                     set_config('site_name', $siteName);
                     set_config('account_duration', $durationAccount);
                     set_config('institution', $_POST['Institution']);
@@ -643,7 +649,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     if ($handle = opendir($webDir . '/video/')) {
                         while (false !== ($entry = readdir($handle))) {
                             if (is_dir($webDir . '/video/' . $entry) && $entry != "." && $entry != "..") {
-                                touch_or_error($webDir . '/video/' . $entry . '/index.htm');
+                                touch_or_error($webDir . '/video/' . $entry . '/index.php');
                             }
                         }
                         closedir($handle);
@@ -751,7 +757,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             $newvis = ($ures->visibility == 'i') ? 0 : 1;
                             Database::get()->query("INSERT INTO course_description SET
                                 course_id = ?d, title = ?s, comments = ?s,
-                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, purify($ures->comments), intval($newvis), intval($ures->order), $ures->date);
+                                visible = ?d, `order` = ?d, update_dt = ?t", intval($ures->course_id), $ures->title, $ures->comments, intval($newvis), intval($ures->order), $ures->date);
                             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", intval($ures->id));
                         });
                     }
@@ -973,8 +979,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        DROP INDEX annonces");
                     } else {
                         Database::get()->query("ALTER TABLE announcement 
-                                       ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
-                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
+                                       ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
+                                       ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
                     }
 
                     // create forum tables
@@ -1278,6 +1284,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `grade` FLOAT NOT NULL DEFAULT -1,
                             `comments` TEXT NOT NULL) $charset_spec");
                     
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
+                            `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `gradebook_id` MEDIUMINT(11) NOT NULL,
+                            `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance` (
                                 `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
@@ -1299,7 +1310,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `attendance_activity_id` MEDIUMINT(11) NOT NULL,
                                 `uid` int(11) NOT NULL DEFAULT 0,
                                 `attend` TINYINT(4) NOT NULL DEFAULT 0,
-                                `comments` TEXT NOT NULL) $charset_spec");                    
+                                `comments` TEXT NOT NULL) $charset_spec");
+                    
+                    Database::get()->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
+                                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `attendance_id` MEDIUMINT(11) NOT NULL,
+                                `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1561,10 +1577,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 KEY `admin_events_dates` (`start`))");
 
                     //create triggers
+                    Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
                     Database::get()->query("CREATE TRIGGER personal_calendar_settings_init "
                             . "AFTER INSERT ON `user` FOR EACH ROW "
                             . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
-                    Database::get()->query("INSERT INTO personal_calendar_settings(user_id) SELECT id FROM user");
+                    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) SELECT id FROM user");
                     
                     // bbb_sessions tables
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
@@ -1611,6 +1628,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `start_week` DATE NOT NULL default '0000-00-00',
                         `finish_week` DATE NOT NULL default '0000-00-00',
                         `visible` TINYINT(4) NOT NULL DEFAULT 1,
+                        `public` TINYINT(4) NOT NULL DEFAULT 1,
                         PRIMARY KEY  (`id`)) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE `course_weekly_view_activities` (
@@ -1932,7 +1950,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                                 DROP COLUMN `course_prerequisites`,
                                                 DROP COLUMN `course_references`");
                     }
-                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
+                    Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
                                              CHANGE `description` `description` MEDIUMTEXT NOT NULL,
@@ -2001,7 +2019,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `actionsdailycourseindex` (`course_id`) )");
 
 
-        // ----------------------------------
+        // drop stale full text indexes
+        Database::get()->query("ALTER TABLE document DROP INDEX document");        
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_title");
+        Database::get()->query("ALTER TABLE course_units DROP INDEX course_units_comments");
+        Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
+        
+        // // ----------------------------------
         // creation of indexes
         // ----------------------------------
         echo "<p>$langIndexCreation</p><br />";
@@ -2175,16 +2199,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             if (version_compare($oldversion, '2.4', '<')) {
                 convert_description_to_units($row->code, $row->id);
                 upgrade_course_index_php($row->code);
-                upgrade_course_2_4($row->code, $row->lang, "($i / $total)");
+                upgrade_course_2_4($row->code, $row->id, $row->lang, "($i / $total)");
             }
             if (version_compare($oldversion, '2.5', '<')) {
                 upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '2.10', '<')) {
-                upgrade_course_2_10($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.8', '<')) {
+                upgrade_course_2_8($row->code, $row->lang, "($i / $total)");
             }
-            if (version_compare($oldversion, '3.0', '')) {
-                upgrade_course_3_0($row->code, "($i / $total)");
+            if (version_compare($oldversion, '2.9', '<')) {
+                upgrade_course_2_9($row->code, $row->lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.10', '<')) {
+                upgrade_course_2_10($row->code, $row->id, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.11', '<')) {
+                upgrade_course_2_11($row->code, "($i / $total)");
+            }
+            if (version_compare($oldversion, '3.0', '<')) {
+                upgrade_course_3_0($row->code, $row->id, "($i / $total)");
             }
             echo "</p>";
             $i++;
@@ -2197,7 +2230,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
-
+            Database::get()->query("USE `$mysqlMainDb`");
+            
             Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
                 SELECT
                 `user_id`,
