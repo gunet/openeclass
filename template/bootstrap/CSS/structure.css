@@ -1,6 +1,6 @@
 /* 
 ==========================================================
-    SASS for structure of eclass v3.0 - version 0.0919c 
+    SASS for structure of eclass v3.0 - version 0.0924a 
 ==========================================================
 */
 /* 
@@ -322,9 +322,9 @@ body > .container {
   text-shadow: none;
   color: #333;
   border-radius: 4px 0px 0px 4px;
-  box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
-  -moz-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: -5px 0px 10px -3px rgba(0, 0, 0, 0.8);
+  box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
 }
 /* line 129, structure.scss */
 #leftnav .panel a.list-group-item:last-child {
