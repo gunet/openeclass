@@ -119,7 +119,7 @@ if ($is_editor) {
     $edit_link = '';
 }
 
-$main_content .= "\n      <div class='course_info'>";
+$main_content .= "<div class='course_info'>";
 $desccomm = Database::get()->querySingle("SELECT comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
                         AND res_id = -1 ORDER BY `order`", $course_id);
@@ -324,8 +324,7 @@ if ($is_editor) { //if he is editor
     if ($last_id) {
         $last_id = $last_id->id;
     }
-    
-    
+        
     $query = "SELECT id, title, comments, visible, public
                 FROM course_units WHERE course_id = $course_id AND `order` >= 0
                 ORDER BY `order`";
@@ -421,7 +420,7 @@ foreach ($departments as $dep) {
     $i++;
 }
 
-$bar_content .= "</li>\n";
+$bar_content .= "</li>";
 
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
@@ -577,7 +576,7 @@ if($viewCourse == "weekly"){
         
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                                <h2 $class_vis>$langWeek: $week->start_week - $week->finish_week - $week->title</h2>
+                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - $week->title</h2>
                             </a>
                             <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
                                 <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
@@ -591,8 +590,7 @@ if($viewCourse == "weekly"){
                             <div $class_vis>$week->comments</div>
                             <hr>";
                             show_resourcesWeeks($week->id);
-        $tool_content .= "</fieldset>";
-        
+        $tool_content .= "</fieldset>";        
     }
 }
 
