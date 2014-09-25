@@ -483,6 +483,9 @@ if ($can_upload) {
         <h5 class='content-title'>$langCreateDir</h5>
         <div class='panel padding-thin focused'>
             <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
+                $group_hidden_input
+
+                <input type='hidden' name='newDirPath' value='$createDir' />
                 
                 <div class='form-group'>
                     <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
