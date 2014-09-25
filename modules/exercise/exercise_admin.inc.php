@@ -90,7 +90,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     load_js('bootstrap-datetimepicker');
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', language: '".$language."'});
+            $('#startdatepicker, #enddatepicker').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
         });
     </script>";
     if (isset($_GET['modifyExercise'])) {
