@@ -1235,14 +1235,31 @@ textarea{
 }*/
 
 /* Action Button ------------------------------------------------------------------- */
-$action-btn-sm-width: 60px;
-$action-btn-sm-height: 54px;
+$action-btn-sm-width: 56px;
+$action-btn-sm-height: 48px;
+
+$action-btn-bg-width: 75px;
+$action-btn-bg-height: 63px;
 
 .opt-btn-wrapper
 {
     position: relative;
     width: $action-btn-sm-width;
     height: $action-btn-sm-height;
+    
+    .opt-btn-more-wrapper
+    {
+        position: absolute;
+        width: $action-btn-sm-width;
+        height: $action-btn-sm-height;
+        right: 0px;
+        overflow: hidden;
+        
+        .opt-btn-more-tool
+        {
+            float: left;
+        }
+    }
 }
 .opt-btn
 {
@@ -1254,35 +1271,27 @@ $action-btn-sm-height: 54px;
     background-color: #4da1e4 !important;
     color: white !important;
 }
-.opt-btn-more-wrapper
-{
-    position: absolute;
-    width: $action-btn-sm-width;
-    height: $action-btn-sm-height;
-    right: 0px;
-    overflow: hidden;
-}
-.opt-btn-more-tool
-{
-    float: left;
-}
+
+
 .tool-btn
 {
     width: $action-btn-sm-width;
     height: $action-btn-sm-height;
     cursor: pointer;
     text-align: center;
-    line-height: 54px;
+    line-height: $action-btn-sm-height;
     color: #7e7e7e;
+    
+    .tool-btn a
+    {
+        display: block;
+        width: $action-btn-sm-width;
+        height: $action-btn-sm-height;
+        color: white;
+        background-color: #333333;
+    }
 }
-.tool-btn a
-{
-    display: block;
-    width: $action-btn-sm-width;
-    height: $action-btn-sm-height;
-    color: white;
-    background-color: #333333;
-}
+
 .tool-btn.delete a
 {
     color: #ce6b6b;
