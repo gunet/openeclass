@@ -337,9 +337,11 @@ $tool_content .= "<form action='multideluser.php' method='post' name='delall_use
 foreach ($_GET as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
-$tool_content .= "<input type='submit' name='dellall_submit' value='".q($langDelList)."'></form>";
-$tool_content .= "</div>";
-
-$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+$tool_content .= "<input type='submit' name='dellall_submit' value='".q($langDelList)."'>";
+if ($_GET['search'] == 'inactive') { // inactive users
+    $tool_content .= " <input type='submit' name='activate_submit' value='".q($langAddSixMonths)."'>";
+}
+$tool_content .= "</form></div>
+    <p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3, null, $head_content);

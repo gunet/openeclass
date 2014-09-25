@@ -23,15 +23,20 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 require_once 'admin.inc.php';
 
-$nameTools = $langMultiDelUser;
+$nameTools = isset($_POST['activate_submit'])? $langAddSixMonths: $langMultiDelUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 load_js('tools.js');
 
 
 if (isset($_POST['submit'])) {
+    if (isset($_POST['months'])) {
+        $months = intval($_POST['months']);
+        $expires_at_delta = intval($months * 30.5 * 24 * 60 * 60);
+    }
     
     $line = strtok($_POST['user_names'], "\n");
-    
+
+    $count = 0; 
     while ($line !== false) {
         // strip comments
         $line = preg_replace('/#.*/', '', trim($line));
@@ -39,27 +44,36 @@ if (isset($_POST['submit'])) {
         if (!empty($line)) {
             // fetch uid
             $u = usernameToUid($line);
-            
-            // for real uids not equal to admin
-            if ($u !== false && $u > 1) {
-                // full deletion
-                $success = deleteUser($u);
-                // progress report
-                if ($success === true)
-                    $tool_content .= "<p>$langUserWithId $line $langWasDeleted.</p>\n";
-                else
-                    $tool_content .= "<p>$langErrorDelete: $line.</p>\n";
+
+            if (isset($_POST['delete'])) {
+                // for real uids not equal to admin
+                if ($u !== false && $u > 1) {
+                    // full deletion
+                    $success = deleteUser($u);
+                    // progress report
+                    if ($success === true)
+                        $tool_content .= "<p>$langUserWithId " . q($line) . " $langWasDeleted.</p>\n";
+                    else
+                        $tool_content .= "<p>$langErrorDelete: " . q($line) . "</p>\n";
+                }
+            } elseif (isset($expires_at_delta)) {
+                if ($u !== false) {
+                    db_query("UPDATE user SET expires_at = expires_at + $expires_at_delta WHERE user_id = $u");
+                    $count++;
+                }
             }
         }
         
         $line = strtok("\n");
     }
-    
+    if ($count and isset($expires_at_delta)) {
+        $tool_content .= "<p class='success'>$langUsersActivated $count</p>";
+    }
 } else {
     
     $usernames = '';
     
-    if (isset($_POST['dellall_submit'])) {
+    if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit'])) {
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c'])  :'';
@@ -147,19 +161,29 @@ if (isset($_POST['submit'])) {
     }
     
     
-    $tool_content .= "<div class='noteit'>". $langMultiDelUserInfo ."</div>
-        <form method='post' action='". $_SERVER['SCRIPT_NAME'] ."'>
+    if (!isset($_POST['activate_submit'])) {
+        $tool_content .= "<div class='noteit'>". $langMultiDelUserInfo ."</div>";
+    }
+    $tool_content .= "<form method='post' action='". $_SERVER['SCRIPT_NAME'] ."'>
         <fieldset>
         <legend>". $langMultiDelUserData ."</legend>
         <table class='tbl' width='100%'>
         <tr>
             <th>". $langUsersData .":</th>
             <td><textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea></td>
-        </tr>
-        <tr>
+        </tr>";
+    if (isset($_POST['activate_submit'])) {
+        $tool_content .= "<tr><th>" . q($langMonthsToAdd) . ":</th><td><input type='text' name='months' size='5' value='6'></td></tr>";
+    }
+    $tool_content .= "<tr>
             <th>&nbsp;</th>
-            <td class='right'>
-            <input type='submit' name='submit' value='". q($langSubmit) ."' onclick='return confirmation(\"". $langMultiDelUserConfirm ."\");' /></td>
+            <td class='right'>";
+    if (isset($_POST['activate_submit'])) {
+        $tool_content .= "<input type='submit' name='submit' value='". q($langAddSixMonths) ."'><input type='hidden' name='activate' value='1'>";
+    } else {
+        $tool_content .= "<input type='submit' name='submit' value='". q($langSubmit) ."' onclick='return confirmation(\"". $langMultiDelUserConfirm ."\");'><input type='hidden' name='delete' value='1'>";
+    }
+    $tool_content .= "</td>
         </tr>
         </table>
         </fieldset>

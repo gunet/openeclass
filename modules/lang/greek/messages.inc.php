@@ -435,7 +435,9 @@ $langUserType = "Τύπος χρήστη";
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί χρήστες";
-$langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού: 6 μήνες";
+$langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού";
+$langMonthsToAdd = 'Μήνες επέκτασης διάρκειας';
+$langUsersActivated = 'Λογαριασμοί χρηστών για τους οποίους επεκτάθηκε η διάρκεια:';
 
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
