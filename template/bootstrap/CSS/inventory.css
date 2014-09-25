@@ -1023,14 +1023,6 @@ textarea{
   position: relative;
   width: 56px;
   height: 48px; }
-  .opt-btn-wrapper .opt-btn-more-wrapper {
-    position: absolute;
-    width: 56px;
-    height: 48px;
-    right: 0px;
-    overflow: hidden; }
-    .opt-btn-wrapper .opt-btn-more-wrapper .opt-btn-more-tool {
-      float: left; }
 
 .opt-btn {
   position: absolute;
@@ -1040,6 +1032,16 @@ textarea{
   background-color: #4da1e4 !important;
   color: white !important; }
 
+.opt-btn-more-wrapper {
+  position: absolute;
+  width: 56px;
+  height: 48px;
+  right: 0px;
+  overflow: hidden; }
+
+.opt-btn-more-tool {
+  float: left; }
+
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1047,12 +1049,13 @@ textarea{
   text-align: center;
   line-height: 48px;
   color: #7e7e7e; }
-  .tool-btn .tool-btn a {
-    display: block;
-    width: 56px;
-    height: 48px;
-    color: white;
-    background-color: #333333; }
+
+.tool-btn a {
+  display: block;
+  width: 56px;
+  height: 48px;
+  color: white;
+  background-color: #333333; }
 
 .tool-btn.delete a {
   color: #ce6b6b; }

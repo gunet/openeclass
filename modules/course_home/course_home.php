@@ -388,7 +388,7 @@ if ($total_cunits > 0) {
             }
             $cunits_content .= "<div class='opt-btn-more-tool tool-btn delete'>
                                     <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
-                                        <a href='#' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
+                                        <a  title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
                                             <i class='fa fa-times'></i>
                                         </a>    
                                 </form>

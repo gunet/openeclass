@@ -100,21 +100,29 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //checking ordering status and initializing appropriate arrows
             $up_arrow = $down_arrow = '';
             if ($iterator != 1 or $offset > 0)  {
-                $up_arrow = icon('fa-arrow-up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id");
+                $up_arrow = '<div class="opt-btn-more-tool tool-btn">'.icon('fa-arrow-up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id").'</div>';
             }
             if ($offset + $iterator < $all_announc->total) {
-                $down_arrow = icon('fa-arrow-down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id");
+                $down_arrow = '<div class="opt-btn-more-tool tool-btn">'.icon('fa-arrow-down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id").'</div>';
             }
             //setting datables column data
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
-                '2' => icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id")  .
-                       "&nbsp;" . icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .
-                       "&nbsp;" . icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .
-                       "&nbsp;" . $down_arrow . $up_arrow
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
+                '1' => date('d-m-Y', strtotime($myrow->date)),
+                /*'2' => icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id").
+                       icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .
+                       icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .
+                       $down_arrow . $up_arrow*/
+                '2' => '<div class="opt-btn-wrapper">'.
+                       '<div class="opt-btn-more-wrapper">'.
+                       '<div class="opt-btn-more-tool tool-btn">'.icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id").'</div>'.
+                       '<div class="opt-btn-more-tool tool-btn">'.icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .'</div>'.
+                       '<div class="opt-btn-more-tool tool-btn">'.icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .'</div>'.
+                       $down_arrow . $up_arrow.
+                       '<div class="opt-btn-more-tool tool-btn delete">'.icon('fa-times', $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"").'</div>'.
+                       '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>'
                 );
             $iterator++;
         }
@@ -147,6 +155,9 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
+                'fnDrawCallback': function( oSettings ) {
+                    animate_btn();
+},
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
                 'oLanguage': {

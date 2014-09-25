@@ -1,4 +1,11 @@
-
+function animate_btn() {
+$(".opt-btn-wrapper").hover(
+        function(){
+            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*56)+"px";
+            $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
+        function(){
+            $(this).children(".opt-btn-more-wrapper").animate({width:"56px"},150);});
+        }
 
 $(document).ready( function () {
 
@@ -77,10 +84,6 @@ $(document).ready( function () {
 
 //var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
 //alert(tool_length);
-$(".opt-btn-wrapper").hover(
-        function(){
-            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*56)+"px";
-            $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
-        function(){
-            $(this).children(".opt-btn-more-wrapper").animate({width:"56px"},150);});
+animate_btn();
+
 }); 
