@@ -11,334 +11,209 @@
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-/* line 35, global.scss */
 .delete-action {
-  color: #ce6b6b;
-}
+  color: #CE6B6B; }
 
-/* line 36, global.scss */
 .delete-action:hover {
-  background: #ce6b6b !important;
-  color: white!important;
-}
+  background: #CE6B6B !important;
+  color: white !important; }
 
-/* line 38, global.scss */
 .align-left {
-  text-align: left;
-}
+  text-align: left; }
 
-/* line 39, global.scss */
 .align-right {
-  text-align: right;
-}
+  text-align: right; }
 
 /* Extend bootstrap style - margins */
-/* line 43, global.scss */
 .no-margin {
-  margin: 0px;
-}
+  margin: 0px; }
 
-/* line 44, global.scss */
 .margin-top {
-  margin-top: 15px;
-}
+  margin-top: 15px; }
 
-/* line 45, global.scss */
 .margin-top-thin {
-  margin-top: 10px;
-}
+  margin-top: 10px; }
 
-/* line 46, global.scss */
 .margin-top-fat {
-  margin-top: 20px;
-}
+  margin-top: 20px; }
 
-/* line 47, global.scss */
 .margin-bottom {
-  margin-bottom: 15px;
-}
+  margin-bottom: 15px; }
 
-/* line 48, global.scss */
 .margin-bottom-thin {
-  margin-bottom: 10px;
-}
+  margin-bottom: 10px; }
 
-/* line 49, global.scss */
 .margin-bottom-fat {
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 
-/* line 50, global.scss */
 .space-after-icon {
-  margin-right: 5px;
-}
+  margin-right: 5px; }
 
-/* line 52, global.scss */
 .float-left {
-  float: left;
-}
+  float: left; }
 
-/* line 53, global.scss */
 .float-right {
-  float: right;
-}
+  float: right; }
 
 /* Extend bootstrap style - gutters and paddings */
-/* line 58, global.scss */
 .padding {
-  padding: 0.5em;
-}
+  padding: 0.5em; }
 
-/* line 59, global.scss */
 .padding-thin {
-  padding: 2em;
-}
+  padding: 2em; }
 
-/* line 60, global.scss */
 .padding-fat {
-  padding: 4em;
-}
+  padding: 4em; }
 
-/* line 61, global.scss */
 .no-padding {
-  padding: 0px;
-}
+  padding: 0px; }
 
-/* line 64, global.scss */
 .no-gutters {
   padding-right: 0;
-  padding-left: 0;
-}
+  padding-left: 0; }
 
-/* line 69, global.scss */
 .add-gutter {
   padding-left: 30px;
-  padding-right: 30px;
-}
+  padding-right: 30px; }
 
-/* line 75, global.scss */
 .remove-gutter {
   padding-left: 0px;
-  padding-right: 0px;
-}
+  padding-right: 0px; }
 
-/* line 83, global.scss */
 .place-at-toolbox {
-  margin: 0em 0.2em 0.65em 0.2em !important;
-}
+  margin: 0em 0.2em 0.65em 0.2em !important; }
 
 /* MIXINS ------------------------------------------------------------------------------- */
-/* line 176, global.scss */
 .focused {
-  box-shadow: 0 0px 10px #bbbbbb !important;
-  -moz-box-shadow: 0 0px 10px #bbbbbb !important;
-  -webkit-box-shadow: 0 0px 10px #bbbbbb !important;
-}
+  box-shadow: 0 0px 10px #BBBBBB !important;
+  -moz-box-shadow: 0 0px 10px #BBBBBB !important;
+  -webkit-box-shadow: 0 0px 10px #BBBBBB !important; }
 
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 191, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
   -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  transition: all 150ms linear; }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 197, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 198, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 199, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 205, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 206, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 207, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @-o-keyframes NEW-ITEM-FX {
-  /* line 213, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 214, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 215, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @keyframes NEW-ITEM-FX {
-  /* line 221, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 222, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 223, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 /* Style for links -------------------------------------------------*/
-/* line 13, inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
-  outline: 0;
-}
-/* line 19, inventory.scss */
-a:hover {
-  text-decoration: underline;
-  outline: 0;
-}
-/* line 25, inventory.scss */
-a:focus {
-  outline: 0;
-}
-/* line 30, inventory.scss */
-a.goto {
-  position: relative;
-  padding-right: 1.5em!important;
-  font-size: 0.75em;
-}
-/* line 36, inventory.scss */
-a.goto:after {
-  content: "\f105";
-  font-family: "FontAwesome";
-  position: absolute;
-  display: block;
-  right: 0px;
-  top: calc(50% - 0.5em);
-  width: 1em;
-  height: 1em;
-  color: #7E7E7E;
-}
+  outline: 0; }
+  a:hover {
+    text-decoration: underline;
+    outline: 0; }
+  a:focus {
+    outline: 0; }
+  a.goto {
+    position: relative;
+    padding-right: 1.5em !important;
+    font-size: 0.75em; }
+    a.goto:after {
+      content: "\f105";
+      font-family: "FontAwesome";
+      position: absolute;
+      display: block;
+      right: 0px;
+      top: calc(50% - 0.5em);
+      width: 1em;
+      height: 1em;
+      color: #7E7E7E; }
 
 /* Styles for headings --------------------------------------------------*/
-/* line 56, inventory.scss */
 h1 {
   font-size: 2em;
-  font-weight: 300;
-}
+  font-weight: 300; }
 
-/* line 62, inventory.scss */
 h1.page-title {
   margin: 0em;
-  font-weight: 400!important;
-  color: #333;
-}
+  font-weight: 400 !important;
+  color: #333; }
 
-/* line 71, inventory.scss */
 #main h1 {
-  color: #444;
-}
-/* line 76, inventory.scss */
+  color: #444; }
 #main h2, #main h3, #main h4, #main h5, #main h6 {
-  color: #777;
-}
+  color: #777; }
 
-/* line 82, inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
-  color: #4da1e4;
-}
+  color: #4da1e4; }
 
-/* line 89, inventory.scss */
 hr {
   height: 1px;
   border: none;
-  background: #eee;
-}
+  background: #eee; }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-/* line 99, inventory.scss */
 .fa {
-  font-size: 1em;
-}
+  font-size: 1em; }
 
-/* line 106, inventory.scss */
 img {
   max-width: 100%;
-  position: relative;
-}
+  position: relative; }
 
-/* line 112, inventory.scss */
 .content-title {
   text-transform: uppercase;
   color: #888888;
-  font-weight: 400;
-}
+  font-weight: 400; }
 
-/* line 119, inventory.scss */
 .page-subtitle {
   color: #555555;
-  font-size: 22px;
-}
+  font-size: 22px; }
 
-/* line 125, inventory.scss */
 .page-subtitle-name {
   color: #555555;
-  font-size: 18px;
-}
+  font-size: 18px; }
 
 /* Extend bootstrap style - forms */
-/* line 133, inventory.scss */
 .form-control {
   border-radius: 2px 2px 2px 2px !important;
   -webkit-border-radius: 2px 2px 2px 2px !important;
-  -moz-border-radius: 2px 2px 2px 2px !important;
-}
+  -moz-border-radius: 2px 2px 2px 2px !important; }
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 145, inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
   margin-bottom: 1em !important;
   color: #a7a7a7 !important;
   font-size: 0.8em !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-}
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important; }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 160, inventory.scss */
 #main-content .panel {
-  background: white !important;
+  background: #FFFFFF !important;
   min-height: 2.4em  !important;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -346,17 +221,15 @@ img {
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #dddddd;
-  -moz-box-shadow: 0 0px 7px #dddddd;
-  -webkit-box-shadow: 0 0px 7px #dddddd;
-}
+  box-shadow: 0 0px 7px #DDDDDD;
+  -moz-box-shadow: 0 0px 7px #DDDDDD;
+  -webkit-box-shadow: 0 0px 7px #DDDDDD; }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 173, inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
-  background: #f0f4f6;
+  background: #F0F4F6;
   border-top: 1px solid #d8d8d8;
   border-bottom: 1px solid #f8f8f8;
   box-sizing: border-box;
@@ -371,32 +244,22 @@ img {
   position: relative;
   text-align: right;
   margin-right: 0em;
-  display: inline-block;
-}
-/* line 188, inventory.scss */
-.toolbox ul {
-  display: block;
-  display: inline-block;
-  margin: 0px;
-  padding: 0px;
-}
-/* line 196, inventory.scss */
-.toolbox li {
-  list-style-type: none;
-  display: inline-block;
-}
-/* line 202, inventory.scss */
-.toolbox ul.toolbox-submenu {
-  display: none;
-}
+  display: inline-block; }
+  .toolbox ul {
+    display: block;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px; }
+  .toolbox li {
+    list-style-type: none;
+    display: inline-block; }
+  .toolbox ul.toolbox-submenu {
+    display: none; }
 
-/* line 210, inventory.scss */
 .toolbox:hover .toolbox-submenu {
-  display: inline-block;
-}
+  display: inline-block; }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-/* line 223, inventory.scss */
 #doc-toggle {
   float: right;
   margin: 1em 0em;
@@ -406,26 +269,18 @@ img {
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
-  user-select: none;
-}
+  user-select: none; }
 
-/* line 231, inventory.scss */
 .toggle-sidebar {
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 /* TOGGLE SWTICH */
-/* line 238, inventory.scss */
 .my-toggle > * {
-  vertical-align: middle;
-}
+  vertical-align: middle; }
 
-/* line 243, inventory.scss */
 .my-toggle .txt {
-  font-size: 0.75em;
-}
+  font-size: 0.75em; }
 
-/* line 248, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -445,10 +300,8 @@ input.toggle {
   outline: none;
   box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
-}
+  -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2); }
 
-/* line 275, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -466,27 +319,19 @@ input.toggle:after {
   -webkit-box-sizing: border-box;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-}
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5); }
 
-/* line 295, inventory.scss */
 input.toggle:hover:after {
-  background: white;
-}
+  background: white; }
 
-/* line 300, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
-  background-color: #dddddd;
-}
+  background-color: #dddddd; }
 
-/* line 307, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
-  left: 0px;
-}
+  left: 0px; }
 
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 320, inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -512,111 +357,81 @@ input.toggle[type=checkbox]:checked:after {
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #dddddd;
-  -moz-box-shadow: 0 0px 7px #dddddd;
-  -webkit-box-shadow: 0 0px 7px #dddddd;
+  box-shadow: 0 0px 7px #DDDDDD;
+  -moz-box-shadow: 0 0px 7px #DDDDDD;
+  -webkit-box-shadow: 0 0px 7px #DDDDDD;
   /*
     Giving right/reft margin on icons that ain't last/first childs
-  */
-}
-/* line 345, inventory.scss */
-.btn-default-eclass > .fa:not(:last-child) {
-  margin-right: 10px;
-}
-/* line 350, inventory.scss */
-.btn-default-eclass > .fa:not(:first-child) {
-  margin-left: 10px;
-}
-/* line 355, inventory.scss */
-.btn-default-eclass > .fa.fa-caret-down {
-  margin-right: 0px!important;
-}
-/* line 361, inventory.scss */
-.btn-default-eclass:hover, .btn-default-eclass:focus {
-  outline: 0;
-  background: #4da1e4;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1;
-  color: white;
-}
-/* line 370, inventory.scss */
-.btn-default-eclass:active {
-  background: #4da1e4 !important;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1!important;
-  color: white!important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
+  */ }
+  .btn-default-eclass > .fa:not(:last-child) {
+    margin-right: 10px; }
+  .btn-default-eclass > .fa:not(:first-child) {
+    margin-left: 10px; }
+  .btn-default-eclass > .fa.fa-caret-down {
+    margin-right: 0px !important; }
+  .btn-default-eclass:hover, .btn-default-eclass:focus {
+    outline: 0;
+    background: #4da1e4;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1;
+    color: white; }
+  .btn-default-eclass:active {
+    background: #4da1e4 !important;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1 !important;
+    color: white !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
 
 /* BUTTON COLORS */
-/* line 383, inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
-  background: #6bce6b;
+  background: #6BCE6B;
   border-color: 1px solid #4AA04A;
   border-top: none;
   box-shadow: none;
   -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-}
-/* line 391, inventory.scss */
-.btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
-  background: #83DE83;
-}
-/* line 396, inventory.scss */
-.btn-default-eclass.color-green:active {
-  background: #83DE83 !important;
-  outline: 0 !important;
-  border-color: #4AA04A !important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
+  -webkit-box-shadow: none; }
+  .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
+    background: #83DE83; }
+  .btn-default-eclass.color-green:active {
+    background: #83DE83 !important;
+    outline: 0 !important;
+    border-color: #4AA04A !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
 
-/* line 406, inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
-  background: #ce6b6b;
+  background: #CE6B6B;
   border-bottom: 1px solid #984B4B;
   border-top: none;
   box-shadow: none;
   -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-}
-/* line 414, inventory.scss */
-.btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
-  background: #E58080;
-}
-/* line 419, inventory.scss */
-.btn-default-eclass.color-red:active {
-  background: #E58080 !important;
-  outline: 0 !important;
-  border-bottom-color: #984B4B !important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
+  -webkit-box-shadow: none; }
+  .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
+    background: #E58080; }
+  .btn-default-eclass.color-red:active {
+    background: #E58080 !important;
+    outline: 0 !important;
+    border-bottom-color: #984B4B !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
 
 /* BUTTON SIZES */
-/* line 432, inventory.scss */
 .btn-default-eclass.size-xl {
-  font-size: 1.2em;
-}
+  font-size: 1.2em; }
 
-/* line 437, inventory.scss */
 .btn-default-eclass.size-l {
-  font-size: 1.1em;
-}
+  font-size: 1.1em; }
 
-/* line 442, inventory.scss */
 .btn-default-eclass.size-s {
-  font-size: 0.85em;
-}
+  font-size: 0.85em; }
 
 /* flippin btn */
-/* line 453, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -625,14 +440,12 @@ input.toggle[type=checkbox]:checked:after {
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0);
+  color: transparent;
   background: transparent;
   border-radius: .25rem;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-touch-callout: none;
-}
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; }
 
-/* line 470, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -644,10 +457,8 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
+  transform-style: preserve-3d; }
 
-/* line 483, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -659,26 +470,20 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
+  backface-visibility: hidden; }
 
-/* line 497, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
-  color: white;
-}
+  color: white; }
 
-/* line 502, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
   background-color: #4da1e4;
   color: #9C9C9C;
   background-color: #FFFFFF;
-  content: attr(data-label);
-}
+  content: attr(data-label); }
 
-/* line 511, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -689,374 +494,277 @@ input.toggle[type=checkbox]:checked:after {
   -moz-transform: rotateX(180deg);
   -ms-transform: rotateX(180deg);
   transform: rotateX(180deg);
-  content: '';
-}
+  content: ''; }
 
-/* line 524, inventory.scss */
 .btn-flippin:active:before {
-  background-color: #3571c8;
-}
+  background-color: #3571c8; }
 
-/* line 528, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
   -ms-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-}
+  transform: rotateX(180deg); }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 546, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
-  cursor: default;
-}
-/* line 553, inventory.scss */
-ul.tablelist li.list-item {
-  position: relative;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  list-style-type: none;
-  border-bottom: 1px solid #eee;
-  background: white;
-  overflow: hidden;
-}
-/* line 562, inventory.scss */
-ul.tablelist li.list-item .max-height {
-  max-height: 3.35em;
-}
-/* line 567, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
-  border-right: 1px solid #eee;
-}
-/* line 572, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:first-child {
-  border-left: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-/* line 578, inventory.scss */
-ul.tablelist li.list-item .item-right-cols {
-  float: right;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  max-width: 95%;
-}
-/* line 588, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span,
-ul.tablelist li.list-item .item-title {
-  padding: 1em;
-  display: inline-block;
-}
-/* line 594, inventory.scss */
-ul.tablelist li.list-item .item-wholeline {
-  padding: 1em;
-  padding-right: 60px;
-  display: inline-block;
-}
-/* line 601, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-content {
-  font-size: 0.9em;
-}
-/* line 606, inventory.scss */
-ul.tablelist li.list-item .item-right-cols a {
-  width: 1em;
-  padding: 1em 1.4em;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-}
-/* line 616, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-date {
-  color: rgba(0, 0, 0, 0.6);
-  background: white;
-  width: 4.5em;
-  text-align: center;
-  vertical-align: top;
-}
-/* line 625, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options {
-  padding: 0px;
-  margin-left: -0.26em;
-  padding-right: 3.8em;
-}
-/* line 632, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
-  position: absolute;
-  display: inline-block;
-  top: 0px;
-  right: 0px;
-  width: 1em;
-  text-align: center;
-  padding: 1em 1.4em;
-  color: #7E7E7E;
-  background: #F8F8F8;
-}
-/* line 645, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
-  background: #4da1e4;
-  color: white;
-}
-/* line 651, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .options-content {
-  display: block;
-  margin-right: -25em;
-  background: #333333;
-  color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 663, inventory.scss */
-ul.tablelist li.list-item .item-options:hover .options-content {
-  margin-right: 0em;
-  background: #333333;
-}
-/* line 669, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a {
-  color: white;
-}
-/* line 673, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a:hover {
-  color: white;
-  background: #4da1e4;
-}
-/* line 682, inventory.scss */
-ul.tablelist li.list-item:first-child,
-ul.tablelist li.list-item:first-child .item-date {
-  -webkit-animation: NEW-ITEM-FX 3s 1;
-  -moz-animation: NEW-ITEM-FX 3s 1;
-  -o-animation: NEW-ITEM-FX 3s 1;
-  animation: NEW-ITEM-FX 3s 1;
-}
-/* line 690, inventory.scss */
-ul.tablelist li.list-item:hover {
-  background: #FCFCFC;
-}
+  cursor: default; }
+  ul.tablelist li.list-item {
+    position: relative;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    list-style-type: none;
+    border-bottom: 1px solid #eee;
+    background: white;
+    overflow: hidden; }
+    ul.tablelist li.list-item .max-height {
+      max-height: 3.35em; }
+    ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
+      border-right: 1px solid #eee; }
+    ul.tablelist li.list-item .item-right-cols > span:first-child {
+      border-left: 1px solid #eee;
+      border-bottom: 1px solid #eee; }
+    ul.tablelist li.list-item .item-right-cols {
+      float: right;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      max-width: 95%; }
+    ul.tablelist li.list-item .item-right-cols > span,
+    ul.tablelist li.list-item .item-title {
+      padding: 1em;
+      display: inline-block; }
+    ul.tablelist li.list-item .item-wholeline {
+      padding: 1em;
+      padding-right: 60px;
+      display: inline-block; }
+    ul.tablelist li.list-item .item-right-cols .item-content {
+      font-size: 0.9em; }
+    ul.tablelist li.list-item .item-right-cols a {
+      width: 1em;
+      padding: 1em 1.4em;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer; }
+    ul.tablelist li.list-item .item-right-cols .item-date {
+      color: rgba(0, 0, 0, 0.6);
+      background: white;
+      width: 4.5em;
+      text-align: center;
+      vertical-align: top; }
+    ul.tablelist li.list-item .item-right-cols .item-options {
+      padding: 0px;
+      margin-left: -0.26em;
+      padding-right: 3.8em; }
+    ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
+      position: absolute;
+      display: inline-block;
+      top: 0px;
+      right: 0px;
+      width: 1em;
+      text-align: center;
+      padding: 1em 1.4em;
+      color: #7E7E7E;
+      background: #F8F8F8; }
+    ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
+      background: #4da1e4;
+      color: white; }
+    ul.tablelist li.list-item .item-right-cols .options-content {
+      display: block;
+      margin-right: -25em;
+      background: #333333;
+      color: white;
+      -webkit-transition: all 150ms linear;
+      -moz-transition: all 150ms linear;
+      -o-transition: all 150ms linear;
+      -ms-transition: all 150ms linear;
+      transition: all 150ms linear; }
+    ul.tablelist li.list-item .item-options:hover .options-content {
+      margin-right: 0em;
+      background: #333333; }
+    ul.tablelist li.list-item .item-right-cols .item-options a {
+      color: white; }
+    ul.tablelist li.list-item .item-right-cols .item-options a:hover {
+      color: white;
+      background: #4da1e4; }
+  ul.tablelist li.list-item:first-child,
+  ul.tablelist li.list-item:first-child .item-date {
+    -webkit-animation: NEW-ITEM-FX 3s 1;
+    -moz-animation: NEW-ITEM-FX 3s 1;
+    -o-animation: NEW-ITEM-FX 3s 1;
+    animation: NEW-ITEM-FX 3s 1; }
+  ul.tablelist li.list-item:hover {
+    background: #FCFCFC; }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 702, inventory.scss */
 .boxlist {
-  padding: 0px;
-}
-/* line 707, inventory.scss */
-.boxlist .list-item {
-  display: block;
-  position: relative;
-  width: 100%;
-  padding: 0em;
-  margin-bottom: 1em;
-  overflow: hidden;
-  /*important for the transition*/
-  list-style-type: none;
-  background: white;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 720, inventory.scss */
-.boxlist .list-item.hidden {
-  background: rgba(255, 255, 255, 0.6);
-}
-/* line 725, inventory.scss */
-.boxlist .list-item.hidden .item-content {
-  opacity: 0.6;
-}
-/* line 730, inventory.scss */
-.boxlist .list-item:hover .side-header {
-  color: #eee;
-}
-/* line 735, inventory.scss */
-.boxlist .list-item .item-content {
-  width: 93%;
-  /* a fallback for calc */
-  width: -webkit-calc(100% - 4em);
-  width: -moz-calc(100% - 4em);
-  width: calc(100% - 4em);
-  position: relative;
-  display: inline-block;
-  padding-left: 1em;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 747, inventory.scss */
-.boxlist .item-header {
-  padding: 1em 0em 0.5em 0em;
-  border-bottom: 1px solid #eee;
-}
-/* line 753, inventory.scss */
-.boxlist .item-header .item-title {
-  margin: 0px;
-}
-/* line 758, inventory.scss */
-.boxlist .item-header .item-date {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.4);
-}
-/* line 764, inventory.scss */
-.boxlist .item-body {
-  padding: 1em 0em;
-  min-height: 5em;
-  font-size: 14px;
-}
-/* line 771, inventory.scss */
-.boxlist .list-item .item-side {
-  display: inline-block;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  color: #eee;
-  -webkit-transition: all 50ms linear;
-  -moz-transition: all 50ms linear;
-  -o-transition: all 50ms linear;
-  -ms-transition: all 50ms linear;
-  transition: all 50ms linear;
-}
-/* line 786, inventory.scss */
-.boxlist .list-item .option-button {
-  display: inline-block;
-  position: relative;
-  z-index: 9;
-  padding: 1em 1.4em;
-  background: #F8F8F8;
-  color: #7E7E7E;
-  text-align: center;
-  width: 1em;
-  /* as long as its a content box... */
-  border-radius: 0px 2px 0px 0px;
-  -webkit-border-radius: 0px 2px 0px 0px;
-  -moz-border-radius: 0px 2px 0px 0px;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 800, inventory.scss */
-.boxlist .list-item .item-side .item-options:hover .option-button {
-  background: #4da1e4;
-  color: white;
-}
-/* line 807, inventory.scss */
-.boxlist .list-item .item-side .item-options ul {
-  position: relative;
-  z-index: 2;
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
-  margin-right: -100%;
-  background: #333333;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 819, inventory.scss */
-.boxlist .list-item .item-side .item-options:hover ul {
-  margin-right: 0%;
-}
-/* line 824, inventory.scss */
-.boxlist .list-item .item-side .item-options > * {
-  float: right;
-}
-/* line 829, inventory.scss */
-.boxlist .list-item .item-side:hover .item-options ul {
-  display: block;
-}
-/* line 834, inventory.scss */
-.boxlist .list-item .item-options ul li {
-  display: inline-block;
-  padding: 1em 1.4em;
-  z-index: 2;
-  width: 1em;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 847, inventory.scss */
-.boxlist .list-item .item-options ul li:hover {
-  background: #4da1e4;
-}
+  padding: 0px; }
+  .boxlist .list-item {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 0em;
+    margin-bottom: 1em;
+    overflow: hidden;
+    /*important for the transition*/
+    list-style-type: none;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+  .boxlist .list-item.hidden {
+    background: rgba(255, 255, 255, 0.6); }
+  .boxlist .list-item.hidden .item-content {
+    opacity: 0.6; }
+  .boxlist .list-item:hover .side-header {
+    color: #eee; }
+  .boxlist .list-item .item-content {
+    width: 93%;
+    /* a fallback for calc */
+    width: -webkit-calc(100% - 4em);
+    width: -moz-calc(100% - 4em);
+    width: calc(100% - 4em);
+    position: relative;
+    display: inline-block;
+    padding-left: 1em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+  .boxlist .item-header {
+    padding: 1em 0em 0.5em 0em;
+    border-bottom: 1px solid #eee; }
+  .boxlist .item-header .item-title {
+    margin: 0px; }
+  .boxlist .item-header .item-date {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.4); }
+  .boxlist .item-body {
+    padding: 1em 0em;
+    min-height: 5em;
+    font-size: 14px; }
+  .boxlist .list-item .item-side {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #eee;
+    -webkit-transition: all 50ms linear;
+    -moz-transition: all 50ms linear;
+    -o-transition: all 50ms linear;
+    -ms-transition: all 50ms linear;
+    transition: all 50ms linear; }
+  .boxlist .list-item .option-button {
+    display: inline-block;
+    position: relative;
+    z-index: 9;
+    padding: 1em 1.4em;
+    background: #F8F8F8;
+    color: #7E7E7E;
+    text-align: center;
+    width: 1em;
+    /* as long as its a content box... */
+    border-radius: 0px 2px 0px 0px;
+    -webkit-border-radius: 0px 2px 0px 0px;
+    -moz-border-radius: 0px 2px 0px 0px;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; }
+  .boxlist .list-item .item-side .item-options:hover .option-button {
+    background: #4da1e4;
+    color: white; }
+  .boxlist .list-item .item-side .item-options ul {
+    position: relative;
+    z-index: 2;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    margin-right: -100%;
+    background: #333333;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .boxlist .list-item .item-side .item-options:hover ul {
+    margin-right: 0%; }
+  .boxlist .list-item .item-side .item-options > * {
+    float: right; }
+  .boxlist .list-item .item-side:hover .item-options ul {
+    display: block; }
+  .boxlist .list-item .item-options ul li {
+    display: inline-block;
+    padding: 1em 1.4em;
+    z-index: 2;
+    width: 1em;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; }
+  .boxlist .list-item .item-options ul li:hover {
+    background: #4da1e4; }
 
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
-/* line 862, inventory.scss */
 #lesson-banner {
   position: relative;
-  min-height: 13em;
-}
-/* line 867, inventory.scss */
-#lesson-banner .banner-left {
-  width: 40%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  margin-right: 1em;
-  padding: 1em;
-}
-/* line 877, inventory.scss */
-#lesson-banner .banner-left .banner-image {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  border-radius: 2px 0px 0px 2px;
-  -webkit-border-radius: 2px 0px 0px 2px;
-  -moz-border-radius: 2px 0px 0px 2px;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-/* line 885, inventory.scss */
-#lesson-banner .banner-left .banner-image:after {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
-  /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right top, color-stop(57%, rgba(255, 255, 255, 0)), color-stop(68%, rgba(255, 255, 255, 0.25)), color-stop(86%, rgba(255, 255, 255, 0.85)), color-stop(92%, rgba(255, 255, 255, 0.95)), color-stop(99%, white));
-  /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
-  /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
-  /* Opera 11.10+ */
-  background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
-  /* IE10+ */
-  background: linear-gradient(to right, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, #ffffff 99%);
-  /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
-  /* IE6-9 */
-}
-/* line 907, inventory.scss */
-#lesson-banner .banner-content {
-  margin-left: 40%;
-  padding: 1em;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 913, inventory.scss */
-#lesson-banner .banner-content .banner-description {
-  font-size: 0.8em;
-  min-height: 6em;
-  line-height: 1.7em;
-}
-/* line 920, inventory.scss */
-#lesson-banner .banner-content hr {
-  margin-bottom: 0.8em;
-}
+  min-height: 13em; }
+  #lesson-banner .banner-left {
+    width: 40%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    margin-right: 1em;
+    padding: 1em; }
+    #lesson-banner .banner-left .banner-image {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 2px 0px 0px 2px;
+      -webkit-border-radius: 2px 0px 0px 2px;
+      -moz-border-radius: 2px 0px 0px 2px;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover; }
+      #lesson-banner .banner-left .banner-image:after {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
+        /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, right top, color-stop(57%, rgba(255, 255, 255, 0)), color-stop(68%, rgba(255, 255, 255, 0.25)), color-stop(86%, rgba(255, 255, 255, 0.85)), color-stop(92%, rgba(255, 255, 255, 0.95)), color-stop(99%, white));
+        /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
+        /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
+        /* Opera 11.10+ */
+        background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
+        /* IE10+ */
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 57%, rgba(255, 255, 255, 0.25) 68%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0.95) 92%, white 99%);
+        /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
+        /* IE6-9 */ }
+  #lesson-banner .banner-content {
+    margin-left: 40%;
+    padding: 1em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+    #lesson-banner .banner-content .banner-description {
+      font-size: 0.8em;
+      min-height: 6em;
+      line-height: 1.7em; }
+    #lesson-banner .banner-content hr {
+      margin-bottom: 0.8em; }
 
 /* LABEL -------------------------------------------------------------------------------- */
 /*.label
@@ -1310,3 +1018,54 @@ textarea{
 .modal-overlay-bg-dark{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
+/* Action Button ------------------------------------------------------------------- */
+.opt-btn-wrapper {
+  position: relative;
+  width: 60px;
+  height: 54px; }
+
+.opt-btn {
+  position: absolute;
+  background-color: #F8F8F8 !important; }
+
+.opt-btn:hover {
+  background-color: #4da1e4 !important;
+  color: white !important; }
+
+.opt-btn-more-wrapper {
+  position: absolute;
+  width: 60px;
+  height: 54px;
+  right: 0px;
+  overflow: hidden; }
+
+.opt-btn-more-tool {
+  float: left; }
+
+.tool-btn {
+  width: 60px;
+  height: 54px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 54px;
+  color: #7e7e7e; }
+
+.tool-btn a {
+  display: block;
+  width: 60px;
+  height: 54px;
+  color: white;
+  background-color: #333333; }
+
+.tool-btn.delete a {
+  color: #ce6b6b; }
+
+.tool-btn.delete a:hover {
+  color: white;
+  background-color: #ce6b6b; }
+
+.tool-btn a:hover {
+  color: white;
+  background-color: #4da1e4; }
+
+/*# sourceMappingURL=inventory.css.map */

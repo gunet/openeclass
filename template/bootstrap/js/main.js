@@ -79,8 +79,8 @@ $(document).ready( function () {
 //alert(tool_length);
 $(".opt-btn-wrapper").hover(
         function(){
-            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*53)+"px";
+            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*60)+"px";
             $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
         function(){
-            $(this).children(".opt-btn-more-wrapper").animate({width:"53px"},150);});
+            $(this).children(".opt-btn-more-wrapper").animate({width:"60px"},150);});
 }); 
