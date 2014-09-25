@@ -254,9 +254,12 @@ if (isset($_POST['formSent'])) {
     
     // if it is a non-sequential exercice OR
     // if it is a sequnential exercise in the last question OR the time has expired
-    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {
-        // goes to the script that will show the result of the exercise
-        $secs_remaining = $_POST['secsRemaining'];
+    if ($exerciseType == 1 && !isset($_POST['buttonSave']) || $exerciseType == 2 && ($questionNum >= $nbrQuestions || (isset($time_expired) && $time_expired))) {        
+        if (isset($_POST['secsRemaining'])) {
+            $secs_remaining = $_POST['secsRemaining'];
+        } else { 
+            $secs_remaining = 0;
+        }              
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);

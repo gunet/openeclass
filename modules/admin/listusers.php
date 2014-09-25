@@ -308,7 +308,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $icon_content = icon('edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
                                 icon('delete', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
                                 icon('platform_stats', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                                icon('platform_stats', $langActions, "userlogs.php?u=$logs->id");
+                                icon('action_log', $langActions, "userlogs.php?u=$logs->id");
             if (!isDepartmentAdmin()) {
                     $icon_content .= '&nbsp;' . icon('log_as', $changetip, 'change_user.php?username=' . urlencode($logs->username));
             }

@@ -18,6 +18,7 @@ class Debug {
 
     private static $level = Debug::ERROR;
     private static $default_level = Debug::ERROR;
+    private static $log_location = null;
 
     const LOW = 0;
     const INFO = 10;
@@ -43,11 +44,8 @@ class Debug {
             }
             echo "<br> $message </p>";
         }
-        /*
-          if ($level > Debug::ERROR) {
-          // Store it somewhere
-          }
-         */
+        if (!is_null(Debug::$log_location))
+            file_put_contents(Debug::$log_location, $message . "\n", FILE_APPEND | LOCK_EX);
     }
 
 }

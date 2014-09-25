@@ -215,7 +215,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <fieldset>
         <legend>$langInfoPoll</legend>
 	<table width=\"100%\" class='tbl'>
-	<tr ".(Session::getError('PollName') ? "class='error'" : "").">
+	<tr ".(Session::has('PollName') ? "class='error'" : "").">
 	  <th width='100'>$langTitle:</th>
 	  <td><input type='text' size='50' name='PollName' value='$PollName'>".Session::getError('PollName', 'caution')."</td>
 	</tr>
@@ -408,7 +408,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= "
         <fieldset>
-            <legend>$langInfoPoll &nbsp;".icon('edit', $langEditPoll, "admin.php?course=TMAPOST104&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
+            <legend>$langInfoPoll &nbsp;".icon('edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
             <table width='99%' class='tbl'>
             <tbody><tr>
               <th width='180'>$langTitle:</th>

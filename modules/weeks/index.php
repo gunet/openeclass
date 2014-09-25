@@ -135,7 +135,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         //$q_title = htmlspecialchars($q->title);
-        $q_title = $langFrom . " " . $q->start_week . " $langUntil " . $q->finish_week;
+        $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
         $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$q_title</a>$arrow2";
     } else {
         $link[$i] = '&nbsp;';
@@ -185,8 +185,7 @@ $q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM
 foreach ($q as $info) {
     $selected = ($info->id == $id) ? ' selected ' : '';
     $tool_content .= "<option value='$info->id'$selected>" .
-            htmlspecialchars(ellipsize($info->start_week . " ... " . $info->finish_week, 40)) .
-            '</option>';
+            nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
 }
 $tool_content .= "</select>
        </td>
