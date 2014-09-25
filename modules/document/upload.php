@@ -55,12 +55,15 @@ if ($can_upload) {
     <h5 class='content-title'>$langUpload</h5>
     <div class='panel padding-fat focused'>
 
-    <form class='form-horizontal' role='form'>
+    <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
       
+      <input type='hidden' name='uploadPath' value='$uploadPath' />
+      $group_hidden_input
+
       <div class='form-group'>
-        <label for='' class='col-sm-2 control-label'>BROWSE FILE VARIABLE</label>
+        <label for='' class='col-sm-2 control-label'>$fileinput</label>
         <div class='col-sm-10'>
-          $fileinput
+          ...
         </div>
       </div>
 
@@ -92,6 +95,8 @@ if ($can_upload) {
           </select>
         </div>
 
+        <input type='hidden' name='file_creator' value='" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "' size='40' />
+
       </div>
 
       <div class='form-group'>
@@ -116,6 +121,9 @@ if ($can_upload) {
       </div>
 
       <div class='form-group'>
+        <input type='hidden' name='file_date' value='' size='40' />
+        <input type='hidden' name='file_format' value='' size='40' />
+
         <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage</label>
         <div class='col-sm-10'>
           <select name='file_language'>
@@ -150,8 +158,8 @@ if ($can_upload) {
       if (!isset($_GET['ext'])) {
         $tool_content .= "
       <div class='form-group'>
-        <label for='inputFileCompression' class='col-sm-2 control-label'>$langUncompress</label>
-        <div class='col-sm-10'>
+        <label for='inputFileCompression' class='col-sm-5 control-label'>$langUncompress</label>
+        <div class='col-sm-7'>
           <div class='checkbox'>
               <input type='checkbox' name='uncompress' value='1'>
           </div>
@@ -163,14 +171,17 @@ if ($can_upload) {
       $tool_content .= "
 
       <div class='form-group'>
-        <label for='inputFileReplaceSameName' class='col-sm-2 control-label'>$langReplaceSameName</label>
-        <div class='col-sm-10'>
+        <label for='inputFileReplaceSameName' class='col-sm-5 control-label'>$langReplaceSameName</label>
+        <div class='col-sm-7'>
           <div class='checkbox'>
               <input type='checkbox' name='replace' value='1'>
           </div>
         </div>
       </div>      
 
+<div class='right smaller'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+    
+  $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-5 col-sm-12'>
           <button type='submit' class='btn-default-eclass color-green size-l'>
@@ -183,7 +194,20 @@ if ($can_upload) {
 
     </form>
 
+      
+
     </div>
+
+
+
+
+
+
+
+
+
+
+
 
     <div class='panel'>
 
