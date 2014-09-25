@@ -63,9 +63,9 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Main body
 $close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_POST['close'] : '');
-$id = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : '');
+$id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
 $show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
-$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
 
 // id validation
 if (intval($id) > 0) {
