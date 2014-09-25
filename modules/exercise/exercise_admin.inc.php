@@ -39,11 +39,14 @@ if (isset($_POST['submitExercise'])) {
         if ((!is_numeric($exerciseTimeConstraint)) or (!is_numeric($exerciseAttemptsAllowed))) {
             $msgErr = $langGiveExerciseInts;
         } else {
+            
             $objExercise->updateTitle($exerciseTitle);
             $objExercise->updateDescription($exerciseDescription);
             $objExercise->updateType($exerciseType);
-            $objExercise->updateStartDate($exerciseStartDate);
-            $objExercise->updateEndDate($exerciseEndDate);
+            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate);
+            $objExercise->updateStartDate($startDateTime_obj->format('Y-m-d H:i:s'));
+            $endDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate);
+            $objExercise->updateEndDate($endDateTime_obj->format('Y-m-d H:i:s'));
             $objExercise->updateTempSave($exerciseTempSave);
             $objExercise->updateTimeConstraint($exerciseTimeConstraint);
             $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
@@ -63,8 +66,17 @@ if (isset($_POST['submitExercise'])) {
     $exerciseTitle = $objExercise->selectTitle();
     $exerciseDescription = $objExercise->selectDescription();
     $exerciseType = $objExercise->selectType();
-    $exerciseStartDate = $objExercise->selectStartDate();
+    $startDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate());
+    $exerciseStartDate = $startDateTime_obj->format('d-m-Y H:i');
     $exerciseEndDate = $objExercise->selectEndDate();
+    if ($exerciseEndDate == '') {
+        $endDateTime_obj = new DateTime;
+        $endDateTime_obj->add(new DateInterval('P1Y'));
+        $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i');
+    } else {
+        $endDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate());
+        $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i'); 
+    }
     $exerciseTempSave = $objExercise->selectTempSave();
     $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
@@ -75,6 +87,12 @@ if (isset($_POST['submitExercise'])) {
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#startdatepicker, #enddatepicker').datetimepicker({format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', language: '".$language."'});
+        });
+    </script>";
     if (isset($_GET['modifyExercise'])) {
         $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>";
     } else {
@@ -113,16 +131,23 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $tool_content .= "> " . $langSequentialExercise . "</td>
 	</tr>";
 
-    if (isset($exerciseStartDate)) {
-        $start_cal_Excercise = jscal_html('exerciseStartDate', $exerciseStartDate);
-    } else {
-        $start_cal_Excercise = jscal_html('exerciseStartDate', strftime('%Y-%m-%d %H:%M', strtotime('now -0 day')));
-    }
-    if (isset($exerciseEndDate) and $exerciseEndDate != '') {
-        $end_cal_Excercise = jscal_html('exerciseEndDate', $exerciseEndDate);
-    } else {
-        $end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d %H:%M', strtotime('now +1 year')));
-    }
+
+    $start_cal_Excercise = "<div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+        <div class='col-xs-11'>        
+            <input name='exerciseStartDate' type='text' value='$exerciseStartDate'>
+        </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+    </div>";
+
+    $end_cal_Excercise = "<div class='input-append date form-group' id='enddatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+        <div class='col-xs-11'>        
+            <input name='exerciseEndDate' type='text' value='$exerciseEndDate'>
+        </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+    </div>";
+    
     $tool_content .= "
         <tr>
           <th>" . $langExerciseStart . ":</th>
@@ -205,6 +230,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
+    
     $exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;

@@ -153,7 +153,7 @@ function js_escape($s) {
 
 // Include a JavaScript file from the main js directory
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings;
+    global $head_content, $urlAppend, $theme, $theme_settings, $language;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -165,20 +165,8 @@ function load_js($file, $init='') {
     // Load file only if not provided by template
     if (!(isset($theme_settings['js_loaded']) and
           in_array($file, $theme_settings['js_loaded']))) {
-        if ($file == 'jquery') {
-            $file = 'jquery-2.1.1.min.js';
-        } elseif ($file == 'jquery-ui') {
-            if ($theme == 'modern' || $theme == 'ocean') {
-                $uiTheme = 'redmond';
-            } else {
-                $uiTheme = 'smoothness';
-            }
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.4.custom.min.css'>\n";
-            $file = 'jquery-ui-1.10.4.custom.min.js';
-        } elseif ($file == 'jquery-multiselect') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
-            $file = 'jquery.multiselect.min.js';
-        } elseif ($file == 'jstree') {
+        
+        if ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
         } elseif ($file == 'shadowbox') {
@@ -217,7 +205,12 @@ function load_js($file, $init='') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2.css'>";
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2-bootstrap.css'>";
             $file = 'select2-3.5.1/select2.min.js';
-        }        
+        } elseif ($file == 'bootstrap-datetimepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'>";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'></script>\n";
+            
+            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+        }      
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
