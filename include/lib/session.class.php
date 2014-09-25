@@ -153,6 +153,7 @@ class Session {
         foreach($item_messages as $class => $value){
             $msg_boxes .= "<div class='$class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
+        unset($_SESSION['messages']);
         return $msg_boxes;
     }
     
