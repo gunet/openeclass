@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0923a
+    SASS for UI Inventory of eclass v3.0 - version 0.0925a
 =============================================================
 */
 
@@ -97,7 +97,7 @@ hr
 /* Font awesome icons seem to be looking better on specific sizes */
 .fa
 {
-  font-size:1em;
+  font-size:1em !important;
 }
 
 
@@ -321,7 +321,7 @@ input.toggle[type=checkbox]:checked:after
   color: #555555;
   outline: 0;
   font-family: $font-default;
-  font-size:0.9em;
+  font-size:1em;
   padding:0.5em 1.2em;
   margin:0 0.2em;
   display:inline-block;
