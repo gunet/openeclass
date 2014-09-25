@@ -29,28 +29,12 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js'); 
 global $themeimg;
-$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
-    <script>
-    $(function() {
-        $('input[name=PollStart], input[name=PollEnd]').datetimepicker({
-            showOn: 'both',
-            buttonImage: '{$themeimg}/calendar.png',
-            buttonImageOnly: true,
-            dateFormat: 'dd-mm-yy', 
-            timeFormat: 'HH:mm'
-        });
-        $(poll_init);
-        $('.success').delay(3000).fadeOut(1500);
-    });
-    </script>";
+
 if (isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-    if(!$poll){
+    if(!$poll){     
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
 }
@@ -81,7 +65,6 @@ if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
 if (isset($_POST['submitPoll'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', ['PollName']);
-    $v->rule('alpha', ['PollName']);
     $v->labels(array(
         'PollName' => "$langTheField $langTitle"
     ));
@@ -189,6 +172,12 @@ if (isset($_GET['pid'])) {
 $aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#startdatepicker, #enddatepicker').datetimepicker({format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', language: '".$language."'});
+        });
+    </script>";    
     if (isset($_GET['modifyPoll'])) {
         $nameTools = $langInfoPoll;
         $navigation[] = array(
@@ -217,14 +206,31 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 	<table width=\"100%\" class='tbl'>
 	<tr ".(Session::getError('PollName') ? "class='error'" : "").">
 	  <th width='100'>$langTitle:</th>
-	  <td><input type='text' size='50' name='PollName' value='$PollName'>".Session::getError('PollName', 'caution')."</td>
+	  <td><input type='text' size='50' name='PollName' value='$PollName'>".Session::getError('PollName')."</td>
 	</tr>
 	<tr>
 	  <th>$langPollStart:</th>
-	  <td><input type='text' size='47' name='PollStart' value='$PollStart'></td></tr>
+          <td>
+                <div class='input-append date form-group' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-11'>        
+                        <input name='PollStart' type='text' value='$PollStart'>
+                    </div>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+          </td>    
+        </tr>
 	<tr>
 	  <th>$langPollEnd:</th>
-	  <td><input type='text' size='47' name='PollEnd' value='$PollEnd'></td>
+          <td>
+                <div class='input-append date form-group' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-11'>        
+                        <input name='PollEnd' type='text' value='$PollEnd'>
+                    </div>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>          
+          </td>
 	</tr>
 	<tr>
 	  <th>$langPollAnonymize:</th>
@@ -408,7 +414,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= "
         <fieldset>
-            <legend>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=TMAPOST104&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
+            <legend>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
             <table width='99%' class='tbl'>
             <tbody><tr>
               <th width='180'>$langTitle:</th>
