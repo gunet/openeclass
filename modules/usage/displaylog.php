@@ -69,10 +69,10 @@ $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
 $u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -30 day'));
 $u_date_end = isset($_REQUEST['u_date_end']) ? $_REQUEST['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
-$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
 
 if (isset($_REQUEST['submit'])) {
-    $page_link = "&amp;logtype=$logtype&amp;u_date_start=$u_date_start&amp;u_date_end=$u_date_end&amp;u_module_id=$u_module_id&amp;u_user_id=$u_user_id&amp;submit=1";
+    $page_link = "&amp;logtype=$logtype&amp;u_date_start=" . urlencode($u_date_start) . "&amp;u_date_end=" . urlencode($u_date_end) . "&amp;u_module_id=$u_module_id&amp;u_user_id=$u_user_id&amp;submit=1";
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
 }
