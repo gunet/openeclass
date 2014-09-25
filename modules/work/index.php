@@ -87,21 +87,10 @@ if ($is_editor) {
 
 if ($is_editor) {
     load_js('tools.js');
-    load_js('jquery');
-    load_js('jquery-ui');
-    load_js('jquery-ui-timepicker-addon.min.js');  
     global $themeimg, $m;
-    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+    $head_content .= "
     <script type='text/javascript'>
-    $(function() {
-        $('input[name=WorkEnd]').datetimepicker({
-            showOn: 'both',
-            buttonImage: '{$themeimg}/calendar.png',
-            buttonImageOnly: true,
-            dateFormat: 'dd-mm-yy', 
-            timeFormat: 'HH:mm'
-        });
-        
+    $(function() {        
         $('input[name=group_submissions]').click(changeAssignLabel);
         $('input[id=assign_button_some]').click(ajaxAssignees);        
         $('input[id=assign_button_all]').click(hideAssignees);
@@ -317,7 +306,7 @@ draw($tool_content, 2, null, $head_content);
 // insert the assignment into the database
 function add_assignment() {
     global $tool_content, $workPath, $course_id, $uid;
-    
+      
     $title = $_POST['title'];
     $desc = $_POST['desc'];
     $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
@@ -530,9 +519,20 @@ function submit_work($id, $on_behalf_of = null) {
 //  assignment - prof view only
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id;
-    global $desc;
+    global $desc, $language, $head_content;
     global $langBack, $langStudents, $langMove, $langWorkFile;
-
+    
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#enddatepicker').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true
+                });
+        });
+    </script>";
+    $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
     $tool_content .= "
         <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
         <fieldset>
@@ -558,8 +558,17 @@ function new_assignment() {
         <br /><input type='radio' name='is_deadline' value='1'". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#deadline_row, #late_sub_row\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
         <tr id='deadline_row' ". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
-          <th></th>
-          <td><input id='deadline' type='text' name='WorkEnd' value='".(isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "")."' />&nbsp $m[deadline_notif]</td>
+            <th></th>
+            <td>
+                <div class='input-append date form-group' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-11'>        
+                        <input id='deadline' name='WorkEnd' type='text' value='$workEnd'>
+                    </div>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+                <div>$m[deadline_notif]</div>
+            </td>
         </tr>
         <tr id='late_sub_row'". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
                <th></th>
@@ -616,9 +625,20 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
-    $urlAppend, $works_url, $end_cal_Work_db, $course_id, 
+    $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
     $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
-
+    
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#enddatepicker').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', language: '".$language."',
+                autoclose: true
+            });
+        });
+    </script>";
+    
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
@@ -711,7 +731,16 @@ function show_edit_assignment($id) {
     </tr>
     <tr id='deadline_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
           <th></th>
-          <td><input id='deadline' type='text' name='WorkEnd' value='{$deadline}' />&nbsp $m[deadline_notif]</td>
+          <td>
+                <div class='input-append date form-group' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-11'>        
+                        <input id='deadline' name='WorkEnd' type='text' value='$deadline'>
+                    </div>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+                <div>$m[deadline_notif]</div>          
+          </td>
     </tr>  
     <tr id='late_sub_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
           <th></th>
