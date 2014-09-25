@@ -429,7 +429,7 @@ class Calendar_Events {
 
         $m = ($eventtype == 'personal')? MODULE_ID_PERSONALCALENDAR:MODULE_ID_ADMINCALENDAR;
         Log::record(0, $m, LOG_DELETE, array('user_id' => $uid, 'id' => $eventid,
-            'title' => $event->title,
+            'title' => q($event->title),
             'content' => $content));
     }
 
@@ -964,9 +964,9 @@ class Calendar_Events {
        if($event->event_type != 'personal' && $event->event_type != 'admin'){
            $link = str_replace('thiscourse', $event->course, $link);
        }
-       $formatted_calendar_item = "<a href=\"".$link."\"><div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".$event->title."</div></a>";
+       $formatted_calendar_item = "<a href=\"".$link."\"><div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".q($event->title)."</div></a>";
        if(!$is_admin && $event->event_group == 'admin'){
-           $formatted_calendar_item = "<div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".$event->title."</div>";
+           $formatted_calendar_item = "<div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".q($event->title)."</div>";
        }
        return $formatted_calendar_item;
    }
@@ -1130,7 +1130,7 @@ class Calendar_Events {
            $ical .= "DTSTART:".$startdatetime->format("Ymd\THis").PHP_EOL;
            $duration = new DateTime($event->duration);
            $ical .= "DURATION:".$duration->format("\P\TH\Hi\Ms\S").PHP_EOL;
-           $ical .= "SUMMARY:[".strtoupper($event->event_group)."] ".$event->title.PHP_EOL;
+           $ical .= "SUMMARY:[".strtoupper($event->event_group)."] ".q($event->title).PHP_EOL;
            $ical .= "DESCRIPTION:".canonicalize_whitespace(strip_tags($event->content)).PHP_EOL;
            if($event->event_group == 'deadline')
            {
