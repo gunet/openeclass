@@ -67,6 +67,8 @@ if ($can_upload) {
         </div>
       </div>
 
+      <hr/>
+
       <div class='form-group'>
         <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
         <div class='col-sm-10'>
@@ -179,7 +181,7 @@ if ($can_upload) {
         </div>
       </div>      
 
-<div class='right smaller'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+<div class='infotext-sm'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
     
   $tool_content .= "
       <div class='form-group'>
