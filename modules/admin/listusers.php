@@ -78,7 +78,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         add_param('user_registered_at');
         // join the above with registered at search
         $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
-        $terms[] = $user_registered_at;
+        $date_user_registered_at = DateTime::createFromFormat("d-m-Y H:i", $user_registered_at);
+        $terms[] = $date_user_registered_at->format("Y-m-d H:i:s");
     }
     // surname search
     if (!empty($lname)) {

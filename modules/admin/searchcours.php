@@ -36,19 +36,19 @@ $tree = new Hierarchy();
 $user = new User();
 
 load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#id_date').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
 
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -101,13 +101,20 @@ $tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></th>
         </td>
       </tr>";
 
-$tool_content .= "<tr><th class='left'>$langRegistrationDate:</th><td>";
+$tool_content .= "<tr><th class='left'>$langCreationDate:</th><td>";
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;
 $tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
-@$tool_content .= "<input type='text' name='date' value='" . $date . "'>";
+$tool_content .= "<div class='input-append date form-group' id='id_date' data-date='$date' data-date-format='dd-mm-yyyy'>";
+$tool_content .= "<div class='col-xs-11'>        
+            <input name='date' type='text' value='$date'>
+        </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+    </div>";
+
 $tool_content .= "</td></tr>";
 $tool_content .= "<tr><th class='left'>" . $langFaculty . ":</th><td>";
 

@@ -21,10 +21,9 @@
 
 /**
  * 	@file searchuser.php
- * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
  *      @brief: user search form based upon criteria/filters
  */
+
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -35,19 +34,19 @@ require_once 'hierarchy_validations.php';
 $user = new User();
 
 load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=user_registered_at]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#id_user_registered_at').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
@@ -121,8 +120,6 @@ $tool_content .= selection($usertype_data, 'user_type', 0) . "
     <th class='left'>$langAuthMethod:</th>
     <td>";
 
-// enalaktika mporoume na valoume mono tous energous tropous
-//$auth_methods = get_auth_active_methods();
 $authtype_data = $auth_ids;
 $authtype_data[0] = $langAllAuthTypes;
 $tool_content .= selection($authtype_data, 'auth_type', 0) . "
@@ -133,12 +130,16 @@ $tool_content .= selection($authtype_data, 'auth_type', 0) . "
 
 $tool_content .= selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag);
 
-$tool_content .= "<input type='text' name='user_registered_at' value='" . $user_registered_at . "'>";
+$tool_content .= "<div class='input-append date form-group' id='id_user_registered_at' data-date='$user_registered_at' data-date-format='dd-mm-yyyy'>";
+$tool_content .= "<div class='col-xs-11'>        
+            <input name='user_registered_at' type='text' value='$user_registered_at'>
+        </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+    </div>";
 
-$tool_content .= "</td></tr>
-  <tr>
-    <th class='left'>$langEmailVerified:</th>
-    <td>";
+$tool_content .= "</td></tr>";
+$tool_content .= "<tr><th class='left'>$langEmailVerified:</th><td>";
 
 $verified_mail_data = array(
     EMAIL_VERIFICATION_REQUIRED => $m['pending'],

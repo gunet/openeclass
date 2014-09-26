@@ -75,7 +75,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     if (isset($_GET['reg_flag']) and !empty($_GET['date'])) {
         $query .= ' AND created ' .  (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
-        $terms[] = $_GET['date'];
+        $date_created_at = DateTime::createFromFormat("d-m-Y H:i", $_GET['date']);
+        $terms[] = $date_created_at->format("Y-m-d H:i:s");
     }
 
     // Datatables internal search

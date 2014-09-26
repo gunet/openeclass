@@ -1771,6 +1771,7 @@ $langMyCoursesProf = "Τα μαθήματα που υποστηρίζω";
 $langMyCoursesUser = "Τα μαθήματα που παρακολουθώ";
 $langNoCourses = "Δεν υπάρχουν μαθήματα";
 $langCourseCreate = "Δημιουργία Μαθήματος";
+$langCreationDate = "Ημερομηνία δημιουργίας";
 $langMyAgenda = "Το Ημερολόγιό μου";
 $langMyStats = "Στατιστικά Χρήσης";   #ophelia 1-8-2006
 $langMyAnnouncements = "Οι Ανακοινώσεις μου";
