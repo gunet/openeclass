@@ -135,22 +135,22 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 map_table_field('student_group', 'id', 'tutor', $userid_map);
                         }
                 }
-		if ($eclass_version < '2.2') { // if we come from 2.1.x
+                if (version_compare($eclass_version, '2.2', '<')) { // if we come from 2.1.x
                         upgrade_course_2_2($new_course_code, $course_lang);
                 }
-                if ($eclass_version < '2.3') {
+                if (version_compare($eclass_version, '2.3', '<')) {
                         upgrade_course_2_3($new_course_code);
                 }
-                if ($eclass_version < '2.4') {
+                if (version_compare($eclass_version, '2.4', '<')) {
                         upgrade_course_2_4($new_course_code, $course_lang);
                 }
-                if ($eclass_version < '2.5') {
+                if (version_compare($eclass_version, '2.5', '<')) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
-                if ($eclass_version < '2.8') {
+                if (version_compare($eclass_version, '2.8', '<')) {
                         upgrade_course_2_8($new_course_code, $course_lang);
                 }
-                if ($eclass_version < '2.9') {
+                if (version_compare($eclass_version, '2.9', '<')) {
                         upgrade_course_2_9($new_course_code, $course_lang);
                 }
                 if (version_compare($eclass_version, '2.10', '<')) {
@@ -159,10 +159,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 if (version_compare($eclass_version, '2.11', '<')) {
                         upgrade_course_2_11($new_course_code, $course_lang);
                 }
-	}
+        }
         convert_description_to_units($new_course_code, $course_id);
-	$tool_content .= ob_get_contents();
-	ob_end_clean();
+        $tool_content .= ob_get_contents();
+        ob_end_clean();
         
         if (file_exists("$restoreThis/cours")) {
                 // New-style backup - restore individual tables
@@ -216,7 +216,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                 $data['res_id'] = $section_map[$data['res_id']];
                         } elseif ($type == 'subsection') {
                                 $data['res_id'] = $subsection_map[$data['res_id']];
-			} elseif ($type == 'description') {
+                        } elseif ($type == 'description') {
                                 $data['res_id'] = intval($data['res_id']);
                         }
                         return true;
