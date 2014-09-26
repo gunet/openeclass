@@ -40,12 +40,22 @@ if ($can_upload) {
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $nameTools = $langExternalFile;
-        $fileinput = "<th width='200'>$langExternalFileInfo:</th>
-                              <td><input type='text' name='fileURL' size='40' /></td>";
+        $fileinput = "
+        <div class='form-group'>
+          <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
+          <div class='col-sm-10'>
+            <input type='text' class='form-control' id='fileURL' name='fileURL'>
+          </div>
+        </div>";
     } else {
         $nameTools = $langDownloadFile;
-        $fileinput = "<th width='200'>$langPathUploadFile:</th>
-                              <td><input type='file' name='userFile' size='35' /></td>";
+        $fileinput = "
+        <div class='form-group'>
+          <label for='userFile' class='col-md-6 control-label'>$langPathUploadFile</label>
+          <div class='col-md-3'>
+            <input type='file' id='userFile' name='userFile'>
+          </div>
+        </div>";
     }
     $tool_content .= "
 
@@ -60,12 +70,8 @@ if ($can_upload) {
       <input type='hidden' name='uploadPath' value='$uploadPath' />
       $group_hidden_input
 
-      <div class='form-group'>
-        <label for='' class='col-sm-2 control-label'>$fileinput</label>
-        <div class='col-sm-10'>
-          ...
-        </div>
-      </div>
+      $fileinput
+      
 
       <hr/>
 
