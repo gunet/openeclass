@@ -1,18 +1,18 @@
 /* 
 ==========================================================
-    SASS for structure of eclass v3.0 - version 0.0924a 
+    SASS for structure of eclass v3.0 - version 0.0926a 
 ==========================================================
 */
 /* 
 ================================================================
-    SASS for eclass UI v3.0 - Global styles - version 0.0923a
+    SASS for eclass UI v3.0 - Global styles - version 0.0926a
 ================================================================
 */
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 112, global.scss */
+/* line 112, D:/SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -22,68 +22,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 118, global.scss */
+  /* line 118, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 119, global.scss */
+  /* line 119, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 120, global.scss */
+  /* line 120, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 126, global.scss */
+  /* line 126, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 127, global.scss */
+  /* line 127, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 128, global.scss */
+  /* line 128, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 134, global.scss */
+  /* line 134, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 135, global.scss */
+  /* line 135, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 136, global.scss */
+  /* line 136, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 142, global.scss */
+  /* line 142, D:/SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 143, global.scss */
+  /* line 143, D:/SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 144, global.scss */
+  /* line 144, D:/SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

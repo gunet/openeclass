@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0925a
+    SASS for UI Inventory of eclass v3.0 - version 0.0926a
 =============================================================
 */
 
@@ -454,20 +454,26 @@ input.toggle[type=checkbox]:checked:after
 {
   color:white;
   background: $color-green;
-  border-color: 1px solid #4AA04A;
-  border-top: none;
-  @include box-shadow(none);
+  border:1px solid transparent;
+  border-bottom: 1px solid #4AA04A;
+  @include border-radius(2px);
 
   &:hover,&:focus
   {
-    background:#83DE83;
+    text-decoration: none;
+    outline: 0;
+    background: $color-hover;
+    border-color: $color-hover;
+    border-bottom-color: #3F87C1;
+    color:white;
   }
 
   &:active
   {
-    background:#83DE83 !important;    
-    outline: 0 !important;
-    border-color: #4AA04A !important;
+    background: $color-hover!important;
+    border-color: $color-hover;
+    border-bottom-color: #3F87C1!important;
+    color:white!important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
   }
 
