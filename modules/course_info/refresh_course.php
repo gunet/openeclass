@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 	  <td>$langPurgeExerciseResults</td>
 	</tr>
         <tr>
-	  <th class='left'><img src='$themeimg/usage_on.png' alt='' height='16' width='16'> $langStats</th>
+	  <th class='left'><img src='$themeimg/usage_on.png' alt='' height='16' width='16'> $langStat</th>
 	  <td><input type='checkbox' name='clearstats'></td>
 	  <td>$langClearStats</td>
 	</tr>
