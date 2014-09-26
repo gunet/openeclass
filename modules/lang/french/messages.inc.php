@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2014-09-24 08:07:14
+// Generated 2014-09-26 08:54:17
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -392,7 +392,7 @@ $langBefore = "Avant";
 $langUserType = "Type d'utilisateur";
 $langSearchUsers = "Recherche des utilisateurs";
 $langInactiveUsers = "Utilisateurs inactifs";
-$langAddSixMonths = "Ce compte sera activé pour une période supplémentaire";
+$langAddSixMonths = "Activer les comptes pour une période supplémentaire";
 $langRestoredValues = "Rétablir les valeurs précédentes";
 $langEclassConf = "Fichier de configurations de $siteName";
 $langFileUpdatedSuccess = "Le fichier de configurations a été modifié avec succès !";
@@ -3452,6 +3452,7 @@ $langPollFullResults = 'Full results';
 $langCMeta['instructor_add'] = "Add instructor";
 $langCitation = 'Cite this course';
 $langAccessed = 'Retrieved %s, from %s';
-$langCMeta['paidagogy'] = "Paidagogy";
 $lang_error_db = "The platform is unable to create new databases. Unable to continue!";
 $langCatVideoDirectory = "Categorized multimedia files";
+$langMonthsToAdd = 'Months to add';
+$langUsersActivated = 'User accounts having their expiration extended:';

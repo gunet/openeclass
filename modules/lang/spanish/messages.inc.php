@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2014-09-24 08:07:08
+// Generated 2014-09-26 08:54:11
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -364,7 +364,7 @@ $langBefore = "Antes";
 $langUserType = "Usuario tipo";
 $langSearchUsers = "Búsqueda de usuarios";
 $langInactiveUsers = "Usuarios inactivos";
-$langAddSixMonths = "Activar la cuenta";
+$langAddSixMonths = "Activar las cuentas";
 $langRestoredValues = "Restaurar los valores antiguos";
 $langEclassConf = "Archivo de configuración";
 $langFileUpdatedSuccess = "¡Archivo config editado con éxito!";
@@ -389,7 +389,7 @@ $langRenamedFileNotAllowed = "New filename is not allowed.  For more information
 $langUploadedZipFileNotAllowed = "The zip file you attempt to upload and extract contains unsupported files. For more information, please contact the platform administrator.";
 $langEnableSearch = "Enable seach engine";
 $langUserRegistration = "User registration option";
-$langUserAccount = $langStudent." Cuenta";
+$langUserAccount = "".$langStudent."Cuenta";
 $langProfAccount = "".$langTeacher."Cuenta";
 $langReqRegUser = "$langOfStudent request registration";
 $langViaAltAuthMethods = "via alternative authentication methods";
@@ -3226,6 +3226,7 @@ $langPollFullResults = 'Full results';
 $langCMeta['instructor_add'] = "Add instructor";
 $langCitation = 'Cite this course';
 $langAccessed = 'Retrieved %s, from %s';
-$langCMeta['paidagogy'] = "Paidagogy";
 $lang_error_db = "The platform is unable to create new databases. Unable to continue!";
 $langCatVideoDirectory = "Categorized multimedia files";
+$langMonthsToAdd = 'Months to add';
+$langUsersActivated = 'User accounts having their expiration extended:';

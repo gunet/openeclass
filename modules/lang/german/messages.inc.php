@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2014-09-24 08:07:13
+// Generated 2014-09-26 08:54:16
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3138,6 +3138,7 @@ $langPollFullResults = 'Full results';
 $langCMeta['instructor_add'] = "Add instructor";
 $langCitation = 'Cite this course';
 $langAccessed = 'Retrieved %s, from %s';
-$langCMeta['paidagogy'] = "Paidagogy";
 $lang_error_db = "The platform is unable to create new databases. Unable to continue!";
 $langCatVideoDirectory = "Categorized multimedia files";
+$langMonthsToAdd = 'Months to add';
+$langUsersActivated = 'User accounts having their expiration extended:';
