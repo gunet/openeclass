@@ -2788,6 +2788,7 @@ $langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μ
 $langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα $siteName απορρίφθηκε.";
 $langRegistrationDateShort = "Ημερομηνία <br />εγγραφής";
 $langRegistrationDate = "Ημερομηνία εγγραφής";
+$langCreationDate = "Ημερομηνία δημιουργίας";
 $langExpirationDate = "Ημερομηνία λήξης";
 $langCourseRegistrationDate = "Ημ/νία εγγραφής στο μάθημα";
 $langUnknownDate = "(άγνωστη)";

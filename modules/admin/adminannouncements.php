@@ -117,7 +117,7 @@ if (isset($_GET['delete'])) {
         $id = intval($_POST['id']);
         Database::get()->query("UPDATE admin_announcement
                         SET title = ?s, body = ?s, lang = ?s,
-                            `date` = NOW(), $start_sql, $end_sql
+                            `date` = ".DBHelper::timeAfter().", $start_sql, $end_sql
                         WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $id);
         $message = $langAdminAnnModify;
     } else {
@@ -130,7 +130,7 @@ if (isset($_GET['delete'])) {
                             body = ?s,
                             visible = 1, 
                             lang = ?s,
-                            `date` = NOW(), 
+                            `date` = ".DBHelper::timeAfter().", 
                             `order` = ?d, 
                             $start_sql, 
                             $end_sql", $title, $newContent, $lang_admin_ann, $order, $dates);
