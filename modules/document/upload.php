@@ -160,9 +160,9 @@ if ($can_upload) {
       if (!isset($_GET['ext'])) {
         $tool_content .= "
       <div class='form-group'>
-        <label for='inputFileCompression' class='col-sm-5 control-label'>$langUncompress</label>
-        <div class='col-sm-7'>
-          <div class='checkbox'>
+        <label for='inputFileCompression' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langUncompress</label>
+        <div class='col-md-1 col-sm-1 col-xs-2'>
+          <div class='checkbox pull-right'>
               <input type='checkbox' name='uncompress' value='1'>
           </div>
         </div>
@@ -173,15 +173,15 @@ if ($can_upload) {
       $tool_content .= "
 
       <div class='form-group'>
-        <label for='inputFileReplaceSameName' class='col-sm-5 control-label'>$langReplaceSameName</label>
-        <div class='col-sm-7'>
-          <div class='checkbox'>
+        <label for='inputFileReplaceSameName' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langReplaceSameName</label>
+        <div class='col-md-1 col-sm-1 col-xs-2'>
+          <div class='checkbox pull-right'>
               <input type='checkbox' name='replace' value='1'>
           </div>
         </div>
       </div>      
 
-<div class='infotext-sm'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+<div class='infotext-sm margin-bottom-thin'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
     
   $tool_content .= "
       <div class='form-group'>
