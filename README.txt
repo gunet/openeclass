@@ -18,7 +18,7 @@ support. A complete list of contributors can be found in the CREDITS.txt file.
 
 Sincerely,
 Gunet Asychronous eLearning Group
-April 2014
+October 2014
 
 
 EL - Ελληνικά
@@ -57,4 +57,4 @@ EL - Ελληνικά
 
 Με τιμή,
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Απρίλιος 2014
+Οκτώβριος 2014

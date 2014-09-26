@@ -333,7 +333,7 @@ $db->query("CREATE TABLE loginout (
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
-$db->query("CREATE TABLE `personal_calendar` (
+$db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `user_id` int(11) NOT NULL,
         `title` varchar(200) NOT NULL,
@@ -349,7 +349,7 @@ $db->query("CREATE TABLE `personal_calendar` (
         `reference_obj_course` int(11) DEFAULT NULL,
         PRIMARY KEY (`id`))");
  
-$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
+$db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
         `user_id` int(11) NOT NULL,
         `view_type` enum('day','month','week') DEFAULT 'month',
         `personal_color` varchar(30) DEFAULT '#5882fa',
@@ -361,6 +361,7 @@ $db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
         `show_deadline` bit(1) DEFAULT b'1',
         `show_admin` bit(1) DEFAULT b'1',
         PRIMARY KEY (`user_id`))");
+
 //create triggers
 $db->query("CREATE TRIGGER personal_calendar_settings_init "
         . "AFTER INSERT ON `user` FOR EACH ROW "
@@ -1201,9 +1202,6 @@ $db->query("CREATE TABLE user_request (
                 request_ip VARCHAR(45) NOT NULL DEFAULT '',
                 PRIMARY KEY (id)) $charset_spec");
 
-
-// New table auth for authentication methods
-// added by kstratos
 $db->query("CREATE TABLE `auth` (
                   `auth_id` int(2) NOT NULL auto_increment,
                   `auth_name` varchar(20) NOT NULL default '',
@@ -1222,36 +1220,11 @@ $db->query("INSERT INTO `auth` VALUES
                 (6, 'shibboleth', '', '', 0),
                 (7, 'cas', '', '', 0)");
 
-$dont_display_login_form = intval($dont_display_login_form);
-$email_required = intval($email_required);
-$email_verification_required = intval($email_verification_required);
-$dont_mail_unverified_mails = intval($dont_mail_unverified_mails);
-$email_from = intval($email_from);
-$am_required = intval($am_required);
-$dropbox_allow_student_to_student = intval($dropbox_allow_student_to_student);
-$block_username_change = intval($block_username_change);
-$display_captcha = intval($display_captcha);
-$insert_xml_metadata = intval($insert_xml_metadata);
-$enable_mobileapi = intval($enable_mobileapi);
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
-$course_multidep = intval($course_multidep);
-$user_multidep = intval($user_multidep);
-$restrict_owndep = intval($restrict_owndep);
-$restrict_teacher_owndep = intval($restrict_teacher_owndep);
-$student_upload_whitelist = $student_upload_whitelist;
-$teacher_upload_whitelist = $teacher_upload_whitelist;
-$enable_indexing = intval($enable_indexing);
-$enable_search = intval($enable_search);
 
-if ($enable_search == 1) {
-    $enable_indexing = 1;
-}
-
-// restrict_owndep and restrict_teacher_owndep are interdependent
-if ($restrict_owndep == 0) {
-    $restrict_teacher_owndep = 0;
-}
+$student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
+$teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 
 $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
@@ -1260,33 +1233,33 @@ $db->query("CREATE TABLE `config` (
 $default_config = array(
     'base_url', $urlForm,
     'default_language', $lang,
-    'dont_display_login_form', $dont_display_login_form,
-    'email_required', $email_required,
-    'email_from', $email_from,
-    'email_verification_required', $email_verification_required,
-    'dont_mail_unverified_mails', $dont_mail_unverified_mails,
-    'am_required', $am_required,
-    'dropbox_allow_student_to_student', $dropbox_allow_student_to_student,
-    'block_username_change', $block_username_change,
-    'enable_mobileapi', $enable_mobileapi,
+    'dont_display_login_form', 0,
+    'email_required', 0,
+    'email_from', 1,
+    'email_verification_required', 0,
+    'dont_mail_unverified_mails', 0,
+    'am_required', 0,
+    'dropbox_allow_student_to_student', 0,
+    'block_username_change', 0,
+    'enable_mobileapi', 1,
     'code_key', generate_secret_key(32),
-    'display_captcha', $display_captcha,
-    'insert_xml_metadata', $insert_xml_metadata,
-    'doc_quota', $doc_quota,
-    'video_quota', $video_quota,
-    'group_quota', $group_quota,
-    'dropbox_quota', $dropbox_quota,
+    'display_captcha', 0,
+    'insert_xml_metadata', 0,
+    'doc_quota', 500,
+    'video_quota', 500,
+    'group_quota', 500,
+    'dropbox_quota', 500,
     'user_registration', 1,
     'alt_auth_stud_reg', 2,
     'alt_auth_prof_reg', 2,
     'eclass_stud_reg', $eclass_stud_reg,
     'eclass_prof_reg', $eclass_prof_reg,
-    'course_multidep', $course_multidep,
-    'user_multidep', $user_multidep,
-    'restrict_owndep', $restrict_owndep,
-    'restrict_teacher_owndep', $restrict_teacher_owndep,
+    'course_multidep', 0,
+    'user_multidep', 0,
+    'restrict_owndep', 0,
+    'restrict_teacher_owndep', 0,
     'max_glossary_terms', '250',
-    'phpSysInfoURL', $phpSysInfoURL,
+    'phpSysInfoURL', $phpSysInfoURL, 
     'email_sender', $emailForm,
     'admin_name', $nameForm,
     'email_helpdesk', $helpdeskmail,
@@ -1310,8 +1283,8 @@ $default_config = array(
     'log_purge_interval', 12,
     'course_metadata', 0,
     'opencourses_enable', 0,
-    'enable_indexing', $enable_indexing,
-    'enable_search', $enable_search,
+    'enable_indexing', 1,
+    'enable_search', 1,
     'version', ECLASS_VERSION);
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
     implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')),
@@ -1539,40 +1512,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
     `course_id` int(11) NOT NULL UNIQUE,
     PRIMARY KEY (`id`)) $charset_spec");
 
-
-$db->query("CREATE TABLE `personal_calendar` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `user_id` int(11) NOT NULL,
-        `title` varchar(200) NOT NULL,
-        `content` text NOT NULL,
-        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `duration` time NOT NULL,
-        `recursion_period` varchar(30) DEFAULT NULL,
-        `recursion_end` date DEFAULT NULL,
-        `source_event_id` int(11) DEFAULT NULL,
-        `reference_obj_module` mediumint(11) DEFAULT NULL,
-        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
-        `reference_obj_id` int(11) DEFAULT NULL,
-        `reference_obj_course` int(11) DEFAULT NULL,
-        PRIMARY KEY (`id`))");
- 
-$db->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
-        `user_id` int(11) NOT NULL,
-        `view_type` enum('month','week') DEFAULT 'month',
-        `personal_color` varchar(30) DEFAULT NULL,
-        `course_color` varchar(30) DEFAULT NULL,
-        `deadline_color` varchar(30) DEFAULT NULL,
-        `show_personal` bit(1) DEFAULT b'1',
-        `show_course` bit(1) DEFAULT b'1',
-        `show_deadline` bit(1) DEFAULT b'1',
-        PRIMARY KEY (`user_id`))");
-
-//create triggers
-$db->query("CREATE TRIGGER personal_calendar_settings_init "
-        . "AFTER INSERT ON `user` FOR EACH ROW "
-        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
-
-// create indexes
+// create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
 $db->query("CREATE INDEX `admin_index` ON admin(user_id)");

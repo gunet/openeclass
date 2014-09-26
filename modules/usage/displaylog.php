@@ -97,7 +97,7 @@ $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']
 $u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -30 day'));
 $u_date_end = isset($_REQUEST['u_date_end']) ? $_REQUEST['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
 
-if (isset($_REQUEST['submit'])) {    
+if (isset($_REQUEST['submit'])) {
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF']);
 }

@@ -293,11 +293,18 @@ class Calendar_Events {
      * @return int $eventid which is the id of the new event
      */
     public static function add_event($title, $content, $start, $duration, $recursion = NULL, $reference_obj_id = NULL, $admin_event_visibility){
-        global $uid;
+        global $uid, $langNotValidInput, $is_admin;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         // insert
         $period = "";
-        $enddate = "";
+        $enddate = null;
+        $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
+        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $title = trim($title);
+        if(empty($title) || !(($d1 && $d1->format('Y-m-d H:i') == $start) || ($d2 && $d2->format('Y-m-d H:i:s') == $start)))
+        {
+            return array('success'=>false, 'message'=>$langNotValidInput);
+        }
         if(!empty($recursion))
         {
             $period = "P".$recursion['repeat'].$recursion['unit'];
@@ -309,7 +316,8 @@ class Calendar_Events {
                 . "recursion_period = ?s, recursion_end = ?t, "
                 . "reference_obj_module = ?d, reference_obj_type = ?s, reference_obj_id = ?d, reference_obj_course = ?d",
                 purify($content), $title, $uid, $start, $duration, $period, $enddate, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
-        } else {
+        } 
+        elseif($is_admin) {
             $eventid = Database::get()->query("INSERT INTO admin_calendar "
                 . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, duration = ?t, "
                 . "recursion_period = ?s, recursion_end = ?t, "
@@ -355,7 +363,7 @@ class Calendar_Events {
             'title' => $title,
             'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
         }
-        return $eventid;
+        return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
 
     /**
@@ -366,8 +374,17 @@ class Calendar_Events {
      * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      */
     public static function update_event($eventid, $title, $start, $duration, $content, $reference_obj_id = NULL){
-        global $uid;
+        global $uid, $langNotValidInput;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
+        
+        $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
+        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $title = trim($title);
+        if(empty($title) || !(($d1 && $d1->format('Y-m-d H:i') == $start) || ($d2 && $d2->format('Y-m-d H:i:s') == $start)))
+        {
+            return array('success'=>false, 'message'=>$langNotValidInput);
+        }
+        
         Database::get()->query("UPDATE personal_calendar SET "
                 . "title = ?s, "
                 . "start = ?t, "
@@ -383,6 +400,7 @@ class Calendar_Events {
         Log::record(0, MODULE_ID_PERSONALCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
+        return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
 
     /**
@@ -393,7 +411,18 @@ class Calendar_Events {
      * @param int $visibility_level min user level to show this event to
      */
     public static function update_admin_event($eventid, $title, $start, $duration, $content, $visibility_level){
-        global $uid;
+        global $uid, $is_admin, $langNotValidInput, $langNotAllowed;
+        if(!is_admin){
+            return array('success'=>false,'message'=>$langNotAllowed);
+        }
+        $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
+        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $title = trim($title);
+        if(empty($title) || !(($d1 && $d1->format('Y-m-d H:i') == $start) || ($d2 && $d2->format('Y-m-d H:i:s') == $start)))
+        {
+            return array('success'=>false, 'message'=>$langNotValidInput);
+        }
+        
         Database::get()->query("UPDATE admin_calendar SET "
                 . "title = ?s, "
                 . "start = ?t, "
@@ -406,6 +435,7 @@ class Calendar_Events {
         Log::record(0, MODULE_ID_ADMINCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
+        return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
 
     /**
@@ -413,15 +443,15 @@ class Calendar_Events {
      * @param int $noteid id in table note
      */
     public static function delete_event($eventid, $eventtype){
-        global $uid;
+        global $uid, $is_admin;
         if($eventtype != 'personal' && $eventtype != 'admin'){
-            return false;
+            return array('success'=>false,'message'=>$langNotAllowed);
         }
         if($eventtype == 'personal' && !$event = Calendar_Events::get_event($eventid)){
-            return false;
+            return array('success'=>false,'message'=>$langNotAllowed);
         }
-        if($eventtype == 'admin' && !$event = Calendar_Events::get_admin_event($eventid)){
-            return false;
+        if($eventtype == 'admin' && (!is_admin || !$event = Calendar_Events::get_admin_event($eventid))){
+            return array('success'=>false,'message'=>$langNotAllowed);
         }
         $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
         $content = ellipsize_html(canonicalize_whitespace(strip_tags($event->content)), 50, '+');
@@ -431,6 +461,7 @@ class Calendar_Events {
         Log::record(0, $m, LOG_DELETE, array('user_id' => $uid, 'id' => $eventid,
             'title' => $event->title,
             'content' => $content));
+        return array('success'=>true,'message'=>'', 'event'=>$eventid);
     }
 
     /**
@@ -1121,7 +1152,7 @@ class Calendar_Events {
        $show_course_bak = Calendar_Events::$calsettings->show_course;
        $show_deadline_bak = Calendar_Events::$calsettings->show_deadline;
        $show_admin_bak = Calendar_Events::$calsettings->show_admin;
-       Calendar_Events::set_calendar_settings(1,1,1);
+       Calendar_Events::set_calendar_settings(1,1,1,1);
        Calendar_Events::get_calendar_settings();
        $eventlist = Calendar_Events::get_calendar_events();
        Calendar_Events::set_calendar_settings($show_personal_bak,$show_course_bak,$show_deadline_bak,$show_admin_bak);
@@ -1142,8 +1173,8 @@ class Calendar_Events {
                $ical .= "TRIGGER:-PT24H".PHP_EOL;
                $ical .= "DURATION:PT10H".PHP_EOL;
                $ical .= "ACTION:DISPLAY".PHP_EOL;
-               $ical .= "DESCRIPTION:DEADLINE REMINDER:".canonicalize_whitespace(strip_tags($event->title)).PHP_EOL;
-               $ical .= "BEGIN:VALARM".PHP_EOL;
+               $ical .= "DESCRIPTION:DEADLINE REMINDER for ".canonicalize_whitespace(strip_tags($event->title)).PHP_EOL;
+               $ical .= "END:VALARM".PHP_EOL;
            }
            $ical .= "END:VEVENT".PHP_EOL;
        }

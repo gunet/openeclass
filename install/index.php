@@ -131,21 +131,11 @@ if (isset($_POST['welcomeScreen'])) {
     $campusForm = 'Open eClass';
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
-    $institutionUrlForm = 'http://www.gunet.gr/';
-    $doc_quota = 500;
-    $video_quota = 500;
-    $group_quota = 500;
-    $dropbox_quota = 500;
+    $institutionUrlForm = 'http://www.gunet.gr/';    
     $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
-    $email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
-    $display_captcha = $block_username_change = $insert_xml_metadata = $enable_mobileapi = '';
-    $email_verification_required = $dont_mail_unverified_mails = '';
-    $course_multidep = $user_multidep = $restrict_owndep = $restrict_teacher_owndep = $disable_log_user_actions = '';
-    $email_from = 1;
     $eclass_stud_reg = 2;
     $eclass_prof_reg = 1;
-    $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
-    $teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
+    
 } else {
     register_posted_variables(array(
         'lang' => true,
@@ -154,8 +144,7 @@ if (isset($_POST['welcomeScreen'])) {
         'dbNameForm' => true,
         'dbPassForm' => true,
         'dbMyAdmin' => true,
-        'urlForm' => true,
-        'emailForm' => true,
+        'urlForm' => true,        
         'nameForm' => true,
         'loginForm' => true,
         'passForm' => true,
@@ -164,36 +153,12 @@ if (isset($_POST['welcomeScreen'])) {
         'helpdeskmail' => true,
         'faxForm' => true,
         'postaddressForm' => true,
-        'institutionForm' => true,
-        'institutionUrlForm' => true,
-        'email_required' => true,
-        'email_verification_required' => true,
-        'dont_mail_unverified_mails' => true,
-        'email_from' => true,
-        'am_required' => true,
-        'dropbox_allow_student_to_student' => true,
-        'dont_display_login_form' => true,
-        'block_username_change' => true,
-        'display_captcha' => true,
-        'insert_xml_metadata' => true,        
-        'enable_mobileapi' => true,
         'eclass_stud_reg' => true,
         'eclass_prof_reg' => true,
-        'course_multidep' => true,
-        'user_multidep' => true,
-        'restrict_owndep' => true,
-        'restrict_teacher_owndep' => true,
-        'disable_log_user_actions' => true,
-        'enable_indexing' => true,
-        'enable_search' => true,
-        'student_upload_whitelist' => true,
-        'teacher_upload_whitelist' => true));
-
-    register_posted_variables(array(
-        'doc_quota' => true,
-        'group_quota' => true,
-        'dropbox_quota' => true,
-        'video_quota' => true), 'all', 'intval');
+        'emailForm' => true,
+        'lang' => true,
+        'institutionForm' => true,
+        'institutionUrlForm' => true));   
 }
 
 function hidden_vars($names) {
@@ -231,17 +196,9 @@ function selection_input($entries, $name) {
 }
 
 $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
-    'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'loginForm',
-    'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
-    'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
-    'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
-    'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
-    'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-    'insert_xml_metadata', 'enable_mobileapi',
-    'course_multidep', 'user_multidep',
-    'eclass_stud_reg', 'eclass_prof_reg',
-    'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_indexing', 'enable_search',
-    'student_upload_whitelist', 'teacher_upload_whitelist');
+    'dbPassForm', 'urlForm', 'nameForm', 'emailForm', 'loginForm', 'lang',
+    'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail', 'eclass_stud_reg', 'eclass_prof_reg',
+    'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm');
 
 // step 2 license
 if (isset($_REQUEST['install2']) OR isset($_REQUEST['back2'])) {
@@ -269,7 +226,7 @@ elseif (isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
     $langStep = $langStep3;
     $_SESSION['step'] = 3;
     $tool_content .= "
-	<div>$langWillWrite $langDBSettingIntro</div>
+	<div class='info'>$langWillWrite $langDBSettingIntro</div>
 	<br />
         <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
@@ -311,7 +268,7 @@ elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
     $_SESSION['step'] = 4;
     if (empty($helpdeskmail)) {
         $helpdeskmail = '';
-    }
+    }    
     $tool_content .= "
                 <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
                 <table width='100%' class='tbl smaller'>
@@ -338,15 +295,7 @@ elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
                 <tr><th class='left'>$langInstituteName</th>
                     <td>" . text_input('institutionUrlForm', 40) . "</td></tr>
                 <tr><th class='left'>$langInstitutePostAddress</th>
-                    <td>" . textarea_input('postaddressForm', 3, 40) . "</td></tr>	        
-		<tr><th class='left'>$langDocQuota</th>
-			<td>" . text_input('doc_quota', 5) . "&nbsp;(Mb)</td></tr>
-		<tr><th class='left'>$langVideoQuota</th>
-			<td>" . text_input('video_quota', 5) . "&nbsp;(Mb)</td></tr>
-		<tr><th class='left'>$langGroupQuota</th>
-			<td>" . text_input('group_quota', 5) . "&nbsp;(Mb)</td></tr>
-		<tr><th class='left'>$langDropboxQuota</th>
-			<td>" . text_input('dropbox_quota', 5) . "&nbsp;(Mb)</td></tr>
+                    <td>" . textarea_input('postaddressForm', 3, 40) . "</td></tr>
 		<tr><th class='left'>$langUserAccount $langViaeClass</th>
                         <td>" . selection_input(array('2' => $langDisableEclassStudRegType,
                 '1' => $langReqRegUser,
@@ -365,108 +314,11 @@ elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
     draw($tool_content);
 }
 
-// step 5 optional config settings
-elseif (isset($_REQUEST['install5']) OR isset($_REQUEST['back5'])) {
-    $langStepTitle = $langOptionalCfgSetting;
-    $langStep = $langStep5;
-    $_SESSION['step'] = 5;
-    $tool_content .= "<div>$langWillWriteConfig</div><br />
-        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-	<table width='100%' class='tbl smaller'>
-	  <tr>
-		<th class='left' width='550'><b>$lang_email_required</b></th>
-		<td>" . checkbox_input('email_required') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left' width='550'><b>$lang_email_verification_required</b></th>
-		<td>" . checkbox_input('email_verification_required') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left' width='550'><b>$lang_dont_mail_unverified_mails</b></th>
-		<td>" . checkbox_input('dont_mail_unverified_mails') . "</td>
-	  </tr>
-          <tr>
-		<th class='left' width='550'><b>$lang_email_from</b></th>
-		<td>" . checkbox_input('email_from') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_am_required</b></th>
-		<td>" . checkbox_input('am_required') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_dropbox_allow_student_to_student</b></th>
-		<td>" . checkbox_input('dropbox_allow_student_to_student') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_dont_display_login_form</b></th>
-		<td>" . checkbox_input('dont_display_login_form') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_block_username_change</b></th>
-		<td>" . checkbox_input('block_username_change') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_display_captcha</b></th>
-		<td>" . checkbox_input('display_captcha') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_insert_xml_metadata</b></th>
-		<td>" . checkbox_input('insert_xml_metadata') . "</td>
-	  </tr>	  
-	  <tr>
-		<th class='left'><b>$lang_enable_mobileapi</b></th>
-		<td>" . checkbox_input('enable_mobileapi') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_course_multidep</b></th>
-		<td>" . checkbox_input('course_multidep') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_user_multidep</b></th>
-		<td>" . checkbox_input('user_multidep') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_restrict_owndep</b></th>
-		<td>" . checkbox_input('restrict_owndep') . "</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$lang_restrict_teacher_owndep</b></th>
-		<td>" . checkbox_input('restrict_teacher_owndep') . "</td>
-	  </tr>
-          <tr>
-		<th class='left'><b>$lang_disable_log_actions</b></th>
-		<td>" . checkbox_input('disable_log_user_actions') . "</td>
-	  </tr>
-          <tr>
-		<th class='left'><b>$langEnableIndexing</b></th>
-		<td>" . checkbox_input('enable_indexing') . "</td>
-	  </tr>
-          <tr>
-		<th class='left'><b>$langEnableSearch</b></th>
-		<td>" . checkbox_input('enable_search') . "</td>
-	  </tr>
-	  <tr>
-	      <th class='left'><b>$langStudentUploadWhitelist</b></th>
-	      <td>" . textarea_input('student_upload_whitelist', 6, 60) . "</td>
-	  </tr>
-	  <tr>
-	      <th class='left'><b>$langTeacherUploadWhitelist</b></th>
-	      <td>" . textarea_input('teacher_upload_whitelist', 6, 60) . "</td>
-	  </tr>
-	  <tr><td colspan='2' class='right'>
-	  <input type='submit' name='back4' value='&laquo; " . q($langPreviousStep) . "' />
-	  <input type='submit' name='install6' value='" . q($langNextStep) . " &raquo;' />
-	  </td>
-	</tr>
-	</table>" . hidden_vars($all_vars) . "</form>";
-    draw($tool_content);
-}
-
-// step 6 last check before install
-elseif (isset($_REQUEST['install6'])) {
+// step 5 last check before install
+elseif (isset($_REQUEST['install5'])) {
     $langStepTitle = $langLastCheck;
     $langStep = $langStep6;
-    $_SESSION['step'] = 6;
+    $_SESSION['step'] = 5;
 
     switch ($eclass_stud_reg) {
         case '0': $disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
@@ -481,10 +333,10 @@ elseif (isset($_REQUEST['install6'])) {
     } else {
         $disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
     }
-
+    
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-	<div>$langReviewSettings</div> <br />
+	<div class='info'>$langReviewSettings</div> <br />
 		<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
@@ -556,8 +408,8 @@ elseif (isset($_REQUEST['install6'])) {
 	</tr>";
     $tool_content .= "<tr><td class='right'>&nbsp;</td>
 	<td class='right'>
-		<input type='submit' name='back5' value='&laquo; $langPreviousStep' />
-		<input type='submit' name='install7' value='$langInstall &raquo;' />
+		<input type='submit' name='back4' value='&laquo; $langPreviousStep' />
+		<input type='submit' name='install6' value='$langInstall &raquo;' />
 	</td>
 	</tr>
 	</table>" . hidden_vars($all_vars) . "</form>";
@@ -565,12 +417,12 @@ elseif (isset($_REQUEST['install6'])) {
     draw($tool_content);
 }
 
-// step 7 installation successful
-elseif (isset($_REQUEST['install7'])) {
+// step 6 installation successful
+elseif (isset($_REQUEST['install6'])) {
     // database creation
     $langStepTitle = $langInstallEnd;
     $langStep = $langStep7;
-    $_SESSION['step'] = 7;
+    $_SESSION['step'] = 6;
     $GLOBALS['mysqlServer'] = $dbHostForm;
     $GLOBALS['mysqlUser'] = $dbUsernameForm;
     $GLOBALS['mysqlPassword'] = $dbPassForm;
@@ -677,10 +529,10 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     warnIfExtNotLoaded('mbstring');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
+    warnIfExtNotLoaded("curl");
     $tool_content .= "</ul><p class='sub_title1'>$langOptionalPHP</p>";
     $tool_content .= "<ul class='installBullet'>";
-    warnIfExtNotLoaded("ldap");
-    warnIfExtNotLoaded("curl");
+    warnIfExtNotLoaded("ldap");    
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
@@ -741,13 +593,23 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     echo $tool_content;
 }
 
-// -----------------------
-// functions
-// -----------------------
+
+/**
+ * @brief make directories
+ * @global type $errorContent
+ * @global boolean $configErrorExists
+ * @global type $langWarningInstall3
+ * @global type $langWarnInstallNotice1
+ * @global type $langWarnInstallNotice2
+ * @global type $install_info_file
+ * @global type $langHere
+ * @param type $dirname
+ */
 function mkdir_try($dirname) {
     global $errorContent, $configErrorExists, $langWarningInstall3,
         $langWarnInstallNotice1, $langWarnInstallNotice2,
         $install_info_file, $langHere;
+    
     if (!is_dir('../' . $dirname)) {
         if (!mkdir('../' . $dirname, 0775)) {
             $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $dirname);
@@ -756,10 +618,22 @@ function mkdir_try($dirname) {
     }
 }
 
+/**
+ * @brief create files
+ * @global type $errorContent
+ * @global boolean $configErrorExists
+ * @global type $langWarningInstall3
+ * @global type $langWarnInstallNotice1
+ * @global type $langWarnInstallNotice2
+ * @global type $install_info_file
+ * @global type $langHere
+ * @param type $filename
+ */
 function touch_try($filename) {
     global $errorContent, $configErrorExists, $langWarningInstall3,
         $langWarnInstallNotice1, $langWarnInstallNotice2,
         $install_info_file, $langHere;
+    
     if (@!touch('../' . $filename)) {
         $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $filename);
         $configErrorExists = true;
