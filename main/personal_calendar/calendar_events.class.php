@@ -297,7 +297,7 @@ class Calendar_Events {
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         // insert
         $period = "";
-        $enddate = "";
+        $enddate = null;
         $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
         $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
         $title = trim($title);
