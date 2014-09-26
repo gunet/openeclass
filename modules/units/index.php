@@ -67,7 +67,84 @@ if ($access) {
 }
 
 if ($is_editor) {
-    $tool_content .= "&nbsp;<div id='operations_container'>
+    $tool_content .= "
+
+<div class='row'>
+  <div class='col-md-12'>
+    <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
+      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
+        <i class='fa fa-paste space-after-icon'></i>$langAdd
+      </a>
+      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertDoc' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
+        <i class='fa fa-file-o space-after-icon'></i>$langAdd
+      </a>
+    </div>
+
+
+    <div class='toolbox pull-right margin-top-thin margin-bottom-thin margin-right'>
+      <ul class='toolbox-submenu'>
+        <li>
+          $langAdd 
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-file-text-o'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-link'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-random'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-video-camera'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-comment'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-book'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-paste'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-paste'></i>
+          </a>
+        </li>
+        <li>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+            <i class='fa fa-paste'></i>
+          </a>
+        </li>
+      </ul>
+      <button class='btn-default-eclass place-at-toolbox' title=''>
+        <i class='fa fa-th-large'></i>
+      </button>
+    </div>
+  </div>
+<div>
+
+<br/>
+
+
+<div class='row'>
+  <div class='col-md-12'>
+    <div id='operations_container'>
 		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
 		<select name='type' onChange='document.resinsert.submit();'>
 			<option>-- $langAdd --</option>
@@ -80,13 +157,15 @@ if ($is_editor) {
 			<option value='forum'>$langInsertForum</option>
 			<option value='ebook'>$langInsertEBook</option>
 			<option value='work'>$langInsertWork</option>
-                        <option value='poll'>$langInsertPoll</option>
+      <option value='poll'>$langInsertPoll</option>
 			<option value='wiki'>$langInsertWiki</option>                            
 		</select>
 		<input type='hidden' name='id' value='$id'>
 		<input type='hidden' name='course' value='$course_code'>
 		</form>
-		</div>" .
+		</div>
+  </div>
+</div>" .
             $form;
 }
 

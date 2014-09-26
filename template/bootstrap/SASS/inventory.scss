@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0926a
+    SASS for UI Inventory of eclass v3.0 - version 0.0926b
 =============================================================
 */
 
@@ -18,13 +18,19 @@
 
 
 /* Extend bootstrap style - margins */
-.no-margin {margin: 0px;}
-.margin-top {margin-top: 15px;}
-.margin-top-thin {margin-top: 10px;}
-.margin-top-fat {margin-top: 20px;}
-.margin-bottom {margin-bottom: 15px;}
-.margin-bottom-thin {margin-bottom: 10px;}
-.margin-bottom-fat {margin-bottom: 20px;}
+.no-margin {margin: 0px !important;}
+.margin-top {margin-top: 15px !important;}
+.margin-top-thin {margin-top: 10px !important;}
+.margin-top-fat {margin-top: 20px !important;}
+.margin-bottom {margin-bottom: 15px !important;}
+.margin-bottom-thin {margin-bottom: 10px !important;}
+.margin-bottom-fat {margin-bottom: 20px !important;}
+.margin-right {margin-right: 15px !important;}
+.margin-right-thin {margin-right: 10px !important;}
+.margin-right-fat {margin-right: 20px !important;}
+.margin-left {margin-left: 15px  !important;}
+.margin-left-thin {margin-left: 10px !important;}
+.margin-left-fat {margin-left: 20px !important;}
 .space-after-icon {margin-right:5px;}
 
 .float-left {float: left;}
@@ -430,6 +436,7 @@ input.toggle[type=checkbox]:checked:after
   &:hover,
   &:focus
   {
+    text-decoration: none;
     outline: 0;
     background: $color-hover;
     border-color: $color-hover;
@@ -490,6 +497,8 @@ input.toggle[type=checkbox]:checked:after
   &:hover, &:focus
   {
     background:#E58080;
+    text-decoration: none;
+    
   }
 
   &:active
