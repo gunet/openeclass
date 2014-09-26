@@ -49,23 +49,26 @@ if (isset($_GET['id'])) {
 }
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
-
+//load_js('jquery-ui');
+//load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
+load_js('bootstrap-timepicker');
+ 
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
+    $('#date').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
     });
-    $('input[name=enddate]').datepicker({
-    dateFormat: 'yy-mm-dd'
+    $('#enddate').datepicker({
+        format: 'dd-mm-yyyy',
+        language: '".$language."',
+        autoclose: true
     });
-    $('input[name=duration]').timepicker({ 
-    timeFormat: 'H:mm'
-    });
+    $('#duration').timepicker({showMeridian: false, minuteStep: 1, defaultTime: false });
 });
 </script>";
 
@@ -113,6 +116,8 @@ if ($is_editor) {
         $content = purify($content);
         if (isset($_POST['id']) and ! empty($_POST['id'])) {
             $id = intval($_POST['id']);
+            $eventDate_obj = DateTime::createFromFormat('d-m-Y H:i',$date);
+            $date = $eventDate_obj->format('Y-m-d H:i:s');
             Database::get()->query("UPDATE agenda SET title = ?s, content = ?s, start = ?t, duration = ?s
                         WHERE course_id = ?d AND id = ?d", $event_title, $content, $date, $duration, $course_id, $id);
             $log_type = LOG_MODIFY;
@@ -122,9 +127,14 @@ if ($is_editor) {
             if(isset($_POST['frequencyperiod']) && isset($_POST['frequencynumber']) && isset($_POST['enddate']))
             {
                 $period = "P".$_POST['frequencynumber'].$_POST['frequencyperiod'];
-                $enddate = $_POST['enddate'];
+                if ($_POST['enddate']!='') {
+                    $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
+                    $enddate = $endDate_obj->format('Y-m-d');
+                } else {
+                    $enddate = '';
+                }
             }
-        
+
             $id = Database::get()->query("INSERT INTO agenda "
                         ."SET course_id = ?d, "
                         ."title = ?s, "
@@ -246,12 +256,19 @@ if ($is_editor) {
             <tr>
               <th>$langDate:</th>
               <td>
-               <input type='text' name='date' value='" . datetime_remove_seconds($myrow->start) . "'>
+               <input type='text' name='date' id='date' value='" . datetime_remove_seconds($myrow->start) . "'>
               </td>
             </tr>
             <tr>
               <th>$langDuration <small> $langInHour</small>:</th>
-              <td><input type='text' name='duration' value='" . $myrow->duration . "' size='2' maxlength='3'></td>
+              <td>
+                <div class='input-append bootstrap-timepicker'>
+                    <input name='duration' id='duration' type='text' class='input-small' value='" . $myrow->duration . "'>
+                    <span class='add-on'>
+                        <i class='icon-time'></i>
+                    </span>
+                </div>              
+              </td>
             </tr>";
         if(!isset($_GET['edit'])){
             $tool_content .= "
@@ -270,7 +287,7 @@ if ($is_editor) {
                     . "<option value=\"W\">$langWeeks</option>"
                     . "<option value=\"M\">$langMonthsAbstract</option>"
                     . "</select>"
-                    . " $langUntil: <input type='text' name='enddate' value=''></td>
+                    . " $langUntil: <input type='text' name='enddate' id='enddate' value=''></td>
             </tr>";
         }
         

@@ -210,7 +210,14 @@ function load_js($file, $init='') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'></script>\n";
             
             $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-        }      
+        } elseif ($file == 'bootstrap-timepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-timepicker/css/bootstrap-timepicker.min.css'>";           
+            $file = "bootstrap-timepicker/js/bootstrap-timepicker.min.js";
+        } elseif ($file == 'bootstrap-datepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-datepicker/css/datepicker3.css'>";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datepicker/js/bootstrap-datepicker.js'></script>\n";
+            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+        }         
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
