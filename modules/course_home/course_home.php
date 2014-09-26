@@ -491,10 +491,9 @@ if ($is_editor or ( isset($_SESSION['saved_editor']) and $_SESSION['saved_editor
         $button_image = "switch_s";
     }
     $toggle_student_view = "<form action='{$urlServer}student_view.php?course=$course_code' method='post'>
-                <input id='view_btn' type='image' src='$themeimg/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
-    $toggle_student_view_close = '</form>';
+                <input id='view_btn' type='image' src='$themeimg/$button_image.png' name='submit' title='$button_message'></form>";
 } else {
-    $toggle_student_view = $toggle_student_view_close = '';
+    $toggle_student_view = '';
 }
 
 $emailnotification = '';
@@ -568,14 +567,7 @@ $tool_content .= "
 
             // Button: toggle student view
             $tool_content .= "
-                        <button class='btn-default-eclass place-at-toolbox' title=''>
-                                $toggle_student_view_close
-                                $toggle_student_view
-                        </button>";
-
-    $tool_content .= "
         </div>
-
     </div>
 </div>
 ";
@@ -738,7 +730,7 @@ $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($titl
             <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
 if (visible_module(MODULE_ID_ANNOUNCE)) {
     $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                          <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>&nbsp;$toggle_student_view_close";
+                          <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>";
 }
 $tool_content .= "</td>
       </tr>
