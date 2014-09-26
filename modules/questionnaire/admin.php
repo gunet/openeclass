@@ -198,65 +198,70 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
 
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>";
     $tool_content .= "
         <div id=\"operations_container\">
           <ul id=\"opslist\">
             <li><a href='".(isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code")."'>".$langBack."</a></li>
 	  </ul>
 	</div>
-
+        
         <fieldset>
-        <legend>$langInfoPoll</legend>
-	<table width=\"100%\" class='tbl'>
-	<tr ".(Session::getError('PollName') ? "class='error'" : "").">
-	  <th width='100'>$langTitle:</th>
-	  <td><input type='text' size='50' name='PollName' value='$PollName'>".Session::getError('PollName')."</td>
-	</tr>
-	<tr>
-	  <th>$langPollStart:</th>
-          <td>
-                <div class='input-append date form-group' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-11'>        
-                        <input name='PollStart' type='text' value='$PollStart'>
-                    </div>
+        <legend>$langInfoPoll</legend>        
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
+            <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
+              <label for='PollName' class='col-sm-2 control-label'>$langTitle :</label>
+              <div class='col-sm-10'>
+                <input type='text' class='form-control' id='PollName' placeholder='$langTitle'>
+                <span class='help-block'>".Session::getError('PollName')."</span>
+              </div>
+            </div>
+            <div class='input-append date form-group' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+                <label for='PollStart' class='col-sm-2 control-label'>$langPollStart :</label>
+                <div class='col-xs-10 col-sm-9'>        
+                    <input name='PollEnd' id='PollStart' type='text' value='$PollStart'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-          </td>    
-        </tr>
-	<tr>
-	  <th>$langPollEnd:</th>
-          <td>
-                <div class='input-append date form-group' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-11'>        
-                        <input name='PollEnd' type='text' value='$PollEnd'>
-                    </div>
+            </div>            
+            <div class='input-append date form-group' id='startdatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+                <label for='PollEnd' class='col-sm-2 control-label'>$langPollEnd :</label>
+                <div class='col-xs-10 col-sm-9'>        
+                    <input name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>          
-          </td>
-	</tr>
-	<tr>
-	  <th>$langPollAnonymize:</th>
-	  <td><input type='checkbox' name='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '')."></td>
-	</tr>
-	<tr>
-	  <th>$langDescription:</th>
-	  <td>".rich_text_editor('PollDescription', 4, 52, $PollDescription)."</td>
-	</tr>
-	<tr>
-	  <th>$langPollEndMessage:</th>
-	  <td>".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."</td>
-	</tr>        
-	<tr>
-        <th>&nbsp;</th>";
-        if (isset($_GET['newPoll'])) {
-            $tool_content .= "<td><input type='submit' name='submitPoll' value='$langCreate'>&nbsp;&nbsp;";
-        } else {
-            $tool_content .= "<td><input type='submit' name='submitPoll' value='$langModify'>&nbsp;&nbsp;";
-        }
-        $tool_content .= "<input type='submit' name='cancelPoll' value='$langCancel'></td></tr></table></form>";
+                </div>
+            </div>
+            <div class='form-group'>
+              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize : </label>
+              <div class='col-sm-10'>
+                <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '')."> 
+              </div>
+            </div>            
+            <div class='form-group'>
+              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription :</label>
+              <div class='col-sm-10'>
+                ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
+              </div>
+            </div> 
+            <div class='form-group'>
+              <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage : </label>
+              <div class='col-sm-10'>
+                ".rich_text_editor('PollEndMessage', 4, 52, $PollDescription)."
+              </div>
+            </div>                
+            <div class='form-group'>
+              <div class='col-sm-offset-2 col-sm-10'>
+                <input type='submit' class='btn btn-default' name='submitPoll' value='".(isset($_GET['newPoll']) ? $langCreate : $langModify)."'>
+                <input type='submit' class='btn btn-default' name='cancelPoll' value='$langCancel'>    
+              </div>
+            </div>
+        </form>
+        </fieldset>
+        ";
 } elseif (isset($_GET['editQuestion'])) {
     if (isset($_GET['editQuestion'])) {
         $question_id = $_GET['editQuestion'];

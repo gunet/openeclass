@@ -124,9 +124,17 @@ class Session {
     }
     // Flashes posted variable errors
     public function Errors($errors){
+        $keys = array();
         foreach ($errors as $key => $error) {
             $_SESSION[$key]['errors'] = $error;
+            $keys[] = $key;
         }
+        if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
+        $keys = array_unique($keys);
+        foreach($keys as $key) {
+            array_push($_SESSION['flash_new'], $key);
+        }
+        array_push($_SESSION['flash_new'], 'messages');        
         return new self;
     }      
     public static function get($key) {
@@ -136,9 +144,9 @@ class Session {
             return FALSE;
         }
     }   
-    public static function getError($key, $class='alert-danger') {
+    public static function getError($key) {
         if (isset($_SESSION[$key]['errors'][0])){
-            return "<div class='alert $class'>".$_SESSION[$key]['errors'][0]."</div>";
+            return $_SESSION[$key]['errors'][0];
         } else {
             return FALSE;
         }
