@@ -900,7 +900,7 @@ ul.tablelist li.list-item:hover {
 }
 /* line 824, inventory.scss */
 .boxlist .item-header {
-  padding: 1em 0em 0.5em 0em;
+  padding: 1em 0em 1.1em 0em;
   border-bottom: 1px solid #eee;
 }
 /* line 830, inventory.scss */

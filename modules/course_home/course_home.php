@@ -345,7 +345,7 @@ if ($total_cunits > 0) {
                                     <li class='list-item contentbox'>
                                         <div class='item-content'>
                                                 <div class='item-header'>
-                                                    <h3 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h3>
+                                                    <h4 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
                                                 </div>	    
                                                 <div class='item-body'>    
                                                     $cu->comments
