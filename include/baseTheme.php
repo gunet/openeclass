@@ -150,6 +150,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     if (is_array($toolArr)) {
+        $group_opened = false;
         for ($i = 0; $i < $numOfToolGroups; $i ++) {
             $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
             $t->set_var('TOOL_GROUP_ID', $i);
@@ -190,13 +191,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 if ($module_dir == $current_module_dir) {
                     $t->set_var('TOOL_CLASS', get_theme_class('tool_active'));
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
+                    $group_opened = true;
                 } else {
                     $t->set_var('TOOL_CLASS', '');
                 }
                 $t->parse('leftNavLink', 'leftNavLinkBlock', true);
             }
-            if ($i == 0 and $current_module_dir == 'course_home') {
+            if (!$group_opened and
+                ($current_module_dir == '/' or
+                 $current_module_dir == 'course_home' or
+                 $current_module_dir == 'main/portfolio.php')) {
                 $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
+                $group_opened = true;
             }
             $t->parse('leftNavCategory', 'leftNavCategoryBlock', true);
             $t->clear_var('leftNavLink'); //clear inner block
@@ -611,6 +617,8 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
+    global $urlAppend;
+    $path = str_replace(array($urlAppend, '?logout=yes', 'index.php'), array('/', '', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
         return 'course_info/restore_course.php';
     } elseif (strpos($path, '/info/') !== false) {
