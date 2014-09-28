@@ -88,8 +88,8 @@ if (isset($_POST['submit'])) {
 
     $nameTools = $langReply;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $myrow->name);
-    $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow->title);
+    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
+    $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));
 
     $myrow = Database::get()->querySingle("SELECT p.post_text, p.post_time, t.title
                         FROM forum_post p, forum_topic t
@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) {
     $first_post = is_first_post($topic_id, $post_id);
     if ($first_post) {
         $tool_content .= "<tr><th>$langSubject:<br /><br />
-                <input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow->title) . "'  class='FormData_InputText' /></th>
+                <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='FormData_InputText' /></th>
                 </tr>";
     }
     $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />" .
