@@ -127,6 +127,12 @@ class Session {
         foreach ($errors as $key => $error) {
             $_SESSION[$key]['errors'] = $error;
         }
+        if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
+        $keys = array_unique($keys);
+        foreach($keys as $key) {
+            array_push($_SESSION['flash_new'], $key);
+        }
+        array_push($_SESSION['flash_new'], 'messages');         
         return new self;
     }      
     public static function get($key) {
@@ -153,6 +159,7 @@ class Session {
         foreach($item_messages as $class => $value){
             $msg_boxes .= "<div class='$class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
+        unset($_SESSION['messages']);
         return $msg_boxes;
     }
     

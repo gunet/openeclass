@@ -388,7 +388,7 @@ if (isset($_GET['modifyAnswers'])) {
 
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         $tool_content .= "
-                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$_GET[modifyAnswers]'>
+                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET[modifyAnswers]) . "'>
                     <input type='hidden' name='formSent' value='1' />
                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
 
@@ -490,7 +490,7 @@ if (isset($_GET['modifyAnswers'])) {
                     </form>";
     } elseif ($answerType == FILL_IN_BLANKS) {
         $tool_content .= "
-                    <form name='formulaire' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$_GET[modifyAnswers]'>";
+                    <form name='formulaire' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET[modifyAnswers]) . "'>";
         if (!isset($setWeighting)) {
             $tempSW = "";
         } else {
@@ -584,7 +584,7 @@ if (isset($_GET['modifyAnswers'])) {
     } //END FILL_IN_BLANKS !!!
     elseif ($answerType == MATCHING) {
         $tool_content .= "
-                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$_GET[modifyAnswers]'>
+                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET[modifyAnswers]) . "'>
                 <input type='hidden' name='formSent' value='1' />
                 <input type='hidden' name='nbrOptions' value='$nbrOptions' />
                 <input type='hidden' name='nbrMatches' value='$nbrMatches' />
@@ -647,10 +647,10 @@ if (isset($_GET['modifyAnswers'])) {
             $tool_content .= "\" /></td>
             <td><div align='right'><select name=\"sel[" . $i . "]\">";
             foreach ($listeOptions as $key => $val) {
-                $tool_content .= "<option value=\"" . $key . "\" ";
+                $tool_content .= "<option value=\"" . q($key) . "\" ";
                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key)
                     $tool_content .= "selected=\"selected\"";
-                $tool_content .= ">" . $val . "</option>";
+                $tool_content .= ">" . q($val) . "</option>";
             } // end foreach()
 
             $tool_content .= "</select></div></td>
@@ -659,7 +659,7 @@ if (isset($_GET['modifyAnswers'])) {
             if (!isset($submitAnswers) && !isset($weighting[$i])) {
                 $tool_content .= '5';
             } else {
-                $tool_content .= $weighting[$i];
+                $tool_content .= q($weighting[$i]);
             }
             $tool_content .= "\" /></td>
             </tr>";
@@ -681,7 +681,7 @@ if (isset($_GET['modifyAnswers'])) {
         foreach ($listeOptions as $key => $val) {
             $tool_content .= "
                     <tr>
-                      <td class=\"right\"><b>" . $val . "</b></td>
+                      <td class=\"right\"><b>" . q($val) . "</b></td>
                       <td><input type=\"text\" " .
                     "name=\"option[" . $key . "]\" size=\"58\" value=\"";
             if (!isset($formSent) && !isset($option[$key]))
@@ -708,7 +708,7 @@ if (isset($_GET['modifyAnswers'])) {
 
     elseif ($answerType == TRUE_FALSE) {
         $tool_content .= "
-                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$_GET[modifyAnswers]'>
+                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET[modifyAnswers]) . "'>
                     <input type='hidden' name='formSent' value='1' />
                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
                     <fieldset>
@@ -751,7 +751,7 @@ if (isset($_GET['modifyAnswers'])) {
                 . "</td>
   <td valign='top'><input type='text' name='weighting[1]' size='5' value=\"";
         if (isset($weighting[1])) {
-            $tool_content .= $weighting[1];
+            $tool_content .= q($weighting[1]);
         } else {
             $tool_content .= 0;
         }
@@ -772,7 +772,7 @@ if (isset($_GET['modifyAnswers'])) {
                 . "</td>
                     <td valign='top'><input type='text' name='weighting[2]' size='5' value=\"";
         if (isset($weighting[2])) {
-            $tool_content .= $weighting[2];
+            $tool_content .= q($weighting[2]);
         } else {
             $tool_content .= 0;
         }

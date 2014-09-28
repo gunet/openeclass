@@ -120,7 +120,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
                 '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>');
+                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>');
         }
     }
     echo json_encode($data);
@@ -210,22 +210,22 @@ if (isset($_GET['an_id'])) {
     }
 }
 if ($is_editor) {
-	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-			 $langEmptyAnTitle . '";</script>';
+  $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+       $langEmptyAnTitle . '";</script>';
         $aidx = new AnnouncementIndexer();
-	$displayForm = true;
-	/* up and down commands */
-	if (isset($_GET['down'])) {
-		$thisAnnouncementId = $_GET['down'];
-		$sortDirection = "DESC";
-	}
-	if (isset($_GET['up'])) {
-		$thisAnnouncementId = $_GET['up'];
-		$sortDirection = "ASC";
-	}
+  $displayForm = true;
+  /* up and down commands */
+  if (isset($_GET['down'])) {
+    $thisAnnouncementId = $_GET['down'];
+    $sortDirection = "DESC";
+  }
+  if (isset($_GET['up'])) {
+    $thisAnnouncementId = $_GET['up'];
+    $sortDirection = "ASC";
+  }
 
         $thisAnnouncementOrderFound = false;
-	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
+  if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
             $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
                                            WHERE course_id = ?d
                                            ORDER BY `order` $sortDirection",$course_id );
@@ -243,7 +243,7 @@ if ($is_editor) {
                     $thisAnnouncementOrderFound = true;
                 }
            }
-	}
+  }
 
     /* modify */
     if (isset($_GET['modify'])) {
@@ -298,11 +298,11 @@ if ($is_editor) {
             foreach($_POST['recipients'] as $re){
                 $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
             }
-            $emailContent = "$professorMessage: $_SESSION[givenname] $_SESSION[surname]<br>\n<br>\n" .
-                    $_POST['antitle'] .
+            $emailContent = "$professorMessage: " . q($_SESSION[givenname]) . " " . q($_SESSION[surname]) . "<br>\n<br>\n" .
+                    q($_POST['antitle']) .
                     "<br>\n<br>\n" .
-                    $_POST['newContent'];
-            $emailSubject = "$professorMessage ($public_code - $title - $langAnnouncement)";
+                    q($_POST['newContent']);
+            $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
             $invalid = 0;
@@ -369,13 +369,13 @@ if ($is_editor) {
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
-	<table class='tbl' width='100%'>";
+  <table class='tbl' width='100%'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
         } else {
-	    $nameTools = $langAddAnn;
+      $nameTools = $langAddAnn;
         }
-	$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
+  $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
@@ -387,14 +387,14 @@ if ($is_editor) {
         </tr>
         <tr>
           <td><input type='text' name='antitle' value='$titleToModify' size='50' /></td>
-	</tr>
-	<tr>
+  </tr>
+  <tr>
           <th>$langAnnBody:</th>
         </tr>
         <tr>
           <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
         </tr>
-	<tr>
+  <tr>
           <th><img src='$themeimg/email.png' title='email' /> $langEmailOption:</th>
         </tr>
         <tr>
@@ -402,12 +402,12 @@ if ($is_editor) {
             <select name='recipients[]' multiple='true' class='auth_input' id='select-recipients' style='min-width:400px;'>";
             $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
             foreach($course_users as $cu){
-               $tool_content .= "<option value='{$cu->email}'>{$cu->name} ($cu->email)</option>"; 
+               $tool_content .= "<option value='{" . q($cu->email) . "}'>{" . q($cu->name) . "} (" . q($cu->email) . ")</option>"; 
             } 
             $tool_content .= "</select>
           </td>
-	</tr>
-	<tr>
+  </tr>
+  <tr>
           <th>$langAnnouncementActivePeriod:</th>
         </tr>
         <tr>
@@ -415,16 +415,16 @@ if ($is_editor) {
         </tr>
         <tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
-	</tr>
-	</table>
-	<input type='hidden' name='id' value='$AnnouncementToModify' />
+  </tr>
+  </table>
+  <input type='hidden' name='id' value='$AnnouncementToModify' />
         </fieldset>
-	</form>";
+  </form>";
     } else {
-	/* display actions toolbar */
-	$tool_content .= "
-	<div id='operations_container'>
-	  <ul id='opslist'>";
+  /* display actions toolbar */
+  $tool_content .= "
+  <div id='operations_container'>
+    <ul id='opslist'>";
         if (isset($_GET['an_id'])) {
             $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;modify=$row->id'>" . $langModify . "</a></li>
                               <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";

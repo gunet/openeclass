@@ -101,9 +101,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $tool_content .= "<p class='caution'>$msgErr</p>\n";
     }
     if (isset($_GET['newQuestion'])){
-        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=$_GET[newQuestion]'>";
+        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET[newQuestion]) . "'>";
     } else {
-        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=$_GET[modifyQuestion]'>";
+        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET[modifyQuestion]) . "'>";
     }
     @$tool_content .= "
 	<fieldset>

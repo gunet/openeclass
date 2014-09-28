@@ -239,11 +239,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         </tr>
 	<tr>
 	  <th>$langExerciseConstrain:</th>
-	  <td>$exerciseTimeConstraint $langExerciseConstrainUnit</td>
+	  <td>" . q($exerciseTimeConstraint) . " $langExerciseConstrainUnit</td>
 	</tr>
 	<tr>
 	  <th>$langExerciseAttemptsAllowed:</th>
-  	  <td>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</td>
+  	  <td>" . q($exerciseAttemptsAllowed) . " $langExerciseAttemptsAllowedUnit</td>
 	</tr>
         <tr>
             <th>$langRandomQuestions</th>

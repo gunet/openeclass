@@ -71,8 +71,8 @@ $group_id = init_forum_group_info($forum_id);
 
 $nameTools = $langReply;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $forum_name);
-$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => $topic_title);
+$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
+$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' =>  q($topic_title));
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_post_ok) {
     $tool_content .= $langErrorTopicSelect;
@@ -139,12 +139,12 @@ if (isset($_POST['submit'])) {
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
     $forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
-    $plain_forum_message = html2text($forum_message);
+    $plain_forum_message = q(html2text($forum_message));
     $body_topic_notify = "<br>$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum '" . q($forum_name) . "' 
                                 $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c'  <br />
                                 <br />" . q($forum_message) . "<br /><br />$gunet<br />
                                 <a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
-    $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
+    $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum " . q($forum_name) . "' $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
     $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
     $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
     $plain_body_topic_notify .= $unsubscribe . $linkhere;

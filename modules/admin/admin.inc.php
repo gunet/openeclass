@@ -38,7 +38,7 @@
  * ************************************************************* */
 function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', $displayAll = FALSE) {
     global $langNextPage, $langBeforePage, $langAllUsers;
-
+    $limit = intval($limit);
     $retString = $link_all = "";
     if ($displayAll == TRUE) {
         if (isset($GLOBALS['course_code'])) {

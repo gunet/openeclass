@@ -101,7 +101,7 @@ $tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></th>
         </td>
       </tr>";
 
-$tool_content .= "<tr><th class='left'>$langRegistrationDate:</th><td>";
+$tool_content .= "<tr><th class='left'>$langCreationDate:</th><td>";
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;

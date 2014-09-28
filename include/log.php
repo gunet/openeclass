@@ -127,7 +127,7 @@ class Log {
                                 ORDER BY ts DESC");
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $tool_content .= "<div class='info'>$langCourse: " . course_id_to_title($course_id) . "</div>";
+                $tool_content .= "<div class='info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
@@ -162,7 +162,7 @@ class Log {
                     $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
                 if ($course_id == -1) { // all courses
-                    $tool_content .= "<td>" . course_id_to_title($r->course_id) . "</td>";
+                    $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
                 if ($module_id == -1) { // all modules                    
                     $mid = $r->module_id;
@@ -315,8 +315,8 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langTitle &laquo;" . $details['title'] . "&raquo;";
-        $content .= "&nbsp;(" . $details['code'] . ")";
+        $content = "$langTitle &laquo;" . q($details['title']) . "&raquo;";
+        $content .= "&nbsp;(" . q($details['code']) . ")";
 
         return $content;
     }
@@ -333,8 +333,8 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langTitle &laquo;" . $details['title'] . "&raquo;";
-        $content .= "&nbsp;(" . $details['code'] . ")";
+        $content = "$langTitle &laquo;" . q($details['title']) . "&raquo;";
+        $content .= "&nbsp;(" . q($details['code']) . ")";
 
         return $content;
     }
@@ -345,8 +345,8 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langTitle &laquo;" . $details['title'] . "&raquo;";
-        $content .= "&nbsp;(" . $details['public_code'] . ")";
+        $content = "$langTitle &laquo;" . q($details['title']) . "&raquo;";
+        $content .= "&nbsp;(" . q($details['public_code']) . ")";
 
         return $content;
     }
@@ -360,9 +360,9 @@ class Log {
         $content = '';
 
         if (!empty($details['modifyprofile'])) {
-            $content .= "$langPersoDetails<br />$lang_username&nbsp;&laquo;" . $details['username'] . "&raquo;&nbsp;email&nbsp;&laquo;" . $details['email'] . "&raquo;&nbsp;";
+            $content .= "$langPersoDetails<br />$lang_username&nbsp;&laquo;" . q($details['username']) . "&raquo;&nbsp;email&nbsp;&laquo;" . q($details['email']) . "&raquo;&nbsp;";
             if (!empty($details['am'])) {
-                $content .= "&nbsp;($langAm: " . $details['am'];
+                $content .= "&nbsp;($langAm: " . q($details['am']);
             }
             $content .= ")";
         }
@@ -370,7 +370,7 @@ class Log {
             $content .= "$langChangePass";
         }
         if (!empty($details['addimage'])) {
-            $content .= "$langUpdateImage&nbsp;($langType: " . $details['imagetype'] . ")";
+            $content .= "$langUpdateImage&nbsp;($langType: " . q($details['imagetype']) . ")";
         }
         if (!empty($details['deleteimage'])) {
             $content .= "$langDelImage";
@@ -395,7 +395,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;$details[uname]&raquo;&nbsp;$langPassword&nbsp;&laquo;$details[pass]&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details[uname]) . "&raquo;&nbsp;$langPassword&nbsp;&laquo;" . q($details[pass]) . "&raquo;";
 
         return $content;
     }
@@ -405,7 +405,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;$details[username]&raquo;&nbsp;$langName&nbsp;&laquo;$details[name]&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details[username]) . "&raquo;&nbsp;$langName&nbsp;&laquo;" . q($details[name]) . "&raquo;";
 
         return $content;
     }
@@ -422,12 +422,12 @@ class Log {
         global $langTitle, $langDescription;
 
         $details = unserialize($details);
-        $content = "$langTitle  &laquo" . $details['title'] . "&raquo";
+        $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q($details['description']) . "&raquo";
         }
         if (!empty($details['url'])) {
-            $content .= "&nbsp;&mdash;&nbsp; URL &laquo" . $details['url'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; URL &laquo" . q($details['url']) . "&raquo";
         }
         return $content;
     }
@@ -445,18 +445,18 @@ class Log {
         global $langTitle, $langDescription, $m;
 
         $details = unserialize($details);
-        $content = "$langTitle  &laquo" . $details['title'] . "&raquo";
+        $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
         }
         if (!empty($details['filename'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . $m['filename'] . " &laquo" . $details['filename'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($m['filename']) . " &laquo" . q($details['filename']) . "&raquo";
         }
         if (!empty($details['comments'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . $m['comments'] . " &laquo" . $details['comments'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($m['comments']) . " &laquo" . q($details['comments']) . "&raquo";
         }
         if (!empty($details['grade'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . $m['grade'] . " &laquo" . $details['grade'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($m['grade']) . " &laquo" . q($details['grade']) . "&raquo";
         }
         return $content;
     }
@@ -471,10 +471,9 @@ class Log {
     private function announcement_action_details($details) {
 
         global $langTitle, $langContent;
-        
+
         $details = unserialize($details);        
-        
-        $content = "$langTitle &laquo" . $details['title'] .
+        $content = "$langTitle &laquo" . q($details['title']) .
                 "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "&raquo";
         return $content;
     }
@@ -496,10 +495,10 @@ class Log {
         $details = unserialize($details);
         $date = $details['date'];
 
-        $content = "$langTitle &laquo" . $details['title'] .
+        $content = "$langTitle &laquo" . q($details['title']) .
                 "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "&raquo
-                             &nbsp;&mdash;&nbsp;$langDate: " . nice_format($date, true) . "
-                             &nbsp;&mdash;&nbsp;$langDuration: " . $details['duration'] . " $langhours";
+                             &nbsp;&mdash;&nbsp;$langDate: " . q(nice_format($date, true)) . "
+                             &nbsp;&mdash;&nbsp;$langDuration: " . q($details['duration']) . " $langhours";
         return $content;
     }
 
@@ -518,13 +517,13 @@ class Log {
         $details = unserialize($details);
         $content = '';
         if (!empty($details['url'])) {
-            $content .= "URL: " . $details['url'];
+            $content .= "URL: " . q($details['url']);
         }
         if (!empty($details['category'])) {
-            $content .= " $langCategoryName &laquo" . $details['category'] . "&raquo";
+            $content .= " $langCategoryName &laquo" . q($details['category']) . "&raquo";
         }
         if (!empty($details['title'])) {
-            $content .= " &mdash; $langTitle &laquo" . $details['title'] . "&raquo";
+            $content .= " &mdash; $langTitle &laquo" . q($details['title']) . "&raquo";
         }
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
@@ -550,18 +549,18 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langFileName &laquo" . $details['filename'] . "&raquo";
+        $content = "$langFileName &laquo" . q($details['filename']) . "&raquo";
         if (!empty($details['title'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langTitle &laquo" . $details['title'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langTitle &laquo" . q($details['title']) . "&raquo";
         }
         if (!empty($details['comment'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo" . $details['comment'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo" . q($details['comment']) . "&raquo";
         }
         if (!empty($details['newfilename'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langRename $langIn &laquo" . $details['newfilename'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langRename $langIn &laquo" . q($details['newfilename']) . "&raquo";
         }
         if (!empty($details['newpath'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo" . $details['newpath'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo" . q($details['newpath']) . "&raquo";
         }
         return $content;
     }
@@ -579,7 +578,7 @@ class Log {
         
         $content = "$langSubject &laquo" . q($details['subject']) . "&raquo";
         if (!empty($details['filename'])) {
-            $content .= "&nbsp;&mdash;&nbsp;$langFileName &laquo" . $details['filename'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp;$langFileName &laquo" . q($details['filename']) . "&raquo";
         }
         if (!empty($details['body'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langMessage &laquo" . standard_text_escape($details['body']) . "&raquo";
@@ -602,9 +601,9 @@ class Log {
         $details = unserialize($details);
 
         if (!empty($details['uid'])) {
-            $content = "$langNewUser &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . $details['name'] . "&raquo";
+            $content = "$langNewUser &laquo" . display_user($details['uid'], false, false) . "&raquo $langInGroup &laquo" . q($details['name']) . "&raquo";
         } else {
-            $content = "$langGroup &laquo" . $details['name'] . "&raquo";
+            $content = "$langGroup &laquo" . q($details['name']) . "&raquo";
         }
 
         return $content;
@@ -623,7 +622,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langTitle  &laquo" . $details['title'] . "&raquo";
+        $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         $content .= "&nbsp;&mdash;&nbsp; $langContent &laquo" . ellipsize($details['content'], 100) . "&raquo";
 
         return $content;
@@ -644,12 +643,12 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langGlossaryTerm &laquo" . $details['term'] . "&raquo";
+        $content = "$langGlossaryTerm &laquo" . q($details['term']) . "&raquo";
         if (!empty($details['definition'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langGlossaryDefinition &laquo" . ellipsize($details['definition'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langGlossaryDefinition &laquo" . q(ellipsize($details['definition'], 100)) . "&raquo";
         }
         if (!empty($details['url'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langGlossaryURL &laquo" . $details['url'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langGlossaryURL &laquo" . q($details['url']) . "&raquo";
         }
         if (!empty($details['notes'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langCategoryNotes &laquo" . $details['notes'] . "&raquo";
@@ -671,9 +670,9 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langLearnPath &laquo" . $details['name'] . "&raquo";
+        $content = "$langLearnPath &laquo" . q($details['name']) . "&raquo";
         if (!empty($details['comment'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo" . ellipsize($details['comment'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo" . q(ellipsize($details['comment'], 100)) . "&raquo";
         }
         return $content;
     }
@@ -690,8 +689,7 @@ class Log {
         global $langTitle, $langDescription;
 
         $details = unserialize($details);
-               
-        $content = "$langTitle &laquo" . $details['title'] . "&raquo";
+        $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
         }
@@ -711,9 +709,9 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$langTitle &laquo" . $details['title'] . "&raquo";
+        $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
         return $content;
     }
@@ -776,8 +774,8 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "URL: " . $details['link'];
-        $content .= " &mdash; $langLinkName &laquo" . $details['name_link'] . "&raquo";
+        $content = "URL: " . q($details['link']);
+        $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
 
         return $content;
     }

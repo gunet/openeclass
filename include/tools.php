@@ -655,7 +655,7 @@ function lessonToolsMenu() {
                              'class' => 'external');
         array_push($sideMenuSubGroup, $arrMenuType);
         foreach ($result2 as $ex_link) {        
-            array_push($sideMenuText, $ex_link->title);
+            array_push($sideMenuText, q($ex_link->title));
             array_push($sideMenuLink, q($ex_link->url));
             array_push($sideMenuImg, "external_link" . $section['iconext']);
         }

@@ -106,7 +106,7 @@ foreach ($result as $row) {
                 $studentam = '-';
             else
                 $studentam = $theStudent->am;
-            $tool_content .= "<b>$langUser:</b> $theStudent->surname $theStudent->givenname  <div class='smaller'>($langAm: $studentam)</div>";
+            $tool_content .= "<b>$langUser:</b> " . q($theStudent->surname) . " " . q($theStudent->givenname) . "  <div class='smaller'>($langAm: " . q($studentam) . ")</div>";
         }
         $tool_content .= "</td>
                 </tr>
@@ -128,19 +128,19 @@ foreach ($result as $row) {
                 $class .= ' highlight_row'; 
             }
             $tool_content .= "<tr class='$class'>";
-            $tool_content .= "<td class='center'>$row2->record_start_date</td>";
+            $tool_content .= "<td class='center'>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $tool_content .= "<td class='center'>$langNotRecorded</td>";
             } else {
                 $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
-                $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $row2->total_score . "/" . $row2->total_weighting . "</a>";
+                $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
             } else {
                 if ($row2->attempt_status == ATTEMPT_PAUSED) {
                     $results_link = "-/-";
                 } else {
-                    $results_link = $row2->total_score . "/" . $row2->total_weighting;
+                    $results_link = q($row2->total_score). "/" . q($row2->total_weighting);
                 }
             }
             $tool_content .= "<td class='center'>$results_link</td>";
