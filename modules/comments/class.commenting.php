@@ -90,7 +90,7 @@ Class Commenting {
             $comments = $this->getCommentsDB();
             foreach ($comments as $comment) {
                 $out .= '<div class="comment" id="comment-'.$comment->getId().'">';
-                $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
+                $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.q(uid_to_name($comment->getAuthor())).':</div>';
                 $out .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 
                 if ($comment->permEdit($isEditor, $uid)) {
