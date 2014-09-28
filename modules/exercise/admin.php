@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // construction of the Exercise object
 $objExercise = new Exercise();
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = $_GET['exerciseId'];   
+    $exerciseId = intval($_GET['exerciseId']);   
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
 }
@@ -96,11 +96,11 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
     // reads question data
     if (isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
         if (isset($_GET['editQuestion'])) {
-            $question_id = $_GET['editQuestion'];
+            $question_id = intval($_GET['editQuestion']);
         } elseif (isset($_GET['modifyQuestion'])) {
-            $question_id = $_GET['modifyQuestion'];
+            $question_id = intval($_GET['modifyQuestion']);
         } elseif (isset($_GET['modifyAnswers'])) {
-            $question_id = $_GET['modifyAnswers'];
+            $question_id = intval($_GET['modifyAnswers']);
         }
         // if question not found
         if (!$objQuestion->read($question_id)) {
@@ -170,7 +170,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
         $nameTools = $langInfoExercise;
         $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
     } else {
-        $nameTools = $objExercise->selectTitle();
+        $nameTools = q($objExercise->selectTitle());
     }
     include('exercise_admin.inc.php');
     if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {

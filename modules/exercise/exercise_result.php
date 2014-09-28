@@ -292,13 +292,13 @@ if (count($exercise_question_ids)>0){
                             // else if the word entered is not the same as the one defined by the professor
                             elseif (!empty($choice[$j])) {
                                 // adds the word in red at the end of the string, and strikes it
-                                $answer.='<font color="red"><s>' . $choice[$j] . '</s></font>';
+                                $answer.='<font color="red"><s>' . q($choice[$j]) . '</s></font>';
                             } else {
                                 // adds a tabulation if no word has been typed by the student
                                 $answer.='&nbsp;&nbsp;&nbsp;';
                             }
                             // adds the correct word, followed by ] to close the blank
-                            $answer.=' / <font color="green"><b>' . substr($temp, 0, $pos) . '</b></font>]';
+                            $answer.=' / <font color="green"><b>' . q(substr($temp, 0, $pos)) . '</b></font>]';
                             $j++;
                             $temp = substr($temp, $pos + 1);
                         }
@@ -312,7 +312,7 @@ if (count($exercise_question_ids)>0){
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
                                 $choice[$answerId] = '<font color="red">
-                                                                <s>' . $matching[$choice[$answerId]] . '</s>
+                                                                <s>' . q($matching[$choice[$answerId]]) . '</s>
                                                                 </font>';
                             }
                         } else {
@@ -377,7 +377,7 @@ if (count($exercise_question_ids)>0){
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+                                                  <td>" .q($choice[$answerId]) ." / <font color='green'><b>" . q($matching[$answerCorrect]) . "</b></font></td>
                                                 </tr>";
                         }
                     }

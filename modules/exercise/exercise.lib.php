@@ -142,11 +142,11 @@ function showQuestion($questionId, $onlyAnswers = false, $exerciseResult = array
                 foreach ($Select as $key => $val) {
                 $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';    
                     $tool_content .= "
-					<option value=\"${key}\" $selected>${val['Lettre']}</option>";
+					<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
-                    $tool_content .= '<b>' . $Select[$cpt2]['Lettre'] . '.</b> ' . $Select[$cpt2]['Reponse'];
+                    $tool_content .= '<b>' . q($Select[$cpt2]['Lettre']) . '.</b> ' . $Select[$cpt2]['Reponse'];
                 } else {
                     $tool_content .= '&nbsp;';
                 }
@@ -165,7 +165,7 @@ function showQuestion($questionId, $onlyAnswers = false, $exerciseResult = array
                                                   <td width='200'>&nbsp;</td>
                                                   <td width='100'>&nbsp;</td>
                                                   <td width='200' valign='top'>" .
-                                "<b>" . $Select[$cpt2]['Lettre'] . ".</b> " . $Select[$cpt2]['Reponse'] . "
+                                "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "
                                                   </td>
                                                   </tr>
                                                   </table>
