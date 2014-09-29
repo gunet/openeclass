@@ -617,8 +617,10 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
-    global $urlAppend;
-    $path = str_replace(array($urlAppend, '?logout=yes', 'index.php'), array('/', '', ''), $path);
+    global $urlAppend, $urlServer, $urlSecure;
+    $path = preg_replace('/\?[a-zA-Z0-9=&]+$/', '', $path);
+    $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
+                        array('/', '/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
         return 'course_info/restore_course.php';
     } elseif (strpos($path, '/info/') !== false) {
