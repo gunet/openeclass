@@ -294,8 +294,12 @@ if ($is_editor) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);
-            $showFrom = q($announce->start_display);
-            $showUntil = q($announce->stop_display);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
+            $startdate = $startDate_obj->format('d-m-Y');
+            $showFrom = q($startdate);
+            $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
+            $enddate = $endDate_obj->format('d-m-Y');            
+            $showUntil = q($enddate);
         }
     }
 
@@ -305,8 +309,18 @@ if ($is_editor) {
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
-        $start_display = (isset($_POST['startdate']) && !empty($_POST['startdate']))? $_POST['startdate']:"2014-01-01";
-        $stop_display = (isset($_POST['enddate']) && !empty($_POST['enddate']))? $_POST['enddate']:"2094-12-31";
+        if (isset($_POST['startdate']) && !empty($_POST['startdate'])) {
+            $startDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['startdate']);
+            $start_display = $startDate_obj->format('Y-m-d');
+        } else {
+            $start_display = "2094-12-31";
+        }
+        if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
+            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
+            $stop_display = $endDate_obj->format('Y-m-d');            
+        } else {
+            $stop_display = "2094-12-31";
+        }
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW(), start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
@@ -393,18 +407,21 @@ if ($is_editor) {
     }
     /* display form */
     if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
-        load_js('jquery-ui');
-        load_js('jquery-ui-timepicker-addon.min.js');
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+        load_js('bootstrap-datepicker');
+        $head_content .= "
             <script type='text/javascript'>
             $(function() {
-            $('input[name=startdate]').datepicker({
-                dateFormat: 'yy-mm-dd'
+                $('#startdate').datepicker({
+                    format: 'dd-mm-yyyy',
+                    language: '$language',
+                    autoclose: true
                 });
-            $('input[name=enddate]').datepicker({
-                dateFormat: 'yy-mm-dd'
+                $('#enddate').datepicker({
+                    format: 'dd-mm-yyyy',
+                    language: '$language',
+                    autoclose: true
                 });
-               });"
+            });"
         . "</script>";
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
@@ -453,7 +470,7 @@ if ($is_editor) {
           <th>$langAnnouncementActivePeriod:</th>
         </tr>
         <tr>
-          <td>$langFrom: <input type='text' name='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' value='$showUntil'></td>
+          <td>$langFrom: <input type='text' name='startdate' id='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' id='enddate' value='$showUntil'></td>
         </tr>
         <tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
