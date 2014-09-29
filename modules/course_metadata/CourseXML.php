@@ -117,8 +117,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $this->populate($data);
         }
         $out .= $this->populateDiv();
-        $out .= "</div>
-                 </div>";
+        $out .= "</div></div>";
         return $out;
     }
 
@@ -388,18 +387,26 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // proper divs initializations
         $fieldStart = "";
-        if (in_array($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
+        if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
+            $fieldStart .= "<div class='panel-group'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>
+                            <a data-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
+                        </h3>
+                    </div>
+                    <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
+                        <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield'>";
 
-        $fieldEnd = "</span></div>";
+        $fieldEnd = "</span></div><!--lalakoko1-->";
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
-            $fieldEnd .= "</div></div>";
+            $fieldEnd .= "</div></div></div></div><!--lalakoko2-->";
         }
         if (array_key_exists($fullKey, CourseXMLConfig::$breakFields)) {
-            $fieldEnd .= "</div><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
+            $fieldEnd .= "</div><!--lalakoko3--><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
         }
 
         // hidden/auto-generated fields
@@ -413,7 +420,7 @@ class CourseXMLElement extends SimpleXMLElement {
         }
 
         // print nothing for empty and non-breaking-necessary fields
-        if (!in_array($fullKey, CourseXMLConfig::$breakAccordionStartFields) &&
+        if (!array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields) &&
                 !in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields) &&
                 !array_key_exists($fullKey, CourseXMLConfig::$breakFields) &&
                 strlen((string) $this) <= 0) {
