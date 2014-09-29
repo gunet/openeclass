@@ -11,7 +11,7 @@
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 
 .delete-action {color:$color-red;}
-.delete-action:hover {background:$color-red!important; color:white!important;}
+.delete-action:hover {background:$color-red!important; color:white!important; @include transition(all 150ms linear);}
 
 .align-left {text-align: left;}
 .align-right {text-align: right;}
@@ -446,6 +446,7 @@ input.toggle[type=checkbox]:checked:after
     border-color: $color-hover;
     border-bottom-color: #3F87C1;
     color:white;
+    @include transition(all 150ms linear);
   }
 
   &:active
@@ -455,6 +456,7 @@ input.toggle[type=checkbox]:checked:after
     border-bottom-color: #3F87C1!important;
     color:white!important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+    @include transition(all 150ms linear);
   }
 
 }
@@ -477,6 +479,8 @@ input.toggle[type=checkbox]:checked:after
     border-color: $color-hover;
     border-bottom-color: #3F87C1;
     color:white;
+
+    @include transition(all 120ms linear);
   }
 
   &:active
@@ -486,6 +490,8 @@ input.toggle[type=checkbox]:checked:after
     border-bottom-color: #3F87C1!important;
     color:white!important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+    @include transition(all 150ms linear);
+
   }
 
 }
@@ -502,6 +508,8 @@ input.toggle[type=checkbox]:checked:after
   {
     background:#E58080;
     text-decoration: none;
+
+    @include transition(all 150ms linear);
     
   }
 
@@ -511,6 +519,7 @@ input.toggle[type=checkbox]:checked:after
     outline: 0 !important;   
     border-bottom-color: #984B4B !important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+    @include transition(all 150ms linear);
   }
 
 }
@@ -596,6 +605,8 @@ input.toggle[type=checkbox]:checked:after
 color: #9C9C9C;
 background-color: #FFFFFF;
   content:attr(data-label);
+
+  @include transition(all 150ms linear);
 }
 
 .btn-flippin:after {
@@ -735,6 +746,7 @@ ul.tablelist
     {
       background: $color-hover;
       color:white;
+      @include transition(all 150ms linear);
     }
 
     .item-right-cols .options-content
@@ -763,6 +775,7 @@ ul.tablelist
     {
       color:white;
       background: $color-hover;
+      @include transition(all 150ms linear);
     }
 
 
@@ -779,6 +792,7 @@ ul.tablelist
   li.list-item:hover
   {
     background:#FCFCFC;
+    @include transition(all 150ms linear);
   }
 
 
@@ -819,6 +833,7 @@ ul.tablelist
   .list-item:hover .side-header
   {
     color:#eee;
+    @include transition(all 150ms linear);
   }
 
   .list-item .item-content
@@ -890,6 +905,7 @@ ul.tablelist
   {
     background: $color-hover;
     color:white;
+    @include transition(all 120ms linear);
   }
 
 
@@ -936,6 +952,7 @@ ul.tablelist
   .list-item .item-options ul li:hover
   {
     background:$color-hover;
+    @include transition(all 120ms linear);
   }
 }
 
@@ -1341,8 +1358,9 @@ $action-btn-sm-height: 48px;
 }
 .opt-btn:hover
 {
-    background-color: #4da1e4 !important;
+    background-color: $color-hover !important;
     color: white !important;
+    @include transition(all 120ms linear);
 }
 .opt-btn-more-wrapper
 {
@@ -1371,19 +1389,23 @@ $action-btn-sm-height: 48px;
     width: $action-btn-sm-width;
     height: $action-btn-sm-height;
     color: white;
-    background-color: #333333;
+    background-color: #232C3A;
 }
 .tool-btn.delete a
 {
-    color: #ce6b6b;
+    color: $color-red;
 }
 .tool-btn.delete a:hover
 {
     color: white;
-    background-color: #ce6b6b;
+    background-color: $color-red;
+
+    @include transition(all 120ms linear);
 }
 .tool-btn a:hover
 {
     color: white;
-    background-color: #4da1e4;
+    background-color: $color-hover;
+
+    @include transition(all 120ms linear);
 }
