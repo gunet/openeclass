@@ -54,7 +54,7 @@ $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-
+$date = '';
 // search form
 $tool_content .= "<form action='listcours.php?search=yes' method='get'>
     <fieldset>

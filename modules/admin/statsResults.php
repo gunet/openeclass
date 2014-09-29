@@ -21,12 +21,27 @@
 
 
 require_once 'modules/graphics/plotter.php';
+
+if (isset($_POST['u_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');        
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P30D'));       
+    $u_date_start = $date_start->format('d-m-Y H:i');
+}
+if (isset($_POST['u_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_end']);
+    $u_date_end = $ude->format('Y-m-d H:i');            
+} else {
+    $date_end = new DateTime();    
+    $u_date_end = $date_end->format('d-m-Y H:i');
+}
+
 $usage_defaults = array(
     'u_stats_type' => 'visits',
     'u_interval' => 'daily',
-    'u_user_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
-    'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
+    'u_user_id' => -1,    
 );
 
 foreach ($usage_defaults as $key => $val) {
@@ -40,8 +55,6 @@ foreach ($usage_defaults as $key => $val) {
 #see if chart has content
 
 $date_fmt = '%Y-%m-%d';
-$u_date_start = mysql_real_escape_string($u_date_start);
-$u_date_end = mysql_real_escape_string($u_date_end);
 $date_where = " (`when` BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "DATE_FORMAT(MIN(`when`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`when`), '$date_fmt') AS date_end ";
 

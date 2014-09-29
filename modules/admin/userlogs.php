@@ -26,7 +26,6 @@
  */
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
@@ -40,15 +39,14 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
 load_js('jquery');
-load_js('jquery-ui');
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').DataTable ({                                
+            $('#log_results_table').dataTable ({                                
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,                
                 'oLanguage': {
@@ -78,43 +76,49 @@ $head_content .= '<script type="text/javascript">
         $(course_log_controls_init);
 </script>';
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#u_date_start, #u_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
 
 $u = isset($_GET['u']) ? intval($_GET['u']) : '';
-$u_date_start = isset($_GET['u_date_start']) ? $_GET['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -15 day'));
-$u_date_end = isset($_GET['u_date_end']) ? $_GET['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
+if (isset($_GET['u_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_start']);    
+    $u_date_start = $uds->format('Y-m-d H:i');        
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P15D'));       
+    $u_date_start = $date_start->format('d-m-Y H:i');
+}
+if (isset($_GET['u_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_end']);    
+    $u_date_end = $ude->format('Y-m-d H:i');            
+} else {
+    $date_end = new DateTime();
+    $date_end->add(new DateInterval('P1D'));
+    $u_date_end = $date_end->format('d-m-Y H:i');
+}
 $logtype = isset($_GET['logtype']) ? intval($_GET['logtype']) : '0';
 $u_course_id = isset($_GET['u_course_id']) ? intval($_GET['u_course_id']) : '-1';
 $u_module_id = isset($_GET['u_module_id']) ? intval($_GET['u_module_id']) : '-1';
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
 
-if (isDepartmentAdmin())
+if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
-
+}
 // display logs
 if (isset($_GET['submit'])) {
     $log = new Log();
-    if ($logtype == -2) { // display system logging
-        $page_link = "&amp;logtype=$logtype&amp;u_date_start=" . urlencode($u_date_start) . "&amp;u_date_end=" . urlencode($u_date_end) . "&amp;u_module_id=$u_module_id&amp;u=$u&amp;submit=1";
-        $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
-    } else { // display course modules logging
-        $page_link = "&amp;logtype=$logtype&amp;u_date_start=" . urlencode($u_date_start) . "&amp;u_date_end=" . urlencode($u_date_end) . "&amp;u_module_id=$u_module_id&amp;u=$u&amp;submit=1";
-        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+    if ($logtype == -2) { // display system logging        
+        $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    } else { // display course modules logging        
+        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
     }
 }
 
@@ -166,9 +170,27 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
       <legend>$langUserLog</legend>
       <table class='tbl'>
         <tr><th width='220' class='left'>$langStartDate</th>
-            <td><input type='text' name = 'u_date_start' value = '" . q($u_date_start) . "'></td></tr>
+        <td>
+            <div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
+                <div class='col-xs-11'>        
+                    <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+                </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>
+        </td>
+        </tr>
         <tr><th class='left'>$langEndDate</th>
-            <td><input type='text' name = 'u_date_end' value = '" . q($u_date_end) . "'></td></tr>
+            <td>
+            <div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
+                <div class='col-xs-11'>
+                    <input name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
+                </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>
+        </td>
+        </tr>
         <tr><th class='left'>$langLogTypes :</th>
             <td>" . selection($log_types, 'logtype', $logtype) . "</td></tr>
         <tr class='course'><th class='left'>$langFirstLetterCourse</th>

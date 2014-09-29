@@ -32,25 +32,18 @@ require_once '../../include/baseTheme.php';
 
 load_js('tools.js');
 load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#u_date_start, #u_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
 $nameTools = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -66,7 +59,7 @@ $tool_content .= "
   </div>";
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
-$query = "SELECT MIN(`when`) as min_when FROM loginout";
+$query = "SELECT MIN(`when`) AS min_when FROM loginout";
 foreach (Database::get()->queryArray($query) as $row) {
     $min_when = strtotime($row->min_when);
 }
@@ -79,23 +72,25 @@ $tool_content .= '<div class="info">' . sprintf($langOldStatsLoginsExpl, get_con
  * ***************************************** */
 require_once 'modules/graphics/plotter.php';
 
-//default values for chart
-$usage_defaults = array(
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -4 month')),
-    'u_date_end' => strftime('%Y-%m-%d', strtotime('now -1 month')),
-);
-
-foreach ($usage_defaults as $key => $val) {
-    if (!isset($_POST[$key])) {
-        $$key = $val;
-    } else {
-        $$key = q($_POST[$key]);
-    }
+if (isset($_POST['u_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P4M'));
+    $u_date_start = $date_start->format('d-m-Y H:i');
+}
+if (isset($_POST['u_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_end']);
+    $u_date_end = $ude->format('Y-m-d H:i');
+} else {
+    $date_end = new DateTime();
+    $date_start->sub(new DateInterval('P1M'));
+    $u_date_end = $date_end->format('d-m-Y H:i');
 }
 
+
 $date_fmt = '%Y-%m-%d';
-$u_date_start = mysql_real_escape_string($u_date_start);
-$u_date_end = mysql_real_escape_string($u_date_end);
 $date_where = " (start_date BETWEEN '$u_date_start' AND '$u_date_end') ";
 $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits
                         FROM loginout_summary
@@ -113,7 +108,7 @@ if (count($result) > 0) {
         $mont = $langMonths[$row->month];
         $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
     }
-    $tool_content .= "<p>" . $langVisits . "</p>\n" . $chart->plot($langNoStatistics);
+    $tool_content .= "<p>" . $langVisits . "</p>" . $chart->plot($langNoStatistics);
 }
 $tool_content .= '<br />';
 
@@ -121,17 +116,35 @@ $tool_content .= '<form method="post">
     <table width="100%" class="tbl">
     <tr>
       <th width="150" class="left">' . $langStartDate . ':</th>
-      <td><input type="text" name="u_date_start" value = "' . $u_date_start . '"></td>      
+      <td>';
+$tool_content .= "<div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
+                <div class='col-xs-11'>        
+                    <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+                </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>";      
+$tool_content .= '</td>
     </tr>
     <tr>
       <th class="left">' . $langEndDate . ':</th>
-      <td><input type="text" name="u_date_end" value = "' . $u_date_end . '"></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td class="right"><input type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
-    </tr>
-    </table>
-    </form>';
+      <td>';
+
+$tool_content .= "<div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
+            <div class='col-xs-11'>
+                <input name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
+            </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>";
+              
+$tool_content .= '</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td class="right"><input type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
+</tr>
+</table>
+</form>';
 
 draw($tool_content, 3, null, $head_content);
