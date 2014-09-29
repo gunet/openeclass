@@ -352,6 +352,7 @@ $langLasting = "Duration";
 $langDateNow = "Today:";
 $langCalendar = "Calendar";
 $langAddEvent = "Add an event";
+$langDelEventConfirm = "Are yu sure you want to delete the specifc event?";
 $langDetail = "Details";
 $langChooseDate = "Choose Date";
 $langOldToNew = "Oldest first";

@@ -62,7 +62,7 @@ if(!empty($langLanguageCode)){
 load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
 $(function() {
@@ -116,7 +116,6 @@ function show_day(day,month,year){
 $nameTools = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
-load_js('jquery');
 load_js('tools.js');
 load_js('references.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
@@ -223,9 +222,8 @@ if (isset($message) && $message) {
 
 /* display form */
 if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
-    $tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
-    <fieldset>
+    $tool_content .= "       
+    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\" style='display:inline'>
     <legend>$langEvent</legend>
     <table class='tbl' width='100%'>";
     if (isset($_GET['modify'])) {
@@ -254,6 +252,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $object_selected = null;
     
     $tool_content .= "
+    <input type='hidden' name='id' value='$eventToModify' />
     <tr><th>$langEventTitle:</th></tr>
     <tr>
       <td><input type='text' name='newTitle' value='$titleToModify' size='50' /></td>
@@ -315,17 +314,14 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 . "</select></td></tr>";
     }
     $tool_content .= "
-        </tr>
-        <tr>
-          <td class='right'>
-            <input type='submit' name='submitEvent' value='$langAdd' />
-            <a href='?delete=$eventToModify&et=$eventtype' onClick=\"return confirmation('$langConfirmDelete');\"><span class='button' name='deleteEventBtn'>$langDelete</span></a>
-          </td>
         </tr>";
     $tool_content .= "</table>
-    <input type='hidden' name='id' value='$eventToModify' />
-    </fieldset>
-    </form>";
+            <input type='submit' name='submitEvent' value='$langAdd' />
+            </form> 
+            <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
+                <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+            </form>        
+   ";
 } else {
     /* display actions toolbar */
     $tool_content .= "

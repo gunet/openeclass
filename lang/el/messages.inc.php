@@ -554,6 +554,7 @@ $langhours = 'ώρες';
 $langDateNow = "Σημερινή ημερομηνία:";
 $langCalendar = "Ημερολόγιο";
 $langAddEvent = "Προσθήκη ενός γεγονότος";
+$langDelEventConfirm = "Είστε σίγουρος/η ότι θέλετε να διαγράψετε το συγκεκριμένο γεγονός?";
 $langDetail = "Λεπτομέρειες";
 $langChooseDate = "Επιλέξτε Ημερομηνία";
 $langOldToNew = "Αντιστροφή σειράς παρουσίασης";
