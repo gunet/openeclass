@@ -122,9 +122,6 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
     exit;
 }
 
-load_js('jquery');
-load_js('jquery-ui');
-
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
@@ -406,6 +403,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         ";
 	}
 } else {//mailbox
+    load_js('jquery-ui');
     load_js('datatables');
     load_js('datatables_filtering_delay');
     load_js('datatables_reload');

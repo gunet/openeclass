@@ -1,7 +1,7 @@
 <?php
 
 $theme_settings = array(
-    'js_loaded' => array('jquery', 'jquery-ui'),
+    'js_loaded' => array('jquery'),
     'classes' => array('tool_active' => 'active',
                       'group_active' => 'in'),
     'icon_map' => array(

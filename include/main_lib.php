@@ -165,10 +165,19 @@ function load_js($file, $init='') {
     // Load file only if not provided by template
     if (!(isset($theme_settings['js_loaded']) and
           in_array($file, $theme_settings['js_loaded']))) {
-        
         if ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'jquery-ui') {
+            if ($theme == 'modern' || $theme == 'ocean') {
+                $uiTheme = 'redmond';
+            } else {
+                $uiTheme = 'lightness';
+            }
+           
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui.1.11.1.min.css'>\n";
+            $file = 'jquery-ui-1.11.1.custom.min.js';
+           
         } elseif ($file == 'shadowbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
             $file = 'shadowbox/shadowbox.js';
