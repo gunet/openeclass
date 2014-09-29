@@ -231,19 +231,24 @@
   padding-right: 0px;
 }
 
-/* line 67, inventory.scss */
+/* line 66, inventory.scss */
+.whole-row {
+  width: 100% !important;
+}
+
+/* line 71, inventory.scss */
 .place-at-toolbox {
   margin: 0em 0.2em 0.65em 0.2em !important;
 }
 
-/* line 73, inventory.scss */
+/* line 77, inventory.scss */
 .focused {
   box-shadow: 0 0px 10px #bbbbbb !important;
   -moz-box-shadow: 0 0px 10px #bbbbbb !important;
   -webkit-box-shadow: 0 0px 10px #bbbbbb !important;
 }
 
-/* line 78, inventory.scss */
+/* line 82, inventory.scss */
 .infotext-sm {
   font-size: 0.8em;
   font-style: italic;
@@ -251,28 +256,28 @@
 }
 
 /* Style for links -------------------------------------------------*/
-/* line 90, inventory.scss */
+/* line 94, inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
   outline: 0;
 }
-/* line 96, inventory.scss */
+/* line 100, inventory.scss */
 a:hover {
   text-decoration: underline;
   outline: 0;
 }
-/* line 102, inventory.scss */
+/* line 106, inventory.scss */
 a:focus {
   outline: 0;
 }
-/* line 107, inventory.scss */
+/* line 111, inventory.scss */
 a.goto {
   position: relative;
   padding-right: 1.5em!important;
   font-size: 0.75em;
 }
-/* line 113, inventory.scss */
+/* line 117, inventory.scss */
 a.goto:after {
   content: "\f105";
   font-family: "FontAwesome";
@@ -286,36 +291,36 @@ a.goto:after {
 }
 
 /* Styles for headings --------------------------------------------------*/
-/* line 133, inventory.scss */
+/* line 137, inventory.scss */
 h1 {
   font-size: 2em;
   font-weight: 300;
 }
 
-/* line 139, inventory.scss */
+/* line 143, inventory.scss */
 h1.page-title {
   margin: 0em;
   font-weight: 400!important;
   color: #333;
 }
 
-/* line 148, inventory.scss */
+/* line 152, inventory.scss */
 #main h1 {
   color: #444;
 }
-/* line 153, inventory.scss */
+/* line 157, inventory.scss */
 #main h2, #main h3, #main h4, #main h5, #main h6 {
   color: #777;
 }
 
-/* line 159, inventory.scss */
+/* line 163, inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
   color: #4da1e4;
 }
 
-/* line 166, inventory.scss */
+/* line 170, inventory.scss */
 hr {
   height: 1px;
   border: none;
@@ -323,38 +328,38 @@ hr {
 }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-/* line 176, inventory.scss */
+/* line 180, inventory.scss */
 .fa {
   font-size: 1em !important;
 }
 
-/* line 183, inventory.scss */
+/* line 187, inventory.scss */
 img {
   max-width: 100%;
   position: relative;
 }
 
-/* line 189, inventory.scss */
+/* line 193, inventory.scss */
 .content-title {
   text-transform: uppercase;
   color: #888888;
   font-weight: 400;
 }
 
-/* line 196, inventory.scss */
+/* line 200, inventory.scss */
 .page-subtitle {
   color: #555555;
   font-size: 22px;
 }
 
-/* line 202, inventory.scss */
+/* line 206, inventory.scss */
 .page-subtitle-name {
   color: #555555;
   font-size: 18px;
 }
 
 /* Extend bootstrap style - forms */
-/* line 210, inventory.scss */
+/* line 214, inventory.scss */
 .form-control {
   border-radius: 2px 2px 2px 2px !important;
   -webkit-border-radius: 2px 2px 2px 2px !important;
@@ -362,7 +367,7 @@ img {
 }
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 222, inventory.scss */
+/* line 226, inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
@@ -373,7 +378,7 @@ img {
 }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 237, inventory.scss */
+/* line 241, inventory.scss */
 #main-content .panel {
   background: white !important;
   min-height: 2.4em  !important;
@@ -389,7 +394,7 @@ img {
 }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 250, inventory.scss */
+/* line 254, inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
@@ -410,30 +415,30 @@ img {
   margin-right: 0em;
   display: inline-block;
 }
-/* line 265, inventory.scss */
+/* line 269, inventory.scss */
 .toolbox ul {
   display: block;
   display: inline-block;
   margin: 0px;
   padding: 0px;
 }
-/* line 273, inventory.scss */
+/* line 277, inventory.scss */
 .toolbox li {
   list-style-type: none;
   display: inline-block;
 }
-/* line 279, inventory.scss */
+/* line 283, inventory.scss */
 .toolbox ul.toolbox-submenu {
   display: none;
 }
 
-/* line 287, inventory.scss */
+/* line 291, inventory.scss */
 .toolbox:hover .toolbox-submenu {
   display: inline-block;
 }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-/* line 300, inventory.scss */
+/* line 304, inventory.scss */
 #doc-toggle {
   float: right;
   margin: 1em 0em;
@@ -446,23 +451,23 @@ img {
   user-select: none;
 }
 
-/* line 308, inventory.scss */
+/* line 312, inventory.scss */
 .toggle-sidebar {
   cursor: pointer;
 }
 
 /* TOGGLE SWTICH */
-/* line 315, inventory.scss */
+/* line 319, inventory.scss */
 .my-toggle > * {
   vertical-align: middle;
 }
 
-/* line 320, inventory.scss */
+/* line 324, inventory.scss */
 .my-toggle .txt {
   font-size: 0.75em;
 }
 
-/* line 325, inventory.scss */
+/* line 329, inventory.scss */
 input.toggle {
   position: relative;
   padding-left: 5px;
@@ -485,7 +490,7 @@ input.toggle {
   -webkit-box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* line 352, inventory.scss */
+/* line 356, inventory.scss */
 input.toggle:after {
   position: absolute;
   content: "";
@@ -506,24 +511,24 @@ input.toggle:after {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* line 372, inventory.scss */
+/* line 376, inventory.scss */
 input.toggle:hover:after {
   background: white;
 }
 
-/* line 377, inventory.scss */
+/* line 381, inventory.scss */
 input.toggle[type=checkbox]:checked {
   border: 1px solid #aaaaaa;
   background-color: #dddddd;
 }
 
-/* line 384, inventory.scss */
+/* line 388, inventory.scss */
 input.toggle[type=checkbox]:checked:after {
   left: 0px;
 }
 
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 397, inventory.scss */
+/* line 401, inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -556,19 +561,19 @@ input.toggle[type=checkbox]:checked:after {
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 422, inventory.scss */
+/* line 426, inventory.scss */
 .btn-default-eclass > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 427, inventory.scss */
+/* line 431, inventory.scss */
 .btn-default-eclass > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 432, inventory.scss */
+/* line 436, inventory.scss */
 .btn-default-eclass > .fa.fa-caret-down {
   margin-right: 0px!important;
 }
-/* line 438, inventory.scss */
+/* line 442, inventory.scss */
 .btn-default-eclass:hover, .btn-default-eclass:focus {
   text-decoration: none;
   outline: 0;
@@ -577,7 +582,7 @@ input.toggle[type=checkbox]:checked:after {
   border-bottom-color: #3F87C1;
   color: white;
 }
-/* line 448, inventory.scss */
+/* line 452, inventory.scss */
 .btn-default-eclass:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -589,7 +594,7 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* BUTTON COLORS */
-/* line 461, inventory.scss */
+/* line 465, inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
   background: #6bce6b;
@@ -599,7 +604,7 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
 }
-/* line 469, inventory.scss */
+/* line 473, inventory.scss */
 .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
   text-decoration: none;
   outline: 0;
@@ -608,7 +613,7 @@ input.toggle[type=checkbox]:checked:after {
   border-bottom-color: #3F87C1;
   color: white;
 }
-/* line 479, inventory.scss */
+/* line 483, inventory.scss */
 .btn-default-eclass.color-green:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -619,7 +624,7 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
-/* line 490, inventory.scss */
+/* line 494, inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
   background: #ce6b6b;
@@ -629,12 +634,12 @@ input.toggle[type=checkbox]:checked:after {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 498, inventory.scss */
+/* line 502, inventory.scss */
 .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
   background: #E58080;
   text-decoration: none;
 }
-/* line 505, inventory.scss */
+/* line 509, inventory.scss */
 .btn-default-eclass.color-red:active {
   background: #E58080 !important;
   outline: 0 !important;
@@ -645,23 +650,23 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* BUTTON SIZES */
-/* line 518, inventory.scss */
+/* line 522, inventory.scss */
 .btn-default-eclass.size-xl {
   font-size: 1.2em;
 }
 
-/* line 523, inventory.scss */
+/* line 527, inventory.scss */
 .btn-default-eclass.size-l {
   font-size: 1.1em;
 }
 
-/* line 528, inventory.scss */
+/* line 532, inventory.scss */
 .btn-default-eclass.size-s {
   font-size: 0.85em;
 }
 
 /* flippin btn */
-/* line 539, inventory.scss */
+/* line 543, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -677,7 +682,7 @@ input.toggle[type=checkbox]:checked:after {
   -webkit-touch-callout: none;
 }
 
-/* line 556, inventory.scss */
+/* line 560, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -692,7 +697,7 @@ input.toggle[type=checkbox]:checked:after {
   transform-style: preserve-3d;
 }
 
-/* line 569, inventory.scss */
+/* line 573, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -707,13 +712,13 @@ input.toggle[type=checkbox]:checked:after {
   backface-visibility: hidden;
 }
 
-/* line 583, inventory.scss */
+/* line 587, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
   color: white;
 }
 
-/* line 588, inventory.scss */
+/* line 592, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
@@ -723,7 +728,7 @@ input.toggle[type=checkbox]:checked:after {
   content: attr(data-label);
 }
 
-/* line 597, inventory.scss */
+/* line 601, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -737,12 +742,12 @@ input.toggle[type=checkbox]:checked:after {
   content: '';
 }
 
-/* line 610, inventory.scss */
+/* line 614, inventory.scss */
 .btn-flippin:active:before {
   background-color: #3571c8;
 }
 
-/* line 614, inventory.scss */
+/* line 618, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
@@ -751,14 +756,14 @@ input.toggle[type=checkbox]:checked:after {
 }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 632, inventory.scss */
+/* line 636, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
   cursor: default;
 }
-/* line 639, inventory.scss */
+/* line 643, inventory.scss */
 ul.tablelist li.list-item {
   position: relative;
   box-sizing: border-box;
@@ -769,20 +774,20 @@ ul.tablelist li.list-item {
   background: white;
   overflow: hidden;
 }
-/* line 648, inventory.scss */
+/* line 652, inventory.scss */
 ul.tablelist li.list-item .max-height {
   max-height: 3.35em;
 }
-/* line 653, inventory.scss */
+/* line 657, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
   border-right: 1px solid #eee;
 }
-/* line 658, inventory.scss */
+/* line 662, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:first-child {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
-/* line 664, inventory.scss */
+/* line 668, inventory.scss */
 ul.tablelist li.list-item .item-right-cols {
   float: right;
   position: absolute;
@@ -790,23 +795,23 @@ ul.tablelist li.list-item .item-right-cols {
   right: 0px;
   max-width: 95%;
 }
-/* line 674, inventory.scss */
+/* line 678, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span,
 ul.tablelist li.list-item .item-title {
   padding: 1em;
   display: inline-block;
 }
-/* line 680, inventory.scss */
+/* line 684, inventory.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 1em;
   padding-right: 60px;
   display: inline-block;
 }
-/* line 687, inventory.scss */
+/* line 691, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-content {
   font-size: 0.9em;
 }
-/* line 692, inventory.scss */
+/* line 696, inventory.scss */
 ul.tablelist li.list-item .item-right-cols a {
   width: 1em;
   padding: 1em 1.4em;
@@ -814,7 +819,7 @@ ul.tablelist li.list-item .item-right-cols a {
   text-align: center;
   cursor: pointer;
 }
-/* line 702, inventory.scss */
+/* line 706, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-date {
   color: rgba(0, 0, 0, 0.6);
   background: white;
@@ -822,13 +827,13 @@ ul.tablelist li.list-item .item-right-cols .item-date {
   text-align: center;
   vertical-align: top;
 }
-/* line 711, inventory.scss */
+/* line 715, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options {
   padding: 0px;
   margin-left: -0.26em;
   padding-right: 3.8em;
 }
-/* line 718, inventory.scss */
+/* line 722, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   position: absolute;
   display: inline-block;
@@ -840,12 +845,12 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   color: #7E7E7E;
   background: #F8F8F8;
 }
-/* line 731, inventory.scss */
+/* line 735, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
 }
-/* line 737, inventory.scss */
+/* line 741, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
   margin-right: -25em;
@@ -857,21 +862,21 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 749, inventory.scss */
+/* line 753, inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
   margin-right: 0em;
   background: #333333;
 }
-/* line 755, inventory.scss */
+/* line 759, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a {
   color: white;
 }
-/* line 759, inventory.scss */
+/* line 763, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
 }
-/* line 768, inventory.scss */
+/* line 772, inventory.scss */
 ul.tablelist li.list-item:first-child,
 ul.tablelist li.list-item:first-child .item-date {
   -webkit-animation: NEW-ITEM-FX 3s 1;
@@ -879,17 +884,17 @@ ul.tablelist li.list-item:first-child .item-date {
   -o-animation: NEW-ITEM-FX 3s 1;
   animation: NEW-ITEM-FX 3s 1;
 }
-/* line 776, inventory.scss */
+/* line 780, inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 788, inventory.scss */
+/* line 792, inventory.scss */
 .boxlist {
   padding: 0px;
 }
-/* line 793, inventory.scss */
+/* line 797, inventory.scss */
 .boxlist .list-item {
   display: block;
   position: relative;
@@ -904,19 +909,19 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 806, inventory.scss */
+/* line 810, inventory.scss */
 .boxlist .list-item.hidden {
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 811, inventory.scss */
+/* line 815, inventory.scss */
 .boxlist .list-item.hidden .item-content {
   opacity: 0.6;
 }
-/* line 816, inventory.scss */
+/* line 820, inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
 }
-/* line 821, inventory.scss */
+/* line 825, inventory.scss */
 .boxlist .list-item .item-content {
   width: 93%;
   /* a fallback for calc */
@@ -930,27 +935,27 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 833, inventory.scss */
+/* line 837, inventory.scss */
 .boxlist .item-header {
   padding: 1em 0em 0.5em 0em;
   border-bottom: 1px solid #eee;
 }
-/* line 839, inventory.scss */
+/* line 843, inventory.scss */
 .boxlist .item-header .item-title {
   margin: 0px;
 }
-/* line 844, inventory.scss */
+/* line 848, inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 850, inventory.scss */
+/* line 854, inventory.scss */
 .boxlist .item-body {
   padding: 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 857, inventory.scss */
+/* line 861, inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -963,7 +968,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 872, inventory.scss */
+/* line 876, inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -981,12 +986,12 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 886, inventory.scss */
+/* line 890, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
 }
-/* line 893, inventory.scss */
+/* line 897, inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -1001,19 +1006,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 905, inventory.scss */
+/* line 909, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 910, inventory.scss */
+/* line 914, inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 915, inventory.scss */
+/* line 919, inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 920, inventory.scss */
+/* line 924, inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -1026,18 +1031,18 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 933, inventory.scss */
+/* line 937, inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
 }
 
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
-/* line 948, inventory.scss */
+/* line 952, inventory.scss */
 #lesson-banner {
   position: relative;
   min-height: 13em;
 }
-/* line 953, inventory.scss */
+/* line 957, inventory.scss */
 #lesson-banner .banner-left {
   width: 40%;
   position: absolute;
@@ -1047,7 +1052,7 @@ ul.tablelist li.list-item:hover {
   margin-right: 1em;
   padding: 1em;
 }
-/* line 963, inventory.scss */
+/* line 967, inventory.scss */
 #lesson-banner .banner-left .banner-image {
   width: 100%;
   height: 100%;
@@ -1060,7 +1065,7 @@ ul.tablelist li.list-item:hover {
   -o-background-size: cover;
   background-size: cover;
 }
-/* line 971, inventory.scss */
+/* line 975, inventory.scss */
 #lesson-banner .banner-left .banner-image:after {
   position: absolute;
   top: 0px;
@@ -1084,7 +1089,7 @@ ul.tablelist li.list-item:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
   /* IE6-9 */
 }
-/* line 993, inventory.scss */
+/* line 997, inventory.scss */
 #lesson-banner .banner-content {
   margin-left: 40%;
   padding: 1em;
@@ -1092,13 +1097,13 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 999, inventory.scss */
+/* line 1003, inventory.scss */
 #lesson-banner .banner-content .banner-description {
   font-size: 0.8em;
   min-height: 6em;
   line-height: 1.7em;
 }
-/* line 1006, inventory.scss */
+/* line 1010, inventory.scss */
 #lesson-banner .banner-content hr {
   margin-bottom: 0.8em;
 }
@@ -1356,26 +1361,26 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1328, inventory.scss */
+/* line 1332, inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
   height: 48px;
 }
 
-/* line 1334, inventory.scss */
+/* line 1338, inventory.scss */
 .opt-btn {
   position: absolute;
   background-color: #F8F8F8 !important;
 }
 
-/* line 1339, inventory.scss */
+/* line 1343, inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
 }
 
-/* line 1344, inventory.scss */
+/* line 1348, inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
@@ -1384,12 +1389,12 @@ textarea{
   overflow: hidden;
 }
 
-/* line 1352, inventory.scss */
+/* line 1356, inventory.scss */
 .opt-btn-more-tool {
   float: left;
 }
 
-/* line 1356, inventory.scss */
+/* line 1360, inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1399,7 +1404,7 @@ textarea{
   color: #7e7e7e;
 }
 
-/* line 1365, inventory.scss */
+/* line 1369, inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
@@ -1408,18 +1413,18 @@ textarea{
   background-color: #333333;
 }
 
-/* line 1373, inventory.scss */
+/* line 1377, inventory.scss */
 .tool-btn.delete a {
   color: #ce6b6b;
 }
 
-/* line 1377, inventory.scss */
+/* line 1381, inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
   background-color: #ce6b6b;
 }
 
-/* line 1382, inventory.scss */
+/* line 1386, inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
