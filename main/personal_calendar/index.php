@@ -52,9 +52,10 @@ if (isset($_GET['id'])) {
 }
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
+load_js('bootstrap-timepicker');
+
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
 }
@@ -65,15 +66,20 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jq
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
 $(function() {
-$('input[name=startdate]').datetimepicker({
-    dateFormat: 'yy-mm-dd'
+    $('#startdate').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
     });
-$('input[name=enddate]').datepicker({
-    dateFormat: 'yy-mm-dd'
+    $('#enddate').datepicker({
+        format: 'dd-mm-yyyy',
+        language: '".$language."',
+        autoclose: true
     });
-$('input[name=duration]').timepicker({ 
-    timeFormat: 'H:mm',
-    showDuration: true
+    $('#duration').timepicker({ 
+        showMeridian: false, 
+        minuteStep: 1, 
+        defaultTime: false 
     });
 });".
 '
@@ -130,8 +136,8 @@ if (isset($_POST['submitEvent'])) {
         $refobjid = ($_POST['refobjid'] == "0")? $_POST['refcourse']:$_POST['refobjid'];
         $visibility = null;
     }
-    
-    $start = $_POST['startdate'];
+    $eventDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
+    $start = $eventDate_obj->format('Y-m-d H:i:s');    
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
@@ -149,7 +155,9 @@ if (isset($_POST['submitEvent'])) {
     } else { // new event 
         $recursion = null;
         if(!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber'])>0 && !empty($_POST['enddate'])){
-            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
+            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
+            $end = $endDate_obj->format('Y-m-d H:i:s');  
+            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $end);
         }
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
         if($resp['success']){
@@ -173,7 +181,7 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
 }
 
 /* edit */
-if (isset($_GET['modify'])) {
+if (isset($_GET['modify'])) {    
     $modify = intval($_GET['modify']);
     $displayForm = false;
     if(isset($_GET['admin']) && $_GET['admin'] == 1){
@@ -182,18 +190,22 @@ if (isset($_GET['modify'])) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
-            $datetimeToModify = q($event->start);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s',$event->start);
+            $startdate = $startDate_obj->format('d-m-Y H:i');
+            $datetimeToModify = q($startdate);
             $durationToModify = q($event->duration);
             $visibility_level = $event->visibility_level;
             $displayForm = true;
         }
     } else {
-        $event = Calendar_Events::get_event($modify);
+        $event = Calendar_Events::get_event($modify);       
         if ($event) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
-            $datetimeToModify = q($event->start);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s',$event->start);
+            $startdate = $startDate_obj->format('d-m-Y H:i');            
+            $datetimeToModify = q($startdate);
             $durationToModify = q($event->duration);
             $gen_type_selected = $event->reference_obj_module;
             $course_selected = $event->reference_obj_course;
@@ -210,7 +222,7 @@ if (isset($message) && $message) {
 }
 
 /* display form */
-if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
+if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
     $tool_content .= "
     <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
@@ -252,11 +264,11 @@ if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['ad
     </tr>
     <tr><th>$langDate:</th></tr>
     <tr>
-        <td> <input type='text' name='startdate' value='$datetimeToModify'></td>
+        <td> <input type='text' name='startdate' id='startdate' value='$datetimeToModify'></td>
     </tr>
     <tr><th>$langDuration:</th></tr>
     <tr>
-        <td><input type=\"text\" name=\"duration\" value='$durationToModify'></td>
+        <td><input type=\"text\" name=\"duration\" id='duration' value='$durationToModify'></td>
     </tr>";
     if(!isset($_GET['modify'])){
         $tool_content .= "
@@ -276,7 +288,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['ad
                 . "<option value=\"W\">$langWeeks</option>"
                 . "<option value=\"M\">$langMonthsAbstract</option>"
                 . "</select>"
-                . " $langUntil: <input type='text' name='enddate' value=''></td>
+                . " $langUntil: <input type='text' name='enddate' id='enddate' value=''></td>
         </tr>";
     }
     if(!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])){
