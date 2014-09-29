@@ -503,7 +503,7 @@ if ($is_editor) {
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table table-bordered' width='100%'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr><th>$langDate</th><th>$langAnnouncement</th>";
+        $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
         if ($is_editor) {
             $tool_content .= "<th class='center'>$langActions</th>";
         }
