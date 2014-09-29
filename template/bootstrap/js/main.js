@@ -33,34 +33,6 @@ $(document).ready( function () {
 //      animate: 200
 //    });
 
-    /* Dropdown menu toggle on click */
-    $(document).click(function() {
-        $('div.dropdown').removeClass('opened');
-    });
-
-
-    $('div.dropdown:not(.open-on-hover)').on('click',function(event){
-        $('div.dropdown:not(.open-on-hover)').not(this).removeClass('opened');
-        $(this).toggleClass('opened');
-        event.stopPropagation();
-    });
-
-    
-    var loading = function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.target.classList.add('loading');
-      e.target.setAttribute('disabled','disabled');
-      setTimeout(function(){
-        e.target.classList.remove('loading');
-        e.target.removeAttribute('disabled');
-      },1500);
-    };
-
-    var btns = document.querySelectorAll('button');
-    for (var i=btns.length-1;i>=0;i--) {
-      btns[i].addEventListener('click',loading);
-    }
 
 
     // Menu height 

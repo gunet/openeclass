@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.0926b
+    SASS for UI Inventory of eclass v3.0 - version 0.0929a
 =============================================================
 */
 /* 
@@ -416,7 +416,7 @@ img {
   display: inline-block;
 }
 /* line 269, inventory.scss */
-.toolbox ul {
+.toolbox ul:not(.dropdown-menu) {
   display: block;
   display: inline-block;
   margin: 0px;
