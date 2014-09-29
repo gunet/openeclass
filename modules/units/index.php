@@ -71,6 +71,7 @@ if ($is_editor) {
 
 <div class='row'>
   <div class='col-md-12'>
+    
     <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
       <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
         <i class='fa fa-paste space-after-icon'></i>$langAdd
@@ -136,14 +137,14 @@ if ($is_editor) {
         <i class='fa fa-th-large'></i>
       </button>
     </div>
-  </div>
-<div>
 
-<br/>
+  </div>
+</div>
 
 
 <div class='row'>
   <div class='col-md-12'>
+
     <div id='operations_container'>
 		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
 		<select name='type' onChange='document.resinsert.submit();'>
@@ -164,6 +165,7 @@ if ($is_editor) {
 		<input type='hidden' name='course' value='$course_code'>
 		</form>
 		</div>
+
   </div>
 </div>" .
             $form;
@@ -233,35 +235,79 @@ if ($is_editor) {
     $comment_edit_link = '';
 }
 
-$tool_content .= "<table class='$units_class' width='99%'>";
+$tool_content .= "
+<div class='row'>
+  <div class='col-md-12'>
+    <h3 class='page-title'>$nameTools</h3>
+  </div>
+</div>
+
+
+<div class='row'>
+  <div class='col-md-12'>
+    
+    <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
+      
+
+  
+";
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "
-    <tr class='odd'>
-      <td class='left'>" . $link['previous'] . '</td>
-      <td class="right">' . $link['next'] . "</td>
-    </tr>";
+
+
+    <a class='btn-default-eclass place-at-toolbox' title='TEST BUTTON' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
+      <i class='fa fa-paste space-after-icon'></i>TEST BUTTON
+    </a>
+
+    ". $link['previous'] ."
+    ". $link['next'] ."
+
+
+    ";
 }
-$tool_content .= "<tr><td colspan='2' class='unit_title'>$nameTools</td></tr></table>";
+$tool_content .= "
+
+    </div>
+  </div>
+</div>";
+
+
+
 
 
 if (!empty($comments)) {
-    $tool_content .= "<table class='tbl' width='99%'>
-        <tr class='even'>
-          <td>$comments</td>
+    $tool_content .= "
+
+<div class='row'>
+  <div class='col-md-12'>
+    <div class='panel'>
+
+          $comments
           $comment_edit_link
-        </tr>
-        </table>";
+
+    </div>
+  </div>
+</div>";
 }
+
+
+
 
 show_resources($id);
 
-$tool_content .= '<form name="unitselect" action="' . $urlServer . 'modules/units/" method="get">';
-$tool_content .="
-    <table width='99%' class='tbl'>
-     <tr class='odd'>
-       <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
-       <td width='50' class='right'>" .
-        "<select name='id' onChange='document.unitselect.submit();'>";
+
+
+$tool_content .= "
+<div class='row'>
+  <div class='col-md-12'>
+    <div class='panel'>
+
+      <form name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+          <table width='99%' class='tbl'>
+            <tr class='odd'>
+              <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
+              <td width='50' class='right'>" .
+              "<select name='id' onChange='document.unitselect.submit();'>";
 
 $q = Database::get()->queryArray("SELECT id, title FROM course_units
                WHERE course_id = ?d AND `order` > 0
@@ -274,9 +320,13 @@ foreach ($q as $info) {
             '</option>';
 }
 $tool_content .= "</select>
-       </td>
-     </tr>
-    </table>
- </form>";
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+ ";
 
 draw($tool_content, 2, null, $head_content);
