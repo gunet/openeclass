@@ -49,8 +49,6 @@ if (isset($_GET['id'])) {
 }
 
 load_js('tools.js');
-//load_js('jquery-ui');
-//load_js('jquery-ui-timepicker-addon.min.js');
 load_js('bootstrap-datetimepicker');
 load_js('bootstrap-datepicker');
 load_js('bootstrap-timepicker');

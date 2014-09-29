@@ -53,15 +53,16 @@ if (check_guest()) {
 }
 load_js('tools.js');
 load_js('tagsinput');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('validation.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
-$('input[name=start_session]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
+$('#start_session').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
     });
 });
 </script>";
@@ -121,7 +122,9 @@ if (isset($_GET['add'])) {
 }
 elseif(isset($_POST['update_bbb_session']))
 { 
-    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
+    $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');   
+    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
 }
 elseif(isset($_GET['choice']))
 {
@@ -180,7 +183,9 @@ elseif(isset($_GET['choice']))
         $tool_content .= "<div class='success'>$langBBBImportRecordingsΟΚ</div>";
     }
 } elseif(isset($_POST['new_bbb_session'])) {  
-    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');    
+    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
 }
 else {    
     bbb_session_details();
@@ -221,7 +226,8 @@ function new_bbb_session() {
     global $langΒΒΒAlertTitle,$langΒΒΒAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
-    $start_session = strftime('%Y-%m-%d', strtotime('now'));
+    $start_date = new DateTime;
+    $start_session = $start_date->format('d-m-Y H:i'); 
     $tool_content .= "
         <form name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
@@ -237,7 +243,7 @@ function new_bbb_session() {
         </tr>
         <tr>
           <th>$langNewBBBSessionStart:</th>
-          <td><input type='text' name='start_session' value='$start_session'></td>
+          <td><input type='text' name='start_session' id='start_session' value='$start_session'></td>
         </tr>
         <tr>
         <th valign='top'>$langParticipants:</th>
@@ -540,8 +546,9 @@ function edit_bbb_session($session_id) {
     #print_r($row);
     $r_group = explode(",",$row->participants);
     
+    $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
+    $start = $startDate_obj->format('d-m-Y H:i');    
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
-
     $tool_content .= "
                     <form name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
                     <fieldset>
@@ -557,7 +564,7 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                       <th>$langNewBBBSessionStart:</th>
-                      <td><input type='text' name='start_session' value = ".q($row->start_date)."></td>
+                      <td><input type='text' name='start_session' id='start_session' value='".q($start)."'></td>
                     </tr>
                     <tr>
                     <th valign='top'>$langParticipants:</th>
