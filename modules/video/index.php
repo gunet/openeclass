@@ -532,18 +532,17 @@ if ($num_of_categories > 0) { // categories found ?
         }
         $tool_content .= "<tr><th width='15' valign='top'>$folder_icon</th>";
         if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-            $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
+            $tool_content .= "<th colspan='3' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
         } else {
-            $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
-        }
-        
-        if ($is_editor) {
-            $tool_content .= "<span style='padding-left: 15px;'>".icon('edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
-                             icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</span>";
+            $tool_content .= "<th width = '85%' colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
         }
         if (!empty($description)) {
                 $tool_content .= "<br />$description</th>";
         }
+        if ($is_editor) {
+            $tool_content .= "<th colspan='2' style='padding-left:45px;'>".icon('edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
+                             icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</th>";
+        }        
         // display all links
         if (isset($_GET['d']) and $_GET['d'] == 1) {
                 showlinksofcategory($myrow->id);
@@ -732,7 +731,7 @@ function showlinksofcategory($cat_id = 0) {
 
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
                         //$link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow[4]) . "</small>" : '';    
-                        $link_to_add = "<td>". $link_href . "</br />";
+                        $link_to_add = "<td width = '73%'>". $link_href . "</br />";
                         $link_to_add .= (!$is_in_tinymce) ? "<small>$langcreator: " . q($myrow->creator) . ", $langpublisher: " . q($myrow->publisher) . "</small>" : '';
                         $link_to_add .= "</td><td align='center'>". nice_format(date('Y-m-d', strtotime($myrow->date)))."</td>";
                         $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
@@ -746,7 +745,7 @@ function showlinksofcategory($cat_id = 0) {
                             $link_to_add = "<td width = '73%'>". $link_href ."<br/>" . q($myrow->description) . "<br />";
                         }
                         $link_to_add .= (!$is_in_tinymce) ? "<small>$langcreator: " . q($myrow->creator) . ", $langpublisher: " . q($myrow->publisher) . "</small>" : '';
-                        $link_to_add .= "</td><td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
+                        $link_to_add .= "</td><td width = 10%' align='center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
                         $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;";
                         break;
                     default:
