@@ -74,7 +74,7 @@ if (count($lesson_ids) > 0) {
     //show a "-" in all blocks if the user is not enrolled to any lessons
     // (except of the lessons block which is handled before)
     $user_assignments = "<p>-</p>";
-    $user_announcements = "<p>-</p>";
+    $user_announcements = '';
     $user_documents = "<p>-</p>";
     $user_agenda = "<p>-</p>";
     $user_forumPosts = "<p>-</p>";
@@ -94,7 +94,6 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
 $perso_tool_content = array(
     'lessons_content' => $user_lesson_info,
     'assigns_content' => $user_assignments,
-    'announce_content' => $user_announcements,
     'docs_content' => $user_documents,
     'agenda_content' => $user_agenda,
     'forum_content' => $user_forumPosts,
@@ -189,7 +188,7 @@ function getUserLessonInfo($uid) {
 
 /**
  * @brief get last month course announcements 
- * @global type $urlServer
+ * @global type $urlAppend
  * @global type $langMore
  * @global type $dateFormatLong
  * @global type $langNoAnnouncementsExist
@@ -198,42 +197,42 @@ function getUserLessonInfo($uid) {
  */
 function getUserAnnouncements($lesson_id) {
 
-    global $urlServer, $langMore, $dateFormatLong, $langNoAnnouncementsExist;
+    global $urlAppend, $langMore, $dateFormatShort;
 
+    $ann_content = '';
     $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
 
-    $found = false;
-    $ann_content = '<table width="100%">';
-    foreach ($lesson_id as $lid) {
-        $q = Database::get()->queryArray("SELECT title, content, `date`, announcement.id
-                        FROM announcement, course_module
-                        WHERE announcement.course_id = ?d
+    $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
+    $q = Database::get()->queryArray("SELECT announcement.title,
+                                             announcement.content,
+                                             announcement.`date`,
+                                             announcement.id,
+                                             course.code,
+                                             course.title course_title
+                        FROM course, course_module, announcement
+                        WHERE course.id IN ($course_id_sql)
+                                AND course.id = course_module.course_id
+                                AND course.id = announcement.course_id
                                 AND announcement.visible = 1
-                                AND DATE_FORMAT(`date`,'%Y %m %d') >= ?s
-                                AND course_module.module_id = " . MODULE_ID_ANNOUNCE . "
+                                AND announcement.`date` >= ?s
+                                AND course_module.module_id = ?d
                                 AND course_module.visible = 1
-                                AND course_module.course_id = ?d
-                        ORDER BY announcement.`date` DESC", $lid, $last_month, $lid);
-        if ($q) { // if course has announcements
-            $found = true;
-            $ann_content .= "<tr><td class='sub_title1'>" . q(ellipsize(course_id_to_title($lid), 70)) . "</td></tr>";
-            foreach ($q as $data) {
-                $url = $urlServer . "modules/announcements/index.php?course=" . course_id_to_code($lid) . "&amp;an_id=";
-                $ann_content .= "<tr><td><ul class='custom_list'><li><a href='$url$data->id'>" .
-                        "<b>" . q($data->title) . "</b></a>
-                            <span class='smaller'><b><br />" .
-                        claro_format_locale_date($dateFormatLong, strtotime($data->date)) .
-                        "</b></span><div class='smaller'>" .
-                        standard_text_escape(ellipsize_html($data->content, 250, "<strong>&nbsp;...<a href='$url$data->id'>[$langMore]</a></strong>")) .
-                        "</div></li></ul></td></tr>";
-            }
+                        ORDER BY announcement.`date` DESC LIMIT 5", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
+    if ($q) { // if announcements exist
+        foreach ($q as $ann) {
+            $course_title = q(ellipsize($ann->course_title, 50));
+            $course_url = $urlAppend . 'courses/' . $ann->code . '/';
+            $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
+            $ann_date = claro_format_locale_date($dateFormatShort, strtotime($ann->date));
+            $ann_text = q(ellipsize(strip_tags($ann->content), 150));
+            $ann_content .= "<li class='list-item'>" .
+                "<span class='item-title'><a href='$ann_url'>" . q($ann->title) .
+                "</a><br><a href='$course_url'>$course_title</a><br>$ann_text</span>" .
+                "<div class='item-right-cols'><span class='item-date'><span class='item-content'>$ann_date</span></span></div></li>";
         }
-    }
-    $ann_content .= "</table>";
-    if ($found) {
         return $ann_content;
     } else {
-        return "<p class='alert1'>$langNoAnnouncementsExist</p>";
+        return '';
     }
 }
 

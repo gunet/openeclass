@@ -134,44 +134,22 @@ $tool_content = "
                 </div>
         </div>
 
+";
 
-
+if ($user_announcements) {
+    $tool_content .= "
         <div class='col-md-5'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
                 <div class='panel'>
-
                         <ul class='tablelist panel'>
-                
-                <li class='list-item'>
-                        <span class='item-title'>.......... 1</span>
-                        <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                </li>
-
-                <li class='list-item'>
-                        <span class='item-title'>.......... 2</span>
-                        <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                </li>
-
-                <li class='list-item'>
-                        <span class='item-title'>.......... 3</span>
-                        <div class='item-right-cols'>
-                        <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                </li>
-        
+                        $user_announcements 
                         </ul>
-
-
                 </div>
-        </div>
+        </div>";
+}
 
-
+$tool_content .= "
 </div>
-
 <div class='row'>
     <div class='col-md-12'>
         <div class='panel'>

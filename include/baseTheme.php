@@ -94,7 +94,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if ($perso_tool_content) {
         $lesson_content = $perso_tool_content ['lessons_content'];
         $assigns_content = $perso_tool_content ['assigns_content'];
-        $announce_content = $perso_tool_content ['announce_content'];
         $docs_content = $perso_tool_content ['docs_content'];
         $agenda_content = $perso_tool_content ['agenda_content'];
         $forum_content = $perso_tool_content ['forum_content'];
@@ -471,7 +470,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             
             $t->set_var('LESSON_CONTENT', $lesson_content);
             $t->set_var('ASSIGN_CONTENT', $assigns_content);
-            $t->set_var('ANNOUNCE_CONTENT', $announce_content);
             $t->set_var('DOCS_CONTENT', $docs_content);
             $t->set_var('AGENDA_CONTENT', $agenda_content);
             $t->set_var('FORUM_CONTENT', $forum_content);
