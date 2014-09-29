@@ -85,7 +85,7 @@ $tool_content .= "<table class='tbl_alt' width='100%'>
 if (isset($_GET['stats'])) {
     switch ($_GET['stats']) {
         case 'failurelogin':
-            $limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             $tool_content .= "<br />";
             $date_start = date("Y-m-d", strtotime("-15 days"));
             $date_end = date("Y-m-d", strtotime("+1 days"));
@@ -94,7 +94,7 @@ if (isset($_GET['stats'])) {
             $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
             break;
         case 'unregusers':
-            $limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             $tool_content .= "<br />";
             $date_start = date("Y-m-d", strtotime("-1 month"));
             $date_end = date("Y-m-d", strtotime("+1 days"));

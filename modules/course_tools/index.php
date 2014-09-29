@@ -93,7 +93,7 @@ if (isset($_POST['delete'])) {
 if (isset($_POST['submit'])) {
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
-    if ((trim($link) == 'http://') or (trim($link) == 'ftp://') or empty($link) or empty($name_link)) {
+    if ((trim($link) == 'http://') or (trim($link) == 'ftp://') or empty($link) or empty($name_link) or !is_url_accepted($link)) {
         $tool_content .= "<p class='caution'>$langInvalidLink<br />
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
         draw($tool_content, 2, null, $head_content);
@@ -214,7 +214,7 @@ foreach ($q as $externalLinks) {
     }
     $tool_content .= "<th width='1'>
         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
-        <td class='left'>$externalLinks->title</td>
+        <td class='left'>" . q($externalLinks->title) . "</td>
         <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks->id' />
            <input type='image' src='$themeimg/delete.png' name='delete_button'

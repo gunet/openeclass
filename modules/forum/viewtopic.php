@@ -154,9 +154,9 @@ $topic_subject = Database::get()->querySingle("SELECT title FROM forum_topic WHE
 
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => $forum_name);
+    $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => q($forum_name));
 }
-$nameTools = $topic_subject;
+$nameTools = q($topic_subject);
 
 if (isset($_SESSION['message'])) {
     $tool_content .= $_SESSION['message'];

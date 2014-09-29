@@ -62,13 +62,13 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langE
 
 if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
-    $fromExercise = $_GET['fromExercise'];
+    $fromExercise = intval($_GET['fromExercise']);
     $objExercise->read($fromExercise);
     $navigation[] = array("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
 }
 
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = $_GET['exerciseId'];
+    $exerciseId = intval($_GET['exerciseId']);
 }
 
 // maximum number of questions on a same page

@@ -127,18 +127,22 @@ load_js('jquery-ui');
 
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
-        if (!$personal_msgs_allowed) {
-            $tool_content .= "<p class='alert1'>$langGeneralError</p>";
-            draw($tool_content, 1, null, $head_content);
-            exit;
-        }
-        
         if (isset($_GET['type']) && $_GET['type'] == 'cm') {
             $type = 'cm';
         } else {
             $type = 'pm';
         }
+    }
+    
+    if ($course_id == 0 && $type == 'pm') {
+        if (!$personal_msgs_allowed) {
+            $tool_content .= "<p class='alert1'>$langGeneralError</p>";
+            draw($tool_content, 1, null, $head_content);
+            exit;
+        }
         $tool_content .= "<form id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+    } elseif ($course_id == 0 && $type == 'cm') {
+        $tool_content .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
         $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";

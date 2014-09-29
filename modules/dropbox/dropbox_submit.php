@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
     } else if ($_POST['body'] == '') {
         $error = TRUE;
         $errormsg = $langEmptyMsg;
-    } elseif(!isset($_POST['course']) && !$personal_msgs_allowed) {
+    } elseif(!isset($_REQUEST['course']) && !$personal_msgs_allowed) {
         $error = TRUE;
         $errormsg = $langGeneralError;
     } elseif (!isset($_POST['recipients']) or empty($_POST['recipients'])) {

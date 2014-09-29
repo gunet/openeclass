@@ -898,7 +898,7 @@ if ($is_editor) {
                 $tool_content .= "
                     <tr>
                         <td>$cnt</td>
-                        <td>$resultUser->name $resultUser->surname ($langAm: $resultUser->am)</td>
+                        <td>" . q($resultUser->name). " " . q($resultUser->surname) . " ($langAm: " . q($resultUser->am) . ")</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td class='center'><input type='checkbox' name='recID[]' value='$resultUser->recID'></td>
                     </tr>";
@@ -1067,7 +1067,7 @@ if ($is_editor) {
                     $content .= "($langGradebookAssignSpecific)<br>";
                     $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname , user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
                     foreach ($checkForAssSpec as $checkForAssSpecR) {
-                        $content .= $checkForAssSpecR->surname. " " . $checkForAssSpecR->givenname . "<br>";
+                        $content .= q($checkForAssSpecR->surname). " " . q($checkForAssSpecR->givenname) . "<br>";
                     }
                 }
                 

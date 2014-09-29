@@ -61,7 +61,7 @@ $group_id = init_forum_group_info($forum_id);
 
 $nameTools = $langNewTopic;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $forum_name);
+$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 
 if (!does_exists($forum_id, "forum")) {
     $tool_content .= "<div class='caution'>$langErrorPost</div>";
@@ -120,11 +120,11 @@ if (isset($_POST['submit'])) {
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
     $forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";
-    $plain_forum_message = html2text($forum_message);
+    $plain_forum_message = q(html2text($forum_message));
     $body_topic_notify = "$langBodyForumNotify $langInForums '" . q($forum_name) . "' 
                                $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' <br /><br />" . q($forum_message) . "<br />
                                <br />$gunet<br /><a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
-    $plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
+    $plain_body_topic_notify = "$langBodyForumNotify $langInForums '" . q($forum_name) . "' $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
     $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
     $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
     $plain_body_topic_notify .= $unsubscribe . $linkhere;

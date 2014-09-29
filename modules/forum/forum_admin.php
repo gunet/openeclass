@@ -347,9 +347,9 @@ elseif (isset($_GET['forumgodel'])) {
            $cat_title = $result_row->cat_title;
            
            if ($forum_id == $current_forum_id) {
-               $tool_content .= "<option value='$forum_id' selected>$forum_name ($cat_title)</option>";
+               $tool_content .= "<option value='$forum_id' selected>" . q($forum_name) . " (" . q($cat_title) . ")</option>";
            } else {
-               $tool_content .= "<option value='$forum_id'>$forum_name ($cat_title)</option>";
+               $tool_content .= "<option value='$forum_id'>" . q($forum_name) . " (" . q($cat_title) . ")</option>";
            }
        }
        $tool_content .= "</select></td></tr>

@@ -252,7 +252,7 @@ if ($action == "editPost") {
             <th>$langBlogPostTitle:</th>
             </tr>
             <tr>
-            <td><input type='text' name='blogPostTitle' value='".$post->getTitle()."' size='50' /></td>
+            <td><input type='text' name='blogPostTitle' value='".q($post->getTitle())."' size='50' /></td>
             </tr>
             <tr>
             <th>$langBlogPostBody:</th>
@@ -346,7 +346,7 @@ if ($action == "showPost") {
         $tool_content .= "</h2></div>";
         
         $tool_content .= "<div class='blog_post_content'>".standard_text_escape($post->getContent())."</div>";
-        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
+        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.q(uid_to_name($post->getAuthor()))."</div>";
         $tool_content .= "</div>";
         
         if ($ratings_enabled == 1) {
@@ -414,7 +414,7 @@ if ($action == "showBlog") {
             $tool_content .= "</h2></div>";
             
             $tool_content .= "<div class='blog_post_content'>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</div>";
-            $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
+            $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.q(uid_to_name($post->getAuthor()))."</div>";
             $tool_content .= "</div>";
             
             if ($ratings_enabled == 1) {

@@ -140,7 +140,7 @@ $nbrExercises = count($result); //Getting number of limited (offset and limit) e
 if (count($paused_exercises) > 0) {
     foreach ($paused_exercises as $row) {       
         $paused_exercises_ids[] = $row->eid;        
-        $tool_content .="<div class='info'>$langTemporarySaveNotice $row->title. <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
+        $tool_content .="<div class='info'>$langTemporarySaveNotice " . q($row->title) . ". <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
     }
 }
 if ($is_editor) {
@@ -148,7 +148,7 @@ if ($is_editor) {
             . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
         foreach ($pending_exercises as $row) {           
-            $tool_content .="<div class='info'>$langPendingExercise $row->title. (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
+            $tool_content .="<div class='info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }    
     $tool_content .= "<div align='left' id='operations_container'>
@@ -300,7 +300,7 @@ if (!$nbrExercises) {
                                  <img src='$themeimg/arrow.png' alt='' />
                                  </td><td>" . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
-            $tool_content .= "<br />$row->description</td><td class='smaller' align='center'>
+            $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";          														  
             if ($row->time_constraint > 0) {

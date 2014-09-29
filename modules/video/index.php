@@ -531,7 +531,12 @@ if ($num_of_categories > 0) { // categories found ?
             $folder_icon = icon('fa-folder-o', $showall);
         }
         $tool_content .= "<tr><th width='15' valign='top'>$folder_icon</th>";
-        $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
+        if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
+            $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
+        } else {
+            $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
+        }
+        
         if ($is_editor) {
             $tool_content .= "<span style='padding-left: 15px;'>".icon('fa-edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
                              icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</span>";

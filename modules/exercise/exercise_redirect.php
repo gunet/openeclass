@@ -54,7 +54,7 @@ if (isset($_GET['error'])) {
 $tool_content_extra = "<br/>
 	<table width='99%' class='Question'>
 		<thead>
-			<td class='alert1'>".${$error}."</td>
+			<td class='alert1'>".q($error)."</td>
 		</tr><tr>
 			<td><br/><br/><br/>
 				<div align='center'><a href='index.php?course=$course_code'>$langBack</a></div>
@@ -88,9 +88,9 @@ $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $tool_content .= "<table class='Exercise' width='99%'>
 <thead><tr>
   <td colspan='2'>
-  <b>" . stripslashes($exerciseTitle) . "</b>
+  <b>" . q($exerciseTitle) . "</b>
   <br/><br/>
-  " . stripslashes($exerciseDescription_temp) . "
+  " . q($exerciseDescription_temp) . "
   </td>
 </tr>
 </thead></table>";

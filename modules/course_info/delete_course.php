@@ -59,6 +59,6 @@ if (isset($_POST['delete'])) {
     <td>&nbsp;</td>
     </tr>
     </table>";
-    $tool_content .= "<p align='right'><a href='infocours.php?course=" . q($course_code) . "'>$langBack</a></p>";
+    $tool_content .= "<p align='right'><a href='index.php?course=" . q($course_code) . "'>$langBack</a></p>";
 }
 draw($tool_content, 2);

@@ -3345,6 +3345,7 @@ $langLastUpdate = "Last update";
 $langModifEvent = "Modify event";
 $langMonthsAbstract = "months";
 $langNoEvent = "You haven't any events";
+$langNotValidInput = "The title or the date of the event are not set correctly.";
 $langPersonalEvent = "Personal event";
 $langReferencedObject = "Refers to";
 $langRepeat = "Repeat";

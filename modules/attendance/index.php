@@ -763,7 +763,7 @@ if ($is_editor) {
                 $tool_content .= "
                     <tr>
                         <td>$cnt</td>
-                        <td>$resultUser->name $resultUser->surname ($langAm: $resultUser->am)</td>
+                        <td>" . q($resultUser->name) . " " . q($resultUser->surname) . " ($langAm: " . q($resultUser->am) . ")</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td class='center'><input type='checkbox' name='recID[]' value='$resultUser->recID'></td>
                     </tr>";
