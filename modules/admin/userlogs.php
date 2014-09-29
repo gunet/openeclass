@@ -26,7 +26,6 @@
  */
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
@@ -101,20 +100,18 @@ $u_date_end = isset($_GET['u_date_end']) ? $_GET['u_date_end'] : strftime('%Y-%m
 $logtype = isset($_GET['logtype']) ? intval($_GET['logtype']) : '0';
 $u_course_id = isset($_GET['u_course_id']) ? intval($_GET['u_course_id']) : '-1';
 $u_module_id = isset($_GET['u_module_id']) ? intval($_GET['u_module_id']) : '-1';
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
 
-if (isDepartmentAdmin())
+if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
+}
 
 // display logs
 if (isset($_GET['submit'])) {
     $log = new Log();
-    if ($logtype == -2) { // display system logging
-        $page_link = "&amp;logtype=$logtype&amp;u_date_start=" . urlencode($u_date_start) . "&amp;u_date_end=" . urlencode($u_date_end) . "&amp;u_module_id=$u_module_id&amp;u=$u&amp;submit=1";
-        $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
-    } else { // display course modules logging
-        $page_link = "&amp;logtype=$logtype&amp;u_date_start=" . urlencode($u_date_start) . "&amp;u_date_end=" . urlencode($u_date_end) . "&amp;u_module_id=$u_module_id&amp;u=$u&amp;submit=1";
-        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+    if ($logtype == -2) { // display system logging 
+        $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    } else { // display course modules logging        
+        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
     }
 }
 
