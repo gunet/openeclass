@@ -40,7 +40,6 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jquery');
 load_js('jstree');
 
 $nameTools = $langHierarchyActions;

@@ -28,7 +28,6 @@ require_once 'modules/auth/auth.inc.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-load_js('jquery');
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */

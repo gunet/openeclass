@@ -28,7 +28,6 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-load_js('jquery');
 load_js('datatables');
 load_js('tools.js');
 load_js('validation.js');

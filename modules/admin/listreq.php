@@ -31,8 +31,6 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jquery');
-load_js('jquery-ui');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 

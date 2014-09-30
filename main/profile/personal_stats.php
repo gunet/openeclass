@@ -30,9 +30,6 @@ check_uid();
 $nameTools = $langPersonalStats;
 check_guest();
 
-load_js('jquery');
-load_js('jquery-ui');
-
 $totalHits = 0;
 $totalDuration = 0;
 require_once 'modules/graphics/plotter.php';

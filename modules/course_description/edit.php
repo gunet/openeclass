@@ -92,7 +92,6 @@ $tool_content .= "
   </form>";
 
 
-load_js('jquery');
 $head_content .= <<<hCont
 <script type="text/javascript">
 /* <![CDATA[ */

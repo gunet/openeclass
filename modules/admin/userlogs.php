@@ -38,7 +38,6 @@ $nameTools = $langUserLog;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
-load_js('jquery');
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');

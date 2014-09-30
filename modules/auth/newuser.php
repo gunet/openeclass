@@ -44,7 +44,6 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jquery');
 load_js('jstree');
 load_js('pwstrength.js');
 $head_content .= <<<hContent

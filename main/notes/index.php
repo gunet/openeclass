@@ -54,7 +54,6 @@ require_once 'main/notes/notes.class.php';
 $nameTools = $langNotes;
 
 ModalBoxHelper::loadModalBox();
-load_js('jquery');
 load_js('tools.js');
 load_js('references.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .

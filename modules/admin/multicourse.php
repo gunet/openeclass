@@ -103,7 +103,6 @@ if (isset($_POST['submit'])) {
     $course = new course();
     $user = new user();
 
-    load_js('jquery');
     load_js('jstree');
 
     $tool_content .= "<div class='noteit'>" . $langMultiCourseInfo . "</div>

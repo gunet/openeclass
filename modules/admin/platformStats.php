@@ -33,7 +33,6 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats . ": " . $langVisitsStats;
 
 load_js('tools.js');
-load_js('jquery');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>

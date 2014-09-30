@@ -37,7 +37,6 @@ require_once 'include/phpass/PasswordHash.php';
 $nameTools = $lang_remind_pass;
 
 // javascript
-load_js('jquery');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">

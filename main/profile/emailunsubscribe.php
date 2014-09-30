@@ -22,7 +22,6 @@
 $require_login = true;
 $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
-load_js('jquery');
 load_js('tools.js');
 
 $nameTools = $langEmailUnsubscribe;

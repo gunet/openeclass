@@ -46,7 +46,6 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-load_js('jquery');
 load_js('jstree');
 load_js('bootstrap-datetimepicker');
 

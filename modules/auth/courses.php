@@ -147,8 +147,6 @@ var lang = {
         invalidCode: '" . js_escape($langInvalidCode) . "',
 };</script>";
 
-load_js('jquery');
-load_js('jquery-ui');
 load_js('tools.js');
 
 draw($tool_content, 1, null, $head_content);

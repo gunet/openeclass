@@ -210,7 +210,6 @@ if (count($courses) > 0) {
 }
 
 if ($isInOpenCoursesMode) {
-    load_js('jquery');
     $head_content .= <<<EOF
 <style type="text/css">
 .ui-widget {

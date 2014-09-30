@@ -31,7 +31,6 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 
 load_js('tools.js');
-load_js('jquery');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>

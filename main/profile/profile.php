@@ -36,7 +36,6 @@ require_once 'include/log.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jquery');
 load_js('jstree');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>

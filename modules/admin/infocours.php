@@ -45,7 +45,6 @@ $user = new User();
 $cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-load_js('jquery');
 load_js('jstree');
 
 // Define $nameTools
