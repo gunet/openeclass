@@ -37,7 +37,6 @@ $tree = new Hierarchy();
 $userObj = new User();
 
 load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
@@ -118,10 +117,11 @@ if (isset($_POST['submit'])) {
 
     $departments = null;
     if (!get_config('restrict_owndep')) {
-        if (!isset($_POST['department']) and !$is_admin)
+        if (!isset($_POST['department']) and !$is_admin) {
             $all_ok = false;
-        else
+        } else {
             $departments = $_POST['department'];
+        }
     }
     $email_public = valid_access($email_public);
     $phone_public = valid_access($phone_public);

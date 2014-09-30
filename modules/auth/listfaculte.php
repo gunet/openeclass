@@ -40,13 +40,14 @@ $tree = new Hierarchy();
 $nameTools = $langSelectFac;
 $roots = $tree->buildRootsArray();
 
-if (count($roots) <= 0)
+if (count($roots) <= 0) {
     die("ERROR: no root nodes");
-else if (count($roots) == 1) {
+} else if (count($roots) == 1) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]));
     exit();
-} else
+} else {
     $tool_content = $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
+}
 
 
 draw($tool_content, (isset($uid) and $uid) ? 1 : 0);
