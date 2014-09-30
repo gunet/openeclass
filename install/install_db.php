@@ -298,6 +298,7 @@ $db->query("CREATE TABLE user (
       username VARCHAR(50) NOT NULL UNIQUE KEY COLLATE utf8_bin,
       password VARCHAR(60) NOT NULL DEFAULT 'empty',
       email VARCHAR(100) NOT NULL DEFAULT '',
+      parent_email VARCHAR(100) NOT NULL DEFAULT '',
       status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
       phone VARCHAR(20) DEFAULT '',
       am VARCHAR(20) DEFAULT '',
