@@ -141,7 +141,7 @@ foreach ($result as $row) {
     $table_cont .= "<td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
                 <td>";
     if ($known) {
-        $table_cont .= $user;
+        $table_cont .= q($user);
     } else {
         $table_cont .= "<span class='red'>" . q($user) . "</span>";
     }

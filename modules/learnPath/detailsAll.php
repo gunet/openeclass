@@ -128,7 +128,7 @@ foreach ($usersList as $user) {
     }
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= '    <td width="1"><img src="' . $themeimg . '/arrow.png" alt=""></td>' . "\n"
-            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . $user->surname . ' ' . $user->givenname . '</a></td>' . "\n"
+            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
             . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>' . "\n"
             . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>' . "\n"
             . '    <td class="right" width=\'120\'>'
