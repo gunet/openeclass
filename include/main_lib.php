@@ -2614,3 +2614,61 @@ function forbidden($path) {
     '".</p></body></html>';
     exit;
 }
+
+
+/**
+ * @brief returns HTML for an action bar
+ * @param array $options options for each entry in bar
+ * 
+ * Each item in array is another array of the form:
+ * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'level' => 'primary')
+ * level is optional and can be 'primary' for primary entries or unset
+ */
+function action_bar($options) {
+    $out_primary = $out_secondary = array();
+
+    foreach ($options as $option) {
+        $title = q($option['title']);
+        if (isset($option['level']) and $option['level'] == 'primary') {
+            if (!count($out_primary)) {
+                array_unshift($out_primary,
+                    "<li><a class='btn btn-default' href='" . $option['url'] .
+                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    " title='$title'>" .
+                    "<i class='fa fa-$option[icon] space-after-icon'></i>" .
+                    "<span class='hidden-xs'>$title</span></a></li>");
+            } else {
+                array_unshift($out_primary,
+                    "<li><a class='btn btn-default' href='" . $option['url'] .
+                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    " title='$title'>" .
+                    "<i class='fa fa-$option[icon]'></i></a></li>");
+            }
+        } else {
+            array_unshift($out_secondary,
+                    "<li><a class='btn btn-default' href='" . $option['url'] .
+                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    " title='$title'>" .
+                    "<i class='fa fa-$option[icon]'></i></a></li>");
+        }
+    }
+    $out = "<ul class='list-inline'>";
+    if (count($out_secondary)) {
+        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
+    }
+    if (count($out_primary)) {
+        $out .= implode('', $out_primary);
+    }
+    $out .= "</ul>";
+    if (count($out_secondary)) {
+        $out .= "<ul class='list-inline expandable'>" . implode('', $out_secondary) . "</ul>";
+    }
+    if ($out) {
+        return "<div class='row'>" .
+             "<div class='col-sm-12 clearfix'>" .
+             "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
+             $out . "</div></div></div>";
+    } else {
+        return '';
+    }
+}

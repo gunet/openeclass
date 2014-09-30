@@ -134,18 +134,17 @@ if ($is_editor) {
     }
 
     if (!$is_in_tinymce) {
-        $tool_content .="<div id='operations_container'><ul id='opslist'>";
-        if (isset($category)) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
-        }
-        if (isset($urlview)) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
-        }
-        $tool_content .= "</ul></div>";
+        $ext = (isset($category)? "&amp;category=$category": '') .
+               (isset($urlview)? "&amp;urlview=$urlview": '');
+        $tool_content .= action_bar(array(
+            array('title' => $langLinkAdd,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
+                  'icon' => 'plus-circle',
+                  'level' => 'primary'),
+            array('title' => $langCategoryAdd,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
+                  'icon' => 'folder',
+                  'level' => 'primary')));
     }
 
     // Display the correct title and form for adding or modifying a category or link.

@@ -9,8 +9,7 @@ $(".opt-btn-wrapper").hover(
 
 $(document).ready( function () {
 
-  menuheight();
-
+    menuheight();
 
     // Sidebar switcher - custom CSS
     $('.toggle-sidebar').on('click',function(e){
@@ -19,20 +18,19 @@ $(document).ready( function () {
     });
 
     // Lesson accordion - jQuery ui
-//    $( ".accordion" ).accordion({
-//      heightStyle: "content",
-//      active: false,
-//      collapsible: true,
-//      animate: 200
-//    });
-//
-//    $( ".accordion-first-active" ).accordion({
-//      heightStyle: "fill",
-//      autoHeight: false,
-//      collapsible: true,
-//      animate: 200
-//    });
-
+    //    $( ".accordion" ).accordion({
+    //      heightStyle: "content",
+    //      active: false,
+    //      collapsible: true,
+    //      animate: 200
+    //    });
+    //
+    //    $( ".accordion-first-active" ).accordion({
+    //      heightStyle: "fill",
+    //      autoHeight: false,
+    //      collapsible: true,
+    //      animate: 200
+    //    });
 
 
     // Menu height 
@@ -49,13 +47,17 @@ $(document).ready( function () {
       $('#leftnav .navlist > li > ul').css('height','150px !important;');
     }
 
-    //window resize
-//    $(window).resize(function() {
-//        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
-//    });
+    $(".expandable-btn").click(function(){
+        $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
+    });
 
-//var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
-//alert(tool_length);
-animate_btn();
+    //window resize
+    //    $(window).resize(function() {
+    //        $(".accordion-first-active, .accordion").accordion("refresh"); //refresh the accordions
+    //    });
+
+    //var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
+    //alert(tool_length);
+    animate_btn();
 
 }); 
