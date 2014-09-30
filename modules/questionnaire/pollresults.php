@@ -153,7 +153,7 @@ foreach ($questions as $theQuestion) {
                       $names_array[] = $name->fullname;
                     }
                     $names_str = implode(', ', $names_array);  
-                    $ellipsized_names_str = ellipsize($names_str, 60);
+                    $ellipsized_names_str = q(ellipsize($names_str, 60));
                 }
                 $answers_table .= "
                     <tr>
