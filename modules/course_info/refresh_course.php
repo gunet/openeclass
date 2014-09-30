@@ -32,15 +32,15 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/work/work_functions.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
-$('input[name=before_date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
+$('#before_date').datepicker({
+        format: 'dd-mm-yyyy',
+        language: '".$language."',
+        autoclose: true
     });
 });
 </script>";
@@ -51,7 +51,9 @@ if (isset($_POST['submit'])) {
     $output = array();
     if (isset($_POST['delusers'])) {
         if (isset($_POST['before_date'])) {
-            $output[] = delete_users(q($_POST['before_date']));
+            $date_obj = DateTime::createFromFormat('d-m-Y', $_POST['before_date']);
+            $date = $date_obj->format('Y-m-d');    
+            $output[] = delete_users(q($date));
         } else {
             $output[] = delete_users();
         }
@@ -97,7 +99,7 @@ if (isset($_POST['submit'])) {
 	  <th class='left'><img src='$themeimg/groups_on.png' alt='' height='16' width='16'> $langUsers</th>
 	  <td width='1%'><input type='checkbox' name='delusers'></td>
 	  <td>$langUserDelCourse&nbsp;&nbsp;
-	  <input type='text' name='before_date' value='" .date("Y-n-j", time()) ."'></td>              
+	  <input type='text' name='before_date' id='before_date' value='" .date("d-m-Y", time()) ."'></td>              
 	</tr>
 	<tr>
 	  <th class='left'><img src='$themeimg/announcements_on.png' alt='' height='16' width='16'> $langAnnouncements</th>
