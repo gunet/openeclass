@@ -1188,8 +1188,8 @@ textarea{
   transition: all 120ms linear; }
 
 .action-bar-wrapper ul {
-  padding: 0px !important;
-  margin: 0px !important; }
+  padding: 0px;
+  margin: 0px; }
   .action-bar-wrapper ul li a {
     color: #333; }
 

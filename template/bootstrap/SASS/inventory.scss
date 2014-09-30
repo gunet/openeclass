@@ -1412,8 +1412,8 @@ $action-btn-sm-height: 48px;
 
 .action-bar-wrapper{
     ul{
-        padding:0px !important;
-        margin:0px !important;
+        padding:0px;
+        margin:0px;
         
         li a{
             color: #333;
@@ -1424,7 +1424,7 @@ ul.expandable{
     display: none;
     margin-top: 9px;
     
-    .secondary-active{
+    &.secondary-active{
         display: block;
     }
 }
