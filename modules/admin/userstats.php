@@ -46,7 +46,7 @@ if (isDepartmentAdmin())
 
 if (!empty($u)) {
     $info = Database::get()->querySingle("SELECT username FROM user WHERE id =?d", $u)->username;
-    $tool_content .= "<p class='title1'>$langUserStats: <b>$info</b></p>
+    $tool_content .= "<p class='title1'>$langUserStats: <b>" . q($info) . "</b></p>
 		<p><b>$langStudentParticipation</b></p>";
 
     // display user courses (if any)
@@ -124,11 +124,11 @@ if (!empty($u)) {
     $chart = new Plotter(220, 200);
     $chart->setTitle($langCourseVisits);
     foreach ($hits as $code => $count) {
-        $chart->growWithPoint($course_names[$code], $count);
+        $chart->growWithPoint(q($course_names[$code]), $count);
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
-    $tool_content .= "<p>$langLastUserVisits $info</p>\n";
+    $tool_content .= "<p>$langLastUserVisits " . q($info) . "</p>\n";
     $tool_content .= "
 	      <table class='tbl_alt' width='99%'>
 	      <tr>
