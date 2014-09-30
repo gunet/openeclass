@@ -113,7 +113,9 @@ if (count($result) > 0) {
         $mont = $langMonths[$row->month];
         $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
     }
-    $tool_content .= "<p>" . $langVisits . "</p>\n" . $chart->plot($langNoStatistics);
+    $tool_content .= "<p>" . $langVisits . "</p>" . $chart->plot();
+} else {
+    $tool_content .= "<div class='alert1'>$langNoStatistics</div>";
 }
 $tool_content .= '<br />';
 
