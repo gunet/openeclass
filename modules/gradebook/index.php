@@ -35,19 +35,18 @@ $nameTools = $langGradebook;
 
 //Datepicker
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
-        });
+    $('#date').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
+    });
     var oTable = $('#users_table{$course_id}').dataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -187,7 +186,8 @@ if ($is_editor) {
             if ($modifyActivity) {
                 $titleToModify = $modifyActivity->title;
                 $contentToModify = $modifyActivity->description;
-                $date = $modifyActivity->date;
+                $actDate_obj = DateTime::createFromFormat('Y-m-d H:i:s',$modifyActivity->date);
+                $date = $actDate_obj->format('d-m-Y H:i');
                 $module_auto_id = $modifyActivity->module_auto_id;
                 $auto = $modifyActivity->auto;
                 $weight = $modifyActivity->weight;
@@ -225,7 +225,7 @@ if ($is_editor) {
             </tr>
             <tr><th>$langGradebookActivityDate2:</th></tr>
             <tr>
-              <td><input type='text' name='date' value='" . datetime_remove_seconds($date) . "'></td>
+              <td><input type='text' name='date' id='date' value='$date'></td>
             </tr>
             <tr><th>$langGradebookActivityWeight:</th></tr>
             <tr>
@@ -334,7 +334,7 @@ if ($is_editor) {
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
     elseif(isset($_POST['submitGradebookActivity'])){
         
-        if (!ctype_alnum($_POST['actTitle'])) {
+        if (ctype_alnum($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];  
         } else {
             $actTitle = "";
@@ -347,14 +347,15 @@ if ($is_editor) {
         }
         $weight = $_POST['weight'];
         $type = $_POST['activity_type'];
-        $actDate = $_POST['date'];
-        $visible = $_POST['visible'];
+        $actDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['date']);
+        $actDate = $actDate_obj->format('Y-m-d H:i:s'); 
+        $visible = isset($_POST['visible']) ? 1 : 0;
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
             $tool_content .= $message . "<br/>";
         } else {
-            if ($_POST['id']) {
+            if (isset($_POST['id'])) {
                 //update
                 $id = intval($_POST['id']);
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
