@@ -54,12 +54,12 @@ if (isset($_GET['mid'])) {
             $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
         $out .= "<tr><td>$langDate:</td><td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td></tr>";
-        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id, false, false)."</td></tr>";
+        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id, false, false, "outtabs")."</td></tr>";
         
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
-                $recipients .= display_user($r, false, false).'<br/>';
+                $recipients .= display_user($r, false, false, "outtabs").'<br/>';
             }
         }
         
