@@ -53,7 +53,7 @@ load_js('bootstrap-datetimepicker');
 load_js('bootstrap-datepicker');
 load_js('bootstrap-timepicker');
  
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('#date').datetimepicker({

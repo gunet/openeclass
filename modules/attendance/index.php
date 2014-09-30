@@ -35,19 +35,18 @@ $nameTools = $langAttendance;
 
 //Datepicker
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
-        });
+    $('#date').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
+    });
     var oTable = $('#users_table{$course_id}').dataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -175,7 +174,8 @@ if ($is_editor) {
             $titleToModify = $mofifyActivity->title;
             $contentToModify = $mofifyActivity->description;
             $attendanceActivityToModify = $id;
-            $date = $mofifyActivity->date;
+            $actDate_obj = DateTime::createFromFormat('Y-m-d H:i:s',$mofifyActivity->date);
+            $date = $actDate_obj->format('d-m-Y H:i');            
             $module_auto_id = $mofifyActivity->module_auto_id;
             $auto = $mofifyActivity->auto;
 
@@ -192,7 +192,7 @@ if ($is_editor) {
             </tr>
             <tr><th>$langAttendanceActivityDate:</th></tr>
             <tr>
-              <td><input type='text' name='date' value='" . @datetime_remove_seconds($date) . "'></td>
+              <td><input type='text' name='date' id='date' value='$date'></td>
             </tr>
             <tr><th>$langDescription:</th></tr>
             <tr>
@@ -264,13 +264,14 @@ if ($is_editor) {
     //EDIT DB: add or edit activity to attendance module (edit concerns and course automatic activities)
     elseif(isset($_POST['submitAttendanceActivity'])){
 
-        if (!ctype_alnum($_POST['actTitle'])) {
+        if (ctype_alnum($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];
         } else {
             $actTitle = "";
         }
         $actDesc = purify($_POST['actDesc']);
-        $actDate = $_POST['date'];
+        $actDate_obj = DateTime::createFromFormat('d-m-Y H:i',$_POST['date']);
+        $actDate = $actDate_obj->format('Y-m-d H:i:s');        
         if (isset($_POST['auto'])) {
             $auto = intval($_POST['auto']);
         } else {
