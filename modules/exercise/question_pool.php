@@ -28,28 +28,14 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-load_js('jquery-ui');
 $head_content .= "
 <script>
   $(function() {
-    $('.modal_warning').click( function(e){
-        var link = $(this).attr('href');
-        e.preventDefault();
-        $('#dialog').dialog({
-            resizable: false,
-            width: 500,
-            modal: true,
-            buttons: {
-               '$langModifyInAllExercises': function() {
-                $( this ).dialog( 'close' );
-                window.location = link;
-              },            
-              '$langModifyInQuestionPool': function() {
-                $( this ).dialog( 'close' );
-                window.location = link.concat('&clone=true');
-              }
-            }        
-        });
+    $('.warnLink').click( function(e){
+          var modidyAllLink = $(this).attr('href');
+          var modifyOneLink = modidyAllLink.concat('&clone=true');
+          $('a#modifyAll').attr('href', modidyAllLink);
+          $('a#modifyOne').attr('href', modifyOneLink); 
     });
   });
 </script>
@@ -108,7 +94,7 @@ if ($is_editor) {
         unset($objQuestionTmp);
         // adds the question ID into the list of questions for the current exercise
         $objExercise->addToList($recup);
-        Session::set_flashdata($langQuestionReused, 'success');
+        Session::Messages($langQuestionReused, 'alert-success');
         redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
     }
     
@@ -238,9 +224,9 @@ if ($is_editor) {
 				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
-				  <a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
+				  <a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
 				</td>
-				<td width='3'><div align='center'><a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
+				<td width='3'><div align='center'><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' title='test' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
 				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
 				</td>";
             } else {
@@ -318,4 +304,23 @@ if ($is_editor) {
 } else { // if not admin of course
     $tool_content .= $langNotAllowed;
 }
+$tool_content .= "
+<!-- Modal -->
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+      </div>
+      <div class='modal-body'>
+        $langUsedInSeveralExercises
+      </div>
+      <div class='modal-footer'>
+        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInQuestionPool</a>
+      </div>
+    </div>
+  </div>
+</div>    
+";
 draw($tool_content, 2, null, $head_content);
