@@ -29,6 +29,11 @@ if (!isset($_GET['pid'])) {
     $pid = $_GET['pid'];
 }
 
+if (!$is_editor) {
+    Session::Messages($langPollResultsAccess);
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+}
+
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
 } else {
