@@ -45,9 +45,9 @@ load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').dataTable ({                                
+            $('#log_results_table').dataTable ({
                 'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,                
+                'bAutoWidth': true,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '".$langNoResult."',
@@ -81,24 +81,24 @@ $head_content .= "<script type='text/javascript'>
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
                 language: '".$language."',
-                autoclose: true    
-            });            
+                autoclose: true
+            });
         });
     </script>";
 
 
 $u = isset($_GET['u']) ? intval($_GET['u']) : '';
 if (isset($_GET['u_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_start']);    
-    $u_date_start = $uds->format('Y-m-d H:i');        
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P15D'));       
+    $date_start->sub(new DateInterval('P15D'));
     $u_date_start = $date_start->format('d-m-Y H:i');
 }
 if (isset($_GET['u_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_end']);    
-    $u_date_end = $ude->format('Y-m-d H:i');            
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_GET['u_date_end']);
+    $u_date_end = $ude->format('Y-m-d H:i');
 } else {
     $date_end = new DateTime();
     $date_end->add(new DateInterval('P1D'));
@@ -111,12 +111,13 @@ $u_module_id = isset($_GET['u_module_id']) ? intval($_GET['u_module_id']) : '-1'
 if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
 }
+
 // display logs
 if (isset($_GET['submit'])) {
     $log = new Log();
-    if ($logtype == -2) { // display system logging        
         $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-    } else { // display course modules logging        
+    } else { // display course modules logging
+        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
         $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
     }
 }
@@ -171,7 +172,7 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
         <tr><th width='220' class='left'>$langStartDate</th>
         <td>
             <div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
-                <div class='col-xs-11'>        
+                <div class='col-xs-11'>
                     <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
                 </div>
             <span class='add-on'><i class='fa fa-times'></i></span>

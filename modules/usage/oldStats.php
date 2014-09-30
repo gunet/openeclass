@@ -151,14 +151,14 @@ switch ($u_stats_value) {
             $mont = $langMonths[$row->month];
             $chart->growWithPoint($mont . " - " . $row->year, $row->tot_dur);
         }
-        $tool_content .= "<p>$langDurationExpl</p>";
+        $tool_content .= "<p class='info'>$langDurationExpl</p>";
         break;
 }
 
 $chart_path = 'courses/' . $course_code . '/temp/chart_' . md5(serialize($chart)) . '.png';
 
 if (!$chart->isEmpty()) {
-    $tool_content .= "<p>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</p>";
+    $tool_content .= "<p class='info'>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</p>";
     $tool_content .= $chart->plot($langNoStatistics);
 }
 

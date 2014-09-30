@@ -41,8 +41,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     if ($group !== false) {
         $from = "`group_members` AS groups
                                 LEFT JOIN user ON groups.user_id = user.id";
-        $and = "AND groups.group_id = ?d";
-        $or = '';
+        $and = "AND groups.group_id = ?d";        
         $terms[] = $group;
     } else {
         $from = " (SELECT * FROM user UNION (SELECT 0 as id,
@@ -51,6 +50,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as username,
                             null as password,
                             null as email,
+                            null as parent_email,
                             null as status,
                             null as phone,
                             null as am,
@@ -66,11 +66,9 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am_public,
                             null as whitelist,
                             null as last_passreminder)) as user ";
-        $and = '';
-        $or = ' OR user.id = 0 ';
+        $and = '';               
     }
-
-
+        
     return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
                                    user.surname AS surname,
                                    user.givenname AS givenname,
@@ -78,7 +76,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                                    user.am AS am
                             FROM $from
                             LEFT JOIN actions_daily ON user.id = actions_daily.user_id
-                            WHERE (actions_daily.course_id = ?d  $or )
+                            WHERE (actions_daily.course_id = ?d)
                             $and
                             $date_where
                             GROUP BY user.id

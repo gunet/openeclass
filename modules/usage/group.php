@@ -72,7 +72,7 @@ if (count($q) > 0) {
         }
         $tool_content .= "<td class='arrow'>
 			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group->id'>" .
-                q($group->name) . "</a></td>";
+                q($group->name) . "</a></td>";              
         $tool_content .= "<td>" . display_user(group_tutors($group->id)) . "</td>";
         $tool_content .= "<td class='center'>$group->registered</td>";
         if ($group->max_members == 0) {

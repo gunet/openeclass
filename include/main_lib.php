@@ -245,20 +245,22 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
     global $langAnonymous, $urlAppend;
 
     if (count($user) == 0) {
-        return '-';
-    } elseif (is_array($user) and !isset($user['id'])) {
+        return '-';    
+    } elseif (is_array($user)) {
         $begin = true;
         $html = '';
-        foreach ($user as $user_data) {
-            if ($begin) {
-                $begin = false;
-            } else {
-                $html .= '<br>';
+        foreach ($user as $user_data) {            
+            if (!isset($user->user_id)) {
+                if ($begin) {
+                    $begin = false;
+                } else {
+                    $html .= '<br>';
+                }
+                $html .= display_user($user_data->user_id, $print_email);
             }
-            $html .= display_user($user_data, $print_email);
         }
         return $html;
-    } elseif (!is_array($user)) {
+    } elseif (!is_array($user)) {        
         $r = Database::get()->querySingle("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = ?d", $user);
         if ($r) {
             $user = $r;
