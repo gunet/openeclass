@@ -50,6 +50,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as username,
                             null as password,
                             null as email,
+                            null as parent_email,
                             null as status,
                             null as phone,
                             null as am,
