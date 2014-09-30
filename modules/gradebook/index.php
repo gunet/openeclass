@@ -334,7 +334,7 @@ if ($is_editor) {
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
     elseif(isset($_POST['submitGradebookActivity'])){
         
-        if (!ctype_alnum($_POST['actTitle'])) {
+        if (ctype_alnum($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];  
         } else {
             $actTitle = "";
@@ -348,7 +348,7 @@ if ($is_editor) {
         $weight = $_POST['weight'];
         $type = $_POST['activity_type'];
         $actDate = $_POST['date'];
-        $visible = $_POST['visible'];
+        $visible = isset($_POST['visible']) ? 1 : 0;
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
