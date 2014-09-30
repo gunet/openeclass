@@ -35,7 +35,6 @@ if (!get_config('course_metadata') || !file_exists(CourseXMLConfig::getCourseXML
 $xml = CourseXMLElement::init($course_id, $course_code);
 $tool_content .= $xml->asDiv();
 
-load_js('jquery');
 $head_content .= <<<EOF
 <style type="text/css">
 .ui-widget {

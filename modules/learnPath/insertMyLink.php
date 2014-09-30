@@ -42,7 +42,6 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-load_js('jquery');
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {

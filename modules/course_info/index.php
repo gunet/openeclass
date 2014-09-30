@@ -41,7 +41,6 @@ $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
 
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');

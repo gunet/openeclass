@@ -32,7 +32,6 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/work/work_functions.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 

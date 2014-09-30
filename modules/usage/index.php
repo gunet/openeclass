@@ -32,7 +32,6 @@ $require_login = true;
 require_once '../../include/baseTheme.php';
 
 load_js('tools.js');
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 

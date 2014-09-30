@@ -41,7 +41,6 @@ $user = new User();
 
 $nameTools = $langCourseCreate;
 
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');

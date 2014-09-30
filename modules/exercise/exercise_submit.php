@@ -118,7 +118,6 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 load_js('tools.js');
-load_js('jquery');
 
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();

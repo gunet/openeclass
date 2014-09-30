@@ -28,7 +28,6 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-load_js('jquery');
 load_js('jquery-ui');
 $head_content .= "
 <script>

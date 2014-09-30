@@ -53,7 +53,6 @@ $main_content = $cunits_content = $bar_content = "";
 add_units_navigation(TRUE);
 
 load_js('tools.js');
-load_js('jquery');
 load_js('slick');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>

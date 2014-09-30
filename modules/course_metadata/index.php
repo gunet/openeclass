@@ -59,7 +59,6 @@ $greek = $langCMeta['el'];
 $english = $langCMeta['en'];
 $instrPhoto = $langCMeta['course_instructor_photo'];
 
-load_js('jquery');
 load_js('select2');
 $head_content .= <<<EOF
 <script type='text/javascript'>

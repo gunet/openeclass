@@ -31,7 +31,6 @@ $nameTools = $langAddGuest;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 // javascript
-load_js('jquery');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">

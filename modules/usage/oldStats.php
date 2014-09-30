@@ -35,7 +35,6 @@ include '../../include/baseTheme.php';
 require_once 'include/action.php';
 
 load_js('tools.js');
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 

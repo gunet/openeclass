@@ -35,7 +35,6 @@ $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-load_js('jquery');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 load_js('bootstrap-datetimepicker');

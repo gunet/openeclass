@@ -1144,7 +1144,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         $tool_content .= "<tr class='nobrd'><td colspan='5'>$langScormEmptyDocsList</td></tr>";
     } else {
         // JS code to enable clicking anywhere in the table to trigger the radio button
-        load_js('jquery');
 
         $head_content .= <<<EOF
 <script type='text/javascript'>

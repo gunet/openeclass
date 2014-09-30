@@ -33,7 +33,6 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQ
 
 $total_answers = 0;
 $answer_total = 0;
-load_js('jquery');
 $head_content .= "<script type = 'text/javascript'>
     $(document).ready(function(){
       $('a.trigger_names').click(function(e){

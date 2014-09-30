@@ -42,7 +42,6 @@ require_once 'functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
-    load_js('jquery');
     $head_content .= '<script>
                           function lock(topic_id,course_code) {
                             $.getJSON("lock_topic.php?course="+course_code+"&topic="+topic_id,function(response){
