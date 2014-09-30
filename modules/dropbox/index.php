@@ -403,61 +403,39 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         ";
 	}
 } else {//mailbox
-    load_js('jquery-ui');
     load_js('datatables');
     load_js('datatables_filtering_delay');
     load_js('datatables_reload');
     $head_content .= "<script type='text/javascript'>
-		              $(function() {
-		                $( \"#tabs\" ).tabs({
-		                  collapsible: false,
-                          //cache tab and avoid reload
-                          beforeLoad: function( event, ui ) {
-                            if ( ui.tab.data( \"loaded\" ) ) {
-                              event.preventDefault();
-                              return;
-                            }
-                            ui.jqXHR.success(function() {
-                              ui.tab.data( \"loaded\", true );
+                        $(document).ready(function() {
+                            // bootstrap tabs load external content via AJAX
+                            $('a[data-toggle=\"tab\"]').on('show.bs.tab', function (e) {
+                                var contentID = $(e.target).attr('data-target');
+                                var contentURL = $(e.target).attr('href');
+                                $(contentID).load(contentURL);
                             });
-                          },
-                          //open links inside tabs
-                          load: function(event, ui) {
-                            //following line prevents double requests by unbinding click event on previously loaded tab content 
-                            $('.ui-tabs-panel.ui-widget-content-new').off('click', 'a'); 
-                            $('.ui-tabs-panel.ui-widget-content-new').on('click', 'a', function(event) {
-                              if (event.target.className != 'outtabs' && event.target.className.indexOf('paginate_button') == -1) {
-                                event.preventDefault();
-                                $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
-                              }
+                            
+                            // trap links to open inside tabs
+                            $('.tab-content').on('click', 'a', function(e) {
+                                if (e.target.className != 'outtabs' && e.target.className.indexOf('paginate_button') == -1) {
+                                    e.preventDefault();
+                                    $(this).closest('.tab-pane').load(this.href);
+                                }
                             });
-                          }
-                         })
-                        //remove some classes to avoid overriding of openeclass styling
-                        $('#tabs').removeClass('ui-widget');
-                        $('#tabs').removeClass('ui-widget-content');
-                        $('#ui-tabs-1').removeClass('ui-widget-content');
-                        $('#ui-tabs-2').removeClass('ui-widget-content');
-                        //add classes needed for opening links inside tabs (see above)
-                        $('#ui-tabs-1').addClass('ui-widget-content-new');
-                        $('#ui-tabs-2').addClass('ui-widget-content-new');
-                      })
-                      </script>";
-    if ($course_id == 0) {
-        $tool_content .= "<div id=\"tabs\">
-                           <ul>
-                             <li><a href=\"inbox.php\">Inbox</a></li>
-                             <li><a href=\"outbox.php\">Outbox</a></li>
-                           </ul>
-                         </div>";
-    } else {
-        $tool_content .= "<div id=\"tabs\">
-                           <ul>
-                             <li><a href=\"inbox.php?course=$course_code\">Inbox</a></li>
-                             <li><a href=\"outbox.php?course=$course_code\">Outbox</a></li>
-                           </ul>
-                         </div>";
-    }
+                            
+                            // show 1st tab
+                            $('#dropboxTabs a:first').tab('show');
+                        });
+                    </script>";
+    $courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
+    $tool_content .= "<ul id='dropboxTabs' class='nav nav-tabs' role='tablist'>
+                        <li><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . "'>Inbox</a></li>
+                        <li><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'>Outbox</a></li>
+                      </ul>
+                      <div class='tab-content'>
+                        <div class='tab-pane fade' id='inbox'></div>
+                        <div class='tab-pane fade' id='outbox'></div>
+                      </div>";
 }
 
 if ($course_id == 0) {
