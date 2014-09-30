@@ -401,12 +401,12 @@ class CourseXMLElement extends SimpleXMLElement {
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield'>";
 
-        $fieldEnd = "</span></div><!--lalakoko1-->";
+        $fieldEnd = "</span></div>";
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
-            $fieldEnd .= "</div></div></div></div><!--lalakoko2-->";
+            $fieldEnd .= "</div></div></div></div>";
         }
         if (array_key_exists($fullKey, CourseXMLConfig::$breakFields)) {
-            $fieldEnd .= "</div><!--lalakoko3--><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
+            $fieldEnd .= "</div><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
         }
 
         // hidden/auto-generated fields
