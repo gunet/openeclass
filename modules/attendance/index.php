@@ -127,7 +127,7 @@ if ($is_editor) {
         $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
     }
     if(!isset($_GET['statsAttendance'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStats</a></li>";
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStat</a></li>";
     }
     $tool_content .= "</ul></div>";
 
