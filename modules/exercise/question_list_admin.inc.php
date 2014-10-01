@@ -25,25 +25,12 @@ load_js('jquery-ui');
 $head_content .= "
 <script>
   $(function() {
-    $('.modal_warning').click( function(e){
-        var link = $(this).parent().attr('href');
-        e.preventDefault();
-        $('#dialog').dialog({
-            resizable: false,
-            width: 500,
-            modal: true,
-            buttons: {
-               '$langModifyInAllExercises': function() {
-                $( this ).dialog( 'close' );
-                window.location = link;
-              },            
-              '$langModifyInThisExercise': function() {
-                $( this ).dialog( 'close' );
-                window.location = link.concat('&clone=true');
-              }
-            }        
-        });
-    });
+    $('.warnLink').click( function(e){
+          var modidyAllLink = $(this).attr('href');
+          var modifyOneLink = modidyAllLink.concat('&clone=true');
+          $('a#modifyAll').attr('href', modidyAllLink);
+          $('a#modifyOne').attr('href', modifyOneLink); 
+    });  
   });
 </script>
 ";
@@ -112,7 +99,7 @@ if ($nbrQuestions) {
 			<td> " . q($objQuestionTmp->selectTitle()) . "<br />
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
 			<td class='right' width='50'>" .
-                icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='modal_warning'" : "")) . "&nbsp;" .
+                icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")) . "&nbsp;" .
                 icon('fa-times', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
                 "</td><td width='20'>";
         if ($i != 1) {
@@ -128,6 +115,25 @@ if ($nbrQuestions) {
     }
     $tool_content .= "</table>";
 }
+$tool_content .= "
+<!-- Modal -->
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+      </div>
+      <div class='modal-body'>
+        $langUsedInSeveralExercises
+      </div>
+      <div class='modal-footer'>
+        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInThisExercise</a>
+      </div>
+    </div>
+  </div>
+</div>    
+";
 if (!isset($i)) {
     $tool_content .= "<p class='alert1'>$langNoQuestion</p>";
 }
