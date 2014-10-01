@@ -613,7 +613,7 @@ $tool_content .= "
             </div>
 
             <div class='col-md-7 col-sm-7 col-xs-12'>
-                <div class=''>$main_content</div>
+                <div class=''>$main_content</div>             
             </div>
             
             <div class ='col-md-7 col-sm-12 col-xs-12'>

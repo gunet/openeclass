@@ -983,11 +983,12 @@ ul.tablelist li.list-item:hover {
 }
 /* line 840, inventory.scss */
 .boxlist .list-item .item-content {
-  width: 93%;
+  /*width: 93%;*/
   /* a fallback for calc */
-  width: -webkit-calc(100% - 4em);
+  /*width: -webkit-calc(100% - 4em);
   width: -moz-calc(100% - 4em);
-  width: calc(100% - 4em);
+  width: calc(100% - 4em);*/
+  width: 100%;
   position: relative;
   display: inline-block;
   padding-left: 1em;
@@ -995,27 +996,27 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 852, inventory.scss */
+/* line 853, inventory.scss */
 .boxlist .item-header {
-  padding: 1em 0em 1em 0em;
+  padding: 1em 4em 1em 0em;
   border-bottom: 1px solid #eee;
 }
-/* line 858, inventory.scss */
+/* line 859, inventory.scss */
 .boxlist .item-header .item-title {
   margin: 0px;
 }
-/* line 863, inventory.scss */
+/* line 864, inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 869, inventory.scss */
+/* line 870, inventory.scss */
 .boxlist .item-body {
-  padding: 1em 0em;
+  padding: 1em 1em 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 876, inventory.scss */
+/* line 877, inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -1028,7 +1029,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 891, inventory.scss */
+/* line 892, inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -1046,7 +1047,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 905, inventory.scss */
+/* line 906, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
@@ -1056,7 +1057,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 913, inventory.scss */
+/* line 914, inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -1071,19 +1072,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 925, inventory.scss */
+/* line 926, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 930, inventory.scss */
+/* line 931, inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 935, inventory.scss */
+/* line 936, inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 940, inventory.scss */
+/* line 941, inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -1096,7 +1097,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 953, inventory.scss */
+/* line 954, inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -1107,23 +1108,23 @@ ul.tablelist li.list-item:hover {
 }
 
 /* Course-home lesson banner */
-/* line 964, inventory.scss */
+/* line 965, inventory.scss */
 .banner-image-wrapper {
   overflow: hidden;
   padding: 0;
 }
 
-/* line 969, inventory.scss */
+/* line 970, inventory.scss */
 .banner-image-wrapper img.banner-image {
   max-width: none;
 }
 
 /* Course-home licence box */
-/* line 976, inventory.scss */
+/* line 977, inventory.scss */
 .license_info_box {
   text-align: center;
 }
-/* line 980, inventory.scss */
+/* line 981, inventory.scss */
 .license_info_box img {
   width: 100px;
   margin: 8px 0 5px 0;
@@ -1442,20 +1443,20 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1366, inventory.scss */
+/* line 1367, inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
   height: 48px;
 }
 
-/* line 1372, inventory.scss */
+/* line 1373, inventory.scss */
 .opt-btn {
   position: absolute;
   background-color: #F8F8F8 !important;
 }
 
-/* line 1377, inventory.scss */
+/* line 1378, inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
@@ -1466,7 +1467,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1383, inventory.scss */
+/* line 1384, inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
@@ -1475,12 +1476,12 @@ textarea{
   overflow: hidden;
 }
 
-/* line 1391, inventory.scss */
+/* line 1392, inventory.scss */
 .opt-btn-more-tool {
   float: left;
 }
 
-/* line 1395, inventory.scss */
+/* line 1396, inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1490,7 +1491,7 @@ textarea{
   color: #7e7e7e;
 }
 
-/* line 1404, inventory.scss */
+/* line 1405, inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
@@ -1499,12 +1500,12 @@ textarea{
   background-color: #232C3A;
 }
 
-/* line 1412, inventory.scss */
+/* line 1413, inventory.scss */
 .tool-btn.delete a {
   color: #ce6b6b;
 }
 
-/* line 1416, inventory.scss */
+/* line 1417, inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
   background-color: #ce6b6b;
@@ -1515,7 +1516,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1423, inventory.scss */
+/* line 1424, inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
@@ -1527,33 +1528,33 @@ textarea{
 }
 
 /* Action Bar ------------------------------------------------------------------- */
-/* line 1432, inventory.scss */
+/* line 1433, inventory.scss */
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px;
 }
-/* line 1436, inventory.scss */
+/* line 1437, inventory.scss */
 .action-bar-wrapper ul li a {
   color: #333;
 }
 
-/* line 1441, inventory.scss */
+/* line 1442, inventory.scss */
 ul.expandable {
   display: none;
   margin-top: 9px;
 }
-/* line 1445, inventory.scss */
+/* line 1446, inventory.scss */
 ul.expandable.secondary-active {
   display: block;
 }
 
 /* Datatables ---------------------------------------------------------*/
-/* line 1453, inventory.scss */
+/* line 1454, inventory.scss */
 .dataTables_wrapper tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
 }
-/* line 1456, inventory.scss */
+/* line 1457, inventory.scss */
 .dataTables_wrapper tr.not_visible td:not(:last-child) a {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
