@@ -72,6 +72,7 @@ if (isset($_GET['exerciseId'])) {
 // if cancelling an exercise
 if (isset($_POST['cancelExercise'])) {
     // goes back to the exercise list
+    unset($objExercise);
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 }
 

@@ -218,14 +218,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='input-append date form-group' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                 <label for='PollStart' class='col-sm-2 control-label'>$langPollStart :</label>
                 <div class='col-xs-10 col-sm-9'>        
-                    <input name='PollEnd' id='PollStart' type='text' value='$PollStart'>
+                    <input name='PollStart' id='PollStart' type='text' value='$PollStart'>
                 </div>
                 <div class='col-xs-2 col-sm-1'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
             </div>            
-            <div class='input-append date form-group' id='startdatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+            <div class='input-append date form-group' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
                 <label for='PollEnd' class='col-sm-2 control-label'>$langPollEnd :</label>
                 <div class='col-xs-10 col-sm-9'>        
                     <input name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>

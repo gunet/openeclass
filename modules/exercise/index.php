@@ -150,12 +150,20 @@ if ($is_editor) {
         foreach ($pending_exercises as $row) {           
             $tool_content .="<div class='info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
-    }    
-    $tool_content .= "<div align='left' id='operations_container'>
-        <ul id='opslist'>
-	<li><a href='admin.php?course=$course_code&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
-			&nbsp;<a href='question_pool.php?course=$course_code'>$langQuestionPool</a></li>";
-    $tool_content .= "</ul></div>";
+    }
+    $tool_content .= action_bar(array(
+        array('title' => $langNewEx,
+            'url' => "admin.php?course=$course_code&amp;NewExercise=Yes",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label'
+        ),
+        array('title' => $langQuestionPool,
+            'url' => "question_pool.php?course=$course_code",
+            'icon' => 'fa-university',
+            'level' => 'primary'
+            )
+    ));
+
 } else {
     $tool_content .= "";
 }

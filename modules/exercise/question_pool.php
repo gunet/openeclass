@@ -98,16 +98,22 @@ if ($is_editor) {
         redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
     }
     
-    
-    $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
     if (isset($fromExercise)) {
-        $tool_content .= "<a href=\"admin.php?course=$course_code&amp;exerciseId=$fromExercise\">&lt;&lt; " . $langGoBackToEx . "</a>";
+        $action_bar_options[] = array('title' => $langGoBackToEx,
+                'url' => "admin.php?course=$course_code&amp;exerciseId=$fromExercise",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+         );        
     } else {
-        $tool_content .= "<a href=\"admin.php?course=$course_code&amp;newQuestion=yes\">" . $langNewQu . "</a>";
+        $action_bar_options[] = array('title' => $langNewQu,
+                'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label'
+         );          
     }
 
-    $tool_content .= "</li></ul></div>";
-
+    $tool_content .= action_bar($action_bar_options);
+    
     $tool_content .= "<form name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>";
     if (isset($fromExercise)) {
         $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";

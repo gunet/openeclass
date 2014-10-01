@@ -412,12 +412,13 @@ function showquota($quota, $used) {
     } else {
         $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     }
-    $retstring .= "
-               <div id='operations_container'>
-                 <ul id='opslist'>
-                   <li><a href=$link>" . $langBack . "</a></li>
-                 </ul>
-               </div>";
+    $action_bar_options[] = array(
+        'title' => $langBack,
+        'url' => $link,
+        'icon' => 'fa-reply',
+        'level' => 'primary-label'
+    );     
+    $retstring .= action_bar($action_bar_options);
 $retstring .= "
 <form class='form-horizontal' role='form'>
   <div class='form-group'>

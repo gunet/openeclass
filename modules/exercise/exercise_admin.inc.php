@@ -98,137 +98,148 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             });
         });
     </script>";
-    if (isset($_GET['modifyExercise'])) {
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>";
-    } else {
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;NewExercise=Yes'>";
-    }
-    @$tool_content .="
-	<fieldset>
-        <legend>$langInfoExercise </legend>
-	<table width='99%' class='tbl'>";
-    if (!empty($msgErr)) {
-        $tool_content .= "<tr><td colspan='2'><p class='caution'>$msgErr</td></tr>";
-    }
-    $tool_content .= "
-        <tr>
-        <th width='180'>" . $langExerciseName .":</th>
-        <td><input type='text' name='exerciseTitle' " . "size='50' maxlength='200' value='" . q($exerciseTitle) . "' style='width:400px;'></td>
-        </tr>
-        <tr>
-        <th>" . $langExerciseDescription . ":</th>
-        <td>" . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") . "</td>
-        </tr>
-        <tr>
-        <th>" . $langExerciseType . ":</th>
-        <td>" . "<input type='radio' name='exerciseType' value='1'";
-
-    if ($exerciseType <= 1) {
-        $tool_content .= " checked='checked'";
-    }
-    $tool_content .= "> " . $langSimpleExercise . "
-	  <br />
-	  <input type='radio' name='exerciseType' value='2'";
-
-    if ($exerciseType >= 2) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langSequentialExercise . "</td>
-	</tr>";
-
-
-    $start_cal_Excercise = "<div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-        <div class='col-xs-11'>        
-            <input name='exerciseStartDate' type='text' value='$exerciseStartDate'>
-        </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-    </div>";
-
-    $end_cal_Excercise = "<div class='input-append date form-group' id='enddatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-        <div class='col-xs-11'>        
-            <input name='exerciseEndDate' type='text' value='$exerciseEndDate'>
-        </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-    </div>";
-    
-    $tool_content .= "
-        <tr>
-          <th>" . $langExerciseStart . ":</th>
-	  <td>$start_cal_Excercise</td>
-        </tr>
-        <tr>
-	  <th>" . $langExerciseEnd . ":</th>
-	  <td>$end_cal_Excercise</td>
-	</tr>
-        <tr>
-            <th>$langTemporarySave:</th>
-            <td>
-                <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)?'checked':'')."> $langDeactivate <br>
-                <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)?'checked':'')."> $langActivate
-            </td>
-        </tr>
-	<tr>
-	  <th>" . $langExerciseConstrain . ":</th>
-	  <td><input type=\"text\" name=\"exerciseTimeConstraint\" size=\"3\" maxlength=\"3\" " .
-            "value=\"" . htmlspecialchars($exerciseTimeConstraint) . "\">&nbsp;&nbsp;" .
-            $langExerciseConstrainUnit . " &nbsp;&nbsp;&nbsp;&nbsp;(" . $langExerciseConstrainExplanation . ")</td>
-	</tr>
-	<tr>
-	  <th>" . $langExerciseAttemptsAllowed . ":</th>
-	  <td><input type='text' name='exerciseAttemptsAllowed' size='3' maxlength='2'" .
-            "value=\"" . htmlspecialchars($exerciseAttemptsAllowed) . "\">&nbsp;&nbsp;" .
-            $langExerciseAttemptsAllowedUnit . " &nbsp;&nbsp;&nbsp;(" . $langExerciseAttemptsAllowedExplanation . ")</td>
-	</tr>";
-
-    // Random Questions
-    $tool_content .= "<tr><th>" . $langRandomQuestions . ":</th>" .
-            "<td>" . $langSelection . "&nbsp;" .
-            "<input type='text' name='questionDrawn' size='2' value='" . $randomQuestions . "' />&nbsp;" .
-            $langFromRandomQuestions . "</td></tr>";
-
-
-    if (isset($displayResults) and $displayResults == 1) {
-        $extra = 'checked';
-        $extra2 = '';
-    } else {
-        $extra = '';
-        $extra2 = 'checked';
-    }
-    if (isset($displayScore) and $displayScore == 1) {
-        $extras = 'checked';
-        $extras2 = '';
-    } else {
-        $extras = '';
-        $extras2 = 'checked';
-    }
-
-    $tool_content .= "
-        <tr>
-	  <th>" . $langAnswers . ":</th>" . "
-	  <td><input type='radio' name='dispresults' value='1'" . $extra . ">&nbsp;$langAnswersDisp
-	  <br /><input type='radio' name='dispresults' value='0'" . $extra2 . ">&nbsp;$langAnswersNotDisp
-	  </td>
-	</tr>
-	<tr>
-	  <th>" . $langScore . ":</th>" . "
-	  <td><input type='radio' name='dispscore' value='1'" . $extras . ">&nbsp;$langScoreDisp
-	  <br /><input type='radio' name='dispscore' value='0'" . $extras2 . ">&nbsp;$langScoreNotDisp
-	  </td>
-	</tr>
-	<tr>
-          <th>&nbsp;</th>";
-    if (isset($_GET['NewExercise'])) {
-        $tool_content .= "<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;";
-    } else {
-        $tool_content .= "<td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;";
-    }
-    $tool_content .= "<input type='submit' name='cancelExercise' value='$langCancel'></td>
-	</tr>
-        </table>
-	</fieldset>
-	</form>";
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )
+    ));    
+   $tool_content .= "
+       <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
+        <fieldset>
+        <legend>$langInfoExercise</legend>        
+            <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
+              <label for='exerciseTitle' class='col-sm-2 control-label'>$langExerciseName :</label>
+              <div class='col-sm-10'>
+                <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
+                <span class='help-block'>".Session::getError('exerciseTitle')."</span>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseDescription:</label>
+              <div class='col-sm-10'>
+              " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
+              </div>
+            </div>
+            <div class='form-group'>
+                <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseType:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='exerciseType' value='1' ".(($exerciseType <= 1)? 'checked' : '').">
+                        $langSimpleExercise
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='exerciseType' value='2' ".(($exerciseType >= 2)? 'checked' : '').">
+                        $langSequentialExercise
+                      </label>
+                    </div>
+                </div>
+            </div>    
+            <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+                <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart :</label>
+                <div class='col-xs-10 col-sm-9'>        
+                    <input name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>  
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+            </div>            
+            <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
+                <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd :</label>
+                <div class='col-xs-10 col-sm-9'>        
+                    <input name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>  
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='exerciseTempSave' class='col-sm-2 control-label'>$langTemporarySave:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)? 'checked' : '').">
+                        $langDeactivate
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)? 'checked' : '').">
+                        $langActivate
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+              <label for='exerciseTimeConstraint' class='col-sm-2 control-label'>$langExerciseConstrain:</label>
+              <div class='col-sm-10'>
+                <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
+                <span class='help-block'>$langExerciseConstrainUnit ($langExerciseConstrainExplanation)</span>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='exerciseAttemptsAllowed' class='col-sm-2 control-label'>$langExerciseAttemptsAllowed:</label>
+              <div class='col-sm-10'>
+                <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
+                <span class='help-block'>$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)</span>
+              </div>
+            </div>            
+            <div class='form-group'>
+              <label for='questionDrawn' class='col-sm-2 control-label'>$langRandomQuestions:</label>
+              <div class='col-sm-10'>
+                <input type='text' class='form-control' name='questionDrawn' id='questionDrawn' value='$randomQuestions' placeholder='$langRandomQuestions'>
+                <span class='help-block'>$langFromRandomQuestions</span>
+              </div>
+            </div>
+            <div class='form-group'>
+                <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='dispresults' value='1' ".(($displayResults == 1)? 'checked' : '').">
+                        $langAnswersDisp
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='dispresults' value='0' ".(($displayResults == 0)? 'checked' : '').">
+                        $langAnswersNotDisp
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='dispresults' class='col-sm-2 control-label'>$langScore:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='dispscore' value='1' ".(($displayScore == 1)? 'checked' : '').">
+                        $langScoreDisp
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='dispscore' value='0' ".(($displayScore == 0)? 'checked' : '').">
+                        $langScoreNotDisp
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-sm-offset-2 col-sm-10'>
+                <input type='submit' class='btn btn-default' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
+                <input type='submit' class='btn btn-default' name='cancelExercise' value='$langCancel'>    
+              </div>
+            </div>
+        </fieldset>
+        </form>
+        ";    
 } else {
     
     $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
