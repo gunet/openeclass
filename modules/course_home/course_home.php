@@ -453,12 +453,10 @@ $bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:1
 
 // display course license
 if ($course_license) {
-    $license_info_box = "<table class='tbl_courseid' width='200'>
-        <tr class='title1'>
-            <td class='title1'>${langOpenCoursesLicense}</td></tr>
-        <tr><td><div align='center'><small>" . copyright_info($course_id) . "</small></div></td></tr>
-        </table>
-        <br/>";
+    $license_info_box = "
+    
+        ${langOpenCoursesLicense}
+        <small>" . copyright_info($course_id) . "</small>";
 } else {
     $license_info_box = '';
 }
@@ -469,15 +467,39 @@ $level = ($levres = Database::get()->querySingle("SELECT level FROM course_revie
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
-    $opencourses_level = "<table class='tbl_courseid' width='200'>
+    $opencourses_level = "
+
+    <div class='row'>
+
+        <div class='col-md-4'>
+            <img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'>
+        </div>
+
+        <div class='col-md-8 margin-top-thin'>
+            ${langOpenCoursesLevel}: $level
+            <br />
+            <small><a href='$metadataUrl'>$langCourseMetadata " .
+            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</small>
+        </div>        
+
+    </div>
+
+
+    <table class='tbl_courseid' width='200' style='display: none;'>
         <tr class='title1'>
-            <td class='title1'>${langOpenCourseShort}</td>
+            <td class='title1'></td>
             <td style='text-align: right; padding-right: 1.2em'><a href='$metadataUrl'>" .
-            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td></tr>
-        <tr><td colspan='2'><div class='center'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'></div>
-                <div class='center'><b>${langOpenCoursesLevel}: $level</b></div></td></tr>
-        </table>
-        <br/>";
+            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td>
+        </tr>
+        <tr>
+            <td colspan='2'><div class='center'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'></div>
+                <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
+            </td>
+        </tr>
+    </table>
+
+
+        ";
 }
 
 
@@ -657,16 +679,16 @@ $tool_content .= "
                 </ul>
             </div>
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>Αδεια χρησης</h5>
-                <div class='panel'>
+                <h5 class='content-title'>${langOpenCoursesLicense}</h5>
+                <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
             </div>
         </div>
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>Opencourses</h5>
-                <div class='panel'>
+                <h5 class='content-title'>${langOpenCourseShort}</h5>
+                <div class='panel padding'>
                         $opencourses_level
                 </div>
             </div>

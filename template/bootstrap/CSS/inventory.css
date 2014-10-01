@@ -1118,6 +1118,17 @@ ul.tablelist li.list-item:hover {
   max-width: none;
 }
 
+/* Course-home licence box */
+/* line 976, inventory.scss */
+.license_info_box {
+  text-align: center;
+}
+/* line 980, inventory.scss */
+.license_info_box img {
+  width: 100px;
+  margin: 8px 0 5px 0;
+}
+
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
 /*
 #lesson-banner
@@ -1431,20 +1442,20 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1353, inventory.scss */
+/* line 1366, inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
   height: 48px;
 }
 
-/* line 1359, inventory.scss */
+/* line 1372, inventory.scss */
 .opt-btn {
   position: absolute;
   background-color: #F8F8F8 !important;
 }
 
-/* line 1364, inventory.scss */
+/* line 1377, inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
@@ -1455,7 +1466,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1370, inventory.scss */
+/* line 1383, inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
@@ -1464,12 +1475,12 @@ textarea{
   overflow: hidden;
 }
 
-/* line 1378, inventory.scss */
+/* line 1391, inventory.scss */
 .opt-btn-more-tool {
   float: left;
 }
 
-/* line 1382, inventory.scss */
+/* line 1395, inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1479,7 +1490,7 @@ textarea{
   color: #7e7e7e;
 }
 
-/* line 1391, inventory.scss */
+/* line 1404, inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
@@ -1488,12 +1499,12 @@ textarea{
   background-color: #232C3A;
 }
 
-/* line 1399, inventory.scss */
+/* line 1412, inventory.scss */
 .tool-btn.delete a {
   color: #ce6b6b;
 }
 
-/* line 1403, inventory.scss */
+/* line 1416, inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
   background-color: #ce6b6b;
@@ -1504,7 +1515,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1410, inventory.scss */
+/* line 1423, inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
@@ -1516,33 +1527,33 @@ textarea{
 }
 
 /* Action Bar ------------------------------------------------------------------- */
-/* line 1419, inventory.scss */
+/* line 1432, inventory.scss */
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px;
 }
-/* line 1423, inventory.scss */
+/* line 1436, inventory.scss */
 .action-bar-wrapper ul li a {
   color: #333;
 }
 
-/* line 1428, inventory.scss */
+/* line 1441, inventory.scss */
 ul.expandable {
   display: none;
   margin-top: 9px;
 }
-/* line 1432, inventory.scss */
+/* line 1445, inventory.scss */
 ul.expandable.secondary-active {
   display: block;
 }
 
 /* Datatables ---------------------------------------------------------*/
-/* line 1440, inventory.scss */
+/* line 1453, inventory.scss */
 .dataTables_wrapper tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
 }
-/* line 1443, inventory.scss */
+/* line 1456, inventory.scss */
 .dataTables_wrapper tr.not_visible td:not(:last-child) a {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
