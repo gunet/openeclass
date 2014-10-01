@@ -262,9 +262,9 @@ function loggedInMenu() {
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
     if ($new_msgs == 0) {
-        array_push($sideMenuText, $GLOBALS['langDropBox']);
+        array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
-        array_push($sideMenuText, "<b>".$GLOBALS['langDropBox']." (".$new_msgs.")</b>");
+        array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." (".$new_msgs.")</b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "arrow.png");
