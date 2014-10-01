@@ -445,18 +445,22 @@ if (isset($_POST['submit'])) {
 	    <table class='tbl'>
                 
                 <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
-                
+                <tr><td><input type='radio' name='view_type' value='simple' ";
+                if($c->view_type == "simple"){
+                    $tool_content .= " checked ";
+                }
+                $tool_content .= "id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
                 <tr><td><input type='radio' name='view_type' value='units'";
                 if($c->view_type == "units"){
                     $tool_content .= " checked ";
                 }
-                $tool_content .= "id='units'><label for='units'>&nbsp;$langCourseUnits</label></td></tr>
+                $tool_content .= "id='units'><label for='units'>&nbsp;$langWithCourseUnits</label></td></tr>
                 
                 <tr><td><input type='radio' name='view_type' value='weekly' ";
                 if($c->view_type == "weekly"){
                     $tool_content .= " checked ";
                 }
-                $tool_content .= "id='weekly'><label for='weekly'>&nbsp;$langWeekly</label></td></tr>
+                $tool_content .= "id='weekly'><label for='weekly'>&nbsp;$langCourseWeeklyFormat</label></td></tr>
                     
                 <tr id='weeklyDates'>
                     <td>
@@ -475,14 +479,6 @@ if (isset($_POST['submit'])) {
                         $tool_content .= "' readonly='true'>
                     </td>
                 </tr>
-                
-                <tr><td><input type='radio' name='view_type' value='simple' ";
-                if($c->view_type == "simple"){
-                    $tool_content .= " checked ";
-                }
-                $tool_content .= "id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
-
-                
                 </table>
                 </fieldset>";
         
