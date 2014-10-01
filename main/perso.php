@@ -197,14 +197,13 @@ function getUserLessonInfo($uid) {
  */
 function getUserAnnouncements($lesson_id) {
 
-    global $urlAppend, $langMore, $dateFormatShort;
+    global $urlAppend, $langMore, $dateFormatLong;
 
     $ann_content = '';
     $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
 
     $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
     $q = Database::get()->queryArray("SELECT announcement.title,
-                                             announcement.content,
                                              announcement.`date`,
                                              announcement.id,
                                              course.code,
@@ -220,15 +219,12 @@ function getUserAnnouncements($lesson_id) {
                         ORDER BY announcement.`date` DESC LIMIT 5", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
     if ($q) { // if announcements exist
         foreach ($q as $ann) {
-            $course_title = q(ellipsize($ann->course_title, 50));
-            $course_url = $urlAppend . 'courses/' . $ann->code . '/';
+            $course_title = q(ellipsize($ann->course_title, 30));
             $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
-            $ann_date = claro_format_locale_date($dateFormatShort, strtotime($ann->date));
-            $ann_text = q(ellipsize(strip_tags($ann->content), 150));
+            $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
             $ann_content .= "<li class='list-item'>" .
-                "<span class='item-title'><a href='$ann_url'>" . q($ann->title) .
-                "</a><br><a href='$course_url'>$course_title</a><br>$ann_text</span>" .
-                "<div class='item-right-cols'><span class='item-date'><span class='item-content'>$ann_date</span></span></div></li>";
+                "<span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) .
+                "</a><br><i>$course_title</i> - $ann_date</span></li>";
         }
         return $ann_content;
     } else {

@@ -28,6 +28,7 @@ $guest_allowed = true;
 define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -645,36 +646,14 @@ $tool_content .= "
     <div class='col-md-$cunits_sidebar_columns'>
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>Ημερολογιο</h5>
+                <h5 class='content-title'>$langCalendar</h5>
                 <div class='panel padding'>
                         <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
                 </div>
             </div>
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>Ανακοινωσεις</h5>
-                <ul class='tablelist panel'>
-
-                    <li class='list-item'>
-                        <span class='item-title'>Ανακοίνωση 1</span>
-                        <div class='item-right-cols'>
-                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                    </li>
-
-                    <li class='list-item'>
-                        <span class='item-title'>Ανακοίνωση 2</span>
-                        <div class='item-right-cols'>
-                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                    </li>
-
-                    <li class='list-item'>
-                        <span class='item-title'>Ανακοίνωση 3</span>
-                        <div class='item-right-cols'>
-                            <span class='item-date'><span class='item-content'>13/2/2019</span></span>
-                        </div>
-                    </li>
-
+                <h5 class='content-title'>$langAnnouncements</h5>
+                <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
             <div class='col-md-$cunits_sidebar_subcolumns'>
@@ -783,3 +762,28 @@ if($viewCourse == "units"){
 $tool_content .= "</div>";
 
 draw($tool_content, 2, null, $head_content);
+
+
+function course_announcements() {
+    global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong;
+
+    if (visible_module(MODULE_ID_ANNOUNCE)) {
+        $q = Database::get()->queryArray("SELECT title, `date`, id
+                            FROM announcement
+                            WHERE course_id = ?d AND
+                                  visible = 1
+                            ORDER BY `date` DESC LIMIT 5", $course_id);
+        if ($q) { // if announcements exist
+            $ann_content = '';
+            foreach ($q as $ann) {
+                $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
+                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
+                $ann_content .= "<li class='list-item'>" .
+                    "<span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) .
+                    "</a><br>$ann_date</span></li>";
+            }
+            return $ann_content;
+        }
+    }
+    return "<li>$langNoAnnounce</li>";
+}
