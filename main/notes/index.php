@@ -179,7 +179,18 @@ if ($displayForm and (isset($_GET['addNote']) or isset($_GET['modify']))) {
 
 
 /* display notes */
-$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
+//$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
+if (isset($_GET['course'])) {
+    $cid = course_code_to_id($_GET['course']);
+    $notelist = Notes::get_general_course_notes($cid);
+} else { 
+    if (isset($_GET['nid'])) {
+        $notelist = array(Notes::get_note(intval($_GET['nid'])));
+    } else {
+        $notelist = Notes::get_user_notes();
+    }
+}
+//$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
 
 $iterator = 1;
 $bottomNote = $noteNumber = count($notelist);

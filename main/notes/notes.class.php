@@ -210,7 +210,7 @@ class Notes {
        if(is_null($cid)){
            $cid = $course_id;
        }
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_type = 'course' AND reference_obj_id = ?d", $uid, $cid);
+       return Database::get()->queryArray("SELECT * FROM note WHERE user_id = ?d AND reference_obj_type = 'course' AND reference_obj_id = ?d", $uid, $cid);
     }
     
     /** Get notes associated with a course generally or with specific items of the course
@@ -222,7 +222,7 @@ class Notes {
        if(is_null($cid)){
            $cid = $course_id;
        }
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_course = ?d ", $uid, $cid);
+       return Database::get()->queryArray("SELECT * FROM note WHERE user_id = ?d AND reference_obj_course = ?d ", $uid, $cid);
     }
     
     /** 

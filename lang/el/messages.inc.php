@@ -803,7 +803,7 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
-$langAddAsBookmark = 'Προσθήκη στους σελιδοδείκτες';
+$langAddToMyNotes = 'Οι σημειώσεις μου';
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
 
 
