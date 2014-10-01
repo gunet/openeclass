@@ -66,12 +66,11 @@ require_once 'perso.php';
 $tool_content = "
 <div class='panel_left'>
 <p class='panel_title'>{%LANG_MY_PERSO_LESSONS%}</p>
-<div class='panel_content_open'>{%LESSON_CONTENT%}</div>
+<div class='panel_content_open'>{%LESSON_CONTENT%}</div>";
 
-<p class='panel_title'>{%LANG_MY_PERSONAL_CALENDAR%}</p>
-<div id='smallcal' class='panel_content_open'>{%PERSONAL_CALENDAR_CONTENT%}</div>
-</div>
-
+//<p class='panel_title'>{%LANG_MY_PERSONAL_CALENDAR%}</p>
+//<div id='smallcal' class='panel_content_open'>{%PERSONAL_CALENDAR_CONTENT%}</div>
+$tool_content .= "</div>
 
 <div class='panel_right'>
 <p class='panel_title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</p>

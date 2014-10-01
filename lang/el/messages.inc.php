@@ -3706,7 +3706,6 @@ $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
 
 /* * ******************************************
-<<<<<<< mine
   Notes
  * ***************************************** */
 $langAddNote = "Νέα σημείωση";
@@ -3722,33 +3721,7 @@ $langNoteDel = "Η σημείωση διαγράφηκε.";
 $langNoteModified = "Η σημείωση άλλαξε.";
 $langNoteModify = "Η σημείωση ενημερώθηκε.";
 $langNoteNoTitle = "Κενός τίτλος";
-$langNotes = "Σημειώσεις";
-$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
-$langNoteTitle = "Τίτλος";
-$langPersonalEvent = "Προσωπικό γεγονός";
-$langReferencedObject = "Αφορά";
-$langSelectFromMenu = "Επιλέξτε...";
-$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
-$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
-
-/* * ******************************************
-=======
-  Notes
- * ***************************************** */
-$langAddNote = "Νέα σημείωση";
-$langDocument = "Έγγραφο";
-$langEmptyNoteTitle = "Νέα σημείωση";
-$langEvent = "Γεγονός";
-$langLastUpdate = "Τελευταία ενημέρωση";
-$langModifNote = "Αλλαγή σημείωσης";
-$langNoNote = "Δεν έχετε σημειώσεις.";
-$langNoteAdd = "Νέα σημείωση προστέθηκε.";
-$langNoteBody = "Περιεχόμενο";
-$langNoteDel = "Η σημείωση διαγράφηκε.";
-$langNoteModified = "Η σημείωση άλλαξε.";
-$langNoteModify = "Η σημείωση ενημερώθηκε.";
-$langNoteNoTitle = "Κενός τίτλος";
-$langNotes = "Σημειώσεις";
+$langNotes = "Οι Σημειώσεις μου";
 $langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
 $langNoteTitle = "Τίτλος";
 $langPersonalEvent = "Προσωπικό γεγονός";
