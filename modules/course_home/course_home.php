@@ -539,14 +539,11 @@ $tool_content .= "
   <tr class='title1'>
     <td class='title1'>$langTools</td>
     <td class='left'>$toggle_student_view";
-if ($status != USER_GUEST) {
-    if ($receive_mail) {
-        $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                  <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
-    }
-}
-$tool_content .= "&nbsp;&nbsp;<a href='${urlServer}main/notes/index.php?course=$course_code' title='" . q($title) . "'>
+
+if ($status and $status != USER_GUEST) {
+    $tool_content .= "&nbsp;&nbsp;<a href='${urlServer}main/notes/index.php?course=$course_code' title='" . q($title) . "'>
             <img src='$themeimg/mynotes.png' alt='". q($langAddToMyNotes) . "' title='". q($langAddToMyNotes) . "' /></a>&nbsp;&nbsp;";
+}
 if (visible_module(MODULE_ID_ANNOUNCE)) {
     $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
                           <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>&nbsp;$toggle_student_view_close";
