@@ -50,6 +50,7 @@ $(document).ready( function () {
     $(".expandable-btn").click(function(){
         $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
+    $('[rel=tooltip]').tooltip();
 
     //window resize
     //    $(window).resize(function() {

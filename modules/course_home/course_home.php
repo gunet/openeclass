@@ -62,7 +62,6 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
-            $('[rel=\"tooltip\"]').tooltip();
     })
     </script>";
 

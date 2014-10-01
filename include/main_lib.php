@@ -2625,31 +2625,42 @@ function forbidden($path) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options) {
+    global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
 
     foreach ($options as $option) {
         $title = q($option['title']);
+        if (isset($option['confirm'])) {
+            $confirm_extra = " data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='" .
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
+            $form_begin = "<form method=post action='$option[url]'>";
+            $form_end = '</form>';
+            $href = '';
+        } else {
+            $confirm_extra = $form_begin = $form_end = '';
+            $href = " href='" . $option['url'] . "'";
+        }
         if (isset($option['level']) and $option['level'] == 'primary') {
             if (!count($out_primary)) {
                 array_unshift($out_primary,
-                    "<li><a class='btn btn-default' href='" . $option['url'] .
-                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    "<li>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
                     "<i class='fa fa-$option[icon] space-after-icon'></i>" .
-                    "<span class='hidden-xs'>$title</span></a></li>");
+                    "<span class='hidden-xs'>$title</span></a>$form_end</li>");
             } else {
                 array_unshift($out_primary,
-                    "<li><a class='btn btn-default' href='" . $option['url'] .
-                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    "<li>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
-                    "<i class='fa fa-$option[icon]'></i></a></li>");
+                    "<i class='fa fa-$option[icon]'></i></a>$form_end</li>");
             }
         } else {
             array_unshift($out_secondary,
-                    "<li><a class='btn btn-default' href='" . $option['url'] .
-                    "' data-placement='down' data-toggle='tooltip' rel='tooltip'" .
+                    "<li>$form_begin<a$confirm_extra  class='btn btn-default'" . $href .
+                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
-                    "<i class='fa fa-$option[icon]'></i></a></li>");
+                    "<i class='fa fa-$option[icon]'></i></a>$form_end</li>");
         }
     }
     $out = "<ul class='list-inline'>";

@@ -480,17 +480,24 @@ if ($is_editor) {
         </fieldset>
   </form>";
     } else {
-  /* display actions toolbar */
-  $tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>";
         if (isset($_GET['an_id'])) {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;modify=$row->id'>" . $langModify . "</a></li>
-                              <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";
+            $tool_content .= action_bar(array(
+                array('title' => $langModify,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
+                      'icon' => 'edit',
+                      'level' => 'primary'),
+                array('title' => $langDelete,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
+                      'icon' => 'times',
+                      'level' => 'primary',
+                      'confirm' => $langSureToDelAnnounce)));
         } else {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>";
+            $tool_content .= action_bar(array(
+                array('title' => $langAddAnn,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
+                      'icon' => 'plus-circle',
+                      'level' => 'primary')));
         }
-        $tool_content .= "</ul></div>";
     }
 } // end: teacher only
 
