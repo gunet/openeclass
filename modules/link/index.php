@@ -140,7 +140,7 @@ if ($is_editor) {
             array('title' => $langLinkAdd,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
                   'icon' => 'fa-plus-circle',
-                  'level' => 'primary'),
+                  'level' => 'primary-label'),
             array('title' => $langCategoryAdd,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
                   'icon' => 'fa-folder',

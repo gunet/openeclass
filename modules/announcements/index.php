@@ -484,7 +484,7 @@ if ($is_editor) {
                 array('title' => $langModify,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
                       'icon' => 'fa-edit',
-                      'level' => 'primary'),
+                      'level' => 'primary-label'),
                 array('title' => $langDelete,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
                       'icon' => 'fa-times',
@@ -495,7 +495,7 @@ if ($is_editor) {
                 array('title' => $langAddAnn,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
                       'icon' => 'fa-plus-circle',
-                      'level' => 'primary')));
+                      'level' => 'primary-label')));
         }
     }
 } // end: teacher only

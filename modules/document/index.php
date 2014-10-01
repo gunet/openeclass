@@ -1057,7 +1057,7 @@ if ($can_upload) {
             array('title' => $langDownloadFile,
                   'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
                   'icon' => 'fa-plus-circle',
-                  'level' => 'primary'),
+                  'level' => 'primary-label'),
             array('title' => $langCreateDir,
                   'url' => "{$base_url}createDir=$cmdCurDirPath",
                   'icon' => 'fa-folder',

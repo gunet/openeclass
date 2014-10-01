@@ -2639,6 +2639,7 @@ function action_bar($options) {
             $class = '';
         }
         $title = q($option['title']);
+        $level = isset($option['level'])? $option['level']: 'secondary';
         if (isset($option['confirm'])) {
             $confirm_extra = " data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
@@ -2649,21 +2650,19 @@ function action_bar($options) {
             $confirm_extra = $form_begin = $form_end = '';
             $href = " href='" . $option['url'] . "'";
         }
-        if (isset($option['level']) and $option['level'] == 'primary') {
-            if (!count($out_primary)) {
-                array_unshift($out_primary,
-                    "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
-                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                    " title='$title'>" .
-                    "<i class='fa $option[icon] space-after-icon'></i>" .
-                    "<span class='hidden-xs'>$title</span></a>$form_end</li>");
-            } else {
-                array_unshift($out_primary,
-                    "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
-                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                    " title='$title'>" .
-                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
-            }
+        if ($level == 'primary-label') {
+            array_unshift($out_primary,
+                "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'>" .
+                "<i class='fa $option[icon] space-after-icon'></i>" .
+                "<span class='hidden-xs'>$title</span></a>$form_end</li>");
+        } elseif ($level == 'primary') {
+            array_unshift($out_primary,
+                "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'>" .
+                "<i class='fa $option[icon]'></i></a>$form_end</li>");
         } else {
             array_unshift($out_secondary,
                     "<li$class>$form_begin<a$confirm_extra  class='btn btn-default'" . $href .
