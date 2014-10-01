@@ -111,7 +111,6 @@ class Answer
 		// while a record is found
 		while($object=mysql_fetch_object($result))
 		{
-echo "<div>question_id=$questionId reponse: ".q($object->reponse).'</div>';
 			$this->answer[$i]=$object->reponse;
 			$this->correct[$i]=$object->correct;
 			$this->comment[$i]=$object->comment;
