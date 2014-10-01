@@ -49,7 +49,13 @@ $checked['private_forum_yes'] = $private_forum ? ' checked="1"' : '';
 $checked['private_forum_no'] = $private_forum ? '' : ' checked="1"';
 $checked['wiki'] = ($wiki==0) ? '' : ' checked="1"';
 
-$tool_content = "
+$tool_content .= "<div id='operations_container'>
+                    <ul id='opslist'>
+                        <li><a href='index.php?course=$course_code'>$langBack</a></li>
+                    </ul>
+                </div>";
+
+$tool_content .= "
 <form method='post' action='index.php?course=$course_code'>
     <fieldset>
     <legend>$langGroupProperties / $langTools</legend>

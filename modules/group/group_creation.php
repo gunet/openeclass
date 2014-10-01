@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,15 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This module is responsible for the user groups of each lesson
- *
+/**
+ * @file group_creation.php
+ * @brief create users group
  */
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
@@ -38,28 +34,30 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langNewGroupCreate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-$tool_content = <<<tCont
-
-    <form method="post" action="index.php?course=$course_code">
+$tool_content .= "<div id='operations_container'>
+                    <ul id='opslist'>
+                        <li><a href='index.php?course=$course_code'>$langBack</a></li>
+                    </ul>
+                </div>";
+                
+$tool_content .= " <form method='post' action='index.php?course=$course_code'>
     <fieldset>
     <legend>$langNewGroupCreateData</legend>
-    <table width="99%" class="tbl">
+    <table width='99%' class='tbl'>
     <tr>
-      <th width="160" class="left">$langNewGroups:</th>
-      <td><input type="text" name="group_quantity" size="3" value="1"></td>
+      <th width='160' class='left'>$langNewGroups:</th>
+      <td><input type='text' name='group_quantity' size='3' value='1'></td>
     </tr>
     <tr>
-      <th class="left">$langNewGroupMembers:</th>
-      <td><input type="text" name="group_max" size="3" value="8">&nbsp;$langMax $langPlaces</td>
+      <th class='left'>$langNewGroupMembers:</th>
+      <td><input type='text' name='group_max' size='3' value='8'>&nbsp;$langMax $langPlaces</td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type="submit" value=$langCreate name="creation"></td>
+      <td><input type='submit' value='$langCreate' name='creation'></td>
     </tr>
     </table>
     </fieldset>
-    </form>
-
-tCont;
+    </form>";
 
 draw($tool_content, 2);

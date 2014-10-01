@@ -37,6 +37,11 @@ if (isset($_GET['uploadPath'])) {
 }
 
 if ($can_upload) {
+    $tool_content .= "<div id='operations_container'>
+                        <ul id='opslist'>
+                           <li><a href='index.php?course=$course_code'>$langBack</a></li>
+                        </ul>
+                    </div>";
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $nameTools = $langExternalFile;

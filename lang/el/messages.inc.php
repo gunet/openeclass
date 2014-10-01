@@ -957,7 +957,6 @@ $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές 
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
-$langAttendanceAbsences = "Παρουσίες";
 $langAttendanceAbsencesYes = "Παρουσία";
 $langAttendanceAbsencesNo = "Απουσία";
 $langAttendanceAbsences = "Παρουσίες";

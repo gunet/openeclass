@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,6 +39,8 @@ $fpdx = new ForumPostIndexer($idx);
 require_once 'config.php';
 require_once 'functions.php';
 
+
+
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
 } else {
@@ -68,6 +70,10 @@ if (!does_exists($forum_id, "forum")) {
     draw($tool_content, 2);
     exit;
 }
+
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+$tool_content .= "<li><a href='viewforum.php?course=$course_code&forum=$forum_id'>$langBack</a></li>";
+$tool_content .= "</ul></div>";
 
 if (isset($_POST['submit'])) {
     $subject = trim($_POST['subject']);
@@ -144,9 +150,6 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<p class='success'>$langStored</p>
 		<p class='back'>&laquo; <a href='viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic'>$langReturnMessages</a></p>
 		<p class='back'>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>$langReturnTopic</a></p>";
-} elseif (isset($_POST['cancel'])) {
-    header("Location: viewforum.php?course=$course_code&forum=$forum_id");
-    exit;
 } else {
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
@@ -164,8 +167,7 @@ if (isset($_POST['submit'])) {
 	  <tr>
             <th>&nbsp;</th>
 	    <td class='right'>
-	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
-	       <input class='Login' type='submit' name='cancel' value='$langCancelPost' />
+	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;	       
 	    </td>
           </tr>
 	  </table>

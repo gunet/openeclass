@@ -212,8 +212,8 @@ if (count($result) > 0) { // topics found
 	  <th width='70' class='center'>$langAnswers</th>
 	  <th width='150' class='center'>$langSender</th>
 	  <th width='80' class='center'>$langSeen</th>
-	  <th width='200' class='center'>$langLastMsg</th>
-	  <th width='70' class='center'>$langActions</th>
+	  <th width='190' class='center'>$langLastMsg</th>
+	  <th width='80' class='center'>$langActions</th>
 	</tr>";
     $i = 0;
     foreach ($result as $myrow) {

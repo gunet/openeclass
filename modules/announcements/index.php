@@ -352,6 +352,11 @@ if ($is_editor) {
     }
     /* display form */
     if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
+        
+        $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= "</ul></div>";
+        
         load_js('jquery-ui');
         load_js('jquery-ui-timepicker-addon.min.js');
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
@@ -429,7 +434,7 @@ if ($is_editor) {
             $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;modify=$row->id'>" . $langModify . "</a></li>
                               <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";
         } else {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>";
+            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;af=1'>" . $langAddAnn . "</a></li>";
         }
         $tool_content .= "</ul></div>";
     }
