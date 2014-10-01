@@ -1053,28 +1053,26 @@ if ($can_upload) {
     // available actions
     if (!$is_in_tinymce) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-        $action_bar_options = array(
+        $tool_content .= action_bar(array(
             array('title' => $langDownloadFile,
                   'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
-                  'icon' => 'plus-circle',
+                  'icon' => 'fa-plus-circle',
                   'level' => 'primary'),
             array('title' => $langCreateDir,
                   'url' => "{$base_url}createDir=$cmdCurDirPath",
-                  'icon' => 'folder',
+                  'icon' => 'fa-folder',
                   'level' => 'primary'),
             array('title' => $langQuotaBar,
                   'url' => "{$base_url}showQuota=true",
-                  'icon' => 'pie-chart'),
+                  'icon' => 'fa-pie-chart'),
             array('title' => $langExternalFile,
                   'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-                  'icon' => 'external-link'),
-        );
-        if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
-            $action_bar_options[] = array('title' => $langCommonDocs,
-                'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
-                'icon' => 'plus-circle');
-        }
-        $tool_content .= action_bar($action_bar_options);
+                  'icon' => 'fa-external-link'),
+            array('title' => $langCommonDocs,
+                  'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
+                  'icon' => 'fa-plus-circle',
+                  'show' => !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
+            ));
     }
 
     // Dialog Box

@@ -95,15 +95,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             } else {
                 $visible = 0;
                 $vis_icon = 'fa-eye';
-                $vis_class= 'visible';
-            }
-            //checking ordering status and initializing appropriate arrows
-            $up_arrow = $down_arrow = '';
-            if ($iterator != 1 or $offset > 0)  {
-                $up_arrow = '<div class="opt-btn-more-tool tool-btn">'.icon('fa-arrow-up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id").'</div>';
-            }
-            if ($offset + $iterator < $all_announc->total) {
-                $down_arrow = '<div class="opt-btn-more-tool tool-btn">'.icon('fa-arrow-down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id").'</div>';
+                $vis_class = 'visible';
             }
             //setting datables column data
             $data['aaData'][] = array(
@@ -111,19 +103,26 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 'DT_RowClass' => $vis_class,
                 '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
                 '1' => date('d-m-Y', strtotime($myrow->date)),
-                /*'2' => icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id").
-                       icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .
-                       icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .
-                       $down_arrow . $up_arrow*/
-                '2' => '<div class="opt-btn-wrapper">'.
-                       '<div class="opt-btn-more-wrapper">'.
-                       '<div class="opt-btn-more-tool tool-btn">'.icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id").'</div>'.
-                       '<div class="opt-btn-more-tool tool-btn">'.icon('fa-times', $langDelete, "#", "class=\"delete_btn\"") .'</div>'.
-                       '<div class="opt-btn-more-tool tool-btn">'.icon($vis_icon, $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"") .'</div>'.
-                       $down_arrow . $up_arrow.
-                       '<div class="opt-btn-more-tool tool-btn delete">'.icon('fa-times', $langVisible, "#", "class=\"vis_btn\" data-vis=\"$visible\"").'</div>'.
-                       '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>'
-                );
+                '2' => action_button(array(
+                    array('title' => $langModify,
+                          'icon' => 'fa-edit',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
+                    array('title' => $langDelete,
+                          'class' => 'delete',
+                          'icon' => 'fa-times',
+                          'icon-class' => 'delete_btn'),
+                    array('title' => $langVisible,
+                          'icon' => $vis_icon,
+                          'icon-class' => 'vis_btn',
+                          'icon-extra' => "data-vis='$visible'"),
+                    array('title' => $langMove,
+                          'icon' => 'fa-arrow-up',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id",
+                          'show' => $iterator != 1 || $offset > 0),
+                    array('title' => $langMove,
+                          'icon' => 'fa-arrow-down',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id",
+                          'show' => $offset + $iterator < $all_announc->total))));
             $iterator++;
         }
     } else {
@@ -484,18 +483,18 @@ if ($is_editor) {
             $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
-                      'icon' => 'edit',
+                      'icon' => 'fa-edit',
                       'level' => 'primary'),
                 array('title' => $langDelete,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
-                      'icon' => 'times',
+                      'icon' => 'fa-times',
                       'level' => 'primary',
                       'confirm' => $langSureToDelAnnounce)));
         } else {
             $tool_content .= action_bar(array(
                 array('title' => $langAddAnn,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
-                      'icon' => 'plus-circle',
+                      'icon' => 'fa-plus-circle',
                       'level' => 'primary')));
         }
     }

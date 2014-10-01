@@ -2629,6 +2629,15 @@ function action_bar($options) {
     $out_primary = $out_secondary = array();
 
     foreach ($options as $option) {
+        // skip items with show=false
+        if (isset($option['show']) and !$option['show']) {
+            continue;
+        }
+        if (isset($option['class'])) {
+            $class = " class='$option[class]'";
+        } else {
+            $class = '';
+        }
         $title = q($option['title']);
         if (isset($option['confirm'])) {
             $confirm_extra = " data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='" .
@@ -2643,24 +2652,24 @@ function action_bar($options) {
         if (isset($option['level']) and $option['level'] == 'primary') {
             if (!count($out_primary)) {
                 array_unshift($out_primary,
-                    "<li>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                    "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
                     " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
-                    "<i class='fa fa-$option[icon] space-after-icon'></i>" .
+                    "<i class='fa $option[icon] space-after-icon'></i>" .
                     "<span class='hidden-xs'>$title</span></a>$form_end</li>");
             } else {
                 array_unshift($out_primary,
-                    "<li>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
+                    "<li$class>$form_begin<a$confirm_extra class='btn btn-default'" . $href .
                     " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
-                    "<i class='fa fa-$option[icon]'></i></a>$form_end</li>");
+                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
             }
         } else {
             array_unshift($out_secondary,
-                    "<li>$form_begin<a$confirm_extra  class='btn btn-default'" . $href .
+                    "<li$class>$form_begin<a$confirm_extra  class='btn btn-default'" . $href .
                     " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
-                    "<i class='fa fa-$option[icon]'></i></a>$form_end</li>");
+                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
         }
     }
     $out = "<ul class='list-inline'>";
@@ -2682,4 +2691,42 @@ function action_bar($options) {
     } else {
         return '';
     }
+}
+
+/**
+ * @brief returns HTML for an action button
+ * @param array $options options for each entry in the button
+ * 
+ * Each item in array is another array of the form:
+ * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
+ * 
+ */
+function action_button($options) {
+    $out = '';
+    foreach ($options as $option) {
+        // skip items with show=false
+        if (isset($option['show']) and !$option['show']) {
+            continue;
+        }
+        if (isset($option['class'])) {
+            $class = ' ' . $option['class'];
+        } else {
+            $class = '';
+        }
+        $url = isset($option['url'])? $option['url']: '#';
+        $icon_class = '';
+        if (isset($option['icon-class'])) {
+            $icon_class .= 'class="' . $option['icon-class'] . '"';
+        }
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }
+        $out .= "<div class='opt-btn-more-tool tool-btn$class'>" .
+            icon($option['icon'], $option['title'], $url, $icon_class) .
+            '</div>';
+    }
+    return '<div class="opt-btn-wrapper">' .
+        '<div class="opt-btn-more-wrapper">' .
+        $out .
+        '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>';
 }

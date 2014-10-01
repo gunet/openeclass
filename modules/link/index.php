@@ -139,11 +139,11 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langLinkAdd,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
-                  'icon' => 'plus-circle',
+                  'icon' => 'fa-plus-circle',
                   'level' => 'primary'),
             array('title' => $langCategoryAdd,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
-                  'icon' => 'folder',
+                  'icon' => 'fa-folder',
                   'level' => 'primary')));
     }
 
