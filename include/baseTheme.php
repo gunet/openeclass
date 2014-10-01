@@ -616,6 +616,13 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  */
 function module_path($path) {
     global $urlAppend, $urlServer, $urlSecure;
+
+    if (strpos($path, 'modules/units/insert.php') !== false) {
+        if (strpos($path, '&dir=') !== false) {
+            return 'document';
+        }
+    }
+
     $path = preg_replace('/\?[a-zA-Z0-9=&]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
                         array('/', '/', '/', ''), $path);
