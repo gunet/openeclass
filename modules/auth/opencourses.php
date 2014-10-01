@@ -139,15 +139,15 @@ if (count($courses) > 0) {
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
-            <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>";
+            <th class='left' colspan='2'>" . q($m['lessoncode']) . "</th>";
 
     if ($isInOpenCoursesMode) {
         $tool_content .= "
-                <th class='left' width='220'>" . $m['professor'] . "</th>
+                <th class='left' width='220'>" . q($m['professor']) . "</th>
                 <th width='30'>$langOpenCoursesLevel</th>";
     } else {
         $tool_content .= "
-                <th class='left' width='200'>" . $m['professor'] . "</th>
+                <th class='left' width='200'>" . q($m['professor']) . "</th>
                 <th width='30'>$langType</th>";
     }
 
@@ -156,9 +156,9 @@ if (count($courses) > 0) {
     $k = 0;    
     foreach ($courses as $mycours) {
         if ($mycours->visible == 2) {
-            $codelink = "<a href='../../courses/" . $mycours->k . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . $mycours->c . ")</small>";
+            $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
         } else {
-            $codelink = $mycours->i . "&nbsp;<small>(" . $mycours->c . ")</small>";
+            $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
         }
 
         if ($k % 2 == 0) {
@@ -169,7 +169,7 @@ if (count($courses) > 0) {
 
         $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
         $tool_content .= "<td>" . $codelink . "</td>";
-        $tool_content .= "<td>" . $mycours->t . "</td>";
+        $tool_content .= "<td>" . q($mycours->t) . "</td>";
         $tool_content .= "<td align='center'>";
 
         if ($isInOpenCoursesMode) {
