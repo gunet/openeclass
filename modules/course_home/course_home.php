@@ -351,7 +351,7 @@ if ($total_cunits > 0) {
                                                 </div>			      
                                         </div>";
         if ($is_editor) {                                                
-            $cunits_content .= "<div class='item-side'>
+            $cunits_content .= "        <div class='item-side'>
                                             <div class='opt-btn-wrapper'>
                                                 <div class='opt-btn-more-wrapper'>
                                                     <div class='opt-btn-more-tool tool-btn'>
@@ -362,7 +362,6 @@ if ($total_cunits > 0) {
                                                     <div class='opt-btn-more-tool tool-btn'>
                                                         <a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langEdit'>
                                                             <i class='fa fa-edit '></i>
-
                                                         </a>
                                                     </div>";
             if ($visible == COURSE_OPEN) {
@@ -372,33 +371,35 @@ if ($total_cunits > 0) {
                                                     </a></div>";
             }
             if ($cu->id != $last_id) {
-                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
-                                            <i class='fa fa-arrow-down'></i>
-                                        </a>
-                                    </div>";
+            $cunits_content .= "                    <div class='opt-btn-more-tool tool-btn'>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?down=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langDown'>
+                                                            <i class='fa fa-arrow-down'></i>
+                                                        </a>
+                                                    </div>";
             }
             if ($count_index != 1) {        
-                $cunits_content .= "<div class='opt-btn-more-tool tool-btn'>
+                $cunits_content .= "                <div class='opt-btn-more-tool tool-btn'>
                                                         <a href='$_SERVER[SCRIPT_NAME]?up=$cu->id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='$langUp'>
                                                             <i class='fa fa-arrow-up'></i>
                                                         </a>
                                                     </div>";
             }
-            $cunits_content .= "<div class='opt-btn-more-tool tool-btn delete'>
-                                    <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
-                                        <a  title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
-                                            <i class='fa fa-times'></i>
-                                        </a>    
-                                </form>
-                                </div> 
-                            </div>    
-                            <div class='opt-btn tool-btn'>
-                                <i class='fa fa-gear '></i>
-                            </div>
-                    </div>";
+            $cunits_content .= "                    <div class='opt-btn-more-tool tool-btn delete'>
+                                                    <form method='POST' action='$_SERVER[SCRIPT_NAME]?del=$cu->id' accept-charset='UTF-8' style='display:inline'>
+                                                        <a  title='$langDelete' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langCourseUnitDeleteConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>                                        
+                                                            <i class='fa fa-times'></i>
+                                                        </a>    
+                                                    </form>
+                                                </div> 
+                                            </div>   
+                            
+                                            <div class='opt-btn tool-btn'>
+                                                <i class='fa fa-gear '></i>
+                                            </div>
+                                        </div>
+                                    ";
         }
-        $cunits_content .= "</li>
+        $cunits_content .= "        </li>
                                 </ul>                          
                             </div>"; 
 
@@ -781,7 +782,7 @@ if($viewCourse == "units"){
    </tr></table>";
 }
 
-$tool_content .= "</div>";
+$tool_content .= "</div></div></div>";
 
 draw($tool_content, 2, null, $head_content);
 
