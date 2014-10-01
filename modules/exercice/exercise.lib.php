@@ -22,7 +22,13 @@
 function showAnswer($text) {
     global $urlAppend;
 
-    return mathfilter(make_clickable(q($text)), 12, "{$urlAppend}/courses/mathimg/");
+    $text = make_clickable(preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', q($text)));
+    $text = mathfilter($text, 12, "{$urlAppend}/courses/mathimg/");
+    if (strpos($text, "\n") !== false) {
+        return '<pre>' . $text . '</pre>';
+    } else {
+        return $text;
+    }
 }
 
 
@@ -100,7 +106,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td class='center' width='1'>
 			    <input type='radio' name='choice[${questionId}]' value='${answerId}' />
 			  </td>
-			  <td><pre>". showAnswer($answer) ."</pre></td>
+			  <td>". showAnswer($answer) ."</td>
 			</tr>";
 		}
 		// multiple answers
@@ -110,7 +116,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td width='1' align='center'>
 			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
 			  </td>
-			  <td><pre>". showAnswer($answer) ."</pre></td>
+			  <td>". showAnswer($answer) ."</td>
 			</tr>";
 		}
 		// fill in blanks
@@ -133,7 +139,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				  <td colspan='2'>
 				    <table class='tbl' width='100%'>
 				    <tr>
-				      <td width='200'><b>${cpt2}.</b> <pre>". showAnswer($answer) ."</pre></td>
+				      <td width='200'><b>${cpt2}.</b> ". showAnswer($answer) ."</td>
 				      <td width='100'><div align='left'>
 				       <select name='choice[${questionId}][${answerId}]'>
 					 <option value='0'>--</option>";
@@ -184,7 +190,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                             <td width='1' align='center'>
                               <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                             </td>
-                            <td><pre>". showAnswer($answer) ."</pre></td>
+                            <td>". showAnswer($answer) ."</td>
                           </tr>";
 		}
 	}	// end for()
