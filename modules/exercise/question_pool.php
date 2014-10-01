@@ -111,46 +111,34 @@ if ($is_editor) {
                 'level' => 'primary-label'
          );          
     }
-
     $tool_content .= action_bar($action_bar_options);
     
-    $tool_content .= "<form name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>";
-    if (isset($fromExercise)) {
-        $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
-    }
-
-    $tool_content .= "<table width='100%' class='tbl_alt'><tr>";
-    if (isset($fromExercise)) {
-        $tool_content .= "<td colspan='3'>";
-    } else {
-        $tool_content .= "<td colspan='4'>";
-    }
-    $tool_content .= "<div align='right'><b>" . $langFilter . "</b>:
-	   <select onChange='document.qfilter.submit();' name='exerciseId' class='FormData_InputText'>" . "
-	     <option value=\"0\">-- " . $langAllExercises . " --</option>" . "
-	     <option value=\"-1\" ";
-
-    if (isset($exerciseId) && $exerciseId == -1) {
-        $tool_content .= "selected=\"selected\"";
-    }
-    $tool_content .= ">-- " . $langOrphanQuestions . " --</option>\n";
-
     if (isset($fromExercise)) {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
-    }
+    }    
+    //Start of filtering Component
+    $tool_content .= "<form class='form-horizontal' role='form' name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>
+                        <div class='form-group'>
+                            <label for='exerciseTitle' class='col-sm-2 control-label'>$langFilter:</label>
+                            <div class='col-sm-4'>
+                                <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
+                                  <option value = '0'>-- $langAllExercises --</option>
+                                  <option value = '-1' ".(isset($exerciseId) && $exerciseId == -1 ? "selected='selected'": "").">-- $langOrphanQuestions --</option>";
 
-    // shows a list-box allowing to filter questions
     foreach ($result as $row) {
         $tool_content .= "
-             <option value=\"" . $row->id . "\"";
-        if (isset($exerciseId) && $exerciseId == $row->id) {
-            $tool_content .= "selected=\"selected\"";
-        }
-        $tool_content .= ">" . q($row->title) . "</option>\n";
+             <option value='" . $row->id . "' ".(isset($exerciseId) && $exerciseId == $row->id ? "selected='selected'":"").">$row->title</option>\n";
+    }   
+    $tool_content .= "</select></div></div></form>";      
+    //End of filtering Component
+    
+    if (isset($fromExercise)) {
+        $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
     }
-    $tool_content .= "</select></div></td></tr>\n";
+
+    $tool_content .= "<table width='100%' class='tbl_alt'>";
 
     $from = $page * QUESTIONS_PER_PAGE;
 
@@ -306,7 +294,7 @@ if ($is_editor) {
             }
         }
     }
-    $tool_content .= "</table></form>";
+    $tool_content .= "</table>";
 } else { // if not admin of course
     $tool_content .= $langNotAllowed;
 }
