@@ -1187,6 +1187,7 @@ textarea{
   -ms-transition: all 120ms linear;
   transition: all 120ms linear; }
 
+/* Action Bar ------------------------------------------------------------------- */
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px; }
@@ -1198,5 +1199,13 @@ ul.expandable {
   margin-top: 9px; }
   ul.expandable.secondary-active {
     display: block; }
+
+/* Datatables ---------------------------------------------------------*/
+.dataTables_wrapper tr.not_visible td:not(:last-child) {
+  color: rgba(3, 3, 3, 0.3);
+  font-style: italic; }
+  .dataTables_wrapper tr.not_visible td:not(:last-child) a {
+    color: rgba(3, 3, 3, 0.3);
+    font-style: italic; }
 
 /*# sourceMappingURL=inventory.css.map */
