@@ -193,7 +193,7 @@ if (!isset($_POST['create_course'])) {
             }
         }
 
-        $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
+        $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langLicence</td></tr>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
                 {$license[0]['title']}
             </td>

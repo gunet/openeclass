@@ -181,7 +181,7 @@ $tool_content .= <<<EOF
       <td align="right"><img src="$themeimg/$mandatoryMetadataImg.png" alt=""></td>
     </tr>
     <tr>
-      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesLicense</td>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langLicence</td>
       <td align="right"><img src="$themeimg/$licenseImg.png" alt=""></td>
     </tr>
     <tr>

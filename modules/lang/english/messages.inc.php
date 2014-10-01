@@ -2943,7 +2943,6 @@ $langOpenCoursesCharacteristics = "Qualitative/Quantitative characteristics";
 $langOpenCoursesCharacter = "Course Rating";
 $langOpenCoursesOpenAccess = "Access Type (Open)";
 $langOpenCoursesMandatoryMetadata = "Mandatory Course Metadata (complete)";
-$langOpenCoursesLicense = "Course License";
 $langOpenCoursesTeacherConfirm = "Teacher Statement - The available training material covers 100% of the curriculum";
 $langOpenCoursesHasDocuments = "Has Documents";
 $langOpenCoursesHasUnits = "Has Course units";

@@ -300,7 +300,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
         }
         $tool_content .= "<fieldset>
-        <legend>$langOpenCoursesLicense</legend>
+        <legend>$langLicence</legend>
             <table class='tbl' width='100%'>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
             {$license[0]['title']}

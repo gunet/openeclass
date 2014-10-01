@@ -3477,7 +3477,6 @@ $langOpenCoursesCharacteristics = "Ποιοτικά/Ποσοτικά χαρακ�
 $langOpenCoursesCharacter = "Χαρακτηρισμός Μαθήματος";
 $langOpenCoursesOpenAccess = "Τύπος Πρόσβασης (Ανοικτή)";
 $langOpenCoursesMandatoryMetadata = "Υποχρεωτικά Μεταδεδομένα Μαθήματος (συμπληρωμένα)";
-$langOpenCoursesLicense = "Άδεια Διάθεσης";
 $langOpenCoursesTeacherConfirm = "Δήλωση Καθηγητή - Το Διαθέσιμο Εκπαιδευτικό Υλικό καλύπτει το 100% της Διδακτέας Ύλης";
 $langOpenCoursesHasDocuments = "Έχει Εκπαιδευτικό Υλικό";
 $langOpenCoursesHasUnits = "Έχει Θεματικές Ενότητες";
