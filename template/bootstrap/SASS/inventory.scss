@@ -1410,6 +1410,7 @@ $action-btn-sm-height: 48px;
     @include transition(all 120ms linear);
 }
 
+/* Action Bar ------------------------------------------------------------------- */
 .action-bar-wrapper{
     ul{
         padding:0px;
@@ -1426,5 +1427,19 @@ ul.expandable{
     
     &.secondary-active{
         display: block;
+    }
+}
+
+/* Datatables ---------------------------------------------------------*/
+.dataTables_wrapper{
+    tr.not_visible{
+        td:not(:last-child){
+            color: rgba(3,3,3,0.3);
+            font-style: italic;
+            a{
+                color: rgba(3,3,3,0.3);
+                font-style: italic;
+            }
+        }
     }
 }
