@@ -576,7 +576,7 @@ if($viewCourse == "weekly"){
         
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - $week->title</h2>
+                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - " . q($week->title) . "</h2>
                             </a>
                             <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
                                 <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
