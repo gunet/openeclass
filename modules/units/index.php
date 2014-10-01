@@ -67,18 +67,32 @@ if ($access) {
 }
 
 if ($is_editor) {
+
+    $comment_edit_link = "
+
+    <a class='btn-default-eclass place-at-toolbox color-green' title='...' href='info.php?course=$course_code&amp;edit=$id&amp;next=1'>
+      <i class='fa fa-edit'></i>
+    </a>
+    ";
+    
+
     $tool_content .= "
 
 <div class='row'>
   <div class='col-md-12'>
     
     <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
+      
+
       <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
         <i class='fa fa-paste space-after-icon'></i>$langAdd
       </a>
       <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertDoc' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
         <i class='fa fa-file-o space-after-icon'></i>$langAdd
       </a>
+      
+      $comment_edit_link
+
     </div>
 
 
@@ -142,7 +156,7 @@ if ($is_editor) {
 </div>
 
 
-<div class='row'>
+<div class='row' style='display:none;'>
   <div class='col-md-12'>
 
     <div id='operations_container'>
@@ -227,22 +241,52 @@ foreach (array('previous', 'next') as $i) {
     }
 }
 
-if ($is_editor) {
-    $comment_edit_link = "<td valign='top' width='20'><a href='info.php?course=$course_code&amp;edit=$id&amp;next=1'><img src='$themeimg/edit.png' title='' alt='' /></a></td>";
-    $units_class = 'tbl';
-} else {
-    $units_class = 'tbl';
-    $comment_edit_link = '';
-}
+
 
 $tool_content .= "
-<div class='row'>
+<div class='row margin-bottom'>
   <div class='col-md-12'>
     <h3 class='page-title'>$nameTools</h3>
   </div>
 </div>
+";
 
 
+
+
+
+if (!empty($comments)) {
+    $tool_content .= "
+
+<div class='row'>
+  <div class='col-md-12'>
+    <div class='panel padding'>
+
+          $comments
+
+    </div>
+  </div>
+</div>";
+}
+
+
+
+$tool_content .= "
+<div class='row'>
+  <div class='col-md-12'>
+    <div class='panel padding'>";
+
+show_resources($id);
+
+$tool_content .= "
+
+    </div>
+  </div>
+</div>";
+
+
+
+$tool_content .= "
 <div class='row'>
   <div class='col-md-12'>
     
@@ -263,46 +307,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     ". $link['next'] ."
 
 
-    ";
-}
-$tool_content .= "
-
-    </div>
-  </div>
-</div>";
-
-
-
-
-
-if (!empty($comments)) {
-    $tool_content .= "
-
-<div class='row'>
-  <div class='col-md-12'>
-    <div class='panel'>
-
-          $comments
-          $comment_edit_link
-
-    </div>
-  </div>
-</div>";
-}
-
-
-
-
-show_resources($id);
-
-
-
-$tool_content .= "
-<div class='row'>
-  <div class='col-md-12'>
-    <div class='panel'>
-
-      <form name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+    <form name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
           <table width='99%' class='tbl'>
             <tr class='odd'>
               <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
@@ -324,9 +329,15 @@ $tool_content .= "</select>
           </tr>
         </table>
       </form>
+
+
+
+    ";
+}
+$tool_content .= "
+
     </div>
   </div>
-</div>
- ";
+</div>";
 
 draw($tool_content, 2, null, $head_content);
