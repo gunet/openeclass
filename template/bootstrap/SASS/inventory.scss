@@ -330,15 +330,16 @@ img
   border-radius: 5rem;
   overflow: hidden;
   
-  background: #bbbbbb;
-  @include box-shadow(inset 0px 0px 3px #333333);
-  border: 1px solid rgba(0,0,0,0);
+  background: $color-toolbox;
+  @include box-shadow(inset -3px 0px 2px rgb(221, 221, 221));
+  border: 1px solid rgb(216, 216, 216);
   
   outline:none!important;
 }
 
 .btn-toggle.btn-toggle-on{
   background:$color-hover;
+  @include box-shadow(inset 3px 0px 2px #555555);
 }
 
 .btn-toggle:hover span{
@@ -377,6 +378,8 @@ img
   top: 0px;
   background: $color-panel;
   color: #555555;
+
+  @include box-shadow(2px 0px 2px rgb(221, 221, 221));
 }
 
 .btn-toggle .on{
