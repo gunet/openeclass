@@ -33,8 +33,6 @@ require_once 'group_functions.php';
 require_once 'modules/usage/duration_query.php';
 
 load_js('tools.js');
-//load_js('jquery-ui');
-//load_js('jquery-ui-timepicker-addon.min.js');
 load_js('bootstrap-datepicker');
 
 $head_content .= "

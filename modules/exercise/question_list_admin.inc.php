@@ -21,7 +21,6 @@
 /**
  * @file question_list_admin.inc.php
  */
-load_js('jquery-ui');
 $head_content .= "
 <script>
   $(function() {
