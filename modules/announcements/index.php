@@ -495,7 +495,8 @@ if ($is_editor) {
                 array('title' => $langAddAnn,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
                       'icon' => 'fa-plus-circle',
-                      'level' => 'primary-label')));
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success')));
         }
     }
 } // end: teacher only
