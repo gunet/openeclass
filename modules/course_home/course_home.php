@@ -583,7 +583,7 @@ $tool_content .= "
 
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
                 <div >
-                    <img class='banner-image' src='../../template/bootstrap/img/ph1.jpg'/>
+                    <img class='banner-image img-responsive' src='../../template/bootstrap/img/ph1.jpg'/>
                 </div>
             </div>
 

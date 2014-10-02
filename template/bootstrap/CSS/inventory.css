@@ -12,395 +12,248 @@
 /* FONTS ------------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 112, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
   -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  transition: all 150ms linear; }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 118, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 119, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 120, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 126, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 127, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 128, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @-o-keyframes NEW-ITEM-FX {
-  /* line 134, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 135, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 136, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 @keyframes NEW-ITEM-FX {
-  /* line 142, global.scss */
   0% {
-    background: #e8ffcb;
-  }
-
-  /* line 143, global.scss */
+    background: #e8ffcb; }
   20% {
-    background: #e8ffcb;
-  }
-
-  /* line 144, global.scss */
+    background: #e8ffcb; }
   100% {
-    background: rgba(232, 255, 203, 0);
-  }
-}
-
+    background: rgba(232, 255, 203, 0); } }
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-/* line 13, inventory.scss */
 .delete-action {
-  color: #ce6b6b;
-}
+  color: #CE6B6B; }
 
-/* line 14, inventory.scss */
 .delete-action:hover {
-  background: #ce6b6b !important;
-  color: white!important;
+  background: #CE6B6B !important;
+  color: white !important;
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
   -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  transition: all 150ms linear; }
 
-/* line 16, inventory.scss */
 .align-left {
-  text-align: left;
-}
+  text-align: left; }
 
-/* line 17, inventory.scss */
 .align-right {
-  text-align: right;
-}
+  text-align: right; }
 
 /* Extend bootstrap style - margins */
-/* line 21, inventory.scss */
 .no-margin {
-  margin: 0px !important;
-}
+  margin: 0px !important; }
 
-/* line 22, inventory.scss */
 .margin-top {
-  margin-top: 15px !important;
-}
+  margin-top: 15px !important; }
 
-/* line 23, inventory.scss */
 .margin-top-thin {
-  margin-top: 10px !important;
-}
+  margin-top: 10px !important; }
 
-/* line 24, inventory.scss */
 .margin-top-fat {
-  margin-top: 20px !important;
-}
+  margin-top: 20px !important; }
 
-/* line 25, inventory.scss */
 .margin-bottom {
-  margin-bottom: 15px !important;
-}
+  margin-bottom: 15px !important; }
 
-/* line 26, inventory.scss */
 .margin-bottom-thin {
-  margin-bottom: 10px !important;
-}
+  margin-bottom: 10px !important; }
 
-/* line 27, inventory.scss */
 .margin-bottom-fat {
-  margin-bottom: 20px !important;
-}
+  margin-bottom: 20px !important; }
 
-/* line 28, inventory.scss */
 .margin-right {
-  margin-right: 15px !important;
-}
+  margin-right: 15px !important; }
 
-/* line 29, inventory.scss */
 .margin-right-thin {
-  margin-right: 10px !important;
-}
+  margin-right: 10px !important; }
 
-/* line 30, inventory.scss */
 .margin-right-fat {
-  margin-right: 20px !important;
-}
+  margin-right: 20px !important; }
 
-/* line 31, inventory.scss */
 .margin-left {
-  margin-left: 15px  !important;
-}
+  margin-left: 15px  !important; }
 
-/* line 32, inventory.scss */
 .margin-left-thin {
-  margin-left: 10px !important;
-}
+  margin-left: 10px !important; }
 
-/* line 33, inventory.scss */
 .margin-left-fat {
-  margin-left: 20px !important;
-}
+  margin-left: 20px !important; }
 
-/* line 34, inventory.scss */
 .space-after-icon {
-  margin-right: 5px;
-}
+  margin-right: 5px; }
 
-/* line 35, inventory.scss */
 .space-before-icon {
-  margin-left: 5px;
-}
+  margin-left: 5px; }
 
-/* line 37, inventory.scss */
 .float-left {
-  float: left;
-}
+  float: left; }
 
-/* line 38, inventory.scss */
 .float-right {
-  float: right;
-}
+  float: right; }
 
-/* line 40, inventory.scss */
 .align-left {
-  text-align: left !important;
-}
+  text-align: left !important; }
 
-/* line 41, inventory.scss */
 .align-right {
-  text-align: right !important;
-}
+  text-align: right !important; }
 
 /* Extend bootstrap style - gutters and paddings */
-/* line 46, inventory.scss */
 .padding {
-  padding: 15px;
-}
+  padding: 15px; }
 
-/* line 47, inventory.scss */
 .padding-thin {
-  padding: 10px;
-}
+  padding: 10px; }
 
-/* line 48, inventory.scss */
 .padding-fat {
-  padding: 20px;
-}
+  padding: 20px; }
 
-/* line 49, inventory.scss */
 .no-padding {
-  padding: 0px;
-}
+  padding: 0px; }
 
-/* line 52, inventory.scss */
 .no-gutters {
   padding-right: 0;
-  padding-left: 0;
-}
+  padding-left: 0; }
 
-/* line 57, inventory.scss */
 .add-gutter {
   padding-left: 30px;
-  padding-right: 30px;
-}
+  padding-right: 30px; }
 
-/* line 63, inventory.scss */
 .remove-gutter {
   padding-left: 0px;
-  padding-right: 0px;
-}
+  padding-right: 0px; }
 
-/* line 70, inventory.scss */
 .whole-row {
-  width: 100% !important;
-}
+  width: 100% !important; }
 
-/* line 75, inventory.scss */
 .place-at-toolbox {
-  margin: 0em 0.2em 0.65em 0.2em !important;
-}
+  margin: 0em 0.2em 0.65em 0.2em !important; }
 
-/* line 81, inventory.scss */
 .focused {
-  box-shadow: 0 0px 10px #bbbbbb !important;
-  -moz-box-shadow: 0 0px 10px #bbbbbb !important;
-  -webkit-box-shadow: 0 0px 10px #bbbbbb !important;
-}
+  box-shadow: 0 0px 10px #BBBBBB !important;
+  -moz-box-shadow: 0 0px 10px #BBBBBB !important;
+  -webkit-box-shadow: 0 0px 10px #BBBBBB !important; }
 
-/* line 86, inventory.scss */
 .infotext-sm {
   font-size: 0.8em;
   font-style: italic;
-  color: #888888;
-}
+  color: #888888; }
 
 /* Style for links -------------------------------------------------*/
-/* line 98, inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
-  outline: 0;
-}
-/* line 104, inventory.scss */
-a:hover {
-  text-decoration: underline;
-  outline: 0;
-}
-/* line 110, inventory.scss */
-a:focus {
-  outline: 0;
-}
-/* line 115, inventory.scss */
-a.goto {
-  position: relative;
-  padding-right: 1.5em!important;
-  font-size: 0.75em;
-}
-/* line 121, inventory.scss */
-a.goto:after {
-  content: "\f105";
-  font-family: "FontAwesome";
-  position: absolute;
-  display: block;
-  right: 0px;
-  top: calc(50% - 0.5em);
-  width: 1em;
-  height: 1em;
-  color: #7E7E7E;
-}
+  outline: 0; }
+  a:hover {
+    text-decoration: underline;
+    outline: 0; }
+  a:focus {
+    outline: 0; }
+  a.goto {
+    position: relative;
+    padding-right: 1.5em !important;
+    font-size: 0.75em; }
+    a.goto:after {
+      content: "\f105";
+      font-family: "FontAwesome";
+      position: absolute;
+      display: block;
+      right: 0px;
+      top: calc(50% - 0.5em);
+      width: 1em;
+      height: 1em;
+      color: #7E7E7E; }
 
 /* Styles for headings --------------------------------------------------*/
-/* line 141, inventory.scss */
 h1 {
   font-size: 2em;
-  font-weight: 300;
-}
+  font-weight: 300; }
 
-/* line 147, inventory.scss */
 h1.page-title {
   margin: 0em;
-  font-weight: 400!important;
-  color: #333;
-}
+  font-weight: 400 !important;
+  color: #333; }
 
-/* line 156, inventory.scss */
 #main h1 {
-  color: #444;
-}
-/* line 161, inventory.scss */
+  color: #444; }
 #main h2, #main h3, #main h4, #main h5, #main h6 {
-  color: #777;
-}
+  color: #777; }
 
-/* line 167, inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
-  color: #4da1e4;
-}
+  color: #4da1e4; }
 
-/* line 174, inventory.scss */
 hr {
   height: 1px;
   border: none;
-  background: #eee;
-}
+  background: #eee; }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-/* line 184, inventory.scss */
 .fa {
-  font-size: 1em !important;
-}
+  font-size: 1em !important; }
 
-/* line 191, inventory.scss */
 img {
   max-width: 100%;
-  position: relative;
-}
+  position: relative; }
 
-/* line 197, inventory.scss */
 .content-title {
   text-transform: uppercase;
   color: #888888;
-  font-weight: 400;
-}
+  font-weight: 400; }
 
-/* line 204, inventory.scss */
 .page-subtitle {
   color: #555555;
-  font-size: 22px;
-}
+  font-size: 22px; }
 
-/* line 210, inventory.scss */
 .page-subtitle-name {
   color: #555555;
-  font-size: 18px;
-}
+  font-size: 18px; }
 
 /* Extend bootstrap style - forms */
-/* line 218, inventory.scss */
 .form-control {
   border-radius: 2px 2px 2px 2px !important;
   -webkit-border-radius: 2px 2px 2px 2px !important;
-  -moz-border-radius: 2px 2px 2px 2px !important;
-}
+  -moz-border-radius: 2px 2px 2px 2px !important; }
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 230, inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
   margin-bottom: 1em !important;
   color: #a7a7a7 !important;
   font-size: 0.8em !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-}
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important; }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 245, inventory.scss */
 #main-content .panel {
-  background: white !important;
+  background: #FFFFFF !important;
   min-height: 2.4em  !important;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -408,17 +261,15 @@ img {
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #dddddd;
-  -moz-box-shadow: 0 0px 7px #dddddd;
-  -webkit-box-shadow: 0 0px 7px #dddddd;
-}
+  box-shadow: 0 0px 7px #DDDDDD;
+  -moz-box-shadow: 0 0px 7px #DDDDDD;
+  -webkit-box-shadow: 0 0px 7px #DDDDDD; }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 258, inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
-  background: #f0f4f6;
+  background: #F0F4F6;
   border-top: 1px solid #d8d8d8;
   border-bottom: 1px solid #f8f8f8;
   box-sizing: border-box;
@@ -433,32 +284,22 @@ img {
   position: relative;
   text-align: right;
   margin-right: 0em;
-  display: inline-block;
-}
-/* line 273, inventory.scss */
-.toolbox ul:not(.dropdown-menu) {
-  display: block;
-  display: inline-block;
-  margin: 0px;
-  padding: 0px;
-}
-/* line 281, inventory.scss */
-.toolbox li {
-  list-style-type: none;
-  display: inline-block;
-}
-/* line 287, inventory.scss */
-.toolbox ul.toolbox-submenu {
-  display: none;
-}
+  display: inline-block; }
+  .toolbox ul:not(.dropdown-menu) {
+    display: block;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px; }
+  .toolbox li {
+    list-style-type: none;
+    display: inline-block; }
+  .toolbox ul.toolbox-submenu {
+    display: none; }
 
-/* line 295, inventory.scss */
 .toolbox:hover .toolbox-submenu {
-  display: inline-block;
-}
+  display: inline-block; }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-/* line 307, inventory.scss */
 .btn-toggle {
   padding: 0px;
   height: 3rem;
@@ -470,50 +311,36 @@ img {
   box-shadow: inset 0px 0px 3px #333333;
   -moz-box-shadow: inset 0px 0px 3px #333333;
   -webkit-box-shadow: inset 0px 0px 3px #333333;
-  border: 1px solid rgba(0, 0, 0, 0);
-  outline: none!important;
-}
+  border: 1px solid transparent;
+  outline: none !important; }
 
-/* line 322, inventory.scss */
 .btn-toggle.btn-toggle-on {
-  background: #4da1e4;
-}
+  background: #4da1e4; }
 
-/* line 326, inventory.scss */
 .btn-toggle:hover span {
   background: #4da1e4;
   color: white;
-  box-shadow: 0px 0px 4px black;
-  -moz-box-shadow: 0px 0px 4px black;
-  -webkit-box-shadow: 0px 0px 4px black;
+  box-shadow: 0px 0px 4px #000000;
+  -moz-box-shadow: 0px 0px 4px #000000;
+  -webkit-box-shadow: 0px 0px 4px #000000;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
+  transition: all 120ms linear; }
 
-/* line 333, inventory.scss */
 .btn-toggle span.on {
-  display: none;
-}
+  display: none; }
 
-/* line 337, inventory.scss */
 .btn-toggle span.off {
-  display: inline-block;
-}
+  display: inline-block; }
 
-/* line 341, inventory.scss */
 .btn-toggle.btn-toggle-on span.on {
-  display: inline-block;
-}
+  display: inline-block; }
 
-/* line 345, inventory.scss */
 .btn-toggle.btn-toggle-on span.off {
-  display: none;
-}
+  display: none; }
 
-/* line 349, inventory.scss */
 .btn-toggle span {
   border-radius: 5rem;
   text-align: center;
@@ -525,15 +352,12 @@ img {
   height: 100%;
   left: 0px;
   top: 0px;
-  background: white;
-  color: #555555;
-}
+  background: #FFFFFF;
+  color: #555555; }
 
-/* line 364, inventory.scss */
 .btn-toggle .on {
   right: 0;
-  left: auto;
-}
+  left: auto; }
 
 /*#doc-toggle
 {
@@ -622,7 +446,6 @@ input.toggle[type=checkbox]:checked:after
   left:0px;
 }*/
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 470, inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -648,149 +471,119 @@ input.toggle[type=checkbox]:checked:after
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #dddddd;
-  -moz-box-shadow: 0 0px 7px #dddddd;
-  -webkit-box-shadow: 0 0px 7px #dddddd;
+  box-shadow: 0 0px 7px #DDDDDD;
+  -moz-box-shadow: 0 0px 7px #DDDDDD;
+  -webkit-box-shadow: 0 0px 7px #DDDDDD;
   /*
     Giving right/reft margin on icons that ain't last/first childs
-  */
-}
-/* line 495, inventory.scss */
-.btn-default-eclass > .fa:not(:last-child) {
-  margin-right: 10px;
-}
-/* line 500, inventory.scss */
-.btn-default-eclass > .fa:not(:first-child) {
-  margin-left: 10px;
-}
-/* line 505, inventory.scss */
-.btn-default-eclass > .fa.fa-caret-down {
-  margin-right: 0px!important;
-}
-/* line 511, inventory.scss */
-.btn-default-eclass:hover, .btn-default-eclass:focus {
-  text-decoration: none;
-  outline: 0;
-  background: #4da1e4;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1;
-  color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 522, inventory.scss */
-.btn-default-eclass:active {
-  background: #4da1e4 !important;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1!important;
-  color: white!important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  */ }
+  .btn-default-eclass > .fa:not(:last-child) {
+    margin-right: 10px; }
+  .btn-default-eclass > .fa:not(:first-child) {
+    margin-left: 10px; }
+  .btn-default-eclass > .fa.fa-caret-down {
+    margin-right: 0px !important; }
+  .btn-default-eclass:hover, .btn-default-eclass:focus {
+    text-decoration: none;
+    outline: 0;
+    background: #4da1e4;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1;
+    color: white;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .btn-default-eclass:active {
+    background: #4da1e4 !important;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1 !important;
+    color: white !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
 
 /* BUTTON COLORS */
-/* line 536, inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
-  background: #6bce6b;
+  background: #6BCE6B;
   border: 1px solid transparent;
   border-bottom: 1px solid #4AA04A;
   border-radius: 2px;
   -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-}
-/* line 544, inventory.scss */
-.btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
-  text-decoration: none;
-  outline: 0;
-  background: #4da1e4;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1;
-  color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 556, inventory.scss */
-.btn-default-eclass.color-green:active {
-  background: #4da1e4 !important;
-  border-color: #4da1e4;
-  border-bottom-color: #3F87C1!important;
-  color: white!important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  -moz-border-radius: 2px; }
+  .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
+    text-decoration: none;
+    outline: 0;
+    background: #4da1e4;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1;
+    color: white;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .btn-default-eclass.color-green:active {
+    background: #4da1e4 !important;
+    border-color: #4da1e4;
+    border-bottom-color: #3F87C1 !important;
+    color: white !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
 
-/* line 569, inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
-  background: #ce6b6b;
+  background: #CE6B6B;
   border-bottom: 1px solid #984B4B;
   border-top: none;
   box-shadow: none;
   -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-}
-/* line 577, inventory.scss */
-.btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
-  background: #E58080;
-  text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 586, inventory.scss */
-.btn-default-eclass.color-red:active {
-  background: #E58080 !important;
-  outline: 0 !important;
-  border-bottom-color: #984B4B !important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  -webkit-box-shadow: none; }
+  .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
+    background: #E58080;
+    text-decoration: none;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .btn-default-eclass.color-red:active {
+    background: #E58080 !important;
+    outline: 0 !important;
+    border-bottom-color: #984B4B !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
 
 /* BUTTON SIZES */
-/* line 600, inventory.scss */
 .btn-default-eclass.size-xl {
-  font-size: 1.2em;
-}
+  font-size: 1.2em; }
 
-/* line 605, inventory.scss */
 .btn-default-eclass.size-l {
-  font-size: 1.1em;
-}
+  font-size: 1.1em; }
 
-/* line 610, inventory.scss */
 .btn-default-eclass.size-s {
-  font-size: 0.85em;
-}
+  font-size: 0.85em; }
 
 /* flippin btn */
-/* line 621, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -799,14 +592,12 @@ input.toggle[type=checkbox]:checked:after
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0);
+  color: transparent;
   background: transparent;
   border-radius: .25rem;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-touch-callout: none;
-}
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; }
 
-/* line 638, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -818,10 +609,8 @@ input.toggle[type=checkbox]:checked:after
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
+  transform-style: preserve-3d; }
 
-/* line 651, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -833,16 +622,12 @@ input.toggle[type=checkbox]:checked:after
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
+  backface-visibility: hidden; }
 
-/* line 665, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
-  color: white;
-}
+  color: white; }
 
-/* line 670, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
@@ -854,10 +639,8 @@ input.toggle[type=checkbox]:checked:after
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
   -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  transition: all 150ms linear; }
 
-/* line 681, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -868,356 +651,265 @@ input.toggle[type=checkbox]:checked:after
   -moz-transform: rotateX(180deg);
   -ms-transform: rotateX(180deg);
   transform: rotateX(180deg);
-  content: '';
-}
+  content: ''; }
 
-/* line 694, inventory.scss */
 .btn-flippin:active:before {
-  background-color: #3571c8;
-}
+  background-color: #3571c8; }
 
-/* line 698, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
   -ms-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-}
+  transform: rotateX(180deg); }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 716, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
-  cursor: default;
-}
-/* line 723, inventory.scss */
-ul.tablelist li.list-item {
-  position: relative;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  list-style-type: none;
-  border-bottom: 1px solid #eee;
-  background: white;
-  overflow: hidden;
-}
-/* line 732, inventory.scss */
-ul.tablelist li.list-item .max-height {
-  max-height: 3.35em;
-}
-/* line 737, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
-  border-right: 1px solid #eee;
-}
-/* line 742, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:first-child {
-  border-left: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-/* line 748, inventory.scss */
-ul.tablelist li.list-item .item-right-cols {
-  float: right;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  max-width: 95%;
-}
-/* line 758, inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span,
-ul.tablelist li.list-item .item-title {
-  padding: 1em;
-  display: inline-block;
-}
-/* line 764, inventory.scss */
-ul.tablelist li.list-item .item-wholeline {
-  padding: 1em;
-  padding-right: 60px;
-  display: inline-block;
-}
-/* line 771, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-content {
-  font-size: 0.9em;
-}
-/* line 776, inventory.scss */
-ul.tablelist li.list-item .item-right-cols a {
-  width: 1em;
-  padding: 1em 1.4em;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-}
-/* line 786, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-date {
-  color: rgba(0, 0, 0, 0.6);
-  background: white;
-  width: 4.5em;
-  text-align: center;
-  vertical-align: top;
-}
-/* line 795, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options {
-  padding: 0px;
-  margin-left: -0.26em;
-  padding-right: 3.8em;
-}
-/* line 802, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
-  position: absolute;
-  display: inline-block;
-  top: 0px;
-  right: 0px;
-  width: 1em;
-  text-align: center;
-  padding: 1em 1.4em;
-  color: #7E7E7E;
-  background: #F8F8F8;
-}
-/* line 815, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
-  background: #4da1e4;
-  color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 822, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .options-content {
-  display: block;
-  margin-right: -25em;
-  background: #333333;
-  color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 834, inventory.scss */
-ul.tablelist li.list-item .item-options:hover .options-content {
-  margin-right: 0em;
-  background: #333333;
-}
-/* line 840, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a {
-  color: white;
-}
-/* line 844, inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a:hover {
-  color: white;
-  background: #4da1e4;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 854, inventory.scss */
-ul.tablelist li.list-item:first-child,
-ul.tablelist li.list-item:first-child .item-date {
-  -webkit-animation: NEW-ITEM-FX 3s 1;
-  -moz-animation: NEW-ITEM-FX 3s 1;
-  -o-animation: NEW-ITEM-FX 3s 1;
-  animation: NEW-ITEM-FX 3s 1;
-}
-/* line 862, inventory.scss */
-ul.tablelist li.list-item:hover {
-  background: #FCFCFC;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
+  cursor: default; }
+  ul.tablelist li.list-item {
+    position: relative;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    list-style-type: none;
+    border-bottom: 1px solid #eee;
+    background: white;
+    overflow: hidden; }
+    ul.tablelist li.list-item .max-height {
+      max-height: 3.35em; }
+    ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
+      border-right: 1px solid #eee; }
+    ul.tablelist li.list-item .item-right-cols > span:first-child {
+      border-left: 1px solid #eee;
+      border-bottom: 1px solid #eee; }
+    ul.tablelist li.list-item .item-right-cols {
+      float: right;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      max-width: 95%; }
+    ul.tablelist li.list-item .item-right-cols > span,
+    ul.tablelist li.list-item .item-title {
+      padding: 1em;
+      display: inline-block; }
+    ul.tablelist li.list-item .item-wholeline {
+      padding: 1em;
+      padding-right: 60px;
+      display: inline-block; }
+    ul.tablelist li.list-item .item-right-cols .item-content {
+      font-size: 0.9em; }
+    ul.tablelist li.list-item .item-right-cols a {
+      width: 1em;
+      padding: 1em 1.4em;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer; }
+    ul.tablelist li.list-item .item-right-cols .item-date {
+      color: rgba(0, 0, 0, 0.6);
+      background: white;
+      width: 4.5em;
+      text-align: center;
+      vertical-align: top; }
+    ul.tablelist li.list-item .item-right-cols .item-options {
+      padding: 0px;
+      margin-left: -0.26em;
+      padding-right: 3.8em; }
+    ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
+      position: absolute;
+      display: inline-block;
+      top: 0px;
+      right: 0px;
+      width: 1em;
+      text-align: center;
+      padding: 1em 1.4em;
+      color: #7E7E7E;
+      background: #F8F8F8; }
+    ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
+      background: #4da1e4;
+      color: white;
+      -webkit-transition: all 150ms linear;
+      -moz-transition: all 150ms linear;
+      -o-transition: all 150ms linear;
+      -ms-transition: all 150ms linear;
+      transition: all 150ms linear; }
+    ul.tablelist li.list-item .item-right-cols .options-content {
+      display: block;
+      margin-right: -25em;
+      background: #333333;
+      color: white;
+      -webkit-transition: all 150ms linear;
+      -moz-transition: all 150ms linear;
+      -o-transition: all 150ms linear;
+      -ms-transition: all 150ms linear;
+      transition: all 150ms linear; }
+    ul.tablelist li.list-item .item-options:hover .options-content {
+      margin-right: 0em;
+      background: #333333; }
+    ul.tablelist li.list-item .item-right-cols .item-options a {
+      color: white; }
+    ul.tablelist li.list-item .item-right-cols .item-options a:hover {
+      color: white;
+      background: #4da1e4;
+      -webkit-transition: all 150ms linear;
+      -moz-transition: all 150ms linear;
+      -o-transition: all 150ms linear;
+      -ms-transition: all 150ms linear;
+      transition: all 150ms linear; }
+  ul.tablelist li.list-item:first-child,
+  ul.tablelist li.list-item:first-child .item-date {
+    -webkit-animation: NEW-ITEM-FX 3s 1;
+    -moz-animation: NEW-ITEM-FX 3s 1;
+    -o-animation: NEW-ITEM-FX 3s 1;
+    animation: NEW-ITEM-FX 3s 1; }
+  ul.tablelist li.list-item:hover {
+    background: #FCFCFC;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 875, inventory.scss */
 .boxlist {
-  padding: 0px;
-}
-/* line 880, inventory.scss */
-.boxlist .list-item {
-  display: block;
-  position: relative;
-  width: 100%;
-  padding: 0em;
-  margin-bottom: 1em;
-  overflow: hidden;
-  /*important for the transition*/
-  list-style-type: none;
-  background: white;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 893, inventory.scss */
-.boxlist .list-item.hidden {
-  background: rgba(255, 255, 255, 0.6);
-}
-/* line 898, inventory.scss */
-.boxlist .list-item.hidden .item-content {
-  opacity: 0.6;
-}
-/* line 903, inventory.scss */
-.boxlist .list-item:hover .side-header {
-  color: #eee;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 909, inventory.scss */
-.boxlist .list-item .item-content {
-  /*width: 93%;*/
-  /* a fallback for calc */
-  /*width: -webkit-calc(100% - 4em);
-  width: -moz-calc(100% - 4em);
-  width: calc(100% - 4em);*/
-  width: 100%;
-  position: relative;
-  display: inline-block;
-  padding-left: 1em;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 922, inventory.scss */
-.boxlist .item-header {
-  padding: 1em 4em 1em 0em;
-  border-bottom: 1px solid #eee;
-}
-/* line 928, inventory.scss */
-.boxlist .item-header .item-title {
-  margin: 0px;
-}
-/* line 933, inventory.scss */
-.boxlist .item-header .item-date {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.4);
-}
-/* line 939, inventory.scss */
-.boxlist .item-body {
-  padding: 1em 1em 1em 0em;
-  min-height: 5em;
-  font-size: 14px;
-}
-/* line 946, inventory.scss */
-.boxlist .list-item .item-side {
-  display: inline-block;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  color: #eee;
-  -webkit-transition: all 50ms linear;
-  -moz-transition: all 50ms linear;
-  -o-transition: all 50ms linear;
-  -ms-transition: all 50ms linear;
-  transition: all 50ms linear;
-}
-/* line 961, inventory.scss */
-.boxlist .list-item .option-button {
-  display: inline-block;
-  position: relative;
-  z-index: 9;
-  padding: 1em 1.4em;
-  background: #F8F8F8;
-  color: #7E7E7E;
-  text-align: center;
-  width: 1em;
-  /* as long as its a content box... */
-  border-radius: 0px 2px 0px 0px;
-  -webkit-border-radius: 0px 2px 0px 0px;
-  -moz-border-radius: 0px 2px 0px 0px;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 975, inventory.scss */
-.boxlist .list-item .item-side .item-options:hover .option-button {
-  background: #4da1e4;
-  color: white;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 983, inventory.scss */
-.boxlist .list-item .item-side .item-options ul {
-  position: relative;
-  z-index: 2;
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
-  margin-right: -100%;
-  background: #333333;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
-}
-/* line 995, inventory.scss */
-.boxlist .list-item .item-side .item-options:hover ul {
-  margin-right: 0%;
-}
-/* line 1000, inventory.scss */
-.boxlist .list-item .item-side .item-options > * {
-  float: right;
-}
-/* line 1005, inventory.scss */
-.boxlist .list-item .item-side:hover .item-options ul {
-  display: block;
-}
-/* line 1010, inventory.scss */
-.boxlist .list-item .item-options ul li {
-  display: inline-block;
-  padding: 1em 1.4em;
-  z-index: 2;
-  width: 1em;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 1023, inventory.scss */
-.boxlist .list-item .item-options ul li:hover {
-  background: #4da1e4;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
+  padding: 0px; }
+  .boxlist .list-item {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 0em;
+    margin-bottom: 1em;
+    overflow: hidden;
+    /*important for the transition*/
+    list-style-type: none;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+  .boxlist .list-item.hidden {
+    background: rgba(255, 255, 255, 0.6); }
+  .boxlist .list-item.hidden .item-content {
+    opacity: 0.6; }
+  .boxlist .list-item:hover .side-header {
+    color: #eee;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .boxlist .list-item .item-content {
+    /*width: 93%;*/
+    /* a fallback for calc */
+    /*width: -webkit-calc(100% - 4em);
+    width: -moz-calc(100% - 4em);
+    width: calc(100% - 4em);*/
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    padding-left: 1em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+  .boxlist .item-header {
+    padding: 1em 4em 1em 0em;
+    border-bottom: 1px solid #eee; }
+  .boxlist .item-header .item-title {
+    margin: 0px; }
+  .boxlist .item-header .item-date {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.4); }
+  .boxlist .item-body {
+    padding: 1em 1em 1em 0em;
+    min-height: 5em;
+    font-size: 14px; }
+  .boxlist .list-item .item-side {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #eee;
+    -webkit-transition: all 50ms linear;
+    -moz-transition: all 50ms linear;
+    -o-transition: all 50ms linear;
+    -ms-transition: all 50ms linear;
+    transition: all 50ms linear; }
+  .boxlist .list-item .option-button {
+    display: inline-block;
+    position: relative;
+    z-index: 9;
+    padding: 1em 1.4em;
+    background: #F8F8F8;
+    color: #7E7E7E;
+    text-align: center;
+    width: 1em;
+    /* as long as its a content box... */
+    border-radius: 0px 2px 0px 0px;
+    -webkit-border-radius: 0px 2px 0px 0px;
+    -moz-border-radius: 0px 2px 0px 0px;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; }
+  .boxlist .list-item .item-side .item-options:hover .option-button {
+    background: #4da1e4;
+    color: white;
+    -webkit-transition: all 120ms linear;
+    -moz-transition: all 120ms linear;
+    -o-transition: all 120ms linear;
+    -ms-transition: all 120ms linear;
+    transition: all 120ms linear; }
+  .boxlist .list-item .item-side .item-options ul {
+    position: relative;
+    z-index: 2;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    margin-right: -100%;
+    background: #333333;
+    -webkit-transition: all 150ms linear;
+    -moz-transition: all 150ms linear;
+    -o-transition: all 150ms linear;
+    -ms-transition: all 150ms linear;
+    transition: all 150ms linear; }
+  .boxlist .list-item .item-side .item-options:hover ul {
+    margin-right: 0%; }
+  .boxlist .list-item .item-side .item-options > * {
+    float: right; }
+  .boxlist .list-item .item-side:hover .item-options ul {
+    display: block; }
+  .boxlist .list-item .item-options ul li {
+    display: inline-block;
+    padding: 1em 1.4em;
+    z-index: 2;
+    width: 1em;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; }
+  .boxlist .list-item .item-options ul li:hover {
+    background: #4da1e4;
+    -webkit-transition: all 120ms linear;
+    -moz-transition: all 120ms linear;
+    -o-transition: all 120ms linear;
+    -ms-transition: all 120ms linear;
+    transition: all 120ms linear; }
 
 /* Course-home lesson banner */
-/* line 1034, inventory.scss */
 .banner-image-wrapper {
   overflow: hidden;
-  padding: 0;
-}
+  padding: 0; }
 
-/* line 1039, inventory.scss */
-.banner-image-wrapper img.banner-image {
-  max-width: none;
-}
-
+/*.banner-image-wrapper img.banner-image{
+    max-width: none;
+}*/
 /* Course-home licence box */
-/* line 1046, inventory.scss */
 .license_info_box {
-  text-align: center;
-}
-/* line 1050, inventory.scss */
-.license_info_box img {
-  width: 100px;
-  margin: 8px 0 5px 0;
-}
+  text-align: center; }
+  .license_info_box img {
+    width: 100px;
+    margin: 8px 0 5px 0; }
 
 /* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
 /*
@@ -1532,20 +1224,15 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1436, inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
-  height: 48px;
-}
+  height: 48px; }
 
-/* line 1442, inventory.scss */
 .opt-btn {
   position: absolute;
-  background-color: #F8F8F8 !important;
-}
+  background-color: #F8F8F8 !important; }
 
-/* line 1447, inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
@@ -1553,59 +1240,45 @@ textarea{
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
+  transition: all 120ms linear; }
 
-/* line 1453, inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
   height: 48px;
   right: 0px;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
-/* line 1461, inventory.scss */
 .opt-btn-more-tool {
-  float: left;
-}
+  float: left; }
 
-/* line 1465, inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
   cursor: pointer;
   text-align: center;
   line-height: 48px;
-  color: #7e7e7e;
-}
+  color: #7e7e7e; }
 
-/* line 1474, inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
   height: 48px;
   color: white;
-  background-color: #232C3A;
-}
+  background-color: #232C3A; }
 
-/* line 1482, inventory.scss */
 .tool-btn.delete a {
-  color: #ce6b6b;
-}
+  color: #CE6B6B; }
 
-/* line 1486, inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
-  background-color: #ce6b6b;
+  background-color: #CE6B6B;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
+  transition: all 120ms linear; }
 
-/* line 1493, inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
@@ -1613,37 +1286,28 @@ textarea{
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
+  transition: all 120ms linear; }
 
 /* Action Bar ------------------------------------------------------------------- */
-/* line 1502, inventory.scss */
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px;
   /*li a{
       color: #333;
-  }*/
-}
+  }*/ }
 
-/* line 1511, inventory.scss */
 ul.expandable {
   display: none;
-  margin-top: 9px;
-}
-/* line 1515, inventory.scss */
-ul.expandable.secondary-active {
-  display: block;
-}
+  margin-top: 9px; }
+  ul.expandable.secondary-active {
+    display: block; }
 
 /* Datatables ---------------------------------------------------------*/
-/* line 1523, inventory.scss */
 .dataTables_wrapper tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
-  font-style: italic;
-}
-/* line 1526, inventory.scss */
-.dataTables_wrapper tr.not_visible td:not(:last-child) a {
-  color: rgba(3, 3, 3, 0.3);
-  font-style: italic;
-}
+  font-style: italic; }
+  .dataTables_wrapper tr.not_visible td:not(:last-child) a {
+    color: rgba(3, 3, 3, 0.3);
+    font-style: italic; }
+
+/*# sourceMappingURL=inventory.css.map */
