@@ -3227,6 +3227,7 @@ $langCMeta['basicmed'] = "Basic Medicine";
 $langCMeta['clinicalmed'] = "Clinical Medicine";
 $langCMeta['healthsci'] = "Health Sciences";
 $langCMeta['medbio'] = "Medical Biotechnology";
+$langCMeta['physedu'] = "Physical Education";
 $langCMeta['otherhum'] = "Other Humanities";
 $langCMeta['hisarch'] = "History and Archaeology";
 $langCMeta['langlit'] = "Languages and Literature";
