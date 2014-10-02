@@ -291,6 +291,19 @@ $tool_content .= "
   <div class='col-md-12'>
     
     <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
+
+    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+      <i class='fa fa-arrow-right space-after-icon'></i>Next Chapter*
+    </a>
+
+    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+      <i class='fa fa-arrow-right space-after-icon'></i>Next Chapter*
+    </a>
+
+    <a class='btn-default-eclass place-at-toolbox' title='Previous Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+      <i class='fa fa-arrow-right space-after-icon'></i>Previous Chapter*
+    </a>
+
       
 
   
@@ -299,9 +312,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "
 
 
-    <a class='btn-default-eclass place-at-toolbox' title='TEST BUTTON' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
-      <i class='fa fa-paste space-after-icon'></i>TEST BUTTON
-    </a>
+    
 
     ". $link['previous'] ."
     ". $link['next'] ."

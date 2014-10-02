@@ -701,11 +701,11 @@ input.toggle[type=checkbox]:checked:after
   border-color: #4da1e4;
   border-bottom-color: #3F87C1;
   color: white;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
 }
 /* line 552, inventory.scss */
 .btn-default-eclass.color-green:active {
@@ -1606,10 +1606,9 @@ textarea{
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px;
-}
-/* line 1502, inventory.scss */
-.action-bar-wrapper ul li a {
-  color: #333;
+  /*li a{
+      color: #333;
+  }*/
 }
 
 /* line 1507, inventory.scss */
