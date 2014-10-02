@@ -73,7 +73,7 @@ echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>$language</language>";
 
 Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
-        FROM blog_post WHERE course_id = ? ORDER BY `time` DESC", function($r) use ($code, $urlServer) {
+        FROM blog_post WHERE course_id = ?d ORDER BY `time` DESC", function($r) use ($code, $urlServer) {
         echo "<item>";
         echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
         echo "<link>{$urlServer}modules/blog/index.php?pId=" . $r->id . "&amp;course=" . urlencode($code) . "</link>";
