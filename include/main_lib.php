@@ -2342,16 +2342,13 @@ function get_user_email_notification($user_id, $course_id = null) {
  * @param type $user_id
  * @return boolean
  */
-function get_user_email_notification_from_courses($user_id) {
-        
-    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id)->receive_mail;
-    
-    if ($result == 1) {
+function get_user_email_notification_from_courses($user_id) {    
+    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id);
+    if ($result && $result->receive_mail)
         return true;
-    } else {
-        return false;
-    }
+    return false;
 }
+
 
 // Return a list of all subdirectories of $base which contain a file named $filename
 function active_subdirs($base, $filename) {
