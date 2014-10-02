@@ -68,7 +68,7 @@ $num_chars_teaser_break = 500;//chars before teaser break
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
 if ($is_editor) {
-    if (isset($action) and $action != "showBlog" and $action != "showPost") {
+    if (isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost") {
         $tool_content .= "
             <div id='operations_container'>
             <ul id='opslist'>
