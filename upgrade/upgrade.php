@@ -1599,6 +1599,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `unlock_interval` int(11) DEFAULT NULL,
                       `external_users` varchar(255) DEFAULT "",
                       `participants` varchar(255) DEFAULT "",
+                      `record` enum("true","false") DEFAULT "false",
+                       `sessionUsers` int(11) DEFAULT 0,
                       PRIMARY KEY (`id`))');
                     
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
