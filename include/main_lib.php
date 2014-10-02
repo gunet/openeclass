@@ -915,7 +915,7 @@ function mkpath($path) {
 function display_activation_link($module_id) {
     global $modules;
 
-    if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {
+    if (!defined('STATIC_MODULE') and $module_id && array_key_exists($module_id, $modules)) {
         return true;
     } else {
         return false;
