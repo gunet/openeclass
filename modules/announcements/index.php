@@ -434,7 +434,7 @@ if ($is_editor) {
             $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;modify=$row->id'>" . $langModify . "</a></li>
                               <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";
         } else {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;af=1'>" . $langAddAnn . "</a></li>";
+            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>";
         }
         $tool_content .= "</ul></div>";
     }
