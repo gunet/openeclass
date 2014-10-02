@@ -319,14 +319,11 @@ if (isset($message) && $message) {
 if ($action == "showPost") {
     if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
         $tool_content .= "
-        <div id='operations_container'>
-        <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>";
-        if ($is_editor) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings'>" . $langConfig . "</a></li>";
-        }
-        $tool_content .= "</ul>
-        </div>";
+            <div id='operations_container'>
+            <ul id='opslist'>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
+            </ul>
+            </div>";
     }
     
     $post = new BlogPost();
