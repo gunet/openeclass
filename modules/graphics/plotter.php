@@ -74,11 +74,12 @@ class Plotter {
         if ($this->isEmpty()) {
             return $emptyerror;
         } else {
-            
+
             load_js('flot');
 
             $dataset = '[';
             foreach ($this->data as $name => $value) {
+                $name = strlen($name) > 17 ? (substr($name, 0, 17) . "...") : $name;
                 $dataset .= '["' . $name . '", ' . $value . "], ";
             }
             if (strlen($dataset) > 1) {
@@ -90,13 +91,13 @@ class Plotter {
                 
 <div class="flot-container" style="width: ' . $this->width . 'px; height: ' . $this->height . 'px;">
 <p class="flot-title">' . $this->title . '</p>
-<div class="flot-placeholder" id="placeholder'.self::$instanceCounter.'"></div>
+<div class="flot-placeholder" id="placeholder' . self::$instanceCounter . '"></div>
 </div>
 
 <script type="text/javascript">
     $(function() {
         var data = ' . $dataset . ';
-        $.plot("#placeholder'.self::$instanceCounter.'", [ data ], {
+        $.plot("#placeholder' . self::$instanceCounter . '", [ data ], {
             series: {
                 bars: {
                     show: true,
