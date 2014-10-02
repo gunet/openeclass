@@ -38,10 +38,30 @@ require_once 'include/lib/fileUploadLib.inc.php';
 $nameTools = $langWelcomeToPortfolio;
 
 ModalBoxHelper::loadModalBox();
-
+load_js('datatables');
 // jquery is already loaded via index.php and modal box
 $head_content .= "<script type='text/javascript'>
 jQuery(document).ready(function() {
+  jQuery('#portfolio_lessons').dataTable({
+    'bLengthChange': false,
+    'bSort' : false,
+    'oLanguage': {
+           'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+           'sZeroRecords':  '".$langNoResult."',
+           'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+           'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+           'sInfoFiltered': '',
+           'sInfoPostFix':  '',
+           'sSearch':       '".$langSearch."',
+           'sUrl':          '',
+           'oPaginate': {
+               'sFirst':    '&laquo;',
+               'sPrevious': '&lsaquo;',
+               'sNext':     '&rsaquo;',
+               'sLast':     '&raquo;'
+           }
+       }    
+  });
   jQuery('.panel_content').hide();
    jQuery('.panel_content_open').show();
   jQuery('.panel_title').click(function()
