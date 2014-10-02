@@ -67,7 +67,7 @@ $(document).ready( function () {
     //alert(tool_length);
     animate_btn();
     
-    var viewportHeight = $(window).height();
-    $("#main-content.col-modified").css({"height":viewportHeight});
+    var viewportHeight = $(window).height()+"px";
+    $("#main-content.col-modified .row-main").css({"height":viewportHeight});
 
 }); 
