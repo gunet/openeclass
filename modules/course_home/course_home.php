@@ -641,7 +641,23 @@ if (!$alter_layout){
 
 $tool_content .= "
     <div class='col-md-$cunits_sidebar_columns'>
+        
         <div class='row'>
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>${langOpenCourseShort}</h5>
+                <div class='panel padding'>
+                        $opencourses_level
+                </div>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>${langOpenCoursesLicense}</h5>
+                <div class='panel license_info_box padding'>
+                        $license_info_box
+                </div>
+            </div>
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langCalendar</h5>
                 <div class='panel padding'>
@@ -653,21 +669,8 @@ $tool_content .= "
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>${langOpenCoursesLicense}</h5>
-                <div class='panel license_info_box padding'>
-                        $license_info_box
-                </div>
-            </div>
         </div>
-        <div class='row'>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>${langOpenCourseShort}</h5>
-                <div class='panel padding'>
-                        $opencourses_level
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
 ";
