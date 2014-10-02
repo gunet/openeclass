@@ -79,7 +79,7 @@ class Plotter {
 
             $dataset = '[';
             foreach ($this->data as $name => $value) {
-                $name = strlen($name) > 17 ? (substr($name, 0, 17) . "...") : $name;
+                $name = mb_strlen($name) > 17 ? (mb_substr($name, 0, 17) . "...") : $name;
                 $dataset .= '["' . $name . '", ' . $value . "], ";
             }
             if (strlen($dataset) > 1) {
