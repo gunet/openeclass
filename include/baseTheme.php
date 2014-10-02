@@ -88,7 +88,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $require_current_course, $require_help, $siteName, $siteName,
     $status, $switchLangURL, $theme, $themeimg,
     $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
-    $theme_settings;
+    $theme_settings, $language;
 
     //get blocks content from $toolContent array
     if ($perso_tool_content) {
@@ -135,6 +135,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if (function_exists('template_callback')) {
         template_callback($t, $menuTypeID);
     }
+
+    $t->set_var('LANG', $language);
 
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------
