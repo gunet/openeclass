@@ -2545,7 +2545,6 @@ $langEmtpyGroupsAll = "Svuotare tutti i gruppi";
 $langFillGroupsAll = "Completare tutti i gruppi";
 $langGroupPrefs = "Preferenze di gruppi";
 $langGroupPropertiesSum = "Riepilogo impostazioni";
-$langStep7 = "Passo 7 di 7";
 $langBasicCfgSetting = "Impostazioni di base";
 $langOptionalCfgSetting = "Impostazioni opzionali";
 $langWillWriteConfig = "Le seguenti impostazioni verranno archiviate nella tabella <em>config</em> del database della piattaforma";

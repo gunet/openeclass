@@ -2680,7 +2680,6 @@ $langEmtpyGroupsAll = "Purge all groups";
 $langFillGroupsAll = "Fill all groups";
 $langGroupPrefs = "Group preferences";
 $langGroupPropertiesSum = "Group properties";
-$langStep7 = "Step 7 of 7";
 $langBasicCfgSetting = "Basic settings";
 $langOptionalCfgSetting = "Optional Settings";
 $langWillWriteConfig = "Settings below will be written to <em>config</em> table of main database";
