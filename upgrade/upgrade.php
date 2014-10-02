@@ -878,44 +878,48 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         $total = mysql_num_rows($res);
         $i = 1;
         while ($code = mysql_fetch_row($res)) {
-                // get course language
-                $lang = $code[1];
-                if (version_compare($oldversion, '2.1.3', '<')) {
-                        db_query('SET NAMES greek');
-        		upgrade_course_old($code[0], $lang, "($i / $total)");
-                        db_query('SET NAMES utf8');
-               	        upgrade_course_2_1_3($code[0], "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.2', '<')) {
-               	        upgrade_course_2_2($code[0], $lang, "($i / $total)");
-		}
-                if (version_compare($oldversion, '2.3', '<')) {
-			upgrade_course_2_3($code[0], "($i / $total)");
-		}
-                if (version_compare($oldversion, '2.4', '<')) {
-                        convert_description_to_units($code[0], $code[2]);
-                        upgrade_course_index_php($code[0]);
-			upgrade_course_2_4($code[0], $lang, "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.5', '<')) {
-			upgrade_course_2_5($code[0], $lang, "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.8.3', '<')) {
-			upgrade_course_2_8($code[0], $lang, "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.9', '<')) {
-			upgrade_course_2_9($code[0], $lang, "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.10', '<')) {
-                    upgrade_course_2_10($code[0], $lang, "($i / $total)");
-                }
-                if (version_compare($oldversion, '2.11', '<')) {
-                    upgrade_course_2_11($code[0], $lang, "($i / $total)");
-                }
-                echo "</p>";
-                $i++;
+            // get course language
+            $lang = $code[1];
+            if (version_compare($oldversion, '2.1.3', '<')) {
+                db_query('SET NAMES greek');
+                upgrade_course_old($code[0], $lang, "($i / $total)");
+                db_query('SET NAMES utf8');
+                upgrade_course_2_1_3($code[0], "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.2', '<')) {
+                upgrade_course_2_2($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.3', '<')) {
+                upgrade_course_2_3($code[0], "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.4', '<')) {
+                convert_description_to_units($code[0], $code[2]);
+                upgrade_course_index_php($code[0]);
+                upgrade_course_2_4($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.5', '<')) {
+                upgrade_course_2_5($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.8.3', '<')) {
+                upgrade_course_2_8($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.9', '<')) {
+                upgrade_course_2_9($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.10', '<')) {
+                upgrade_course_2_10($code[0], $lang, "($i / $total)");
+            }
+            if (version_compare($oldversion, '2.11', '<')) {
+                upgrade_course_2_11($code[0], $lang, "($i / $total)");
+            }
+            if (!get_config('exercise_strings_updated')) {
+                upgrade_course_fix_exercise_math($code[0]);
+            }
+            echo "</p>";
+            $i++;
         }
-	echo "<hr>";
+        set_config('exercise_strings_updated', 1);
+        echo "<hr>";
 
         if (version_compare($oldversion, '2.1.3', '<')) {
 	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";

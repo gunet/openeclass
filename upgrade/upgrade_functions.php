@@ -333,6 +333,42 @@ function upgrade_course($code, $lang)
         upgrade_course_2_11($code, $lang);
 }
 
+function fix_math($str) {
+    $str = str_replace(array('<m>', '</m>', '&#123;'),
+                       array('[m]', '[/m]', '{'), $str);
+    $str = preg_replace('|<img src=[^>]+alt="[^"]+" title="\s*([^"]+)\s*"\s*/?>|', '[m]\1[/m]', $str);
+    return $str;
+}
+
+function upgrade_course_fix_exercise_math($code) {
+    mysql_select_db($code);
+    $q1 = db_query("SELECT id, question_id, reponse, comment FROM reponses
+                        WHERE reponse LIKE '%[m]%'
+                           OR reponse LIKE '%<img src%'
+                           OR reponse LIKE '%&#123;%'
+                           OR comment LIKE '%[m]%'
+                           OR comment LIKE '%<img src%'
+                           OR comment LIKE '%&#123;%'
+                        ORDER BY question_id, id");
+    while ($data = mysql_fetch_assoc($q1)) {
+        $reponse = fix_math($data['reponse']);
+        $comment = fix_math($data['comment']);
+        $fixes = array();
+        if ($reponse != $data['reponse']) {
+            $fixes[] = 'reponse = ' . quote($reponse);
+        }
+        if ($comment != $data['comment']) {
+            $fixes[] = 'comment = ' . quote($comment);
+        }
+        if (count($fixes)) {
+            $fixes_sql = "UPDATE reponses SET " .
+                implode(', ', $fixes) .
+                " WHERE id = $data[id] AND question_id = $data[question_id]";
+            db_query($fixes_sql);
+        }
+    }
+}
+
 function upgrade_course_2_11($code, $lang, $extramessage = '') {
     
     global $langUpgCourse;
