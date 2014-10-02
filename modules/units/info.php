@@ -57,31 +57,52 @@ if (isset($_GET['next'])) {
     $action = "${urlServer}courses/$course_code/";
 }
 
-$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
-    <fieldset>
-    <legend>$nameTools</legend>";
-if (isset($unit_id)) {
+/*$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
+    <fieldset>";*/
+
+$tool_content .= "
+
+    <div class='panel focused margin-top-fat padding'>
+        <form class='form-horizontal' role='form' method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">";
+
+    if (isset($unit_id)) {
     $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
+
 }
 $tool_content .= "
-    <table class='tbl' width='100%'>
-    <tr>
-      <th width='150'>$langUnitTitle:</th>
-    </tr>
-    <tr>
-      <td><input type='text' name='unittitle' size='50' maxlength='255' $unittitle ></td>
-    </tr>
-    <tr>
-      <th valign='top'>$langUnitDescr:</th>
-    </tr>
-    <tr>
-      <td>" . rich_text_editor('unitdescr', 4, 20, $unitdescr) . "</td>
-    </tr>
-    <tr>
-      <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>
-    </tr>
-    </table>
+     
+            <div class='form-group'>
+                <label for='unitTitle' class='col-sm-12 control-label align-left margin-bottom-thin'>$langUnitTitle</label>
+                <div class='col-sm-12 margin-bottom-fat'>
+                    <input type='text' class='form-control' id='unitTitle' name='unittitle' $unittitle>
+                </div>
+            </div>
+
+            <div class='form-group'>
+                <label for='unitTitle' class='col-sm-12 control-label align-left margin-bottom-thin'>$langUnitDescr</label>
+                <div class='col-sm-12'>
+                    " . rich_text_editor('unitdescr', 10, 20, $unitdescr) . "
+                </div>
+            </div>
+
+
+
+            <div class='form-group'>
+                <div class='col-sm-offset-5 col-sm-12'>
+                  <button type='submit' class='btn-default-eclass color-green size-l margin-top' name='edit_submit'>
+                    <i class='fa fa-save space-after-icon'></i>$langSubmit
+                  </button>
+                </div>
+             </div>
+        </form>
+    </div>
+
+    ";
+
+
+
+/*$tool_content .= "
     </fieldset>
-    </form>";
+    </form>";*/
 draw($tool_content, 2, null, $head_content);
 
