@@ -292,18 +292,29 @@ $tool_content .= "
     
     <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
 
-    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
-      <i class='fa fa-arrow-right space-after-icon'></i>Next Chapter*
-    </a>
-
-    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
-      <i class='fa fa-arrow-right space-after-icon'></i>Next Chapter*
-    </a>
-
     <a class='btn-default-eclass place-at-toolbox' title='Previous Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
-      <i class='fa fa-arrow-right space-after-icon'></i>Previous Chapter*
+      <i class='fa fa-arrow-left space-after-icon'></i>Previous Chapter*
+    </a>    
+
+    <a class='btn-default-eclass place-at-toolbox' title='Select Chapter' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+      <i class='fa fa-angle-down space-after-icon'></i>Select Chapter*
     </a>
 
+    
+
+    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+      Next Chapter*<i class='fa fa-arrow-right space-before-icon'></i>
+    </a>
+
+    </div>
+  </div>
+</div>
+
+
+<div class='row'>
+  <div class='col-md-12'>
+    
+    <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
       
 
   
