@@ -1362,7 +1362,7 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
     `api_url` varchar(255) DEFAULT NULL,
     `max_rooms` int(11) DEFAULT NULL,
     `max_users` int(11) DEFAULT NULL,
-    `enable_recordings` enum("yes","no") DEFAULT NULL,
+    `enable_recordings` enum("true","false") DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `idx_bbb_servers` (`hostname`))');
