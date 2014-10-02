@@ -654,7 +654,7 @@ if (!$alter_layout){
             <div class='align-right'>
                 <div class='toolbox margin-bottom-thin margin-top-thin'>
                     <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox color-green'>
-                        <i class='fa fa-plus-circle space-after-icon'></i>
+                        <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
                     </a>
                 </div>                          

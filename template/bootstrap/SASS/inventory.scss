@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.1001a
+    SASS for UI Inventory of eclass v3.0 - version 0.1002a
 =============================================================
 */
 
@@ -300,7 +300,72 @@ img
 
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-#doc-toggle
+.btn-toggle{
+  padding: 0px;
+  height: 3rem;
+  width: 6rem;
+  position: relative;
+  border-radius: 5rem;
+  overflow: hidden;
+  
+  background: $color-background;
+  @include box-shadow(inset 0px 0px 3px #333333);
+  border: 1px solid rgba(0,0,0,0);
+  
+  outline:none!important;
+}
+
+.btn-toggle.btn-toggle-on{
+  background:$color-hover;
+}
+
+.btn-toggle:hover span{
+  background:$color-hover;
+  color: white;
+  @include box-shadow(0px 0px 4px #000000);
+  @include transition(all 120ms linear);
+}
+
+.btn-toggle span.on{
+  display: none;
+}
+
+.btn-toggle span.off{
+  display: inline-block;
+}
+
+.btn-toggle.btn-toggle-on span.on{
+  display: inline-block;
+}
+
+.btn-toggle.btn-toggle-on span.off{
+  display: none;
+}
+
+.btn-toggle span{
+  border-radius: 5rem;
+  text-align:center;
+  vertical-align: middle;
+  line-height: 3rem;
+  display: inline-block;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background: $color-panel;
+  color: #555555;
+}
+
+.btn-toggle .on{
+  right:0;
+  left:auto;
+}
+
+
+
+
+/*#doc-toggle
 {
   float: right;
   margin:1em 0em;
@@ -311,11 +376,11 @@ img
 .toggle-sidebar
 {
   cursor: pointer;
-}
+}*/
 
 /* TOGGLE SWTICH */
 
-.my-toggle > *
+/*.my-toggle > *
 {
   vertical-align: middle;
 }
@@ -387,7 +452,7 @@ input.toggle[type=checkbox]:checked
 input.toggle[type=checkbox]:checked:after
 {
   left:0px;
-}
+}*/
 
 
 

@@ -1,11 +1,13 @@
-function animate_btn() {
-$(".opt-btn-wrapper").hover(
+function animate_btn(){
+
+    $(".opt-btn-wrapper").hover(
         function(){
             tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*56)+"px";
             $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
         function(){
             $(this).children(".opt-btn-more-wrapper").animate({width:"56px"},150);});
-        }
+}
+
 
 $(document).ready( function () {
 
@@ -15,6 +17,11 @@ $(document).ready( function () {
     $('.toggle-sidebar').on('click',function(e){
       $('body').toggleClass('sidebar-opened');
       $('#header .sidebutton').toggleClass('displaynone');
+    });
+
+    // Btn-toggle
+    $('.btn-toggle').on('click',function(){
+        $(this).toggleClass('btn-toggle-on');
     });
 
     // Lesson accordion - jQuery ui
