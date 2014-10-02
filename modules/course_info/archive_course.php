@@ -25,7 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langModifInfo);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
 if (extension_loaded('zlib')) {
     include 'include/pclzip/pclzip.lib.php';

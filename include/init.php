@@ -385,7 +385,7 @@ $modules = array(
 // ----------------------------------------
 $admin_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'course_info'),
-    MODULE_ID_USERS => array('title' => $langAdminUsers, 'link' => 'user', 'image' => 'users'),
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
 );
