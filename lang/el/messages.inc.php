@@ -276,7 +276,7 @@ $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του μαθήματο�
 
 // editcours
 $langCourseEdit = "Επεξεργασία Μαθήματος";
-$langCourseInfo = "Στοιχεία Μαθήματος";
+$langCourseInfo = "Ρυθμίσεις";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
 $langCurrentStatus = "Τρέχουσα κατάσταση";
@@ -813,7 +813,6 @@ $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσει
  * ******************************************* */
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
-$langModifInfo = "Διαχείριση Μαθήματος";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
 $langHome = "Επιστροφή στην αρχική σελίδα";
 $langCode = "Κωδικός";
@@ -946,7 +945,7 @@ $langDropBox = "Μηνύματα";
 $langMyDropBox = "Τα Μηνύματά μου"; 
 $langLearnPath = "Γραμμή Μάθησης";
 $langWiki = "Σύστημα Wiki";
-$langToolManagement = "Ενεργοποίηση Εργαλείων";
+$langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";
 $langClearStats = "Καθαρισμός Στατιστικών";
 $langStatsCleared = "Τα στατιστικά καθαρίστηκαν";
@@ -2156,7 +2155,7 @@ $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πα
  * lessontools.php
  * ************************************************ */
 $langActiveTools = "Ενεργά εργαλεία";
-$langAdministrationTools = "Εργαλεία διαχείρισης";
+$langAdministrationTools = "Διαχείριση Μαθήματος";
 $langAdministratorTools = "Εργαλεία διαχειριστή";
 $langCourseTools = "Εργαλεία μαθήματος";
 
