@@ -1310,4 +1310,21 @@ ul.expandable {
     color: rgba(3, 3, 3, 0.3);
     font-style: italic; }
 
+/* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
+.row-wrapper {
+  display: table; }
+
+.col-modified {
+  float: none;
+  display: table-cell;
+  vertical-align: top;
+  padding-bottom: 0px; }
+
+.row-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0px; }
+
+/*# sourceMappingURL=inventory.css.map */
+
 /*# sourceMappingURL=inventory.css.map */

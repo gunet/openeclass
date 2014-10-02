@@ -1530,3 +1530,20 @@ ul.expandable{
         }
     }
 }
+
+/* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
+.row-wrapper {
+  display: table; }
+
+.col-modified {
+  float: none;
+  display: table-cell;
+  vertical-align: top;
+  padding-bottom: 0px; }
+
+.row-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0px; }
+
+/*# sourceMappingURL=inventory.css.map */
