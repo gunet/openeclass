@@ -49,7 +49,6 @@ $(document).ready( function () {
       var window_height = $(window).height();
 
       var nav_available_height = window_height - logo_height - (nav_item_height*nav_length);
-      console.log(nav_available_height);
     
       $('#leftnav .navlist > li > ul').css('height','150px !important;');
     }
@@ -67,5 +66,8 @@ $(document).ready( function () {
     //var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
     //alert(tool_length);
     animate_btn();
+    
+    var viewportHeight = $(window).height();
+    $("#main-content.col-modified").css({"height":viewportHeight});
 
 }); 
