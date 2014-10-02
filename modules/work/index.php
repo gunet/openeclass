@@ -1576,20 +1576,20 @@ function show_student_assignments() {
 
 // show all the assignments
 function show_assignments() {
-    global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
+    global $tool_content, $m, $langEdit, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langConfirmDelete, $langDaysLeft, $m,
     $langWarnForSubmissions, $langDelSure;
     
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
               FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
- 
-    $tool_content .="
-            <div id='operations_container'>
-              <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1'>$langNewAssign</a></li>
-              </ul>
-            </div>";
+ $tool_content .= action_bar(array(
+            array('title' => $langNewAssign,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
+                  'button-class' => 'btn-success',
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label')  
+            ));
 
     if (count($result)>0) {
         $tool_content .= "
@@ -1614,7 +1614,7 @@ function show_assignments() {
                 $num_ungraded = '&nbsp;';
             }
             if (!$row->active) {
-                $tool_content .= "\n<tr class = 'invisible'>";
+                $tool_content .= "\n<tr class = 'not_visible'>";
             } else {
                 if ($index % 2 == 0) {
                     $tool_content .= "\n<tr class='even'>";
@@ -1644,27 +1644,24 @@ function show_assignments() {
             }                         
            $tool_content .= "</td>
               <td class='right'>" .
-                  icon('fa-edit', $m['edit'],
-                      "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit") .
-                  '&nbsp;';
-           if (is_numeric($num_submitted) && $num_submitted > 0) {
-                $tool_content .= icon('fa-eraser', $m['WorkSubsDelete'],
-                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
-                    "onClick='return confirmation(\"$langWarnForSubmissions. $langDelSure\")'") .
-                    '&nbsp;';
-           }
-            $tool_content .= icon('fa-times', $m['delete'],
-                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                "onClick='return confirmation(\"$langConfirmDelete\")'") .
-                '&nbsp;';
-            if ($row->active) {
-                $tool_content .= icon('fa-eye', $m['deactivate'],
-                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id");
-            } else {
-                $tool_content .= icon('fa-eye-slash', $m['activate'],
-                    "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id");
-            }
-            $tool_content .= "</td></tr>";
+              action_button(array(
+                    array('title' => $langEdit,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
+                          'icon' => 'fa-edit'),
+                    array('title' => $m['WorkSubsDelete'],
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
+                          'icon' => 'fa-eraser',
+                          'confirm' => $langWarnForSubmissions. $langDelSure,
+                          'show' => is_numeric($num_submitted) && $num_submitted > 0),
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDelete),
+                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
+                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'))).
+                   "</td></tr>";
             $index++;
         }
         $tool_content .= '</table>';
