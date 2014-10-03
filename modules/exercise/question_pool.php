@@ -139,7 +139,7 @@ if ($is_editor) {
         $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
     }
 
-    $tool_content .= "<table width='100%' class='tbl_alt'>";
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
 
     $from = $page * QUESTIONS_PER_PAGE;
 
@@ -181,15 +181,9 @@ if ($is_editor) {
 
     $tool_content .= "
 	<tr>
-	  <th>&nbsp;</th>
-	  <th><div align='left'>$langQuesList</div></th>";
-
-    if (isset($fromExercise)) {
-        $tool_content .= "<th width='70'>$langReuse</th>";
-    } else {
-        $tool_content .= "<th colspan='2' width='30'>$langActions</th>";
-    }
-    $tool_content .= "</tr>";
+	  <th>$langQuesList</th>
+          <th class='text-center'>".icon('fa-gears')."</th>
+        </tr>";
     $i = 1;
     foreach ($result as $row) {
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
@@ -207,44 +201,31 @@ if ($is_editor) {
             } elseif ($row->type == 6) {
                 $answerType = $langFreeText;
             }
-            if ($i % 2 == 0) {
-                $tool_content .= "\n    <tr class='even'>";
-            } else {
-                $tool_content .= "\n    <tr class='odd'>";
-            }
-
+            $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
-                $tool_content .= "
-				<td width='1'><div style='padding-top:4px;'>
-				  <img src='$themeimg/arrow.png' alt='bullet'></div>
-				</td>
-				<td>
-				  <a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
-				</td>
-				<td width='3'><div align='center'><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' title='test' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
-				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
-				</td>";
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             } else {
-                $tool_content .= "
-				<td width='1'><div style='padding-top:4px;'>
-				  <img src='$themeimg/arrow.png'></div>
-				</td>
-				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>
-				<td class='center'><div align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;recup=" . $row->id .
-                        "&amp;fromExercise=" . $fromExercise . "&amp;exerciseId=".$exerciseId."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
-				</td>";
+                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             }
-            //$tool_content .= "</td>";
-            if (!isset($fromExercise)) {
-                $tool_content .= "
-				<td width='3' align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId . "&amp;delete=" . $row->id . "\"" .
-                        " onclick=\"javascript:if(!confirm('" . addslashes(htmlspecialchars($langConfirmYourChoice)) .
-                        "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
-				</td>";
-            }
-            $tool_content .= "</tr>";
+            $tool_content .= "<td class='option-btn-cell'>".
+            action_button(array(
+                    array('title' => $langModify,
+                          'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
+                          'icon-class' => 'warnLink',
+                          'icon-extra' => ((count($exercise_ids)>0)? " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
+                          'icon' => 'fa-edit',
+                          'show' => !isset($fromExercise)),
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmYourChoice,
+                          'show' => !isset($fromExercise)),
+                    array('title' => $langReuse,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=".(isset($fromExercise) ? $fromExercise : '')."&amp;exerciseId=$exerciseId",
+                          'icon' => 'fa-plus-square',
+                          'show' => isset($fromExercise))
+                ))."</td></tr>";       
             // skips the last question,only used to know if we must create a link "Next page"
             if ($i == QUESTIONS_PER_PAGE) {
                 break;

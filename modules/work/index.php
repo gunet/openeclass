@@ -1593,13 +1593,13 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
-                    <table width='100%' class='tbl_alt'>
+                    <table class='table table-striped table-bordered table-hover'>
                     <tr>
                       <th>$m[title]</th>
-                      <th width='60'>$m[subm]</th>
-                      <th width='60'>$m[nogr]</th>
-                      <th width='130'>$m[deadline]</th>
-                      <th width='80'>$langCommands</th>
+                      <th>$m[subm]</th>
+                      <th>$m[nogr]</th>
+                      <th>$m[deadline]</th>
+                      <th class='text-center'>".icon('fa-gears')."</th>
                     </tr>";
         $index = 0;
         foreach ($result as $row) {
@@ -1634,16 +1634,16 @@ function show_assignments() {
             $tool_content .= q($row->title);
 
             $tool_content .= "</a></td>
-			  <td class='center'>$num_submitted</td>
-			  <td class='center'>$num_ungraded</td>
-			  <td class='center'>" . $deadline; 
+			  <td class='text-center'>$num_submitted</td>
+			  <td class='text-center'>$num_ungraded</td>
+			  <td class='text-center'>" . $deadline; 
             if ($row->time > 0) {
                 $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
             } else if((int)$row->deadline){
                 $tool_content .= " (<span class='expired'>$m[expired]</span>)";
             }                         
            $tool_content .= "</td>
-              <td class='right'>" .
+              <td class='option-btn-cell'>" .
               action_button(array(
                     array('title' => $langEdit,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",

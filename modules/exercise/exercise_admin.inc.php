@@ -107,8 +107,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     ));    
    $tool_content .= "
        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
-        <fieldset>
-        <legend>$langInfoExercise</legend>        
+        <fieldset>       
             <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
               <label for='exerciseTitle' class='col-sm-2 control-label'>$langExerciseName :</label>
               <div class='col-sm-10'>
@@ -233,7 +232,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             </div>
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-default' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
+                <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
                 <input type='submit' class='btn btn-default' name='cancelExercise' value='$langCancel'>    
               </div>
             </div>

@@ -2734,7 +2734,7 @@ function action_button($options) {
             $url = isset($option['url'])? $option['url']: '#';
         }
         $out .= "<div class='opt-btn-more-tool tool-btn$class'>" . $form_begin .
-            icon($option['icon'], $option['title'], $url, $icon_class) .
+            icon($option['icon'], $option['title'], $url, $icon_class ) .
             $form_end . '</div>';
     }
     return '<div class="opt-btn-wrapper">' .
