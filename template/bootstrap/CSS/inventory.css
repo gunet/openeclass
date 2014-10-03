@@ -1350,5 +1350,8 @@ tr.not_visible td:not(:last-child) {
   bottom: 0px; }
 
 /*# sourceMappingURL=inventory.css.map */
+td.option-btn-cell {
+  width: 5px;
+  padding: 0px !important; }
 
 /*# sourceMappingURL=inventory.css.map */
