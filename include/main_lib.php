@@ -2641,13 +2641,14 @@ function action_bar($options) {
         $title = q($option['title']);
         $level = isset($option['level'])? $option['level']: 'secondary';
         if (isset($option['confirm'])) {
-            $confirm_extra = " data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='" .
+            $confirm_extra = " data-title='$langConfirmDelete' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
+            $confirm_modal_class = ' confirmAction';
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
             $href = '';
         } else {
-            $confirm_extra = $form_begin = $form_end = '';
+            $confirm_extra = $confirm_modal_class = $form_begin = $form_end = '';
             $href = " href='" . $option['url'] . "'";
         }
         if (!isset($option['button-class'])) {
@@ -2657,20 +2658,20 @@ function action_bar($options) {
         }
         if ($level == 'primary-label') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
                 "<span class='hidden-xs'>$title</span></a>$form_end</li>");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'>" .
                 "<i class='fa $option[icon]'></i></a>$form_end</li>");
         } else {
             array_unshift($out_secondary,
-                    "<li$class>$form_begin<a$confirm_extra  class='btn $button_class'" . $href .
+                    "<li$class>$form_begin<a$confirm_extra  class='btn $button_class$confirm_modal_class'" . $href .
                     " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                     " title='$title'>" .
                     "<i class='fa $option[icon]'></i></a>$form_end</li>");
@@ -2726,7 +2727,7 @@ function action_button($options) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
         if (isset($option['confirm'])) {
-            $icon_class .= " data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='" .
+            $icon_class .= " class='confirmAction' data-title='$langConfirmDelete' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';

@@ -369,46 +369,32 @@
 	    </div>
 	</div>	
     <!-- BEGIN modalWindowBlock -->
-    <!-- Modal Dialog -->
-        <div class='modal fade' id='confirmAction' role='dialog' aria-labelledby='confirmActionLabel' aria-hidden='true'>
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <a class='close' data-dismiss='modal' aria-hidden='true'>&times;</a>
-                <h4 class='modal-title'>Delete Parmanently</h4>
-              </div>
-              <div class='modal-body'>
-                <p>Are you sure about this ?</p>
-              </div>
-              <div class='modal-footer'>
-                <a id='cancel-btn' class='btn btn-default' data-dismiss='modal'></a>
-                <button type='button' class='btn' id='confirm'></button>
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- Dialog show event handler -->
         <script type='text/javascript'>
-          $('#confirmAction').on('show.bs.modal', function (e) {
-              var message = $(e.relatedTarget).attr('data-message');
-              $('.modal-body p').text(message);
-              var title = $(e.relatedTarget).attr('data-title');
-              $('.modal-title').text(title);
-              var cancel_text = $(e.relatedTarget).attr('data-cancel-txt');
-              $('#cancel-btn').text(cancel_text);
-              var action_text = $(e.relatedTarget).attr('data-action-txt');
-              $('.modal-footer #confirm').text(action_text);
-              var action_btn_class = $(e.relatedTarget).attr('data-action-class');
-              $('.modal-footer #confirm').addClass(action_btn_class);
-              
-              // Pass form reference to modal for submission on yes/ok
-              var form = $(e.relatedTarget).closest('form');
-              $('.modal-footer #confirm').data('form', form);
-          });
-
-          <!-- Form confirm (yes/ok) handler, submits form -->
-          $('.modal-footer #confirm').on('click', function(){
-              $(this).data('form').submit();
+          $('.confirmAction').on('click', function(e){             
+                var message = $(this).attr('data-message');
+                var title = $(this).attr('data-title');
+                var cancel_text = $(this).attr('data-cancel-txt');
+                var action_text = $(this).attr('data-action-txt');
+                var action_btn_class = $(this).attr('data-action-class'); 
+                var form = $(this).closest('form');              
+                bootbox.dialog({
+                 message: message,
+                 title: title,
+                 buttons: {
+                   cancel_btn: {
+                     label: cancel_text,
+                     className: "btn-default"
+                   },
+                   action_btn: {
+                     label: action_text,
+                     className: action_btn_class,
+                     callback: function() {
+                       form.submit();
+                     }
+                   }
+                 }
+               });               
           });
         </script>
     <!-- END modalWindowBlock -->
