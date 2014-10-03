@@ -22,25 +22,17 @@
 /** @file index.php
  *  @brief display form to contact with course prof if course is closed
  */
-if (isset($_REQUEST['from_reg'])) {
-    $from_reg = $_REQUEST['from_reg'];
-    $course_id = $_REQUEST['course_id'];
-}
 
-if (isset($from_reg)) {
-    $require_login = TRUE;
-} else {
-    $require_current_course = TRUE;
-    $require_help = TRUE;
-    $helpTopic = 'Contact';
-}
+$require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
-if (isset($from_reg)) {
-    $title = course_id_to_title($course_id);
+if (isset($_REQUEST['course_id'])) {    
+    $course_id = $_REQUEST['course_id'];
 }
+
+$title = course_id_to_title($course_id);
 $nameTools = $langContactProf;
 
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
@@ -63,11 +55,7 @@ if (empty($userdata->email)) {
     $tool_content .= form();
 }
 
-if (isset($from_reg)) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 2);
-}
+draw($tool_content, 1);
 
 /**
  * @brief display form
@@ -81,17 +69,11 @@ if (isset($from_reg)) {
  * @return type
  */
 function form() {
-    global $from_reg, $course_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage, $course_code;
-
-    if (isset($from_reg)) {
-        $message = $langInfoAboutRegistration;
-        $hidden = "<input type='hidden' name='from_reg' value='$from_reg'>
-			<input type='hidden' name='course_id' value='$course_id'>";
-    } else {
-        $message = $langContactMessage;
-        $hidden = '';
-    }
-
+    global $course_id, $langInfoAboutRegistration, $langIntroMessage, $langSendMessage, $course_code;
+    
+    $message = $langInfoAboutRegistration;
+    $hidden = "<input type='hidden' name='course_id' value='$course_id'>";
+     
     $ret = "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>
@@ -141,16 +123,15 @@ function email_profs($course_id, $content, $from_name, $from_address) {
                                WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
 
     $message = sprintf($langContactIntro, $from_name, $from_address, $content);
-    $subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";
-    
+    $subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";    
     foreach ($profs as $prof) {
-        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {
+        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {            
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
             $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
             if (!send_mail($from_name, $from_address, $to_name, $prof->email, $subject, $message, $GLOBALS['charset'])) {
-                $ret .= "<p class='alert1'>$GLOBALS[langErrorSendingMessage]</p>\n";
+                $ret .= "<p class='alert1'>$GLOBALS[langErrorSendingMessage]</p>\n";               
             }
         }
     }

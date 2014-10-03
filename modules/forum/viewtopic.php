@@ -273,13 +273,16 @@ foreach ($result as $myrow) {
     } else {
         $tool_content .= "<tr class='even'>";
     }
-    
+    $nummessages = '';
     if (!isset($user_stats[$myrow->poster_id])) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
-        $user_stats[$myrow->poster_id] = $user_num_posts->num_posts;
+        if ($user_num_posts) {
+            $user_stats[$myrow->poster_id] = $user_num_posts->num_posts;
+            $nummessages = "<br/>".$user_stats[$myrow->poster_id]." $langMessages";
+        }
     }
     
-    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . "<br/>".$user_stats[$myrow->poster_id]." $langMessages</td>";
+    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . "$nummessages</td>";
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");

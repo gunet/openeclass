@@ -95,6 +95,26 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 
+    if (!$is_in_tinymce and (!isset($_GET['showQuota']))) {
+        if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {
+            $tool_content .= "
+            <div id='operations_container'>
+              <ul id='opslist'>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
+              </ul>
+            </div>";
+        } else {
+            $tool_content .= "<div id='operations_container'>
+                <ul id='opslist'>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>
+                </ul>
+            </div>";
+        }
+    }
+        
     $diskQuotaVideo = Database::get()->querySingle("SELECT video_quota FROM course WHERE code=?s", $course_code)->video_quota;
     $updir = "$webDir/video/$course_code"; //path to upload directory
     $diskUsed = dir_total_space($updir);
@@ -468,20 +488,23 @@ hContent;
             </tr>
             </table>
             </fieldset>
-            </form>
-            <br/>";
+            </form>";
     }
 
     if (!isset($_GET['form_input']) && !$is_in_tinymce) {
-            $tool_content .= "
-            <div id='operations_container'>
-              <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
-              </ul>
-            </div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langAddV,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
+                  'icon' => 'fa-plus-circle'),
+            array('title' => $langAddVideoLink,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url",
+                  'icon' => 'fa-plus-circle'),
+            array('title' => $langCategoryAdd,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory",
+                  'icon' => 'fa-plus-circle'),
+            array('title' => $langQuotaBar,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
+                  'icon' => 'fa-pie-chart')));
     }
 }   // end of admin check
 

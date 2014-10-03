@@ -519,35 +519,7 @@ if ($is_editor) {
         $tool_content .= "</table><br />";
     } else {
         $tool_content .= "<p class='alert1'>$langNoGroup</p>";
-    }
-    
-    
-    $nameTools = $langNewGroupCreate;
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
-
-    $tool_content .= <<<tCont
-    <hr>
-    <form method="post" action="index.php?course=$course_code">
-    <fieldset>
-    <legend>$langNewGroupCreate - $langNewGroupCreateData</legend>
-    <table width="99%" class="tbl">
-    <tr>
-      <th width="160" class="left">$langNewGroups:</th>
-      <td><input type="text" name="group_quantity" size="3" value="1"></td>
-    </tr>
-    <tr>
-      <th class="left">$langNewGroupMembers:</th>
-      <td><input type="text" name="group_max" size="3" value="8">&nbsp;$langMax $langPlaces</td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type="submit" value=$langCreate name="creation"></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>
-
-tCont;
+    }          
     
 } else {
     // Begin student view

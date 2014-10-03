@@ -298,6 +298,7 @@ $db->query("CREATE TABLE user (
       username VARCHAR(50) NOT NULL UNIQUE KEY COLLATE utf8_bin,
       password VARCHAR(60) NOT NULL DEFAULT 'empty',
       email VARCHAR(100) NOT NULL DEFAULT '',
+      parent_email VARCHAR(100) NOT NULL DEFAULT '',
       status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
       phone VARCHAR(20) DEFAULT '',
       am VARCHAR(20) DEFAULT '',
@@ -1361,7 +1362,7 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
     `api_url` varchar(255) DEFAULT NULL,
     `max_rooms` int(11) DEFAULT NULL,
     `max_users` int(11) DEFAULT NULL,
-    `enable_recordings` enum("yes","no") DEFAULT NULL,
+    `enable_recordings` enum("true","false") DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `idx_bbb_servers` (`hostname`))');

@@ -166,14 +166,13 @@ if (isset($_POST['submit'])) {
     $_SESSION['message'] = "<p class='success'>$langStored</p>";
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
     exit;
-} elseif (isset($_POST['cancel'])) {
-    header("Location: viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id");
 } else {
     // Topic review
     $tool_content .= "
         <div id='operations_container'>
             <ul id='opslist'>
               <li><a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
+              <li><a href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langBack</li>
             </ul>
         </div>";
 
@@ -194,8 +193,7 @@ if (isset($_POST['submit'])) {
         </tr>
 	<tr>
 	  <td class='right'>	 
-	    <input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	    <input type='submit' name='cancel' value='$langCancelPost'>
+	    <input type='submit' name='submit' value='$langSubmit'>&nbsp;	    
  	  </td>
 	</tr>
 	</table>

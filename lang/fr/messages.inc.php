@@ -2746,7 +2746,6 @@ $langEmtpyGroupsAll = "Effacer tout";
 $langFillGroupsAll = "Compléter tout";
 $langGroupPrefs = "Caractéristiques fonctionnelles des groupes";
 $langGroupPropertiesSum = "Résumé des paramètres";
-$langStep7 = "Étape 7 de 7";
 $langBasicCfgSetting = "Paramètres de base";
 $langOptionalCfgSetting = "Paramètres optionnels"
 ;

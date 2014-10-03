@@ -243,7 +243,7 @@ function expanded_faculte($facid, $uid) {
         if ($mycours->visible == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course                
             $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
         } elseif ($mycours->visible == COURSE_CLOSED) { //closed course
-            $codelink = "<a href='../contact/index.php?from_reg=true&course_id=$cid'>$course_title</a>";
+            $codelink = "<a href='../contact/index.php?course_id=$cid'>$course_title</a>";
         } else {
             $codelink = $course_title;
         }

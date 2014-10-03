@@ -88,6 +88,26 @@ if ($glossary_data) {
  * ****************************************** */
 
 if ($is_editor) {
+    
+    if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
+       $tool_content .= "<div id='operations_container'>
+         <ul id='opslist'>
+            <li><a href='$base_url'>$langBack</a></li>
+            </ul>
+       </div>";
+    } else {    
+         $tool_content .= "
+        <div id='operations_container'>
+          <ul id='opslist'>" .
+             ($categories ? "<li><a href='categories.php?course=$course_code'>$langCategories</a></li>" : '') . "
+            <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
+            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
+            <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
+            <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>
+          </ul>
+        </div>";
+    }
+    
     if (isset($_POST['url'])) {
         $url = trim($_POST['url']);
         if (!empty($url)) {
@@ -159,22 +179,13 @@ if ($is_editor) {
         $q = Database::get()->query("DELETE FROM glossary WHERE id = ?d AND course_id = ?d", $id, $course_id);
         invalidate_glossary_cache();
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
-            'term' => $term));
+                                                                      'term' => $term));
         if ($q and $q->affectedRows) {
             $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";
         }
-    }
-
-    $tool_content .= "
-       <div id='operations_container'>
-         <ul id='opslist'>" .
-            ($categories ? "<li><a href='categories.php?course=$course_code'>$langCategories</a></li>" : '') . "
-           <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
-           <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
-           <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
-           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>
-         </ul>
-       </div>";
+        draw($tool_content, 2, null, $head_content);
+        exit;
+    }       
 
     // display configuration form
     if (isset($_GET['config'])) {
@@ -348,8 +359,7 @@ if (count($sql) > 0) {
         $tool_content .= "
 		 <th width='20'>$langActions</th>";
     }
-    $tool_content .= "
-	       </tr>";
+    $tool_content .= "</tr>";
     $i = 0;
     foreach ($sql as $g) {
         if ($i == 0 and isset($_GET['id'])) {
@@ -396,14 +406,10 @@ if (count($sql) > 0) {
 		    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete'></a>
 		 </td>";
         }
-        $tool_content .= "
-	       </tr>";
+        $tool_content .= "</tr>";
         $i++;
     }
-    $tool_content .= "
-	       </table>
-
-	       <br />\n";
+    $tool_content .= "</table><br />";
 } else {
     $tool_content .= "<p class='alert1'>$langNoResult</p>";
 }

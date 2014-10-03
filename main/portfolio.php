@@ -44,12 +44,32 @@ if(!empty($langLanguageCode)){
 }
 load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+load_js('datatables');
 
-// jquery is already loaded via index.php and modal box
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
 ."<script type='text/javascript'>
 jQuery(document).ready(function() {
+  jQuery('#portfolio_lessons').dataTable({
+    'bLengthChange': false,
+    'bSort' : false,
+    'oLanguage': {
+           'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+           'sZeroRecords':  '".$langNoResult."',
+           'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+           'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+           'sInfoFiltered': '',
+           'sInfoPostFix':  '',
+           'sSearch':       '".$langSearch."',
+           'sUrl':          '',
+           'oPaginate': {
+               'sFirst':    '&laquo;',
+               'sPrevious': '&lsaquo;',
+               'sNext':     '&rsaquo;',
+               'sLast':     '&raquo;'
+           }
+       }    
+  });
   jQuery('.panel_content').hide();
    jQuery('.panel_content_open').show();
   jQuery('.panel_title').click(function()
@@ -98,7 +118,6 @@ require_once 'perso.php';
 
 $tool_content = "
 <div class='row margin-top-thin'>
-
         <div class ='col-md-12'>
                 <div class='toolbox pull-right'>
                         <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
@@ -124,8 +143,6 @@ $tool_content = "
                         <br/><br/><br/><br/><br/><br/><br/><br/>
                 </div>
         </div>
-
-
 
         <div class='col-md-5'>
                 <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>

@@ -326,7 +326,7 @@ if ($is_editor) {
         $announcementNumber = count($result);
 
         if ($announcementNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langStats - $langAttendanceActList</legend>";
+            $tool_content .= "<fieldset><legend>$langStat - $langAttendanceActList</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t2'>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langDescription</th><th>$langType</th>";
@@ -533,7 +533,7 @@ if ($is_editor) {
                       <th width='1'>$langID</th>
                       <th><div align='left' width='100'>$langName $langSurname</div></th>
                       <th class='center' width='80'>$langRegistrationDateShort</th>
-                      <th class='center'>$langAttendanceΑbsences</th>
+                      <th class='center'>$langAttendanceAbsences</th>
                       <th class='center'>$langActions</th>
                     </tr>
                 </thead>

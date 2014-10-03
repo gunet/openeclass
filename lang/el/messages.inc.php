@@ -276,7 +276,7 @@ $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του μαθήματο�
 
 // editcours
 $langCourseEdit = "Επεξεργασία Μαθήματος";
-$langCourseInfo = "Στοιχεία Μαθήματος";
+$langCourseInfo = "Ρυθμίσεις";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
 $langCurrentStatus = "Τρέχουσα κατάσταση";
@@ -292,6 +292,7 @@ $langCourseFormat = "Mορφή μαθήματος";
 $langCourseWeeklyFormatInfo = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
 $langCourseWeeklyFormatNotice = "Προσοχή δεν μπορείτε να επιλέξετε Εβδομαδιαία απεικόνιση αν δεν έχετε Ημερομηνία έναρξης μαθήματος";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
+$langWithCourseUnits = "Μάθημα με θεματικές ενότητες";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
 $langEditWeek = 'Επεξεργασία εβδομάδας';
@@ -804,7 +805,7 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
-$langAddAsBookmark = 'Προσθήκη στους σελιδοδείκτες';
+$langAddToMyNotes = 'Οι σημειώσεις μου';
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
 
 
@@ -813,7 +814,6 @@ $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσει
  * ******************************************* */
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
-$langModifInfo = "Διαχείριση Μαθήματος";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
 $langHome = "Επιστροφή στην αρχική σελίδα";
 $langCode = "Κωδικός";
@@ -943,9 +943,10 @@ $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
 $langLinkSite = "Προσθήκη συνδέσμου στην αρχική σελίδα";
 $langModifyInfo = "Διαχείριση Μαθήματος";
 $langDropBox = "Μηνύματα";
+$langMyDropBox = "Τα Μηνύματά μου"; 
 $langLearnPath = "Γραμμή Μάθησης";
 $langWiki = "Σύστημα Wiki";
-$langToolManagement = "Ενεργοποίηση Εργαλείων";
+$langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";
 $langClearStats = "Καθαρισμός Στατιστικών";
 $langStatsCleared = "Τα στατιστικά καθαρίστηκαν";
@@ -957,7 +958,6 @@ $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές 
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
-$langAttendanceAbsences = "Παρουσίες";
 $langAttendanceAbsencesYes = "Παρουσία";
 $langAttendanceAbsencesNo = "Απουσία";
 $langAttendanceAbsences = "Παρουσίες";
@@ -2157,7 +2157,7 @@ $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πα
  * lessontools.php
  * ************************************************ */
 $langActiveTools = "Ενεργά εργαλεία";
-$langAdministrationTools = "Εργαλεία διαχείρισης";
+$langAdministrationTools = "Διαχείριση Μαθήματος";
 $langAdministratorTools = "Εργαλεία διαχειριστή";
 $langCourseTools = "Εργαλεία μαθήματος";
 
@@ -3709,7 +3709,6 @@ $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
 
 /* * ******************************************
-<<<<<<< mine
   Notes
  * ***************************************** */
 $langAddNote = "Νέα σημείωση";
@@ -3725,33 +3724,7 @@ $langNoteDel = "Η σημείωση διαγράφηκε.";
 $langNoteModified = "Η σημείωση άλλαξε.";
 $langNoteModify = "Η σημείωση ενημερώθηκε.";
 $langNoteNoTitle = "Κενός τίτλος";
-$langNotes = "Σημειώσεις";
-$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
-$langNoteTitle = "Τίτλος";
-$langPersonalEvent = "Προσωπικό γεγονός";
-$langReferencedObject = "Αφορά";
-$langSelectFromMenu = "Επιλέξτε...";
-$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
-$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
-
-/* * ******************************************
-=======
-  Notes
- * ***************************************** */
-$langAddNote = "Νέα σημείωση";
-$langDocument = "Έγγραφο";
-$langEmptyNoteTitle = "Νέα σημείωση";
-$langEvent = "Γεγονός";
-$langLastUpdate = "Τελευταία ενημέρωση";
-$langModifNote = "Αλλαγή σημείωσης";
-$langNoNote = "Δεν έχετε σημειώσεις.";
-$langNoteAdd = "Νέα σημείωση προστέθηκε.";
-$langNoteBody = "Περιεχόμενο";
-$langNoteDel = "Η σημείωση διαγράφηκε.";
-$langNoteModified = "Η σημείωση άλλαξε.";
-$langNoteModify = "Η σημείωση ενημερώθηκε.";
-$langNoteNoTitle = "Κενός τίτλος";
-$langNotes = "Σημειώσεις";
+$langNotes = "Οι Σημειώσεις μου";
 $langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
 $langNoteTitle = "Τίτλος";
 $langPersonalEvent = "Προσωπικό γεγονός";
@@ -3835,7 +3808,7 @@ $langOpenCoursesCharacteristics = "Ποιοτικά/Ποσοτικά χαρακ�
 $langOpenCoursesCharacter = "Χαρακτηρισμός Μαθήματος";
 $langOpenCoursesOpenAccess = "Τύπος Πρόσβασης (Ανοικτή)";
 $langOpenCoursesMandatoryMetadata = "Υποχρεωτικά Μεταδεδομένα Μαθήματος (συμπληρωμένα)";
-$langOpenCoursesLicense = "Άδεια Διάθεσης (Creative Commons)";
+$langOpenCoursesLicense = "Άδεια Διάθεσης";
 $langOpenCoursesTeacherConfirm = "Δήλωση Καθηγητή - Το Διαθέσιμο Εκπαιδευτικό Υλικό καλύπτει το 100% της Διδακτέας Ύλης";
 $langOpenCoursesHasDocuments = "Έχει Εκπαιδευτικό Υλικό";
 $langOpenCoursesHasUnits = "Έχει Θεματικές Ενότητες";
@@ -4080,9 +4053,6 @@ $langCMeta['chemic'] = "Επιστήμες Χημικού Μηχανικού";
 $langCMeta['mateng'] = "Μηχανική Υλικών";
 $langCMeta['medeng'] = "Βιοϊατρική Μηχανική";
 $langCMeta['enveng'] = "Μηχανική Περιβάλλοντος";
-$langCMeta['envbio'] = "Περιβαλλοντική Βιοτεχνολογία";
-$langCMeta['indbio'] = "Βιομηχανική Βιοτεχνολογία";
-$langCMeta['nanotech'] = "Νανοτεχνολογία";
 $langCMeta['othersoc'] = "Άλλες Κοινωνικές Επιστήμες";
 $langCMeta['psych'] = "Ψυχολογία";
 $langCMeta['ecobi'] = "Οικονομικά και Διοίκηση Επιχειρήσεων";
@@ -4097,6 +4067,7 @@ $langCMeta['basicmed'] = "Βασική Ιατρική";
 $langCMeta['clinicalmed'] = "Κλινική Ιατρικη";
 $langCMeta['healthsci'] = "Επιστήμες Υγείας";
 $langCMeta['medbio'] = "Ιατρική Βιοτεχνολογία";
+$langCMeta['physedu'] = "Φυσική Αγωγή";
 $langCMeta['otherhum'] = "Άλλες Ανθρωπιστικές Επιστήμες";
 $langCMeta['hisarch'] = "Ιστορία & Αρχαιολογία";
 $langCMeta['langlit'] = "Γλώσσα & Λογοτεχνία";

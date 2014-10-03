@@ -12,8 +12,10 @@ syntax: regexp
 ^\.buildpath$
 ^\.project$
 ^\.settings$
-^\.htaccess$
 
-syntax: glob
-*.orig
-*.map
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
+\.map$

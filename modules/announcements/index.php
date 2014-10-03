@@ -423,10 +423,12 @@ if ($is_editor) {
                 });
             });"
         . "</script>";
-        $tool_content .= "
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'))) . "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
-        <fieldset>
-        <legend>$langAnnouncement</legend>
   <table class='tbl' width='100%'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
@@ -476,8 +478,7 @@ if ($is_editor) {
           <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
   </tr>
   </table>
-  <input type='hidden' name='id' value='$AnnouncementToModify' />
-        </fieldset>
+  <input type='hidden' name='id' value='$AnnouncementToModify'>
   </form>";
     } else {
         if (isset($_GET['an_id'])) {

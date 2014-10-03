@@ -258,9 +258,10 @@ if (!isset($_POST['create_course'])) {
 
         $tool_content .= "
         <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='units' checked id='units'><label for='units'>&nbsp;$langCourseUnits</label></td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly' id='weekly'><label for='weekly'>&nbsp;$langWeekly</label></td></tr>
         <tr><td colspan='2'><input type='radio' name='view_type' value='simple' id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='units' checked id='units'><label for='units'>&nbsp;$langWithCourseUnits</label></td></tr>
+        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly' id='weekly'><label for='weekly'>&nbsp;$langCourseWeeklyFormat</label></td></tr>
+        
         
         <tr id='weeklyDates'>
             <td colspan=4>$langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly='true'>

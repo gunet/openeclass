@@ -72,6 +72,11 @@ function checkrequired(which, entry) {
 }
 </script>
 hContent;
+
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";
+$tool_content .= "<li><a href='index.php?course=$course_code'>$langBack</a></li>";
+$tool_content .= "</ul></div>";
+        
 // forum go
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);

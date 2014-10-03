@@ -120,16 +120,13 @@ if ($is_editor) {
                         WHERE course_id = ?d AND id = ?d", $event_title, $content, $date, $duration, $course_id, $id);
             $log_type = LOG_MODIFY;
         } else {
-            $period = "";
-            $enddate = "";
-            if(isset($_POST['frequencyperiod']) && isset($_POST['frequencynumber']) && isset($_POST['enddate']))
-            {
-                $period = "P".$_POST['frequencynumber'].$_POST['frequencyperiod'];
-                if ($_POST['enddate']!='') {
+            $period = '';
+            $enddate = '0000-00-00';
+            if(isset($_POST['frequencyperiod']) and isset($_POST['frequencynumber']) and isset($_POST['enddate'])) {
+                $period = 'P' . $_POST['frequencynumber'] . $_POST['frequencyperiod'];
+                if (!empty($_POST['enddate'])) {
                     $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
                     $enddate = $endDate_obj->format('Y-m-d');
-                } else {
-                    $enddate = '';
                 }
             }
 
@@ -139,8 +136,8 @@ if ($is_editor) {
                         ."content = ?s, " 
                         ."start = ?t, "                                             
                         ."duration = ?t, "
-                        . "recursion_period = ?t, "
-                        . "recursion_end = ?t, " 
+                        ."recursion_period = ?t, "
+                        ."recursion_end = ?t, " 
                         ."visible = 1", $course_id, $event_title, $content, $date, $duration, $period, $enddate)->lastInsertID;
             
             if(isset($id) && !is_null($id)){
@@ -183,10 +180,10 @@ if ($is_editor) {
         $agdx->store($id);
         $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
         Log::record($course_id, MODULE_ID_AGENDA, $log_type, array('id' => $id,
-            'date' => $date,
-            'duration' => $duration,
-            'title' => $event_title,
-            'content' => $txt_content));
+                                                                   'date' => $date,
+                                                                   'duration' => $duration,
+                                                                   'title' => $event_title,
+                                                                   'content' => $txt_content));
         unset($id);
         unset($content);
         unset($event_title);
@@ -208,18 +205,20 @@ if ($is_editor) {
     }
 
     $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1'>" . $langAddEvent . "</a></li>";
-    }
-    $sens = " ASC";
-    $result = Database::get()->queryArray("SELECT id FROM agenda WHERE course_id = ?d", $course_id);
-    if (count($result) > 1) {
-        if (isset($_GET["sens"]) && $_GET["sens"] == "d") {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sens=' >$langOldToNew</a></li>";
-            $sens = " DESC ";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sens=d' >$langOldToNew</a></li>";
-        }
+    if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>" . $langBack . "</a></li>";    
+    } else {
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1'>" . $langAddEvent . "</a></li>";    
+        $sens = " ASC";
+        $result = Database::get()->queryArray("SELECT id FROM agenda WHERE course_id = ?d", $course_id);
+        if (count($result) > 1) {
+            if (isset($_GET["sens"]) && $_GET["sens"] == "d") {
+                $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sens=' >$langOldToNew</a></li>";
+                $sens = " DESC ";
+            } else {
+                $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sens=d' >$langOldToNew</a></li>";
+            }
+        } 
     }
     $tool_content .= "</ul></div>";
     if (isset($id) && $id) {
@@ -273,14 +272,14 @@ if ($is_editor) {
             <tr><th>$langRepeat:</th>
                 <td> $langEvery: "
                     . "<select name='frequencynumber'>"
-                    . "<option value=\"0\">$langSelectFromMenu</option>";
+                    . "<option value='0'>$langSelectFromMenu</option>";
             for($i = 1;$i<10;$i++)
             {
                 $tool_content .= "<option value=\"$i\">$i</option>";
             }
             $tool_content .= "</select>"
                     . "<select name='frequencyperiod'> "
-                    . "<option>$langSelectFromMenu...</option>"
+                    . "<option value=\"D\">$langSelectFromMenu...</option>"
                     . "<option value=\"D\">$langDays</option>"
                     . "<option value=\"W\">$langWeeks</option>"
                     . "<option value=\"M\">$langMonthsAbstract</option>"
@@ -311,9 +310,9 @@ if ($is_editor) {
 /* ---------------------------------------------
  *  End  of  prof only
  * ------------------------------------------- */
-if (!isset($sens))
+if (!isset($sens)) {
     $sens = " ASC";
-
+}
 if ($is_editor) {
     $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
 		ORDER BY start " . $sens, $course_id);

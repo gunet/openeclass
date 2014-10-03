@@ -68,14 +68,15 @@ $num_chars_teaser_break = 500;//chars before teaser break
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
 if ($is_editor) {
-    if ($action == "settings") {
+    if (isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost") {
         $tool_content .= "
-        <div id='operations_container'>
-        <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langReturnBlog . "</a></li>
-        </ul>
-        </div>";
-        
+            <div id='operations_container'>
+            <ul id='opslist'>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
+            </ul>
+            </div>";
+    }    
+    if ($action == "settings") {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
             setting_set(SETTING_BLOG_COMMENT_ENABLE, $_POST['2_radio'], $course_id);
@@ -144,22 +145,22 @@ if ($is_editor) {
         $tool_content .= "</table>";
         $tool_content .= "</fieldset>";
 		
-		if (!$sharing_allowed) {
-		    $radio_dis = " disabled";
-		    $sharing_dis_label = "<tr><td><em>";
-		    if (!get_config('enable_social_sharing_links')) {
-		        $sharing_dis_label .= $langSharingDisAdmin;
-		    }
-		    if (course_status($course_id) != COURSE_OPEN) {
-		        $sharing_dis_label .= " ".$langSharingDisCourse;
-		    }
-		    $sharing_dis_label .= "</em></td></tr>";
-		} else {
-		    $radio_dis = "";
-		    $sharing_dis_label = "";
-		}
+        if (!$sharing_allowed) {
+            $radio_dis = " disabled";
+            $sharing_dis_label = "<tr><td><em>";
+            if (!get_config('enable_social_sharing_links')) {
+                $sharing_dis_label .= $langSharingDisAdmin;
+            }
+            if (course_status($course_id) != COURSE_OPEN) {
+                $sharing_dis_label .= " ".$langSharingDisCourse;
+            }
+            $sharing_dis_label .= "</em></td></tr>";
+        } else {
+            $radio_dis = "";
+            $sharing_dis_label = "";
+        }
 		
-		if ($sharing_enabled == 1) {
+        if ($sharing_enabled == 1) {
             $checkDis = "";
             $checkEn = "checked";
         } else {
@@ -318,14 +319,11 @@ if (isset($message) && $message) {
 if ($action == "showPost") {
     if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
         $tool_content .= "
-        <div id='operations_container'>
-        <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>";
-        if ($is_editor) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings'>" . $langConfig . "</a></li>";
-        }
-        $tool_content .= "</ul>
-        </div>";
+            <div id='operations_container'>
+            <ul id='opslist'>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
+            </ul>
+            </div>";
     }
     
     $post = new BlogPost();

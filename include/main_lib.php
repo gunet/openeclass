@@ -932,7 +932,7 @@ function mkpath($path) {
 function display_activation_link($module_id) {
     global $modules;
 
-    if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {
+    if (!defined('STATIC_MODULE') and $module_id && array_key_exists($module_id, $modules)) {
         return true;
     } else {
         return false;
@@ -1697,7 +1697,7 @@ tinymce.init({
     selector: 'textarea:not(.mceNoEditor)',
     language: '$language',
     theme: 'modern',
-    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime',
+    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -1708,7 +1708,7 @@ tinymce.init({
     $filebrowser
 
     // Toolbar options
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia',
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
@@ -2338,16 +2338,13 @@ function get_user_email_notification($user_id, $course_id = null) {
  * @param type $user_id
  * @return boolean
  */
-function get_user_email_notification_from_courses($user_id) {
-        
-    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id)->receive_mail;
-    
-    if ($result == 1) {
+function get_user_email_notification_from_courses($user_id) {    
+    $result = Database::get()->querySingle("SELECT receive_mail FROM user WHERE id = ?d", $user_id);
+    if ($result && $result->receive_mail)
         return true;
-    } else {
-        return false;
-    }
+    return false;
 }
+
 
 // Return a list of all subdirectories of $base which contain a file named $filename
 function active_subdirs($base, $filename) {

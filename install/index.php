@@ -317,7 +317,7 @@ elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
 // step 5 last check before install
 elseif (isset($_REQUEST['install5'])) {
     $langStepTitle = $langLastCheck;
-    $langStep = $langStep6;
+    $langStep = $langStep5;
     $_SESSION['step'] = 5;
 
     switch ($eclass_stud_reg) {
@@ -421,7 +421,7 @@ elseif (isset($_REQUEST['install5'])) {
 elseif (isset($_REQUEST['install6'])) {
     // database creation
     $langStepTitle = $langInstallEnd;
-    $langStep = $langStep7;
+    $langStep = $langStep6;
     $_SESSION['step'] = 6;
     $GLOBALS['mysqlServer'] = $dbHostForm;
     $GLOBALS['mysqlUser'] = $dbUsernameForm;

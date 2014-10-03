@@ -544,14 +544,6 @@ $tool_content .= "
                 }
             }
 
-
-            // Button: star - bookmark the page
-            $tool_content .= "
-                        <a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark btn-default-eclass place-at-toolbox' title='$langAddAsBookmark'>
-                                <i class='fa fa-star'></i>
-                        </a>";
-
-
             // Button: rss
             if (visible_module(MODULE_ID_ANNOUNCE))
             {
@@ -699,15 +691,12 @@ $tool_content .= "
     <td class='left'>$toggle_student_view";
 if ($status != USER_GUEST) {
     if ($receive_mail) {
-        $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
-                  <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
+        $tool_content .= icon('fa-envelope', $langContactProf, $urlAppend . "modules/contact/index.php?course=$course_code");
     }
 }
-$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
-            <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
 if (visible_module(MODULE_ID_ANNOUNCE)) {
-    $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
-                          <img src='$themeimg/feed.png' alt='" . q($langRSSFeed) . "' title='" . q($langRSSFeed) . "' /></a></span>";
+    $tool_content .= "<span class='feed'>" .
+        icon('fa-rss', $langRSSFeed, $urlServer . "modules/announcements/rss.php?c=$course_code") . "</span>";
 }
 $tool_content .= "</td>
       </tr>

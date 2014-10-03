@@ -1275,7 +1275,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
                             `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                             `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-                            `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                            `auto` TINYINT(4) NOT NULL DEFAULT 0,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1599,6 +1600,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `unlock_interval` int(11) DEFAULT NULL,
                       `external_users` varchar(255) DEFAULT "",
                       `participants` varchar(255) DEFAULT "",
+                      `record` enum("true","false") DEFAULT "false",
+                       `sessionUsers` int(11) DEFAULT 0,
                       PRIMARY KEY (`id`))');
                     
                     Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
@@ -1610,7 +1613,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `api_url` varchar(255) DEFAULT NULL,
                         `max_rooms` int(11) DEFAULT NULL,
                         `max_users` int(11) DEFAULT NULL,
-                        `enable_recordings` enum("yes","no") DEFAULT NULL,
+                        `enable_recordings` enum("true","false") DEFAULT NULL,
                         `weight` int(11) DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_bbb_servers` (`hostname`))');

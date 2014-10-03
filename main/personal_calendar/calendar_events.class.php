@@ -58,7 +58,14 @@ class Calendar_Events {
 
     public static function get_calendar_settings(){
         global $uid;
-        Calendar_Events::$calsettings = Database::get()->querySingle("SELECT * FROM personal_calendar_settings WHERE user_id = ?d", $uid);
+        Calendar_Events::$calsettings = Database::get()->querySingle("SELECT 
+                            user_id, view_type, 
+                            personal_color, course_color, deadline_color, admin_color,
+                            CAST(show_personal AS UNSIGNED INTEGER) AS show_personal,
+                            CAST(show_course AS UNSIGNED INTEGER) AS show_course,
+                            CAST(show_deadline AS UNSIGNED INTEGER) AS show_deadline,
+                            CAST(show_admin AS UNSIGNED INTEGER) AS show_admin
+                        FROM personal_calendar_settings WHERE user_id = ?d", $uid);
     }
 
     public static function set_calendar_settings($show_personal, $show_course, $show_seadline, $show_admin){
@@ -142,9 +149,11 @@ class Calendar_Events {
      */
     public static function get_calendar_events($scope = "month", $startdate = null, $enddate = null, $user_id = NULL){
         global $uid, $is_admin;
+        
         if(is_null($user_id)){
             $user_id = $uid;
         }
+        
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -170,8 +179,8 @@ class Calendar_Events {
         if(!is_null($enddate)){
            $q_args_templ[] = $enddate;
         }
-        Calendar_Events::get_calendar_settings();
-        if(Calendar_Events::$calsettings->show_personal == 1){
+        Calendar_Events::get_calendar_settings();       
+        if(Calendar_Events::$calsettings->show_personal == 1){           
             $dc = str_replace('start','pc.start',$datecond);
             $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, date_format(start + duration, '%Y-%m-%d %H:%s') `end`, content, 'personal' event_group, 'event-special' class, 'personal' event_type, null as course FROM personal_calendar pc "
                     . "WHERE user_id = ?d " . $dc;
@@ -239,7 +248,7 @@ class Calendar_Events {
         {
             return null;
         }
-        $q .= " ORDER BY start, event_type";
+        $q .= " ORDER BY start, event_type";        
         return Database::get()->queryArray($q, $q_args);
 
         /*if($eventtypes == "all"){
@@ -827,8 +836,7 @@ class Calendar_Events {
         $calendar_content .= "<td class='center'><b>$weekdescription</b></td>";
         $calendar_content .= '<td width="25" class="right"><a href="#" onclick="show_week('.$foreward['day'].','.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
         $calendar_content .= "</tr>";
-        $calendar_content .= "</table>";
-
+        $calendar_content .= "</table>";        
         $eventlist = Calendar_Events::get_calendar_events("week", "$year-$month-$day");
         //$dateNow = date("j-n-Y", time());
         $numLine = 0;
@@ -841,8 +849,8 @@ class Calendar_Events {
         $curday = 0;
         $now = getdate();
         $today = new DateTime($now['year'].'-'.$now['mon'].'-'.$now['mday']);
-        $curstartddate = "";
-        foreach ($eventlist as $thisevent) {
+        $curstartddate = "";        
+        foreach ($eventlist as $thisevent) {        
             if($curstartddate != $thisevent->startdate){ //event date changed
                 $thiseventdatetime = new DateTime($thisevent->startdate);
                 while($cursorday < $thiseventdatetime){
@@ -931,8 +939,7 @@ class Calendar_Events {
         $calendar_content .= "</tr>";
         $calendar_content .= "</table>";
 
-        $eventlist = Calendar_Events::get_calendar_events("day", "$year-$month-$day");
-
+        $eventlist = Calendar_Events::get_calendar_events("day", "$year-$month-$day");        
         $calendar_content .= "<table width='100%' class='tbl_alt'>";
 
         $curhour = 0;
@@ -947,6 +954,7 @@ class Calendar_Events {
         $thishour = new DateTime($today->format('Y-m-d H:00'));
         $cursorhour = new DateTime("$year-$month-$day 00:00");
         $curstarthour = "";
+
         foreach ($eventlist as $thisevent) {
             $thiseventstart = new DateTime($thisevent->start);
             $thiseventhour = new DateTime($thiseventstart->format('Y-m-d H:00'));
