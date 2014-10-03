@@ -108,7 +108,8 @@ if ($is_editor) {
         $action_bar_options[] = array('title' => $langNewQu,
                 'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
                 'icon' => 'fa-plus-circle',
-                'level' => 'primary-label'
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
          );          
     }
     $tool_content .= action_bar($action_bar_options);

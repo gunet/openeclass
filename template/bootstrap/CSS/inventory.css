@@ -1324,10 +1324,10 @@ ul.expandable {
     display: block; }
 
 /* Datatables ---------------------------------------------------------*/
-.dataTables_wrapper tr.not_visible td:not(:last-child) {
+tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic; }
-  .dataTables_wrapper tr.not_visible td:not(:last-child) a {
+  tr.not_visible td:not(:last-child) a {
     color: rgba(3, 3, 3, 0.3);
     font-style: italic; }
 
@@ -1350,5 +1350,8 @@ ul.expandable {
   bottom: 0px; }
 
 /*# sourceMappingURL=inventory.css.map */
+td.option-btn-cell {
+  width: 5px;
+  padding: 0px !important; }
 
 /*# sourceMappingURL=inventory.css.map */

@@ -144,6 +144,7 @@ load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
            var oTable = $('#ann_table{$course_id}').dataTable ({
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
@@ -514,7 +515,7 @@ if ($is_editor) {
         $tool_content .= "<thead>";
         $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
         if ($is_editor) {
-            $tool_content .= "<th class='center'>$langActions</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
