@@ -555,16 +555,12 @@ if ($count_video[0] > 0 or $count_video_links[0] > 0) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+    $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
 }
 
 add_units_navigation(TRUE);
 
-if (isset($head_content)) {
-	draw($tool_content, $menuTypeID, null, $head_content);
-} else {
-        draw($tool_content, $menuTypeID);
-}
+draw($tool_content, $menuTypeID, null, $head_content);
 
 
 /**
