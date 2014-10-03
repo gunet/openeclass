@@ -97,21 +97,29 @@ hContent;
 
     if (!$is_in_tinymce and (!isset($_GET['showQuota']))) {
         if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {
-            $tool_content .= "
-            <div id='operations_container'>
-              <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
-              </ul>
-            </div>";
+            $tool_content .= action_bar(array(
+                array('title' => $langAddV,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
+                      'icon' => 'fa-plus-circle',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success'),
+                array('title' => $langAddVideoLink,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url",
+                      'icon' => 'fa-plus-circle',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success'),
+                array('title' => $langCategoryAdd,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory",
+                      'icon' => 'fa-plus-circle'),
+                array('title' => $langQuotaBar,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
+                      'icon' => 'fa-pie-chart')));
         } else {
-            $tool_content .= "<div id='operations_container'>
-                <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>
-                </ul>
-            </div>";
+            $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
         }
     }
         
@@ -317,7 +325,7 @@ hContent;
                 <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
                 <legend>$langAddV</legend>
-                <table width='100%' class='tbl'>
+                <table class='table table-striped table-bordered table-hover'>
                 <tr>
                 <th valign='top'>$langWorkFile:</th>
                 <td>
@@ -369,8 +377,6 @@ hContent;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
             $tool_content .= "
                 <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
-                <fieldset>
-                <legend>$langAddVideoLink</legend>
                 <table width='100%' class='tbl'>
                 <tr>
                   <th valign='top' width='190'>$langGiveURL:<input type='hidden' name='id' value=''></th>
@@ -414,7 +420,6 @@ hContent;
                   <td class='right'><input type='submit' name='add_submit' value='$langAdd'></td>
                 </tr>
                 </table>
-                </fieldset>
                 </form>
                 <br/>";
         }
@@ -437,8 +442,6 @@ hContent;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
             $tool_content .= "
                 <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
-                <fieldset>
-                <legend>$langModify</legend>
                 <table width='100%' class='tbl'>";
             if ($table_edit == 'videolink') {
                 $tool_content .= "
@@ -487,100 +490,72 @@ hContent;
               </td>
             </tr>
             </table>
-            </fieldset>
             </form>";
     }
 
-    if (!isset($_GET['form_input']) && !$is_in_tinymce) {
-        $tool_content .= action_bar(array(
-            array('title' => $langAddV,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
-                  'icon' => 'fa-plus-circle'),
-            array('title' => $langAddVideoLink,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url",
-                  'icon' => 'fa-plus-circle'),
-            array('title' => $langCategoryAdd,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory",
-                  'icon' => 'fa-plus-circle'),
-            array('title' => $langQuotaBar,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
-                  'icon' => 'fa-pie-chart')));
-    }
 }   // end of admin check
-
-$count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id)->count;
-$count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id)->count;
-
-if ($count_video[0] > 0 or $count_video_links[0]> 0) {
-    $tool_content .= "<table width='100%' class='tbl_alt'><tr>
-                        <th colspan='2'><div align='left'>$langVideoDirectory</div></th>";
-    $tool_content .= "<th width='70'>$langDate</th>";
-    if (!$is_in_tinymce and $is_editor) {
-        $tool_content .= "<th width='170'>$langActions</th>";
-    }
-    $tool_content .= "</tr>";
-    //display uncategorized links
-    showlinksofcategory();
-    $tool_content .= "</table>";
-} else {
-    $tool_content .= "<p class='alert1'>$langNoVideo</p>";
-}
 
 ModalBoxHelper::loadModalBox(true);
 
+$count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id)->count;
+$count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id)->count;
 $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 
-if ($num_of_categories > 0) { // categories found ?
-    $tool_content .= "<br />
-    <table width='100%' class='tbl'>
-    <tr>
-      <td class='bold'>$langCatVideoDirectory</td>
-      <td width='1'><img src='$themeimg/folder_closed.png' title='$showall' alt='$showall'></td>
-      <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0'>$shownone</a></td>
-      <td width='1'><img src='$themeimg/folder_open.png' title='$showall' alt='$showall'></td>
-      <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1'>$showall</a></td>
-    </tr>
-    </table>";
+$expand_all = isset($_GET['d']) && $_GET['d'] == '1';
+if ($count_video[0] > 0 or $count_video_links[0] > 0) {
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>
+        <tr><th>$langVideoDirectory</th>
+        <th class='text-center'>$langDate</th>
+        <th class='text-center'>" . icon('fa-gears') . "</th>";
+    $tool_content .= "</tr>";
+    //display uncategorized links
+    showlinksofcategory();
 
-    $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
-    $tool_content .= "<table width='100%' class='tbl_alt'>";
-    $catcounter = 1;
-    foreach ($resultcategories as $myrow) {
-        $description = standard_text_escape($myrow->description);
-        if ((isset($_GET['d']) and $_GET['d'] == 1) or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-            $folder_icon = icon('fa-folder-open-o', $shownone);
-        } else {
-            $folder_icon = icon('fa-folder-o', $showall);
-        }
-        $tool_content .= "<tr><th width='15' valign='top'>$folder_icon</th>";
-        if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-            $tool_content .= "<th colspan='3' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
-        } else {
-            $tool_content .= "<th colspan='4' valign='top' align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
-        }
-
-        if ($is_editor) {
-            $tool_content .= "<span style='padding-left: 15px;'>".icon('fa-edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
-                             icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</span>";
-        }
-        if (!empty($description)) {
-                $tool_content .= "<br />$description</th>";
-        }
-        if ($is_editor) {
-            $tool_content .= "<th colspan='2' style='padding-left:45px;'>".icon('edit',$langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")."&nbsp;".
-                             icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat", "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"")."</th>";
-        }
-        // display all links
-        if (isset($_GET['d']) and $_GET['d'] == 1) {
-                showlinksofcategory($myrow->id);
-        } else {
-            // display links of specific category
+    if ($num_of_categories > 0) { // categories found ?
+        $tool_content .= "<tr><th colspan='2'>$langCatVideoDirectory</th>
+            <td class='text-center'>" .
+            ($expand_all?
+                icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
+                icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
+            "</td></tr>";
+        $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
+        foreach ($resultcategories as $myrow) {
+            $description = standard_text_escape($myrow->description);
+            if ((isset($_GET['d']) and $_GET['d'] == 1) or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
+                $folder_icon = icon('fa-folder-open-o', $shownone);
+            } else {
+                $folder_icon = icon('fa-folder-o', $showall);
+            }
+            $tool_content .= "<tr><th colspan='2'>$folder_icon ";
             if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-                showlinksofcategory($_GET['cat_id']);
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
+            } else {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
+            }
+            if (!empty($description)) {
+                    $tool_content .= '<br>' . $description;
+            }
+            $tool_content .= "</th><td class='option-btn-cell'>";
+            if ($is_editor) {
+                $tool_content .= action_button(array(
+                    array('title' => $langModify,
+                          'icon' => 'fa-edit',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory"),
+                    array('title' => $langDelete,
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
+                          'confirm' => $langCatDel)));
+            }
+            $tool_content .= '</td></tr>';
+            if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
+                showlinksofcategory($myrow->id);
             }
         }
     }
-    $tool_content .=  "</table>";
+    $tool_content .= "</table>";
+} else {
+    $tool_content .= "<p class='alert1'>$langNoVideo</p>";
 }
 
 add_units_navigation(TRUE);
@@ -749,88 +724,67 @@ function showlinksofcategory($cat_id = 0) {
     $i = 0;
     foreach($results as $table => $result) {
         foreach ($result as $myrow) {
-                $myrow->course_id = $course_id;
+            $myrow->course_id = $course_id;
+            if (resource_access($myrow->visible, $myrow->public)) {
                 switch($table) {
                     case 'video':
                         $vObj = MediaResourceFactory::initFromVideo($myrow);
                         if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
                             $vObj->setPlayURL($vObj->getAccessURL());
-
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
-                        //$link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow[4]) . "</small>" : '';
-                        $link_to_add = "<td width = '73%'>". $link_href . "</br />";
-                        $link_to_add .= (!$is_in_tinymce) ? "<small>$langcreator: " . q($myrow->creator) . ", $langpublisher: " . q($myrow->publisher) . "</small>" : '';
-                        $link_to_add .= "</td><td align='center'>". nice_format(date('Y-m-d', strtotime($myrow->date)))."</td>";
-                        $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                        $link_to_save = $vObj->getAccessURL();
                         break;
                     case "videolink":
                         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
                         $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
-                        if ($cat_id > 0) {
-                            $link_to_add = "<td width = '70%'>". $link_href ."<br />" . q($myrow->description) . "<br />";
-                        } else {
-                            $link_to_add = "<td width = '73%'>". $link_href ."<br/>" . q($myrow->description) . "<br />";
-                        }
-                        $link_to_add .= (!$is_in_tinymce) ? "<small>$langcreator: " . q($myrow->creator) . ", $langpublisher: " . q($myrow->publisher) . "</small>" : '';
-                        $link_to_add .= "</td><td width = 10%' align='center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
-                        $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;";
+                        $link_to_save = $vObj->getPath();
                         break;
                     default:
                         exit;
                 }
-                if ($is_editor or resource_access($myrow->visible, $myrow->public)) {
-                    if ($myrow->visible == 1) {
-                            $visibility = 0;
-                            $vis_icon = 'visible';
-                            if ($i % 2) {
-                                $rowClass = "class='odd'";
-                            } else {
-                                $rowClass = "class='even'";
-                            }
-                            $tool_content .= "<tr $rowClass>";
-                    } elseif ($is_editor and $myrow->visible == 0) {
-                            $tool_content .= "<tr class='invisible'>";
-                            $visibility = 1;
-                            $vis_icon = 'invisible';
-                    }
-                    if ($cat_id > 0) {
-                        $tool_content .= "<td>&nbsp;</td>";
-                    }
-                    $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>$link_to_add";
-                    if ($is_editor) {
-                        $width = '17%';
+                $tool_content .= "<tr><td>". $link_href;
+                if (!$is_in_tinymce and (!empty($myrow->creator) or !empty($myrow->publisher))) {
+                    $tool_content .= '<br><small>';
+                    if ($myrow->creator == $myrow->publisher) {
+                        $tool_content .= "$langcreator: " . q($myrow->creator);
                     } else {
-                        $width = '5%';
-                    }
-                    // preview / save icon
-                    $tool_content .= "<td align='center' width=$width> $link_to_save";
-                    if (!$is_in_tinymce and $is_editor) {
-                        $tool_content .= "
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table'>
-                              <img src='$themeimg/edit.png' title='".q($langModify)."'>
-                              </a><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete")."');\">
-                              <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>&nbsp;";
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;vis=$visibility&amp;table=$table'>" .
-                                                        "<img src='$themeimg/$vis_icon.png' " .
-                                                        "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
-                    }
-                    if (!$is_in_tinymce and $is_editor) {
-                        if (course_status($course_id) == COURSE_OPEN) {
-                            if ($myrow->public) {
-                                    $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;limited=1&amp;table=$table'>" .
-                                                    "<img src='$themeimg/access_public.png' " .
-                                                    "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
-                            } else {
-                                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;public=1&amp;table=$table'>" .
-                                                    "<img src='$themeimg/access_limited.png' " .
-                                                    "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
-                            }
+                        $emit = false;
+                        if (!empty($myrow->creator)) {
+                            $tool_content .= "$langcreator: " . q($myrow->creator);
+                            $emit = true;
+                        }
+                        if (!empty($myrow->publisher)) {
+                            $tool_content .= ($emit? ', ': '') . "$langpublisher: " . q($myrow->publisher);
                         }
                     }
-                    $tool_content .= "</td>";
-                    $tool_content .= "</tr>";
-                } // end of check resource access
-            $i++;
-        } // while
-    } // foreach
+                    $tool_content .= '</small>';
+                }
+                $tool_content .= "</td><td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
+                    "</td><td class='option-btn-cell'>" .
+                    action_button(array(
+                        array('title' => $langSave,
+                              'url' => $link_to_save,
+                              'icon' => 'fa-floppy-o'),
+                        array('title' => $langModify,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
+                              'icon' => 'fa-edit',
+                              'show' => !$is_in_tinymce and $is_editor),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
+                              'icon' => 'fa-times',
+                              'confirm' => $langConfirmDelete,
+                              'class' => 'delete'),
+                        array('title' => $langVisible,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
+                                       $myrow->visible? '0': '1',
+                              'icon' => $myrow->visible? 'fa-eye-slash': 'fa-eye'),
+                        array('title' => $langResourceAccess,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
+                                       $myrow->public? 'limited=1': 'public=1',
+                              'icon' => $myrow->public? 'fa-unlock': 'fa-lock',
+                              'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN))) .
+                    "</td></tr>";
+            } // end of check resource access
+        } // foreach row
+    } // foreach table
 }
