@@ -184,45 +184,29 @@ if (!$nbrExercises) {
         }
     }
 
-    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'><tr>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {
         $tool_content .= "
-                <th colspan='2'><div class='left'>$langExerciseName</div></th>
-                <th class='center'>$langResults</th>
-                <th class='center'>$langCommands</th>
+                <th>$langExerciseName</th>
+                <th class='text-center'>$langResults</th>
+                <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
         $tool_content .= "
-                <th colspan='2'>$langExerciseName</th>
-                <th width='110' class='center'>$langExerciseStart / $langExerciseEnd</th>
-                <th width='70' class='center'>$langExerciseConstrain</th>
-                <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
-                <th width='70' class='center'>$langResults</th>
+                <th>$langExerciseName</th>
+                <th class='text-center'>$langExerciseStart / $langExerciseEnd</th>
+                <th class='text-center'>$langExerciseConstrain</th>
+                <th class='text-center'>$langExerciseAttemptsAllowed</th>
+                <th class='text-center'>$langResults</th>
               </tr>";
     }
     // display exercise list
     $k = 0;
     foreach ($result as $row) {
-        if ($is_editor) {
-            if (!$row->active) {
-                $tool_content .= "<tr class='invisible'>";
-            } else {
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-            }
-        } else {
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-        }
-
+        
+        $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
 
         // prof only
@@ -232,22 +216,21 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td>".icon('fa-angle-double-right')."</td>
-				<td><a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
+            $tool_content .= "<td>".icon('fa-angle-double-right')." <a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 
             if ($NumOfResults) {
-                $tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a> |
+                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a> |
 				<a href='csv.php?course=$course_code&amp;exerciseId=" . $row->id . "' target=_blank>" . $langExerciseScores3 . "</a></td>";
             } else {
-                $tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
+                $tool_content .= "<td class='text-center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
             }
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
             
-            $tool_content .= "<td align = 'right'>".action_button(array(
+            $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                     array('title' => $langModify,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
@@ -261,43 +244,14 @@ if (!$nbrExercises) {
                           'icon' => 'fa-trash',
                           'confirm' => $langConfirmPurgeExerciseResults),
                     array('title' => $langVisible,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(isset($row->active)? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
                           'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
                     array('title' => $langResourceAccess,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(isset($row->public) ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
                           'icon' => $row->public ? 'fa-unlock' : 'fa-lock',
                           'show' => course_status($course_id) == COURSE_OPEN)
                            ))."</td></tr>";
             
-
-            // if active
-//            if ($row->active) {
-//                if (isset($page)) {
-//                    $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;page=${page}&amp;exerciseId=" . $row->id . "\">
-//					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-//                } else {
-//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;exerciseId=" . $row->id . "'>
-//					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-//                }
-//            } else { // else if not active
-//                if (isset($page)) {
-//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;page=${page}&amp;exerciseId=" . $row->id . "'>
-//					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-//                } else {
-//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;exerciseId=" . $row->id . "'>
-//					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-//                }
-//            }
-//            if (course_status($course_id) == COURSE_OPEN) {
-//                if ($row->public) {
-//                    $tool_content .= icon('fa-unlock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
-//                } else {
-//                    $tool_content .= icon('fa-lock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
-//                }
-//                $tool_content .= "&nbsp;";
-//            }
-//            $tool_content .= "</td></tr>";
-
         // student only
     } else {
             if (!resource_access($row->active, $row->public)) {
@@ -310,31 +264,26 @@ if (!$nbrExercises) {
             $currentDate = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5, 2), substr($currentDate, 8, 2), substr($currentDate, 0, 4));
         
             if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
-                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                       <td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
-             } 
-            elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
-                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                         <td class='invisible'>" . q($row->title) . "&nbsp;&nbsp;";
+                $tool_content .= "<td>".icon('fa-angle-double-right')." <a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
+             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
+                $tool_content .= "<td class='not_visible'>".icon('fa-angle-double-right')." " . q($row->title) . "&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td width='16'>
-                                 <img src='$themeimg/arrow.png' alt='' />
-                                 </td><td>" . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
+                $tool_content .= "<td>".icon('fa-angle-double-right')." " . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
             $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";          														  
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td align='center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
+                $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
             } else {
-                $tool_content .= "<td align='center'> - </td>";
+                $tool_content .= "<td class='text-center'> - </td>";
             }
             // how many attempts we have.
             $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;            
             if ($row->attempts_allowed > 0) {
-                $tool_content .= "<td align='center'>$currentAttempt/$row->attempts_allowed</td>";
+                $tool_content .= "<td class='text-center'>$currentAttempt/$row->attempts_allowed</td>";
             } else {
-                $tool_content .= "<td align='center'> - </td>";
+                $tool_content .= "<td class='text-center'> - </td>";
             }
             if ($row->score) {
                 // user last exercise score
@@ -342,13 +291,13 @@ if (!$nbrExercises) {
                                             FROM exercise_user_record WHERE uid = ?d
                                             AND eid = ?d", $uid, $row->id)->count;
                 if ($attempts > 0) {
-                    $tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
+                    $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
                 } else {
-                    $tool_content .= "<td align='center'>&dash;</td>";
+                    $tool_content .= "<td class='text-center''>&dash;</td>";
                 }
             $tool_content .= "</tr>";
             } else {
-                $tool_content .= "<td align='center'>$langNotAvailable</td>";
+                $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
             }
         }
         // skips the last exercise, that is only used to know if we have or not to create a link "Next page"
