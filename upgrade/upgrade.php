@@ -1275,7 +1275,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
                             `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
                             `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-                            `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+                            `auto` TINYINT(4) NOT NULL DEFAULT 0,
+                            `visible` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
                     
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
