@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -53,7 +53,7 @@ if (!$is_editor) {
     $zipFile = new pclZip($_FILES['file']['tmp_name']);
     validateUploadedZipFile($zipFile->listContent(), 2);
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) as order FROM ebook WHERE course_id = ?d", $course_id)->order;
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS `order` FROM ebook WHERE course_id = ?d", $course_id)->order;
     if (!$order) {
         $order = 1;
     } else {

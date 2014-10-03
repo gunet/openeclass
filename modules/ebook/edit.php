@@ -231,12 +231,12 @@ if (!$info) {
         $display_id = $r->sid . ',' . $r->ssid;
         $tool_content .= "
      <tr$class>
-       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet'></td>
        <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
-       <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "' /></td>
+       <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
        <td>" . selection($sections, "sid[$file_id]", $r->sid) . "</td>
-       <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid />
-           <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "' /></td>
+       <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
+           <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
      </tr>\n";
         unset($files[$id_map[$file_id]]);
         $k++;
