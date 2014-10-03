@@ -155,7 +155,8 @@ if ($is_editor) {
         array('title' => $langNewEx,
             'url' => "admin.php?course=$course_code&amp;NewExercise=Yes",
             'icon' => 'fa-plus-circle',
-            'level' => 'primary-label'
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
         ),
         array('title' => $langQuestionPool,
             'url' => "question_pool.php?course=$course_code",
@@ -183,14 +184,14 @@ if (!$nbrExercises) {
         }
     }
 
-    $tool_content .= "<table width='100%' class='tbl_alt'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered'><tr>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {
         $tool_content .= "
-                <th width='500' colspan='2'><div class='left'>$langExerciseName</div></th>
+                <th colspan='2'><div class='left'>$langExerciseName</div></th>
                 <th class='center'>$langResults</th>
-                <th class='center'>$langCommands&nbsp;</th>
+                <th class='center'>$langCommands</th>
               </tr>";
     } else { // student view
         $tool_content .= "
@@ -231,8 +232,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td width='16'>
-				<img src='$themeimg/arrow.png' alt='' /></td>
+            $tool_content .= "<td>".icon('fa-angle-double-right')."</td>
 				<td><a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
@@ -246,44 +246,57 @@ if (!$nbrExercises) {
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
-            $tool_content .= "<td align = 'right'>
-                                   <a href='admin.php?course=$course_code&amp;exerciseId=$row->id'>
-                                         <img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
-                                   </a>
-                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmPurgeExercise');\">
-                                         <img src='$themeimg/delete.png' alt='$langPurgeExercise' title='$langPurgeExercise' />
-                                  </a>
-                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id' onClick=\"return confirmation('$langConfirmPurgeExerciseResults');\">
-                                         <img src='$themeimg/clear.png' alt='" . q($langPurgeExerciseResults) . "' title='" . q($langPurgeExerciseResults) . "' />
-                                   </a>";
+            
+            $tool_content .= "<td align = 'right'>".action_button(array(
+                    array('title' => $langModify,
+                          'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
+                          'icon' => 'fa-edit'),
+                    array('title' => $langPurgeExercise,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmPurgeExercise),
+                    array('title' => $langPurgeExerciseResults,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                          'icon' => 'fa-trash',
+                          'confirm' => $langConfirmPurgeExerciseResults),
+                    array('title' => $langVisible,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(isset($row->active)? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
+                          'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
+                    array('title' => $langResourceAccess,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(isset($row->public) ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
+                          'icon' => $row->public ? 'fa-unlock' : 'fa-lock',
+                          'show' => course_status($course_id) == COURSE_OPEN)
+                           ))."</td></tr>";
+            
 
             // if active
-            if ($row->active) {
-                if (isset($page)) {
-                    $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;page=${page}&amp;exerciseId=" . $row->id . "\">
-					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-                } else {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;exerciseId=" . $row->id . "'>
-					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-                }
-            } else { // else if not active
-                if (isset($page)) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;page=${page}&amp;exerciseId=" . $row->id . "'>
-					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-                } else {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;exerciseId=" . $row->id . "'>
-					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
-                }
-            }
-            if (course_status($course_id) == COURSE_OPEN) {
-                if ($row->public) {
-                    $tool_content .= icon('fa-unlock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
-                } else {
-                    $tool_content .= icon('fa-lock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
-                }
-                $tool_content .= "&nbsp;";
-            }
-            $tool_content .= "</td></tr>";
+//            if ($row->active) {
+//                if (isset($page)) {
+//                    $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;page=${page}&amp;exerciseId=" . $row->id . "\">
+//					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+//                } else {
+//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;exerciseId=" . $row->id . "'>
+//					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+//                }
+//            } else { // else if not active
+//                if (isset($page)) {
+//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;page=${page}&amp;exerciseId=" . $row->id . "'>
+//					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+//                } else {
+//                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;exerciseId=" . $row->id . "'>
+//					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+//                }
+//            }
+//            if (course_status($course_id) == COURSE_OPEN) {
+//                if ($row->public) {
+//                    $tool_content .= icon('fa-unlock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
+//                } else {
+//                    $tool_content .= icon('fa-lock', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
+//                }
+//                $tool_content .= "&nbsp;";
+//            }
+//            $tool_content .= "</td></tr>";
 
         // student only
     } else {
@@ -344,7 +357,7 @@ if (!$nbrExercises) {
         }
         $k++;
     } // end while()
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 }
 add_units_navigation(TRUE);
 $head_content .= "<script type='text/javascript'>
