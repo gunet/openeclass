@@ -1539,7 +1539,6 @@ ul.expandable{
 }
 
 /* Datatables ---------------------------------------------------------*/
-.dataTables_wrapper{
     tr.not_visible{
         td:not(:last-child){
             color: rgba(3,3,3,0.3);
@@ -1550,7 +1549,6 @@ ul.expandable{
             }
         }
     }
-}
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
 .row-wrapper {
