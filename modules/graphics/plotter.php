@@ -26,8 +26,8 @@ class Plotter {
     private $title;
     private $data;
     private static $instanceCounter = 0;
-    private static $MAX_WIDTH = 780;
-    private static $MAX_HEIGHT = Plotter::MAX_WIDTH;
+    private static $MAX_WIDTH = 780;    
+    private static $MAX_HEIGHT = 780;
 
     function __construct($width = 200, $height = 200) {
         $this->setDimension($width, $height);
