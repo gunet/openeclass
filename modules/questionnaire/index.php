@@ -123,12 +123,14 @@ if ($is_editor) {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }        
     }
-    $tool_content .= "
-        <div id=\"operations_container\">
-	  <ul id=\"opslist\">
-	    <li><a href='admin.php?course=$course_code&amp;newPoll=yes'>$langCreatePoll</a></li>
-	  </ul>
-	</div>";
+    $tool_content .= action_bar(array(
+            array('title' => $langCreatePoll,
+                  'url' => "admin.php?course=$course_code&amp;newPoll=yes",
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')
+            ));    
+
 }
 
 printPolls();

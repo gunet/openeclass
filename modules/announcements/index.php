@@ -178,8 +178,8 @@ $head_content .= "<script type='text/javascript'>
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                if (confirmation('$langSureToDelAnnounce')) {
-                    var row_id = $(this).closest('tr').attr('id');
+                var row_id = $(this).closest('tr').attr('id');
+                bootbox.confirm('$langSureToDelAnnounce', function(result) {                       
                     $.ajax({
                       type: 'POST',
                       url: '',
@@ -197,6 +197,7 @@ $head_content .= "<script type='text/javascript'>
                                 page_number--;
                             }
                         }
+                        console.log(page_number);
                         oTable.fnPageChange(page_number);
                       },
                       error: function(xhr, textStatus, error){
@@ -204,8 +205,8 @@ $head_content .= "<script type='text/javascript'>
                           console.log(textStatus);
                           console.log(error);
                       }
-                    });                    
-                }
+                    });              
+                });                
             });
             $(document).on( 'click','.vis_btn', function (g) {
                 g.preventDefault();

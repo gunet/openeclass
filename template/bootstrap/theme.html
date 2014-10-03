@@ -8,24 +8,33 @@
     <title>{%PAGE_TITLE%}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- jQuery -->
+    
+    <!-- jQuery -->
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
     
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="{%template_base%}/CSS/bootstrap.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{%template_base%}/js/bootstrap.min.js"></script>
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-theme.min.css">
-
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="{%template_base%}/js/bootstrap.min.js"></script>
-
-	<!-- Font Awesome - A font of icons -->
-	<link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-
-	<!-- Our javascript -->
+     <!-- BootBox -->
+    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js"></script>
+    <script>
+    bootbox.setDefaults({
+      locale: "{%LANG%}"
+    });
+    </script>
+    <!-- Our javascript -->
     <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-theme.min.css">
+
+    <!-- Font Awesome - A font of icons -->
+    <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+
 
 	<!-- Our main styles -->
     <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/global.css">
