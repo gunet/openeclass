@@ -540,6 +540,8 @@ if (!$is_allowedToRead) {
     die;
 }
 
+
+if (!isset($_GET['edit'])) {
 // Wiki navigation bar
 $tool_content .= '
   <div id="operations_container">
@@ -581,6 +583,7 @@ $tool_content .= '          <li>'
 ;
 
 $tool_content .= '</ul></div>';
+}
 
 if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {
 
