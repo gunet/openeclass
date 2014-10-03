@@ -171,7 +171,7 @@ if (isset($_GET['mid'])) {
 } else {
     
     $out = "<div id='del_msg'></div><div id='inbox'>";
-    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
+    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all_in\"/></p><br/>";
     
     $out .= "<table id=\"inbox_table\">
                   <thead>
@@ -187,9 +187,9 @@ if (isset($_GET['mid'])) {
                 </thead>
                 <tbody>
                 </tbody>
-              </table>";
+              </table></div>";
     
-    $out .= "<script>
+    $out .= "<script type='text/javascript'>
                $(document).ready(function() {
                  var oTable = $('#inbox_table').dataTable({
                    'bStateSave' : true,
@@ -219,49 +219,56 @@ if (isset($_GET['mid'])) {
                              'sNext':     '&rsaquo;',
                              'sLast':     '&raquo;'
                         }
-                    },
-                   'fnDrawCallback' : function( oSettings ) {
-                       $('.delete').on('click', function() {
-                           if (confirm('$langConfirmDelete')) {
-                               var rowContainer = $(this).parent().parent();
-                               var id = rowContainer.attr('id');
-                               var string = 'mid='+ id ;
-                               $.ajax({
-                                   type: 'POST',
-                                   url: 'ajax_handler.php',
-                                   data: string,
-                                   cache: false,
-                                   success: reload()
-                               });
-                               return false;
-                           }
-                       }); 
                     }
                  }).fnSetFilteringDelay(1000);
                  
-                 var reload = function() {
-                    oTable.fnReloadAjax();
-                    $('#del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
-                    $('.success').delay(3000).fadeOut(1500);
-                 };
-                 
-                 $('.delete_all').click(function() {
-                  if (confirm('$langConfirmDeleteAllMsgs')) {
-                    var string = 'all_inbox=1';
-                    $.ajax({
-                      type: 'POST',
-                      url: 'ajax_handler.php?course_id=$course_id',
-                      data: string,
-                      cache: false,
-                      success: function(){
-                        oTable.fnReloadAjax();      
-                        $('#del_msg').html('<p class=\'success\'>$langMessageDeleteAllSuccess</p>');
-                        $('.success').delay(3000).fadeOut(1500);
+                 $(document).on( 'click','.delete_in', function (e) {
+                     e.preventDefault();
+                     if (confirm('$langConfirmDelete')) {
+                         var rowContainer = $(this).parent().parent();
+                         var id = rowContainer.attr('id');
+                         var string = 'mid='+ id ;
+                         $.post('ajax_handler.php', string, function() {
+                             var num_page_records = oTable.fnGetData().length;
+                             var per_page = oTable.fnPagingInfo().iLength;
+                             var page_number = oTable.fnPagingInfo().iPage;
+                             if(num_page_records==1){
+                                 if(page_number!=0) {
+                                     page_number--;
+                                 }
+                             }
+                             $('#del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
+                             $('.success').delay(3000).fadeOut(1500);
+                             oTable.fnPageChange(page_number);
+                         }, 'json');
                       }
-                   });
-                   return false;
-                 }
-               });
+                  });
+                 
+                 $('.delete_all_in').click(function() {
+                     if (confirm('$langConfirmDeleteAllMsgs')) {
+                         var string = 'all_inbox=1';
+                         $.ajax({
+                             type: 'POST',
+                             url: 'ajax_handler.php?course_id=$course_id',
+                             data: string,
+                             cache: false,
+                             success: function(){
+                                 var num_page_records = oTable.fnGetData().length;
+                                 var per_page = oTable.fnPagingInfo().iLength;
+                                 var page_number = oTable.fnPagingInfo().iPage;
+                                 if(num_page_records==1){
+                                     if(page_number!=0) {
+                                         page_number--;
+                                     }
+                                 }    
+                                 $('#del_msg').html('<p class=\'success\'>$langMessageDeleteAllSuccess</p>');
+                                 $('.success').delay(3000).fadeOut(1500);
+                                 oTable.fnPageChange(page_number);
+                             }
+                         });
+                         return false;
+                     }
+                 });
                  
                });
              </script>";
