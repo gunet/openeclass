@@ -124,8 +124,10 @@ class Session {
     }
     // Flashes posted variable errors
     public function Errors($errors){
+        $keys = array();
         foreach ($errors as $key => $error) {
             $_SESSION[$key]['errors'] = $error;
+            $keys[] = $key;
         }
         if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
         $keys = array_unique($keys);
