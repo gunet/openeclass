@@ -2623,7 +2623,7 @@ function action_bar($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
 
-    foreach ($options as $option) {
+    foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
@@ -2675,15 +2675,15 @@ function action_bar($options) {
         }
     }
     $out = "<ul class='list-inline'>";
-    if (count($out_secondary)) {
-        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
-    }
     if (count($out_primary)) {
         $out .= implode('', $out_primary);
     }
+    if (count($out_secondary)) {
+        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
+    }
     $out .= "</ul>";
     if (count($out_secondary)) {
-        $out .= "<ul class='list-inline expandable'>" . implode('', $out_secondary) . "</ul>";
+        $out .= "<ul class='list-inline expandable' style=\"float:right\">" . implode('', $out_secondary) . "</ul>";
     }
     if ($out) {
         return "<div class='row'>" .
@@ -2706,7 +2706,7 @@ function action_bar($options) {
 function action_button($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out = '';
-    foreach ($options as $option) {
+    foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
