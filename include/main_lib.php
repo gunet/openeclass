@@ -2636,8 +2636,10 @@ function action_bar($options) {
         $title = q($option['title']);
         $level = isset($option['level'])? $option['level']: 'secondary';
         if (isset($option['confirm'])) {
-            $confirm_extra = " data-title='$langConfirmDelete' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
+            $title_conf = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
+            $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $confirm_extra = " data-title='$title_conf' data-message='" .
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
@@ -2722,8 +2724,10 @@ function action_button($options) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
         if (isset($option['confirm'])) {
-            $icon_class .= " class='confirmAction' data-title='$langConfirmDelete' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'";
+            $title = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
+            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $icon_class .= " class='confirmAction' data-title='$title' data-message='" .
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
             $url = '#';
