@@ -98,7 +98,7 @@ if (isset($_GET['add'])) {
         $tvar = 'search_' . $term;
         if (!empty($GLOBALS[$tvar])) {
             $search[] = "u.$term LIKE ?s";
-            $values = $GLOBALS[$tvar] . '%';
+            $values[] = $GLOBALS[$tvar] . '%';
         }
     }
     $query = join(' AND ', $search);
