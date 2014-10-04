@@ -348,7 +348,7 @@ if ($is_editor) {
         $weight = $_POST['weight'];
         $type = $_POST['activity_type'];
         $actDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['date']);
-        $actDate = $actDate_obj->format('Y-m-d H:i:s');
+        $actDate = $actDate_obj ? $actDate_obj->format('Y-m-d H:i:s') : "";
         $visible = isset($_POST['visible']) ? 1 : 0;
 
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
