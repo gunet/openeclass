@@ -93,7 +93,7 @@ if (isset($language)) {
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';
 use Valitron\Validator as V;
-V::langDir(__DIR__.'/valitron/lang'); // always set langDir before lang.
+V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
 //Managing Session Flash Data
