@@ -345,7 +345,7 @@ switch ($action) {
             break;
     }
     // edit form
-    case "rqEdit": {
+    case "rqEdit": {            
             $tool_content .= claro_disp_wiki_properties_form($wikiId, $wikiTitle, $wikiDesc, $groupId, $wikiACL);
             break;
         }
@@ -358,16 +358,14 @@ switch ($action) {
             }
 
             if ($is_allowedToAdmin) {
-                $tool_content .= '
-              <div id="operations_container">
-                <ul id="opslist">
-                  <li><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid=' . $groupId . '&amp;action=rqEdit'
-                        . '">'
-                        . $langWikiCreateNewWiki
-                        . '</a></li>
-                </ul>
-              </div>
-               ';
+                $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+                if (isset($_GET['action'])) {
+                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'?course=$course_code'>$langBack</li>";
+                } else {
+                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId &amp;action=rqEdit'>
+                            $langWikiCreateNewWiki</a></li>";
+                }
+                $tool_content .= "</ul></div>";
             }
 
             // wiki list not empty

@@ -234,7 +234,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
     , $langWikiDescription, $langWikiAccessControl, $langWikiAccessControlText
     , $langWikiCourseMembers, $langWikiGroupMembers, $langWikiOtherUsers
     , $langWikiOtherUsersText, $langWikiReadPrivilege, $langWikiEditPrivilege
-    , $langWikiCreatePrivilege, $langCancel, $langSave
+    , $langWikiCreatePrivilege, $langCancel, $langSave, $langBack
     , $course_code;
 
     $title = ( $title != '' ) ? $title : '';
@@ -260,7 +260,11 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $form = '   <form method="POST" id="wikiProperties" action="' . $script . '">' . "\n"
+    $form = "<div id='operations_container'><ul id='opslist'>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>
+                </ul></div>";
+    
+    $form .= '   <form method="POST" id="wikiProperties" action="' . $script . '">' . "\n"
             . '   <fieldset>' . "\n"
             . '      <legend>' . $langWikiDescriptionForm . '</legend>' . "\n"
             . '      <table width="99%" class="tbl">' . "\n"
@@ -366,9 +370,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $form .= '</td></tr><tr><th>&nbsp;</th><td>';
 
-    $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button($_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid=' . $groupId . 'action=list', $langCancel) . "\n"
-    ;
+    $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />';
 
     $form .= '</td></tr></table></fieldset></form>';
 

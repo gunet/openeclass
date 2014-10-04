@@ -150,7 +150,7 @@ if ($is_editor) {
         submit_grade_comments($_POST['assignment'], $_POST['submission'], $_POST['grade'], $_POST['comments'], $email_notify);
     } elseif (isset($_GET['add'])) {
         $nameTools = $langNewAssign;
-        $navigation[] = $works_url;
+        $navigation[] = $works_url;        
         new_assignment();
     } elseif (isset($_POST['assign_type'])) {
         if ($_POST['assign_type']) {
@@ -533,7 +533,10 @@ function new_assignment() {
         });
     </script>";
     $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
-    $tool_content .= "
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "$_SERVER[PHP_SELF]?course=$course_code",
+              'icon' => 'fa-reply'))) . "
         <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
         <fieldset>
         <legend>$m[WorkInfo]</legend>
@@ -617,16 +620,15 @@ function new_assignment() {
         </tr>
         </table>
         </fieldset>
-        </form>
-        <br />";
-    $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+        </form>";    
 }
 
 //form for editing
 function show_edit_assignment($id) {
+    
     global $tool_content, $m, $langEdit, $langBack, $course_code,
-    $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
-    $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
+        $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
+        $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
     
     load_js('bootstrap-datetimepicker');
     $head_content .= "<script type='text/javascript'>
@@ -687,8 +689,12 @@ function show_edit_assignment($id) {
     } else {
         $deadline = '';
     }
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);
-    $tool_content .= "<h1>".q($row->title)."</h1>";
+    $tool_content .= "<div id='operations_container'>
+                        <ul id='opslist'>
+                      <li><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></li>
+                        </ul></div>";
+    
+    $textarea = rich_text_editor('desc', 4, 20, $row->description);    
     $tool_content .= "
     <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
@@ -792,8 +798,6 @@ function show_edit_assignment($id) {
     </table>
     </fieldset>
     </form>";
-
-    $tool_content .= "<br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</ul></div>";
 }
 
 // edit assignment
@@ -1117,7 +1121,7 @@ function assignment_details($id, $row) {
               <ul id='opslist'>
               <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>$langDelAssign</a></li>
                 <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
-		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
+		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li><br>
                     <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true'>$m[WorkUserGroupNoSubmission]</a></li>
 		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
               </ul>

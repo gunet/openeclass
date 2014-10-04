@@ -101,7 +101,7 @@ if (isset($_GET['mid'])) {
 } else {
     
     $out = "<div id='out_del_msg'></div><div id='outbox'>";
-    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all\"/></p><br/>";
+    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all_out\"/></p><br/>";
     $out .= "<table id=\"outbox_table\">
                <thead>
                  <tr>
@@ -116,9 +116,9 @@ if (isset($_GET['mid'])) {
                </thead>
                <tbody>
                </tbody>
-             </table>";
+             </table></div>";
     
-    $out .= "<script>
+    $out .= "<script type='text/javascript'>
                $(document).ready(function() {
                  var oTable2 = $('#outbox_table').dataTable({
                     'bStateSave' : true,
@@ -148,33 +148,32 @@ if (isset($_GET['mid'])) {
                                  'sNext':     '&rsaquo;',
                                  'sLast':     '&raquo;'
                             }
-                        },
-                       'fnDrawCallback' : function( oSettings ) {
-                        $('.delete').on('click', function() {
-                           if (confirm('$langConfirmDelete')) {
-                               var rowContainer = $(this).parent().parent();
-                               var id = rowContainer.attr('id');
-                               var string = 'mid='+ id ;
-                               $.ajax({
-                                   type: 'POST',
-                                   url: 'ajax_handler.php',
-                                   data: string,
-                                   cache: false,
-                                   success: reload()
-                               });
-                               return false;
-                           }
-                       }); 
-                      } 
+                        }
                     }).fnSetFilteringDelay(1000);
                     
-                    var reload = function() {
-                        oTable2.fnReloadAjax();
-                        $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
-                        $('.success').delay(3000).fadeOut(1500);
-                    };
+                    $(document).on( 'click','.delete_out', function (e) {
+                        e.preventDefault();
+                        if (confirm('$langConfirmDelete')) {
+                            var rowContainer = $(this).parent().parent();
+                            var id = rowContainer.attr('id');
+                            var string = 'mid='+ id ;
+                            $.post('ajax_handler.php', string, function() {
+                                var num_page_records = oTable2.fnGetData().length;
+                                var per_page = oTable2.fnPagingInfo().iLength;
+                                var page_number = oTable2.fnPagingInfo().iPage;
+                                if(num_page_records==1){
+                                    if(page_number!=0) {
+                                        page_number--;
+                                    }
+                                }
+                                $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
+                                $('.success').delay(3000).fadeOut(1500);
+                                oTable2.fnPageChange(page_number);
+                            }, 'json');
+                         }
+                     });
                      
-                    $('.delete_all').click(function() {
+                    $('.delete_all_out').click(function() {
                       if (confirm('$langConfirmDeleteAllMsgs')) {
                         var string = 'all_outbox=1';
                         $.ajax({
@@ -183,9 +182,17 @@ if (isset($_GET['mid'])) {
                           data: string,
                           cache: false,
                           success: function(){
-                            oTable2.fnReloadAjax();      
+                            var num_page_records = oTable2.fnGetData().length;
+                            var per_page = oTable2.fnPagingInfo().iLength;
+                            var page_number = oTable2.fnPagingInfo().iPage;
+                            if(num_page_records==1){
+                              if(page_number!=0) {
+                                page_number--;
+                              }
+                            }     
                             $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteAllSuccess</p>');
                             $('.success').delay(3000).fadeOut(1500);
+                            oTable2.fnPageChange(page_number);
                           }
                        });
                        return false;

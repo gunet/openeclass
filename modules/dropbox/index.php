@@ -409,7 +409,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 } else {//mailbox
     load_js('datatables');
     load_js('datatables_filtering_delay');
-    load_js('datatables_reload');
     $head_content .= "<script type='text/javascript'>
                         $(document).ready(function() {
                             // bootstrap tabs load external content via AJAX

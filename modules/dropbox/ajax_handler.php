@@ -139,7 +139,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $td[$i++] = $recipients;
         }
         $td[$i++] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
-        $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/>";
+        if ($mbox_type == 'inbox') {
+            $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete_in\"/>";
+        } else {
+            $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete_out\"/>";
+        }
         
         if ($course_id == 0) {
             $data['aaData'][] = array(

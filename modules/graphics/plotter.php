@@ -26,6 +26,8 @@ class Plotter {
     private $title;
     private $data;
     private static $instanceCounter = 0;
+    private static $MAX_WIDTH = 780;    
+    private static $MAX_HEIGHT = 780;
 
     function __construct($width = 200, $height = 200) {
         $this->setDimension($width, $height);
@@ -34,13 +36,12 @@ class Plotter {
     }
 
     public function setDimension($width, $height) {
-        $this->width = $width;
-        $this->height = $height;
+        $this->width = $width > Plotter::$MAX_WIDTH ? Plotter::$MAX_WIDTH : $width;
+        $this->height = $height > Plotter::$MAX_HEIGHT ? Plotter::$MAX_HEIGHT : $height;
     }
 
     public function modDimension($width, $height) {
-        $this->width += $width;
-        $this->height += $height;
+        $this->setDimension($this->width + $width, $this->height + $height);
     }
 
     public function setTitle($title) {
