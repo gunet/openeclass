@@ -82,7 +82,7 @@ if ($is_editor) {
         //clone poll
         } elseif (isset($_GET['clone']) and $_GET['clone'] == 'yes') {
             $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
-            $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
+            $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY pqid", $pid);
 
             $poll->name .= " ($langCopy2)";
             $poll_data = array(
@@ -113,7 +113,7 @@ if ($is_editor) {
                                            SET pid = ?d,
                                                question_text = ?s,
                                                qtype = ?d", $new_pid, $question->question_text, $question->qtype);
-                $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $question->pqid);
+                $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                 foreach ($answers as $answer) {
                     Database::get()->query("INSERT INTO poll_question_answer
                                             SET pqid = ?d,
