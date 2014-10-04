@@ -178,9 +178,9 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
 if (!isset($_SESSION['theme'])) {
     $_SESSION['theme'] = get_config('theme');
-    if (empty($_SESSION['theme'])) {
-        $_SESSION['theme'] = 'classic';
     }
+if (empty($_SESSION['theme']) or !is_readable("template/$_SESSION[theme]/theme.html")) {
+    $_SESSION['theme'] = 'classic';
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
