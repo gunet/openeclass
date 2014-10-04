@@ -242,7 +242,8 @@ if ($is_editor) {
         // Move group directory to garbage collector
         $groupGarbage = uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
-        rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
+        if ($myDir)
+            rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
         
         /*         * ********Delete Group FORUM*********** */
         $result = Database::get()->querySingle("SELECT `forum_id` FROM `group` WHERE `course_id` = ?d AND `id` = ?d AND `forum_id` <> 0 AND `forum_id` IS NOT NULL", $course_id, $id);
@@ -280,7 +281,7 @@ if ($is_editor) {
         /*         * *********************************** */
 
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
-                                                                    'name' => $myDir->name));
+            'name' => $myDir? $myDir->name:"[no name]"));
 
         $message = $langGroupDel;
     } elseif (isset($_REQUEST['empty'])) {
