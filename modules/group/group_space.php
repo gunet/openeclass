@@ -24,7 +24,6 @@
  * @file group_space.php
  * @brief Display user group info
  */
-
 $require_login = true;
 $require_current_course = true;
 $require_help = true;
@@ -64,18 +63,45 @@ if (!$is_member and ! $is_editor and ( !$self_reg or $member_count >= $max_membe
     exit;
 }
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>";
-if ($is_editor or $is_tutor) {
-    $tool_content .= "<li><a href='group_edit.php?course=$course_code&amp;group_id=$group_id'>$langEditGroup</a></li>\n";
-} elseif ($self_reg and isset($uid) and ! $is_member) {
-    if ($max_members == 0 or $member_count < $max_members) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
-    }
-} elseif (isset($regDone)) {
+if (isset($regDone)) {
     $tool_content .= "$message&nbsp;";
 }
 
-$tool_content .= loadGroupTools();
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langEditGroup,
+                'url' => "group_edit.php?course=$course_code&amp;group_id=$group_id",
+                'icon' => 'fa-edit',
+                'level' => 'primary',
+                'show' => $is_editor or $is_tutor),
+            array('title' => $langRegIntoGroup,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary',
+                'show' => !($is_editor or $is_tutor) && ($max_members == 0 or $member_count < $max_members)),
+            array('title' => $langForums,
+                'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
+                'icon' => 'fa-comments',
+                'level' => 'primary',
+                'show' => $has_forum and $forum_id <> 0),
+            array('title' => $langGroupDocumentsLink,
+                'url' => "document.php?course=$course_code&amp;group_id=$group_id",
+                'icon' => 'fa-folder-open',
+                'level' => 'primary',
+                'show' => $documents),
+            array('title' => $langWiki,
+                'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
+                'icon' => 'fa-globe',
+                'level' => 'primary',
+                'show' => $wiki),
+            array('title' => $langEmailGroup,
+                'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
+                'icon' => 'fa-envelope',
+                'level' => 'primary',
+                'show' => $is_editor or $is_tutor),
+        )) .
+        "</div>";
+
 $tool_content .= "<br />
     <fieldset>
     <legend>$langGroupInfo</legend>
@@ -94,7 +120,7 @@ $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, 
                             group_members.user_id = user.id
                       ORDER BY user.surname, user.givenname", $group_id);
 foreach ($q as $user) {
-    if ($user->is_tutor) {       
+    if ($user->is_tutor) {
         $tutors[] = display_user($user->id, true);
     } else {
         $members[] = $user;
@@ -133,7 +159,7 @@ $tool_content .= "
         </tr>";
 
 if (count($members) > 0) {
-    $i = 0;    
+    $i = 0;
     foreach ($members as $member) {
         $user_group_description = $member->description;
         if ($i % 2 == 0) {
@@ -169,45 +195,3 @@ $tool_content .= "</table>";
 $tool_content .= "</td></tr></table></fieldset>";
 draw($tool_content, 2);
 
-/**
- * 
- * @global type $has_forum
- * @global type $forum_id
- * @global type $documents
- * @global type $wiki
- * @global type $langForums
- * @global type $group_id
- * @global type $langGroupDocumentsLink
- * @global type $is_editor
- * @global type $is_tutor
- * @global type $group_id
- * @global type $langEmailGroup
- * @global type $langUsage
- * @global type $course_code
- * @return string
- */
-function loadGroupTools() {
-    global $has_forum, $forum_id, $documents, $wiki, $langWiki, $langForums,
-    $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,
-    $langUsage, $course_code;
-
-    $group_tools = '';
-
-    // Drive members into their own forum
-    if ($has_forum and $forum_id <> 0) {
-        $group_tools .= "<li><a href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>$langForums</a></li>";
-    }
-    // Drive members into their own File Manager
-    if ($documents) {
-        $group_tools .= "<li><a href='document.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
-    }
-    if ($wiki) {
-        $group_tools .= "<li><a href='../wiki/?course=$course_code&amp;gid=$group_id'>$langWiki</a></li>";
-    }
-    if ($is_editor or $is_tutor) {
-        $group_tools .= "<li><a href='group_email.php?course=$course_code&amp;group_id=$group_id'>$langEmailGroup</a></li>
-                <li><a href='group_usage.php?course=$course_code&amp;group_id=$group_id'>$langUsage</a></li>";
-    }
-    $group_tools .= "</ul></div>";
-    return $group_tools;
-}

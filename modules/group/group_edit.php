@@ -25,7 +25,6 @@
  * @brief group editing
  *
  */
-
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -170,7 +169,7 @@ if ($multi_reg) {
 $tool_content_not_Member = '';
 foreach ($resultNotMember as $myNotMember) {
     $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
-            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am)? q(" ($myNotMember->am)"):"") ."</option>";
+            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
 }
 
 $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
@@ -190,12 +189,18 @@ if (!empty($message)) {
     $tool_content .= $message;
 }
 
-$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='group_space.php?course=$course_code&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
-        ($is_editor ? "<li><a href='../user/?course=$course_code'>$langAddTutors</a></li>" : '') . "</ul></div>";
-
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langGroupThisSpace,
+                'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
+                'icon' => 'fa-users',
+                'level' => 'primary-label'),
+            array('title' => $langAddTutors,
+                'url' => "../user/?course=$course_code",
+                'icon' => 'fa-folder',
+                'level' => 'primary'),
+        )) .
+        "</div>";
 
 $tool_content .="
   <form name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
