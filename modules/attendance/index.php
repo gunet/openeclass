@@ -112,23 +112,35 @@ if ($attendance) {
 if ($is_editor) {  
 
     // TOP MENU
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if(isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
-    }
-    if(!isset($_GET['editUsers'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langAdminUsers</a></li>";
-    }
-    if(!isset($_GET['attendanceBook'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
-    }
-    if(!isset($_GET['addActivity'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
-    }
-    if(!isset($_GET['statsAttendance'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStat</a></li>";
-    }
-    $tool_content .= "</ul></div>";
+    $tool_content .= "<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langAttendanceManagement,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-check-square-o',
+                    'level' => 'primary',
+                    'show' => isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])),
+                array('title' => $langAdminUsers,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                    'icon' => 'fa-users',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['editUsers'])),
+                array('title' => $langAttendanceBook,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
+                    'icon' => 'fa-pencil',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['attendanceBook'])),
+                array('title' => $langAttendanceAddActivity,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['addActivity'])),
+                array('title' => $langStat,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1",
+                    'icon' => 'fa-area-chart',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['statsAttendance'])),
+            )) .
+            "</div>";
 
     //FLAG: flag to show the activities
     $showAttendanceActivities = 1;       
@@ -842,12 +854,18 @@ if ($is_editor) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
 
-                $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
-                      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirm('$langSureToDelAnnounce');\">
-                      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;</td>";
+                $tool_content .= "<td width='70' class='right'>" .
+                        action_button(array(
+                            array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id",
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                'class' => 'delete',
+                                'confirm' => $langSureToDelAnnounce,
+                                'icon' => 'fa-times')
+                        )) .
+                        "</td>";
                 $k++;
             } // end of while
         }

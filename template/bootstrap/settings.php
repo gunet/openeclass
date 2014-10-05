@@ -27,6 +27,7 @@ $theme_settings = array(
         'users' => 'fa-cogs',
         'tooladmin' => 'fa-cogs',
         'usage' => 'fa-cogs',
+        'attendance' => 'fa-check-square-o',
     ),
 );
 
