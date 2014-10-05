@@ -96,7 +96,7 @@ if (isset($_GET['cmd']) and $_GET['cmd'] == 'export12' and isset($_GET['path_id'
 } // endif $cmd == export12
 
 if (isset($_GET['cmd']) and $_GET['cmd'] == 'exportIMSCP'
-    and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {
+        and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {
 
     require_once "include/IMSCPExport.inc.php";
 
@@ -104,9 +104,9 @@ if (isset($_GET['cmd']) and $_GET['cmd'] == 'exportIMSCP'
     if (!$imscp->export()) {
         $dialogBox = '<b>' . $langScormErrorExport . '</b><br />' . "\n" . '<ul>' . "\n";
         foreach ($imscp->getError() as $error) {
-            $dialogBox .= '<li>' . $error . '</li>'."\n";
+            $dialogBox .= '<li>' . $error . '</li>' . "\n";
         }
-        $dialogBox .= '<ul>'."\n";
+        $dialogBox .= '<ul>' . "\n";
     }
 }
 
@@ -155,7 +155,7 @@ if ($is_editor) {
                         $delModuleSql .= " OR (`module_id`= " . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
                     }
                     Database::get()->query($delAssetSql);
-                    
+
                     $delModuleSql .= ")";
                     Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
 
@@ -239,8 +239,8 @@ if ($is_editor) {
                         $lp_id = Database::get()->query("INSERT INTO `lp_learnPath` (`course_id`, `name`, `comment`, `visible`, `rank`)
 							VALUES (?d, ?s, ?s, 1, ?d)", $course_id, $_POST['newPathName'], $_POST['newComment'], $order)->lastInsertID;
                         Log::record($course_id, MODULE_ID_LP, LOG_INSERT, array('id' => $lp_id,
-                                                                                'name' => $_POST['newPathName'],
-                                                                                'comment' => $_POST['newComment']));
+                            'name' => $_POST['newPathName'],
+                            'comment' => $_POST['newComment']));
                     } else {
                         // display error message
                         $dialogBox = $langErrorNameAlreadyExists;
@@ -328,15 +328,26 @@ if ($is_editor) {
         exit;
     } else {
         $tool_content .= "
-                <div id='operations_container'>
-                <ul id='opslist'>
-                        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create' title='$langCreateNewLearningPath'>$langCreate</a></li>
-                        <li><a href='importLearningPath.php?course=$course_code' title='$langimportLearningPath'>$langImport</a></li>
-                        <li><a href='detailsAll.php?course=$course_code' title='$langTrackAllPathExplanation'>$langProgress</a></li>
-                        <li><a href='modules_pool.php?course=$course_code'>$langLearningObjectsInUse_sort</a></li>
-                </ul>
-                </div>
-                ";
+                <div id='operations_container'>" .
+                action_bar(array(
+                    array('title' => $langCreate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langimportLearningPath,
+                        'url' => "importLearningPath.php?course=$course_code",
+                        'icon' => 'fa-upload',
+                        'level' => 'primary',),
+                    array('title' => $langTrackAllPathExplanation,
+                        'url' => "detailsAll.php?course=$course_code",
+                        'icon' => 'fa-line-chart',
+                        'level' => 'primary'),
+                    array('title' => $langLearningObjectsInUse_sort,
+                        'url' => "modules_pool.php?course=$course_code",
+                        'icon' => 'fa-book',
+                        'level' => 'primary'))) .
+                "</div>";
     }
 }
 
@@ -355,8 +366,8 @@ $tool_content .= "
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "      <th colspan='3'><div align='center'>$langAdm</div></th>\n" .
-            "      <th colspan='5'><div align='center'>$langActions</div></th>\n";
+    $tool_content .= "      <th ><div align='center'>" . icon('fa-download') . "</div></th>\n" .
+            "      <th><div align='center'>" . icon('fa-gears') . "</div></th>\n";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "      <th colspan='2' width='50'><div align='center'>$langProgress</div></th>\n";
@@ -515,96 +526,66 @@ foreach ($result as $list) { // while ... learning path list
     if ($is_editor) {
         // 5 administration columns
         // LOCK link
-
-        $tool_content .= "      <td class='center' width='1'>";
-
-        if ($list->lock == 'OPEN') {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id . "'>"
-                    . "<img src='$themeimg/bullet_unblock.png' alt='$langBlock' title='$langBlock' />"
-                    . "</a>";
-        } else {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id . "'>"
-                    . "<img src='$themeimg/bullet_block.png' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' />"
-                    . "</a>";
-        }
-        $tool_content .= "</td>\n";
-
         // EXPORT links
-        $tool_content .= '      <td class="center" width="50"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id . '" >'
-                . '<img src="' . $themeimg . '/export.png" alt="' . $langExport2004 . '" title="' . $langExport2004 . '" /></a>' . ""
-                . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list->learnPath_id . '" >'
-                . '<img src="' . $themeimg . '/export.png" alt="' . $langExport12 . '" title="' . $langExport12 . '" /></a>' . ""
-            .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id . '" >'
-            .'<img src="'.$themeimg.'/export.png" alt="'.$langExportIMSCP.'" title="'.$langExportIMSCP.'" /></a>' .""
-                . '</td>' . "\n";
+        $tool_content .= "      <td class='center' width='1'>" .
+                action_button(array(
+                    array('title' => $langExport2004,
+                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id,
+                        'icon' => 'fa-download'),
+                    array('title' => $langExport12,
+                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list->learnPath_id,
+                        'icon' => 'fa-download'),
+                    array('title' => $langExportIMSCP,
+                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id,
+                        'icon' => 'fa-download')
+        ));
 
-        // statistics links
-        $tool_content .= "<td class='center' width='1'><a href='details.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
+        $is_real_dir = is_dir(realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id));
 
-        // VISIBILITY link
-        $tool_content .= "<td class='center' width='60'>";
-        if ($list->visible == 0) {
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id . "'>"
-                    . "<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' />"
-                    . "</a>";
-        } else {
-            if ($list->lock == 'CLOSE') {
-                $onclick = "onClick=\"return confirm('" . clean_str_for_javascript($langAlertBlockingPathMadeInvisible) . "');\"";
-            } else {
-                $onclick = "";
-            }
-
-            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id . "' " . $onclick . " >"
-                    . "<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' />"
-                    . "</a>";
-        }
-
-        // Modify command / go to other page
-        $tool_content .= "&nbsp;&nbsp;<a href='learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>"
-                . "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
-                . "</a>\n";
-
-        // DELETE link
-        $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id);
-
-        // check if the learning path is of a Scorm import package and add right popup:
-        if (is_dir($real)) {
-            $tool_content .=
-                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id . "' "
-                    . "onClick=\"return scormConfirmation('" . clean_str_for_javascript($list->name) . "');\">"
-                    . "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
-                    . "</a>"
-                    . "</td>\n";
-        } else {
-            $tool_content .=
-                    "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id . "' "
-                    . "onClick=\"return confirmation('" . clean_str_for_javascript($list->name) . "');\">"
-                    . "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
-                    . "</a>"
-                    . "</td>\n";
-        }
-        // ORDER links
-        // DISPLAY MOVE UP COMMAND only if it is not the top learning path
-        if ($iterator != 1) {
-            $tool_content .= "      <td class='right' width='1'>"
-                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id . "'>"
-                    . "<img src='$themeimg/up.png' alt='$langUp' title='$langUp' />"
-                    . "</a>"
-                    . "</td>\n";
-        } else {
-            $tool_content .= "      <td width='1'>&nbsp;</td>\n";
-        }
-
-        // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
-        if ($iterator < $LPNumber) {
-            $tool_content .= "      <td width='1'>"
-                    . "<a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list->learnPath_id . "'>"
-                    . "<img src='$themeimg/down.png' alt='$langDown' title='$langDown' />"
-                    . "</a>"
-                    . "</td>";
-        } else {
-            $tool_content .= "      <td width='1'>&nbsp;</td>";
-        }
+        $tool_content .= "      <td class='center' width='1'>" .
+                action_button(array(
+                    array('title' => $langBlock,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id,
+                        'icon' => 'fa-unlock',
+                        'show' => $list->lock == 'OPEN'),
+                    array('title' => $langAltMakeNotBlocking,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
+                        'icon' => 'fa-lock',
+                        'level' => 'primary',
+                        'show' => !($list->lock == 'OPEN')),
+                    array('title' => $langTracking,
+                        'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-search'),
+                    // VISIBILITY link
+                    array('title' => $langVisible,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-eye-slash',
+                        'show' => $list->visible == 0),
+                    array('title' => $langVisible,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-plus-circle',
+                        'confirm' => $list->lock == 'CLOSE' ? $langAlertBlockingPathMadeInvisible : null,
+                        'confirm_title' => "",
+                        'confirm_button' => $langAccept,
+                        'show' => $list->visible != 0),
+                    array('title' => $langModify,
+                        'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-edit'),
+                    array('title' => $langDelete,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm + " '" . $list->name . "'") : $langDelete),
+                    array('title' => $langUp,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-arrow-up',
+                        'show' => $iterator != 1),
+                    array('title' => $langDown,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-arrow-down',
+                        'show' => $iterator < $LPNumber),
+                )) .
+                "</td>\n";
     } elseif ($uid) {
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);

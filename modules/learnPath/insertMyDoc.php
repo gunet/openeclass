@@ -325,8 +325,12 @@ unset($attribute);
 
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style);
-$tool_content .= "<br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\">$langBackToLPAdmin</a></p>";
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 //################################## MODULES LIST ####################################\\
 //$tool_content .= "<br />";

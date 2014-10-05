@@ -537,9 +537,8 @@ $tool_content .="
     <table width=\"99%\" class=\"tbl_alt\">
     <tr>
       <th colspan=\"" . ($maxDeep + 1) . "\"><div align=\"left\">&nbsp;" . $langContents . "</div></th>
-      <th width='50'><div align=\"center\">" . $langBlock . "</div></th>
-      <th width='80' colspan=\"3\"><div align='center'>" . $langMove . "</div></th>
-      <th width='50' colspan=\"3\"><div align=\"center\">" . $langActions . "</div></th>
+      <th width='1' ><div align='center'>" . icon('fa-arrows') . "</div></th>
+      <th width='1' ><div align=\"center\">" . icon('fa-gears') . "</div></th>
     </tr>";
 
 // -------------------- LEARNING PATH LIST DISPLAY ---------------------------------
@@ -597,79 +596,65 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
-    // LOCK
-    $tool_content .= "<td width='10' class='center'>";
 
-    if ($module['contentType'] == CTLABEL_) {
-        $tool_content .= "&nbsp;";
-    } elseif ($module['lock'] == 'OPEN') {
-        $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $module['learnPath_module_id'] . "\">
-	<img src=\"" . $themeimg . "/bullet_unblock.png\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
-    } elseif ($module['lock'] == 'CLOSE') {
-        $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $module['learnPath_module_id'] . "\">
-	<img src=\"" . $themeimg . "/bullet_block.png\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
-    }
-    $tool_content .= "</td>";
-
-    // ORDER COMMANDS
-    // DISPLAY CATEGORY MOVE COMMAND
-    $tool_content .= "<td width='10' class='center'>
-	<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'] . "\">
-	<img src=\"" . $themeimg . "/move.png\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
-
-    // DISPLAY MOVE UP COMMAND only if it is not the top learning path
-    if ($module['up']) {
-        $tool_content .= "<td width='10' align=\"right\">
-	<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'] . "\">
-	<img src=\"" . $themeimg . "/up.png\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
-    } else {
-        $tool_content .= "<td width='10'>&nbsp;</td>";
-    }
-
-    // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
-    if ($module['down']) {
-        $tool_content .= "<td width='10'>
-	<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;cmdid=" . $module['learnPath_module_id'] . "\">
-	<img src=\"" . $themeimg . "/down.png\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
-    } else {
-        $tool_content .= "<td width='10'>&nbsp;</td>";
-    }
-
-    // Modify command / go to other page
-    $tool_content .= "
-      <td width='10'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\"><img src=\"" . $themeimg . "/edit.png\" border=0 alt=\"" . $langModify . "\" title=\"" . $langModify . "\" /></a></td>";
-
-    // DELETE ROW
-    //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
-    $tool_content .= "
-      <td width='10'><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'] . "\" " .
-            "onClick=\"return confirmation('" . clean_str_for_javascript($langAreYouSureToRemove . " " . $module['name']) . " ? ";
+    $tool_content .= "<td width='10' class='center'>" .
+            action_button(array(
+                array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-mail-forward'),
+                array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-arrow-up',
+                    'show' => $module['up']),
+                array('title' => $langDown, // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-arrow-down',
+                    'show' => $module['down']),
+            )) .
+            "</td>";
 
     if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-        $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveSCORM);
+        $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveSCORM);
     } else if ($module['contentType'] == CTLABEL_) {
-        $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveLabel);
+        $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveLabel);
     } else {
-        $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
+        $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveStd);
     }
+    $tool_content .= "<td width='10' class='center'>" .
+            action_button(array(
+                // LOCK
+                array('title' => $langBlock,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-unlock',
+                    'show' => $module['lock'] == 'OPEN'),
+                array('title' => $langAltMakeNotBlocking,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-lock',
+                    'show' => $module['lock'] == 'CLOSE'),
+                array('title' => $langModify, // Modify command / go to other page
+                    'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],
+                    'icon' => 'fa-edit'),
+                array('title' => $langRemove, // DELETE ROW. In case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
+                    'class' => 'delete',
+                    'confirm' => $del_conf_text + " " + $module['name'],
+                    'icon' => 'fa-times'),
+                // VISIBILITY
+                array('title' => $langVisible,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'],
+                    'icon' => 'fa-eye-slash',
+                    'show' => $module['visible'] == 0),
+                array('title' => $langVisible,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
+                    'icon' => 'fa-eye',
+                    'confirm' => $module['lock'] == 'CLOSE' ? $langAlertBlockingMakedInvisible : null,
+                    'confirm_title' => "",
+                    'confirm_button' => $langAccept,
+                    'show' => $module['visible'] != 0),
+            )) .
+            "</td>";
 
-    $tool_content .= "');\"><img src=\"" . $themeimg . "/delete.png\" alt=\"" . $langRemove . "\" title=\"" . $langRemove . "\" /></a></td>";
 
-    // VISIBILITY
-    $tool_content .= "<td width='10'>";
-
-    if ($module['visible'] == 0) {
-        $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'] . "\"><img src=\"" . $themeimg . "/invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
-    } else {
-        if ($module['lock'] == 'CLOSE') {
-            $onclick = "onClick=\"return confirmation('" . clean_str_for_javascript($langAlertBlockingMakedInvisible) . "');\"";
-        } else {
-            $onclick = "";
-        }
-        $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'] . "\" " . $onclick . " ><img src=\"" . $themeimg . "/visible.png\" alt='$langVisible' title='$langVisible' /></a>";
-    }
-
-    $tool_content .= "</td>";
     $tool_content .= "</tr>";
 
     $ind++;
