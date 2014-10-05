@@ -349,7 +349,7 @@ function uid_to_am($uid) {
  * @return string
  */
 function user_icon($uid, $size=null) {
-    global $themeimg;
+    global $themeimg, $urlAppend;
 
     if (!$size) {
         $size = IMAGESIZE_SMALL;

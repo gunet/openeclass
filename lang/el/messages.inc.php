@@ -3669,6 +3669,7 @@ $langNoHelpTopic = "Δεν υπάρχει βοήθεια για το συγκε�
 
 $langGlossary = 'Γλωσσάριο';
 $langGlossaryTerm = 'Όρος';
+$langGlossaryTerms = "Όροι";
 $langGlossaryDefinition = 'Ορισμός';
 $langAddGlossaryTerm = 'Προσθήκη όρου';
 $langEditGlossaryTerm = 'Διόρθωση όρου';
