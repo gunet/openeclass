@@ -28,6 +28,7 @@ $theme_settings = array(
         'tooladmin' => 'fa-cogs',
         'usage' => 'fa-cogs',
         'attendance' => 'fa-check-square-o',
+        'gradebook' => 'fa-sort-numeric-desc',
     ),
 );
 

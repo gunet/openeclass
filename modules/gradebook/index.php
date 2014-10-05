@@ -112,23 +112,35 @@ if ($gradebook) {
 if ($is_editor) {
 
     // Top menu
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if(isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langGradebookManagement</a></li>";
-    }
-    if(!isset($_GET['editUsers'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langAdminUsers</a></li>";
-    }
-    if(!isset($_GET['gradebookBook']) && !isset($_GET['book'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1'>$langGradebookBook</a></li>";
-    }
-    if(!isset($_GET['addActivity'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookAddActivity</a></li>";
-    }
-    if(!isset($_GET['statsGradebook'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsGradebook=1'>$langGradebookStats</a></li>";
-    }
-    $tool_content .= "</ul></div>";
+    $tool_content .= "<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langGradebookManagement,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-sort-numeric-desc',
+                    'level' => 'primary',
+                    'show' => isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])),
+                array('title' => $langAdminUsers,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                    'icon' => 'fa-users',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['editUsers'])),
+                array('title' => $langGradebookBook,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
+                    'icon' => 'fa-pencil',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['gradebookBook']) && !isset($_GET['book'])),
+                array('title' => $langGradebookAddActivity,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['addActivity'])),
+                array('title' => $langGradebookStats,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsGradebook=1",
+                    'icon' => 'fa-area-chart',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['statsGradebook']))
+            )) .
+            "</div>";
 
     //FLAG: flag to show the activities
     $showGradebookActivities = 1;
@@ -1022,15 +1034,21 @@ if ($is_editor) {
                         $tool_content .= $langYes;
                     } else {
                         $tool_content .= $langNo;
-                    }
+                }
                 $tool_content .= "</td>";
 
-                $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
-                      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirmation('$langGradebookDeleteAlert');\">
-                      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;</td>";
+                $tool_content .= "<td width='70' class='right'>" .
+                        action_button(array(
+                            array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id",
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                'class' => 'delete',
+                                'confirm' => $langGradebookDeleteAlert,
+                                'icon' => 'fa-times')
+                        )) .
+                        "</td>";
                 $k++;
             } // end of while
         }
