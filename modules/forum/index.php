@@ -23,7 +23,6 @@
  * @file index.php
  * @brief display forum page
  */
-
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -45,14 +44,19 @@ load_js('tools.js');
 
 if ($is_editor) {
     $tool_content .= "
-	<div id='operations_container'>
-	<ul id='opslist'>
-	<li><a href='forum_admin.php?course=$course_code'>$langAddCategory</a>
-	</li>
-	<li><a href='forum_admin.php?course=$course_code&amp;settings=yes'>$langConfig</a>
-	</li>
-	</ul>
-	</div>";
+	<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langAddCategory,
+                    'url' => "forum_admin.php?course=$course_code",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+                array('title' => $langConfig,
+                    'url' => "forum_admin.php?course=$course_code&amp;settings=yes",
+                    'icon' => 'fa-gear',
+                    'level' => 'primary'),
+            )) .
+            "</div>";
 }
 
 
@@ -63,24 +67,20 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
 		WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $cat_id, $course_id);
     if ($rows->count > 0) {
-        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", 
-                        $_GET['forumcatnotify'], $uid, $cat_id, $course_id);
+        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $_GET['forumcatnotify'], $uid, $cat_id, $course_id);
     } else {
-        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, cat_id = ?d, notify_sent = 1, course_id = ?d", 
-                        $uid, $cat_id, $course_id);
+        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, cat_id = ?d, notify_sent = 1, course_id = ?d", $uid, $cat_id, $course_id);
     }
 } elseif (isset($_GET['forumnotify'])) { // modify forum notification
     if (isset($_GET['forum_id'])) {
         $forum_id = $_GET['forum_id'];
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
-		WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $uid, $forum_id, $course_id);    
-    if ($rows->count > 0) {                
-        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", 
-                    $_GET['forumnotify'], $uid, $forum_id, $course_id);
-    } else {        
-        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, forum_id = ?d, notify_sent = 1, course_id = ?d", 
-                    $uid, $forum_id, $course_id);
+		WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $uid, $forum_id, $course_id);
+    if ($rows->count > 0) {
+        Database::get()->query("UPDATE forum_notify SET notify_sent = ?d WHERE user_id = ?d AND forum_id = ?d AND course_id = ?d", $_GET['forumnotify'], $uid, $forum_id, $course_id);
+    } else {
+        Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, forum_id = ?d, notify_sent = 1, course_id = ?d", $uid, $forum_id, $course_id);
     }
 }
 
@@ -99,14 +99,13 @@ if ($total_categories > 0) {
 
     foreach ($categories as $cat_row) {
         $cat_title = q($cat_row->cat_title);
-        $catNum = $cat_row->id;        
+        $catNum = $cat_row->id;
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-                                                        WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", 
-                                                     $uid, $catNum, $course_id);        
+                                                        WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $catNum, $course_id);
         if ($sql) {
             $action_notify = $sql->notify_sent;
         }
-       
+
         if (!isset($action_notify)) {
             $link_notify = FALSE;
             $icon = '_off';
@@ -118,24 +117,33 @@ if ($total_categories > 0) {
         $tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$cat_title</b></th>
 		<th width='80' class='right'>";
-        if ($is_editor) {
-            $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/add.png' title='$langNewForum' alt='$langNewForum' /></a>
-			<a href='forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>
-			<a href='forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick=\"return confirmation('$langConfirmDelete');\">
-			<img src='$themeimg/delete.png' title='$langDelete' /></a>";
-        }
-        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
-		<img src='$themeimg/email$icon.png' title='$langNotify' alt='$langNotify' />
-		</a></th>
-		</tr>";
+
+        $dyntools = (!$is_editor) ? array() : array(
+            array(
+                'title' => $langNewForum,
+                'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
+                'icon' => 'fa-plus-circle'
+            ),
+            array('title' => $langModify,
+                'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
+                'icon' => 'fa-edit'),
+            array('title' => $langDelete,
+                'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
+                'icon' => 'fa-times',
+                'class' => 'delete',
+                'confirm' => $langConfirmDelete)
+        );
+        $dyntools[] = array('title' => $langNotify,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
+            'icon' => 'fa-envelope');
+        $tool_content .= action_button($dyntools);
+
         $tool_content .= "<tr class='sub_title1'>
 		<td colspan='2' width='150'>$langForums</td>
 		<td class='center'>$langSubjects</td>
 		<td class='center'>$langPosts</td>
 		<td class='center'>$langLastPost</td>
-		<td class='center'>$langActions</td>
+		<td class='text-center'>" . icon('fa-gears') . "</td>
 		</tr>";
 
         // display forum topics
@@ -186,7 +194,7 @@ if ($total_categories > 0) {
                     //  - forum doesn't belong to group
                     //  - forum belongs to group and group forums are enabled and
                     //     - user is member of group
-                    if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
+                    if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
                         $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
@@ -210,8 +218,7 @@ if ($total_categories > 0) {
                     $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 								WHERE user_id = ?d
 								AND forum_id = ?d
-								AND course_id = ?d", 
-                                                $uid, $forum_id, $course_id);                    
+								AND course_id = ?d", $uid, $forum_id, $course_id);
                     if ($forum_action_notify) {
                         $forum_action_notify = $forum_action_notify->notify_sent;
                     }
@@ -223,16 +230,21 @@ if ($total_categories > 0) {
                         $forum_icon = toggle_icon($forum_action_notify);
                     }
                     $tool_content .= "<td class='right'>";
-                    if ($is_editor) { // admin actions
-                        $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
-						<img src='$themeimg/edit.png' title='$langModify' />
-						</a>
-						<a href='forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick=\"return confirmation('$langConfirmDelete');\">
-						 <img src='$themeimg/delete.png' title='$langDelete' /></a>";
-                    }
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
-					<img src='$themeimg/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
-					</td></tr>";
+
+                    $dyntools = (!$is_editor) ? array() : array(
+                        array('title' => $langModify,
+                            'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                            'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete)
+                    );
+                    $dyntools[] = array('title' => $langNotify,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
+                        'icon' => 'fa-envelope');
+                    $tool_content .= action_button($dyntools);
                 }
             } else {
                 $tool_content .= "<tr>";
