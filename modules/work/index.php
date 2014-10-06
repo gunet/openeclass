@@ -577,7 +577,7 @@ function new_assignment() {
         </tr>
         <tr>
           <th>$m[WorkAssignTo]:</th>
-          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked='1' /><label for='assign_button_all'>Όλους</label>
+          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked='1' /><label for='assign_button_all'>$m[WorkToAllUsers]</label>
           <br /><input type='radio' id='assign_button_some' name='assign_to_specific' value='1' /><label for='assign_button_some'>$m[WorkToUser]</label></td>
         </tr>        
         <tr id='assignees_tbl' style='display:none;'>
