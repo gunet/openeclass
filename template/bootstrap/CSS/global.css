@@ -5,9 +5,10 @@
 */
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 112, global.scss */
+/* line 114, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -17,68 +18,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 118, global.scss */
+  /* line 120, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 119, global.scss */
+  /* line 121, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 120, global.scss */
+  /* line 122, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 126, global.scss */
+  /* line 128, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 127, global.scss */
+  /* line 129, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 128, global.scss */
+  /* line 130, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 134, global.scss */
+  /* line 136, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 135, global.scss */
+  /* line 137, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 136, global.scss */
+  /* line 138, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 142, global.scss */
+  /* line 144, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 143, global.scss */
+  /* line 145, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 144, global.scss */
+  /* line 146, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

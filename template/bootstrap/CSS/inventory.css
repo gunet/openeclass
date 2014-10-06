@@ -10,9 +10,10 @@
 */
 /* COLORS ---------------------------------------------------------------------- */
 /* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 112, global.scss */
+/* line 114, global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -22,68 +23,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 118, global.scss */
+  /* line 120, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 119, global.scss */
+  /* line 121, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 120, global.scss */
+  /* line 122, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 126, global.scss */
+  /* line 128, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 127, global.scss */
+  /* line 129, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 128, global.scss */
+  /* line 130, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @-o-keyframes NEW-ITEM-FX {
-  /* line 134, global.scss */
+  /* line 136, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 135, global.scss */
+  /* line 137, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 136, global.scss */
+  /* line 138, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
 
 @keyframes NEW-ITEM-FX {
-  /* line 142, global.scss */
+  /* line 144, global.scss */
   0% {
     background: #e8ffcb;
   }
 
-  /* line 143, global.scss */
+  /* line 145, global.scss */
   20% {
     background: #e8ffcb;
   }
 
-  /* line 144, global.scss */
+  /* line 146, global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
@@ -99,11 +100,11 @@
 .delete-action:hover {
   background: #ce6b6b !important;
   color: white!important;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 16, inventory.scss */
@@ -491,11 +492,11 @@ img {
   color: #dddddd;
   font-size: 15px !important;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 348, inventory.scss */
 .tiny-icon .tiny-icon-text {
@@ -506,44 +507,44 @@ img {
 .tiny-icon:hover {
   color: #4da1e4;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 361, inventory.scss */
 .tiny-icon-rss:hover {
   color: #FFBB4F !important;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 368, inventory.scss */
 .tiny-icon-green:hover {
   color: #6bce6b !important;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 375, inventory.scss */
 .tiny-icon-red:hover {
   color: #ce6b6b !important;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
@@ -770,11 +771,11 @@ input.toggle[type=checkbox]:checked:after
   border-color: #4da1e4;
   border-bottom-color: #3F87C1;
   color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 605, inventory.scss */
 .btn-default-eclass:active {
@@ -785,11 +786,11 @@ input.toggle[type=checkbox]:checked:after
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* BUTTON COLORS */
@@ -811,11 +812,11 @@ input.toggle[type=checkbox]:checked:after
   border-color: #4da1e4;
   border-bottom-color: #3F87C1;
   color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 639, inventory.scss */
 .btn-default-eclass.color-green:active {
@@ -826,11 +827,11 @@ input.toggle[type=checkbox]:checked:after
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 652, inventory.scss */
@@ -847,11 +848,11 @@ input.toggle[type=checkbox]:checked:after
 .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
   background: #E58080;
   text-decoration: none;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 669, inventory.scss */
 .btn-default-eclass.color-red:active {
@@ -861,11 +862,11 @@ input.toggle[type=checkbox]:checked:after
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* BUTTON SIZES */
@@ -945,11 +946,11 @@ input.toggle[type=checkbox]:checked:after
   color: #9C9C9C;
   background-color: #FFFFFF;
   content: attr(data-label);
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* line 764, inventory.scss */
@@ -1073,11 +1074,11 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 905, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
@@ -1085,11 +1086,11 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   margin-right: -25em;
   background: #333333;
   color: white;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 917, inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
@@ -1104,11 +1105,11 @@ ul.tablelist li.list-item .item-right-cols .item-options a {
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 934, inventory.scss */
 ul.tablelist li.list-item .text-title {
@@ -1131,11 +1132,11 @@ ul.tablelist li.list-item:first-child .item-date {
 /* line 958, inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
@@ -1169,11 +1170,11 @@ ul.tablelist li.list-item:hover {
 /* line 999, inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 1005, inventory.scss */
 .boxlist .list-item .item-content {
@@ -1260,11 +1261,11 @@ ul.tablelist li.list-item:hover {
   padding: 0px;
   margin-right: -100%;
   background: #333333;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  -o-transition: all 150ms linear;
-  -ms-transition: all 150ms linear;
-  transition: all 150ms linear;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
 /* line 1091, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
