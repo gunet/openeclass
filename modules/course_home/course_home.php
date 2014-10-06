@@ -110,7 +110,14 @@ $main_extra .= "</div>";
 $tool_content .= "</div>";
 
 if ($is_editor) {
-    $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
+    $edit_link = "
+
+    <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
+        <i class='fa fa-edit' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
+        <span class='tiny-icon-text'>$langEdit</span>
+    </a>
+
+    ";
 } else {
     $edit_link = '';
 }
@@ -124,8 +131,11 @@ if ($desccomm && $desccomm->comments) {
 }
 if (!empty($description)) {
     $main_content .= "
+    <div class='descr_title' style='float: right;'>
+        $edit_link
+    </div>
+    <br/>
     $description
-    <div class='descr_title' style='float: right;'>$langDescription$edit_link</div>
     ";
 } else {
     $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
