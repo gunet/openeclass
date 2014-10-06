@@ -114,7 +114,7 @@ if ($is_editor) {
 
     <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
         <i class='fa fa-edit' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
-        <span class='tiny-icon-text'>$langEdit</span>
+        <span class='tiny-icon-text'><!--$langEdit--></span>
     </a>
 
     ";
@@ -131,10 +131,10 @@ if ($desccomm && $desccomm->comments) {
 }
 if (!empty($description)) {
     $main_content .= "
+    $description
     <div class='descr_title'>
         $edit_link
     </div>
-    $description
     ";
 } else {
     $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
