@@ -113,10 +113,10 @@ if ($is_editor) {
                       'level' => 'primary-label'),
                 array('title' => "$langGlossaryToCsv (UTF8)",
                       'url' => "dumpglossary.php?course=$course_code",
-                      'icon' => 'fa-file-excel-o'),
+                      'icon' => 'fa-download'),
                 array('title' => "$langGlossaryToCsv (Windows 1253)",
                       'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
-                      'icon' => 'fa-file-excel-o'),
+                      'icon' => 'fa-download'),
                 array('title' => $langCategories,
                       'url' => "categories.php?course=$course_code",
                       'icon' => 'fa-tasks',
@@ -357,7 +357,8 @@ $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, cat
                         GROUP BY term
                         ORDER BY term", $course_id, $terms);
 if (count($sql) > 0) {
-    $tool_content .= "<table width='100%' class='table-striped table-bordered table-hover'>";
+    $tool_content .= "<div class='table-responsive'>";
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
     $tool_content .= "<tr>
 		 <th class='text-left'>$langGlossaryTerm</th>
 		 <th class='text-left'>$langGlossaryDefinition</th>";
@@ -412,7 +413,7 @@ if (count($sql) > 0) {
         }                        
         $tool_content .= "</tr>";        
     }
-    $tool_content .= "</table><br>";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<p class='alert1'>$langNoResult</p>";
 }

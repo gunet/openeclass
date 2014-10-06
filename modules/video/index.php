@@ -772,11 +772,11 @@ function showlinksofcategory($cat_id = 0) {
                               'class' => 'delete'),
                         array('title' => $langVisible,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
-                                       $myrow->visible? '0': '1',
+                                       ($myrow->visible? '0': '1'),
                               'icon' => $myrow->visible? 'fa-eye-slash': 'fa-eye'),
                         array('title' => $langResourceAccess,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
-                                       $myrow->public? 'limited=1': 'public=1',
+                                       ($myrow->public? 'limited=1': 'public=1'),
                               'icon' => $myrow->public? 'fa-unlock': 'fa-lock',
                               'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN))) .
                     "</td></tr>";
