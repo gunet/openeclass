@@ -250,54 +250,107 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
     $tool_content .= "
-        <fieldset>
-        <legend>$langInfoExercise&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes'>
-              <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></legend>
-        <table width='99%' class='tbl'>
-	<tr>
-	  <th width='180'>$langExerciseName:</th>
-	  <td>" . q($exerciseTitle) . "</td>
-	</tr>
-	<tr>
-	  <th>$langExerciseDescription:</th>
-	  <td>$exerciseDescription</td>
-	</tr>
-        <tr>
-            <th>$langExerciseType:</th>
-            <td>$exerciseType</td>
-        </tr>
-	<tr>
-	  <th>$langExerciseStart:</th>
-	  <td>$exerciseStartDate</td>
-	</tr>
-	<tr>
-	  <th>$langExerciseEnd:</th>
-	  <td>$exerciseEndDate</td>
-	</tr>
-        <tr>
-            <th>$langTemporarySave:</th>
-            <td>$exerciseTempSave</td>
-        </tr>
-	<tr>
-	  <th>$langExerciseConstrain:</th>
-	  <td>" . q($exerciseTimeConstraint) . " $langExerciseConstrainUnit</td>
-	</tr>
-	<tr>
-	  <th>$langExerciseAttemptsAllowed:</th>
-  	  <td>" . q($exerciseAttemptsAllowed) . " $langExerciseAttemptsAllowedUnit</td>
-	</tr>
-        <tr>
-            <th>$langRandomQuestions</th>
-            <td>$langSelection $randomQuestions $langFromRandomQuestions</td>
-        </tr>
-	<tr>
-	  <th>$langAnswers:</th>
-	  <td>$disp_results_message</td>
-	</tr>
-	<tr>
-	  <th>$langScore:</th>
-	  <td>$disp_score_message</td>
-	</tr>
-	</table>
-        </fieldset>";
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$langInfoExercise &nbsp;". icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes") ."</h3>
+        </div>
+        <div class='panel-body'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseName:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseTitle
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseDescription:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseDescription
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseType:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseType
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseStart:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseType
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseType:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseStartDate
+                </div>                
+            </div> 
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseEnd:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseEndDate
+                </div>                
+            </div>  
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langTemporarySave:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseTempSave
+                </div>                
+            </div> 
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseConstrain:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseTimeConstraint $langExerciseConstrainUnit
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langExerciseAttemptsAllowed:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langRandomQuestions:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $langSelection $randomQuestions $langFromRandomQuestions
+                </div>                
+            </div> 
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langAnswers:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $disp_results_message
+                </div>                
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langScore:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $disp_score_message
+                </div>                
+            </div>              
+        </div>
+    </div>";
 }
