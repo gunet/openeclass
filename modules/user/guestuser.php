@@ -61,7 +61,11 @@ if (isset($_POST['submit'])) {
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
     $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-            "<a href='index.php?course=$course_code'>$langBack</a>";
+            action_bar(array(
+            array('title' => $langBack,
+                'url' => "",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
