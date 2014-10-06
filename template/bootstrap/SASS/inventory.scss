@@ -204,6 +204,26 @@ img
 {
   color:#555555;
   font-size:22px;
+
+  .title-icon
+  {
+    color:#dddddd;
+    font-size: 0.7em !important;
+    text-decoration: none;
+    @include transition(all 150ms linear);
+  }
+
+  .title-icon:hover
+  {
+    color: $color-hover;
+    text-decoration: none;
+    @include transition(all 150ms linear);
+  }
+
+  a
+  {
+    text-decoration: none;
+  }
 }
 
 .page-subtitle-name

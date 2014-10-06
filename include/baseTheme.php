@@ -292,10 +292,20 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             if (display_activation_link($module_id)) {
                 if (visible_module($module_id)) {
                     $message = $langDeactivate;
-                    $mod_activation = "<a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+                    $mod_activation = "
+
+                    <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
+                        <i class='fa fa-check-square title-icon'></i>
+                        <!--($langDeactivate)-->
+                    </a>";
                 } else {
                     $message = $langActivate;
-                    $mod_activation = "<a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+                    $mod_activation = "
+
+                    <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
+                        <i class='fa fa-minus-square title-icon'></i>
+                        <!--($langActivate)-->
+                    </a>";
                 }
             }
         }
@@ -447,9 +457,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             if (isset($require_current_course) and !$is_editor) {
                 $helpTopic .= '_student';
             }
-            $help_link_icon = " <a href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
-        onClick=\"window.open('" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
-        return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' title='$langHelp' /></a>";
+            $help_link_icon = "
+
+            <a href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
+            onClick=\"window.open('" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
+            return false;\">
+                <i class='fa fa-question-circle title-icon'></i>
+                <!--<img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' title='$langHelp' />-->
+            </a>";
 
             $t->set_var('HELP_LINK_ICON', $help_link_icon);
             $t->set_var('LANG_HELP', $langHelp);
@@ -458,7 +473,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('LANG_HELP', '');
         }
         if (defined('RSS')) {
-            $t->set_var('RSS_LINK_ICON', "&nbsp;<span class='feed'><a href='$urlAppend" . RSS . "'><img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
+            $t->set_var('RSS_LINK_ICON', "
+
+                <a href='$urlAppend" . RSS . "'>
+                    <i class='fa fa-rss-square title-icon'></i>
+                    <!--<img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />-->
+                </a>
+
+
+            ");
         }
 
         if ($perso_tool_content) {
