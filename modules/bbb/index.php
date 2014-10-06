@@ -735,13 +735,13 @@ function bbb_session_details() {
         if (!$is_editor) {
             $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
         }    
-        $tool_content .= "<table class='tbl_alt' width='100%'>
+        $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
                           <tr>
-                              <th width = '10%' class='center'>$langTitle</th>
-                              <th class = 'center'>$langNewBBBSessionDesc</th>
-                              <th class = 'center'>$langNewBBBSessionStart</th>
-                              <th class = 'center'>$langNewBBBSessionType</th>
-                              <th width = '15%' class='center'>$langActions</th>
+                              <th class = 'text-center'>$langTitle</th>
+                              <th class = 'text-center'>$langNewBBBSessionDesc</th>
+                              <th class = 'text-center'>$langNewBBBSessionStart</th>
+                              <th class = 'text-center'>$langNewBBBSessionType</th>
+                              <th class = 'text-center'>".icon('fa-gears')."</th>
                           </tr>";
         $k = 0;
 
@@ -758,7 +758,7 @@ function bbb_session_details() {
                 $mod_pw = $row->mod_pw;
                 $record = $row->record;
                 (isset($row->description)? $desc = $row->description : $desc="");
-                $tool_content .= "<tr>";
+                $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
 
                 if ($is_editor) {
                     // If there no available bbb servers, disable join link. Otherwise, enable    
@@ -770,23 +770,27 @@ function bbb_session_details() {
                         $tool_content .= "
                         <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>".q($title)."</a></td>";
                     }
-                    $tool_content.="<td>".$desc."</td>
-                    <td class='center'>".q($start_date)."</td>
-                    <td class='center'>$type</td>
-                    <td class='center'>
-                    ".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit")."                        
-                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
-                    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video' >
-                    <img src='$themeimg/video.png' alt='$langBBBImportRecordings' title='$langBBBImportRecordings' /></a>";
-                    if ($row->active=='1') {
-                        $deactivate_temp = q($langDeactivate);
-                        $activate_temp = q($langActivate);
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_disable&amp;id=$row->id'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
-                    } else {
-                        $activate_temp = q($langActivate);
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_enable&amp;id=$row->id'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
-                    }
+                    $tool_content.="<td class='text-center'>".$desc."</td>
+                    <td class='text-center'>".q($start_date)."</td>
+                    <td class='text-center'>$type</td>
+                    <td class='option-btn-cell'>".
+                            action_button(array(
+                                array(  'title' => $langModify,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
+                                        'icon' => 'fa-edit'),
+                                array(  'title' => $langDelete,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                                        'icon' => 'fa-times',
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete),
+                                array(  'title' => $langBBBImportRecordings,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video",
+                                        'icon' => "fa-edit"),
+                                array(  'title' => $row->active? $langDeactivate : $langActivate,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_".
+                                                 ($row->active? 'disable' : 'enable'),
+                                        'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
+                                ));
                 } else {
                     //Allow access to session only if user is in participant group or session is scheduled for everyone
                     $access='false';
@@ -798,7 +802,7 @@ function bbb_session_details() {
                     }
                     if(in_array("0",$r_group) || $access == 'true')
                     {
-                        $tool_content .= "<td align='center'>";
+                        $tool_content .= "<td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
                         {   
@@ -807,9 +811,9 @@ function bbb_session_details() {
                             $tool_content .= q($title);
                         }
                         $tool_content .="<td>".$desc."</td>
-                            <td align='center'>".q($start_date)."</td>
-                            <td align='center'>$type</td>
-                            <td class='center'>";
+                            <td class='text-center'>".q($start_date)."</td>
+                            <td class='text-center'>$type</td>
+                            <td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>$langBBBSessionJoin</a></td>";
@@ -823,12 +827,12 @@ function bbb_session_details() {
         $tool_content .= "</table>";
         if(get_total_bbb_servers()=='0')
         {
-            if($is_editor) {$tool_content .= "<p class='alert1'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";}
-            else {$tool_content .= "<p class='alert1'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";}
+            if($is_editor) {$tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";}
+            else {$tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";}
         }
         
     } else {
-        $tool_content .= "<div class='alert1'>$langNoBBBSesssions</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langNoBBBSesssions</div>";
     }
 }
 
