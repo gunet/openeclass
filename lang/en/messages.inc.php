@@ -2522,6 +2522,7 @@ $m['WorkDeleteAssignmentFileConfirm'] = 'Delete assignment file confirmation';
 $m['WorkEdit'] = 'Assignment edit';
 $m['WorkToAllUsers'] = 'To All '.$langStudents;
 $m['WorkToUser'] = 'Specific '.$langStudents;
+$m['WorkToAllGroups'] = 'To All  '.$langGroups;
 $m['WorkToGroup'] = 'Specific '.$langGroups;
 $m['WorkAssignTo'] = 'Assign to';
 $m['WorkNoSubmission'] = 'The assignment submission you are looking for does not exist.';
