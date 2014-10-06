@@ -29,7 +29,6 @@ body > .container{
 	background: $color-background;
   padding: 0;
 
-  @include transition(all $transition-time linear);
 
 	.logo{
 		margin:2em 1em;
@@ -99,6 +98,8 @@ body > .container{
         border-top: 1px solid rgba(255,255,255,.075);
 				padding: 1em;
         text-align: center;
+
+        @include transition(all $transition-time linear);
 
         > span{
           font-size: 0.9em;
