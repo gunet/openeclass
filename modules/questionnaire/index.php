@@ -82,7 +82,7 @@ if ($is_editor) {
         //clone poll
         } elseif (isset($_GET['clone']) and $_GET['clone'] == 'yes') {
             $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
-            $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY pqid", $pid);
+            $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
             $poll->name .= " ($langCopy2)";
             $poll_data = array(
@@ -112,12 +112,12 @@ if ($is_editor) {
                 $new_pqid = Database::get()->query("INSERT INTO poll_question
                                            SET pid = ?d,
                                                question_text = ?s,
-                                               qtype = ?d", $new_pid, $question->question_text, $question->qtype);
+                                               qtype = ?d", $new_pid, $question->question_text, $question->qtype)->lastInsertID;
                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                 foreach ($answers as $answer) {
                     Database::get()->query("INSERT INTO poll_question_answer
                                             SET pqid = ?d,
-                                                answer_text = ?s",$new_pqid, $answer->answer_text);
+                                                answer_text = ?s", $new_pqid, $answer->answer_text);
                 }
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);

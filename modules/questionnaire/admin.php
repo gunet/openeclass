@@ -133,7 +133,7 @@ if (isset($_POST['submitAnswers'])) {
     $answers = $_POST['answers'];
     
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+		(SELECT pqid FROM poll_question WHERE pid = ?d AND pqid = ?d)", $pid, $pqid);
     
     foreach ($answers as $answer) {
         if (!empty($answer)) {
