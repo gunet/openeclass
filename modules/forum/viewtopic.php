@@ -275,7 +275,11 @@ foreach ($result as $myrow) {
     }
     if (!isset($user_stats[$myrow->poster_id])) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
-        $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+        if ($user_num_posts->num_posts == 1) {
+            $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessage";
+        } else {
+            $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+        }
     }
     
     $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";
