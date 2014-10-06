@@ -143,7 +143,7 @@ if ($all_set) {
                 "$langProfUname: $username\n$langProfEmail : $usermail\n" .
                 "$contactphone: $userphone\n\n\n$logo\n\n";
 
-        if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset)) {
+        if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
             $tool_content .= "<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
         }
 
@@ -159,7 +159,7 @@ if ($all_set) {
         $subject = $langMailVerificationSubject;
         $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&rid=' . $request_id);
         $emailhelpdesk = get_config('email_helpdesk');
-        if (!send_mail('', $emailhelpdesk, '', $usermail, $subject, $MailMessage, $charset)) {
+        if (!send_mail($siteName, $emailAdministrator, '', $usermail, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
             $mail_ver_error = sprintf("<p class='alert1'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);
