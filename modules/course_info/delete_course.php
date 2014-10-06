@@ -53,12 +53,11 @@ if (isset($_POST['delete'])) {
     <input type='submit' name='delete' value='$langDelete' /></form></td>
     <td><small>$langByDel</small></td>
     </tr>
-    <tr>
-    <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='" . q($course_code) . "'/>
-                    <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
-    <td>&nbsp;</td>
-    </tr>
     </table>";
-    $tool_content .= "<p align='right'><a href='index.php?course=" . q($course_code) . "'>$langBack</a></p>";
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=" . q($course_code),
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
 }
 draw($tool_content, 2);
