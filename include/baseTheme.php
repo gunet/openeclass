@@ -473,8 +473,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('RSS_LINK_ICON', "
 
                 <a href='$urlAppend" . RSS . "'>
-                    <i class='fa fa-rss-square title-icon title-icon-rss'></i>
-                    <!--<img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />-->
+                    <i class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
                 </a>
 
 
