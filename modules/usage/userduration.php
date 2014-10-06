@@ -24,8 +24,6 @@
  * @brief Shows logins made by a user or all users of a course, during a specific period.
  * Takes data from table 'logins'
  */
-
-
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
@@ -35,6 +33,7 @@ $require_login = true;
 require_once '../../include/baseTheme.php';
 require_once 'duration_query.php';
 require_once 'modules/group/group_functions.php';
+require_once 'statistics_tools_bar.php';
 
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $format = 'csv';
@@ -56,17 +55,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 
     $nameTools = $langUserDuration;
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-
-    $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
-            <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
-            <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
-            <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
-            <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
-          </ul>
-        </div>";
+    statistics_tools($course_code, "userduration");
 
     // display number of users
     $tool_content .= "
@@ -74,7 +63,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
            <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
                 2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
           </div>";
-    
+
     $tool_content .= "
         <table class='tbl_alt' width='99%'>
         <tr>

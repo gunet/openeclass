@@ -48,6 +48,7 @@ $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
+require_once 'modules/usage/statistics_tools_bar.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
     $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
@@ -68,16 +69,7 @@ $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 $usersList = get_limited_list($sql, 30);
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
-    $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='../usage/favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
-            <li><a href='../usage/userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
-            <li><a href='../usage/userduration.php?course=$course_code'>$langUserDuration</a></li>
-            <li><a href='detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
-            <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
-          </ul>
-        </div>";
+    statistics_tools($course_code, "detailsAll", "../usage/");
 }
 
 // check if there are learning paths available

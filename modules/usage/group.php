@@ -24,7 +24,6 @@
  * @file group.php
  * @brief group statistics
  */
-
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
@@ -33,18 +32,9 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once "statistics_tools_bar.php";
 
-$tool_content .= "
-<div id='operations_container'>
-  <ul id='opslist'>
-    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
-  </ul>
-</div>";
-
+statistics_tools($course_code, "group");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 
@@ -72,7 +62,7 @@ if (count($q) > 0) {
         }
         $tool_content .= "<td class='arrow'>
 			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group->id'>" .
-                q($group->name) . "</a></td>";              
+                q($group->name) . "</a></td>";
         $tool_content .= "<td>" . display_user(group_tutors($group->id)) . "</td>";
         $tool_content .= "<td class='center'>$group->registered</td>";
         if ($group->max_members == 0) {

@@ -34,6 +34,7 @@ if (isset($_GET['from_admin'])) {
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'statistics_tools_bar.php';
 
 load_js('datatables');
 load_js('datatables_filtering_delay');
@@ -46,12 +47,12 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,                
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '".$langNoResult."',
+                   'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '".$langSearch."',
+                   'sSearch':       '" . $langSearch . "',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -70,7 +71,7 @@ $head_content .= "<script type='text/javascript'>
             $('#u_date_start, #u_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
-                language: '".$language."',
+                language: '" . $language . "',
                 autoclose: true    
             });            
         });
@@ -81,6 +82,7 @@ if (!isset($_REQUEST['course_code'])) {
 }
 
 $nameTools = $langUsersLog;
+statistics_tools($course_code, "displaylog");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
 $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
@@ -88,16 +90,16 @@ $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
 
 if (isset($_REQUEST['u_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_start']);    
-    $u_date_start = $uds->format('Y-m-d H:i');        
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P30D'));       
+    $date_start->sub(new DateInterval('P30D'));
     $u_date_start = $date_start->format('d-m-Y H:i');
 }
 if (isset($_REQUEST['u_date_end'])) {
     $ude = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_end']);
-    $u_date_end = $ude->format('Y-m-d H:i');            
+    $u_date_end = $ude->format('Y-m-d H:i');
 } else {
     $date_end = new DateTime();
     $date_end->add(new DateInterval('P1D'));
@@ -129,7 +131,7 @@ if (isset($_GET['first'])) {
 } else {
     $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = ?d", $course_id);              
+        WHERE b.course_id = ?d", $course_id);
 }
 
 foreach ($result as $row) {
