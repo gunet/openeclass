@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,92 +41,132 @@ function getNumberOfLinks($catid) {
                                                         ORDER BY `order`", $course_id, $catid)->count;
 }
 
+/**
+ * @brief display links of category
+ * @global type $is_editor
+ * @global type $course_id
+ * @global type $urlview
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $course_code
+ * @global type $langLinkDelconfirm
+ * @global type $langDelete
+ * @global type $langUp
+ * @global type $langDown
+ * @global type $langModify
+ * @global type $is_in_tinymce
+ * @param type $catid
+ */
 function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $tool_content,
-    $urlServer, $course_code, $course_code, $themeimg,
+    $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langModify, $langLinks, $langCategoryDelconfirm,
-    $is_in_tinymce;
+    $langModify, $is_in_tinymce;
 
+    $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-
     $i = 1;
     foreach ($result as $myrow) {
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr class='odd'>";
-        } else {
-            $tool_content .= "<tr class='even'>";
-        }
-        $title = empty($myrow->title) ? $myrow->url : $myrow->title;
-        $tool_content .= "<td>&nbsp;</td><td width='1' valign='top'><img src='$themeimg/arrow.png' alt='' /></td>";
-        if ($is_editor) {
-            $num_merge_cols = 1;
-        } else {
-            $num_merge_cols = 1;
-        }
+        $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
+        $num_merge_cols = 1;
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "
-                  <td valign='top' colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
+        $tool_content .= "<td colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
                 urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
         $tool_content .= "</td>";
-
-        if ($is_editor && !$is_in_tinymce) {
-            $tool_content .= "<td width='45' valign='top' align='right'>";
+        $tool_content .= "<td width='45'>";
+        if ($is_editor && !$is_in_tinymce) {            
             $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
             if (isset($category)) {
                 $editlink .= "&amp;category=$category";
             }
-
-            $tool_content .= icon('fa-edit', $langModify, $editlink) .
-                    "&nbsp;&nbsp;" .
-                    icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview", "onclick=\"javascript:if(!confirm('" . $langLinkDelconfirm . "')) return false;\"") .
-                    "</td><td width='35' valign='top' align='right'>";
-            // Display move up command only if it is not the top link
-            if ($i != 1) {
-                $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id");
-            }
-            // Display move down command only if it is not the bottom link
-            if ($i < $numberoflinks) {
-                $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id");
-            }
-            $tool_content .= "</td>";
+            $tool_content .= action_button(array(
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => $editlink),
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'class' => 'delete',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
+                      'confirm' => $langLinkDelconfirm),
+                array('title' => $langUp,
+                      'icon' => 'fa-arrow-up',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
+                      'show' => $i != 1),
+                array('title' => $langDown,
+                      'icon' => 'fa-arrow-down',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
+                      'show' => $i < $numberoflinks)
+            ));
+        } else {
+            $tool_content .= "&nbsp;";
         }
+        $tool_content .= "</td>";
         $tool_content .= "</tr>";
         $i++;
     }
 }
 
+/**
+ * @brief display action bar in categories
+ * @global type $urlview
+ * @global type $aantalcategories
+ * @global type $catcounter
+ * @global type $langDelete
+ * @global type $langModify
+ * @global type $langUp
+ * @global type $langDown
+ * @global type $langCatDel
+ * @global type $tool_content
+ * @global type $course_code
+ * @param type $categoryid
+ */
 function showcategoryadmintools($categoryid) {
     global $urlview, $aantalcategories, $catcounter, $langDelete,
     $langModify, $langUp, $langDown, $langCatDel, $tool_content,
-    $course_code, $themeimg;
+    $course_code;
 
-    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
-    $tool_content .= "<th width='45' valign='top' class='right'>" .
-            icon('fa-edit', $langModify, $basecaturl . 'action=editcategory') .
-            '&nbsp;&nbsp;' .
-            icon('fa-times', $langDelete, $basecaturl . 'action=deletecategory', "onclick=\"javascript:if(!confirm('$langCatDel')) return false;\"") .
-            "</th>
-	                   <th width='35' valign='top' class='right'>";
-    // Display move up command only if it is not the top link
-    if ($catcounter != 1) {
-        $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid");
-    }
-    // Display move down command only if it is not the bottom link
-    if ($catcounter < $aantalcategories) {
-        $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid");
-    }
-    $tool_content .= "</th>";
+    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";    
+    $tool_content .= action_button(array(
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => "$basecaturl . 'action=editcategory'"),
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'url' => "$basecaturl . 'action=deletecategory'",
+                      'class' => 'delete',
+                      'confirm' => $langCatDel),
+                array('title' => $langUp,
+                      'icon' => 'fa-arrow-up',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",
+                      'show' => $catcounter != 1),
+                 array('title' => $langDown,
+                       'icon' => 'fa-arrow-down',
+                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid",
+                       'show' => $catcounter < $aantalcategories)
+                ));           
     $catcounter++;
 }
 
-// Enter the modified info submitted from the link form into the database
+/**
+ * @brief Enter the modified info submitted from the link form into the database
+ * @global type $course_id
+ * @global type $catlinkstatus
+ * @global type $langLinkMod
+ * @global type $langLinkAdded
+ * @global type $urllink
+ * @global type $title
+ * @global type $description
+ * @global type $selectcategory
+ * @global type $langLinkNotPermitted
+ * @global string $state
+ * @return type
+ */
 function submit_link() {
     global $course_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
