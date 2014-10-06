@@ -309,9 +309,11 @@ foreach ($result as $myrow) {
     
     $tool_content .= "<td>
 	  <div>
-	    <a name='".$myrow->id."'></a>$anchor_link
-	    <a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langForumPostReply</a><br/>
-	    <b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
+	    <a name='".$myrow->id."'></a>".$anchor_link;
+    if ($topic_locked != 1) {
+	    $tool_content .= "<a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langForumPostReply</a><br/>";
+    }
+	$tool_content .= "<b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
 	  </div>
 	  <br />$message<br />".$rate_str.$parent_post_link."
 	</td>";
