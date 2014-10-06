@@ -1116,91 +1116,125 @@ function assignment_details($id, $row) {
     $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile;
 
     if ($is_editor) {
-        $tool_content .= "
-            <div id='operations_container'>
-              <ul id='opslist'>
-              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>$langDelAssign</a></li>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
-		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li><br>
-                    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true'>$m[WorkUserGroupNoSubmission]</a></li>
-		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
-              </ul>
-            </div>";
+        $tool_content .= action_bar(array(
+            array(
+                'title' => $langAddGrade,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
+                'icon' => 'fa-plus-cirle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+            ),
+            array(
+                'title' => $langZipDownload,
+                'icon' => 'fa-file-archive-o',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
+                'level' => 'primary'
+            ),            
+            array(
+                'title' => $langGraphResults,
+                'icon' => 'fa-bar-chart',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true"
+            ),
+            array(
+                'title' => $m['WorkUserGroupNoSubmission'],
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                'icon' => 'fa-minus-square'
+            ),
+            array(
+                'title' => $langDelAssign,
+                'icon' => 'fa-times',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'button-class' => "btn-danger",
+                'confirm' => "$langConfirmDelete"
+            )            
+        ));
     }
-
-    $tool_content .= "
-        <fieldset>
-        <legend>" . $m['WorkInfo'];
-    if ($is_editor) {
-        $tool_content .= "&nbsp;" . icon('fa-edit', $m['edit'],
-                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit");
-    }
-    $tool_content .= "</legend>
-        <table class='tbl'>
-        <tr>
-          <th width='150'>$m[title]:</th>
-          <td>".q($row->title)."</td>
-        </tr>";
-    if (!empty($row->description)) {
-        $tool_content .= "
-                <tr>
-                  <th class='left'>$m[description]:</th>
-                  <td>".purify($row->description)."</td>
-                </tr>";
-    }    
-    if (!empty($row->comments)) {
-        $tool_content .= "
-                <tr>
-                  <th class='left'>$m[comments]:</th>
-                  <td>".purify($row->comments)."</td>
-                </tr>";
-    }
-    if (!empty($row->file_name)) {
-        $tool_content .= "
-                <tr>
-                  <th class='left'>$langWorkFile:</th>
-                  <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a></td>
-                </tr>";
+    $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
+    if ($row->time > 0) { 
+        $deadline_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time) . ")</span>";
+    } elseif ((int)$row->deadline) {
+        $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
     }   
-    if((int)$row->deadline){
-        $deadline = nice_format($row->deadline, true);
-    }else{
-        $deadline = $m['no_deadline'];
-    }
     $tool_content .= "
-        <tr>
-            <th class='left'>$m[max_grade]:</th>
-            <td>$row->max_grade</td>
-        </tr>        
-        <tr>
-          <th>$m[start_date]:</th>
-          <td>" . nice_format($row->submission_date, true) . "</td>
-        </tr>
-        <tr>
-          <th valign='top'>$m[deadline]:</th>
-          <td>" . $deadline . " <br />";
-
-    if ($row->time > 0) {
-        $tool_content .= "<span>($langDaysLeft " . format_time_duration($row->time) . ")</span></td>
-                </tr>";
-    } else if((int)$row->deadline){
-        $tool_content .= "<span class='expired'>$langEndDeadline</span></td>
-                </tr>";
-    }
-    $tool_content .= "
-        <tr>
-          <th>$m[group_or_user]:</th>
-          <td>";
-    if ($row->group_submissions == '0') {
-        $tool_content .= "$m[user_work]</td>
-        </tr>";
-    } else {
-        $tool_content .= "$m[group_work]</td>
-        </tr>";
-    }
-    $tool_content .= "
-        </table>
-        </fieldset>";
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$m[WorkInfo] &nbsp;". (($is_editor) ? icon('fa-edit', $m['edit'], "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit"): "")."</h3>
+        </div>
+        <div class='panel-body'>
+            <div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[title]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    $row->title
+                </div>                
+            </div>";
+        if (!empty($row->description)) {
+            $tool_content .= "<div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[description]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    $row->description
+                </div>                
+            </div>";
+        }
+        if (!empty($row->comments)) {        
+            $tool_content .= "<div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[comments]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    $row->comments
+                </div>                
+            </div>";
+        }
+        if (!empty($row->file_name)) {        
+            $tool_content .= "<div class='row'>
+                <div class='col-md-3'>
+                    <strong>$langWorkFile:</strong>
+                </div>
+                <div class='col-md-9'>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>
+                </div>                
+            </div>";
+        }
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[max_grade]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    $row->max_grade
+                </div>                
+            </div>
+            <div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[start_date]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    " . nice_format($row->submission_date, true) . "
+                </div>                
+            </div>
+            <div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[deadline]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."                   
+                </div>                
+            </div>
+            <div class='row'>
+                <div class='col-md-3'>
+                    <strong>$m[group_or_user]:</strong>
+                </div>
+                <div class='col-md-9'>
+                    ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
+                </div>                
+            </div>    
+        </div>
+    </div>";
+       
 }
 
 // Show a table header which is a link with the appropriate sorting
@@ -1403,7 +1437,7 @@ function show_assignment($id, $display_graph_results = false) {
     } else {
         $tool_content .= "
                       <p class='sub_title1'>$langSubmissions:</p>
-                      <p class='alert1'>$langNoSubmissions</p>";
+                      <div class='alert alert-warning'>$langNoSubmissions</div>";
     }
     $tool_content .= "<br/>
                 <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
@@ -1467,7 +1501,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <table width='100%' class='sortable'>
+                            <table class='table table-striped table-bordered table-hover table-responsive'>
                             <tr>
                           <th width='3'>&nbsp;</th>";
                 sort_link($m['username'], 'username');
@@ -1517,17 +1551,16 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
     
     if (count($result)>0) {
-        $tool_content .= "<table class='tbl_alt' width='100%'>
+        $tool_content .= "<table class='table table-striped table-bordered table-hover table-responsive'>
                                   <tr>
-                                      <th colspan='2'>$m[title]</th>
-                                      <th class='center'>$m[deadline]</th>
-                                      <th class='center'>$m[submitted]</th>
+                                      <th>$m[title]</th>
+                                      <th class='text-center'>$m[deadline]</th>
+                                      <th class='text-center'>$m[submitted]</th>
                                       <th>$m[grade]</th>
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
             $title_temp = q($row->title);
-            $class = $k % 2 ? 'odd' : 'even';
             $test = (int)$row->deadline;
             if((int)$row->deadline){
                 $deadline = nice_format($row->deadline, true);
@@ -1535,14 +1568,13 @@ function show_student_assignments() {
                 $deadline = $m['no_deadline'];
             }
             $tool_content .= "
-                                <tr class='$class'>
-                                    <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
+                                <tr>
                                     <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'>$title_temp</a></td>
-                                    <td width='150' align='center'>" . $deadline ;
+                                    <td width='150' class='text-center'>" . $deadline ;
             if ($row->time > 0) {
-                $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
+                $tool_content .= "<br> (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
             } else if((int)$row->deadline){
-                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
+                $tool_content .= "<br> (<span class='expired'>$m[expired]</span>)";
             }
             $tool_content .= "</td><td width='170' align='center'>";
 
@@ -1553,10 +1585,10 @@ function show_student_assignments() {
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>)</div>";
                     }
-                    $tool_content .= "<img src='$themeimg/checkbox_on.png' alt='$m[yes]' /><br />";
+                    $tool_content .= icon('fa-check-square-o', $m['yes'])."<br>";
                 }
             } else {
-                $tool_content .= "<img src='$themeimg/checkbox_off.png' alt='$m[no]' />";
+                $tool_content .= icon('fa-square-o', $m['no']);
             }
             $tool_content .= "</td>
                                     <td width='30' align='center'>";
@@ -1597,7 +1629,7 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
-                    <table class='table table-striped table-bordered table-hover'>
+                    <table class='table table-striped table-bordered table-hover table-responsive'>
                     <tr>
                       <th>$m[title]</th>
                       <th>$m[subm]</th>
