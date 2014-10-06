@@ -100,7 +100,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
+            'url' => $exerciseId ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label'
         )
@@ -233,7 +233,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
-                <input type='submit' class='btn btn-default' name='cancelExercise' value='$langCancel'>    
+                <a href='".(($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code")."' class='btn btn-default'>$langCancel</a>    
               </div>
             </div>
         </fieldset>
@@ -249,6 +249,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )
+    ));    
     $tool_content .= "
     <div class='panel panel-primary'>
         <div class='panel-heading'>

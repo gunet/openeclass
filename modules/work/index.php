@@ -1549,7 +1549,8 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <table class='table table-striped table-bordered table-hover table-responsive'>
+                            <div class='table-responsive'>
+                            <table class='table table-striped table-bordered table-hover'>
                             <tr>
                           <th width='3'>&nbsp;</th>";
                 sort_link($m['username'], 'username');
@@ -1570,7 +1571,7 @@ function show_non_submitted($id) {
                             
                     $i++;
                 }
-                $tool_content .= "</table>";
+                $tool_content .= "</table></div>";
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
@@ -1599,7 +1600,7 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
     
     if (count($result)>0) {
-        $tool_content .= "<table class='table table-striped table-bordered table-hover table-responsive'>
+        $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
                                   <tr>
                                       <th>$m[title]</th>
                                       <th class='text-center'>$m[deadline]</th>
@@ -1652,7 +1653,7 @@ function show_student_assignments() {
             $k++;
         }
         $tool_content .= '
-                                  </table>';
+                                  </table></div>';
     } else {
         $tool_content .= "<p class='alert1'>$langNoAssign</p>";
     }
@@ -1677,7 +1678,8 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
-                    <table class='table table-striped table-bordered table-hover table-responsive'>
+                    <div class='table-responsive'>
+                    <table class='table table-striped table-bordered table-hover'>
                     <tr>
                       <th>$m[title]</th>
                       <th>$m[subm]</th>
@@ -1748,7 +1750,7 @@ function show_assignments() {
                    "</td></tr>";
             $index++;
         }
-        $tool_content .= '</table>';
+        $tool_content .= '</table></div>';
     } else {
         $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";        
     }
