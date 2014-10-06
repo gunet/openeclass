@@ -106,11 +106,13 @@ if ($is_editor) {
                ajaxAssignees();
             }         
             if (this.id=='group_button') {
-               $('label[for=assign_button_some]').text('$m[WorkToGroup]');
-               $('td[#assignees]').text('$langGroups');    
+               $('#assign_button_all_text').text('$m[WorkToAllGroups]');
+               $('#assign_button_some_text').text('$m[WorkToGroup]');
+               $('#assignees').text('$langGroups');    
             } else {
-               $('label[for=assign_button_some]').text('$m[WorkToUser]');
-               $('td[#assignees]').text('$langStudents');    
+               $('#assign_button_all_text').text('$m[WorkToAllUsers]');
+               $('#assign_button_some_text').text('$m[WorkToUser]');
+               $('#assignees').text('$langStudents');    
             }        
         }        
         function ajaxAssignees()
@@ -519,7 +521,7 @@ function submit_work($id, $on_behalf_of = null) {
 //  assignment - prof view only
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id;
-    global $desc, $language, $head_content;
+    global $desc, $language, $head_content, $langCancel;
     global $langBack, $langStudents, $langMove, $langWorkFile;
     
     load_js('bootstrap-datetimepicker');
@@ -533,92 +535,136 @@ function new_assignment() {
         });
     </script>";
     $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
+    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
+              'level' => 'primary',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
-              'icon' => 'fa-reply'))) . "
-        <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+              'icon' => 'fa-reply')));
+    
+    $tool_content .= "
+        <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <legend>$m[WorkInfo]</legend>
-        <table class='tbl' width='100%'>    
-        <tr>
-          <th>$m[title]:</th>
-          <td><input type='text' name='title' size='55' /></td>
-        </tr>
-        <tr>
-          <th>$m[description]:</th>
-          <td>" . rich_text_editor('desc', 4, 20, $desc) . " </td>
-        </tr>
-        <tr>
-            <th class='left' width='150'>$langWorkFile:</th>
-            <td><input type='file' name='userfile' /></td>
-        </tr>
-        <tr>
-          <th>$m[max_grade]:</th>
-          <td><input type='text' name='max_grade' size='5' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'/></td>
-        </tr>        
-        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#deadline_row, #late_sub_row\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#deadline_row, #late_sub_row\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
-        <td></tr>
-        <tr id='deadline_row' ". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
-            <th></th>
-            <td>
-                <div class='input-append date form-group' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-11'>        
-                        <input id='deadline' name='WorkEnd' type='text' value='$workEnd'>
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
+                <div class='col-sm-10'>
+                  <input name='title' type='text' class='form-control' id='title' placeholder='$m[title]'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='desc' class='col-sm-2 control-label'>$m[description]:</label>
+                <div class='col-sm-10'>
+                " . rich_text_editor('desc', 4, 20, $desc) . "
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                <div class='col-sm-10'>    
+                  <input type='file' id='userfile' name='userfile'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                <div class='col-sm-10'>
+                  <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[deadline]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='is_deadline' value='0' ". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
+                        $m[no_deadline]
+                      </label>
                     </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='is_deadline' value='1' ". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
+                        $m[with_deadline]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
+                <div class='col-xs-8 col-xs-offset-2'>        
+                    <input name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                </div>
+                <div class='col-xs-2'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-                <div>$m[deadline_notif]</div>
-            </td>
-        </tr>
-        <tr id='late_sub_row'". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
-               <th></th>
-               <td><input type='checkbox' name='late_submission' value='1'>$m[late_submission_enable]</td>
-         </tr>          
-        <tr>
-          <th>$m[group_or_user]:</th>
-          <td><input type='radio' id='user_button' name='group_submissions' value='0' checked='1' /><label for='user_button'>$m[user_work]</label>
-          <br /><input type='radio' id='group_button' name='group_submissions' value='1' /><label for='group_button'>$m[group_work]</label></td>
-        </tr>
-        <tr>
-          <th>$m[WorkAssignTo]:</th>
-          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked='1' /><label for='assign_button_all'>Όλους</label>
-          <br /><input type='radio' id='assign_button_some' name='assign_to_specific' value='1' /><label for='assign_button_some'>$m[WorkToUser]</label></td>
-        </tr>        
-        <tr id='assignees_tbl' style='display:none;'>
-          <th class='left' valign='top'></th>
-          <td>
-              <table width='99%' align='center' class='tbl_white'>
-              <tr class='title1'>
-                <td id='assignees'>$langStudents</td>
-                <td width='100' class='center'>$langMove</td>
-                <td class='center'>$m[WorkAssignTo]</td>
-              </tr>
-              <tr>
-                <td>
-                  <select id='assign_box' size='15' style='width:180px' multiple>
+                <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
+            </div>
+            <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
+                <div class='col-xs-10 col-xs-offset-2'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='late_submission' value='1'>
+                        $m[late_submission_enable]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='user_button' name='group_submissions' value='0' checked>
+                        $m[user_work]
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='group_button' name='group_submissions' value='1'>
+                        $m[group_work]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
+                        <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_some' name='assign_to_specific' value='1'>
+                        <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <table id='assignees_tbl' style='display:none;' class='table'>
+            <tr class='title1'>
+              <td id='assignees'>$langStudents</td>
+              <td class='text-center'>$langMove</td>
+              <td>$m[WorkAssignTo]</td>
+            </tr>
+            <tr>
+              <td>
+                <select id='assign_box' size='15' multiple>
+                </select>
+              </td>
+              <td class='text-center'>
+                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+              </td>
+              <td width='40%'>
+                <select id='assignee_box' name='ingroup[]' size='15' multiple>
 
-                  </select>
-                </td>
-                <td class='center'>
-                  <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                </td>
-                <td class='right'>
-                  <select id='assignee_box' name='ingroup[]' size='15' style='width:180px' multiple>
-
-                  </select>
-                </td>
-              </tr>
-              </table>
-          </td>
-        </tr>        
-        <tr>
-          <th>&nbsp;</th>
-          <td class='right'><input type='submit' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" /></td>
-        </tr>
-        </table>
+                </select>
+              </td>
+            </tr>
+            </table>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input type='submit' class='btn btn-primary' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" />
+                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+            </div>                   
         </fieldset>
         </form>";    
 }
@@ -1120,7 +1166,7 @@ function assignment_details($id, $row) {
             array(
                 'title' => $langAddGrade,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add",
-                'icon' => 'fa-plus-cirle',
+                'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ),
@@ -1161,74 +1207,74 @@ function assignment_details($id, $row) {
             <h3 class='panel-title'>$m[WorkInfo] &nbsp;". (($is_editor) ? icon('fa-edit', $m['edit'], "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit"): "")."</h3>
         </div>
         <div class='panel-body'>
-            <div class='row'>
-                <div class='col-md-3'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[title]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     $row->title
                 </div>                
             </div>";
         if (!empty($row->description)) {
-            $tool_content .= "<div class='row'>
-                <div class='col-md-3'>
+            $tool_content .= "<div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[description]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     $row->description
                 </div>                
             </div>";
         }
         if (!empty($row->comments)) {        
-            $tool_content .= "<div class='row'>
-                <div class='col-md-3'>
+            $tool_content .= "<div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[comments]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     $row->comments
                 </div>                
             </div>";
         }
         if (!empty($row->file_name)) {        
-            $tool_content .= "<div class='row'>
-                <div class='col-md-3'>
+            $tool_content .= "<div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$langWorkFile:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>
                 </div>                
             </div>";
         }
         $tool_content .= "
-            <div class='row'>
-                <div class='col-md-3'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[max_grade]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     $row->max_grade
                 </div>                
             </div>
-            <div class='row'>
-                <div class='col-md-3'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[start_date]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     " . nice_format($row->submission_date, true) . "
                 </div>                
             </div>
-            <div class='row'>
-                <div class='col-md-3'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[deadline]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."                   
                 </div>                
             </div>
-            <div class='row'>
-                <div class='col-md-3'>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$m[group_or_user]:</strong>
                 </div>
-                <div class='col-md-9'>
+                <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
                 </div>                
             </div>    
