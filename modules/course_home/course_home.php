@@ -550,7 +550,7 @@ $tool_content .= "
             if ($status != USER_GUEST) {
                 if ($receive_mail) {
                     $tool_content .= "
-                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' title='$langContactProf' >
+                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' data-toggle='tooltip' data-placement='top' title='$langContactProf' >
                                 <i class='fa fa-envelope'></i>
                         </a>";
                 }
@@ -560,7 +560,7 @@ $tool_content .= "
             if (visible_module(MODULE_ID_ANNOUNCE))
             {
                 $tool_content .= "
-                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' title='" . q($langRSSFeed) . "'>
+                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' data-toggle='tooltip' data-placement='bottom' title='" . q($langRSSFeed) . "'>
                                 <i class='fa fa-rss'></i>
                         </a>";
             }
