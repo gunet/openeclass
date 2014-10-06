@@ -113,7 +113,7 @@ if ($is_editor) {
     $edit_link = "
 
     <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
-        <i class='fa fa-edit' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
+        <i class='fa fa-edit space-before-icon' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
         <span class='tiny-icon-text'><!--$langEdit--></span>
     </a>
 
