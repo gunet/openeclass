@@ -735,12 +735,14 @@ function show_edit_assignment($id) {
     } else {
         $deadline = '';
     }
-    $tool_content .= "<div id='operations_container'>
-                        <ul id='opslist'>
-                      <li><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></li>
-                        </ul></div>";
-    
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);    
+     
+    $textarea = rich_text_editor('desc', 4, 20, $row->description);
+   
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'level' => 'primary',
+              'url' => "$_SERVER[PHP_SELF]?course=$course_code",
+              'icon' => 'fa-reply')));    
     $tool_content .= "
     <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
