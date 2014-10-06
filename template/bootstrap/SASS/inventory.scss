@@ -220,6 +220,27 @@ img
     @include transition(all 150ms linear);
   }
 
+  .title-icon-rss:hover
+  {
+    color: #FFBB4F !important;
+    text-decoration: none;
+    @include transition(all 150ms linear);
+  }
+
+  .title-icon-green:hover
+  {
+    color: $color-green !important;
+    text-decoration: none;
+    @include transition(all 150ms linear); 
+  }
+
+  .title-icon-red:hover
+  {
+    color: $color-red !important;
+    text-decoration: none;
+    @include transition(all 150ms linear); 
+  }
+
   a
   {
     text-decoration: none;

@@ -393,18 +393,48 @@ img {
   transition: all 150ms linear;
 }
 /* line 224, inventory.scss */
+.page-subtitle .title-icon-rss:hover {
+  color: #FFBB4F !important;
+  text-decoration: none;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+/* line 231, inventory.scss */
+.page-subtitle .title-icon-green:hover {
+  color: #6bce6b !important;
+  text-decoration: none;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+/* line 238, inventory.scss */
+.page-subtitle .title-icon-red:hover {
+  color: #ce6b6b !important;
+  text-decoration: none;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+/* line 245, inventory.scss */
 .page-subtitle a {
   text-decoration: none;
 }
 
-/* line 230, inventory.scss */
+/* line 251, inventory.scss */
 .page-subtitle-name {
   color: #555555;
   font-size: 18px;
 }
 
 /* Extend bootstrap style - forms */
-/* line 238, inventory.scss */
+/* line 259, inventory.scss */
 .form-control {
   border-radius: 2px 2px 2px 2px !important;
   -webkit-border-radius: 2px 2px 2px 2px !important;
@@ -412,7 +442,7 @@ img {
 }
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 250, inventory.scss */
+/* line 271, inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
@@ -423,7 +453,7 @@ img {
 }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 265, inventory.scss */
+/* line 286, inventory.scss */
 #main-content .panel {
   background: white !important;
   min-height: 2.4em  !important;
@@ -439,7 +469,7 @@ img {
 }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 278, inventory.scss */
+/* line 299, inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
@@ -460,29 +490,29 @@ img {
   margin-right: 0em;
   display: inline-block;
 }
-/* line 293, inventory.scss */
+/* line 314, inventory.scss */
 .toolbox ul:not(.dropdown-menu) {
   display: block;
   display: inline-block;
   margin: 0px;
   padding: 0px;
 }
-/* line 301, inventory.scss */
+/* line 322, inventory.scss */
 .toolbox li {
   list-style-type: none;
   display: inline-block;
 }
-/* line 307, inventory.scss */
+/* line 328, inventory.scss */
 .toolbox ul.toolbox-submenu {
   display: none;
 }
 
-/* line 315, inventory.scss */
+/* line 336, inventory.scss */
 .toolbox:hover .toolbox-submenu {
   display: inline-block;
 }
 
-/* line 324, inventory.scss */
+/* line 345, inventory.scss */
 .toolbox-border-only {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
@@ -500,7 +530,7 @@ img {
 }
 
 /* TOOGLES -----------------------------------------------------------------------------*/
-/* line 345, inventory.scss */
+/* line 366, inventory.scss */
 .btn-toggle {
   padding: 0px;
   height: 3rem;
@@ -516,7 +546,7 @@ img {
   outline: none!important;
 }
 
-/* line 360, inventory.scss */
+/* line 381, inventory.scss */
 .btn-toggle.btn-toggle-on {
   background: #4da1e4;
   box-shadow: inset 3px 0px 2px #555555;
@@ -524,7 +554,7 @@ img {
   -webkit-box-shadow: inset 3px 0px 2px #555555;
 }
 
-/* line 365, inventory.scss */
+/* line 386, inventory.scss */
 .btn-toggle:hover span {
   background: #4da1e4;
   color: white;
@@ -538,27 +568,27 @@ img {
   transition: all 120ms linear;
 }
 
-/* line 372, inventory.scss */
+/* line 393, inventory.scss */
 .btn-toggle span.on {
   display: none;
 }
 
-/* line 376, inventory.scss */
+/* line 397, inventory.scss */
 .btn-toggle span.off {
   display: inline-block;
 }
 
-/* line 380, inventory.scss */
+/* line 401, inventory.scss */
 .btn-toggle.btn-toggle-on span.on {
   display: inline-block;
 }
 
-/* line 384, inventory.scss */
+/* line 405, inventory.scss */
 .btn-toggle.btn-toggle-on span.off {
   display: none;
 }
 
-/* line 388, inventory.scss */
+/* line 409, inventory.scss */
 .btn-toggle span {
   border-radius: 5rem;
   text-align: center;
@@ -577,7 +607,7 @@ img {
   -webkit-box-shadow: 2px 0px 2px #dddddd;
 }
 
-/* line 405, inventory.scss */
+/* line 426, inventory.scss */
 .btn-toggle .on {
   right: 0;
   left: auto;
@@ -670,7 +700,7 @@ input.toggle[type=checkbox]:checked:after
   left:0px;
 }*/
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 511, inventory.scss */
+/* line 532, inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -703,19 +733,19 @@ input.toggle[type=checkbox]:checked:after
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 536, inventory.scss */
+/* line 557, inventory.scss */
 .btn-default-eclass > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 541, inventory.scss */
+/* line 562, inventory.scss */
 .btn-default-eclass > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 546, inventory.scss */
+/* line 567, inventory.scss */
 .btn-default-eclass > .fa.fa-caret-down {
   margin-right: 0px!important;
 }
-/* line 552, inventory.scss */
+/* line 573, inventory.scss */
 .btn-default-eclass:hover, .btn-default-eclass:focus {
   text-decoration: none;
   outline: 0;
@@ -729,7 +759,7 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 563, inventory.scss */
+/* line 584, inventory.scss */
 .btn-default-eclass:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -746,7 +776,7 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* BUTTON COLORS */
-/* line 577, inventory.scss */
+/* line 598, inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
   background: #6bce6b;
@@ -756,7 +786,7 @@ input.toggle[type=checkbox]:checked:after
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
 }
-/* line 585, inventory.scss */
+/* line 606, inventory.scss */
 .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
   text-decoration: none;
   outline: 0;
@@ -770,7 +800,7 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 597, inventory.scss */
+/* line 618, inventory.scss */
 .btn-default-eclass.color-green:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
@@ -786,7 +816,7 @@ input.toggle[type=checkbox]:checked:after
   transition: all 150ms linear;
 }
 
-/* line 610, inventory.scss */
+/* line 631, inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
   background: #ce6b6b;
@@ -796,7 +826,7 @@ input.toggle[type=checkbox]:checked:after
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 618, inventory.scss */
+/* line 639, inventory.scss */
 .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
   background: #E58080;
   text-decoration: none;
@@ -806,7 +836,7 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 627, inventory.scss */
+/* line 648, inventory.scss */
 .btn-default-eclass.color-red:active {
   background: #E58080 !important;
   outline: 0 !important;
@@ -822,23 +852,23 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* BUTTON SIZES */
-/* line 641, inventory.scss */
+/* line 662, inventory.scss */
 .btn-default-eclass.size-xl {
   font-size: 1.2em;
 }
 
-/* line 646, inventory.scss */
+/* line 667, inventory.scss */
 .btn-default-eclass.size-l {
   font-size: 1.1em;
 }
 
-/* line 651, inventory.scss */
+/* line 672, inventory.scss */
 .btn-default-eclass.size-s {
   font-size: 0.85em;
 }
 
 /* flippin btn */
-/* line 662, inventory.scss */
+/* line 683, inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -854,7 +884,7 @@ input.toggle[type=checkbox]:checked:after
   -webkit-touch-callout: none;
 }
 
-/* line 679, inventory.scss */
+/* line 700, inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -869,7 +899,7 @@ input.toggle[type=checkbox]:checked:after
   transform-style: preserve-3d;
 }
 
-/* line 692, inventory.scss */
+/* line 713, inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -884,13 +914,13 @@ input.toggle[type=checkbox]:checked:after
   backface-visibility: hidden;
 }
 
-/* line 706, inventory.scss */
+/* line 727, inventory.scss */
 .btn-flippin:hover:before {
   background: #4da1e4;
   color: white;
 }
 
-/* line 711, inventory.scss */
+/* line 732, inventory.scss */
 .btn-flippin:before {
   z-index: 2;
   color: #fff;
@@ -905,7 +935,7 @@ input.toggle[type=checkbox]:checked:after
   transition: all 150ms linear;
 }
 
-/* line 722, inventory.scss */
+/* line 743, inventory.scss */
 .btn-flippin:after {
   z-index: 1;
   background-color: #999;
@@ -919,12 +949,12 @@ input.toggle[type=checkbox]:checked:after
   content: '';
 }
 
-/* line 735, inventory.scss */
+/* line 756, inventory.scss */
 .btn-flippin:active:before {
   background-color: #3571c8;
 }
 
-/* line 739, inventory.scss */
+/* line 760, inventory.scss */
 .btn-flippin.loading {
   -webkit-transform: rotateX(180deg);
   -moz-transform: rotateX(180deg);
@@ -933,14 +963,14 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 757, inventory.scss */
+/* line 778, inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
   padding: 0px;
   cursor: default;
 }
-/* line 764, inventory.scss */
+/* line 785, inventory.scss */
 ul.tablelist li.list-item {
   position: relative;
   box-sizing: border-box;
@@ -951,20 +981,20 @@ ul.tablelist li.list-item {
   background: white;
   overflow: hidden;
 }
-/* line 773, inventory.scss */
+/* line 794, inventory.scss */
 ul.tablelist li.list-item .max-height {
   max-height: 3.35em;
 }
-/* line 778, inventory.scss */
+/* line 799, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
   border-right: 1px solid #eee;
 }
-/* line 783, inventory.scss */
+/* line 804, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:first-child {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
-/* line 789, inventory.scss */
+/* line 810, inventory.scss */
 ul.tablelist li.list-item .item-right-cols {
   float: right;
   position: absolute;
@@ -972,23 +1002,23 @@ ul.tablelist li.list-item .item-right-cols {
   right: 0px;
   max-width: 95%;
 }
-/* line 799, inventory.scss */
+/* line 820, inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span,
 ul.tablelist li.list-item .item-title {
   padding: 1em;
   display: inline-block;
 }
-/* line 805, inventory.scss */
+/* line 826, inventory.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 1em;
   /*padding-right: 60px;*/
   display: inline-block;
 }
-/* line 812, inventory.scss */
+/* line 833, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-content {
   font-size: 0.9em;
 }
-/* line 817, inventory.scss */
+/* line 838, inventory.scss */
 ul.tablelist li.list-item .item-right-cols a {
   width: 1em;
   padding: 1em 1.4em;
@@ -996,7 +1026,7 @@ ul.tablelist li.list-item .item-right-cols a {
   text-align: center;
   cursor: pointer;
 }
-/* line 827, inventory.scss */
+/* line 848, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-date {
   color: rgba(0, 0, 0, 0.6);
   background: white;
@@ -1004,13 +1034,13 @@ ul.tablelist li.list-item .item-right-cols .item-date {
   text-align: center;
   vertical-align: top;
 }
-/* line 836, inventory.scss */
+/* line 857, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options {
   padding: 0px;
   margin-left: -0.26em;
   padding-right: 3.8em;
 }
-/* line 843, inventory.scss */
+/* line 864, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   position: absolute;
   display: inline-block;
@@ -1022,7 +1052,7 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   color: #7E7E7E;
   background: #F8F8F8;
 }
-/* line 856, inventory.scss */
+/* line 877, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
@@ -1032,7 +1062,7 @@ ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 863, inventory.scss */
+/* line 884, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
   margin-right: -25em;
@@ -1044,16 +1074,16 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 875, inventory.scss */
+/* line 896, inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
   margin-right: 0em;
   background: #333333;
 }
-/* line 881, inventory.scss */
+/* line 902, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a {
   color: white;
 }
-/* line 885, inventory.scss */
+/* line 906, inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
@@ -1063,17 +1093,17 @@ ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 892, inventory.scss */
+/* line 913, inventory.scss */
 ul.tablelist li.list-item .text-title {
   font-size: 1.3em;
   padding-bottom: 5px;
 }
-/* line 898, inventory.scss */
+/* line 919, inventory.scss */
 ul.tablelist li.list-item .text-grey {
   font-style: italic;
   color: #999999;
 }
-/* line 908, inventory.scss */
+/* line 929, inventory.scss */
 ul.tablelist li.list-item:first-child,
 ul.tablelist li.list-item:first-child .item-date {
   -webkit-animation: NEW-ITEM-FX 3s 1;
@@ -1081,7 +1111,7 @@ ul.tablelist li.list-item:first-child .item-date {
   -o-animation: NEW-ITEM-FX 3s 1;
   animation: NEW-ITEM-FX 3s 1;
 }
-/* line 916, inventory.scss */
+/* line 937, inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
   -webkit-transition: all 150ms linear;
@@ -1092,11 +1122,11 @@ ul.tablelist li.list-item:hover {
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 929, inventory.scss */
+/* line 950, inventory.scss */
 .boxlist {
   padding: 0px;
 }
-/* line 934, inventory.scss */
+/* line 955, inventory.scss */
 .boxlist .list-item {
   display: block;
   position: relative;
@@ -1111,15 +1141,15 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 947, inventory.scss */
+/* line 968, inventory.scss */
 .boxlist .list-item.hidden {
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 952, inventory.scss */
+/* line 973, inventory.scss */
 .boxlist .list-item.hidden .item-content {
   opacity: 0.6;
 }
-/* line 957, inventory.scss */
+/* line 978, inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
   -webkit-transition: all 150ms linear;
@@ -1128,7 +1158,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 963, inventory.scss */
+/* line 984, inventory.scss */
 .boxlist .list-item .item-content {
   /*width: 93%;*/
   /* a fallback for calc */
@@ -1143,27 +1173,27 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 976, inventory.scss */
+/* line 997, inventory.scss */
 .boxlist .item-header {
   padding: 1em 4em 1em 0em;
   border-bottom: 1px solid #eee;
 }
-/* line 982, inventory.scss */
+/* line 1003, inventory.scss */
 .boxlist .item-header .item-title {
   margin: 0px;
 }
-/* line 987, inventory.scss */
+/* line 1008, inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 993, inventory.scss */
+/* line 1014, inventory.scss */
 .boxlist .item-body {
   padding: 1em 1em 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 1000, inventory.scss */
+/* line 1021, inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -1176,7 +1206,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 1015, inventory.scss */
+/* line 1036, inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -1194,7 +1224,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 1029, inventory.scss */
+/* line 1050, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
@@ -1204,7 +1234,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1037, inventory.scss */
+/* line 1058, inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -1219,19 +1249,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 150ms linear;
   transition: all 150ms linear;
 }
-/* line 1049, inventory.scss */
+/* line 1070, inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 1054, inventory.scss */
+/* line 1075, inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 1059, inventory.scss */
+/* line 1080, inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 1064, inventory.scss */
+/* line 1085, inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -1244,7 +1274,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 1077, inventory.scss */
+/* line 1098, inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -1255,7 +1285,7 @@ ul.tablelist li.list-item:hover {
 }
 
 /* Course-home lesson banner */
-/* line 1088, inventory.scss */
+/* line 1109, inventory.scss */
 .banner-image-wrapper {
   overflow: hidden;
   padding: 0;
@@ -1265,11 +1295,11 @@ ul.tablelist li.list-item:hover {
     max-width: none;
 }*/
 /* Course-home licence box */
-/* line 1100, inventory.scss */
+/* line 1121, inventory.scss */
 .license_info_box {
   text-align: center;
 }
-/* line 1104, inventory.scss */
+/* line 1125, inventory.scss */
 .license_info_box img {
   width: 100px;
   margin: 8px 0 5px 0;
@@ -1588,20 +1618,20 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1490, inventory.scss */
+/* line 1511, inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
   height: 48px;
 }
 
-/* line 1496, inventory.scss */
+/* line 1517, inventory.scss */
 .opt-btn {
   position: absolute;
   background-color: #F8F8F8 !important;
 }
 
-/* line 1501, inventory.scss */
+/* line 1522, inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
@@ -1612,7 +1642,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1507, inventory.scss */
+/* line 1528, inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
@@ -1621,12 +1651,12 @@ textarea{
   overflow: hidden;
 }
 
-/* line 1515, inventory.scss */
+/* line 1536, inventory.scss */
 .opt-btn-more-tool {
   float: left;
 }
 
-/* line 1519, inventory.scss */
+/* line 1540, inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1636,7 +1666,7 @@ textarea{
   color: #7e7e7e;
 }
 
-/* line 1528, inventory.scss */
+/* line 1549, inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
@@ -1645,12 +1675,12 @@ textarea{
   background-color: #232C3A;
 }
 
-/* line 1536, inventory.scss */
+/* line 1557, inventory.scss */
 .tool-btn.delete a {
   color: #ce6b6b;
 }
 
-/* line 1540, inventory.scss */
+/* line 1561, inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
   background-color: #ce6b6b;
@@ -1661,7 +1691,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1547, inventory.scss */
+/* line 1568, inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
@@ -1673,7 +1703,7 @@ textarea{
 }
 
 /* Action Bar ------------------------------------------------------------------- */
-/* line 1556, inventory.scss */
+/* line 1577, inventory.scss */
 .action-bar-wrapper ul {
   padding: 0px;
   margin: 0px;
@@ -1682,35 +1712,35 @@ textarea{
   }*/
 }
 
-/* line 1565, inventory.scss */
+/* line 1586, inventory.scss */
 ul.expandable {
   display: none;
   margin-top: 9px;
 }
-/* line 1569, inventory.scss */
+/* line 1590, inventory.scss */
 ul.expandable.secondary-active {
   display: block;
 }
 
 /* Datatables ---------------------------------------------------------*/
-/* line 1576, inventory.scss */
+/* line 1597, inventory.scss */
 tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
 }
-/* line 1579, inventory.scss */
+/* line 1600, inventory.scss */
 tr.not_visible td:not(:last-child) a {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic;
 }
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
-/* line 1587, inventory.scss */
+/* line 1608, inventory.scss */
 .row-wrapper {
   display: table;
 }
 
-/* line 1590, inventory.scss */
+/* line 1611, inventory.scss */
 .col-modified {
   float: none;
   display: table-cell;
@@ -1718,12 +1748,12 @@ tr.not_visible td:not(:last-child) a {
   padding-bottom: 0px;
 }
 
-/* line 1596, inventory.scss */
+/* line 1617, inventory.scss */
 .row-main {
   padding-bottom: 77px;
 }
 
-/* line 1600, inventory.scss */
+/* line 1621, inventory.scss */
 .row-footer {
   position: absolute;
   width: 100%;
@@ -1731,7 +1761,7 @@ tr.not_visible td:not(:last-child) a {
 }
 
 /*# sourceMappingURL=inventory.css.map */
-/* line 1607, inventory.scss */
+/* line 1628, inventory.scss */
 td.option-btn-cell {
   width: 5px;
   padding: 0px !important;

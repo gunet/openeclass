@@ -295,7 +295,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $mod_activation = "
 
                     <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                        <i class='fa fa-check-square title-icon'></i>
+                        <i class='fa fa-check-square title-icon title-icon-green'></i>
                         <!--($langDeactivate)-->
                     </a>";
                 } else {
@@ -303,7 +303,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $mod_activation = "
 
                     <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                        <i class='fa fa-minus-square title-icon'></i>
+                        <i class='fa fa-minus-square title-icon title-icon-red'></i>
                         <!--($langActivate)-->
                     </a>";
                 }
@@ -476,7 +476,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('RSS_LINK_ICON', "
 
                 <a href='$urlAppend" . RSS . "'>
-                    <i class='fa fa-rss-square title-icon'></i>
+                    <i class='fa fa-rss-square title-icon title-icon-rss'></i>
                     <!--<img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />-->
                 </a>
 
