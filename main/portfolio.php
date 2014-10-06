@@ -117,30 +117,11 @@ jQuery(document).ready(function() {
 require_once 'perso.php';
 
 $tool_content = "
-<div class='row margin-top-thin'>
-        <div class ='col-md-12'>
-                <div class='toolbox pull-right'>
-                        <a href='../../modules/contact/index.php?course=TMAPOST100' id=''>
-                                <button class='btn-default-eclass place-at-toolbox' title='' >
-                                        <i class='fa fa-life-ring'></i>
-                                </button>
-                        </a> 
-                
-                        <button class='btn-default-eclass place-at-toolbox'>{%HELP_LINK_ICON%}</button>
-                        <button class='btn-default-eclass place-at-toolbox'>{%RSS_LINK_ICON%}</button>
-                        <small class='actmod'>&nbsp;{%ACTIVATE_MODULE%}</small>
-                </div>
-        </div>    
-</div>
-
-<div class='row margin-top-thin'>
+<div class='row margin-top-fat'>
         <div class='col-md-7'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
                 <div class='panel'>
-                        {%LESSON_CONTENT%}
-                        <br/><br/><br/><br/><br/><br/><br/><br/>
-                        <br/><br/><br/><br/><br/><br/><br/><br/>
-                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                        {%LESSON_CONTENT%}                        
                 </div>
         </div>
 
