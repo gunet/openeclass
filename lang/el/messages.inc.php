@@ -530,6 +530,8 @@ $langCommonDocs = "Κοινόχρηστα Αρχεία";
 $langExplainCommonDocs = "Το αρχείο που θα ανεβάσετε θα είναι προσβάσιμο από όλα τα μαθήματα μέσω του υποσυστήματος 'Εγγραφα'";
 $langExternalFile = "Σύνδεση εξωτερικού αρχείου";
 $langExternalFileInfo = "Διεύθυνση (URL) εξωτερικού αρχείου";
+$langCommonDocLink = "Κοινόχρηστο αρχείο";
+$langCommonDocLinkInvisible = "Αόρατο κοινόχρηστο αρχείο";
 
 /* * ********************************************************
  * agenda.php
@@ -1136,6 +1138,8 @@ $langUpload = "Ανέβασμα";
 $langDownloadFile = "Ανέβασμα αρχείου";
 $langPathUploadFile = "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir = "Δημιουργία καταλόγου";
+$langCreateDoc='Δημιουργία εγγράφου';
+$langEditDoc='Επεξεργασία εγγράφου';
 $langName = "Όνομα";
 $langNameDir = "Όνομα νέου καταλόγου";
 $langSize = "Μέγεθος";

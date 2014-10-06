@@ -96,14 +96,15 @@ function list_docs() {
     $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
 
     foreach ($result as $row) {
+        $fullpath = $basedir . $row->path;
         if ($row->extra_path) {
             $size = 0;
         } else {
-            $size = filesize($basedir . $row->path);
+            $size = file_exists($fullpath)? filesize($fullpath): 0;
         }
         $fileinfo[] = array(
             'id' => $row->id,
-            'is_dir' => is_dir($basedir . $row->path),
+            'is_dir' => is_dir($fullpath),
             'size' => $size,
             'title' => $row->title,
             'name' => htmlspecialchars($row->filename),
