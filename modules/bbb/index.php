@@ -109,19 +109,19 @@ $head_content .= "
 
 if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['choice'])) {
-        $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>
-          </ul>
-        </div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label',
+                  'show' => $is_editor)));
     } else {
-        $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1'>$langNewBBBSession</a></li>
-          </ul>
-        </div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langNewBBBSession,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
+                  'icon' => 'fa-calendar',
+                  'level' => 'primary-label',
+                  'show' => $is_editor)));
     }
     
 }
