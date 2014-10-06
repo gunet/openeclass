@@ -1,6 +1,6 @@
 /* 
 =============================================================
-    SASS for UI Inventory of eclass v3.0 - version 0.1002a
+    SASS for UI Inventory of eclass v3.0 - version 0.1006a
 =============================================================
 */
 
@@ -784,7 +784,7 @@ ul.tablelist
     .item-wholeline
     {
       padding:1em;
-      padding-right: 60px;
+      /*padding-right: 60px;*/
       display: inline-block;  
     }
 
@@ -867,6 +867,19 @@ ul.tablelist
       background: $color-hover;
       @include transition(all 150ms linear);
     }
+
+    .text-title
+    {
+      font-size: 1.3em;
+      padding-bottom: 5px;
+    }
+
+    .text-grey
+    {
+      font-style: italic;
+      color: #999999;
+    }
+
 
 
   }

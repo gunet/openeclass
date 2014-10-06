@@ -228,9 +228,21 @@ function getUserAnnouncements($lesson_id) {
             $course_title = q(ellipsize($ann->course_title, 30));
             $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
             $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
-            $ann_content .= "<li class='list-item'>" .
-                "<span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) .
-                "</a><br><i>$course_title</i> - $ann_date</span></li>";
+            $ann_content .= "
+
+            <li class='list-item'>
+                <span class='item-wholeline'>
+                    <a href='$ann_url'>
+                        <div class='text-title'>
+                            " . q(ellipsize($ann->title, 60)) ."
+                        </div>
+                    </a>
+                    
+                    <div class='text-grey'>$course_title</div>
+                    
+                    <div>$ann_date</div>
+                </span>
+            </li>";
         }
         return $ann_content;
     } else {
