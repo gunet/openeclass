@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
         <div id='operations_container'>
             <ul id='opslist'>    
-              <li><a href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langBack</li>
+              <li><a href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langBack</a></li>
             </ul>
         </div>";
     

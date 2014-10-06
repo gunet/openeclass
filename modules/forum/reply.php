@@ -172,7 +172,7 @@ if (isset($_POST['submit'])) {
         <div id='operations_container'>
             <ul id='opslist'>
               <li><a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
-              <li><a href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langBack</li>
+              <li><a href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langBack</a></li>
             </ul>
         </div>";
 

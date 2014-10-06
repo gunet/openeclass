@@ -81,7 +81,6 @@ if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
 if (isset($_POST['submitPoll'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', ['PollName']);
-    $v->rule('alpha', ['PollName']);
     $v->labels(array(
         'PollName' => "$langTheField $langTitle"
     ));
