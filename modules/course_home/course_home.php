@@ -131,10 +131,9 @@ if ($desccomm && $desccomm->comments) {
 }
 if (!empty($description)) {
     $main_content .= "
-    <div class='descr_title' style='float: right;'>
+    <div class='descr_title'>
         $edit_link
     </div>
-    <br/>
     $description
     ";
 } else {
@@ -597,7 +596,7 @@ $tool_content .= "
             </div>
             
             <div class ='col-md-7 col-sm-12 col-xs-12'>
-                <hr>
+                <hr class='margin-top-thin margin-bottom-thin'/>
                 $bar_content
             </div>
 

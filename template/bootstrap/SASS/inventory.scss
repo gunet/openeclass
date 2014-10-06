@@ -136,7 +136,7 @@ a
 
 
 
-/* Styles for headings --------------------------------------------------*/
+/* Styles for headings, hr and titles --------------------------------------------------*/
 h1
 {
   font-size:2em;
@@ -149,6 +149,7 @@ h1.page-title
   font-weight: 400!important;
   color: #333;
 }
+
 
 #main
 {
@@ -175,6 +176,13 @@ hr
   height: 1px;
   border: none;
   background: #eee;
+  margin-top: 0px;
+  margin-bottom:0px;
+}
+
+.descr_title
+{
+  float: right;
 }
 
 
@@ -332,9 +340,14 @@ img
 .tiny-icon
 {
   color:#dddddd;
-  font-size: 0.7em !important;
+  font-size: 15px !important;
   text-decoration: none;
   @include transition(all 150ms linear);
+
+  .tiny-icon-text
+  {
+    font-size: 12px !important;
+  }
 }
 
 .tiny-icon:hover
