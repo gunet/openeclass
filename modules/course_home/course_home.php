@@ -123,7 +123,10 @@ if ($desccomm && $desccomm->comments) {
     $description = standard_text_escape($desccomm->comments);
 }
 if (!empty($description)) {
-    $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";
+    $main_content .= "
+    $description
+    <div class='descr_title' style='float: right;'>$langDescription$edit_link</div>
+    ";
 } else {
     $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
 }

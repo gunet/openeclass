@@ -205,41 +205,6 @@ img
   color:#555555;
   font-size:22px;
 
-  .title-icon
-  {
-    color:#dddddd;
-    font-size: 0.7em !important;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon:hover
-  {
-    color: $color-hover;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon-rss:hover
-  {
-    color: #FFBB4F !important;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon-green:hover
-  {
-    color: $color-green !important;
-    text-decoration: none;
-    @include transition(all 150ms linear); 
-  }
-
-  .title-icon-red:hover
-  {
-    color: $color-red !important;
-    text-decoration: none;
-    @include transition(all 150ms linear); 
-  }
 
   a
   {
@@ -355,6 +320,49 @@ img
   text-align: right;
   margin-right:0em;  
   display: inline-block;
+}
+
+
+
+
+
+
+/* tiny-icons actions--------------------------------------------------------------------------- */
+
+.tiny-icon
+{
+  color:#dddddd;
+  font-size: 0.7em !important;
+  text-decoration: none;
+  @include transition(all 150ms linear);
+}
+
+.tiny-icon:hover
+{
+  color: $color-hover;
+  text-decoration: none;
+  @include transition(all 150ms linear);
+}
+
+.tiny-icon-rss:hover
+{
+  color: #FFBB4F !important;
+  text-decoration: none;
+  @include transition(all 150ms linear);
+}
+
+.tiny-icon-green:hover
+{
+  color: $color-green !important;
+  text-decoration: none;
+  @include transition(all 150ms linear); 
+}
+
+.tiny-icon-red:hover
+{
+  color: $color-red !important;
+  text-decoration: none;
+  @include transition(all 150ms linear); 
 }
 
 
