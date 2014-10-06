@@ -21,7 +21,8 @@
 
 $require_current_course = true;
 $require_editor = true;
-include 'include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/questionnaire/functions.php';
 
 if (!isset($_GET['pid'])) {
     redirect_to_home_page();
@@ -57,6 +58,8 @@ if (!$p) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
+$anonymized = $p->anonymized;
+$qlist = array();
 if ($full) {
     $begin = true;
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
@@ -95,7 +98,7 @@ if ($full) {
             $answers = Database::get()->queryArray("SELECT answer_text, user_id
                                 FROM poll_answer_record
                                 WHERE qid = ?d
-                                ORDER BY user_id", $pqid);
+                                ORDER BY user_id", $q->pqid);
             foreach ($answers as $a) {
                 $qlist[$a->user_id][$q->pqid] = $a->answer_text;
             }
@@ -123,7 +126,7 @@ if ($full) {
                                 FROM poll_answer_record
                                     LEFT JOIN poll_question_answer
                                         ON poll_answer_record.aid = poll_question_answer.pqaid
-                                WHERE qid = ?d GROUP BY aid", $question->pqid);
+                                WHERE qid = ?d GROUP BY aid", $q->pqid);
             $answer_counts = array();
             $answer_text = array();
             $answer_total = 0;
@@ -144,13 +147,13 @@ if ($full) {
             }
             echo $crlf;
         } else { // free text questions
-            echo csv_escape($question->question_text), $crlf;
+            echo csv_escape($q->question_text), $crlf;
             $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
-                                                           WHERE qid = ?d", $question->pqid);
+                                                           WHERE qid = ?d", $q->pqid);
             $k = 0;
             foreach ($answers as $a) {
                 $k++;
-                $student_name = $anonymized? "$langStudent $k": uid_to_name($theAnswer['user_id']);
+                $student_name = $anonymized? "$langStudent $k": uid_to_name($a->user_id);
                 echo csv_escape($student_name), ';', csv_escape($a->answer_text), $crlf;
             }
             echo $crlf;

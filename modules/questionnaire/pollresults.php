@@ -80,10 +80,10 @@ if(!$thePoll){
 $tool_content .= "
 <div class='info'>
     <b>$langDumpUserDurationToFile:</b><br>
-    <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
-    <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$code_cours&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$code_cours&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
+    <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
+       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
+    <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
+       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
 </div>
 
 <p class='sub_title1'>$langSurvey</p>
