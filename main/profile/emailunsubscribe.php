@@ -31,13 +31,13 @@ check_uid();
 
 if (isset($_POST['submit'])) {
     if (isset($_POST['unsub'])) {
-        Database::get()->query("UPDATE user SET receive_mail = 1 WHERE id = ?d", $uid);        
+        Database::get()->query("UPDATE user SET receive_mail = 1 WHERE id = ?d", $uid);
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
         $cid = intval($_POST['cid']);
         if (isset($_POST['c_unsub'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = 1
-                                WHERE user_id = ?d AND course_id = ?d", $uid, $cid);            
+                                WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         } else {
             Database::get()->query("UPDATE course_user SET receive_mail = 0
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
@@ -48,14 +48,18 @@ if (isset($_POST['submit'])) {
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             if (@array_key_exists($course_code, $_POST['c_unsub'])) {
                 Database::get()->query("UPDATE course_user SET receive_mail = 1
-                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);                
+                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             } else {
                 Database::get()->query("UPDATE course_user SET receive_mail = 0
-                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);                
+                                WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             }
         }
-        $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />
-                                <a href='../profile/profile.php'>$langBack</a></div>";
+        $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br /></div>" .
+                action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "../profile/profile.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')));
     }
 } else {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";

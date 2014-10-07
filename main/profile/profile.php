@@ -258,17 +258,28 @@ $sec = $urlSecure . 'main/profile/profile.php';
 $passurl = $urlSecure . 'main/profile/password.php';
 
 $tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='display_profile.php'>$langDisplayProfile</a></li> ";
-if ($allow_password_change) {
-    $tool_content .= "
-        <li><a href='$passurl'>$langChangePass</a></li> ";
-}
-$tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></li>
-        <li><a href='../unreguser.php'>$langUnregUser</a></li>
-    </ul>
-  </div>";
+  <div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langDisplayProfile,
+                'url' => "display_profile.php",
+                'icon' => 'fa-eye',
+                'level' => 'primary-label'),
+            array('title' => $langChangePass,
+                'url' => "$passurl",
+                'icon' => 'fa-key',
+                'show' => $allow_password_change,
+                'level' => 'primary'),
+            array('title' => $langEmailUnsubscribe,
+                'url' => "emailunsubscribe.php",
+                'icon' => 'fa-envelope',
+                'level' => 'primary'),
+            array('title' => $langUnregUser,
+                'url' => "../unreguser.php",
+                'icon' => 'fa-times',
+                'button-class'=>'btn-danger',
+                'level' => 'primary')
+            )) .
+        "</div>";
 $tool_content .= "
    <form method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
    <fieldset>
