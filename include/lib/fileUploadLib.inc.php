@@ -462,10 +462,7 @@ function unwanted_file($filename) {
 // Create database entries and set extracted file path to
 // a new safe filename
 function process_extracted_file($p_event, &$p_header) {
-
-    global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
-    $file_title, $file_description, $file_author, $file_language,
-    $file_copyrighted, $uploadPath, $realFileSize, $basedir, $course_id,
+    global $uploadPath, $realFileSize, $basedir, $course_id,
     $subsystem, $subsystem_id, $uploadPath, $group_sql;
     $didx = new DocumentIndexer();
 
@@ -474,18 +471,14 @@ function process_extracted_file($p_event, &$p_header) {
     if (!isset($uploadPath)) {
         $uploadPath = '';
     }
-    if (empty($file_category)) {
-        $file_category = 0;
-    }
-    if (empty($file_author)) {
-        $file_author = '';
-    }
-    if (empty($file_language)) {
-        $file_language = '';
-    }
-    if (empty($file_copyrighted)) {
-        $file_copyrighted = '';
-    }
+    $file_category = isset($_POST['file_category'])? $_POST['file_category']: 0;
+    $file_creator = isset($_POST['file_creator'])? $_POST['file_creator']: '';
+    $file_author = isset($_POST['file_author'])? $_POST['file_author']: '';
+    $file_subject = isset($_POST['file_subject'])? $_POST['file_subject']: '';
+    $file_language = isset($_POST['file_language'])? $_POST['file_language']: '';
+    $file_copyrighted = isset($_POST['file_copyrighted'])? $_POST['file_copyrighted']: '';
+    $file_comment = isset($_POST['file_comment'])? $_POST['file_comment']: '';
+    $file_description = isset($_POST['file_description'])? $_POST['file_description']: '';
     $realFileSize += $p_header['size'];
     $stored_filename = $p_header['stored_filename'];
     if (invalid_utf8($stored_filename)) {
@@ -545,14 +538,14 @@ function process_extracted_file($p_event, &$p_header) {
         $path .= '/' . safe_filename($format);        
         $id = Database::get()->query("INSERT INTO document SET
                                  course_id = ?d,
-				 subsystem = ?d,
+                                 subsystem = ?d,
                                  subsystem_id = ?d,
                                  path = ?s,
                                  filename = ?s,
                                  visible = 1,
                                  comment = ?s,
                                  category = ?d,
-                                 title = ?s,
+                                 title = '',
                                  creator = ?s,
                                  date = ?t,
                                  date_modified = ?t,
@@ -563,15 +556,14 @@ function process_extracted_file($p_event, &$p_header) {
                                  language = ?s,
                                  copyrighted = ?d"
                 , $course_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
-                , $file_title, $file_creator, $file_date, $file_date, $file_subject, $file_description
+                , $file_creator, $file_date, $file_date, $file_subject, $file_description
                 , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
         // Logging
         $didx->store($id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
             'filepath' => $path,
             'filename' => $filename,
-            'comment' => $file_comment,
-            'title' => $file_title));
+            'comment' => $file_comment));
         // File will be extracted with new encoded filename
         $p_header['filename'] = $basedir . $path;
         return 1;
@@ -664,6 +656,9 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
 function validateUploadedZipFile($listContent, $menuTypeID = 2) {
     global $tool_content, $head_content, $langBack, $langUploadedZipFileNotAllowed;
 
+    if (!is_array($listContent)) {
+        return false;
+    }
     foreach ($listContent as $key => $entry) {
         if ($entry['folder'] == 1)
             continue;

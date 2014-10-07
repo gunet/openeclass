@@ -168,18 +168,15 @@ if (isset($_POST['submit'])) {
     exit;
 } else {
     // Topic review
-    $tool_content .= "
-        <div id='operations_container'>" .
-            action_bar(array(
+    $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label'),
-                                array('title' => $langTopicReview,
+                array('title' => $langTopicReview,
                     'url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id",
                     'icon' => 'fa-eye',
-                    'level' => 'primary'))) .
-            "</div>";
+                    'level' => 'primary')));
 
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
 	<input type='hidden' name='parent_post' value='$parent_post'>

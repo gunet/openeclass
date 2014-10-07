@@ -453,20 +453,22 @@ if (isset($require_editor) and $require_editor) {
 }
 
 // Temporary student view
-if (isset($_SESSION['saved_status'])) {
-    $status = 5;
-    $is_course_admin = false;
-    $is_editor = false;
-    if (isset($currentCourse)) {
-        $_SESSION['courses'][$currentCourse] = USER_STUDENT;
+if (isset($_SESSION['student_view'])) {
+    if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
+        $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
+        $is_course_admin = false;
+        $saved_is_editor = $is_editor;
+        $is_editor = false;
+    } else {
+        unset($_SESSION['student_view']);
     }
 }
 
 $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
-if (isset($course_id) and ! $is_editor and ! defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and ! check_guest()) {
+if (isset($course_id) and !$is_editor and $module_id and !defined('STATIC_MODULE')) {
+    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
                                              course_id = ?d", $course_id);

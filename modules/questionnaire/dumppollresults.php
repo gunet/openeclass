@@ -19,19 +19,20 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$require_editor = TRUE;
-include '../../include/init.php';
+$require_current_course = true;
+$require_editor = true;
+require_once '../../include/baseTheme.php';
+require_once 'modules/questionnaire/functions.php';
 
 if (!isset($_GET['pid'])) {
-    header("Location: $urlServer");
+    redirect_to_home_page();
 } else {
-    $pid = $_GET['pid'];
+    $pid = intval($_GET['pid']);
 }
 
 if (!$is_editor) {
     Session::Messages($langPollResultsAccess);
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+    redirect_to_home_page('modules/questionnaire/index.php?course=' . $course_code);
 }
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
@@ -39,51 +40,123 @@ if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 } else {
     $charset = 'UTF-8';
 }
+$full = isset($_GET['full']) && $_GET['full'];
 $crlf = "\r\n";
+
+if (!isset($_GET['pid'])) {
+    redirect_to_home_page();
+} else {
+    $pid = intval($_GET['pid']);
+}
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
 
-$p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
-if(!$p){
+$p = Database::get()->querySingle("SELECT pid, anonymized FROM poll
+        WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+if (!$p) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
-echo csv_escape($langQuestions), $crlf, $crlf;
-$q = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid=?d",$p->pid);
-foreach ($q as $question) {
-    if ($question->qtype == 'multiple') { // only for questions with mupliple answers
-        echo $question->question_text;
-        echo "$crlf";
-        $a = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
+
+$anonymized = $p->anonymized;
+$qlist = array();
+if ($full) {
+    $begin = true;
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+
+    $users = Database::get()->queryArray("SELECT user_id FROM poll_answer_record WHERE pid = ?d ORDER BY user_id", $pid);
+    foreach ($questions as $q) {
+        if ($begin) {
+            echo csv_escape($langUser), ';user_id;';
+            $begin = false;
+        } else {
+            echo ';';
+        }
+        if ($q->qtype == QTYPE_LABEL) {
+            $q->question_text = strip_tags($q->question_text);
+        }
+        echo csv_escape($q->question_text);
+        if ($q->qtype == QTYPE_LABEL) {
+            foreach ($users as $user) {
+                $qlist[$user->user_id][$q->pqid] = '-';
+            }
+        } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
+            $answers = Database::get()->queryArray("SELECT poll_question_answer.answer_text, aid, user_id
                                 FROM poll_answer_record LEFT JOIN poll_question_answer
-                                ON poll_answer_record.aid = poll_question_answer.pqaid
-                                WHERE qid = ?d GROUP BY aid", $question->pqid);
-        $answer_counts = array();
-        $answer_text = array();
-        $answer_total = 0;
-        foreach ($a as $answer) {
-            $answer_counts[] = $answer->count;
-            $answer_total += $answer->count;
-            if ($answer->aid < 0) {
-                $answer_text[] = $langPollUnknown;
-            } else {
-                $answer_text[] = $answer->answer;
+                                     ON poll_answer_record.aid = poll_question_answer.pqaid
+                                WHERE qid = ?d
+                                ORDER BY user_id", $q->pqid);
+            foreach ($answers as $a) {
+                $answer_text = ($a->aid < 0)? $langPollUnknown: $a->answer_text;
+                if (isset($qlist[$a->user_id][$q->pqid])) {
+                    $qlist[$a->user_id][$q->pqid] .= ', ' . $answer_text;
+                } else {
+                    $qlist[$a->user_id][$q->pqid] = $answer_text;
+                }
+            }
+        } else { // free text questions
+            $answers = Database::get()->queryArray("SELECT answer_text, user_id
+                                FROM poll_answer_record
+                                WHERE qid = ?d
+                                ORDER BY user_id", $q->pqid);
+            foreach ($answers as $a) {
+                $qlist[$a->user_id][$q->pqid] = $a->answer_text;
             }
         }
-        echo csv_escape($langAnswers) . ";" . csv_escape($langResults) . " (%)", $crlf;
-        foreach ($answer_counts as $i => $count) {
-            $percentage = round(100 * ($count / $answer_total));
-            $label = $answer_text[$i];
-            echo csv_escape($label) .
-            ";" . csv_escape($percentage) . "$crlf";
+    }
+    echo $crlf;
+    $k = 0;
+    foreach ($qlist as $user_id => $answers) {
+        $k++;
+        $student_name = $anonymized? "$langStudent $k": uid_to_name($user_id);
+        if ($anonymized) {
+            $user_id = $k;
         }
-        echo "$crlf";
-    } else { // free text questions
-            echo csv_escape($question->question_text), $crlf;
-            $a = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
-                                              WHERE qid = ?d", $question->pqid);            
-            foreach ($a as $answer) {
-                    echo csv_escape(uid_to_name($answer->user_id)), ';', csv_escape($answer->answer_text), $crlf;
+        echo csv_escape($student_name), ';', $user_id, ';',
+             implode(';', array_map('csv_escape', $answers)), $crlf;
+    }
+} else {
+    echo csv_escape($langQuestions), $crlf, $crlf;
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid=?d ORDER BY q_position",$p->pid);
+    foreach ($questions as $q) {
+        if ($q->qtype == QTYPE_LABEL) {
+            echo csv_escape(strip_tags($q->question_text)), $crlf, $crlf;
+        } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
+            $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
+                                FROM poll_answer_record
+                                    LEFT JOIN poll_question_answer
+                                        ON poll_answer_record.aid = poll_question_answer.pqaid
+                                WHERE qid = ?d GROUP BY aid", $q->pqid);
+            $answer_counts = array();
+            $answer_text = array();
+            $answer_total = 0;
+            foreach ($answers as $a) {
+                $answer_counts[] = $a->count;
+                $answer_total += $a->count;
+                if ($a->aid < 0) {
+                    $answer_text[] = $langPollUnknown;
+                } else {
+                    $answer_text[] = $a->answer;
+                }
             }
+            echo csv_escape($langAnswers), ';', csv_escape($langResults), ' (%)', $crlf;
+            foreach ($answer_counts as $i => $count) {
+                $percentage = round(100 * ($count / $answer_total));
+                $label = $answer_text[$i];
+                echo csv_escape($label), ';', csv_escape($count), ';', csv_escape($percentage), $crlf;
+            }
+            echo $crlf;
+        } else { // free text questions
+            echo csv_escape($q->question_text), $crlf;
+            $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
+                                                           WHERE qid = ?d", $q->pqid);
+            $k = 0;
+            foreach ($answers as $a) {
+                $k++;
+                $student_name = $anonymized? "$langStudent $k": uid_to_name($a->user_id);
+                echo csv_escape($student_name), ';', csv_escape($a->answer_text), $crlf;
+            }
+            echo $crlf;
+        }
     }
 }

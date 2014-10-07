@@ -92,12 +92,6 @@ if (isset($_GET['showQuota'])) {
     exit;
 }
 
-if ($subsystem == EBOOK) {
-    $nameTools = $langFileAdmin;
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
-    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-}
-
 // ---------------------------
 // download directory or file
 // ---------------------------
@@ -171,14 +165,9 @@ if ($can_upload) {
         }
     }
 
-    /*     * *******************************************************************
+    /* ******************************************************************** *
       UPLOAD FILE
-
-      Ousiastika dhmiourgei ena safe_fileName xrhsimopoiwntas ta DATETIME
-      wste na mhn dhmiourgeitai provlhma sto filesystem apo to onoma tou
-      arxeiou. Parola afta to palio filename pernaei apo 'filtrarisma' wste
-      na apofefxthoun 'epikyndynoi' xarakthres.
-     * ********************************************************************* */
+     * ******************************************************************** */
 
     $didx = new DocumentIndexer();
 
@@ -196,7 +185,7 @@ if ($can_upload) {
                 $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
                         q($_FILES['userFile']['name']) . "</p>";
             } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
-                /*                 * * Unzipping stage ** */
+                /* ** Unzipping stage ** */
                 $zipFile = new pclZip($userFile);
                 validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
                 $realFileSize = 0;
@@ -221,8 +210,22 @@ if ($can_upload) {
         }
         $components = explode('/', $extra_path);
         $fileName = end($components);
+    } elseif (isset($_POST['file_content'])) {
+        $extra_path = '';
+        $diskUsed = dir_total_space($basedir);
+        if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
+            $action_message .= "<p class='caution'>$langNoSpace</p>";
+        } else {
+            if (isset($_POST['file_name'])) {
+                $fileName = $_POST['file_name'];
+                if (!preg_match('/\.html?$/i', $fileName)) {
+                    $fileName .= '.html';
+                }
+            }
+            $uploaded = true;
+        }
     }
-    if ($uploaded) {
+    if ($uploaded and !isset($_POST['editPath'])) {
         // Check if file already exists
         $result = Database::get()->querySingle("SELECT path, visible FROM document WHERE
                                            $group_sql AND
@@ -246,21 +249,21 @@ if ($can_upload) {
         $action_message .= "<p class='caution'>$error</p><br />";
     } elseif ($uploaded) {
         // No errors, so proceed with upload
-        // Try to add an extension to files witout extension,
-        // change extension of PHP files
-        $fileName = php2phps(add_ext_on_mime($fileName));
-        // File name used in file system and path field
-        $safe_fileName = safe_filename(get_file_extension($fileName));
-        if ($uploadPath == '.') {
-            $file_path = '/' . $safe_fileName;
-        } else {
-            $file_path = $uploadPath . '/' . $safe_fileName;
-        }
-        $vis = 1;
-        $file_format = get_file_extension($fileName);
         // File date is current date
         $file_date = date("Y\-m\-d G\:i\:s");
-        if ($extra_path or ( isset($userFile) and @ copy($userFile, $basedir . $file_path))) {
+        if ($extra_path or (isset($userFile) and @copy($userFile, $basedir . $file_path))) {
+            // Try to add an extension to files witout extension,
+            // change extension of PHP files
+            $fileName = php2phps(add_ext_on_mime($fileName));
+            // File name used in file system and path field
+            $safe_fileName = safe_filename(get_file_extension($fileName));
+            if ($uploadPath == '.') {
+                $file_path = '/' . $safe_fileName;
+            } else {
+                $file_path = $uploadPath . '/' . $safe_fileName;
+            }
+            $vis = 1;
+            $file_format = get_file_extension($fileName);
             $id = Database::get()->query("INSERT INTO document SET
                                         course_id = ?d,
                                         subsystem = ?d,
@@ -293,10 +296,75 @@ if ($can_upload) {
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
             $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
-        } else {
-            // Moving uploaded file failed
-            $action_message .= "<p class='caution'>$error</p><br />";
-        }
+        } elseif (isset($_POST['file_content'])) {
+            $q = false;
+            if (isset($_POST['editPath'])) {
+                $fileInfo = Database::get()->querySingle("SELECT * FROM document
+                    WHERE $group_sql AND path = ?s", $_POST['editPath']);
+                if ($fileInfo->editable) {
+                    $file_path = $fileInfo->path;
+                    $q = Database::get()->query("UPDATE document
+                            SET date_modified = NOW(), title = ?s
+                            WHERE $group_sql AND path = ?s",
+                            $_POST['file_title'], $_POST['editPath']);
+                    $id = $fileInfo->id;
+                    $fileName = $fileInfo->filename;
+                }
+            } else {
+                $safe_fileName = safe_filename(get_file_extension($fileName));
+                $file_path = $uploadPath . '/' . $safe_fileName;
+                $file_date = date("Y\-m\-d G\:i\:s");
+                $file_format = get_file_extension($fileName);
+                $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+                $q = Database::get()->query("INSERT INTO document SET
+                            course_id = ?d,
+                            subsystem = ?d,
+                            subsystem_id = ?d,
+                            path = ?s,
+                            extra_path = '',
+                            filename = ?s,
+                            visible = 1,
+                            comment = '',
+                            category = 0,
+                            title = ?s,
+                            creator = ?s,
+                            date = ?s,
+                            date_modified = ?s,
+                            subject = '',
+                            description = '',
+                            author = ?s,
+                            format = ?s,
+                            language = ?s,
+                            copyrighted = 0,
+                            editable = 1",
+                            $course_id, $subsystem, $subsystem_id, $file_path,
+                            $fileName, $_POST['file_title'], $file_creator,
+                            $file_date, $file_date, $file_creator, $file_format,
+                            $language);
+            }
+            if ($q) {
+                if (!isset($id)) {
+                    $id = $q->lastInsertID;
+                    $log_action = LOG_INSERT;
+                } else {
+                    $log_action = LOG_MODIFY;
+                }
+                Log::record($course_id, MODULE_ID_DOCS, $log_action,
+                        array('id' => $id,
+                              'filepath' => $file_path,
+                              'filename' => $fileName,
+                              'title' => $_POST['file_title']));
+                $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                $title = $_POST['file_title']? $_POST['file_title']: $fileName;
+                file_put_contents($basedir . $file_path,
+                    '<!DOCTYPE html><head><meta charset="utf-8">' .
+                    '<title>' . q($title) . '</title><body>' .
+                    purify($_POST['file_content']) .
+                    "</body></html>\n");
+                $didx->store($id);
+            }
+            $curDirPath = dirname($file_path);
+        }        
     }
 
     /*     * ************************************
@@ -894,7 +962,8 @@ function pathvar(&$var, $is_file = false) {
     return '';
 }
 
-$curDirPath = pathvar($_GET['openDir'], false) .
+if (!isset($curDirPath)) {
+    $curDirPath = pathvar($_GET['openDir'], false) .
         pathvar($_GET['createDir'], false) .
         pathvar($_POST['moveTo'], false) .
         pathvar($_POST['newDirPath'], false) .
@@ -913,6 +982,7 @@ $curDirPath = pathvar($_GET['openDir'], false) .
         pathvar($_POST['replacePath'], true) .
         pathvar($_POST['commentPath'], true) .
         pathvar($_POST['metadataPath'], true);
+}
 
 if ($curDirPath == '/' or $curDirPath == '\\') {
     $curDirPath = '';
@@ -958,6 +1028,10 @@ $fileinfo = array();
 foreach ($result as $row) {
     if ($real_path = common_doc_path($row->extra_path, true)) {
         // common docs
+        if (!$common_doc_visible and !$is_admin) {
+            // hide links to invisible common docs to non-admins
+            continue;
+        }
         $path = $real_path;
     } else {
         $path = $basedir . $row->path;
@@ -966,7 +1040,7 @@ foreach ($result as $row) {
         // external file
         $size = 0;
     } else {
-        $size = filesize($path);
+        $size = file_exists($path)? filesize($path): 0;
     }
     $fileinfo[] = array(
         'is_dir' => ($row->format == '.dir'),
@@ -981,7 +1055,8 @@ foreach ($result as $row) {
         'comment' => $row->comment,
         'copyrighted' => $row->copyrighted,
         'date' => $row->date_modified,
-        'object' => MediaResourceFactory::initFromDocument($row));
+        'object' => MediaResourceFactory::initFromDocument($row),
+        'editable' => $row->editable);
 }
 // end of common to teachers and students
 // ----------------------------------------------
@@ -1111,9 +1186,15 @@ if ($doc_count == 0) {
                 if ($entry['extra_path']) {
                     $cdpath = common_doc_path($entry['extra_path']);
                     if ($cdpath) {
-                        if ($is_editor) {
-                            $link_title_extra .= '&nbsp;' .
-                                    $common_doc_visible ? 'common' : 'common_invisible';
+                        if ($can_upload) {
+                            if ($common_doc_visible) {
+                                $link_title_extra .= '&nbsp;' .
+                                    icon('common', $langCommonDocLink);
+                            } else {
+                                $link_title_extra .= '&nbsp;' .
+                                    icon('common-invisible', $langCommonDocLinkInvisible);
+                                $style = ' class="invisible"';
+                            }
                         }
                     } else {
                         // External file URL
@@ -1123,10 +1204,16 @@ if ($doc_count == 0) {
                         }
                     }
                 }
+                if ($can_upload and $entry['editable']) {
+                    $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
+                        ($groupset? "&amp;$groupset": '');
+                    $link_title_extra .= '&nbsp;' .
+                        icon('edit', $langEdit, $edit_url);
+                }
                 if ($copyid = $entry['copyrighted'] and
-                        $copyicon = $copyright_icons[$copyid]) {
+                    $copyicon = $copyright_icons[$copyid]) {
                     $link_title_extra .= "&nbsp;" .
-                            icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
+                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
                 }
                 $dload_msg = $langSave;
 

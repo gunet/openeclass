@@ -241,7 +241,7 @@ if ($is_editor) {
             </tr>
             <tr><th>$langGradebookActivityWeight:</th></tr>
             <tr>
-              <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, $id) . " % $langGradebookActivityWeightLeft)</td>
+              <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, '') . " % $langGradebookActivityWeightLeft)</td>
             </tr>
             <tr>
                 <td><label for='visible'>Ορατό στους μαθητές:</label>
@@ -363,7 +363,7 @@ if ($is_editor) {
         $actDate = $actDate_obj ? $actDate_obj->format('Y-m-d H:i:s') : "";
         $visible = isset($_POST['visible']) ? 1 : 0;
 
-        if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>100)){
+        if (($_POST['id'] && $weight > weightleft($gradebook_id, $_POST['id']) && $weight != 100) || (!$_POST['id'] && $weight > weightleft($gradebook_id, $_POST['id']))) {
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
             $tool_content .= $message . "<br/>";
         } else {
@@ -1379,7 +1379,8 @@ function typeSelected($type, $optionType){
 //function to calculate the weight left
 function weightleft($gradebook_id, $currentActivity){
     if($currentActivity){
-        $left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d AND id != ?d", $gradebook_id, $currentActivity)->count;
+        $left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d AND id != ?d", $gradebook_id, $currentActivity)->count; 
+        //$left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id)->count;
     }else{
         $left = Database::get()->querySingle("SELECT SUM(weight) as count FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id)->count;
     }
