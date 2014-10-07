@@ -109,11 +109,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     } else {
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
         $link_back = "admin.php?course=TMAPOST111".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
-    }
-    
-    
-    
-    
+    }  
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => $link_back,
@@ -122,8 +118,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         )
     ));
     
-
-
     $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
     $tool_content .= "
             <div class='form-group'>
@@ -144,8 +138,21 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                   ".(($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "")."
                   <input type='file'  name='imageUpload' id='imageUpload'> 
                 </div>
-            </div>
+            </div>";
+    if ($okPicture) {
+        $tool_content .= "
             <div class='form-group'>
+		<label class='col-sm-2 control-label'>$langDeletePicture:</label>
+                <div class='col-sm-10'>            
+                    <div class='checkbox'>
+                      <label>    
+                        <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
+                      </label>
+                    </div>
+                </div>
+            </div>";
+    }
+$tool_content .= "<div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAnswerType:</label>
                 <div class='col-sm-10'>            
                     <div class='radio'>
