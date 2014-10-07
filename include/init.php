@@ -456,9 +456,8 @@ if (isset($require_editor) and $require_editor) {
 if (isset($_SESSION['student_view'])) {
     if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
         $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
-        $is_course_admin = false;
         $saved_is_editor = $is_editor;
-        $is_editor = false;
+        $is_admin = $is_editor = $is_course_admin = false;
     } else {
         unset($_SESSION['student_view']);
     }
