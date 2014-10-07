@@ -453,7 +453,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         // display role switch button if needed
         if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
-            $t->set_var('STUDENT_VIEW_TITLE', $is_editor? $langStudentViewEnable: $langStudentViewDisable);
+            if ($is_editor) {
+                $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewEnable);
+            } else {
+                $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewDisable);
+                $t->set_var('STUDENT_VIEW_CLASS', 'btn-toggle-on');
+            }
+            $t->set_var('STUDENT_VIEW_URL', $urlAppend . 'main/student_view.php?course=' . $course_code);
         } else {
             $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
         }
