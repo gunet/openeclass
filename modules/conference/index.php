@@ -54,13 +54,19 @@ function prepare_message() {
 </script>';
 
 if ($is_editor) {
-    $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='messageList.php?course=$course_code&amp;reset=true' target='messageList' class=small_tools>$langWash</a></li>
-            <li><a href='messageList.php?course=$course_code&amp;store=true' target='messageList' class=small_tools>$langSave</a></li>
-          </ul>
-        </div>";
+    $tool_content .= action_bar(array(
+        array('title' => $langSave,
+            'url' => "messageList.php?course=$course_code&amp;store=true",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ),
+        array('title' => $langSave,
+            'url' => "messageList.php?course=$course_code&amp;reset=true",
+            'icon' => 'fa-university',
+            'level' => 'primary'
+            )
+    ));
 }
 
 $tool_content .= "

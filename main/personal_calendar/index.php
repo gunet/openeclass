@@ -52,28 +52,40 @@ if (isset($_GET['id'])) {
 }
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
+load_js('bootstrap-timepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+if (!empty($langLanguageCode)) {
+    load_js('bootstrap-calendar-master/js/language/' . $langLanguageCode . '.js');
+}
+load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
 $(function() {
-$('input[name=startdate]').datetimepicker({
-    dateFormat: 'yy-mm-dd'
+    $('#startdate').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '" . $language . "',
+        autoclose: true
     });
-$('input[name=enddate]').datepicker({
-    dateFormat: 'yy-mm-dd'
+    $('#enddate').datepicker({
+        format: 'dd-mm-yyyy',
+        language: '" . $language . "',
+        autoclose: true
     });
-$('input[name=duration]').timepicker({ 
-    timeFormat: 'H:mm',
-    showDuration: true
+    $('#duration').timepicker({ 
+        showMeridian: false, 
+        minuteStep: 1, 
+        defaultTime: false 
     });
-});".
-'
-var selectedday = '.$today['mday'].';
-var selectedmonth = '.$today['mon'].';
-var selectedyear = '.$today['year'].';
+});" .
+        '
+var selectedday = ' . $today['mday'] . ';
+var selectedmonth = ' . $today['mon'] . ';
+var selectedyear = ' . $today['year'] . ';
 function show_month(day,month,year){
     selectedday = day;
     selectedmonth = month;
@@ -97,14 +109,12 @@ function show_day(day,month,year){
 //angela: Do we need recording of personal actions????
 // The following is added for statistics purposes
 //require_once 'include/action.php';
-
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
 $nameTools = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
-load_js('jquery');
 load_js('tools.js');
 load_js('references.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
@@ -112,57 +122,57 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 
 $displayForm = true;
 
-/* submit form: new or updated event*/
+/* submit form: new or updated event */
 if (isset($_POST['submitEvent'])) {
-    
-    $newTitle = $_POST['newTitle'];       
+
+    $newTitle = $_POST['newTitle'];
     $newContent = $_POST['newContent'];
-    if(isset($_POST['visibility_level'])){
+    if (isset($_POST['visibility_level'])) {
         $visibility = $_POST['visibility_level'];
         $refobjid = null;
     } else {
-        $refobjid = ($_POST['refobjid'] == "0")? $_POST['refcourse']:$_POST['refobjid'];
+        $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
         $visibility = null;
     }
-    
-    $start = $_POST['startdate'];
+    $eventDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
+    $start = $eventDate_obj->format('Y-m-d H:i:s');
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
-        if(is_null($visibility)){
+        if (is_null($visibility)) {
             $resp = Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, $refobjid);
         } else {
             $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility);
         }
-        if($resp['success']){
+        if ($resp['success']) {
             $message = "<p class='success'>$langEventModify</p>";
-        }
-        else{
+        } else {
             $message = "<p class='caution'>{$resp['message']}</p>";
         }
     } else { // new event 
         $recursion = null;
-        if(!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber'])>0 && !empty($_POST['enddate'])){
-            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end'=> $_POST['enddate']);
+        if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
+            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
+            $end = $endDate_obj->format('Y-m-d H:i:s');
+            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $end);
         }
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
-        if($resp['success']){
+        if ($resp['success']) {
             $message = "<p class='success'>$langEventAdd</p>";
-        }
-        else{
+        } else {
             $message = "<p class='caution'>{$resp['message']}</p>";
         }
-    }    
+    }
 } // end of if $submit
 
 /* delete */
 if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
     $thisEventId = intval($_GET['delete']);
     $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
-    if($resp['success']){
-            $message = "<p class='success'>$langEventDel</p>";
+    if ($resp['success']) {
+        $message = "<p class='success'>$langEventDel</p>";
     } else {
-         $message = "<p class='caution'>{$resp['message']}</p>";
+        $message = "<p class='caution'>{$resp['message']}</p>";
     }
 }
 
@@ -170,13 +180,15 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
 if (isset($_GET['modify'])) {
     $modify = intval($_GET['modify']);
     $displayForm = false;
-    if(isset($_GET['admin']) && $_GET['admin'] == 1){
+    if (isset($_GET['admin']) && $_GET['admin'] == 1) {
         $event = Calendar_Events::get_admin_event($modify);
         if ($event) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
-            $datetimeToModify = q($event->start);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $event->start);
+            $startdate = $startDate_obj->format('d-m-Y H:i');
+            $datetimeToModify = q($startdate);
             $durationToModify = q($event->duration);
             $visibility_level = $event->visibility_level;
             $displayForm = true;
@@ -187,7 +199,9 @@ if (isset($_GET['modify'])) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
-            $datetimeToModify = q($event->start);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $event->start);
+            $startdate = $startDate_obj->format('d-m-Y H:i');
+            $datetimeToModify = q($startdate);
             $durationToModify = q($event->duration);
             $gen_type_selected = $event->reference_obj_module;
             $course_selected = $event->reference_obj_course;
@@ -204,10 +218,9 @@ if (isset($message) && $message) {
 }
 
 /* display form */
-if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
-    $tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
-    <fieldset>
+if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
+    $tool_content .= "       
+    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\" style='display:inline'>
     <legend>$langEvent</legend>
     <table class='tbl' width='100%'>";
     if (isset($_GET['modify'])) {
@@ -234,8 +247,9 @@ if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['ad
         $type_selected = null;
     if (!isset($object_selected))
         $object_selected = null;
-    
+
     $tool_content .= "
+    <input type='hidden' name='id' value='$eventToModify' />
     <tr><th>$langEventTitle:</th></tr>
     <tr>
       <td><input type='text' name='newTitle' value='$titleToModify' size='50' /></td>
@@ -246,21 +260,20 @@ if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['ad
     </tr>
     <tr><th>$langDate:</th></tr>
     <tr>
-        <td> <input type='text' name='startdate' value='$datetimeToModify'></td>
+        <td> <input type='text' name='startdate' id='startdate' value='$datetimeToModify'></td>
     </tr>
     <tr><th>$langDuration:</th></tr>
     <tr>
-        <td><input type=\"text\" name=\"duration\" value='$durationToModify'></td>
+        <td><input type=\"text\" name=\"duration\" id='duration' value='$durationToModify'></td>
     </tr>";
-    if(!isset($_GET['modify'])){
+    if (!isset($_GET['modify'])) {
         $tool_content .= "
         <tr><th>$langRepeat:</th></tr>
         <tr>
             <td> $langEvery: "
                 . "<select name='frequencynumber'>"
                 . "<option value=\"0\">$langSelectFromMenu</option>";
-        for($i = 1;$i<10;$i++)
-        {
+        for ($i = 1; $i < 10; $i++) {
             $tool_content .= "<option value=\"$i\">$i</option>";
         }
         $tool_content .= "</select>"
@@ -270,66 +283,125 @@ if ($displayForm and ( isset($_GET['addEvent']) or ($is_admin && isset($_GET['ad
                 . "<option value=\"W\">$langWeeks</option>"
                 . "<option value=\"M\">$langMonthsAbstract</option>"
                 . "</select>"
-                . " $langUntil: <input type='text' name='enddate' value=''></td>
+                . " $langUntil: <input type='text' name='enddate' id='enddate' value=''></td>
         </tr>";
     }
-    if(!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])){
+    if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
         $eventtype = 'personal';
         $tool_content .= "
         <tr><th>$langReferencedObject:</th></tr>
         <tr>
-          <td>".
-          References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
-       ."</td>";
-    }
-    else {
+          <td>" .
+                References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
+                . "</td>";
+    } else {
         $eventtype = 'admin';
-        $selectedvis = array(0=>"", USER_TEACHER=>"",USER_STUDENT=>"",USER_GUEST=>"");
-        if(isset($visibility_level)){
+        $selectedvis = array(0 => "", USER_TEACHER => "", USER_STUDENT => "", USER_GUEST => "");
+        if (isset($visibility_level)) {
             $selectedvis[$visibility_level] = "selected";
         }
         $tool_content .= "<tr><th>$langShowTo:</th></tr>"
                 . "<tr><td><select name='visibility_level'> "
-                . "<option value=\"0\" ".$selectedvis[0].">$langShowToAdminsOnly</option>"
-                . "<option value=\"".USER_TEACHER."\" ".$selectedvis[USER_TEACHER].">$langShowToAdminsandProfs</option>"
-                . "<option value=\"".USER_STUDENT."\" ".$selectedvis[USER_STUDENT].">$langShowToAllregistered</option>"
-                . "<option value=\"".USER_GUEST."\" ".$selectedvis[USER_GUEST].">$langShowToAll</option>"
+                . "<option value=\"0\" " . $selectedvis[0] . ">$langShowToAdminsOnly</option>"
+                . "<option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>"
+                . "<option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>"
+                . "<option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>"
                 . "</select></td></tr>";
     }
     $tool_content .= "
-        </tr>
-        <tr>
-          <td class='right'>
-            <input type='submit' name='submitEvent' value='$langAdd' />
-            <a href='?delete=$eventToModify&et=$eventtype' onClick=\"return confirmation('$langConfirmDelete');\"><span class='button' name='deleteEventBtn'>$langDelete</span></a>
-          </td>
         </tr>";
     $tool_content .= "</table>
-    <input type='hidden' name='id' value='$eventToModify' />
-    </fieldset>
-    </form>";
+            <input type='submit' name='submitEvent' value='$langAdd' />
+            </form> 
+            <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
+                <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+            </form>        
+   ";
 } else {
     /* display actions toolbar */
     $tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?addEvent=1'>" . $langAddEvent . "</a></li>";
-        if($is_admin){
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?addAdminEvent=1'>" . $langAddAdminEvent . "</a></li>";
-        }
-        $tool_content .= "<li><a href='icalendar.php'>" . $langiCalExport . "</a></li>
-      </ul>
-    </div>";
+    <div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langAddEvent,
+                    'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+                array('title' => $langAddAdminEvent,
+                    'url' => "$_SERVER[SCRIPT_NAME]?addAdminEvent=1",
+                    'icon' => 'fa-plus-circle',
+                    'show' => $is_admin,
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label'),
+                array('title' => $langiCalExport,
+                    'url' => "icalendar.php",
+                    'icon' => 'fa-calendar',
+                    'level' => 'primary'),
+            )) .
+            "</div>";
 }
 
 
 /* display events */
-$day = (isset($_GET['day']))? intval($_GET['day']):null;
-$month = (isset($_GET['month']))? intval($_GET['month']):null;
-$year = (isset($_GET['year']))? intval($_GET['year']):null;
-$tool_content .= '<div id="monthcalendar" style="width:100%">';
-$tool_content .= Calendar_Events::calendar_view($day, $month, $year);
-$tool_content .= '</div>';
+$day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
+$month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
+$year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
+if ($_SESSION['theme'] != 'bootstrap') {
+    $tool_content .= '<div id="monthcalendar" style="width:100%">';
+    $tool_content .= Calendar_Events::calendar_view($day, $month, $year);
+    $tool_content .= '</div>';
+} else {
+    $tool_content .= ''
+            . '<div class="row page-header">
+                    <div class="pull-right form-inline">
+                            <div class="btn-group">
+                                    <button class="btn btn-primary" data-calendar-nav="prev">&larr; ' . $langPrevious . '</button>
+                                    <button class="btn" data-calendar-nav="today">' . $langToday . '</button>
+                                    <button class="btn btn-primary" data-calendar-nav="next">' . $langNext . ' &rarr;</button>
+                            </div>
+                            <div class="btn-group">
+                                    <button class="btn btn-warning" data-calendar-view="year">' . $langYear . '</button>
+                                    <button class="btn btn-warning active" data-calendar-view="month">' . $langMonth . '</button>
+                                    <button class="btn btn-warning" data-calendar-view="week">' . $langWeek . '</button>
+                                    <button class="btn btn-warning" data-calendar-view="day">' . $langDay . '</button>
+                            </div>
+                    </div>
+                    <h3></h3>
+            </div>'
+            . '<div class="row"><div id="bootstrapcalendar" class="col-xs-6 col-sm-7 col-md-6 add-gutter"></div></div>' .
+            "<script type='text/javascript'>" .
+            '$(document).ready(function(){
+
+    var calendar = $("#bootstrapcalendar").calendar(
+            {
+                tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
+                events_source: "' . $urlAppend . 'main/calendar_data.php",
+                language: "el-GR",
+                onAfterViewLoad: function(view) {
+                            $(".page-header h3").text(this.getTitle());
+                            $(".btn-group button").removeClass("active");
+                            $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                            }
+            }
+        );
+
+    $(".btn-group button[data-calendar-nav]").each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.navigate($this.data("calendar-nav"));
+        });
+    });
+
+    $(".btn-group button[data-calendar-view]").each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.view($this.data("calendar-view"));
+        });
+    });    
+    });
+
+    </script>';
+}
 
 add_units_navigation(TRUE);
 

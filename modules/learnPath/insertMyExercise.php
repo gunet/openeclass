@@ -165,7 +165,12 @@ $tool_content .= display_my_exercises("", "");
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-$tool_content .= "<p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "'>$langBackToLPAdmin</p>";
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 draw($tool_content, 2, null, $head_content);
 

@@ -27,7 +27,6 @@ require_once 'include/baseTheme.php';
 
 $nameTools = $langCheckTools;
 
-load_js('jquery');
 load_js('check.js');
 $head_content .= <<<hContent
 <style type="text/css">

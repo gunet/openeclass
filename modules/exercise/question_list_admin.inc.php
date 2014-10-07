@@ -21,30 +21,15 @@
 /**
  * @file question_list_admin.inc.php
  */
-load_js('jquery');
-load_js('jquery-ui');
 $head_content .= "
 <script>
   $(function() {
-    $('.modal_warning').click( function(e){
-        var link = $(this).parent().attr('href');
-        e.preventDefault();
-        $('#dialog').dialog({
-            resizable: false,
-            width: 500,
-            modal: true,
-            buttons: {
-               '$langModifyInAllExercises': function() {
-                $( this ).dialog( 'close' );
-                window.location = link;
-              },            
-              '$langModifyInThisExercise': function() {
-                $( this ).dialog( 'close' );
-                window.location = link.concat('&clone=true');
-              }
-            }        
-        });
-    });
+    $('.warnLink').click( function(e){
+          var modidyAllLink = $(this).attr('href');
+          var modifyOneLink = modidyAllLink.concat('&clone=true');
+          $('a#modifyAll').attr('href', modidyAllLink);
+          $('a#modifyOne').attr('href', modifyOneLink); 
+    });  
   });
 </script>
 ";
@@ -53,12 +38,14 @@ $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExerc
 if (isset($_GET['moveUp'])) {
     $objExercise->moveUp($_GET['moveUp']);
     $objExercise->save();
+    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
 // moves a question down in the list
 if (isset($_GET['moveDown'])) {
     $objExercise->moveDown($_GET['moveDown']);
     $objExercise->save();
+    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
 // deletes a question from the exercise (not from the data base)
@@ -77,58 +64,87 @@ if (isset($_GET['deleteQuestion'])) {
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
 
-
-$tool_content .= "
-    <div align='left' id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes'>$langNewQu</a>
-	&nbsp;|&nbsp;
-	<a href='question_pool.php?course=$course_code&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
-      </ul>
-    </div>";
-
+    $tool_content .= action_bar(array(
+        array('title' => $langNewQu,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ),
+        array('title' => $langGetExistingQuestion,
+            'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
+            'icon' => 'fa-bank',
+            'level' => 'primary-label'
+        )       
+    ));  
 
 if ($nbrQuestions) {
     $questionList = $objExercise->selectQuestionList();
     $i = 1;
     $tool_content .= "
-	    <table width='100%' class='tbl_alt'>
+        <div class='table-responsive'>
+	    <table class='table table-striped table-bordered table-hover'>
 	    <tr>
-	      <th colspan='2' class='left'>$langQuestionList</th>
-	      <th colspan='4' class='center'>$langActions</th>
+	      <th colspan='2' class='text-left'>$langQuestionList</th>
+	      <th class='text-center'>".icon('fa-gears', $langActions)."</th>
 	    </tr>";
 
     foreach ($questionList as $id) {
         $objQuestionTmp = new Question();
         $objQuestionTmp->read($id);
-        
-        if ($i % 2 == 0) {
-            $tool_content .= "\n    <tr class='odd'>";
-        } else {
-            $tool_content .= "\n    <tr class='even'>";
-        }
-
-        $tool_content .= "
+         
+        $tool_content .= "<tr>
 			<td align='right' width='1'>" . $i . ".</td>
 			<td> " . q($objQuestionTmp->selectTitle()) . "<br />
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
-			<td class='right' width='50'>" .
-                icon('edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id", (($objQuestionTmp->selectNbrExercises()>1)? "class='modal_warning'" : "")) . "&nbsp;" .
-                icon('delete', $langDelete, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id", "onclick=\"if(!confirm('" . js_escape($langConfirmYourChoice) . "')) return false;\"") .
-                "</td><td width='20'>";
-        if ($i != 1) {
-            $tool_content .= icon('up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id");
-        }
-        $tool_content .= "</td><td width='20'>";
-        if ($i != $nbrQuestions) {
-            $tool_content .= icon('down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id");
-        }
-        $tool_content .= "</td></tr>";
+			<td class='option-btn-cell'>".            
+                    action_button(array(
+                        array('title' => $langModify,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id",
+                              'icon-class' => 'warnLink',
+                              'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                              'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmYourChoice,
+                              'show' => !isset($fromExercise)),
+                        array('title' => $langUp,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id",
+                              'icon' => 'fa-arrow-up',
+                              'show' => $i != 1
+                            ),
+                        array('title' => $langDown,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id",
+                              'icon' => 'fa-arrow-down',
+                              'show' => $i != $nbrQuestions
+                            )                
+                    ))."</td></tr>";
         $i++;
         unset($objQuestionTmp);
     }
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 }
+$tool_content .= "
+<!-- Modal -->
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+      </div>
+      <div class='modal-body'>
+        $langUsedInSeveralExercises
+      </div>
+      <div class='modal-footer'>
+        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInThisExercise</a>
+      </div>
+    </div>
+  </div>
+</div>    
+";
 if (!isset($i)) {
     $tool_content .= "<p class='alert1'>$langNoQuestion</p>";
 }

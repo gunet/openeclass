@@ -28,29 +28,14 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
-load_js('jquery');
-load_js('jquery-ui');
 $head_content .= "
 <script>
   $(function() {
-    $('.modal_warning').click( function(e){
-        var link = $(this).attr('href');
-        e.preventDefault();
-        $('#dialog').dialog({
-            resizable: false,
-            width: 500,
-            modal: true,
-            buttons: {
-               '$langModifyInAllExercises': function() {
-                $( this ).dialog( 'close' );
-                window.location = link;
-              },            
-              '$langModifyInQuestionPool': function() {
-                $( this ).dialog( 'close' );
-                window.location = link.concat('&clone=true');
-              }
-            }        
-        });
+    $('.warnLink').click( function(e){
+          var modidyAllLink = $(this).attr('href');
+          var modifyOneLink = modidyAllLink.concat('&clone=true');
+          $('a#modifyAll').attr('href', modidyAllLink);
+          $('a#modifyOne').attr('href', modifyOneLink); 
     });
   });
 </script>
@@ -109,57 +94,52 @@ if ($is_editor) {
         unset($objQuestionTmp);
         // adds the question ID into the list of questions for the current exercise
         $objExercise->addToList($recup);
-        Session::set_flashdata($langQuestionReused, 'success');
+        Session::Messages($langQuestionReused, 'alert-success');
         redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
     }
     
+    if (isset($fromExercise)) {
+        $action_bar_options[] = array('title' => $langGoBackToEx,
+                'url' => "admin.php?course=$course_code&amp;exerciseId=$fromExercise",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+         );        
+    } else {
+        $action_bar_options[] = array('title' => $langNewQu,
+                'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+         );          
+    }
+    $tool_content .= action_bar($action_bar_options);
     
-    $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
-    if (isset($fromExercise)) {
-        $tool_content .= "<a href=\"admin.php?course=$course_code&amp;exerciseId=$fromExercise\">&lt;&lt; " . $langGoBackToEx . "</a>";
-    } else {
-        $tool_content .= "<a href=\"admin.php?course=$course_code&amp;newQuestion=yes\">" . $langNewQu . "</a>";
-    }
-
-    $tool_content .= "</li></ul></div>";
-
-    $tool_content .= "<form name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>";
-    if (isset($fromExercise)) {
-        $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
-    }
-
-    $tool_content .= "<table width='100%' class='tbl_alt'><tr>";
-    if (isset($fromExercise)) {
-        $tool_content .= "<td colspan='3'>";
-    } else {
-        $tool_content .= "<td colspan='4'>";
-    }
-    $tool_content .= "<div align='right'><b>" . $langFilter . "</b>:
-	   <select onChange='document.qfilter.submit();' name='exerciseId' class='FormData_InputText'>" . "
-	     <option value=\"0\">-- " . $langAllExercises . " --</option>" . "
-	     <option value=\"-1\" ";
-
-    if (isset($exerciseId) && $exerciseId == -1) {
-        $tool_content .= "selected=\"selected\"";
-    }
-    $tool_content .= ">-- " . $langOrphanQuestions . " --</option>\n";
-
     if (isset($fromExercise)) {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
-    }
+    }    
+    //Start of filtering Component
+    $tool_content .= "<form class='form-horizontal' role='form' name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>
+                        <div class='form-group'>
+                            <label for='exerciseTitle' class='col-sm-2 control-label'>$langFilter:</label>
+                            <div class='col-sm-4'>
+                                <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
+                                  <option value = '0'>-- $langAllExercises --</option>
+                                  <option value = '-1' ".(isset($exerciseId) && $exerciseId == -1 ? "selected='selected'": "").">-- $langOrphanQuestions --</option>";
 
-    // shows a list-box allowing to filter questions
     foreach ($result as $row) {
         $tool_content .= "
-             <option value=\"" . $row->id . "\"";
-        if (isset($exerciseId) && $exerciseId == $row->id) {
-            $tool_content .= "selected=\"selected\"";
-        }
-        $tool_content .= ">" . q($row->title) . "</option>\n";
+             <option value='" . $row->id . "' ".(isset($exerciseId) && $exerciseId == $row->id ? "selected='selected'":"").">$row->title</option>\n";
+    }   
+    $tool_content .= "</select></div></div></form>";      
+    //End of filtering Component
+    
+    if (isset($fromExercise)) {
+        $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
     }
-    $tool_content .= "</select></div></td></tr>\n";
+
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
 
     $from = $page * QUESTIONS_PER_PAGE;
 
@@ -201,15 +181,9 @@ if ($is_editor) {
 
     $tool_content .= "
 	<tr>
-	  <th>&nbsp;</th>
-	  <th><div align='left'>$langQuesList</div></th>";
-
-    if (isset($fromExercise)) {
-        $tool_content .= "<th width='70'>$langReuse</th>";
-    } else {
-        $tool_content .= "<th colspan='2' width='30'>$langActions</th>";
-    }
-    $tool_content .= "</tr>";
+	  <th>$langQuesList</th>
+          <th class='text-center'>".icon('fa-gears')."</th>
+        </tr>";
     $i = 1;
     foreach ($result as $row) {
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
@@ -227,44 +201,31 @@ if ($is_editor) {
             } elseif ($row->type == 6) {
                 $answerType = $langFreeText;
             }
-            if ($i % 2 == 0) {
-                $tool_content .= "\n    <tr class='even'>";
-            } else {
-                $tool_content .= "\n    <tr class='odd'>";
-            }
-
+            $tool_content .= "<tr>";
             if (!isset($fromExercise)) {
-                $tool_content .= "
-				<td width='1'><div style='padding-top:4px;'>
-				  <img src='$themeimg/arrow.png' alt='bullet'></div>
-				</td>
-				<td>
-				  <a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "
-				</td>
-				<td width='3'><div align='center'><a ".((count($exercise_ids)>0)? "class='modal_warning'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "\">
-				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
-				</td>";
+                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             } else {
-                $tool_content .= "
-				<td width='1'><div style='padding-top:4px;'>
-				  <img src='$themeimg/arrow.png'></div>
-				</td>
-				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>
-				<td class='center'><div align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;recup=" . $row->id .
-                        "&amp;fromExercise=" . $fromExercise . "&amp;exerciseId=".$exerciseId."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
-				</td>";
+                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
             }
-            //$tool_content .= "</td>";
-            if (!isset($fromExercise)) {
-                $tool_content .= "
-				<td width='3' align='center'>
-				  <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId . "&amp;delete=" . $row->id . "\"" .
-                        " onclick=\"javascript:if(!confirm('" . addslashes(htmlspecialchars($langConfirmYourChoice)) .
-                        "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
-				</td>";
-            }
-            $tool_content .= "</tr>";
+            $tool_content .= "<td class='option-btn-cell'>".
+            action_button(array(
+                    array('title' => $langModify,
+                          'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
+                          'icon-class' => 'warnLink',
+                          'icon-extra' => ((count($exercise_ids)>0)? " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
+                          'icon' => 'fa-edit',
+                          'show' => !isset($fromExercise)),
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmYourChoice,
+                          'show' => !isset($fromExercise)),
+                    array('title' => $langReuse,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=".(isset($fromExercise) ? $fromExercise : '')."&amp;exerciseId=$exerciseId",
+                          'icon' => 'fa-plus-square',
+                          'show' => isset($fromExercise))
+                ))."</td></tr>";       
             // skips the last question,only used to know if we must create a link "Next page"
             if ($i == QUESTIONS_PER_PAGE) {
                 break;
@@ -315,8 +276,27 @@ if ($is_editor) {
             }
         }
     }
-    $tool_content .= "</table></form>";
+    $tool_content .= "</table>";
 } else { // if not admin of course
     $tool_content .= $langNotAllowed;
 }
+$tool_content .= "
+<!-- Modal -->
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+      </div>
+      <div class='modal-body'>
+        $langUsedInSeveralExercises
+      </div>
+      <div class='modal-footer'>
+        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInQuestionPool</a>
+      </div>
+    </div>
+  </div>
+</div>    
+";
 draw($tool_content, 2, null, $head_content);

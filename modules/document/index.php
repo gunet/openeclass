@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,7 +62,6 @@ if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
-    load_js('jquery');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -147,31 +146,6 @@ if (isset($_GET['download'])) {
     exit;
 }
 
-/**
- * Used in documents path navigation bar
- * @global type $langRoot
- * @global type $base_url
- * @global type $group_sql
- * @param type $path
- * @return type
- */
-function make_clickable_path($path) {
-    global $langRoot, $base_url, $group_sql;
-
-    $cur = $out = '';
-    foreach (explode('/', $path) as $component) {
-        if (empty($component)) {
-            $out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
-        } else {
-            $cur .= rawurlencode("/$component");
-            $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
-            $dirname = $row->filename;
-            $out .= " &raquo; <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
-        }
-    }
-    return $out;
-}
 
 if ($can_upload) {
     $error = false;
@@ -390,7 +364,7 @@ if ($can_upload) {
                 $didx->store($id);
             }
             $curDirPath = dirname($file_path);
-        }        
+        }
     }
 
     /*     * ************************************
@@ -543,20 +517,22 @@ if ($can_upload) {
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
         $createDir = q($_GET['createDir']);
-        $dialogBox .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                $group_hidden_input
-                <fieldset>
-                        <input type='hidden' name='newDirPath' value='$createDir' />
-                        <table class='tbl' width='100%'>
-                        <tr>
-                                <th>$langNameDir</th>
-                                <td width='190'><input type='text' name='newDirName' /></td>
-                                <td><input type='submit' value='$langCreateDir' /></td>
-                        </tr>
-                        </table>
-                </fieldset>
-                </form>
-                <br />\n";
+        $dialogBox .= "
+        <div class='col-md-12'>
+        <h5 class='content-title'>$langCreateDir</h5>
+        <div class='panel padding-thin focused'>
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
+            $group_hidden_input
+            <input type='hidden' name='newDirPath' value='$createDir' />
+            <div class='form-group'>
+                <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
+            </div>
+            <button type='submit' class='btn-default-eclass color-green'>
+                <i class='fa fa-plus space-after-icon'></i>
+                $langCreateDir
+            </button>
+        </form>
+        </div></div>";
     }
 
     // add/update/remove comment
@@ -1098,19 +1074,28 @@ if ($can_upload) {
     // available actions
     if (!$is_in_tinymce) {
         $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-        $tool_content .= "<div id='operations_container'>
-                    <ul id='opslist'>
-                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>
-                       <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
-                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>
-                       <li><a href='new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langCreateDoc</a></li>\n";
-        if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
-            $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
-        }
-        $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>
-            </ul></div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langDownloadFile,
+                  'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
+            array('title' => $langCreateDir,
+                  'url' => "{$base_url}createDir=$cmdCurDirPath",
+                  'icon' => 'fa-folder',
+                  'level' => 'primary'),
+            array('title' => $langQuotaBar,
+                  'url' => "{$base_url}showQuota=true",
+                  'icon' => 'fa-pie-chart'),
+            array('title' => $langExternalFile,
+                  'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
+                  'icon' => 'fa-external-link'),
+            array('title' => $langCommonDocs,
+                  'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
+                  'icon' => 'fa-plus-circle',
+                  'show' => !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
+            ));
     }
-
     // Dialog Box
     if (!empty($dialogBox)) {
         $tool_content .= $dialogBox;
@@ -1121,11 +1106,14 @@ if ($can_upload) {
 $doc_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM document WHERE $group_sql $filter" .
                 ($can_upload ? '' : " AND visible=1"))->count;
 if ($doc_count == 0) {
-    $tool_content .= "<p class='alert1'>$langNoDocuments</p>";
+    $tool_content .= "<div class='text-center alert-warning'>$langNoDocuments</div>";
 } else {
     // Current Directory Line
-    $tool_content .= "<table width='100%' class='tbl'>";
-
+    $tool_content .= "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel'>
+                <table width='100%' class='tbl'>";
     if ($can_upload) {
         $cols = 4;
     } else {
@@ -1139,52 +1127,41 @@ if ($doc_count == 0) {
             "&nbsp;$download_dir<br></div></td>
         <td><div align='right'>";
 
-    // Link for sortable table headings
-    function headlink($label, $this_sort) {
-        global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
-
-        if (empty($curDirPath)) {
-            $path = '/';
-        } else {
-            $path = $curDirPath;
-        }
-        if ($sort == $this_sort) {
-            $this_reverse = !$reverse;
-            $indicator = " <img src='$themeimg/arrow_" .
-                    ($reverse ? 'up' : 'down') . ".png' alt='" .
-                    ($reverse ? $langUp : $langDown) . "'>";
-        } else {
-            $this_reverse = $reverse;
-            $indicator = '';
-        }
-        return '<a href="' . $base_url . 'openDir=' . $path .
-                '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-                '">' . $label . $indicator . '</a>';
-    }
 
     /*     * * go to parent directory ** */
     if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-        $tool_content .= "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='$langUp'/></a>";
+        $tool_content .= action_bar(array(
+                    array('title' => $langUp,
+                          'url' => "$parentlink",
+                          'icon' => 'fa-caret-up',
+                          'level' => 'primary-label',
+                          'button-class' => 'btn-success')));
     }
     $tool_content .= "</div></td>
-    </tr>
-    </table>
-    <table width='100%' class='tbl_alt'>
-    <tr>";
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel'>
+                <table class='table table-striped table-bordered table-hover'>
+                    <tr>";
     $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
-            "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
-            "<th width='60' class='center'><b>$langSize</b></th>" .
-            "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
+                     "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
+                     "<th width='60' class='center'><b>$langSize</b></th>" .
+                     "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
     if (!$is_in_tinymce) {
-        $tool_content .= "<th width='50' class='center'><b>$langCommands</b></th>";
+        $tool_content .= "<th width='50' class='text-center'>".icon('fa-gears', $langCommands)."</th>";
     }
-    $tool_content .= "\n    </tr>";
+    $tool_content .= "</tr>";
 
     // -------------------------------------
     // Display directories first, then files
     // -------------------------------------
-    $counter = 0;
     foreach (array(true, false) as $is_dir) {
         foreach ($fileinfo as $entry) {
             $link_title_extra = '';
@@ -1192,17 +1169,13 @@ if ($doc_count == 0) {
                 continue;
             }
             $cmdDirName = $entry['path'];
-            if ($entry['visible']) {
-                if ($counter % 2 == 0) {
-                    $style = 'class="even"';
-                } else {
-                    $style = 'class="odd"';
-                }
+            if (!$entry['visible']) {
+                $style = ' class="not_visible"';
             } else {
-                $style = ' class="invisible"';
+                $style = '';
             }
             if ($is_dir) {
-                $img_href = icon('folder');
+                $img_href = icon('fa-folder-o');
                 $file_url = $base_url . "openDir=$cmdDirName";
                 $link_title = q($entry['filename']);
                 $dload_msg = $langDownloadDir;
@@ -1259,94 +1232,90 @@ if ($doc_count == 0) {
                 // External document
                 $download_url = $entry['extra_path'];
             }
-            $download_icon = icon('save_s', $dload_msg, $download_url);
-            $tool_content .= "<tr $style>
-                                               <td class='center' valign='top'>$img_href</td>
-                                               <td>$link_href $link_title_extra";
-
-            /*             * * comments ** */
+            $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
+                              <td>$link_href $link_title_extra";
+            // comments
             if (!empty($entry['comment'])) {
-                $tool_content .= "<br /><span class='comment'>" .
+                $tool_content .= "<br><span class='comment'>" .
                         nl2br(htmlspecialchars($entry['comment'])) .
                         "</span>";
             }
             $tool_content .= "</td>";
-            $padding = '&nbsp;';
-            $padding2 = '';
             $date = nice_format($entry['date'], true, true);
             $date_with_time = nice_format($entry['date'], true);
             if ($is_dir) {
-                $tool_content .= "\n<td>&nbsp;</td>\n<td class='center'>$date</td>";
-                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                $tool_content .= "<td>&nbsp;</td><td class='center'>$date</td>";
             } else if ($entry['format'] == ".meta") {
                 $size = format_file_size($entry['size']);
-                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
-                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                $tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
             } else {
                 $size = format_file_size($entry['size']);
-                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
+                $tool_content .= "<td class='center'>$size</td><td class='center' title='$date_with_time'>$date</td>";
             }
             if (!$is_in_tinymce) {
                 if ($can_upload) {
-                    $tool_content .= "\n<td class='right toolbox' valign='top'><form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>" . $group_hidden_input .
-                            "<input type='hidden' name='filePath' value='$cmdDirName' />" .
-                            $download_icon . $padding;
-                    if (!$is_dir && $entry['format'] != ".meta") {
-                        /*                         * * replace/overwrite command, only applies to files ** */
-                        $tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
-                                "<img src='$themeimg/replace.png' " .
-                                "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
-                    }
-                    /*                     * * delete command ** */
-                    $tool_content .= "<input type='image' src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('" . js_escape($langConfirmDelete . ' ' . $entry['filename']) . "');\" />&nbsp;" . $padding2;
-                    if ($entry['format'] != '.meta') {
-                        $tool_content .= icon('move', $langMove, "{$base_url}move=$cmdDirName") .
-                                "&nbsp;" . icon('rename', $langRename, "{$base_url}rename=$cmdDirName") .
-                                "&nbsp;" . icon('comment_edit', $langComment, "{$base_url}comment=$cmdDirName") .
-                                "&nbsp;";
-                    }
-                    /*                     * * metadata command ** */
-                    if (get_config("insert_xml_metadata")) {
-                        $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
-                        $tool_content .= icon('lom', $langMetadata, "{$base_url}metadata=$xmlCmdDirName") .
-                                "&nbsp;";
-                    }
-                    if ($entry['visible']) {
-                        $tool_content .= icon('visible', $langVisible, "{$base_url}mkInvisibl=$cmdDirName");
-                    } else {
-                        $tool_content .= icon('invisible', $langVisible, "{$base_url}mkVisibl=$cmdDirName");
-                    }
-                    $tool_content .= "&nbsp;";
-                    // For common docs, $course_id = -1 - disable public icon there
-                    if ($course_id > 0 and course_status($course_id) == COURSE_OPEN) {
-                        if ($entry['public']) {
-                            $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
-                        } else {
-                            $tool_content .= icon('access_limited', $langResourceAccess, "{$base_url}public=$cmdDirName");
-                        }
-                        $tool_content .= "&nbsp;";
-                    }
-                    if ($subsystem == GROUP and isset($is_member) and ( $is_member)) {
-                        $tool_content .= "<a href='{$urlAppend}modules/work/group_work.php?course=$course_code" .
-                                "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
-                                "<img src='$themeimg/book.png' " .
-                                "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";
-                    }
-                    $tool_content .= "</form></td>";
-                    $tool_content .= "</tr>\n";
-                } else { // only for students
-                    $tool_content .= "<td>$download_icon</td>";
+                    $tool_content .= "<td class='option-btn-cell'>";
+
+                    $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
+                    $tool_content .= action_button(array(
+                                    array('title' => $langGroupSubmit,
+                                          'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=$cmdDirName",
+                                          'icon' => 'fa-book',
+                                          'show' => $subsystem == GROUP and isset($is_member) and $is_member),
+                                    array('title' => $dload_msg,
+                                          'url' => $download_url,
+                                          'icon' => 'fa-save'),
+                                    array('title' => $langVisible,
+                                          'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
+                                          'icon' => $entry['visible'] ? 'fa-eye' : 'fa-eye-slash'),
+                                    array('title' => $langResourceAccess,
+                                          'url' => "{$base_url}limited=$cmdDirName",
+                                          'icon' => 'fa-unlock',
+                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and $entry['public']),
+                                    array('title' => $langMove,
+                                          'url' => "{$base_url}move=$cmdDirName",
+                                          'icon' => 'fa-arrows',
+                                          'show' => $entry['format'] != '.meta'),
+                                    array('title' => $langRename,
+                                          'url' => "{$base_url}rename=$cmdDirName",
+                                          'icon' => 'fa-repeat',
+                                          'show' => $entry['format'] != '.meta'),
+                                    array('title' => $langComments,
+                                          'url' => "{$base_url}comment=$cmdDirName",
+                                          'icon' => 'fa-comment-o',
+                                          'show' => $entry['format'] != '.meta'),
+                                    array('title' => $langReplace,
+                                          'url' => "{$base_url}replace=$cmdDirName",
+                                          'icon' => 'fa-reply',
+                                          'show' => !$is_dir && $entry['format'] != '.meta'),
+                                    array('title' => $langMetadata,
+                                          'url' =>  "{$base_url}metadata=$xmlCmdDirName",
+                                          'icon' => 'fa-tags',
+                                          'show' => get_config("insert_xml_metadata")),
+                                    array('title' => $langResourceAccess,
+                                          'url' => "{$base_url}public=$cmdDirName",
+                                          'icon' => 'fa-lock',
+                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public']),
+                                    array('title' => $langDelete,
+                                          'url' => "{$base_url}filePath=$cmdDirName",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => "$langConfirmDelete $entry[filename]")));
+                    $tool_content .= "</td>";
+                } else { // student view
+                    $tool_content .= "<td class='text-center'>" . icon('fa-save', $dload_msg, $download_url) . "</td>";
                 }
+                $tool_content .= "</tr>";
             }
-            $counter++;
         }
     }
-    $tool_content .= "\n    </table>\n";
+    $tool_content .= "</table>
+            </div>
+        </div>
+    </div>";
     if ($can_upload && !$is_in_tinymce) {
-        $tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
+        $tool_content .= "<br><div class='text-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
     }
-    $tool_content .= "\n    <br />";
 }
 if (defined('SAVED_COURSE_CODE')) {
     $course_code = SAVED_COURSE_CODE;
@@ -1390,4 +1359,67 @@ function select_proper_filters($requestDocsFilter) {
     }
 
     return array($filter, $compatiblePlugin);
+}
+
+
+/**
+ * @brief Link for sortable table headings
+ * @global type $sort
+ * @global type $reverse
+ * @global type $curDirPath
+ * @global type $base_url
+ * @global type $themeimg
+ * @global type $langUp
+ * @global type $langDown
+ * @param type $label
+ * @param type $this_sort
+ * @return type
+ */
+function headlink($label, $this_sort) {
+    global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
+
+    if (empty($curDirPath)) {
+        $path = '/';
+    } else {
+        $path = $curDirPath;
+    }
+    if ($sort == $this_sort) {
+        $this_reverse = !$reverse;
+        $indicator = " <img src='$themeimg/arrow_" .
+                ($reverse ? 'up' : 'down') . ".png' alt='" .
+                ($reverse ? $langUp : $langDown) . "'>";
+    } else {
+        $this_reverse = $reverse;
+        $indicator = '';
+    }
+    return '<a href="' . $base_url . 'openDir=' . $path .
+            '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
+            '">' . $label . $indicator . '</a>';
+}
+
+
+/**
+ * Used in documents path navigation bar
+ * @global type $langRoot
+ * @global type $base_url
+ * @global type $group_sql
+ * @param type $path
+ * @return type
+ */
+function make_clickable_path($path) {
+    global $langRoot, $base_url, $group_sql;
+
+    $cur = $out = '';
+    foreach (explode('/', $path) as $component) {
+        if (empty($component)) {
+            $out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
+        } else {
+            $cur .= rawurlencode("/$component");
+            $row = Database::get()->querySingle("SELECT filename FROM document
+                                        WHERE path LIKE '%/$component' AND $group_sql");
+            $dirname = $row->filename;
+            $out .= " &raquo; <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
+        }
+    }
+    return $out;
 }

@@ -30,9 +30,9 @@ $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
+require_once "statistics_tools_bar.php";
 
 load_js('tools.js');
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 
@@ -53,17 +53,7 @@ $('input[name=u_date_end]').datetimepicker({
 });
 </script>";
 
-$tool_content .= "
-<div id='operations_container'>
-  <ul id='opslist'>
-    <li><a href='displaylog.php?course=$course_code'>$langUsersLog</a></li>
-    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
-  </ul>
-</div>";
+statistics_tools($course_code, "index");
 
 $dateNow = date("d-m-Y / H:i:s", time());
 $nameTools = $langUsage;

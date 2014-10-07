@@ -59,9 +59,7 @@ $greek = $langCMeta['el'];
 $english = $langCMeta['en'];
 $instrPhoto = $langCMeta['course_instructor_photo'];
 
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-multiselect');
+load_js('select2');
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -92,18 +90,11 @@ $head_content .= <<<EOF
     };
 
     $(document).ready(function(){
-        $( ".cmetaaccordion" ).accordion({
-            collapsible: true,
-            active: false
+        $( ".cmetarow" ).tooltip({
+            html: true
         });
         
-        $( document ).tooltip({
-            track: true
-        });
-        
-        $( "#tabs" ).tabs();
-        
-        $( "#multiselect" ).multiselect();
+        $( "#multiselect" ).select2({width: '476'});
         
         $( "#course_coursePhoto_delete" ).on('click', function() {
             $( "#course_coursePhoto_image" ).remove();
@@ -162,6 +153,7 @@ $head_content .= <<<EOF
 /* ]]> */
 </script>
 <style type="text/css">
+
 .ui-widget {
     font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
     font-size: 13px;
@@ -170,6 +162,77 @@ $head_content .= <<<EOF
 .ui-widget-content {
     color: rgb(119, 119, 119);
 }
+
+p.right {
+    margin-top: 60px;
+}
+
+div.right {
+    margin-top: 10px;
+}
+
+.form-control, input[type="text"], select, textarea {
+    width: auto;
+}
+
+.panel-group {
+    margin-top: 60px;
+}
+
+/* -- OpenCourses Metadata Form -- */
+
+.cmetarow {
+    clear: both;
+    padding: 4px;
+}
+
+.cmetalabel {
+    font-weight: bold;
+    float: left;
+    width: 232px;
+    border-right: 1px dashed #dfdfdf;
+    padding-bottom: 4px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.cmetalabelinaccordion {
+    font-weight: bold;
+    float: left;
+    width: 232px;
+    border-right: 1px dashed #dfdfdf;
+    padding-bottom: 4px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.cmetafield {
+    float: left;
+    margin-bottom: 20px;
+    //padding-left: 4px;
+}
+
+.cmetamandatory {
+    font-size: 11px;
+    color: red;
+    padding: 4px;
+    float: right;
+    margin-top: 6px;
+}
+
+.cmetaaccordion {
+    clear: both;
+}
+
+.cmetalabel a, .cmetalabelinaccordion a {
+    color: rgb(119, 119, 119) !important;
+    border-bottom: 1px dashed;
+}
+
+.cmetalabel a:hover, .cmetalabelinaccordion a:hover {
+    border-bottom: none;
+}
+
 </style>
 EOF;
 draw($tool_content, 2, null, $head_content);

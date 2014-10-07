@@ -51,7 +51,6 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 load_js('tools.js');
-load_js('jquery');
 
 
 if (isset($_GET['eurId'])) {

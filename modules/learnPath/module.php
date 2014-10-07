@@ -412,7 +412,11 @@ if ($is_editor) {
 } else {
     $pathBack = "./learningPath.php";
 }
-$tool_content .= "
-    <p align=\"right\"><a href=\"" . $pathBack . "?course=$course_code\">" . $langBackToLPAdmin . "</a></p>";
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => $pathBack . "?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 draw($tool_content, 2, null, $head_content, $body_action);

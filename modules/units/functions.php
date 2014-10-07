@@ -224,7 +224,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             return '';
         }
         $status = 'del';
-        $image = 'delete';
+        $image = 'fa-times';
         $link = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {        
         $status = $file->visible;
@@ -232,7 +232,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             return '';
         }
         if ($file->format == '.dir') {
-            $image = 'folder';
+            $image = 'fa-folder-o';
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>";
         } else {
             $image = choose_image('.' . $file->format);

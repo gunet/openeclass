@@ -109,5 +109,10 @@ $tool_content = "<table width='100%' class='tbl'><tr><td class='success'>";
 
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";
-$tool_content .= "<br /><p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "'>$langBackToLPAdmin</a></p>";
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 draw($tool_content, 2);

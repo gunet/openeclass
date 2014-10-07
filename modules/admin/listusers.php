@@ -78,7 +78,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         add_param('user_registered_at');
         // join the above with registered at search
         $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
-        $terms[] = $user_registered_at;
+        $date_user_registered_at = DateTime::createFromFormat("d-m-Y H:i", $user_registered_at);
+        $terms[] = $date_user_registered_at->format("Y-m-d H:i:s");
     }
     // surname search
     if (!empty($lname)) {
@@ -265,15 +266,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($mail_ver_required) {
             switch ($logs->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
-                    $icon = 'pending';
+                    $icon = 'fa-clock-o';
                     $tip = $langMailVerificationPendingU;
                     break;
                 case EMAIL_VERIFIED:
-                    $icon = 'tick_1';
+                    $icon = 'fa-check-square-o';
                     $tip = $langMailVerificationYesU;
                     break;
                 default:
-                    $icon = 'not_confirmed';
+                    $icon = 'fa-circle';
                     $tip = $langMailVerificationNoU;
                     break;
             }
@@ -283,15 +284,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
         switch ($logs->status) {
             case USER_TEACHER:
-                $icon = 'teacher';
+                $icon = 'fa-university';
                 $tip = $langTeacher;
                 break;
             case USER_STUDENT:
-                $icon = 'student';
+                $icon = 'fa-graduation-cap';
                 $tip = $langStudent;
                 break;
             case USER_GUEST:
-                $icon = 'guest';
+                $icon = 'fa-male';
                 $tip = $langVisitor;
                 break;
             default:
@@ -305,12 +306,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $icon_content = "&mdash;&nbsp;";
         } else {
             $changetip = q("$langChangeUserAs $logs->username");
-            $icon_content = icon('edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
-                                icon('delete', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
-                                icon('platform_stats', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                                icon('action_log', $langActions, "userlogs.php?u=$logs->id");
+            $icon_content = icon('fa-edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
+                                icon('fa-list-alt', $langActions, "userlogs.php?u=$logs->id");
             if (!isDepartmentAdmin()) {
-                    $icon_content .= '&nbsp;' . icon('log_as', $changetip, 'change_user.php?username=' . urlencode($logs->username));
+                    $icon_content .= '&nbsp;' . icon('fa-key', $changetip, 'change_user.php?username=' . urlencode($logs->username));
             }
         }
         $data['aaData'][] = array(
@@ -327,12 +328,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 }
 
 load_js('tools.js');
-load_js('jquery');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#search_results_table').DataTable ({
+            $('#search_results_table').dataTable ({
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',

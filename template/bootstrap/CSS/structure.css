@@ -1,0 +1,937 @@
+/* 
+==========================================================
+    SASS for structure of eclass v3.0 - version 0.01007a 
+==========================================================
+*/
+/* 
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0926a
+================================================================
+*/
+/* COLORS ---------------------------------------------------------------------- */
+/* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
+/* MIXINS ------------------------------------------------------------------------------- */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
+/* line 114, global.scss */
+.transition {
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+
+@-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 121, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 122, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-moz-keyframes NEW-ITEM-FX {
+  /* line 128, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 129, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 130, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-o-keyframes NEW-ITEM-FX {
+  /* line 136, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 137, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 138, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@keyframes NEW-ITEM-FX {
+  /* line 144, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 145, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 146, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+/* line 12, structure.scss */
+body {
+  background: #232c3a;
+  font-family: 'Open Sans';
+}
+
+/* line 17, structure.scss */
+body > .container {
+  padding: 0 15px;
+}
+
+/* line 21, structure.scss */
+#Frame {
+  margin: 1em 0em;
+}
+
+/* LEFTNAV - MAIN MENU, LOGO */
+/* line 28, structure.scss */
+#leftnav {
+  background: #232c3a;
+  padding: 0;
+}
+/* line 33, structure.scss */
+#leftnav .logo {
+  margin: 2em 1em;
+}
+/* line 35, structure.scss */
+#leftnav .logo img {
+  margin: 0 auto;
+}
+/* line 38, structure.scss */
+#leftnav .panel {
+  border: none;
+  margin: 0;
+  margin-bottom: 1em;
+  background: inherit;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px 0px 0px 4px;
+}
+/* line 49, structure.scss */
+#leftnav .panel .list-group {
+  border-radius: 0;
+}
+/* line 53, structure.scss */
+#leftnav .panel .panel-heading {
+  border-radius: 4px 0px 0px 0px!important;
+}
+/* line 56, structure.scss */
+#leftnav .panel .panel-heading .panel-title {
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+/* line 62, structure.scss */
+#leftnav .panel .panel-heading:hover {
+  color: #4da1e4;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 70, structure.scss */
+#leftnav .panel > a {
+  outline: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+/* line 75, structure.scss */
+#leftnav .panel > a:not(.collapsed) {
+  border-radius: 4px 0px 0px 0px!important;
+  color: #4da1e4;
+}
+/* line 80, structure.scss */
+#leftnav .panel > a:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+/* line 84, structure.scss */
+#leftnav .panel > a:hover, #leftnav .panel > a:not(.collapsed) {
+  border-radius: 4px 0px 0px 4px;
+}
+/* line 89, structure.scss */
+#leftnav .panel a {
+  background: transparent;
+  color: #ADADAD;
+  text-decoration: none;
+}
+/* line 95, structure.scss */
+#leftnav .panel a.list-group-item {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+  padding: 1em;
+  text-align: center;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 104, structure.scss */
+#leftnav .panel a.list-group-item > span {
+  font-size: 0.9em;
+  margin-left: 0.5em;
+}
+/* line 109, structure.scss */
+#leftnav .panel a.list-group-item:hover {
+  text-decoration: none;
+  color: #eee;
+  background: #4da1e4;
+  border-radius: 4px 0px 0px 4px;
+  margin-left: 0px;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 120, structure.scss */
+#leftnav .panel a.list-group-item.active {
+  background: #fafafa;
+  text-shadow: none;
+  color: #333;
+  border-radius: 4px 0px 0px 4px;
+  box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+}
+/* line 132, structure.scss */
+#leftnav .panel a.list-group-item:last-child {
+  border-bottom: none;
+}
+/* line 136, structure.scss */
+#leftnav .panel a.list-group-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+/* LOGO - Extent bootstrap style -------------------------------------*/
+/* line 151, structure.scss */
+.logo {
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* MAIN-CONTENT -------------------------------------------------------*/
+/* line 161, structure.scss */
+#main-content {
+  background: #fafafa;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0px -5px 10px 0px black;
+  -moz-box-shadow: 0px -5px 10px 0px black;
+  -webkit-box-shadow: 0px -5px 10px 0px black;
+}
+/* line 171, structure.scss */
+#main-content #header.navbar {
+  padding: 0;
+  border: 0;
+  background: #eeeeee;
+  border-bottom: 1px solid #DBDBDB;
+}
+/* line 177, structure.scss */
+#main-content #header.navbar .navbar-nav {
+  margin: 0;
+  float: right;
+}
+/* line 181, structure.scss */
+#main-content #header.navbar .navbar-nav > li {
+  border-left: 1px solid #e7e7e7;
+  float: left;
+}
+/* line 185, structure.scss */
+#main-content #header.navbar .navbar-nav > li a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+/* line 189, structure.scss */
+#main-content #header.navbar .navbar-nav > li a i.fa {
+  margin: 0 1em;
+}
+/* line 194, structure.scss */
+#main-content #header.navbar .navbar-nav > li a:hover, #main-content #header.navbar .navbar-nav > li a:focus {
+  background: #4da1e4;
+  color: white;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 202, structure.scss */
+#main-content #header.navbar .navbar-nav > li .user-icon {
+  width: 20px;
+  margin-right: 10px;
+}
+/* line 207, structure.scss */
+#main-content #header.navbar .navbar-nav > li:last-child > a {
+  border-radius: 0 4px 0px 0px;
+}
+
+/* line 219, structure.scss */
+.navbar-default {
+  border-radius: 4px 4px 0px 0px;
+}
+
+/* FOOTER --------------------------------------------------------------------------------------*/
+/* line 235, structure.scss */
+footer.footer {
+  text-align: center;
+  padding: 1em;
+  background: #eeeeee;
+  margin-top: 2em;
+  color: #a7a7a7;
+  border-top: 1px solid #DBDBDB;
+}
+
+/* SIDEBAR ------------------------------------------------------------------------------------ */
+/* line 255, structure.scss */
+body.sidebar-opened #sidebar {
+  right: 0px;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
+/* line 264, structure.scss */
+body.sidebar-opened .toggle-sidebar {
+  background: #e3e4e6;
+}
+
+/* line 269, structure.scss */
+#sidebar {
+  position: absolute;
+  height: 100%;
+  width: 18.5em;
+  right: -19em;
+  /* just a bit more than width to ensure zero visibility */
+  top: 3.6em;
+  /*not to overlap the header*/
+  padding-bottom: 3.6em;
+  /* same amount as TOP. To avoid losing content */
+  z-index: 10001;
+  background: #dee0e2;
+  word-wrap: break-word;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 295, structure.scss */
+#sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
+  color: #686868;
+  font-weight: 600;
+  margin-bottom: 0.6em;
+  margin-top: 0.3em;
+}
+/* line 302, structure.scss */
+#sidebar .toggle-sidebar {
+  text-align: center;
+  width: 3em;
+  padding: 0.3em 0em;
+  margin: 0.5em;
+  float: right;
+  color: #8B8B8B;
+  display: inline-block;
+  position: relative;
+  border: 1px solid #CFCFCF;
+  cursor: default;
+}
+/* line 315, structure.scss */
+#sidebar .toggle-sidebar:hover {
+  background: #4da1e4;
+  border-color: #4da1e4;
+  color: white;
+}
+/* line 322, structure.scss */
+#sidebar ul, #sidebar li {
+  list-style-type: none;
+  padding: 0em;
+  margin: 0em;
+}
+/* line 328, structure.scss */
+#sidebar .side-list {
+  padding-bottom: 1em;
+}
+/* line 332, structure.scss */
+#sidebar .side-list .lesson-title {
+  background: #344458;
+  font-size: 0.85em;
+  margin: 0px;
+  padding: 10px 15px;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  margin: 0 16px;
+  border: 1px solid #48586D;
+  border-top-width: 0px;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 360, structure.scss */
+#sidebar .side-list .lesson-title:first-of-type {
+  border-top-width: 1px;
+  border-radius: 4px 4px 0px 0px;
+  -webkit-border-radius: 4px 4px 0px 0px;
+  -moz-border-radius: 4px 4px 0px 0px;
+}
+/* line 366, structure.scss */
+#sidebar .side-list .lesson-title:last-of-type {
+  border-radius: 0px 0px 4px 4px;
+  -webkit-border-radius: 0px 0px 4px 4px;
+  -moz-border-radius: 0px 0px 4px 4px;
+}
+/* line 370, structure.scss */
+#sidebar .side-list .lesson-title:hover {
+  background: #48586D;
+  color: rgba(255, 255, 255, 0.85);
+}
+/* line 374, structure.scss */
+#sidebar .side-list .lesson-title:hover:after {
+  color: rgba(255, 255, 255, 0.6);
+}
+/* line 379, structure.scss */
+#sidebar .side-list .lesson-title.ui-accordion-header-active {
+  border-bottom: none;
+  color: white;
+  background: #425164;
+}
+/* line 384, structure.scss */
+#sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+}
+/* line 388, structure.scss */
+#sidebar .side-list .lesson-title.ui-accordion-header-active:after {
+  color: #4da1e4;
+}
+/* line 394, structure.scss */
+#sidebar .side-list > div {
+  background: #253447;
+  border-top: none;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 16px;
+}
+/* line 404, structure.scss */
+#sidebar .side-list > div:last-of-type {
+  border-radius: 0px 0px 4px 4px;
+  -webkit-border-radius: 0px 0px 4px 4px;
+  -moz-border-radius: 0px 0px 4px 4px;
+}
+/* line 409, structure.scss */
+#sidebar .side-list ul {
+  padding: 0em 2em 1em 1.35em;
+  font-size: 0.75em;
+}
+/* line 413, structure.scss */
+#sidebar .side-list ul > li {
+  padding: 5px 0em;
+}
+/* line 418, structure.scss */
+#sidebar .side-list .lesson-id {
+  opacity: 0.5;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+/* line 424, structure.scss */
+#sidebar .side-list .lesson-professor {
+  font-weight: 600;
+  padding-top: 0px;
+}
+/* line 429, structure.scss */
+#sidebar .side-list .lesson-notifications {
+  margin-top: 1em;
+}
+/* line 433, structure.scss */
+#sidebar .side-list .lesson-notifications .item {
+  margin-right: 1.5em;
+  position: relative;
+}
+/* line 437, structure.scss */
+#sidebar .side-list .lesson-notifications .item .count {
+  position: absolute;
+  left: 0.8em;
+  bottom: 0.8em;
+  display: inline-block;
+  text-align: center;
+  background: #ce6b6b;
+  color: white;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 0.75em;
+  font-weight: 600;
+  border-radius: 0.75em;
+  -webkit-border-radius: 0.75em;
+  -moz-border-radius: 0.75em;
+}
+/* line 459, structure.scss */
+#sidebar .side-list .lesson-notifications .item .fa {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* line 474, structure.scss */
+#sidebar .blocks .sidebar-title {
+  margin: 0;
+  font-weight: 600;
+  padding-left: 13px;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  padding: 1.8em;
+  background: #e3e4e6;
+}
+/* line 486, structure.scss */
+#sidebar .blocks .title {
+  margin: 0;
+  padding: 2em 0em!important;
+  font-weight: 700;
+  font-size: 0.8em;
+  text-align: center;
+  overflow: hidden;
+}
+/* line 498, structure.scss */
+#sidebar .blocks .title .txt {
+  text-transform: uppercase;
+}
+/* line 503, structure.scss */
+#sidebar .blocks .title i.fa {
+  display: block;
+  opacity: .9;
+  font-size: 2.3em;
+  margin-top: 0.4em;
+}
+/* line 513, structure.scss */
+#sidebar .blocks .title .tricky {
+  margin-left: -100%;
+  width: 200%;
+  position: relative;
+  height: 45px;
+  -webkit-transition: margin-left 120ms linear;
+  -moz-transition: margin-left 120ms linear;
+  -o-transition: margin-left 120ms linear;
+  -ms-transition: margin-left 120ms linear;
+  transition: margin-left 120ms linear;
+}
+/* line 521, structure.scss */
+#sidebar .blocks .title .tricky > div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  position: relative;
+  top: 0px;
+  vertical-align: middle;
+  padding: 0.5em 0em;
+  -webkit-transition: opacity 60ms linear;
+  -moz-transition: opacity 60ms linear;
+  -o-transition: opacity 60ms linear;
+  -ms-transition: opacity 60ms linear;
+  transition: opacity 60ms linear;
+}
+/* line 533, structure.scss */
+#sidebar .blocks .title .tricky .icon {
+  opacity: 1;
+}
+/* line 537, structure.scss */
+#sidebar .blocks .title .tricky .description {
+  font-weight: 400;
+  padding: 0.5em 1em;
+  opacity: 0;
+}
+/* line 545, structure.scss */
+#sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
+  margin-left: 0%;
+}
+/* line 548, structure.scss */
+#sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
+  opacity: .55;
+}
+/* line 552, structure.scss */
+#sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
+  opacity: 0;
+}
+/* line 558, structure.scss */
+#sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
+  color: #4da1e4;
+}
+/* line 564, structure.scss */
+#sidebar .blocks .title.ui-accordion-header-active .tricky {
+  margin-left: 0%;
+}
+/* line 566, structure.scss */
+#sidebar .blocks .title.ui-accordion-header-active .tricky .description {
+  opacity: .55;
+}
+/* line 574, structure.scss */
+#sidebar .blocks li.block {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+/* line 578, structure.scss */
+#sidebar .blocks li.block > .ui-accordion-content,
+#sidebar .blocks li.block > .ui-accordion-header-active {
+  background: rgba(255, 255, 255, 0.3);
+}
+/* line 582, structure.scss */
+#sidebar .blocks li.block > .ui-accordion-content {
+  padding: 1em 0em;
+}
+/* line 586, structure.scss */
+#sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
+  width: 90%;
+  margin: 0em auto 1em auto;
+  display: block;
+}
+/* line 592, structure.scss */
+#sidebar .blocks li.block textarea {
+  min-height: 12em;
+}
+/* line 596, structure.scss */
+#sidebar .blocks li.block button {
+  margin: 1.1em;
+  margin-top: 0em;
+  font-size: 0.8em;
+}
+/* line 602, structure.scss */
+#sidebar .blocks li.block .goto {
+  float: right;
+  color: #7E7E7E;
+  padding: 0.5em;
+  margin-right: 0.5em;
+}
+/* line 609, structure.scss */
+#sidebar .blocks li.block .input-parent {
+  position: relative;
+}
+/* line 612, structure.scss */
+#sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
+  padding-left: 2em;
+}
+/* line 616, structure.scss */
+#sidebar .blocks li.block .input-parent .fa {
+  position: absolute;
+  top: 0.7em;
+  left: 1.5em;
+  z-index: 9;
+  opacity: 0.2;
+}
+
+/* ACCORDIONS --------------------------------------------------------------------*/
+/* line 633, structure.scss */
+.accordion {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 637, structure.scss */
+.accordion ul, .accordion li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+/* line 646, structure.scss */
+.accordion-title,
+.ui-accordion-header {
+  padding-right: 2em!important;
+  position: relative;
+  display: block;
+  outline: none!important;
+  cursor: pointer;
+}
+/* line 655, structure.scss */
+.accordion-title:after,
+.ui-accordion-header:after {
+  position: absolute;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  right: 1em;
+  top: 42%;
+  top: calc(50% - 0.5em);
+  font-family: FontAwesome;
+  font-size: 0.85em;
+  content: "\f107";
+  color: rgba(255, 255, 255, 0.2);
+  moz-transform-origin: center center;
+  -webkit-transform-origin: center center;
+  -o-transform-origin: center center;
+  -ms-transform-origin: center center;
+  transform-origin: center center;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 678, structure.scss */
+.accordion-title.ui-state-active:after,
+.ui-accordion-header.ui-state-active:after {
+  behavior: url(-ms-transform.htc);
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+
+/* INDEX --------------------------------------------------------------------------- */
+/* line 695, structure.scss */
+body.page-login h1 {
+  margin: 1.25em 1em;
+}
+
+/* line 700, structure.scss */
+.jumbotron.jumbotron-login {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  background-color: #025694;
+  /* fallback from css grandient */
+  background: url("{%template_base%}/img/jumbotron-bg.png") repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: 30% 60%;
+  background-repeat: no-repeat;
+  background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
+  background: -webkit-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
+  background: -moz-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
+  background: -ms-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
+}
+/* line 725, structure.scss */
+.jumbotron.jumbotron-login .graphic {
+  position: absolute;
+  z-index: 9;
+  width: 77%;
+  max-width: 100%;
+  top: -2.8rem;
+}
+
+/* line 737, structure.scss */
+form.login-form {
+  font-size: 0.85em;
+  position: relative;
+  z-index: 99;
+  background: white;
+  border-radius: 3rem;
+  padding: 2em 3em;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+}
+/* line 752, structure.scss */
+form.login-form h2 {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 2rem 0rem;
+  margin-top: 0rem;
+  color: #232c3a;
+}
+/* line 760, structure.scss */
+form.login-form .form-group {
+  margin: 0rem;
+}
+/* line 765, structure.scss */
+form.login-form .form-group > * {
+  display: inline-block;
+  float: none;
+}
+/* line 771, structure.scss */
+form.login-form .form-group input {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+  border-width: 1px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  outline: none;
+  font-size: 1.2em;
+  padding: 0.4em;
+  line-height: 1.42857143;
+  color: #555;
+}
+/* line 788, structure.scss */
+form.login-form .form-group input:focus {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+/* line 793, structure.scss */
+form.login-form .form-group label {
+  margin: 0;
+  text-align: center;
+}
+/* line 798, structure.scss */
+form.login-form .form-group i.fa {
+  font-size: 1.2em;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.5);
+}
+/* line 805, structure.scss */
+form.login-form .login-settings {
+  margin: 2rem 0rem;
+  font-size: 0.9em;
+}
+/* line 809, structure.scss */
+form.login-form .login-settings > * {
+  margin: 0;
+}
+/* line 814, structure.scss */
+form.login-form .login-settings .checkbox,
+form.login-form .login-settings .link {
+  color: rgba(0, 0, 0, 0.5);
+}
+/* line 819, structure.scss */
+form.login-form .login-settings .checkbox label,
+form.login-form .login-settings .link label {
+  font-weight: bold;
+}
+/* line 823, structure.scss */
+form.login-form .login-settings .link a {
+  float: right;
+  margin-top: 0.3em;
+  color: rgba(0, 0, 0, 0.5);
+}
+/* line 829, structure.scss */
+form.login-form .login-settings .checkbox label span {
+  margin-top: 0.3em;
+  display: inline-block;
+}
+/* line 835, structure.scss */
+form.login-form .btn.btn-login {
+  width: 100%;
+  height: 4rem;
+  border-radius: 4rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  background: #428bca;
+  letter-spacing: 0.1em;
+}
+/* line 845, structure.scss */
+form.login-form .btn.btn-login:hover {
+  background: #3071a9;
+}
+
+/* DELETE THIS */
+/* line 852, structure.scss */
+.row .deleteThisClass {
+  height: 400px;
+  border: 1px solid #eee;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* MEDIA QUERIES -------------------------------------------------------------------*/
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* Styles */
+  /* line 875, structure.scss */
+  form.login-form .login-settings .link {
+    float: left!important;
+    margin-top: 1em;
+  }
+
+  /* line 880, structure.scss */
+  .jumbotron.jumbotron-login img.graphic {
+    top: 7.1rem;
+    left: -2rem;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  /* line 889, structure.scss */
+  .jumbotron.jumbotron-login img.graphic {
+    width: 94%;
+  }
+}
+/* No breakpoints bellow 1366 or smth */
+@media (max-width: 1339px) {
+  /* line 902, structure.scss */
+  body > .container {
+    width: 100%;
+  }
+}
+@media (min-width: 1340px) {
+  /* line 908, structure.scss */
+  .container {
+    width: 1340px;
+  }
+}
+@media (min-width: 992px) {
+  /* line 915, structure.scss */
+  #leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title {
+    text-align: left;
+  }
+}
+@media (max-width: 992px) {
+  /* line 921, structure.scss */
+  #Frame, body > .container {
+    padding: 0;
+    margin: 0;
+  }
+
+  /* line 926, structure.scss */
+  #leftnav .panel a {
+    font-size: 1.5em;
+  }
+
+  /* line 930, structure.scss */
+  #main-content .navbar .navbar-nav > li a {
+    padding: 15px 0.5em;
+  }
+
+  /* line 934, structure.scss */
+  #leftnav .panel a.list-group-item {
+    padding: 1em 0.8em;
+  }
+
+  /* line 941, structure.scss */
+  #main-content,
+  #leftnav .panel a.list-group-item,
+  #main-content #header.navbar .navbar-nav > li:last-child > a,
+  .navbar-default {
+    border-radius: 0px!important;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
+  /* Medium screen, retina, stuff to override above media query */
+}

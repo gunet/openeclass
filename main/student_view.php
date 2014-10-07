@@ -10,4 +10,8 @@ if (isset($_SESSION['student_view'])) {
     $_SESSION['student_view'] = $course_code;
 }
 
-header("Location: {$urlServer}courses/$course_code/");
+if (isset($_POST['next'])) {
+    header('Location: ' . $_POST['next']);
+} else {
+    header("Location: {$urlServer}courses/$course_code/");
+}

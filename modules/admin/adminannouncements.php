@@ -28,9 +28,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langAdminAn;
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
+
 
 $head_content .= <<<hContent
 <script type='text/javascript'>
@@ -42,22 +41,16 @@ function toggle(id, checkbox, name)
 </script>
 hContent;
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=start_date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=end_date]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#id_start_date, #id_end_date').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
 
 // display settings
 $displayAnnouncementList = true;
@@ -87,34 +80,40 @@ if (isset($_GET['delete'])) {
     $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
     // modify announcement command
-    $id = intval($_GET['modify']);
-    $myrow = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ?d", $id);
+    $id = intval($_GET['modify']);    
+    $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, 
+                                                DATE_FORMAT(`begin`,'%Y-%d-%m %H:%i') as `begin`,
+                                                DATE_FORMAT(`end`,'%Y-%d-%m %H:%i') as `end`, 
+                                                lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     if ($myrow) {
         $titleToModify = q($myrow->title);
         $contentToModify = standard_text_escape($myrow->body);
         $displayAnnouncementList = true;
         $begindate = $myrow->begin;
+        //$begindate = DateTime::createFromFormat("Y-m-d H:i", $myrow->begin);        
         $enddate = $myrow->end;
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
     // submit announcement command
     $dates = array();
-    if (isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date']) {
+    if (isset($_POST['start_date_active']) and isset($_POST['start_date'])) {        
         $start_sql = 'begin = ?s';
-        $dates[] = $_POST['start_date'];
+        $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['start_date']);        
+        $dates[] = $date_started->format("Y-m-d H:i:s");
     } else {
         $start_sql = 'begin = NULL';
     }
-    if (isset($_POST['end_date_active']) and isset($_POST['end_date']) and $_POST['end_date']) {
+    if (isset($_POST['end_date_active']) and isset($_POST['end_date'])) {
         $end_sql = 'end = ?s';
-        $dates[] = $_POST['end_date'];
+        $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['end_date']);
+        $dates[] = $date_ended->format("Y-m-d H:i:s");
     } else {
         $end_sql = 'end = NULL';
     }
     $newContent = purify($newContent);
     if (isset($_POST['id'])) {
         // modify announcement
-        $id = intval($_POST['id']);
+        $id = $_POST['id'];
         Database::get()->query("UPDATE admin_announcement
                         SET title = ?s, body = ?s, lang = ?s,
                             `date` = ".DBHelper::timeAfter().", $start_sql, $end_sql
@@ -181,15 +180,13 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $start_checkbox = 'checked';
             $start_date = $begindate;
         } else {
-            $start_checkbox = '';
-            $start_date = date("Y-n-j", time());
+            $start_checkbox = '';                        
         }
         if (isset($enddate)) {
             $end_checkbox = 'checked';
             $end_date = $enddate;
         } else {
-            $end_checkbox = '';
-            $end_date = date("Y-n-j", time());
+            $end_checkbox = '';            
         }
         $tool_content .= lang_select_options('lang_admin_ann', '', $myrow->lang);
     } else {
@@ -198,15 +195,27 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     }
     $tool_content .= "<span class='smaller'>$langTipLangAdminAnn</span></td></tr>
         <tr><td><b>$langStartDate:</b><br />
-            <input type='text' name='start_date' value='$start_date'>&nbsp;" .
-                "<span class='smaller'><input type='checkbox' name='start_date_active' " .
-                "$end_checkbox onClick=\"toggle(1,this,'start_date')\">&nbsp;" .
-                "$langActivate</span></td></tr>
-        <tr><td><b>$langEndDate:</b><br />
-            <input type='text' name='end_date' value='$end_date'>&nbsp;" .
-                "<span class='smaller'><input type='checkbox' name='end_date_active' " .
-                "$end_checkbox onClick=\"toggle(2,this,'end_date')\">&nbsp;" .
-                "$langActivate</span></td></tr>
+        <div class='input-append date form-group' id='id_start_date' data-date='$start_date' data-date-format='dd-mm-yyyy'>
+            <div class='col-xs-11'>        
+                <input name='start_date' type='text' value='$start_date'>
+            </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+            <span class='smaller'><input type='checkbox' name='start_date_active' " .
+            "$end_checkbox onClick=\"toggle(1,this,'start_date')\">&nbsp;" .
+            "$langActivate</span></td></tr>";
+    $tool_content .= "<tr><td><b>$langEndDate:</b><br />
+            <div class='input-append date form-group' id='id_end_date' data-date='$end_date' data-date-format='dd-mm-yyyy'>
+            <div class='col-xs-11'>        
+                <input name='end_date' type='text' value='$end_date'>
+            </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>
+            <span class='smaller'><input type='checkbox' name='end_date_active' " .
+            "$end_checkbox onClick=\"toggle(2,this,'end_date')\">&nbsp;" .
+            "$langActivate</span></td></tr>
         <tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit'></td></tr>
     </table></fieldset></form>";
 }
@@ -271,11 +280,11 @@ if ($displayAnnouncementList == true) {
                 } else {
                     $classvis = 'odd';
                 }
-                $icon = 'visible';
+                $icon = 'fa-eye';
             } else {
                 $visibility = 1;
                 $classvis = 'invisible';
-                $icon = 'invisible';
+                $icon = 'fa-eye-slash';
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>
@@ -283,19 +292,19 @@ if ($displayAnnouncementList == true) {
                 <td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
                 <td>" . standard_text_escape($myrow->body) . "</td>
                 <td width='60'>" .
-                    icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?modify=$myrow->id") . ' ' .
-                    icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?delete=$myrow->id", 
+                    icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?modify=$myrow->id") . ' ' .
+                    icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?delete=$myrow->id", 
                          "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") . ' ' .
                     icon($icon, $langVisibility, "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility") . "
                 <td class='right' width='40'>";
             if ($iterator != 1) {
-                $tool_content .= icon('up', $langUp, "$_SERVER[SCRIPT_NAME]?up=$myrow->id");
+                $tool_content .= icon('fa-arrow-up', $langUp, "$_SERVER[SCRIPT_NAME]?up=$myrow->id");
             } else {
                 $tool_content .= "&nbsp;&nbsp;";
             }
             $tool_content .= "&nbsp;";
             if ($iterator < $bottomAnnouncement) {
-                $tool_content .= icon('down', $langDown, "$_SERVER[SCRIPT_NAME]?down=$myrow->id");
+                $tool_content .= icon('fa-arrow-down', $langDown, "$_SERVER[SCRIPT_NAME]?down=$myrow->id");
             }
             $tool_content .= "</td></tr>";
             $iterator++;

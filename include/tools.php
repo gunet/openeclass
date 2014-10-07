@@ -190,7 +190,7 @@ function loggedInMenu() {
                 (isset($is_power_user) and $is_power_user) or
                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                 (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-            array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
+            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
             array_push($sideMenuLink, q($urlServer . 'modules/admin/?course=' . $course_code));
         }
 
@@ -759,21 +759,19 @@ function openCoursesExtra() {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
         if ($openCoursesNum > 0) {
-            $GLOBALS['leftNavExtras'] = '
-                <div class="navmenu">
-                    <div class="navcontainer">
-                        <ul class="navlist">
-                            <li class="category">' . q($GLOBALS['langOpenCoursesShort']) . '</li>
-                        </ul><div style="text-align:center;">' .
-                    icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) . '
-                            &nbsp;<a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">' .
-                    $GLOBALS['langListOpenCoursesShort'] . '</a>
-                            <span class="smaller">' .
-                    $openCoursesNum . ' ' .
+            $GLOBALS['leftNavExtras'] = "
+                <div class='navmenu'>
+                    <div class='navcontainer'>
+                        <ul class='navlist'>
+                            <li class='category'>" . q($GLOBALS['langOpenCoursesShort']) . "</li>
+                        </ul><div style='text-align:center;'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'>
+                            &nbsp;<a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>
+                    $GLOBALS[langListOpenCoursesShort]</a>
+                            <span class='smaller'>$openCoursesNum " .
                     (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) .
-                    '</span></div>
+                    "</span></div>
                     </div>
-                </div>';
+                </div>";
         }
     }
 }

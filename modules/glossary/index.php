@@ -90,22 +90,39 @@ if ($glossary_data) {
 if ($is_editor) {
     
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
-       $tool_content .= "<div id='operations_container'>
-         <ul id='opslist'>
-            <li><a href='$base_url'>$langBack</a></li>
-            </ul>
-       </div>";
-    } else {    
-         $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>" .
-             ($categories ? "<li><a href='categories.php?course=$course_code'>$langCategories</a></li>" : '') . "
-            <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
-            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
-            <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
-            <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>
-          </ul>
-        </div>";
+        $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$base_url",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
+    } else {
+        $tool_content .= action_bar(array(
+                array('title' => $langAddGlossaryTerm,
+                      'url' => "$base_url&amp;add=1",
+                      'icon' => 'fa-plus-circle',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success'),
+                array('title' => $langCategoryAdd,
+                      'url' => "$cat_url&amp;add=1",
+                      'icon' => 'fa-plus-circle',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success'),
+                array('title' => $langConfig,
+                      'url' => "$base_url&amp;config=1",                      
+                      'icon' => 'fa-gear',
+                      'level' => 'primary-label'),
+                array('title' => "$langGlossaryToCsv (UTF8)",
+                      'url' => "dumpglossary.php?course=$course_code",
+                      'icon' => 'fa-download'),
+                array('title' => "$langGlossaryToCsv (Windows 1253)",
+                      'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
+                      'icon' => 'fa-download'),
+                array('title' => $langCategories,
+                      'url' => "categories.php?course=$course_code",
+                      'icon' => 'fa-tasks',
+                      'level' => 'primary-label',
+                      'show' => $categories)
+            ));
     }
     
     if (isset($_POST['url'])) {
@@ -194,9 +211,7 @@ if ($is_editor) {
         $checked_expand = $expand_glossary ? ' checked="1"' : '';
         $checked_index = $glossary_index ? ' checked="1"' : '';
         $tool_content .= "
-              <form action='$base_url' method='post'>
-               <fieldset>
-                 <legend>$langConfig</legend>
+              <form action='$base_url' method='post'>               
                  <table class='tbl' width='100%'>
                  <tr>
                    <th>$langGlossaryIndex:
@@ -210,9 +225,8 @@ if ($is_editor) {
                    </th>
                    <td class='right' width='10'><input type='submit' name='submit_config' value='$langSubmit'></td>
                  </tr>
-                 </table>
-               </fieldset>
-              </form>\n";
+                 </table>               
+              </form>";
     }
 
     // display form for adding or editing a glossary term
@@ -252,9 +266,7 @@ if ($is_editor) {
 
         $tool_content .= "
              <form action='$edit_url' method='post'>
-               $html_id
-               <fieldset>
-                 <legend>$nameTools</legend>
+               $html_id               
                  <table class='tbl' width='100%'>
                  <tr>
                    <th width='90'>$langGlossaryTerm:</th>
@@ -281,8 +293,7 @@ if ($is_editor) {
                    <th>&nbsp;</th>
                    <td class='right'><input type='submit' name='submit' value='$submit_value'></td>
                  </tr>
-                 </table>
-               </fieldset>
+                 </table>               
              </form>";
     }
     $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
@@ -293,12 +304,11 @@ if ($is_editor) {
 } else {
     // Show categories link for students if needed
     if ($categories) {
-        $tool_content .= "
-       <div id='operations_container'>
-         <ul id='opslist'>
-           <li><a href='categories.php?course=$course_code'>$langCategories</a></li>
-         </ul>
-       </div>";
+        $tool_content .= action_bar(array(
+                      array('title' => $langCategories,
+                            'url' => "categories.php?course=$course_code",
+                            'icon' => 'fa-tasks',
+                            'level' => 'primary-label')));        
     }
 }
 
@@ -338,8 +348,7 @@ if (isset($_GET['edit'])) {
     $terms[] = $prefixes[0] . '%';
 }
 if ($cat_id) {
-    $navigation[] = array('url' => $base_url,
-        'name' => $langGlossary);
+    $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
     $nameTools = q($categories[$cat_id]);
     $where .= " AND category_id = $cat_id";
 }
@@ -348,28 +357,19 @@ $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, cat
                         GROUP BY term
                         ORDER BY term", $course_id, $terms);
 if (count($sql) > 0) {
-    $tool_content .= "
-	       <script type='text/javascript' src='../auth/sorttable.js'></script>
-               <table class='sortable' id='t2' width='100%'>";
-    $tool_content .= "
-	       <tr>
-		 <th><div align='left'>$langGlossaryTerm</div></th>
-		 <th><div align='left'>$langGlossaryDefinition</div></th>";
+    $tool_content .= "<div class='table-responsive'>";
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
+    $tool_content .= "<tr>
+		 <th class='text-left'>$langGlossaryTerm</th>
+		 <th class='text-left'>$langGlossaryDefinition</th>";
     if ($is_editor) {
-        $tool_content .= "
-		 <th width='20'>$langActions</th>";
+        $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
     }
-    $tool_content .= "</tr>";
-    $i = 0;
+    $tool_content .= "</tr>";    
     foreach ($sql as $g) {
-        if ($i == 0 and isset($_GET['id'])) {
+        if (isset($_GET['id'])) {
             $nameTools = q($g->term);
-        }
-        if ($i % 2) {
-            $rowClass = "class='odd'";
-        } else {
-            $rowClass = "class='even'";
-        }
+        }        
         if (!empty($g->url)) {
             $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .
                     "' target='_blank'>" . q($g->url) . "</a>)</span></div>";
@@ -384,7 +384,7 @@ if (count($sql) > 0) {
         }
 
         if (!empty($g->notes)) {
-            $urllink .= "<br />" . standard_text_escape($g->notes);
+            $urllink .= "<br>" . standard_text_escape($g->notes);
         }
 
         if (!empty($g->definition)) {
@@ -393,23 +393,27 @@ if (count($sql) > 0) {
             $definition_data = '-';
         }
 
-        $tool_content .= "
-	       <tr $rowClass>
+        $tool_content .= "<tr>
 		 <th width='150'><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a> <div class='invisible'>$cat_descr</div></th>
                  <td><em>$definition_data</em>$urllink</td>";
+        
         if ($is_editor) {
-            $tool_content .= "
-		 <td align='center' valign='top' width='50'><a href='$edit_url&amp;edit=$g->id'>
-		    <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit'></a>
-                    <a href='$edit_url&amp;delete=$g->id' onClick=\"return confirmation('" .
-                    js_escape($langConfirmDelete) . "');\">
-		    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete'></a>
-		 </td>";
-        }
-        $tool_content .= "</tr>";
-        $i++;
+            $tool_content .= "<td class='option-btn-cell'>";
+            $tool_content .= action_button(array(
+                    array('title' => $langEdit,
+                          'url' => "$edit_url&amp;edit=$g->id",
+                          'icon' => 'fa-edit'),
+                    array('title' => $langDelete,
+                          'url' => "$edit_url&amp;delete=$g->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDelete))
+                );
+           $tool_content .= "</td>";
+        }                        
+        $tool_content .= "</tr>";        
     }
-    $tool_content .= "</table><br />";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<p class='alert1'>$langNoResult</p>";
 }
@@ -417,8 +421,11 @@ if (count($sql) > 0) {
 draw($tool_content, 2, null, $head_content);
 
 
-/* * **************************************** */
-
+/**
+ * @brief find glossary term order
+ * @param type $course_id
+ * @return int
+ */
 function findorder($course_id) {
     $maxorder = Database::get()->querySingle("SELECT MAX(`ORDER`) as maxorder FROM glossary WHERE course_id = ?d", $course_id)->maxorder;
     if ($maxorder > 0) {

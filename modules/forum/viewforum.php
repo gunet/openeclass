@@ -42,7 +42,6 @@ require_once 'functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
-    load_js('jquery');
     $head_content .= '<script>
                           function lock(topic_id,course_code) {
                             $.getJSON("lock_topic.php?course="+course_code+"&topic="+topic_id,function(response){
@@ -82,13 +81,14 @@ if (isset($_GET['empty'])) { // if we come from newtopic.php
 
 if ($can_post) {
     $tool_content .= "
-	<div id='operations_container'>
-	<ul id='opslist'>
-	<li>
-	<a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langNewTopic</a>
-	</li>
-	</ul>
-	</div>";
+	<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langNewTopic,
+                    'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'))) .
+            "</div>";
 }
 
 /*
@@ -182,7 +182,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 }
 
 // modify topic notification
-if (isset($_GET['topicnotify'])) {    
+if (isset($_GET['topicnotify'])) {
     if (isset($_GET['topic_id'])) {
         $topic_id = $_GET['topic_id'];
     }
@@ -213,7 +213,7 @@ if (count($result) > 0) { // topics found
 	  <th width='150' class='center'>$langSender</th>
 	  <th width='80' class='center'>$langSeen</th>
 	  <th width='190' class='center'>$langLastMsg</th>
-	  <th width='80' class='center'>$langActions</th>
+	  <th width='80' class='text-center'>" . icon('fa-gears') . "</th>
 	</tr>";
     $i = 0;
     foreach ($result as $myrow) {
@@ -279,29 +279,29 @@ if (count($result) > 0) { // topics found
             $topic_icon = toggle_icon($topic_action_notify);
         }
         $tool_content .= "<td class='center'>";
+
+        $dyntools = (!$is_editor) ? array() : array(
+            array('title' => $langModify,
+                'url' => "forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id",
+                'icon' => 'fa-edit'
+            ),
+            array('title' => $langDelete,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes",
+                'icon' => 'fa-times',
+                'class' => 'delete',
+                'confirm' => $langConfirmDelete)
+        );
+        $dyntools[] = array('title' => $langNotify,
+            'url' => isset($_GET['start']) and $_GET['start'] > 0 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
+            'icon' => 'fa-envelope');
+        $tool_content .= action_button($dyntools);
+
         if ($is_editor) {
-            $tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id'>
-			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-            $tool_content .= "
-			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes' onClick=\"return confirmation('$langConfirmDelete');\">
-			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
-			</a>";
-            
             if ($topic_locked == 0) {
                 $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_open.png' title='$langLockTopic' alt='$langLockTopic' /></a>";
             } else {
                 $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_closed.png' title='$langUnlockTopic' alt='$langUnlockTopic' /></a>";
             }
-        }
-        if (isset($_GET['start']) and $_GET['start'] > 0) {
-            $tool_content .= "
-			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id'>
-			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
-			</a>";
-        } else {            
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id'>
-			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
-			</a>";
         }
         $tool_content .= "</td></tr>";
         $i++;

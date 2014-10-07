@@ -90,30 +90,39 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
-                $vis_icon = 'invisible';
+                $vis_icon = 'fa-eye-slash';
+                $vis_class = 'not_visible';
             } else {
                 $visible = 0;
-                $vis_icon = 'visible';
-            }
-            //checking ordering status and initializing appropriate arrows
-            $up_arrow = $down_arrow = '';
-            if ($iterator != 1 or $offset > 0)  {
-                $up_arrow = icon('up', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id");
-            }
-            if ($offset + $iterator < $all_announc->total) {
-                $down_arrow = icon('down', $langMove, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id");
+                $vis_icon = 'fa-eye';
+                $vis_class = 'visible';
             }
             //setting datables column data
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
-                'DT_RowClass' => $vis_icon,
-                '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
-                '2' => icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id")  .
-                       "&nbsp;" . icon('delete', $langDelete, "", "class=\"delete_btn\"") .
-                       "&nbsp;" . icon($vis_icon, $langVisible, "", "class=\"vis_btn\" data-vis=\"$visible\"") .
-                       "&nbsp;" . $down_arrow . $up_arrow
-                );
+                'DT_RowClass' => $vis_class,
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
+                '1' => date('d-m-Y', strtotime($myrow->date)),
+                '2' => action_button(array(
+                    array('title' => $langModify,
+                          'icon' => 'fa-edit',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
+                    array('title' => $langDelete,
+                          'class' => 'delete',
+                          'icon' => 'fa-times',
+                          'icon-class' => 'delete_btn'),
+                    array('title' => $langVisible,
+                          'icon' => $vis_icon,
+                          'icon-class' => 'vis_btn',
+                          'icon-extra' => "data-vis='$visible'"),
+                    array('title' => $langMove,
+                          'icon' => 'fa-arrow-up',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id",
+                          'show' => $iterator != 1 || $offset > 0),
+                    array('title' => $langMove,
+                          'icon' => 'fa-arrow-down',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id",
+                          'show' => $offset + $iterator < $all_announc->total))));
             $iterator++;
         }
     } else {
@@ -127,23 +136,28 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 load_js('tools.js');
-load_js('jquery');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
+load_js('datatables_bootstrap');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#ann_table{$course_id}').DataTable ({
+           var oTable = $('#ann_table{$course_id}').dataTable ({
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
-                'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                'sScrollX': true,
+                'responsive': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
+                'fnDrawCallback': function( oSettings ) {
+                    animate_btn();
+},
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
                 'oLanguage': {
@@ -165,9 +179,17 @@ $head_content .= "<script type='text/javascript'>
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                if (confirmation('$langSureToDelAnnounce')) {
-                    var row_id = $(this).closest('tr').attr('id');
-                    $.post('', { action: 'delete', value: row_id}, function() {
+                var row_id = $(this).closest('tr').attr('id');
+                bootbox.confirm('$langSureToDelAnnounce', function(result) {                       
+                    $.ajax({
+                      type: 'POST',
+                      url: '',
+                      datatype: 'json',
+                      data: {
+                         action: 'delete', 
+                         value: row_id
+                      },
+                      success: function(data){
                         var num_page_records = oTable.fnGetData().length;
                         var per_page = oTable.fnPagingInfo().iLength;
                         var page_number = oTable.fnPagingInfo().iPage;
@@ -176,21 +198,41 @@ $head_content .= "<script type='text/javascript'>
                                 page_number--;
                             }
                         }
-                        $('#tool_title').after('<p class=\"success\">$langAnnDel</p>');
-                        $('.success').delay(3000).fadeOut(1500);
+                        console.log(page_number);
                         oTable.fnPageChange(page_number);
-                    }, 'json');
-                 }
+                      },
+                      error: function(xhr, textStatus, error){
+                          console.log(xhr.statusText);
+                          console.log(textStatus);
+                          console.log(error);
+                      }
+                    });              
+                });                
             });
             $(document).on( 'click','.vis_btn', function (g) {
                 g.preventDefault();
                 var vis = $(this).data('vis');
                 var row_id = $(this).closest('tr').attr('id');
-                $.post('', { action: 'visible', value: row_id, visible: vis}, function() {
+                $.ajax({
+                  type: 'POST',
+                  url: '',
+                  datatype: 'json',
+                  data: {
+                        action: 'visible', 
+                        value: row_id, 
+                        visible: vis
+                  },
+                  success: function(data){
                     var page_number = oTable.fnPagingInfo().iPage;
-                    var per_page = oTable.fnPagingInfo().iLength;
+                    var per_page = oTable.fnPagingInfo().iLength
                     oTable.fnPageChange(page_number);
-                }, 'json');
+                  },
+                  error: function(xhr, textStatus, error){
+                      console.log(xhr.statusText);
+                      console.log(textStatus);
+                      console.log(error);
+                  }
+                });                
             });
             $('.success').delay(3000).fadeOut(1500);
             $('.dataTables_filter input').attr('placeholder', '$langTitle');
@@ -253,8 +295,12 @@ if ($is_editor) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);
-            $showFrom = q($announce->start_display);
-            $showUntil = q($announce->stop_display);
+            $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
+            $startdate = $startDate_obj->format('d-m-Y');
+            $showFrom = q($startdate);
+            $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
+            $enddate = $endDate_obj->format('d-m-Y');            
+            $showUntil = q($enddate);
         }
     }
 
@@ -264,8 +310,18 @@ if ($is_editor) {
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
-        $start_display = (isset($_POST['startdate']) && !empty($_POST['startdate']))? $_POST['startdate']:"2014-01-01";
-        $stop_display = (isset($_POST['enddate']) && !empty($_POST['enddate']))? $_POST['enddate']:"2094-12-31";
+        if (isset($_POST['startdate']) && !empty($_POST['startdate'])) {
+            $startDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['startdate']);
+            $start_display = $startDate_obj->format('Y-m-d');
+        } else {
+            $start_display = "2094-12-31";
+        }
+        if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
+            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
+            $stop_display = $endDate_obj->format('Y-m-d');            
+        } else {
+            $stop_display = "2094-12-31";
+        }
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW(), start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
@@ -352,28 +408,28 @@ if ($is_editor) {
     }
     /* display form */
     if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
-        
-        $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
-        $tool_content .= "</ul></div>";
-        
-        load_js('jquery-ui');
-        load_js('jquery-ui-timepicker-addon.min.js');
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+        load_js('bootstrap-datepicker');
+        $head_content .= "
             <script type='text/javascript'>
             $(function() {
-            $('input[name=startdate]').datepicker({
-                dateFormat: 'yy-mm-dd'
+                $('#startdate').datepicker({
+                    format: 'dd-mm-yyyy',
+                    language: '$language',
+                    autoclose: true
                 });
-            $('input[name=enddate]').datepicker({
-                dateFormat: 'yy-mm-dd'
+                $('#enddate').datepicker({
+                    format: 'dd-mm-yyyy',
+                    language: '$language',
+                    autoclose: true
                 });
-               });"
+            });"
         . "</script>";
-        $tool_content .= "
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'))) . "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
-        <fieldset>
-        <legend>$langAnnouncement</legend>
   <table class='tbl' width='100%'>";
         if (isset($_GET['modify'])) {
             $langAdd = $nameTools = $langModifAnn;
@@ -404,39 +460,47 @@ if ($is_editor) {
         </tr>
         <tr>
           <td>
-            <select name='recipients[]' multiple='true' class='auth_input' id='select-recipients' style='min-width:400px;'>";
+            <select name='recipients[]' multiple='true' class='form-control' id='select-recipients'>";
             $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
             foreach($course_users as $cu){
                $tool_content .= "<option value='{" . q($cu->email) . "}'>{" . q($cu->name) . "} (" . q($cu->email) . ")</option>"; 
             } 
             $tool_content .= "</select>
+            <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
           </td>
   </tr>
   <tr>
           <th>$langAnnouncementActivePeriod:</th>
         </tr>
         <tr>
-          <td>$langFrom: <input type='text' name='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' value='$showUntil'></td>
+          <td>$langFrom: <input type='text' name='startdate' id='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' id='enddate' value='$showUntil'></td>
         </tr>
         <tr>
           <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
   </tr>
   </table>
-  <input type='hidden' name='id' value='$AnnouncementToModify' />
-        </fieldset>
+  <input type='hidden' name='id' value='$AnnouncementToModify'>
   </form>";
     } else {
-  /* display actions toolbar */
-  $tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>";
         if (isset($_GET['an_id'])) {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;modify=$row->id'>" . $langModify . "</a></li>
-                              <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">" . $langDelete . "</a></li>";
+            $tool_content .= action_bar(array(
+                array('title' => $langModify,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
+                      'icon' => 'fa-edit',
+                      'level' => 'primary-label'),
+                array('title' => $langDelete,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
+                      'icon' => 'fa-times',
+                      'level' => 'primary',
+                      'confirm' => $langSureToDelAnnounce)));
         } else {
-            $tool_content .= "<li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>";
+            $tool_content .= action_bar(array(
+                array('title' => $langAddAnn,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
+                      'icon' => 'fa-plus-circle',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success')));
         }
-        $tool_content .= "</ul></div>";
     }
 } // end: teacher only
 
@@ -447,24 +511,34 @@ if ($is_editor) {
         $tool_content .= $row->content;
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-        $tool_content .= "<table id='ann_table{$course_id}' class='display'>";
+        $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table table-bordered' width='100%'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr><th width='100'>$langDate</th><th>$langAnnouncement</th>";
+        $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
         if ($is_editor) {
-            $tool_content .= "<th width='100' class='center'>$langActions</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
 add_units_navigation(TRUE);
-load_js('jquery-ui');
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
+load_js('select2');
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#select-recipients').select2();       
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-recipients').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-recipients').val(stringVal).trigger('change');
         });
-});</script>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-recipients').val(stringVal).trigger('change');
+        });         
+    });
+
+    </script>
+";
 draw($tool_content, 2, null, $head_content);

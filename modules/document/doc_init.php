@@ -47,6 +47,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $subsystem = EBOOK;
     $subsystem_id = $ebook_id;
     $groupset = "ebook_id=$ebook_id&amp;";
+    $group_id = '';
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
     $upload_target_url = 'document.php?course=' . $course_code;
     $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
@@ -61,6 +62,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $groupset = '';
     $base_url = $_SERVER['SCRIPT_NAME'] . '?';
     $upload_target_url = 'commondocs.php';
+    $group_id = '';
     $group_sql = "course_id = -1 AND subsystem = $subsystem";
     $group_hidden_input = '';
     $basedir = $webDir . '/courses/commondocs';
@@ -83,6 +85,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';
     $upload_target_url = 'index.php?course=' . $course_code;
     $subsystem_id = 'NULL';
+    $group_id = '';
     $groupset = '';
     $group_sql = "course_id = $course_id AND subsystem = $subsystem";
     $group_hidden_input = '';

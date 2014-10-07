@@ -33,26 +33,23 @@ require_once 'group_functions.php';
 require_once 'modules/usage/duration_query.php';
 
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "
+    <script type='text/javascript'>
+    $(function() {
+        $('#u_date_start').datepicker({
+            format: 'dd-mm-yyyy',
+            language: '$language',
+            autoclose: true
+        });
+        $('#u_date_end').datepicker({
+            format: 'dd-mm-yyyy',
+            language: '$language',
+            autoclose: true
+        });
+    });"
+. "</script>";
 
 $group_id = intval($_REQUEST['group_id']);
 
@@ -112,16 +109,16 @@ if ($type == 'duration') {
         $u_date_start = $_POST['u_date_start'];
         $u_date_end = $_POST['u_date_end'];
     } else {
-        $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
-        $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
+        $u_date_start = strftime('%d-%m-%Y', strtotime($min_date));
+        $u_date_end = strftime('%d-%m-%Y', strtotime('now'));
     }
     
     $tool_content .= "<form method='post' action='$base$type'>
         <table class = 'FormData' align = 'left'>
             <tr><th class='left'>$langStartDate:</th>
-                <td><input type='text' name='u_date_start' value='$u_date_start'></td></tr>
+                <td><input type='text' name='u_date_start' id='u_date_start' value='$u_date_start'></td></tr>
             <tr><th class='left'>$langEndDate:</th>
-                <td><input type='text' name='u_date_end' value='$u_date_end'></td></tr>                
+                <td><input type='text' name='u_date_end' id='u_date_end' value='$u_date_end'></td></tr>                
             <tr><th class='left'>&nbsp;</th>
                 <td><input type='submit' name='submit' value='$langSubmit'></td></tr>
         </table>
@@ -143,8 +140,12 @@ $tool_content .= "<table class='FormData' width='100%' id='a'>
 	</tr>";
 
 $i = 0;
-if ($type == 'duration') {    
-    $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);    
+if ($type == 'duration') {   
+    $startDate_obj = DateTime::createFromFormat('d-m-Y', $u_date_start);
+    $startdate = $startDate_obj->format('Y-m-d');
+    $endDate_obj = DateTime::createFromFormat('d-m-Y', $u_date_end);
+    $enddate = $endDate_obj->format('Y-m-d');     
+    $result = user_duration_query($course_id, $startdate, $enddate, $group_id);    
 } else {        
     $result = Database::get()->queryArray("SELECT user_id AS id FROM group_members WHERE group_id = ?d", $group_id);
 }

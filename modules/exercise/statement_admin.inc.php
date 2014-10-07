@@ -25,10 +25,10 @@ $(function() {
     $('input[name=answerType]').click(hideGrade);
     $('input#free_text_selector').click(showGrade);
     function hideGrade(){
-        $('input[name=questionGrade]').prop('disabled', true).closest('tr').hide();    
+        $('input[name=questionGrade]').prop('disabled', true).closest('div.form-group').addClass('hide');    
     }
     function showGrade(){
-        $('input[name=questionGrade]').prop('disabled', false).closest('tr').show();    
+        $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');    
     }    
  });
 </script>
@@ -100,104 +100,110 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (!empty($msgErr)) {
         $tool_content .= "<p class='caution'>$msgErr</p>\n";
     }
+
+    
     if (isset($_GET['newQuestion'])){
-        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']) . "'>";
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']);
+        $link_back = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
+        
     } else {
-        $tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']) . "'>";
-    }
-    @$tool_content .= "
-	<fieldset>
-	  <legend>$langInfoQuestion</legend>
-	  <table class='tbl'>
-	  <tr>
-	    <th>" . q($langQuestion) . ":</th>
-	    <td><input type='text' name='questionName'" . "size='50' value='" . q($questionName) . "'></td>
-	  </tr>
-	  <tr>
-	    <th valign='top'>$langQuestionDescription:</th>
-	    <td>"
-            . rich_text_editor('questionDescription', 4, 50, $questionDescription) .
-            "</td>
-	  </tr>
-	  <tr>
-	    <th valign='top'>";
-
-    if ($okPicture) {
-        $tool_content .= "$langReplacePicture:";
-    } else {
-        $tool_content .= "$langAddPicture:";
-    }
-
-    $tool_content .= "</th><td>";
-    if ($okPicture) {
-        $tool_content .= "<img src='../../$picturePath/quiz-$questionId'><br/><br/>";
-    }
-    $tool_content .= "<input type='file' name='imageUpload' size='30'></td></tr>";
-
-    if ($okPicture) {
-        $tool_content .= "<tr>
-		<th>$langDeletePicture:</th>
-		<td><input type='checkbox' name='deletePicture' value='1' ";
-        if (isset($_POST['deletePicture'])) {
-            $tool_content .= 'checked="checked"';
-        }
-        $tool_content .= "> ";
-        $tool_content .= "</td></tr>";
-    }
-    $tool_content .= "<tr>
-        <th valign='top'>$langAnswerType: </th>
-	<td><input type='radio' name='answerType' value='1' ";
-    if ($answerType == 1) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langUniqueSelect . "<br>";
-    $tool_content .= "<input type='radio' name='answerType' value='2' ";
-    if ($answerType == 2) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langMultipleSelect . "
-	<br>";
-    $tool_content .= "<input type='radio' name='answerType' value='4' ";
-    if ($answerType == 4) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langMatching . "
-	<br>";
-    $tool_content .= "<input type='radio' name='answerType' value='3' ";
-    if ($answerType == 3) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langFillBlanks . "
-	<br>";
-    $tool_content .= "<input type='radio' name='answerType' value='5' ";
-    if ($answerType == 5) {
-        $tool_content .= 'checked="checked"';
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
+        $link_back = "admin.php?course=TMAPOST111".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
     }  
-    $tool_content .= "> " . $langTrueFalse. "<br>";
-    $tool_content .= "<input type='radio' name='answerType' id='free_text_selector' value='6' ";
-    if ($answerType == 6) {
-        $tool_content .= 'checked="checked"';
-    }
-    $tool_content .= "> " . $langFreeText .'</td></tr>';    
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => $link_back,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )
+    ));
     
+    $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
     $tool_content .= "
-        <tr".(($answerType != 6) ? " style='display:none'": "").">
-        <th>$m[grade]:</th>
-        <td>
-	  <input type='text' name='questionGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
-	</td>
-	</tr>
-        ";
-    
-    $tool_content .= " 
-        <tr>
-        <th>&nbsp;</th>
-        <td>
-	  <input type='submit' name='submitQuestion' value='$langOk'>
-	  &nbsp;&nbsp;<input type='submit' name='cancelQuestion' value='$langCancel'>
-	</td>
-	</tr>
-	</table>
-	</fieldset>
-	</form>";
+            <div class='form-group'>
+                <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
+                <div class='col-sm-10'>
+                  <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='questionDescription' class='col-sm-2 control-label'>$langQuestionDescription:</label>
+                <div class='col-sm-10'>
+                  ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
+                <div class='col-sm-10'>
+                  ".(($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "")."
+                  <input type='file'  name='imageUpload' id='imageUpload'> 
+                </div>
+            </div>";
+    if ($okPicture) {
+        $tool_content .= "
+            <div class='form-group'>
+		<label class='col-sm-2 control-label'>$langDeletePicture:</label>
+                <div class='col-sm-10'>            
+                    <div class='checkbox'>
+                      <label>    
+                        <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
+                      </label>
+                    </div>
+                </div>
+            </div>";
+    }
+$tool_content .= "<div class='form-group'>
+                <label class='col-sm-2 control-label'>$langAnswerType:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
+                        $langUniqueSelect
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' value='2' ". (($answerType == MULTIPLE_ANSWER) ? "checked" : "") .">
+                       $langMultipleSelect
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' value='3' ". (($answerType == FILL_IN_BLANKS) ? "checked" : "") .">
+                       $langFillBlanks
+                      </label>
+                    </div>                       
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' value='4' ". (($answerType == MATCHING) ? "checked" : "") .">
+                       $langMatching
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' value='5' ". (($answerType == TRUE_FALSE) ? "checked" : "") .">
+                       $langTrueFalse
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='free_text_selector' name='answerType' value='6' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
+                       $langFreeText
+                      </label>
+                    </div>                       
+                </div>
+            </div>
+            <div class='form-group ".(($answerType != 6) ? "hide": "")."'>
+                <label for='questionGrade' class='col-sm-2 control-label'>$m[grade]:</label>
+                <div class='col-sm-10'>
+                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$m[grade]' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
+                </div>
+            </div>
+            <div class='col-sm-offset-2 col-sm-10'>            
+                <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
+                <a href='$link_back' class='btn btn-default'>$langCancel</a>      
+            </div>
+          </fieldset>
+	</form>    
+    ";
 }

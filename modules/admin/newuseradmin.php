@@ -36,8 +36,6 @@ $user = new User();
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // javascript
-load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
 $head_content .= <<<hContent

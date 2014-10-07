@@ -64,7 +64,7 @@ if (!class_exists('Exercise')):
             $this->exercise = '';
             $this->description = '';
             $this->type = 1;
-            $this->startDate = date("Y-m-d H:i");
+            $this->startDate = date("Y-m-d H:i:s");
             $this->endDate = '';
             $this->tempSave = 0;
             $this->timeConstraint = 0;

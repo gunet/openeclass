@@ -46,7 +46,12 @@ if (isset($_GET['mid'])) {
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
         }
-        $out = "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
+        $out = action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "inbox.php".$urlstr,
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')
+                        ));        
         $out .= "<div id='del_msg'></div><div id='msg_area'><table>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
@@ -125,16 +130,26 @@ if (isset($_GET['mid'])) {
                </form>
                <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
-             $out .= "<script type='text/javascript' src='{$urlAppend}js/jquery.multiselect.min.js'></script>\n";
-             $out .= "<script type='text/javascript'>$(document).ready(function () {
-                                  $('#select-recipients').multiselect({
-                                    selectedText: '$langJQSelectNum',
-                                    noneSelectedText: '$langJQNoneSelected',
-                                    checkAllText: '$langJQCheckAll',
-                                    uncheckAllText: '$langJQUncheckAll'
-                                  });
-                                });</script>
-            <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+             $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
+                 <script type='text/javascript'>
+                        $(document).ready(function () {
+                            $('#select-recipients').select2();       
+                            $('#selectAll').click(function(e) {
+                                e.preventDefault();
+                                var stringVal = [];
+                                $('#select-recipients').find('option').each(function(){
+                                    stringVal.push($(this).val());
+                                });
+                                $('#select-recipients').val(stringVal).trigger('change');
+                            });
+                            $('#removeAll').click(function(e) {
+                                e.preventDefault();
+                                var stringVal = [];
+                                $('#select-recipients').val(stringVal).trigger('change');
+                            });         
+                        });
+
+                        </script>";
         }
         /******End of Reply Form ********/
         

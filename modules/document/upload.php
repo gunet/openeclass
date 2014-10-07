@@ -37,44 +37,60 @@ if (isset($_GET['uploadPath'])) {
 }
 
 if ($can_upload) {
-    $tool_content .= "<div id='operations_container'>
-                        <ul id='opslist'>
-                           <li><a href='index.php?course=$course_code'>$langBack</a></li>
-                        </ul>
-                    </div>";
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => "index.php?course=$course_code",
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $nameTools = $langExternalFile;
-        $fileinput = "<th width='200'>$langExternalFileInfo:</th>
-                              <td><input type='text' name='fileURL' size='40' /></td>";
+        $fileinput = "
+        <div class='form-group'>
+          <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
+          <div class='col-sm-10'>
+            <input type='text' class='form-control' id='fileURL' name='fileURL'>
+          </div>
+        </div>";
     } else {
         $nameTools = $langDownloadFile;
-        $fileinput = "<th width='200'>$langPathUploadFile:</th>
-                              <td><input type='file' name='userFile' size='35' /></td>";
+        $fileinput = "
+        <div class='form-group'>
+          <label for='userFile' class='col-md-6 control-label'>$langPathUploadFile</label>
+          <div class='col-md-3'>
+            <input type='file' id='userFile' name='userFile'>
+          </div>
+        </div>";
     }
-    $tool_content .= "<form action='$upload_target_url' method='post' enctype='multipart/form-data'>
-      <fieldset>
-        <legend>$langUpload</legend>
-        <input type='hidden' name='uploadPath' value='$uploadPath' />
-        $group_hidden_input
-        <table class='tbl' width='100%'>
-        <tr>
+    $tool_content .= "
+        <div class='row margin-top-fat'>
+          <div class='col-md-12'>
+        <h5 class='content-title'>$langUpload</h5>
+        <div class='panel padding-fat focused'>
+
+        <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
+          <input type='hidden' name='uploadPath' value='$uploadPath' />
+          $group_hidden_input
           $fileinput
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langTitle:</th>
-          <td><input type='text' name='file_title' value='' size='40' /></td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langComment:</th>
-          <td><input type='text' name='file_comment' value='' size='40' /></td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langCategory:</th>
-          <td>
+              
+      <hr class='margin-bottom-fat'/>
+      <div class='form-group'>
+        <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='inputFileTitle' name='file_title'>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileComment' class='col-sm-2 control-label'>$langComment</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='inputFileComment' name='file_comment'>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileCategory' class='col-sm-2 control-label'>$langCategory</label>
+        <div class='col-sm-10'>
           <select name='file_category'>
             <option selected='selected' value='0'>$langCategoryOther</option>
             <option value='1'>$langCategoryExcercise</option>
@@ -84,32 +100,40 @@ if ($can_upload) {
             <option value='5'>$langCategoryExample</option>
             <option value='6'>$langCategoryTheory</option>
           </select>
-          </td>
-          <td>&nbsp;</td>
-          <td><input type='hidden' name='file_creator' value='" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "' size='40' /></td>
-        </tr>
-        <tr>
-          <th>$langSubject:</th>
-          <td><input type='text' name='file_subject' value='' size='40' /></td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langDescription:</th>
-          <td><input type='text' name='file_description' value='' size='40' /></td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langAuthor:</th>
-          <td><input type='text' name='file_author' value='' size='40' /></td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th><input type='hidden' name='file_date' value='' size='40' />
-              <input type='hidden' name='file_format' value='' size='40' />
-                $langLanguage:
-          </th>
-          <td>
-            <select name='file_language'>
+        </div>
+
+        <input type='hidden' name='file_creator' value='" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "' size='40' />
+
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileSubject' class='col-sm-2 control-label'>$langSubject</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='inputFileSubject' name='file_subject'>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileDescription' class='col-sm-2 control-label'>$langDescription</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileAuthor' class='col-sm-2 control-label'>$langAuthor</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='inputFileAuthor' name='file_author'>
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <input type='hidden' name='file_date' value='' size='40' />
+        <input type='hidden' name='file_format' value='' size='40' />
+
+        <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage</label>
+        <div class='col-sm-10'>
+          <select name='file_language'>
                 <option value='en'>$langEnglish</option>
                 <option value='fr'>$langFrench</option>
                 <option value='de'>$langGerman</option>
@@ -117,12 +141,13 @@ if ($can_upload) {
                 <option value='it'>$langItalian</option>
                 <option value='es'>$langSpanish</option>
             </select>
-          </td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>$langCopyrighted:</th>
-          <td>" .
+        </div>
+      </div>
+
+      <div class='form-group'>
+        <label for='inputFileCopyright' class='col-sm-2 control-label'>$langCopyrighted</label>
+        <div class='col-sm-10'>
+          " .
             selection(array('0' => $langCopyrightedUnknown,
                 '2' => $langCopyrightedFree,
                 '1' => $langCopyrightedNotFree,
@@ -131,34 +156,48 @@ if ($can_upload) {
                 '5' => $langCreativeCommonsCCBYND,
                 '6' => $langCreativeCommonsCCBYNC,
                 '7' => $langCreativeCommonsCCBYNCSA,
-                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted') . "          
-          </td>
-          <td>&nbsp;</td>
-        </tr>";
-    if (!isset($_GET['ext'])) {
+                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted') . "
+        </div>
+      </div>";
+
+      if (!isset($_GET['ext'])) {
         $tool_content .= "
-        <tr>
-          <th>$langUncompress</th>
-          <td><input type='checkbox' name='uncompress' value='1' /> </td>
-          <td>&nbsp;</td>
-        </tr>";
+        <div class='form-group'>
+          <label for='inputFileCompression' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langUncompress</label>
+          <div class='col-md-1 col-sm-1 col-xs-2'>
+            <div class='checkbox pull-right'>
+                <input type='checkbox' name='uncompress' value='1'>
+            </div>
+          </div>
+        </div>";
     }
-    $tool_content .= "
-        <tr>
-          <th>$langReplaceSameName</th>
-          <td><input type='checkbox' name='replace' value='1' /> </td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <th>&nbsp;</th>
-        <td colspan='2' class='right'><input type='submit' value='$langUpload' /></td>
-        </tr>
-        </table>
-        </fieldset>
-        <div class='right smaller'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
-    $tool_content .= "</form>";
+
+      $tool_content .= "
+      <div class='form-group'>
+        <label for='inputFileReplaceSameName' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langReplaceSameName</label>
+        <div class='col-md-1 col-sm-1 col-xs-2'>
+          <div class='checkbox pull-right'>
+              <input type='checkbox' name='replace' value='1'>
+          </div>
+        </div>
+      </div>      
+
+<div class='infotext-sm margin-bottom-thin'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+    
+  $tool_content .= "
+      <div class='form-group'>
+        <div class='col-sm-offset-5 col-sm-12'>
+          <button type='submit' class='btn-default-eclass color-green size-l'>
+            <i class='fa fa-arrow-up space-after-icon'></i>
+            $langUpload
+          </button>
+        </div>
+      </div>
+    </form>
+
+    </div>";
 } else {
-    $tool_content .= "<span class='caution'>$langNotAllowed</span>";
+    $tool_content .= "<span class='alert-warning'>$langNotAllowed</span>";
 }
 
 if (defined('COMMON_DOCUMENTS')) {

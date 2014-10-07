@@ -28,15 +28,7 @@ require_once 'modules/auth/auth.inc.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-load_js('jquery');
-load_js('jquery-ui');
 $head_content .= <<<EOF
-<style type="text/css">
-    .no-close .ui-dialog-titlebar-close {
-        display: none;
-    }
-</style>
-
 <script type='text/javascript'>
 /* <![CDATA[ */
 
@@ -95,25 +87,22 @@ $(document).ready(function() {
     }
     
     // Search Engine checkboxes
-    $("#confirmIndexDialog").dialog({
-        autoOpen: false,
-        height: 400,
-        width: 600,
-        modal: true,
-        dialogClass: "no-close",
-        closeOnEscape: false,
-        buttons: {
-            "$langCancel": function() {
-                $('#index_enable')
-                    .prop('checked', false)
-                    .prop('disabled', false);
-                $('#search_enable').prop('checked', false);
-                $(this).dialog("close");
-            },
-            "$langOk": function() {
-                $(this).dialog("close");
-            }
-        }
+    $('#confirmIndexDialog').modal({
+        show: false,
+        keyboard: false,
+        backdrop: 'static'
+    });
+        
+    $("#confirmIndexCancel").click(function() {
+        $('#index_enable')
+            .prop('checked', false)
+            .prop('disabled', false);
+        $('#search_enable').prop('checked', false);
+        $("#confirmIndexDialog").modal("hide");
+    });
+        
+    $("#confirmIndexOk").click(function() {
+        $("#confirmIndexDialog").modal("hide");
     });
     
     $('#search_enable').change(function(event) {
@@ -137,32 +126,29 @@ $(document).ready(function() {
     
     $('#index_enable').change(function(event) {
         if ($('#index_enable').is(":checked")) {
-            $("#confirmIndexDialog").dialog("open");
+            $("#confirmIndexDialog").modal("show");
         }
     });
         
     // Mobile API Confirmations    
-    $("#confirmMobileAPIDialog").dialog({
-        autoOpen: false,
-        height: 200,
-        width: 600,
-        modal: true,
-        dialogClass: "no-close",
-        closeOnEscape: false,
-        buttons: {
-            "$langCancel": function() {
-                $('#mobileapi_enable').prop('checked', false);
-                $(this).dialog("close");
-            },
-            "$langOk": function() {
-                $(this).dialog("close");
-            }
-        }
+    $('#confirmMobileAPIDialog').modal({
+        show: false,
+        keyboard: false,
+        backdrop: 'static'
+    });
+        
+    $("#confirmMobileAPICancel").click(function() {
+        $('#mobileapi_enable').prop('checked', false);
+        $("#confirmMobileAPIDialog").modal("hide");
+    });
+        
+    $("#confirmMobileAPIOk").click(function() {
+        $("#confirmMobileAPIDialog").modal("hide");
     });
         
     $('#mobileapi_enable').change(function(event) {
         if ($('#mobileapi_enable').is(":checked")) {
-            $("#confirmMobileAPIDialog").dialog("open");
+            $("#confirmMobileAPIDialog").modal("show");
         }
     });
 
@@ -668,12 +654,8 @@ else {
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
     
     // Modal dialogs
-    $tool_content .= "<div id='confirmIndexDialog' title='" . $langConfirmEnableIndexTitle . "'>
-            <p>" . $langConfirmEnableIndex . "</p>
-        </div>";
-    $tool_content .= "<div id='confirmMobileAPIDialog' title='" . $langConfirmEnableMobileAPITitle . "'>
-            <p>" . $langConfirmEnableMobileAPI . "</p>
-        </div>";
+    $tool_content .= modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmIndexCancel', 'confirmIndexOk');
+    $tool_content .= modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', $langConfirmEnableMobileAPITitle, $langConfirmEnableMobileAPI, 'confirmMobileAPICancel', 'confirmMobileAPIOk');
     
     // After restored values have been inserted into form then bring back
     // values from original config.php, so the rest of the page can be displayed correctly
@@ -683,3 +665,23 @@ else {
 }
 
 draw($tool_content, 3, null, $head_content);
+
+function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
+    global $langCancel, $langOk;
+    return <<<htmlEOF
+<div class='modal fade' id='$id' tabindex='-1' role='dialog' aria-labelledby='$labelId' aria-hidden='true'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class='modal-title' id='$labelId'>$title</h4>
+            </div>
+            <div class='modal-body'><p>$body</p></div>
+            <div class='modal-footer'>
+                <button id='$cancelId' type='button' class='btn btn-default'>$langCancel</button>
+                <button id='$okId' type='button' class='btn btn-primary'>$langOk</button>
+            </div>
+        </div>
+    </div>
+</div>
+htmlEOF;
+}

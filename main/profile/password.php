@@ -19,13 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/** 
+/**
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @file password.php 
  * @abstract Password change component
  *
  */
-
 $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
@@ -41,7 +40,6 @@ $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
 check_uid();
 
 // javascript
-load_js('jquery');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -73,22 +71,22 @@ if (isset($_POST['submit'])) {
         header("Location:" . $passurl . "?msg=2");
         exit();
     }
-    if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {        
+    if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {
         header("Location:" . $passurl . "?msg=1");
         exit();
     }
 
     //all checks ok. Change password!    
-    $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);        
-    
+    $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
+
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_REQUEST['password_form']);
 
     if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
         Database::get()->query("UPDATE user SET password = ?s
-                                 WHERE id = ?d", $new_pass, $_SESSION['uid']);        
+                                 WHERE id = ?d", $new_pass, $_SESSION['uid']);
         Log::record(0, 0, LOG_PROFILE, array('uid' => $_SESSION['uid'],
-                                             'pass_change' => 1));
+            'pass_change' => 1));
         header("Location:" . $passurl . "?msg=4");
         exit();
     } else {
@@ -103,7 +101,7 @@ if (isset($_GET['msg'])) {
     switch ($msg) {
 
         case 1: { // Passwords not acceptable
-                $message = $langPassTwo;               
+                $message = $langPassTwo;
                 $urlText = '';
                 $type = 'alert1';
                 break;
@@ -129,7 +127,14 @@ if (isset($_GET['msg'])) {
                 break;
             }
     }
-    $tool_content .= "<div class='$type'>$message<br /><a href='$urlServer'>$urlText</a></div>";
+    $tool_content .= "<div class='$type'>$message<br /></div>";
+    
+    if ($urlText)
+        $tool_content .= action_bar(array(
+            array('title' => $urlText,
+                'url' => "$urlServer",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
 }
 
 if (!isset($_POST['changePass'])) {

@@ -66,27 +66,43 @@ $head_content = '<script type="text/javascript">
 $nameTools = $langDropBox;
 
 // action bar 
-if (!isset($_GET['showQuota'])) {
-    $tool_content .= "<div id='operations_container'>
-                        <ul id='opslist'>";
+if (!isset($_GET['showQuota'])) {    
     if (isset($_GET['upload'])) {
-        if ($course_id != 0) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'>$langBack</a></li>";
-        }
+        $tool_content .= action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : ""),
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')
+                        ));
     } else {
         if ($course_id != 0) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
-                              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>";
-        } else {
-            if ($personal_msgs_allowed) {
-                $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>";
-            }
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>";          
+            $tool_content .= action_bar(array(
+                                array('title' => $langNewCourseMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success'),
+                                array('title' => $langQuotaBar,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
+                                      'icon' => 'fa-pie-chart',
+                                      'level' => 'primary')
+                            ));
+        } else {            
+            $tool_content .= action_bar(array(
+                                array('title' => $langNewCourseMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success'),
+                                array('title' => $langNewPersoMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?upload=1",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success',
+                                      'show' => $personal_msgs_allowed),
+                            ));
         }
-    }
-    $tool_content .= "</ul></div>";
+    }    
 }
 
 if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
@@ -125,9 +141,6 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
     draw($tool_content, 2);
     exit;
 }
-
-load_js('jquery');
-load_js('jquery-ui');
 
 if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     if ($course_id == 0) {
@@ -186,7 +199,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                     }
                                   });
                                 }
-                                $('#select-recipients').multiselect('refresh');
+                                $('#select-recipients').select2('destroy');
+                                $('#select-recipients').select2();
                               });
                             });
                           </script>";
@@ -225,7 +239,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     	$tool_content .= "<tr>
     	  <th>$langSendTo:</th>
     	  <td>
-    	<select name='recipients[]' multiple='multiple' class='auth_input' id='select-recipients'>";
+    	<select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
     
         if ($course_id != 0) {//course messages
             
@@ -314,7 +328,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             }
         } 
     
-        $tool_content .= "</select></td></tr>";
+        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td></tr>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
         $head_content .= " <script type='text/javascript'>
                              var selected = [];
@@ -386,71 +400,61 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	<p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
-    	load_js('jquery.multiselect.min.js');
-        $head_content .= "<script type='text/javascript'>$(document).ready(function () {
-                $('#select-recipients').multiselect({
-                    selectedText: '$langJQSelectNum',
-                    noneSelectedText: '$langJQNoneSelected',
-                    checkAllText: '$langJQCheckAll',
-                    uncheckAllText: '$langJQUncheckAll'
+        load_js('select2');
+        $head_content .= "<script type='text/javascript'>
+            $(document).ready(function () {
+                $('#select-recipients').select2();       
+                $('#selectAll').click(function(e) {
+                    e.preventDefault();
+                    var stringVal = [];
+                    $('#select-recipients').find('option').each(function(){
+                        stringVal.push($(this).val());
+                    });
+                    $('#select-recipients').val(stringVal).trigger('change');
                 });
-        });</script>
-        <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
+                $('#removeAll').click(function(e) {
+                    e.preventDefault();
+                    var stringVal = [];
+                    $('#select-recipients').val(stringVal).trigger('change');
+                });         
+            });
+
+            </script>
+        ";
 	}
 } else {//mailbox
     load_js('datatables');
     load_js('datatables_filtering_delay');
     $head_content .= "<script type='text/javascript'>
-		              $(function() {
-		                $( \"#tabs\" ).tabs({
-		                  collapsible: false,
-                          //cache tab and avoid reload
-                          beforeLoad: function( event, ui ) {
-                            if ( ui.tab.data( \"loaded\" ) ) {
-                              event.preventDefault();
-                              return;
-                            }
-                            ui.jqXHR.success(function() {
-                              ui.tab.data( \"loaded\", true );
+                        $(document).ready(function() {
+                            // bootstrap tabs load external content via AJAX
+                            $('a[data-toggle=\"tab\"]').on('show.bs.tab', function (e) {
+                                var contentID = $(e.target).attr('data-target');
+                                var contentURL = $(e.target).attr('href');
+                                $(contentID).load(contentURL);
                             });
-                          },
-                          //open links inside tabs
-                          load: function(event, ui) {
-                            //following line prevents double requests by unbinding click event on previously loaded tab content 
-                            $('.ui-tabs-panel.ui-widget-content-new').off('click', 'a'); 
-                            $('.ui-tabs-panel.ui-widget-content-new').on('click', 'a', function(event) {
-                              if (event.target.className != 'outtabs' && event.target.className.indexOf('paginate_button') == -1) {
-                                event.preventDefault();
-                                $(this).closest('.ui-tabs-panel.ui-widget-content-new').load(this.href);
-                              }
+                            
+                            // trap links to open inside tabs
+                            $('.tab-content').on('click', 'a', function(e) {
+                                if (e.target.className != 'outtabs' && e.target.className.indexOf('paginate_button') == -1) {
+                                    e.preventDefault();
+                                    $(this).closest('.tab-pane').load(this.href);
+                                }
                             });
-                          }
-                         })
-                        //remove some classes to avoid overriding of openeclass styling
-                        $('#tabs').removeClass('ui-widget');
-                        $('#tabs').removeClass('ui-widget-content');
-                        $('#ui-tabs-1').removeClass('ui-widget-content');
-                        $('#ui-tabs-2').removeClass('ui-widget-content');
-                        //add classes needed for opening links inside tabs (see above)
-                        $('#ui-tabs-1').addClass('ui-widget-content-new');
-                        $('#ui-tabs-2').addClass('ui-widget-content-new');
-                      })
-                      </script>";
-    if ($course_id == 0) {
-        $tool_content .= "<div id=\"tabs\">
-                           <ul>
-                             <li><a href=\"inbox.php\">Inbox</a></li>
-                             <li><a href=\"outbox.php\">Outbox</a></li>
-                           </ul>
-                         </div>";
-    } else {
-        $tool_content .= "<div id=\"tabs\">
-                           <ul>
-                             <li><a href=\"inbox.php?course=$course_code\">Inbox</a></li>
-                             <li><a href=\"outbox.php?course=$course_code\">Outbox</a></li>
-                           </ul>
-                         </div>";
-    }
+                            
+                            // show 1st tab
+                            $('#dropboxTabs a:first').tab('show');
+                        });
+                    </script>";
+    $courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
+    $tool_content .= "<ul id='dropboxTabs' class='nav nav-tabs' role='tablist'>
+                        <li><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . "'>Inbox</a></li>
+                        <li><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'>Outbox</a></li>
+                      </ul>
+                      <div class='tab-content'>
+                        <div class='tab-pane fade' id='inbox'></div>
+                        <div class='tab-pane fade' id='outbox'></div>
+                      </div>";
 }
 
 if ($course_id == 0) {

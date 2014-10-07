@@ -41,7 +41,7 @@ if (isset($_GET['add'])) {
                                     VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $uid_to_add, $course_id);
 
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
-                                                               'right' => '+5'));
+        'right' => '+5'));
     if ($result) {
         $tool_content .= "<p class='success'>$langTheU $langAdded</p>";
         // notify user via email
@@ -63,16 +63,34 @@ if (isset($_GET['add'])) {
         'search_am' => true), 'any');
 
     $tool_content .= "
-<div id='operations_container'>
-  <ul id='opslist'>
-    <li><b>$langAdd:</b>&nbsp; <a href='adduser.php?course=$course_code'>$langOneUser</a></li>
-    <li><a href='muladduser.php?course=$course_code'>$langManyUsers</a></li>
-    <li><a href='guestuser.php?course=$course_code'>$langGUser</a>&nbsp;</li>
-    <li><a href='../group/index.php?course=$course_code'>$langGroupUserManagement</a></li>
-    <li><a href='../course_info/refresh_course.php?course=$course_code'>$langDelUsers</a></li>
-  </ul>
-</div>";
-    
+<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langOneUser,
+                    'url' => "adduser.php?course=$course_code",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label'),
+                array('title' => $langManyUsers,
+                    'url' => "muladduser.php?course=$course_code",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label'),
+                array('title' => $langGUser,
+                    'url' => "guestuser.php?course=$course_code",
+                    'icon' => 'fa-plane',
+                    'level' => 'primary'),
+                array('title' => $langGroupUserManagement,
+                    'url' => "../group/index.php?course=$course_code",
+                    'icon' => 'fa-users',
+                    'level' => 'primary'),
+                array('title' => $langDelUsers,
+                    'url' => "../course_info/refresh_course.php?course=$course_code",
+                    'icon' => 'fa-times',
+                    'button-class' => 'btn-danger',
+                    'level' => 'primary'),
+            )) .
+            "</div>";
+
     $tool_content .= "
         <fieldset>
         <legend>$langUserData</legend>
@@ -98,7 +116,7 @@ if (isset($_GET['add'])) {
         $tvar = 'search_' . $term;
         if (!empty($GLOBALS[$tvar])) {
             $search[] = "u.$term LIKE ?s";
-            $values = $GLOBALS[$tvar] . '%';
+            $values[] = $GLOBALS[$tvar] . '%';
         }
     }
     $query = join(' AND ', $search);

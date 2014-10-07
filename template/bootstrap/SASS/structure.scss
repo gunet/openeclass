@@ -1,0 +1,956 @@
+/* 
+==========================================================
+    SASS for structure of eclass v3.0 - version 0.01007a 
+==========================================================
+*/
+
+@import 'global';
+
+
+
+body
+{
+	background: $color-background;
+  font-family: 'Open Sans';
+}
+ 
+body > .container{
+  padding: 0 15px;
+}
+
+#Frame{
+	margin: 1em 0em;
+}
+
+
+
+/* LEFTNAV - MAIN MENU, LOGO */
+#leftnav{
+	background: $color-background;
+  padding: 0;
+
+
+	.logo{
+		margin:2em 1em;
+		img{margin:0 auto;}
+	}
+
+	.panel{
+		border: none;
+    margin: 0;
+    margin-bottom: 1em;
+    background: inherit;
+		
+    border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+
+    border-radius: 4px 0px 0px 4px;
+
+    .list-group{
+      border-radius:0;
+    }
+
+		.panel-heading{
+			border-radius: 4px 0px 0px 0px!important;
+
+			.panel-title{
+        text-align: center;
+				font-size: 0.85em;
+				font-weight: bold;
+			}
+
+			&:hover{
+				color: $color-hover;
+
+        @include transition(all $transition-time linear);
+			}
+		}
+
+
+    > a{
+      outline: 0;
+      display: block;
+      background: rgba(0, 0, 0, 0.2)!important;
+
+      &:not(.collapsed){
+        border-radius: 4px 0px 0px 0px!important;
+        color: $color-hover;
+      }
+
+      &:hover{
+        background: rgba(255,255,255,.25);
+      }
+
+      &:hover, &:not(.collapsed){
+        border-radius: 4px 0px 0px 4px;
+      }
+    }
+
+		a{
+			background: transparent;
+			color: #ADADAD;
+      text-decoration: none;
+
+
+			&.list-group-item{
+
+				border: none;
+        border-top: 1px solid rgba(255,255,255,.075);
+				padding: 1em;
+        text-align: center;
+
+        @include transition(all $transition-time linear);
+
+        > span{
+          font-size: 0.9em;
+          margin-left: 0.5em;
+        }
+
+        &:hover{
+          text-decoration: none;
+          color: #eee;
+          background: $color-hover;
+          border-radius: 4px 0px 0px 4px;
+
+          margin-left: 0px;
+
+          @include transition(all $transition-time linear);
+        }
+
+        &.active{
+          background: $color-main-content;
+          text-shadow: none;
+          color: #333;
+          border-radius: 4px 0px 0px 4px;
+
+          box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+          -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+          -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+        }
+
+				//we don't want a border-bottom if it's the last option
+				&:last-child{
+					border-bottom: none;
+				}
+
+				&:first-child{
+					border-top: 1px solid rgba(255,255,255,.075);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+/* LOGO - Extent bootstrap style -------------------------------------*/
+
+.logo
+{
+  min-height: 20px;
+  min-width: 20px;
+}
+
+
+
+
+/* MAIN-CONTENT -------------------------------------------------------*/
+#main-content
+{
+  background: $color-main-content;
+  border-radius: 4px;
+
+	overflow: hidden;
+	
+	box-shadow: 0px -5px 10px 0px black;
+	-moz-box-shadow: 0px -5px 10px 0px black;
+	-webkit-box-shadow: 0px -5px 10px 0px black;
+
+	#header.navbar{
+		padding: 0;
+		border: 0;
+		background: $color-header;
+    border-bottom: 1px solid #DBDBDB;
+
+		.navbar-nav{
+			margin: 0;
+			float:right;
+
+			>li{
+				border-left: 1px solid rgb(231, 231, 231);
+				float: left;
+
+				a {
+					padding-top: 15px;
+					padding-bottom: 15px;
+
+					i.fa{
+						margin:0 1em;		
+					}
+
+					&:hover,
+					&:focus{
+						background: $color-hover;
+						color: white;
+            @include transition(all $transition-time linear);							
+					}
+				}
+
+        .user-icon
+        {
+          width: 20px;
+          margin-right: 10px;
+        }
+
+				&:last-child > a{
+					border-radius: 0 4px 0px 0px;
+				}
+			}
+		}
+
+	}
+
+}
+
+
+.navbar-default
+{
+  border-radius: 4px 4px 0px 0px; 
+}
+
+
+
+
+
+
+
+
+
+
+
+/* FOOTER --------------------------------------------------------------------------------------*/
+footer.footer
+{
+  text-align: center;
+  padding: 1em;
+  background: $color-footer;
+  margin-top: 2em;
+  color: rgb(167, 167, 167);
+  border-top: 1px solid #DBDBDB;
+}
+
+
+
+
+
+
+
+/* SIDEBAR ------------------------------------------------------------------------------------ */
+
+body.sidebar-opened
+{
+  #sidebar
+  {
+    right: 0px;
+    border-left: 1px solid rgba(0,0,0,.05);
+    opacity: 1;
+    //@include box-shadow(-7px 0px 15px -8px rgba(0,0,0,.3));
+  }
+}
+
+body.sidebar-opened .toggle-sidebar
+{
+  background: #e3e4e6;
+}
+
+#sidebar
+{
+  position: absolute;
+
+  height: 100%;
+  width: 18.5em;
+
+  right: -19em; /* just a bit more than width to ensure zero visibility */
+
+  top:3.6em; /*not to overlap the header*/
+  padding-bottom: 3.6em; /* same amount as TOP. To avoid losing content */
+
+  z-index:10001;
+
+  background: $color-sidebar;
+
+  word-wrap:break-word;
+
+  @include user-select(none);
+
+  @include transition(all $transition-time linear);
+
+  &:hover{
+    //@include box-shadow(-8px 0px 17px -8px rgba(0,0,0,.3));
+  }
+
+
+  h1,h2,h3,h4,h5,h6{
+    color: #686868;
+    font-weight: 600;
+    margin-bottom: 0.6em;
+    margin-top: 0.3em;
+  }
+
+  .toggle-sidebar{
+    text-align: center;
+    width: 3em;
+    padding: 0.3em 0em;
+    margin: 0.5em;
+
+    float: right;
+    color: #8B8B8B;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #CFCFCF;
+    cursor: default;
+
+    &:hover{
+      background: $color-hover;
+      border-color: $color-hover;
+      color: white;
+    }
+  }
+
+  ul,li{
+    list-style-type: none;
+    padding: 0em;
+    margin: 0em;
+  }
+
+  .side-list{
+    
+    padding-bottom: 1em;
+
+    .lesson-title{
+      background: #344458;
+
+      font-size: 0.85em;
+
+      margin:0px;
+
+      padding: 10px 15px;
+
+      cursor: pointer;
+
+      position: relative;
+
+      outline: none;
+
+      color: rgba(255,255,255,0.5);
+
+      font-weight: 600;      
+
+      margin: 0 16px;
+
+      border: 1px solid #48586D;
+      border-top-width: 0px;
+
+      @include transition(all $transition-time linear);
+
+      //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
+
+      &:first-of-type{
+        border-top-width: 1px;
+
+        @include border-radius(4px 4px 0px 0px);
+      }
+
+      &:last-of-type{
+        @include border-radius(0px 0px 4px 4px);
+      }
+
+      &:hover{
+        background: #48586D;
+        color: rgba(255,255,255,0.85);
+
+        &:after{
+          color: rgba(255,255,255,.6);
+        }
+      }
+
+      &.ui-accordion-header-active{
+        border-bottom: none;
+        color: rgba(255,255,255,1);
+        background: #425164;
+
+      &:last-of-type{
+        @include border-radius(0px);
+      }
+
+        &:after{
+          color: $color-hover;
+        }
+      }
+    }
+
+    > div{
+
+        background: #253447;
+        
+        border-top: none;
+
+        color: rgba(255,255,255,.9);
+
+        margin: 0 16px;
+
+        &:last-of-type{
+          @include border-radius(0px 0px 4px 4px);
+        }
+    }
+
+    ul{
+        padding:0em 2em 1em 1.35em;
+        font-size: 0.75em;
+
+        >li{
+          padding: 5px 0em;          
+        }
+    }
+
+    .lesson-id{
+      opacity: 0.5;
+      font-size:0.85em;
+      font-weight:700;
+    }
+
+    .lesson-professor{
+      font-weight: 600;
+      padding-top:0px;
+    }
+
+    .lesson-notifications{
+
+      margin-top:1em;
+
+      .item{
+        margin-right:1.5em;
+        position: relative;
+
+        .count{
+
+          position: absolute;
+          left: 0.8em;
+          bottom: 0.8em;
+
+          display: inline-block;
+          text-align: center;
+
+          background: $color-red;
+          color: white;
+
+          width: 1.5em;
+          height: 1.5em;
+
+          font-size:0.75em;
+          font-weight: 600;
+          //border: 2px solid #253447;
+
+          @include border-radius(0.75em);
+        }
+
+        .fa{
+          font-size: 1.2em;
+          color: rgba(255,255,255,.8);
+        }    
+      }
+    }
+
+  }
+
+}
+
+#sidebar .blocks
+{
+
+  .sidebar-title
+  {
+    margin: 0;
+    font-weight: 600;
+    padding-left: 13px;
+    font-size: 0.75em; 
+    text-transform: uppercase;
+    padding: 1.8em;
+
+    background: rgb(227, 228, 230);
+  }
+
+  .title
+  {
+
+    margin: 0;
+    padding: 2em 0em!important;
+    font-weight: 700;
+    font-size: 0.8em;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    .txt
+    {
+      text-transform: uppercase;
+    }
+
+    i.fa
+    {
+      display: block;
+
+      opacity:.9;
+      font-size: 2.3em;
+
+      margin-top: 0.4em;
+    }
+
+    .tricky
+    {
+
+      margin-left:-100%;
+      width: 200%;
+      position: relative;
+      height: 45px;
+      @include transition(margin-left $transition-time linear);
+
+      > div{        
+        display: inline-block;
+        width: 49%;
+        height: 100%;
+        position: relative;
+        top: 0px;
+        vertical-align: middle;
+        padding: 0.5em 0em;
+
+        @include transition(opacity 60ms linear);  
+      }
+
+      .icon{
+        opacity: 1;
+      }
+
+      .description{
+        font-weight: 400;
+        padding:0.5em 1em;
+        opacity: 0;
+      }
+    }
+
+    &:hover:not(.ui-accordion-header-active){
+      .tricky{
+        margin-left: 0%;
+
+        .description{
+          opacity: .55;
+        }
+
+        .icon{
+          opacity:0;
+        }
+
+      }
+
+      .txt{
+        color:$color-hover;
+      }
+    }
+
+    &.ui-accordion-header-active{
+      .tricky{
+        margin-left: 0%;
+        .description{
+          opacity: .55;
+        }
+      }
+    }
+
+  }
+
+  li.block{
+    border-bottom: 1px solid rgba(0,0,0,.05);
+
+    > .ui-accordion-content,
+    > .ui-accordion-header-active {
+      background: rgba(255,255,255,.3);
+    }
+
+    > .ui-accordion-content{
+      padding:1em 0em;
+    }
+
+    textarea,input{
+      width: 90%;
+      margin: 0em auto 1em auto;
+      display: block;
+    }
+
+    textarea{ 
+      min-height: 12em;
+    }
+
+    button{
+      margin: 1.1em;
+      margin-top: 0em;
+      font-size: 0.8em;
+    }
+
+    .goto{
+      float: right;
+      color: #7E7E7E;
+      padding: 0.5em;
+      margin-right: 0.5em;
+    }
+
+    .input-parent{
+      position: relative;
+
+      textarea,input{
+        padding-left:2em;
+      }
+
+      .fa{
+        position: absolute;
+        top: 0.7em;
+        left: 1.5em;
+        z-index: 9;
+        opacity: 0.2;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+/* ACCORDIONS --------------------------------------------------------------------*/
+.accordion{
+  list-style: none;
+  margin:0px;
+  padding:0px;
+  ul,li{
+    margin:0px;
+    padding:0px;
+    list-style: none;
+  }
+}
+
+
+.accordion-title,
+.ui-accordion-header{
+  
+  padding-right: 2em!important;
+  position: relative;
+  display: block;
+  outline: none!important;
+
+  cursor: pointer;
+
+  &:after{
+        position: absolute;
+        display: inline-block;
+        
+        width: 1em;
+        height: 1em;
+        right: 1em;
+        top: 42%;
+        top: calc(50% - 0.5em);
+        font-family: FontAwesome;
+        font-size: 0.85em;
+
+        content: "\f107";
+        color: rgba(255,255,255,.2);
+        moz-transform-origin: center center;
+        -webkit-transform-origin: center center;
+        -o-transform-origin: center center;
+        -ms-transform-origin: center center;
+        transform-origin: center center;
+
+        @include transition(all $transition-time linear);
+  }
+  
+  &.ui-state-active:after{
+    @include transform(180deg);
+    @include transition(all $transition-time linear);
+  }  
+}
+
+
+
+
+
+
+
+
+
+
+/* INDEX --------------------------------------------------------------------------- */
+
+body.page-login h1{
+  margin: 1.25em 1em;
+}
+
+// LOGIN JUMBOTRON
+.jumbotron.jumbotron-login{
+
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+
+  background-color: #025694;
+  /* fallback from css grandient */
+  
+  background: url('{%template_base%}/img/jumbotron-bg.png') repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  background-position: 30% 60%;
+  background-repeat: no-repeat;
+  background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
+  background: -webkit-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -moz-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+
+  .graphic{
+    position: absolute;
+    z-index: 9;
+
+    width: 77%;
+    max-width:100%;
+    
+    top: -2.8rem;
+  }
+}
+
+// LOGIN FORM
+form.login-form{
+
+  font-size: 0.85em;
+
+  position: relative;
+  z-index: 99;
+
+  background:white;
+  border-radius: 3rem;
+  padding: 2em 3em;
+
+  box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+
+  h2{
+    text-align:center;
+    font-size:1.8em;
+    margin: 2rem 0rem;
+    margin-top: 0rem;
+    color: #232c3a;
+  }
+
+  .form-group{
+    margin:0rem;
+  }
+
+
+  .form-group >*{
+    display:inline-block;
+    float:none;
+  }
+
+
+  .form-group input{
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-radius: 0px;
+    border-width: 1px;
+    
+    box-shadow: none;
+    -moz-box-shadow: none;  
+    -webkit-box-shadow: none;  
+    
+    outline:none;
+    font-size:1.2em;
+    padding: 0.4em;
+    line-height: 1.42857143;
+    color: #555;
+
+    &:focus{
+      border-color: rgba(0,0,0,.12);
+    }
+  }
+
+  .form-group label{
+    margin:0;
+    text-align: center;
+  }
+
+  .form-group i.fa{
+    font-size:1.2em;
+    margin:0;
+    color:rgba(0,0,0,.5);
+  }
+
+  // Remember me + forgot your password
+  .login-settings{
+    margin: 2rem 0rem;
+    font-size:0.9em;
+    
+    > * {
+      margin:0;
+    }
+
+    .checkbox,
+    .link{
+      color:rgba(0,0,0,.5);
+    }
+
+    .checkbox label,
+    .link label{
+      font-weight: bold;
+    }
+
+    .link a{
+        float:right;
+        margin-top:0.3em;
+        color:rgba(0,0,0,.5);
+    }
+
+    .checkbox label span{
+      margin-top: 0.3em;
+      display: inline-block;
+    }
+  }
+
+  .btn.btn-login{
+     width: 100%;
+    height:4rem;
+    border-radius: 4rem;
+    font-weight: 600;
+    
+    color:white;
+    text-transform: uppercase;
+    background:#428bca;
+    letter-spacing:0.1em;
+    &:hover{
+      background:#3071a9;
+    }
+  }
+}
+
+/* DELETE THIS */
+.row .deleteThisClass{
+  height: 400px;
+  border: 1px solid #eee;
+  background: rgba(0,0,0,.05);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MEDIA QUERIES -------------------------------------------------------------------*/
+
+
+@media only screen and (min-width: 768px) and (max-width : 992px) {
+  /* Styles */
+  form.login-form .login-settings .link{
+    float:left!important;
+    margin-top:1em;
+  }
+
+  .jumbotron.jumbotron-login img.graphic{
+    top: 7.1rem;
+    left: -2rem;
+    width: 100%;
+  }
+
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px){
+  .jumbotron.jumbotron-login img.graphic{
+    width: 94%;
+  }
+}
+
+
+
+
+
+
+/* No breakpoints bellow 1366 or smth */
+
+@media (max-width: 1339px){
+  body > .container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1340px){
+  .container {
+    width: 1340px;
+  }
+}
+
+@media (min-width: 992px){
+  #leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title{
+    text-align: left;
+  }
+}
+
+@media (max-width: 992px){
+  #Frame, body>.container{
+    padding:0;
+    margin:0;
+  }
+
+  #leftnav .panel a{
+    font-size: 1.5em;
+  }
+
+  #main-content .navbar .navbar-nav > li a{
+    padding: 15px 0.5em;    
+  }
+
+  #leftnav .panel a.list-group-item{
+      padding:1em 0.8em;
+  }
+
+  #main-content,
+  #leftnav .panel a.list-group-item,
+  #main-content #header.navbar .navbar-nav > li:last-child > a,
+  .navbar-default{
+    border-radius: 0px!important;
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 992px),
+only screen and (        min-device-pixel-ratio: 2)      and (min-width: 992px),
+only screen and (                min-resolution: 192dpi) and (min-width: 992px),
+only screen and (                min-resolution: 2dppx)  and (min-width: 992px) { 
+
+  /* Medium screen, retina, stuff to override above media query */
+
+}

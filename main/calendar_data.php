@@ -25,11 +25,20 @@ $require_login = TRUE;
 
 $require_valid_uid = true;
 require_once '../include/lib/textLib.inc.php';
+if (!session_id()) {
+    session_start();
+}
+if(isset($_SESSION['dbname'])){
+    $require_current_course = true;
+}
 require_once '../include/init.php';
 require_once 'personal_calendar/calendar_events.class.php';
 
 Calendar_Events::get_calendar_settings();
-if(isset($_GET['caltype']) && $_GET['caltype'] == 'small'){
+if(isset($_GET['from']) && isset($_GET['to'])){
+    echo Calendar_Events::bootstrap_events($_GET['from'], $_GET['to']);
+}
+elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'small'){
     $day = (isset($_GET['day']))? intval($_GET['day']):null;
     $month = (isset($_GET['month']))? intval($_GET['month']):null;
     $year = (isset($_GET['year']))? intval($_GET['year']):null;

@@ -36,8 +36,6 @@ require_once 'include/log.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
@@ -118,10 +116,11 @@ if (isset($_POST['submit'])) {
 
     $departments = null;
     if (!get_config('restrict_owndep')) {
-        if (!isset($_POST['department']) and !$is_admin)
+        if (!isset($_POST['department']) and !$is_admin) {
             $all_ok = false;
-        else
+        } else {
             $departments = $_POST['department'];
+        }
     }
     $email_public = valid_access($email_public);
     $phone_public = valid_access($phone_public);
@@ -259,17 +258,28 @@ $sec = $urlSecure . 'main/profile/profile.php';
 $passurl = $urlSecure . 'main/profile/password.php';
 
 $tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='display_profile.php'>$langDisplayProfile</a></li> ";
-if ($allow_password_change) {
-    $tool_content .= "
-        <li><a href='$passurl'>$langChangePass</a></li> ";
-}
-$tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></li>
-        <li><a href='../unreguser.php'>$langUnregUser</a></li>
-    </ul>
-  </div>";
+  <div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langDisplayProfile,
+                'url' => "display_profile.php",
+                'icon' => 'fa-eye',
+                'level' => 'primary-label'),
+            array('title' => $langChangePass,
+                'url' => "$passurl",
+                'icon' => 'fa-key',
+                'show' => $allow_password_change,
+                'level' => 'primary'),
+            array('title' => $langEmailUnsubscribe,
+                'url' => "emailunsubscribe.php",
+                'icon' => 'fa-envelope',
+                'level' => 'primary'),
+            array('title' => $langUnregUser,
+                'url' => "../unreguser.php",
+                'icon' => 'fa-times',
+                'button-class'=>'btn-danger',
+                'level' => 'primary')
+            )) .
+        "</div>";
 $tool_content .= "
    <form method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
    <fieldset>
@@ -379,7 +389,7 @@ $tool_content .= "<tr><th>$langLanguage:</th>
 if ($icon) {
     $message_pic = $langReplacePicture;
     $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $delete = '&nbsp;' . icon('delete', $langDelete, null, 'id="delete"') . '&nbsp;';
+    $delete = '&nbsp;' . icon('fa-times', $langDelete, null, 'id="delete"') . '&nbsp;';
 } else {
     $picture = $delete = '';
     $message_pic = $langAddPicture;

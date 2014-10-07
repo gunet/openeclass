@@ -31,14 +31,18 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     // admin cannot be deleted
     if ($is_admin) {
         $tool_content .= "<div class='caution'>$langAdminNo";
-        $tool_content .= "<br /><a href='../profile/profile.php'>$langBack</a></div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "profile/profile.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
         draw($tool_content, 1);
         exit;
     } else {
         $q = Database::get()->querySingle("SELECT code, visible FROM course, course_user
 			WHERE course.id = course_user.course_id
                         AND course.visible != " . COURSE_INACTIVE . "
-			AND user_id = ?d LIMIT 1", $uid);        
+			AND user_id = ?d LIMIT 1", $uid);
         if (!$q) {
             $tool_content .= "<p><b>$langConfirm</b></p>";
             $tool_content .= "<ul class='listBullet'>";
@@ -51,7 +55,11 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
         } else {
             $tool_content .= "<div class='caution'><b>$langNotice: </b> ";
             $tool_content .= "$langExplain<br />";
-            $tool_content .= "<span class='right'><a href='profile/profile.php'>$langBack</a></span></div>\n";
+            $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "profile/profile.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
         }
     }  //endif is admin
 } else {
@@ -61,12 +69,16 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
         deleteUser($id, false);
         // action logging
         Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
-                                                 'username' => $un,
-                                                 'name' => $n));
+            'username' => $un,
+            'name' => $n));
         unset($_SESSION['uid']);
         $tool_content .= "<div class='success'><b>$langDelSuccess</b><br />";
         $tool_content .= "$langThanks";
-        $tool_content .= "<br /><a href='../index.php?logout=yes'>$langLogout</a></div>";
+        $tool_content .= action_bar(array(
+            array('title' => $langLogout,
+                'url' => "../index.php?logout=yes",
+                'icon' => 'fa-sign-out',
+                'level' => 'primary-label')));
     }
 }
 if (isset($_SESSION['uid'])) {

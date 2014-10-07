@@ -39,20 +39,23 @@ $tree = new Hierarchy();
 $nameTools = $langListCourses;
 $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
-if (isset($_GET['fc']))
+if (isset($_GET['fc'])) {
     $fc = intval($_GET['fc']);
+}
 
 // parse the faculte id in a session
 // This is needed in case the user decides to switch language.
-if (isset($fc))
+if (isset($fc)) {
     $_SESSION['fc_memo'] = $fc;
-else
+} else {
     $fc = $_SESSION['fc_memo'];
+}
 
 
 $fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $fc)->name;
-if (!($fac = $fac[0]))
+if (!($fac = $fac[0])) {
     die("ERROR: no faculty with id $fc");
+}
 
 
 // use the following array for the legend icons
@@ -176,10 +179,16 @@ if (count($courses) > 0) {
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours->id, $mycours->k);
             $tool_content .= "\n" . CourseXMLElement::getLevel($mycours->level) .
-                    "<div id='modaldialog-" . $mycours->id . "' class='modaldialog' title='$langCourseMetadata'>" .
-                    $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours->id . "\");'>" .
-                    "<img src='${themeimg}/lom.png'/></a>";
+                    '<div class="modal fade bs-example-modal-lg" id="modaldialog-' . $mycours->id . '" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel-' . $mycours->id . '" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
+                                    <h4 class="modal-title" id="treeModalLabel-' . $mycours->id . '">' . $langCourseMetadata . '</h4>
+                                </div>
+                                <div class="modal-body">' . $metadata->asDiv() . "</div></div></div></div>" . 
+                    "<a href='' data-toggle='modal' data-target='#modaldialog-" . $mycours->id . "'><img src='${themeimg}/lom.png'/></a>"
+                    ;
         } else {
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
@@ -201,39 +210,7 @@ if (count($courses) > 0) {
 }
 
 if ($isInOpenCoursesMode) {
-    load_js('jquery');
-    load_js('jquery-ui');
     $head_content .= <<<EOF
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-    var modalOpen = function(id) {
-        $(id).dialog( "open" );
-    };
-
-    $(document).ready(function(){
-        $( ".cmetaaccordion" ).accordion({
-            collapsible: true,
-            active: false
-        });
-
-        $( ".tabs" ).tabs();
-
-        $( ".modaldialog" ).dialog({
-            autoOpen: false,
-            modal: true,
-            height: 600,
-            width: 600,
-            open: function() {
-                $( ".ui-widget-overlay" ).on('click', function() {
-                    $( ".modaldialog" ).dialog('close');
-                });
-            }
-        });
-    });
-
-/* ]]> */
-</script>
 <style type="text/css">
 .ui-widget {
     font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;

@@ -170,18 +170,18 @@ foreach ($flatElementList as $module) {
     //-- if user can access module
     else {
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'exercise_on';
+            $moduleImg = 'fa-pencil-square-o';
         } elseif ($module['contentType'] == CTLINK_) {
-            $moduleImg = 'links_on';
+            $moduleImg = 'fa-link';
         } elseif ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = 'description_on';
+            $moduleImg = 'fa-info-circle';
         } elseif ($module['contentType'] == CTMEDIA_ or $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = 'videos_on';
+            $moduleImg = 'fa-film';
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= icon($themeimg, $contentType_alt) . q($module['name']) . '</small>';
+        $tool_content .= icon($moduleImg, $contentType_alt) . q($module['name']) . '</small>';
     }
 
     $tool_content .= '</td>' . "\n";

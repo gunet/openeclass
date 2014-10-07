@@ -42,8 +42,8 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
+require_once 'statistics_tools_bar.php';
 
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jquery-ui-timepicker-addon.min.js');
 
@@ -64,17 +64,7 @@ $('input[name=u_date_end]').datetimepicker({
 });
 </script>";
 
-$tool_content .= "
-<div id='operations_container'>
-  <ul id='opslist'>
-    <li><a href='displaylog.php?course=$course_code'>$langUsersLog</a></li>
-    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
-  </ul>
-</div>";
+statistics_tools($course_code, "userlogins");
 
 $nameTools = $langUserLogins;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -119,16 +109,16 @@ $result = Database::get()->queryArray("SELECT user_id, ip, date_time FROM logins
                  WHERE course_id = ?d AND $date_where $user_where
                  ORDER BY date_time DESC", $course_id, $date_terms, $terms);
 $k = 0;
-foreach ($result as $row) {    
+foreach ($result as $row) {
     $known = false;
     if (isset($users[$row->user_id])) {
         $user = $users[$row->user_id];
         $known = true;
     } elseif (isset($unknown_users[$row->user_id])) {
-        $user = $unknown_users[$row->user_id];        
+        $user = $unknown_users[$row->user_id];
     } else {
         $user = uid_to_name($row->user_id);
-        if ($user === false) {            
+        if ($user === false) {
             $user = $langAnonymous;
         }
         $unknown_users[$row->user_id] = $user;
@@ -191,11 +181,11 @@ if (isset($_GET['first'])) {
     $firstletter = $_GET['first'];
     $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);    
+            WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);
 } else {
     $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = ?d", $course_id);    
+            WHERE b.course_id = ?d", $course_id);
 }
 $user_opts = '<option value="-1">' . $langAllUsers . "</option>";
 foreach ($result as $row) {
@@ -228,12 +218,6 @@ $tool_content .= '
   <tr>
     <th valign="top">' . $langUser . ':</th>
     <td>' . $langFirstLetterUser . ': ' . $letterlinks . ' <br /><select name="u_user_id">' . $user_opts . '</select></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="' . $langSubmit . '">
-        <div><br /><a href="oldStats.php?course=' . $course_code . '" onClick="return confirmation(\'' . $langOldStatsExpireConfirm . '\');">' . $langOldStats . '</a></div>
-    </td>
   </tr>
   </table>
 </fieldset>

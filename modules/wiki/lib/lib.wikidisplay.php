@@ -260,9 +260,12 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $form = "<div id='operations_container'><ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>
-                </ul></div>";
+    $form = action_bar(array(
+        array('title' => $langBack,
+              'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label',)
+    ));
     
     $form .= '   <form method="POST" id="wikiProperties" action="' . $script . '">' . "\n"
             . '   <fieldset>' . "\n"

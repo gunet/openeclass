@@ -227,7 +227,6 @@ $tool_content .= <<<EOF
     <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>
 EOF;
 
-load_js('jquery');
 $head_content .= <<<EOF
     <script type='text/javascript'>
         $(document).ready(function() {

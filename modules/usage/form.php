@@ -23,7 +23,6 @@
  * @file form.php
  * @brief display form for creating graph statistics
  */
-
 $require_current_course = true;
 $require_course_admin = true;
 $require_login = true;
@@ -63,11 +62,11 @@ $tool_content .= '
   </tr>
   <tr>
     <th>' . $langStartDate . ':</th>
-    <td><input type="text" name="u_date_start" value="' . $u_date_start .'"></td>
+    <td><input type="text" name="u_date_start" value="' . $u_date_start . '"></td>
   </tr>
   <tr>
     <th>' . $langEndDate . ':</th>
-    <td><input type="text" name="u_date_end" value="' . $u_date_end .'"></td>    
+    <td><input type="text" name="u_date_end" value="' . $u_date_end . '"></td>    
   </tr>
   <tr>
     <th>' . $langModule . ':</th>
@@ -76,12 +75,6 @@ $tool_content .= '
   <tr>
     <th>' . $langInterval . ':</th>
     <td><select name="u_interval">' . $statsIntervalOptions . '</select></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="' . $langSubmit . '">
-        <div><br /><a href="oldStats.php?course=' . $course_code . '" onClick="return confirmation(\'' . $langOldStatsExpireConfirm . '\');">' . $langOldStats . '</a></div>
-    </td>
   </tr>
   </table>
 </fieldset>

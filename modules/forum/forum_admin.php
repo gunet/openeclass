@@ -73,9 +73,13 @@ function checkrequired(which, entry) {
 </script>
 hContent;
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>";
-$tool_content .= "<li><a href='index.php?course=$course_code'>$langBack</a></li>";
-$tool_content .= "</ul></div>";
+$tool_content .= "<div id='operations_container'>".
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) .
+"</div>";
         
 // forum go
 if (isset($_GET['forumgo'])) {

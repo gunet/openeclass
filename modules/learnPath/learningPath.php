@@ -253,13 +253,13 @@ foreach ($flatElementList as $module) {
     //-- if user can access module
     elseif (!$is_blocked) {
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'exercise_on';
+            $moduleImg = 'fa-pencil-square-o';
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "links_on";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "description_on";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "videos_on";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -283,13 +283,13 @@ foreach ($flatElementList as $module) {
     //-- user is blocked by previous module, don't display link
     else {
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'exercise_on';
+            $moduleImg = 'fa-pencil-square-o';
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "links_on";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "description_on";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "videos_on";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -302,7 +302,7 @@ foreach ($flatElementList as $module) {
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked) {
-            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('monitor', $langTracking) . "</a></td>";
+            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('fa-line-chart', $langTracking) . "</a></td>";
         } else {
             $tool_content .= "<td></td>";
         }

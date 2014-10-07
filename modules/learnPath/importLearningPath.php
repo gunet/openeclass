@@ -1076,8 +1076,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . $tempPathId . "\">" . $lpName . "</a></center>";
     } else {
         $tool_content .= "\n<br /><center><b>" . $langNotInstalled . "</b></center>";
-    }
-    $tool_content .= "\n<br /><a href='index.php?course=$course_code'>$langBack</a></p>";
+    }    
+    
+    $tool_content .=  action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 } else { // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
@@ -1144,7 +1149,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         $tool_content .= "<tr class='nobrd'><td colspan='5'>$langScormEmptyDocsList</td></tr>";
     } else {
         // JS code to enable clicking anywhere in the table to trigger the radio button
-        load_js('jquery');
 
         $head_content .= <<<EOF
 <script type='text/javascript'>

@@ -75,7 +75,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     if (isset($_GET['reg_flag']) and !empty($_GET['date'])) {
         $query .= ' AND created ' .  (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
-        $terms[] = $_GET['date'];
+        $date_created_at = DateTime::createFromFormat("d-m-Y H:i", $_GET['date']);
+        $terms[] = $date_created_at->format("Y-m-d H:i:s");
     }
 
     // Datatables internal search
@@ -154,12 +155,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // Add links to course users, delete course and course edit
-        $icon_content = icon('user_list', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
+        $icon_content = icon('fa-user', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
         if (!isDepartmentAdmin()) {
-            $icon_content .= icon('action_log', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
+            $icon_content .= icon('fa-list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
         }
-        $icon_content .= icon('edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
-        $icon_content .= icon('delete', $langDelete, "delcours.php?c=$logs->id");
+        $icon_content .= icon('fa-edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
+        $icon_content .= icon('fa-times', $langDelete, "delcours.php?c=$logs->id");
 
         $data['aaData'][] = array(
                         '0' => $course_title,
@@ -173,12 +174,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 }
 
 load_js('tools.js');
-load_js('jquery');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#course_results_table').DataTable ({
+            $('#course_results_table').dataTable ({
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',

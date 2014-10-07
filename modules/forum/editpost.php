@@ -91,14 +91,12 @@ if (isset($_POST['submit'])) {
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
     $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));
 
-    $tool_content .= "
-        <div id='operations_container'>
-            <ul id='opslist'>    
-              <li><a href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langBack</a></li>
-            </ul>
-        </div>";
-    
-    
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
+
     $myrow = Database::get()->querySingle("SELECT p.post_text, p.post_time, t.title
                         FROM forum_post p, forum_topic t
                         WHERE p.id = ?d

@@ -242,7 +242,8 @@ if ($is_editor) {
         // Move group directory to garbage collector
         $groupGarbage = uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
-        rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
+        if ($myDir)
+            rename("courses/$course_code/group/$myDir->secret_directory", "courses/garbage/$groupGarbage");        
         
         /*         * ********Delete Group FORUM*********** */
         $result = Database::get()->querySingle("SELECT `forum_id` FROM `group` WHERE `course_id` = ?d AND `id` = ?d AND `forum_id` <> 0 AND `forum_id` IS NOT NULL", $course_id, $id);
@@ -280,7 +281,7 @@ if ($is_editor) {
         /*         * *********************************** */
 
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
-                                                                    'name' => $myDir->name));
+            'name' => $myDir? $myDir->name:"[no name]"));
 
         $message = $langGroupDel;
     } elseif (isset($_REQUEST['empty'])) {
@@ -335,24 +336,43 @@ if ($is_editor) {
     if (isset($message)) {
         $tool_content .= "<p class='success'>$message</p><br />";
     }
-    $tool_content .= "
-        <div id='operations_container'>
-          <ul id='opslist'>
-            <li><a href='group_creation.php?course=$course_code' title='$langNewGroupCreate'>$langCreate</a></li>
-            <li><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a></li>";
-                
+    
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $num_of_groups = count($groupSelect);
-    // groups list
-    if ($num_of_groups > 0) {
+    $tool_content .= "
+        <div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langCreate,
+                    'url' => "group_creation.php?course=$course_code",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+                array('title' => $langGroupProperties,
+                    'url' => "group_properties.php?course=$course_code",
+                    'icon' => 'fa-gear',
+                    'level' => 'primary'),
+                array('title' => $langDeleteGroups,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
+                    'icon' => 'fa-times',
+                    'level' => 'primary',
+                    'class' => 'delete',
+                    'confirm' => $langDeleteGroupAllWarn,
+                    'show' => $num_of_groups > 0),
+                array('title' => $langFillGroupsAll,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
+                    'icon' => 'fa-pencil',
+                    'level' => 'primary',
+                    'show' => $num_of_groups > 0),
+                array('title' => $langEmtpyGroups,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
+                    'icon' => 'fa-trash',
+                    'level' => 'primary',
+                    'class' => 'delete',
+                    'confirm' => $langEmtpyGroups,
+                    'confirm_title' => $langEmtpyGroupsAll,
+                    'show' => $num_of_groups > 0))) .
+            "</div>";
 
-        $tool_content .="<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>";
-                
-    }
-    $tool_content .="</ul>
-        </div>";
 
     // ---------- display properties ------------------------
     /*
@@ -507,12 +527,17 @@ if ($is_editor) {
             } else {
                 $tool_content .= "<td class='center'>$max_members</td>";
             }
-            $tool_content .= "<td class='center'>
-                        <a href='group_edit.php?course=$course_code&amp;group_id=$group->id'>
-                        <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id' onClick=\"return confirmation('" .
-                    js_escape($group_name) . "');\">
-                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td></tr>";
+            $tool_content .= "<td class='center'>" .
+                    action_button(array(
+                        array('title' => $langEdit,
+                            'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete))) .
+                        "</td></tr>";
             $totalRegistered += $member_count;
             $myIterator++;
         }
@@ -554,8 +579,8 @@ if ($is_editor) {
             }
             if ($user_group_description) {
                 $tool_content .= "<br />" . q($user_group_description) . "&nbsp;&nbsp;" .
-                        icon('edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                        icon('delete', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                        icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                        icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
             } elseif ($is_member) {
                 $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
             }

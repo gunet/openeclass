@@ -41,7 +41,6 @@ $user = new User();
 
 $nameTools = $langCourseCreate;
 
-load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
@@ -520,8 +519,14 @@ if (!isset($_POST['create_course'])) {
     $_SESSION['courses'][$code] = USER_TEACHER;
 
     $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
-                        <span class='smaller'>$langEnterMetadata</span></p>
-                        <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
+                        <span class='smaller'>$langEnterMetadata</span></p>";
+    $tool_content .= action_bar(array(
+                array('title' => $langEnter,
+                    'url' => "../../courses/$code/index.php",
+                    'icon' => 'fa-arrow-right',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success')));
+    
     // logging
     Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
                                             'code' => $code,

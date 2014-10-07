@@ -34,26 +34,25 @@ if (isset($_GET['from_admin'])) {
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'statistics_tools_bar.php';
 
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');
+load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').DataTable ({                                
+            $('#log_results_table').dataTable ({                                
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,                
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '".$langNoResult."',
+                   'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '".$langSearch."',
+                   'sSearch':       '" . $langSearch . "',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -67,35 +66,45 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#u_date_start, #u_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '" . $language . "',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
 if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
 $nameTools = $langUsersLog;
+statistics_tools($course_code, "displaylog");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
 $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
-$u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -30 day'));
-$u_date_end = isset($_REQUEST['u_date_end']) ? $_REQUEST['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
+
+if (isset($_REQUEST['u_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P30D'));
+    $u_date_start = $date_start->format('d-m-Y H:i');
+}
+if (isset($_REQUEST['u_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_end']);
+    $u_date_end = $ude->format('Y-m-d H:i');
+} else {
+    $date_end = new DateTime();
+    $date_end->add(new DateInterval('P1D'));
+    $u_date_end = $date_end->format('d-m-Y H:i');
+}
 
 if (isset($_REQUEST['submit'])) {
     $log = new Log();
@@ -122,7 +131,7 @@ if (isset($_GET['first'])) {
 } else {
     $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-        WHERE b.course_id = ?d", $course_id);              
+        WHERE b.course_id = ?d", $course_id);
 }
 
 foreach ($result as $row) {
@@ -171,11 +180,26 @@ $tool_content .= selection($log_types, 'logtype', $logtype);
 $tool_content .= "</td></tr>
         <tr>
         <th class='left'>$langStartDate :</th>
-        <td><input type='text' name ='u_date_start' value='" . q($u_date_start) . "'></td>
+        <td>
+        <div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
+            <div class='col-xs-11'>        
+                <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+            </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>            
         </tr>
         <tr>
         <th class='left'>$langEndDate :</th>
-        <td><input type='text' name ='u_date_end' value='" . q($u_date_end) . "'></td>
+        <td>
+        <div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
+            <div class='col-xs-11'>
+                <input name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
+            </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </td>
         </tr>
         <tr>
         <th class='left' rowspan='2' valign='top'>$langUser:</td>

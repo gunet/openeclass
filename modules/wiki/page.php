@@ -809,7 +809,6 @@ switch ($action) {
                 //Do not show progress bar if a lock conflict was detected
                 if (!isset($pre_action) || $pre_action != 'conflict') {
                     //add lock time progress bar
-                    load_js('jquery');
                     
                     $head_content .= "<script type='text/javascript'>
                         function secondsToHms(d) {

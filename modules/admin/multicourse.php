@@ -103,8 +103,6 @@ if (isset($_POST['submit'])) {
     $course = new course();
     $user = new user();
 
-    load_js('jquery');
-    load_js('jquery-ui');
     load_js('jstree');
 
     $tool_content .= "<div class='noteit'>" . $langMultiCourseInfo . "</div>
@@ -120,8 +118,7 @@ if (isset($_POST['submit'])) {
 	  <th>$langFaculty:</th>
           <td>";
 
-    list($js, $html) = $tree->buildCourseNodePicker(
-            array('allowables' => $user->getDepartmentIds($uid)));
+    list($js, $html) = $tree->buildCourseNodePicker(array('allowables' => $user->getDepartmentIds($uid)));
     $head_content .= $js;
     $tool_content .= $html;
 
@@ -290,7 +287,7 @@ function prof_query($sql, $terms) {
 
 // Find a professor by name ("Name surname") or username
 function find_prof($uname) {
-    if ($uid = prof_query('username = ?s', array($uname))) {
+    if (($uid = prof_query('username = ?s', array($uname)))) {
         return $uid;
     } else {
         $names = explode(' ', $uname);

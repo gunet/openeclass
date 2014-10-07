@@ -58,11 +58,27 @@ $tool_content .= '
   <tbody>
   <tr>
     <th width="220"  class="left">' . $langStartDate . ':</th>
-    <td><input type="text" name="u_date_start" value = "' . $u_date_start . '"></td>
+    <td>';
+$tool_content .= "<div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
+            <div class='col-xs-11'>        
+                <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+            </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>";
+$tool_content .= '</td>
   </tr>
   <tr>
     <th class="left">' . $langEndDate . ':</th>
-    <td><input type="text" name="u_date_end" value = "' . $u_date_end . '"></td>
+    <td>';
+$tool_content .= "<div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
+                <div class='col-xs-11'>
+                    <input name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
+                </div>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>";        
+$tool_content .= '</td>
   </tr>
   <tr>
     <th class="left">' . $langFirstLetterUser . ':</th>

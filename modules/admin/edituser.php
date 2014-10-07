@@ -19,19 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* * ===========================================================================
-  edituser.php
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Edit user info (eclass version)
-
-  This script allows the admin to :
-  - edit the user information
-  - activate / deactivate a user account
-
-  ==============================================================================
+/**
+ * @file edituser.php
+ * @brief edit user info
  */
 
 $require_usermanage_user = TRUE;
@@ -56,20 +46,19 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=expires_at]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#id_expires_at').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
@@ -223,7 +212,7 @@ if ($u) {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         $head_content .= $js;
         $tool_content .= $html;
-        $tool_content .= "\n</td></tr>
+        $tool_content .= "</td></tr>
         <tr>
           <th class='left'>$langProperty:</th>
           <td>";
@@ -233,16 +222,24 @@ if ($u) {
             $tool_content .= selection(array(USER_TEACHER => $langTeacher,
                 USER_STUDENT => $langStudent), 'newstatus', intval($info->status));
         }
+           //<input type='text' name='expires_at' value='" . datetime_remove_seconds($info->expires_at) . "'>
         $tool_content .= "</td>";
+        $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);        
         $tool_content .= "
         <tr>
           <th class='left'>$langRegistrationDate:</th>
-          <td>" . datetime_remove_seconds($info->registered_at) . "</td>
+          <td>" . $reg_date->format("d-m-Y H:i") . "</td>
         </tr>
         <tr>
          <th class='left'>$langExpirationDate: </th>
          <td>
-             <input type='text' name='expires_at' value='" . datetime_remove_seconds($info->expires_at) . "'>
+         <div class='input-append date form-group' id='id_expires_at' data-date='" . $info->expires_at . "' data-date-format='dd-mm-yyyy'>
+        <div class='col-xs-11'>        
+            <input name='expires_at' type='text' value='$info->expires_at'>
+        </div>
+        <span class='add-on'><i class='fa fa-times'></i></span>
+        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>          
          </td></tr>
         <tr>
           <th>$langUserID: </th>
@@ -310,7 +307,7 @@ if ($u) {
                         $tool_content .= $langVisitor;
                     }
                     $tool_content .= "</td><td align='center'>" .
-                            icon('cunregister', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>\n";
+                            icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>\n";
                 }
                 $k++;
             }
@@ -334,8 +331,10 @@ if ($u) {
         $am = isset($_POST['am']) ? $_POST['am'] : '';
         $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
-        $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
-        $expires_at = isset($_POST['expires_at']) ? $_POST['expires_at'] : '';
+        $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';        
+        $expires_at = isset($_POST['expires_at']) ? $_POST['expires_at'] : '';          
+        $user_expires_at = DateTime::createFromFormat("d-m-Y H:i", $expires_at);
+        $date_expires_at = $user_expires_at->format("Y-m-d H:i:s");        
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
         $user_exist = FALSE;
         // check if username is free
@@ -361,7 +360,8 @@ if ($u) {
             draw($tool_content, 3, null, $head_content);
             exit();
         }
-        if ($registered_at > $expires_at) {
+        
+        if ($registered_at > $date_expires_at) {            
             $tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br />
                     <a href='edituser.php?u=$u'>$langAgain</a></b><br />";
         } else {
@@ -388,9 +388,8 @@ if ($u) {
                         validateNode($depId, true);
                     }
                 }
-            }
+            }                        
             $user->refresh(intval($u), $departments);
-
             $qry = Database::get()->query("UPDATE user SET surname = ?s,
                                     givenname = ?s,
                                     username = ?s,
@@ -401,7 +400,7 @@ if ($u) {
                                     am = ?s,
                                     verified_mail = ?d,
                                     whitelist = ?s
-                          WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
+                          WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $date_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             if ($qry->affectedRows > 0) {
                     $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";                
             } else {                                                

@@ -25,7 +25,6 @@
  * @brief group editing
  *
  */
-
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -41,20 +40,13 @@ initialize_group_info($group_id);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => q($group_name));
 
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery.multiselect.min.js');
-$head_content .= "<script type='text/javascript'>$(document).ready(function () {
-        $('#select-tutor').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
-        });
-        $('<input type=hidden name=jsCheck value=1>').appendTo('form[name=groupedit]');
-});</script>
-<link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
-
+load_js('select2');
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#select-tutor').select2();              
+    });
+    </script>
+";
 if (!($is_editor or $is_tutor)) {
     header('Location: group_space.php?course=' . $course_code . '&group_id=' . $group_id);
     exit;
@@ -126,7 +118,7 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
-    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>\n";
+    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
                                                               WHERE group_id = ?d AND
@@ -177,7 +169,7 @@ if ($multi_reg) {
 $tool_content_not_Member = '';
 foreach ($resultNotMember as $myNotMember) {
     $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
-            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am)? q(" ($myNotMember->am)"):"") ."</option>";
+            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
 }
 
 $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
@@ -197,12 +189,18 @@ if (!empty($message)) {
     $tool_content .= $message;
 }
 
-$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='group_space.php?course=$course_code&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
-        ($is_editor ? "<li><a href='../user/?course=$course_code'>$langAddTutors</a></li>" : '') . "</ul></div>";
-
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langGroupThisSpace,
+                'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
+                'icon' => 'fa-users',
+                'level' => 'primary-label'),
+            array('title' => $langAddTutors,
+                'url' => "../user/?course=$course_code",
+                'icon' => 'fa-folder',
+                'level' => 'primary'),
+        )) .
+        "</div>";
 
 $tool_content .="
   <form name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">

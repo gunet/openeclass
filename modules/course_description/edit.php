@@ -59,11 +59,13 @@ foreach ($q as $type) {
     }
     $types[$type->id] = $title;
 }
-$tool_content .= "<div id='operations_container'>
-    <ul id='opslist'>
-          <li><a href='index.php?course=$course_code'>$langBack</a></li>
-    </ul>
-  </div>";
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) .
+        "</div>";
 
 $tool_content .= "<form method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
@@ -87,8 +89,6 @@ $tool_content .= "
     <tr>
         <td>&nbsp;</td>
         <td class='right'>
-            <a href='index.php?course=$course_code'>" . q($langBackAndForget) . "</a>
-            &nbsp;&nbsp;
             <input class='Login' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "' />
         </td>
     </tr>
@@ -97,7 +97,6 @@ $tool_content .= "
   </form>";
 
 
-load_js('jquery');
 $head_content .= <<<hCont
 <script type="text/javascript">
 /* <![CDATA[ */

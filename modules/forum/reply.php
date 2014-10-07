@@ -72,7 +72,7 @@ $group_id = init_forum_group_info($forum_id);
 $nameTools = $langReply;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
-$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' =>  q($topic_title));
+$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_post_ok) {
     $tool_content .= $langErrorTopicSelect;
@@ -168,13 +168,15 @@ if (isset($_POST['submit'])) {
     exit;
 } else {
     // Topic review
-    $tool_content .= "
-        <div id='operations_container'>
-            <ul id='opslist'>
-              <li><a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
-              <li><a href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langBack</a></li>
-            </ul>
-        </div>";
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'),
+                array('title' => $langTopicReview,
+                    'url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id",
+                    'icon' => 'fa-eye',
+                    'level' => 'primary')));
 
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
 	<input type='hidden' name='parent_post' value='$parent_post'>

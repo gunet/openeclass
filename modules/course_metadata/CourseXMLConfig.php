@@ -249,9 +249,9 @@ class CourseXMLConfig {
      * @var array
      */
     public static $breakAccordionStartFields = array(
-        'course_code_el',
-        'course_coTeaching',
-        'course_yearOfStudy'
+        'course_code_el' => '1',
+        'course_coTeaching' => '2',
+        'course_yearOfStudy' => '3'
     );
 
     /**

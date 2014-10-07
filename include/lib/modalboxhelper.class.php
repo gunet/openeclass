@@ -98,10 +98,8 @@ class ModalBoxHelper {
         if (file_exists(self::getShadowboxDir()))
             load_js('shadowbox', $shadowbox_init);
         else if (file_exists(self::getFancybox2Dir())) {
-            load_js('jquery');
             load_js('fancybox2', $fancybox2_init);
         } else if (file_exists(self::getColorboxDir())) {
-            load_js('jquery');
             load_js('colorbox', $colorbox_init);
         }
     }

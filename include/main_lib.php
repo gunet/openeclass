@@ -152,8 +152,8 @@ function js_escape($s) {
 }
 
 // Include a JavaScript file from the main js directory
-function load_js($file, $init = '') {
-    global $head_content, $urlAppend, $theme;
+function load_js($file, $init='') {
+    global $head_content, $urlAppend, $theme, $theme_settings, $language;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -162,53 +162,73 @@ function load_js($file, $init = '') {
         $loaded[$file] = true;
     }
 
-    if ($file == 'jquery') {
-        $file = 'jquery-1.10.2.min.js';
-    } elseif ($file == 'jquery-ui') {
-        if ($theme == 'modern' || $theme == 'ocean') {
-            $uiTheme = 'redmond';
-        } else {
-            $uiTheme = 'smoothness';
+    // Load file only if not provided by template
+    if (!(isset($theme_settings['js_loaded']) and
+          in_array($file, $theme_settings['js_loaded']))) {
+        if ($file == 'jstree') {
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
+            $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'jquery-ui') {
+            if ($theme == 'modern' || $theme == 'ocean') {
+                $uiTheme = 'redmond';
+            } else {
+                $uiTheme = 'lightness';
+            }
+           
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui.1.11.1.min.css'>\n";
+            $file = 'jquery-ui-1.11.1.custom.min.js';
+           
+        } elseif ($file == 'shadowbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
+            $file = 'shadowbox/shadowbox.js';
+        } elseif ($file == 'fancybox2') {
+            $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
+            $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
+        } elseif ($file == 'colorbox') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
+            $file = 'colorbox/jquery.colorbox.min.js';
+        } elseif ($file == 'flot') {
+            $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+            $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
+            $file = 'flot/jquery.flot.categories.min.js';
+        } elseif ($file == 'slick') {
+                $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
+                $file = 'slick-master/slick/slick.min.js';
+        } elseif ($file == 'datatables') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
+            $file = 'datatables/media/js/jquery.dataTables.min.js';     
+        } elseif ($file == 'datatables_bootstrap') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/dataTables.bootstrap.css' />";            
+            $file = 'datatables/media/js/dataTables.bootstrap.js';                
+        } elseif ($file == 'datatables_filtering_delay') {
+                $file = 'datatables/media/js/jquery.dataTables_delay.js';
+        } elseif ($file == 'tagsinput') {
+            $file = 'taginput/jquery.tagsinput.min.js';
+        } elseif ($file == 'RateIt') {
+            $file = 'jquery.rateit.min.js';
+        } elseif ($file == 'select2') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/select2-3.5.1/select2-bootstrap.css'>";
+            $file = 'select2-3.5.1/select2.min.js';
+        } elseif ($file == 'bootstrap-datetimepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'>";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'></script>\n";
+            
+            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+        } elseif ($file == 'bootstrap-timepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-timepicker/css/bootstrap-timepicker.min.css'>";           
+            $file = "bootstrap-timepicker/js/bootstrap-timepicker.min.js";
+        } elseif ($file == 'bootstrap-datepicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-datepicker/css/datepicker3.css'>";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datepicker/js/bootstrap-datepicker.js'></script>\n";
+            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+        }         
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
+        if ($file == 'jquery-1.10.2.min.js') {
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         }
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.9.2.custom.min.css'>\n";
-        $file = 'jquery-ui-1.9.2.custom.min.js';
-    } elseif ($file == 'jquery-multiselect') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
-        $file = 'jquery.multiselect.min.js';
-    } elseif ($file == 'jstree') {
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
-        $file = 'jstree/jquery.jstree.min.js';
-    } elseif ($file == 'shadowbox') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
-        $file = 'shadowbox/shadowbox.js';
-    } elseif ($file == 'fancybox2') {
-        $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
-        $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
-    } elseif ($file == 'colorbox') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
-        $file = 'colorbox/jquery.colorbox.min.js';
-    } elseif ($file == 'flot') {
-        $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
-        $file = 'flot/jquery.flot.categories.min.js';
-    } elseif ($file == 'slick') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/slick-master/slick/slick.css'>";
-            $file = 'slick-master/slick/slick.min.js';
-    } elseif ($file == 'datatables') {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/datatables/media/css/jquery.dataTables.css' />";            
-        $file = 'datatables/media/js/jquery.dataTables.min.js';                
-    } elseif ($file == 'datatables_filtering_delay') {
-            $file = 'datatables/media/js/jquery.dataTables_delay.js';
-    } elseif ($file == 'tagsinput') {
-        $file = 'taginput/jquery.tagsinput.min.js';
-    } elseif ($file == 'RateIt') {
-        $file = 'jquery.rateit.min.js';
-    }
-    $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-    if ($file == 'jquery-1.10.2.min.js') {
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
     }
 
     if (strlen($init) > 0) {
@@ -268,7 +288,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
     } else {
         $class_str = "";
     }
-    
+
     $token = token_generate($user->id, true);
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
             q($user->givenname) . " " .  q($user->surname) . "</a>" .
@@ -323,29 +343,26 @@ function uid_to_am($uid) {
 }
 
 /**
- * @brief only for http://eclass.uoa.gr  
- * do we need this ???
-  Show a selection box with division of departments.
-  The function returns a value( a formatted select box with division of departments)
-  and their values as keys in the array/select box
- * @param type $department_value the predefined/selected department value
- * @return int string (a formatted select box)
+ * @brief Return the URL for a user profile image
+ * @param int $uid user id
+ * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
+ * @return string
  */
-function list_divisions($department_value) {
-     
-    $div = Database::get()->queryArray("SELECT id, name FROM division WHERE faculte_id = ?d ORDER BY name", $department_value);
-    if ($div) {
-        $divisions_select = "";
-        $divisions = array();
-        foreach ($div as $row) {
-            $id = $row->id;
-            $name = $row->name;
-            $divisions[$id] = $name;
+function user_icon($uid, $size=null) {
+    global $themeimg, $urlAppend;
+
+    if (!$size) {
+        $size = IMAGESIZE_SMALL;
+    }
+    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
+    if ($user) {
+        if ($user->has_icon) {
+            return "${urlAppend}courses/userimg/${uid}_$size.jpg";
+        } else {
+            return "$themeimg/default_$size.jpg";
         }
-        $divisions_select = selection($divisions, "division");
-        return $divisions_select;
     } else {
-        return 0;
+        return '';
     }
 }
 
@@ -1010,14 +1027,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1101,7 +1118,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本�',
+    'jp' => '日本語',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1373,14 +1390,6 @@ function delete_course($cid) {
                          (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
-	Database::get()->query("DELETE forum_post FROM forum_post INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
-                            INNER JOIN forum ON forum_topic.forum_id = forum.id
-                            WHERE forum.course_id = ?d", $cid);
-    Database::get()->query("DELETE forum_topic FROM forum_topic INNER JOIN forum ON forum_topic.forum_id = forum.id
-                            WHERE forum.course_id = ?d", $cid);    
-    Database::get()->query("DELETE FROM forum_category WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM forum_user_stats WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
@@ -1393,15 +1402,6 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
-                            WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
-    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
-                            WHERE `rating`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
-    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `blog_post` ON `rating_cache`.`rid` = `blog_post`.`id`
-                            WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
-    Database::get()->query("DELETE FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
-    Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
-    Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -2135,21 +2135,17 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $attrs = null, $format = 'png', $link_attrs = '') {
+function icon($name, $title = null, $link = null, $link_attrs = '') {
     global $themeimg;
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "alt='$title' title='$title'";
+        $extra = "title='$title'";
     } else {
-        $extra = "alt=''";
+        $extra = '';
     }
 
-    if (isset($attrs)) {
-        $extra .= ' ' . $attrs;
-    }
-
-    $img = "<img src='$themeimg/$name.$format' $extra>";
+    $img = "<i class='fa $name' $extra></i>";
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {
@@ -2612,4 +2608,139 @@ function forbidden($path) {
     htmlspecialchars($path),
     '".</p></body></html>';
     exit;
+}
+
+
+/**
+ * @brief returns HTML for an action bar
+ * @param array $options options for each entry in bar
+ * 
+ * Each item in array is another array of the form:
+ * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'level' => 'primary')
+ * level is optional and can be 'primary' for primary entries or unset
+ */
+function action_bar($options) {
+    global $langConfirmDelete, $langCancel, $langDelete;
+    $out_primary = $out_secondary = array();
+
+    foreach (array_reverse($options) as $option) {
+        // skip items with show=false
+        if (isset($option['show']) and !$option['show']) {
+            continue;
+        }
+        if (isset($option['class'])) {
+            $class = " class='$option[class]'";
+        } else {
+            $class = '';
+        }
+        $title = q($option['title']);
+        $level = isset($option['level'])? $option['level']: 'secondary';
+        if (isset($option['confirm'])) {
+            $title_conf = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
+            $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $confirm_extra = " data-title='$title_conf' data-message='" .
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
+            $confirm_modal_class = ' confirmAction';
+            $form_begin = "<form method=post action='$option[url]'>";
+            $form_end = '</form>';
+            $href = '';
+        } else {
+            $confirm_extra = $confirm_modal_class = $form_begin = $form_end = '';
+            $href = " href='" . $option['url'] . "'";
+        }
+        if (!isset($option['button-class'])) {
+            $button_class = 'btn-default';
+        } else {
+            $button_class = $option['button-class'];
+        }
+        if ($level == 'primary-label') {
+            array_unshift($out_primary,
+                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'>" .
+                "<i class='fa $option[icon] space-after-icon'></i>" .
+                "<span class='hidden-xs'>$title</span></a>$form_end</li>");
+        } elseif ($level == 'primary') {
+            array_unshift($out_primary,
+                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'>" .
+                "<i class='fa $option[icon]'></i></a>$form_end</li>");
+        } else {
+            array_unshift($out_secondary,
+                    "<li$class>$form_begin<a$confirm_extra  class='btn $button_class$confirm_modal_class'" . $href .
+                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                    " title='$title'>" .
+                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
+        }
+    }
+    $out = "<ul class='list-inline'>";
+    if (count($out_primary)) {
+        $out .= implode('', $out_primary);
+    }
+    if (count($out_secondary)) {
+        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
+    }
+    $out .= "</ul>";
+    if (count($out_secondary)) {
+        $out .= "<ul class='list-inline expandable' style=\"float:right\">" . implode('', $out_secondary) . "</ul>";
+    }
+    if ($out) {
+        return "<div class='row'>" .
+             "<div class='col-sm-12 clearfix'>" .
+             "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
+             $out . "</div></div></div>";
+    } else {
+        return '';
+    }
+}
+
+/**
+ * @brief returns HTML for an action button
+ * @param array $options options for each entry in the button
+ * 
+ * Each item in array is another array of the form:
+ * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
+ * 
+ */
+function action_button($options) {
+    global $langConfirmDelete, $langCancel, $langDelete;
+    $out = '';
+    foreach (array_reverse($options) as $option) {
+        // skip items with show=false
+        if (isset($option['show']) and !$option['show']) {
+            continue;
+        }
+        if (isset($option['class'])) {
+            $class = ' ' . $option['class'];
+        } else {
+            $class = '';
+        }
+        $icon_class = '';
+        if (isset($option['icon-class'])) {
+            $icon_class .= 'class="' . $option['icon-class'] . '"';
+        }
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }
+        if (isset($option['confirm'])) {
+            $title = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
+            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $icon_class .= " class='confirmAction' data-title='$title' data-message='" .
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+            $form_begin = "<form method=post action='$option[url]'>";
+            $form_end = '</form>';
+            $url = '#';
+        } else {
+            $confirm_extra = $form_begin = $form_end = '';
+            $url = isset($option['url'])? $option['url']: '#';
+        }
+        $out .= "<div class='opt-btn-more-tool tool-btn$class'>" . $form_begin .
+            icon($option['icon'], $option['title'], $url, $icon_class ) .
+            $form_end . '</div>';
+    }
+    return '<div class="opt-btn-wrapper">' .
+        '<div class="opt-btn-more-wrapper">' .
+        $out .
+        '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>';
 }

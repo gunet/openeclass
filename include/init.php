@@ -178,12 +178,16 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
 if (!isset($_SESSION['theme'])) {
     $_SESSION['theme'] = get_config('theme');
-    }
+}
 if (empty($_SESSION['theme']) or !is_readable("template/$_SESSION[theme]/theme.html")) {
-    $_SESSION['theme'] = 'classic';
+    $_SESSION['theme'] = 'bootstrap';
 }
 $theme = $_SESSION['theme'];
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
+if (file_exists("template/$theme/settings.php")) {
+    require_once "template/$theme/settings.php";
+}
+
 if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
     $errorMessagePath = "../../";
@@ -452,9 +456,8 @@ if (isset($require_editor) and $require_editor) {
 if (isset($_SESSION['student_view'])) {
     if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
         $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
-        $is_course_admin = false;
         $saved_is_editor = $is_editor;
-        $is_editor = false;
+        $is_admin = $is_editor = $is_course_admin = false;
     } else {
         unset($_SESSION['student_view']);
     }

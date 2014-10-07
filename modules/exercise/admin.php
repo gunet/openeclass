@@ -27,14 +27,10 @@ require_once 'exercise.lib.php';
 
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
+
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
-load_js('jquery');
-load_js('jquery-ui');
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content .= $jscalendar->get_load_files_code();
 ModalBoxHelper::loadModalBox();
 
 $nameTools = $langExercices;
@@ -72,21 +68,6 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);   
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
-}
-// if cancelling an exercise
-if (isset($_POST['cancelExercise'])) {
-    // goes back to the exercise list
-    redirect_to_home_page("modules/exercise/index.php?course=$course_code");
-}
-
-// if cancelling question creation/modification or cancelling answer creation/modification
-if (isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
-    // goes back to the edit exercise or question pool
-    if (isset($exerciseId)) {
-        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
-    } else {
-        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
-    }
 }
 
 // intializes the Question object
@@ -179,23 +160,3 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
 }
 
 draw($tool_content, 2, null, $head_content);
-
-// -----------------------------------------------
-// function for displaying jscalendar
-// -----------------------------------------------
-function jscal_html($name, $u_date) {
-
-    global $jscalendar;
-    if (!$u_date) {
-        $u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
-    }
-
-    $cal = $jscalendar->make_input_field(
-            array('showsTime' => true,
-        'showOthers' => true,
-        'ifFormat' => '%Y-%m-%d %H:%M'), array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
-        'name' => $name,
-        'value' => $u_date));
-
-    return $cal;
-}

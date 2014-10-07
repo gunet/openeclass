@@ -1,0 +1,86 @@
+/* 
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0926a
+================================================================
+*/
+/* COLORS ---------------------------------------------------------------------- */
+/* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
+/* MIXINS ------------------------------------------------------------------------------- */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
+/* line 114, global.scss */
+.transition {
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+
+@-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 121, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 122, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-moz-keyframes NEW-ITEM-FX {
+  /* line 128, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 129, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 130, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-o-keyframes NEW-ITEM-FX {
+  /* line 136, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 137, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 138, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@keyframes NEW-ITEM-FX {
+  /* line 144, global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 145, global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 146, global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}

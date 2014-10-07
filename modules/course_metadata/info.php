@@ -35,24 +35,7 @@ if (!get_config('course_metadata') || !file_exists(CourseXMLConfig::getCourseXML
 $xml = CourseXMLElement::init($course_id, $course_code);
 $tool_content .= $xml->asDiv();
 
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-multiselect');
 $head_content .= <<<EOF
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-    $(document).ready(function(){
-        $( ".cmetaaccordion" ).accordion({
-            collapsible: true,
-            active: false
-        });
-        
-        $( ".tabs" ).tabs();
-    });
-
-/* ]]> */
-</script>
 <style type="text/css">
 .ui-widget {
     font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;

@@ -35,8 +35,6 @@ require_once 'restorehelper.class.php';
 $treeObj = new Hierarchy();
 $courseObj = new Course();
 
-load_js('jquery');
-load_js('jquery-ui');
 load_js('jstree');
 
 list($js, $html) = $treeObj->buildCourseNodePicker();

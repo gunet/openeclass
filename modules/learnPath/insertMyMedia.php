@@ -155,10 +155,12 @@ if (isset($dialogBox) && $dialogBox != "") {
 }
 
 $tool_content .= showmedia();
-
-$tool_content .= "
-    <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\">$langBackToLPAdmin</a>";
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 draw($tool_content, 2, null, $head_content);
 
 function showmedia() {

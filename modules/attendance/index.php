@@ -35,20 +35,19 @@ $nameTools = $langAttendance;
 
 //Datepicker
 load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
-        });
-    var oTable = $('#users_table{$course_id}').DataTable ({
+    $('#date').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
+    });
+    var oTable = $('#users_table{$course_id}').dataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
@@ -113,23 +112,35 @@ if ($attendance) {
 if ($is_editor) {  
 
     // TOP MENU
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if(isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAttendanceManagement</a></li>";
-    }
-    if(!isset($_GET['editUsers'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langAdminUsers</a></li>";
-    }
-    if(!isset($_GET['attendanceBook'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
-    }
-    if(!isset($_GET['addActivity'])) {
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langAttendanceAddActivity</a></li>";
-    }
-    if(!isset($_GET['statsAttendance'])){
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1'>$langStat</a></li>";
-    }
-    $tool_content .= "</ul></div>";
+    $tool_content .= "<div id='operations_container'>" .
+            action_bar(array(
+                array('title' => $langAttendanceManagement,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-check-square-o',
+                    'level' => 'primary',
+                    'show' => isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['attendanceBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsAttendance'])),
+                array('title' => $langAdminUsers,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                    'icon' => 'fa-users',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['editUsers'])),
+                array('title' => $langAttendanceBook,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
+                    'icon' => 'fa-pencil',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['attendanceBook'])),
+                array('title' => $langAttendanceAddActivity,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['addActivity'])),
+                array('title' => $langStat,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsAttendance=1",
+                    'icon' => 'fa-area-chart',
+                    'level' => 'primary',
+                    'show' => !isset($_GET['statsAttendance'])),
+            )) .
+            "</div>";
 
     //FLAG: flag to show the activities
     $showAttendanceActivities = 1;       
@@ -175,7 +186,8 @@ if ($is_editor) {
             $titleToModify = $mofifyActivity->title;
             $contentToModify = $mofifyActivity->description;
             $attendanceActivityToModify = $id;
-            $date = $mofifyActivity->date;
+            $actDate_obj = DateTime::createFromFormat('Y-m-d H:i:s',$mofifyActivity->date);
+            $date = $actDate_obj->format('d-m-Y H:i');            
             $module_auto_id = $mofifyActivity->module_auto_id;
             $auto = $mofifyActivity->auto;
 
@@ -192,7 +204,7 @@ if ($is_editor) {
             </tr>
             <tr><th>$langAttendanceActivityDate:</th></tr>
             <tr>
-              <td><input type='text' name='date' value='" . @datetime_remove_seconds($date) . "'></td>
+              <td><input type='text' name='date' id='date' value='$date'></td>
             </tr>
             <tr><th>$langDescription:</th></tr>
             <tr>
@@ -264,13 +276,14 @@ if ($is_editor) {
     //EDIT DB: add or edit activity to attendance module (edit concerns and course automatic activities)
     elseif(isset($_POST['submitAttendanceActivity'])){
 
-        if (!ctype_alnum($_POST['actTitle'])) {
+        if (ctype_alnum($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];
         } else {
             $actTitle = "";
         }
         $actDesc = purify($_POST['actDesc']);
-        $actDate = $_POST['date'];
+        $actDate_obj = DateTime::createFromFormat('d-m-Y H:i',$_POST['date']);
+        $actDate = $actDate_obj->format('Y-m-d H:i:s');        
         if (isset($_POST['auto'])) {
             $auto = intval($_POST['auto']);
         } else {
@@ -547,7 +560,7 @@ if ($is_editor) {
                         <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
-                        <td class='center'>". icon('edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"). "</td>
+                        <td class='center'>". icon('fa-edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"). "</td>
                     </tr>";
             }
 
@@ -654,7 +667,7 @@ if ($is_editor) {
                                     $tool_content .= "</td>";
 
                                     $tool_content .= "<td class='center'>". userAttendTotal($attendance_id, $myrow->userID). "/" . $attendance_limit . "</td>";
-                                    $tool_content .= "<td class='center'>". icon('edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$myrow->userID"). "</td>";
+                                    $tool_content .= "<td class='center'>". icon('fa-edit', $langEdit, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$myrow->userID"). "</td>";
                                     $i++;
                                 }, 
                         $limitDate, $course_id, USER_STUDENT, $order_sql);
@@ -841,12 +854,18 @@ if ($is_editor) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
 
-                $tool_content .= "
-                <td width='70' class='right'>
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
-                      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirm('$langSureToDelAnnounce');\">
-                      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;</td>";
+                $tool_content .= "<td width='70' class='right'>" .
+                        action_button(array(
+                            array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id",
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                'class' => 'delete',
+                                'confirm' => $langSureToDelAnnounce,
+                                'icon' => 'fa-times')
+                        )) .
+                        "</td>";
                 $k++;
             } // end of while
         }
@@ -891,7 +910,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1")."&nbsp;";
                 $k++;         
             }
             $tool_content .= "</table></fieldset>";
@@ -939,7 +958,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToAttendance->id&amp;type=2")."&nbsp;";                     
+                $tool_content .= "<td width='70' class='center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToAttendance->id&amp;type=2")."&nbsp;";                     
                 $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
@@ -1048,11 +1067,11 @@ if ($is_editor) {
             $tool_content .= "<td width='70' class='center'>";
                     
             if ($userAttend) {
-                $tool_content .= icon('tick', $langAttendanceΑbsencesYes); 
+                $tool_content .= icon('fa-check-square-o', $langAttendanceΑbsencesYes); 
             } elseif($announce->date > date("Y-m-d")) {
                 $tool_content .= "-";
             } else {
-                $tool_content .= icon('delete', $langAttendanceΑbsencesΝο);
+                $tool_content .= icon('fa-times', $langAttendanceΑbsencesΝο);
             }
             $tool_content .= "</td>";            
             $k++;
