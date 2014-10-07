@@ -1254,7 +1254,7 @@ if ($doc_count == 0) {
             }
             if (!$is_in_tinymce) {
                 if ($can_upload) {
-                    $tool_content .= "<td class='toolbox'>";
+                    $tool_content .= "<td class='option-btn-cell'>";
 
                     $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
                     $tool_content .= action_button(array(

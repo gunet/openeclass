@@ -79,7 +79,7 @@ function showlinksofcategory($catid) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
         $tool_content .= "</td>";
-        $tool_content .= "<td width='45'>";
+        $tool_content .= "<td class='option-btn-cell'>";
         if ($is_editor && !$is_in_tinymce) {            
             $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
             if (isset($category)) {

@@ -266,7 +266,7 @@ if (count($resultcategories) > 0) {
             } else {
                 $tool_content .= "</th>";
             }
-            $tool_content .= "<td width='45'>";
+            $tool_content .= "<td class='option-btn-cell'>";
             if ($is_editor && !$is_in_tinymce) {
                 showcategoryadmintools($myrow->id);
             } else {
@@ -286,7 +286,7 @@ if (count($resultcategories) > 0) {
             } else {
                 $tool_content .= "</th>";
             }
-            $tool_content .= "<td width='45'>";
+            $tool_content .= "<td class='option-btn-cell'>";
             if ($is_editor && !$is_in_tinymce) {                
                 showcategoryadmintools($myrow->id);                
             } else {

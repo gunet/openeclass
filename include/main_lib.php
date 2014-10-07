@@ -2140,9 +2140,9 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "alt='$title' title='$title'";
+        $extra = "title='$title'";
     } else {
-        $extra = "alt=''";
+        $extra = '';
     }
 
     $img = "<i class='fa $name' $extra></i>";
