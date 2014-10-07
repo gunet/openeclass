@@ -70,7 +70,7 @@ if ($is_editor) {
 
     $comment_edit_link = "
 
-    <a class='btn-default-eclass place-at-toolbox color-green' title='...' href='info.php?course=$course_code&amp;edit=$id&amp;next=1'>
+    <a class='btn-default-eclass place-at-toolbox color-green' title='...' href='info.php?course=$course_code&amp;edit=$id&amp;next=1' rel='tooltip' data-toggle='tooltip' data-placement='top'>
       <i class='fa fa-edit'></i>
     </a>
     ";
@@ -84,10 +84,10 @@ if ($is_editor) {
     <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
       
 
-      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
+      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...'>
         <i class='fa fa-paste space-after-icon'></i>$langAdd
       </a>
-      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertDoc' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...'>
+      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertDoc' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...'>
         <i class='fa fa-file-o space-after-icon'></i>$langAdd
       </a>
       
@@ -102,47 +102,47 @@ if ($is_editor) {
           $langAdd 
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-file-text-o'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-link'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-random'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-video-camera'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-comment'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-book'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='down' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
@@ -292,17 +292,17 @@ $tool_content .= "
     
     <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
 
-    <a class='btn-default-eclass place-at-toolbox' title='Previous Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+    <a class='btn-default-eclass place-at-toolbox' title='Previous Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
       <i class='fa fa-arrow-left space-after-icon'></i>Previous Chapter*
     </a>    
 
-    <a class='btn-default-eclass place-at-toolbox' title='Select Chapter' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+    <a class='btn-default-eclass place-at-toolbox' title='Select Chapter' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
       <i class='fa fa-angle-down space-after-icon'></i>Select Chapter*
     </a>
 
     
 
-    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='down' href=''>
+    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
       Next Chapter*<i class='fa fa-arrow-right space-before-icon'></i>
     </a>
 

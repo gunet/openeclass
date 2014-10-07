@@ -1,6 +1,6 @@
 /* 
 ==========================================================
-    SASS for structure of eclass v3.0 - version 0.0926a 
+    SASS for structure of eclass v3.0 - version 0.01006a 
 ==========================================================
 */
 
@@ -28,6 +28,7 @@ body > .container{
 #leftnav{
 	background: $color-background;
   padding: 0;
+
 
 	.logo{
 		margin:2em 1em;
@@ -61,7 +62,7 @@ body > .container{
 			&:hover{
 				color: $color-hover;
 
-        @include transition(all 120ms linear);
+        @include transition(all $transition-time linear);
 			}
 		}
 
@@ -98,6 +99,8 @@ body > .container{
 				padding: 1em;
         text-align: center;
 
+        @include transition(all $transition-time linear);
+
         > span{
           font-size: 0.9em;
           margin-left: 0.5em;
@@ -111,7 +114,7 @@ body > .container{
 
           margin-left: 0px;
 
-          @include transition(all 120ms linear);
+          @include transition(all $transition-time linear);
         }
 
         &.active{
@@ -191,7 +194,7 @@ body > .container{
 					&:focus{
 						background: $color-hover;
 						color: white;
-            @include transition(all 120ms linear);							
+            @include transition(all $transition-time linear);							
 					}
 				}
 
@@ -282,7 +285,7 @@ body.sidebar-opened .toggle-sidebar
 
   @include user-select(none);
 
-  @include transition(all 120ms linear);
+  @include transition(all $transition-time linear);
 
   &:hover{
     //@include box-shadow(-8px 0px 17px -8px rgba(0,0,0,.3));
@@ -350,7 +353,7 @@ body.sidebar-opened .toggle-sidebar
       border: 1px solid #48586D;
       border-top-width: 0px;
 
-      @include transition(all 100ms linear);
+      @include transition(all $transition-time linear);
 
       //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
 
@@ -513,7 +516,7 @@ body.sidebar-opened .toggle-sidebar
       width: 200%;
       position: relative;
       height: 45px;
-      @include transition(margin-left 120ms linear);
+      @include transition(margin-left $transition-time linear);
 
       > div{        
         display: inline-block;
@@ -669,12 +672,12 @@ body.sidebar-opened .toggle-sidebar
         -ms-transform-origin: center center;
         transform-origin: center center;
 
-        @include transition(all 100ms linear);
+        @include transition(all $transition-time linear);
   }
   
   &.ui-state-active:after{
     @include transform(180deg);
-    @include transition(all 100ms linear);
+    @include transition(all $transition-time linear);
   }  
 }
 

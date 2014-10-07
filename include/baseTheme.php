@@ -295,14 +295,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $mod_activation = "
 
                     <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                        <i class='fa fa-minus-square title-icon title-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
+                        <i class='fa fa-minus-square tiny-icon tiny-icon-red' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
                     </a>";
                 } else {
                     $message = $langActivate;
                     $mod_activation = "
 
                     <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                        <i class='fa fa-check-square title-icon title-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
+                        <i class='fa fa-check-square tiny-icon tiny-icon-green' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
                     </a>";
                 }
             }
@@ -460,7 +460,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             <a href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
             onClick=\"window.open('" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
             return false;\">
-                <i class='fa fa-question-circle title-icon' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
+                <i class='fa fa-question-circle tiny-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
             </a>";
 
             $t->set_var('HELP_LINK_ICON', $help_link_icon);
@@ -473,8 +473,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('RSS_LINK_ICON', "
 
                 <a href='$urlAppend" . RSS . "'>
-                    <i class='fa fa-rss-square title-icon title-icon-rss'></i>
-                    <!--<img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />-->
+                    <i class='fa fa-rss-square tiny-icon tiny-icon-rss' rel='tooltip' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
                 </a>
 
 

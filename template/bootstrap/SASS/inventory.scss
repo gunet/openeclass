@@ -11,7 +11,7 @@
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 
 .delete-action {color:$color-red;}
-.delete-action:hover {background:$color-red!important; color:white!important; @include transition(all 150ms linear);}
+.delete-action:hover {background:$color-red!important; color:white!important; @include transition(all $transition-time linear);}
 
 .align-left {text-align: left;}
 .align-right {text-align: right;}
@@ -136,7 +136,7 @@ a
 
 
 
-/* Styles for headings --------------------------------------------------*/
+/* Styles for headings, hr and titles --------------------------------------------------*/
 h1
 {
   font-size:2em;
@@ -149,6 +149,7 @@ h1.page-title
   font-weight: 400!important;
   color: #333;
 }
+
 
 #main
 {
@@ -175,6 +176,13 @@ hr
   height: 1px;
   border: none;
   background: #eee;
+  margin-top: 0px;
+  margin-bottom:0px;
+}
+
+.descr_title
+{
+  float: right;
 }
 
 
@@ -205,41 +213,6 @@ img
   color:#555555;
   font-size:22px;
 
-  .title-icon
-  {
-    color:#dddddd;
-    font-size: 0.7em !important;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon:hover
-  {
-    color: $color-hover;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon-rss:hover
-  {
-    color: #FFBB4F !important;
-    text-decoration: none;
-    @include transition(all 150ms linear);
-  }
-
-  .title-icon-green:hover
-  {
-    color: $color-green !important;
-    text-decoration: none;
-    @include transition(all 150ms linear); 
-  }
-
-  .title-icon-red:hover
-  {
-    color: $color-red !important;
-    text-decoration: none;
-    @include transition(all 150ms linear); 
-  }
 
   a
   {
@@ -362,6 +335,54 @@ img
 
 
 
+/* tiny-icons actions--------------------------------------------------------------------------- */
+
+.tiny-icon
+{
+  color:#dddddd;
+  font-size: 15px !important;
+  text-decoration: none;
+  @include transition(all $transition-time linear);
+
+  .tiny-icon-text
+  {
+    font-size: 12px !important;
+  }
+}
+
+.tiny-icon:hover
+{
+  color: $color-hover;
+  text-decoration: none;
+  @include transition(all $transition-time linear);
+}
+
+.tiny-icon-rss:hover
+{
+  color: #FFBB4F !important;
+  text-decoration: none;
+  @include transition(all $transition-time linear);
+}
+
+.tiny-icon-green:hover
+{
+  color: $color-green !important;
+  text-decoration: none;
+  @include transition(all $transition-time linear); 
+}
+
+.tiny-icon-red:hover
+{
+  color: $color-red !important;
+  text-decoration: none;
+  @include transition(all $transition-time linear); 
+}
+
+
+
+
+
+
 /* TOOGLES -----------------------------------------------------------------------------*/
 .btn-toggle{
   padding: 0px;
@@ -387,7 +408,7 @@ img
   background:$color-hover;
   color: white;
   @include box-shadow(0px 0px 4px #000000);
-  @include transition(all 120ms linear);
+  @include transition(all $transition-time linear);
 }
 
 .btn-toggle span.on{
@@ -577,7 +598,7 @@ input.toggle[type=checkbox]:checked:after
     border-color: $color-hover;
     border-bottom-color: #3F87C1;
     color:white;
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
   &:active
@@ -587,7 +608,7 @@ input.toggle[type=checkbox]:checked:after
     border-bottom-color: #3F87C1!important;
     color:white!important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
 }
@@ -611,7 +632,7 @@ input.toggle[type=checkbox]:checked:after
     border-bottom-color: #3F87C1;
     color:white;
 
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
   &:active
@@ -621,7 +642,7 @@ input.toggle[type=checkbox]:checked:after
     border-bottom-color: #3F87C1!important;
     color:white!important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
 
   }
 
@@ -640,7 +661,7 @@ input.toggle[type=checkbox]:checked:after
     background:#E58080;
     text-decoration: none;
 
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
     
   }
 
@@ -650,7 +671,7 @@ input.toggle[type=checkbox]:checked:after
     outline: 0 !important;   
     border-bottom-color: #984B4B !important;
     @include box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
 }
@@ -737,7 +758,7 @@ color: #9C9C9C;
 background-color: #FFFFFF;
   content:attr(data-label);
 
-  @include transition(all 150ms linear);
+  @include transition(all $transition-time linear);
 }
 
 .btn-flippin:after {
@@ -877,7 +898,7 @@ ul.tablelist
     {
       background: $color-hover;
       color:white;
-      @include transition(all 150ms linear);
+      @include transition(all $transition-time linear);
     }
 
     .item-right-cols .options-content
@@ -889,7 +910,7 @@ ul.tablelist
       background:#333333;
       color:white;
 
-      @include transition(all 150ms linear);
+      @include transition(all $transition-time linear);
     }
 
     .item-options:hover .options-content
@@ -906,7 +927,7 @@ ul.tablelist
     {
       color:white;
       background: $color-hover;
-      @include transition(all 150ms linear);
+      @include transition(all $transition-time linear);
     }
 
     .text-title
@@ -936,7 +957,7 @@ ul.tablelist
   li.list-item:hover
   {
     background:#FCFCFC;
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
 
@@ -977,7 +998,7 @@ ul.tablelist
   .list-item:hover .side-header
   {
     color:#eee;
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
   .list-item .item-content
@@ -1050,7 +1071,7 @@ ul.tablelist
   {
     background: $color-hover;
     color:white;
-    @include transition(all 120ms linear);
+    @include transition(all $transition-time linear);
   }
 
 
@@ -1063,7 +1084,7 @@ ul.tablelist
     padding:0px;
     margin-right:-100%;
     background:#333333;
-    @include transition(all 150ms linear);
+    @include transition(all $transition-time linear);
   }
 
   .list-item .item-side .item-options:hover ul
@@ -1097,7 +1118,7 @@ ul.tablelist
   .list-item .item-options ul li:hover
   {
     background:$color-hover;
-    @include transition(all 120ms linear);
+    @include transition(all $transition-time linear);
   }
 }
 
@@ -1522,7 +1543,7 @@ $action-btn-sm-height: 48px;
 {
     background-color: $color-hover !important;
     color: white !important;
-    @include transition(all 120ms linear);
+    @include transition(all $transition-time linear);
 }
 .opt-btn-more-wrapper
 {
@@ -1562,14 +1583,14 @@ $action-btn-sm-height: 48px;
     color: white;
     background-color: $color-red;
 
-    @include transition(all 120ms linear);
+    @include transition(all $transition-time linear);
 }
 .tool-btn a:hover
 {
     color: white;
     background-color: $color-hover;
 
-    @include transition(all 120ms linear);
+    @include transition(all $transition-time linear);
 }
 
 /* Action Bar ------------------------------------------------------------------- */
