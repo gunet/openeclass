@@ -483,7 +483,6 @@ if ($course_license) {
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
-$opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $opencourses_level = "
@@ -510,10 +509,7 @@ if (isset($level) && !empty($level)) {
                 <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
             </td>
         </tr>
-    </table>
-
-
-        ";
+    </table>";
 }
 
 
@@ -640,7 +636,7 @@ if ($total_cunits > 0 || $is_editor) {
 }
 $tool_content .= "
 <div class='row'>";
-if (!$alter_layout){
+if (!$alter_layout) {
     $tool_content .= "
     <div class='col-md-8'>
         <span class='content-title'>$langCourseUnits</span>".
@@ -658,18 +654,21 @@ if (!$alter_layout){
     </div>";
 }
 
-$tool_content .= "
-    <div class='col-md-$cunits_sidebar_columns'>
-        
-        <div class='row'>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>${langOpenCourseShort}</h5>
-                <div class='panel padding'>
-                        $opencourses_level
-                </div>
+$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
+// display open course level if exist
+if (isset($level) && !empty($level)) {
+    $tool_content .= "
+    <div class='row'>
+        <div class='col-md-$cunits_sidebar_subcolumns'>
+            <h5 class='content-title'>$langOpenCourseShort</h5>
+            <div class='panel padding'>
+                    $opencourses_level
             </div>
         </div>
+    </div>";
+}
 
+$tool_content .= "
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langLicence</h5>
@@ -718,8 +717,7 @@ $tool_content .= "
   </tr>
   </table>
   <br />
-  $license_info_box
-  $opencourses_level
+  $license_info_box  
   <table class='tbl_courseid' width='200'>
   <tr class='title1'>
     <td class='title1'>$langTools</td>
