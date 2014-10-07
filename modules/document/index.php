@@ -501,7 +501,7 @@ if ($can_upload) {
    </div>
 </div>
 
-<div class='row'>
+<!--<div class='row'>
     <div class='col-md-12'>
         <div class='panel'>
             <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -517,7 +517,7 @@ if ($can_upload) {
             </form>
         </div>
     </div>
-</div>
+</div>-->
                 <br />\n";
     }
 

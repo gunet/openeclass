@@ -67,7 +67,6 @@ if ($can_upload) {
 <div class='row margin-top-fat'>
   <div class='col-md-12'>
 
-    <h5 class='content-title'>$langUpload</h5>
     <div class='panel padding-fat focused'>
 
     <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
@@ -78,7 +77,7 @@ if ($can_upload) {
       $fileinput
       
 
-      <hr/>
+      <hr class='margin-bottom-fat'/>
 
       <div class='form-group'>
         <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
@@ -221,7 +220,7 @@ if ($can_upload) {
 
 
 
-
+    <!--
     <div class='panel'>
 
 
@@ -342,7 +341,8 @@ if ($can_upload) {
 
     </form>
 
-    </div>
+    </div> -->
+
   </div>
 </div>";
 } else {
