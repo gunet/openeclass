@@ -192,6 +192,44 @@ if ($uid AND !isset($_GET['logout'])) {
     if (!get_config('dont_display_login_form')) {
         $tool_content .= "
 
+
+        <div class='row'>
+            <h1 class='login-heading'>Open eClass - Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης</h1>        
+            <div class='jumbotron jumbotron-login'>
+                <div class='row'>
+                    <div class='hidden-xs col-sm-7 col-md-7'>
+                        <img class='graphic' src='{%template_base%}/img/indexlogo.png'/>
+                    </div>
+                    <form class='login-form col-xs-12 col-sm-5 col-md-5 col-lg-4 pull-right'>
+                        <h2>Σύνδεση Χρήστη</h2>
+                        <div class='form-group'>
+                            <input autofocus type='email' class='col-xs-10 col-sm-10 col-md-10' id='inputEmail' placeholder='Όνομα χρήστη''><label class='col-xs-2 col-sm-2 col-md-2' for='inputEmail'><i class='fa fa-user'></i></label>
+                        </div>
+                        <div class='form-group'>
+                            <input type='password' class='col-xs-10 col-sm-10 col-md-10' id='inputPassword' placeholder='Κωδικός''><label class='col-xs-2 col-sm-2 col-md-2' for='inputPassword'><i class='fa fa-lock'></i></label>
+                        </div>
+                        <div class='login-settings row'>
+                            <div class='checkbox pull-left'>
+                              <label><input type='checkbox'><span>Θυμήσου με</span></label>
+                            </div>
+                            <div class='link pull-right'>
+                              <label><a href='#''>Ξεχάσατε το συνθηματικό σας;</a></label>
+                            </div>                          
+                        </div>
+                        <button type='submit' class='btn btn-login'>Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class='row'>
+                <div class='col-md-7 deleteThisClass'>COL-MD-8</div>
+                <div class='col-md-5 deleteThisClass'>COL-MD-4</div>
+        </div>
+
+
+
+
         <div class='col-md-12 jumbotron'>
                 
                 <form action='$urlSecure' method='post'>
