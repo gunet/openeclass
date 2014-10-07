@@ -69,15 +69,6 @@ if (isset($_GET['exerciseId'])) {
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
 }
-// if cancelling question creation/modification or cancelling answer creation/modification
-if (isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
-    // goes back to the edit exercise or question pool
-    if (isset($exerciseId)) {
-        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
-    } else {
-        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
-    }
-}
 
 // intializes the Question object
 if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
