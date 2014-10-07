@@ -105,28 +105,31 @@ if (isset($_GET['delete'])) {
             Database::get()->query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
     }
-    $tool_content .= "<p class='success'>$langEBookSectionsModified</p>";
+    $tool_content .= "<p class='alert-success'>$langEBookSectionsModified</p>";
 }
 
 $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
 
 if (!$info) {
-    $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
+    $tool_content .= "<p class='alert'>$langNoEBook</p>";
 } else {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
     $k = 0;
     list($paths, $files, $file_ids, $id_map) = find_html_files();
     // Form #1 - edit ebook title
-    $tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='document.php?course=$course_code&amp;ebook_id=$ebook_id'>$langFileAdmin</a></li>
-      </ul>
-    </div>
+    $tool_content .= action_bar(array(
+                    array('title' => $langFileAdmin,
+                          'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
+                          'icon' => 'fa-hdd-o',                          
+                          'level' => 'primary-label'),
+                    array('title' => $langBack,
+                          'url' => "index.php?course=$course_code",
+                          'icon' => 'fa-reply',
+                          'button-class' => 'btn-success',
+                         'level' => 'primary-label')
+                    ));    
 
-    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    <fieldset>
-    <legend>$langEBook</legend>
+    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>    
       <table width='100%' class='tbl_alt'>
       <tr>
         <th width='1' class='right'>$langTitle</th>
@@ -138,8 +141,7 @@ if (!$info) {
          <input name='title_submit' type='submit' value='$langModify' />
         </td>
       </tr>
-      </table>
-    </fieldset>
+      </table>    
     </form>";
 
     // Form #2 - edit sections
@@ -153,7 +155,7 @@ if (!$info) {
         <th width='1' class='right'>$langID</th>
         <th>$langTitle</th>
         <th width='75' class='center'>$langActions</th>
-      </tr>\n";
+      </tr>";
     $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = ?d
                        ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
@@ -178,24 +180,33 @@ if (!$info) {
         } else {
             $section_id = $qsid;
             $section_title = $qstitle;
-            $section_tools = "<a href='edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('" . js_escape(sprintf($langEBookSectionDelConfirm, $section->title)) . "')) return false;\"><img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>";
+            $section_tools = action_button(array(
+                                array('title' => $langModify,
+                                      'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid",
+                                      'icon' => 'fa-edit'),
+                                array('title' => $langDelete,
+                                      'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid",
+                                      'icon' => 'fa-times',
+                                      'class' => 'delete',
+                                      'confirm' => $langEBookSectionDelConfirm)
+            ));            
         }
         $class = odd_even($k);
         $tool_content .= "
-      <tr $class>
-        <td class='right'>$section_id</td>
-        <td>$section_title</td>
-        <td class='center'>$section_tools</td>
-      </tr>";
-        $k++;
+        <tr $class>
+          <td class='right'>$section_id</td>
+          <td>$section_title</td>
+          <td class='center'>$section_tools</td>
+        </tr>";
+          $k++;
     }
     if (!$section_editing) {
         $tool_content .= "
-      <tr>
-        <td><input type='text' size='2' name='new_section_id' /></td>
-        <td><input type='text' size='35' name='new_section_title' /></td>
-        <td class='center'><input type='submit' name='new_section_submit' value='$langAdd' /></td>
-      </tr>";
+        <tr>
+          <td><input type='text' size='2' name='new_section_id' /></td>
+          <td><input type='text' size='35' name='new_section_title' /></td>
+          <td class='center'><input type='submit' name='new_section_submit' value='$langAdd' /></td>
+        </tr>";
     }
     $tool_content .= "
       </table>
@@ -212,7 +223,7 @@ if (!$info) {
        <th>$langTitle</th>
        <th>$langSection</th>
        <th>$langSubsection</th>
-     </tr>\n";
+     </tr>";
     $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
                               ebook_section.id AS psid,
                               ebook_section.title AS section_title,
@@ -230,14 +241,14 @@ if (!$info) {
         $file_id = $r->file_id;
         $display_id = $r->sid . ',' . $r->ssid;
         $tool_content .= "
-     <tr$class>
-       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet'></td>
-       <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
-       <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
-       <td>" . selection($sections, "sid[$file_id]", $r->sid) . "</td>
-       <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
-           <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
-     </tr>\n";
+            <tr$class>
+              <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet'></td>
+              <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+              <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
+              <td>" . selection($sections, "sid[$file_id]", $r->sid) . "</td>
+              <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
+                  <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
+            </tr>";
         unset($files[$id_map[$file_id]]);
         $k++;
     }
@@ -247,13 +258,13 @@ if (!$info) {
         $file_id = $file_ids[$key];
         $title = get_html_title($basedir . $path);
         $tool_content .= "
-     <tr$class>
-       <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-       <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
-       <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-       <td>" . selection($sections, "sid[$file_id]") . "</td>
-       <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
-     </tr>\n";
+        <tr$class>
+          <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+          <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
+          <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+          <td>" . selection($sections, "sid[$file_id]") . "</td>
+          <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
+        </tr>";
         $k++;
     }
     $tool_content .= "
@@ -262,7 +273,7 @@ if (!$info) {
        <td><input type='submit' name='submit' value='$langSubmit' /></td>
      </table>
      </fieldset>
-     </form>\n";
+     </form>";
 }
 
 draw($tool_content, 2, null, $head_content);

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,15 +37,26 @@ $action_stats->record(MODULE_ID_EBOOK);
 $nameTools = $langEBook;
 
 if ($is_editor) {
-    $tool_content .= "
-   <div id='operations_container'>
-     <ul id='opslist'>
-       <li><a href='index.php?course=$course_code&amp;create=1'>$langCreate</a>
-     </ul>
-   </div>";
+    if (isset($_GET['create'])) {
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'button-class' => 'btn-success',
+                  'level' => 'primary-label')
+            ));        
+    } else {
+        $tool_content .= action_bar(array(
+            array('title' => $langCreate,
+                  'url' => "index.php?course=$course_code&amp;create=1",
+                  'icon' => 'fa-plus-circle',
+                  'button-class' => 'btn-success',
+                  'level' => 'primary-label')
+            ));
+    }
 
-    if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
-        $id = intval($_POST['id']);
+    if (isset($_REQUEST['delete']) or isset($_POST['delete_x'])) {
+        $id = $_REQUEST['delete'];
         $r = Database::get()->querySingle("SELECT title FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $id);
         if ($r) {
             $title = $r->title;
@@ -59,29 +70,25 @@ if ($is_editor) {
                                  subsystem = " . EBOOK . " AND
                                  subsystem_id = ?d AND
                                  course_id = ?d", $id, $course_id);
-            $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
+            $tool_content .= "<p class='alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
         }
     } elseif (isset($_GET['create'])) {
         $tool_content .= "
-   <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
-     <fieldset>
-     <legend>$langUpload</legend>
-
-     <table width='100%' class='tbl'>
-     <tr>
-       <th>$langTitle:</th>
-       <td><input type='text' name='title' size='53' /></td></tr>
-     <tr>
-       <th>$langZipFile:</th>
-       <td><input type='file' name='file' size='53' /></td>
-     </tr>
-     <tr>
-       <th>&nbsp;</th>
-       <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
-     </tr>
-     </table>
-     </fieldset>
-   </form>";
+        <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>          
+          <table width='100%' class='tbl'>
+          <tr>
+            <th>$langTitle:</th>
+            <td><input type='text' name='title' size='53' /></td></tr>
+          <tr>
+            <th>$langZipFile:</th>
+            <td><input type='file' name='file' size='53' /></td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
+          </tr>
+          </table>          
+        </form>";
     } elseif (isset($_GET['down'])) {
         move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
     } elseif (isset($_GET['up'])) {
@@ -107,70 +114,88 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q) {
-    $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
+    $tool_content .= "<p class='alert1'>$langNoEBook</p>";
 } else {
-    $tool_content .= "
-     <script type='text/javascript' src='../auth/sorttable.js'></script>
-     <table width='100%' class='sortable' id='t1'>
+    $tool_content .= "<div class='table-responsive'>";
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>
      <tr>
-       <th colspan='2'><div align='left'>$langEBook</div></th>" .
+       <th class = 'text-left'>$langEBook</th>" .
             ($is_editor ?
-                    "<th width='70' colspan='2' class='center'>$langActions</th>" :
-                    '') . "
-     </tr>\n";
+                    "<th width='70' class='text-center'>".icon('fa-gears')."</th>" :
+                    '<th>&nbsp;</th>') . "
+     </tr>";
 
     $k = 0;
     $num = count($q);
     foreach ($q as $r) {
-        $vis_class = $r->visible ? '' : 'invisible';
+        $vis_class = $r->visible ? '' : 'not_visible';
         if (is_null($r->sid)) {
             $title_link = q($r->title) . ' <i>(' . $langEBookNoSections . ')</i>';
         } else {
-            $title_link = "<a href='show.php/$course_code/$r->id/'>" .
-                    q($r->title) . "</a>";
+            $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
         $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
-        $tool_content .= "
-     <tr" . odd_even($k, $vis_class) . ">
-       <td width='16' valign='top'>
-          <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
-       <td>$title_link</td>" .
-                tools($r->id, $r->title, $k, $num, $r->visible) . "
-     </tr>\n";
+        $tool_content .= "<tr class = '$vis_class'>
+                <td>$title_link</td>
+                 <td>".
+                   tools($r->id, $k, $num, $r->visible) . 
+                "</td></tr>";
         $k++;
     }
-    $tool_content .= "
-     </table>\n";
+    $tool_content .= "</table>";
+    $tool_content .= "</div>";
 }
 
 draw($tool_content, 2, null, $head_content);
 
-function tools($id, $title, $k, $num, $vis) {
-    global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
-    $course_code, $themeimg, $langVisibility;
+
+/**
+ * @brief display action button
+ * @global type $is_editor
+ * @global type $langModify
+ * @global type $langDelete
+ * @global type $langMove
+ * @global type $langDown
+ * @global type $langUp
+ * @global type $langEBookDelConfirm
+ * @global type $course_code
+ * @global type $langVisibility
+ * @param type $id
+ * @param type $title
+ * @param type $k
+ * @param type $num
+ * @param type $vis
+ * @return string
+ */
+function tools($id, $k, $num, $vis) {
+    global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, 
+           $langEBookDelConfirm, $course_code, $langVisibility;
 
     if (!$is_editor) {
         return '';
-    } else {
-        $icon_vis = $vis ? 'visible.png' : 'invisible.png';
+    } else {        
         $num--;
-        return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>\n" .
-                "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$course_code&amp;id=$id'>" .
-                "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
-                "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
-                                         alt='$langDelete' title='$langDelete' name='delete' value='$id'
-                                         onclick=\"javascript:if(!confirm('" .
-                js_escape(sprintf($langEBookDelConfirm, $title)) . "')) return false;\" />" .
-                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id'>
-                           <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
-                        </form></td><td class='right' width='40'>" .
-                (($k < $num) ? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id'>
-                                      <img class='displayed' src='$themeimg/down.png'
-                                           title='$langMove $langDown' alt='$langMove $langDown' /></a>" :
-                        '') .
-                (($k > 0) ? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id'>
-                                   <img class='displayed' src='$themeimg/up.png'
-                                        title='$langMove $langUp' alt='$langMove $langUp' /></a>" :
-                        '') . "</td>\n";
+        $content = action_button(array(
+                    array('title' => $langModify,
+                          'url' => "edit.php?course=$course_code&amp;id=$id",
+                          'icon' => 'fa-edit'),
+                    array('title' => $langDelete,                          
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langEBookDelConfirm),
+                    array('title' => $langVisibility,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
+                          'icon' => $vis ? 'fa-eye' : 'fa-eye-slash'),
+                    array('title' => "$langMove $langDown",
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id",
+                          'icon' => 'fa-arrow-down',
+                          'show' => $k < $num),
+                    array('title' => "$langMove $langUp",
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id",
+                          'icon' => 'fa-arrow-up',
+                          'show' => $k > 0)
+        ));
+        return "$content";        
     }
 }
