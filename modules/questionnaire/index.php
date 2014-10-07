@@ -254,6 +254,7 @@ function printPolls() {
                             array(
                                 'title' => $langDelete,
                                 'icon' => 'fa-times',
+                                'class' => 'delete',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
                                 'confirm' => $langConfirmDelete                               
                             ),
