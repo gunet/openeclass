@@ -1752,7 +1752,7 @@ function show_assignments() {
         }
         $tool_content .= '</table></div>';
     } else {
-        $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";        
+        $tool_content .= "\n<div class='alert alert-warning'>$langNoAssign</div>";        
     }
 }
 

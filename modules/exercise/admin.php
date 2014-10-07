@@ -69,13 +69,6 @@ if (isset($_GET['exerciseId'])) {
     $objExercise->read($exerciseId);
     $nbrQuestions = $objExercise->selectNbrQuestions();
 }
-// if cancelling an exercise
-if (isset($_POST['cancelExercise'])) {
-    // goes back to the exercise list
-    unset($objExercise);
-    redirect_to_home_page("modules/exercise/index.php?course=$course_code");
-}
-
 // if cancelling question creation/modification or cancelling answer creation/modification
 if (isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
     // goes back to the edit exercise or question pool

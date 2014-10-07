@@ -100,20 +100,31 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (!empty($msgErr)) {
         $tool_content .= "<p class='caution'>$msgErr</p>\n";
     }
+
+    
+    if (isset($_GET['newQuestion'])){
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']);
+        $link_back = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
+        
+    } else {
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
+        $link_back = "admin.php?course=TMAPOST111".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
+    }
+    
+    
+    
+    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => isset($exerciseId)? "admin.php?course=$course_code&exerciseId=$exerciseId":"question_pool.php?course=$course_code",
+            'url' => $link_back,
             'icon' => 'fa-reply',
             'level' => 'primary-label'
         )
     ));
     
-    if (isset($_GET['newQuestion'])){
-        $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']) . "'>";
-    } else {
-        $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']) . "'>";
-    }
-    
+
+
+    $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
     $tool_content .= "
             <div class='form-group'>
                 <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
@@ -183,7 +194,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>
             <div class='col-sm-offset-2 col-sm-10'>            
                 <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
-                <input type='submit' class='btn btn-default' name='cancelQuestion' value='$langCancel'>      
+                <a href='$link_back' class='btn btn-default'>$langCancel</a>      
             </div>
           </fieldset>
 	</form>    
