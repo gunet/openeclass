@@ -735,7 +735,7 @@ function bbb_session_details() {
         if (!$is_editor) {
             $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
         }    
-        $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
+        $tool_content .= "<div class='row'><div class='col-md-12'><div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
                           <tr>
                               <th class = 'text-center'>$langTitle</th>
                               <th class = 'text-center'>$langNewBBBSessionDesc</th>
@@ -775,14 +775,14 @@ function bbb_session_details() {
                     <td class='text-center'>$type</td>
                     <td class='option-btn-cell'>".
                             action_button(array(
-                                array(  'title' => $langModify,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
-                                        'icon' => 'fa-edit'),
                                 array(  'title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                                         'icon' => 'fa-times',
                                         'class' => 'delete',
                                         'confirm' => $langConfirmDelete),
+                                array(  'title' => $langModify,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
+                                        'icon' => 'fa-edit'),
                                 array(  'title' => $langBBBImportRecordings,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video",
                                         'icon' => "fa-edit"),
@@ -824,7 +824,7 @@ function bbb_session_details() {
                 }
                 $tool_content .= "</tr>";
             }        
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div></div></div>";
         if(get_total_bbb_servers()=='0')
         {
             if($is_editor) {$tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";}

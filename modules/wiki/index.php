@@ -358,14 +358,18 @@ switch ($action) {
             }
 
             if ($is_allowedToAdmin) {
-                $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-                if (isset($_GET['action'])) {
-                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'?course=$course_code'>$langBack</li>";
-                } else {
-                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId &amp;action=rqEdit'>
-                            $langWikiCreateNewWiki</a></li>";
-                }
-                $tool_content .= "</ul></div>";
+                $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                              'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
+                              'icon' => 'fa-reply',
+                              'level' => 'primary-label',
+                              'show' => isset($_GET['action'])),
+                        array('title' => $langWikiCreateNewWiki,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId &amp;action=rqEdit",
+                              'icon' => 'fa-plus-circle',
+                              'level' => 'primary-label',
+                              'show' => !isset($_GET['action']))
+                        ));
             }
 
             // wiki list not empty
