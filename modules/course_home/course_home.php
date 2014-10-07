@@ -483,15 +483,15 @@ if (isset($level) && !empty($level)) {
 }
 
 
-if ($is_editor or ( isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) or ( isset($_SESSION['saved_status']) and $_SESSION['saved_status'] == 1)) {
-    if (isset($_SESSION['saved_status'])) {
+if ($is_editor or (isset($saved_is_editor) and $saved_is_editor)) {
+    if (isset($_SESSION['student_view'])) {
         $button_message = $langStudentViewDisable;
         $button_image = "switch_t";
     } else {
         $button_message = $langStudentViewEnable;
         $button_image = "switch_s";
     }
-    $toggle_student_view = "<form action='{$urlServer}student_view.php?course=$course_code' method='post'>
+    $toggle_student_view = "<form action='{$urlServer}main/student_view.php?course=$course_code' method='post'>
                 <input id='view_btn' type='image' src='$themeimg/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
     $toggle_student_view_close = '</form>';
 } else {
