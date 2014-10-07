@@ -102,47 +102,47 @@ if ($is_editor) {
           $langAdd 
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-file-text-o'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-link'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-random'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-video-camera'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-comment'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-book'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
         <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
+          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
             <i class='fa fa-paste'></i>
           </a>
         </li>
