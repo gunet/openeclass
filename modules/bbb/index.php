@@ -791,6 +791,7 @@ function bbb_session_details() {
                                                  ($row->active? 'disable' : 'enable'),
                                         'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
                                 ));
+                    $tool_content.= "</td>";
                 } else {
                     //Allow access to session only if user is in participant group or session is scheduled for everyone
                     $access='false';

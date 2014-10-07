@@ -375,53 +375,39 @@ switch ($action) {
             // wiki list not empty
             if (is_array($wikiList) && count($wikiList) > 0) {
 
-                $tool_content .= '<table width="100%" class="tbl_alt">' . "\n";
+                $tool_content .= '<div class="row"><div class="col-md-12"><div class="table-responsive"><table class="table table-striped table-bordered table-hover">' . "\n";
 
                 // if admin, display title, edit and delete
                 if ($is_allowedToAdmin) {
                     $tool_content .= '' . "\n"
                             . '        <tr>' . "\n"
-                            . '          <th width="1">&nbsp;</th>' . "\n"
-                            . '          <th width="250"><div align="left">' . $langTitle . '</div></th>' . "\n"
-                            . '          <th>' . $langDescription . '</th>' . "\n"
-                            . '          <th width="70"><div align="center">' . $langPages . '</div></th>' . "\n"
-                            . '          <th colspan="4" ><div align="center">' . $langActions . '</div></th>'
+                            . '          <th class = "text-center">' . $langTitle . '</th>' . "\n"
+                            . '          <th class = "text-center">' . $langDescription . '</th>' . "\n"
+                            . '          <th class = "text-center">' . $langPages . '</th>' . "\n"
+                            . '          <th class = "text-center">' .icon('fa-gears'). '</th>'
                             . '        </tr>' . "\n";
                 }
                 // else display title only
                 else {
                     $tool_content .= '' . "\n"
                             . '        <tr>' . "\n"
-                            . '          <th width="1">&nbsp;</th>' . "\n"
-                            . '          <th width="250"><div align="left">' . $langTitle . '</div></th>' . "\n"
-                            . '          <th>' . $langDescription . '</th>' . "\n"
-                            . '          <th width="80"><div align="center">' . $langWikiNumberOfPages . '</div></th>' . "\n"
-                            . '          <th width="80"><div align="center">' . $langWikiRecentChanges . '</div></th>' . "\n"
+                            . '          <th class = "text-center">' . $langTitle . '</th>' . "\n"
+                            . '          <th class = "text-center">' . $langDescription . '</th>' . "\n"
+                            . '          <th class = "text-center">' . $langWikiNumberOfPages . '</th>' . "\n"
+                            . '          <th class = "text-center">' . $langWikiRecentChanges . '</th>'
                             . '        </tr>' . "\n";
                 }
-
                 $k = 0;
                 foreach ($wikiList as $entry) {
-                    if ($k % 2 == 0) {
-                        $tool_content .= "<tr class='even'>\n";
-                    } else {
-                        $tool_content .= "<tr class='odd'>\n";
-                    }
-
                     // display title for all users
 
-                    $tool_content .= '<td>';
-                    $tool_content .= '<img src="' . $themeimg . '/arrow.png" alt="' . $langWiki . '" title="' . $langWiki . '" border="0" />';
-                    $tool_content .= '</td>' . "\n";
 
-                    $tool_content .= '<td>';
+                    $tool_content .= '<tr><td>';
                     // display direct link to main page
                     $tool_content .= '<a class="item" href="page.php?course=' . $course_code . '&amp;wikiId='
                             . $entry->id . '&amp;action=show'
                             . '">'
-                            . $entry->title . '</a>'
-                    ;
-                    ;
+                            . $entry->title . '</a>';
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '<td>';
@@ -431,56 +417,42 @@ switch ($action) {
                         ;
                     }
                     $tool_content .= '</td>' . "\n";
-                    $tool_content .= '<td><div align="center">';
+                    $tool_content .= '<td>';
                     $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId=' . $entry->id . '&amp;action=all">';
                     $tool_content .= $wikiStore->getNumberOfPagesInWiki($entry->id);
                     $tool_content .= '</a>';
-                    $tool_content .= '</div></td>' . "\n";
+                    $tool_content .= '</td>' . "\n";
 
-                    $tool_content .= '<td width="5" style="text-align: center;">';
-                    // display direct link to main page
-                    $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId='
-                            . $entry->id . '&amp;action=recent'
-                            . '">'
-                            . '<img src="' . $themeimg . '/history.png" border="0" alt="' . $langWikiRecentChanges . '" title="' . $langWikiRecentChanges . '" />'
-                            . '</a>'
-                            . '</td>' . "\n";
-
-                    // if admin, display edit and delete links
 
                     if ($is_allowedToAdmin) {
-                        // edit link
-
-                        $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid='. $groupId . '&amp;wikiId='
-                                . $entry->id . '&amp;action=rqEdit'
-                                . '">'
-                                . '<img src="' . $themeimg . '/edit.png" border="0" alt="' . $langWikiEditProperties . '" title="' . $langWikiEditProperties . '" />'
-                                . '</a>';
-
-                        $tool_content .= '</td>' . "\n";
-
-                        // delete link
-
-                        $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete'>
-                                    <img src='$themeimg/delete.png' alt=" . q($langDelete) . " title=" . q($langDelete) . " onClick=\"return confirmation('$langConfirmDelete');\"/>
-                                    </a>";
-                        $tool_content .= '</td>' . "\n";
-						
-						// export link
-						
-						$tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport'>
-                                    <img src='$themeimg/export.png' alt=" . q($langWikiExport) . " title=" . q($langWikiExport) . "/>
-                                    </a>";
-                        $tool_content .= '</td>' . "\n";
+                        $tool_content.= "<td class='option-btn-cell'>";
+                        $tool_content .=
+                                 action_button(array(
+                                array(  'title' => $langDelete,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
+                                        'icon' => 'fa-times',
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete),
+                                array(  'title' => $langModify,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
+                                        'icon' => 'fa-edit'),
+                                array(  'title' => $langWikiExport,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
+                                        'icon' => "fa-download"),
+                                array(  'title' => $langWikiRecentChanges,
+                                        'url' => "page.php?course=$course_code&amp;wikiId=$entry->id &amp;action=recent",
+                                        'icon' => "fa-clock-o")
+                                ));
+                        $tool_content.= "</td>";
+                     
+                       
+			
                     }
 
                     $tool_content .= '</tr>' . "\n";
                     $k++;
                 }
-                $tool_content .= '</table>' . "\n" . "\n";
+                $tool_content .= '</table></div></div></div>' . "\n" . "\n";
             }
             // wiki list empty
             else {
