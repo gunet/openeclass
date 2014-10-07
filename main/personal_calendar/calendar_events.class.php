@@ -484,9 +484,100 @@ class Calendar_Events {
         Log::record(0, MODULE_ID_PERSONALCALENDAR, LOG_DELETE, array('user_id' => $uid, 'id' => 'all'));
     }
 
+    /**
+     * Get calendar events for a given userincluding personal and course events
+     * @param string $scope month|week|day the calendar selected view
+     * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
+     * @param string $enddate mysql friendly formatted string representing the end of the time frame for which events are seeked
+     * @param int $user_id if empty the session user is assumed
+     * @return array of user events with details
+     */
+    public static function get_current_course_events($scope = "month", $startdate = null, $enddate = null){
+        
+        global $course_id;
+        //form date range condition
+        $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
+                                "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
+                                 "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
+        if(!is_null($startdate) && !is_null($enddate)){
+            $datecond = " AND start>=?t AND start<=?t";
+        }
+        elseif(!is_null($startdate)){
+            $datecond = " AND ";
+            $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]:$dateconditions["month"];
+        }
+        else{
+            $datecond = "";
+        }
+        //retrieve events from various tables according to user preferences on what type of events to show
+        $q = "";
+        $q_args = array();
+        $q_args_templ = array();
+        $q_args_templ[] = $course_id;
+        if(!is_null($startdate)){
+           $q_args_templ[] = $startdate;
+        }
+        if(!is_null($enddate)){
+           $q_args_templ[] = $enddate;
+        }
+        
+        //agenda
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ag.start',$datecond);
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+                . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
+                . "WHERE ag.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        //big blue button
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','bbb.start_date',$datecond);
+        $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                . "FROM bbb_session bbb JOIN course c ON bbb.course_id=c.id "
+                . "WHERE bbb.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+
+        //assignements
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ass.deadline',$datecond);
+        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
+                . "WHERE ass.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        //exercises
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ex.end_date',$datecond);
+        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+                . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
+                . "WHERE ex.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        if(empty($q))
+        {
+            return null;
+        }
+        $q .= " ORDER BY start, event_type";        
+        return Database::get()->queryArray($q, $q_args);
+
+       
+    }
     /**************************************************************************/
     /*
-     * Set of functions to be called from modules other than notes
+     * Set of functions to be called from modules other than calendar
      * in order to associate notes with module specific items
      */
 
@@ -1200,25 +1291,28 @@ class Calendar_Events {
    }
    
    public static function bootstrap_events($from, $to){
-       global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
+       global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $course_id;
        $fromdatetime = date("Y-m-d H:i:s",$from/1000);
        $todatetime = date("Y-m-d H:i:s",$to/1000);
        /* The type of calendar here defines how detailed the events are going to be. Default:month  */
-        $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
-        
-        $events = array();
-        foreach($eventlist as $event){
-            $startdatetime = new DateTime($event->start);
-            $event->start = $startdatetime->getTimestamp()*1000;
-            $enddatetime = new DateTime($event->end);
-            $event->end = $enddatetime->getTimestamp()*1000;
-            $event->url = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
-            if($event->event_type != 'personal' && $event->event_type != 'admin'){
-                $event->url = str_replace('thiscourse', $event->course, $event->url);
-            }
-            array_push($events, $event);
-        }
-        return json_encode(array('success'=>1, 'result'=>$events));
+       if(!isset($course_id) || empty($course_id) || is_null($course_id)){
+           $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
+       } else {
+           $eventlist = Calendar_events::get_current_course_events("month", $fromdatetime, $todatetime);
+       }
+       $events = array();
+       foreach($eventlist as $event){
+           $startdatetime = new DateTime($event->start);
+           $event->start = $startdatetime->getTimestamp()*1000;
+           $enddatetime = new DateTime($event->end);
+           $event->end = $enddatetime->getTimestamp()*1000;
+           $event->url = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
+           if($event->event_type != 'personal' && $event->event_type != 'admin'){
+               $event->url = str_replace('thiscourse', $event->course, $event->url);
+           }
+           array_push($events, $event);
+       }
+       return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
    }
    
    public static function small_month_bootstrap_calendar()

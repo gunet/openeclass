@@ -42,6 +42,7 @@ require_once 'modules/comments/class.commenting.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'main/personal_calendar/calendar_events.class.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -55,15 +56,51 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('slick');
+
+if(!empty($langLanguageCode)){
+    load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
+}
+load_js('bootstrap-calendar-master/js/calendar.js');
+load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
+
 ModalBoxHelper::loadModalBox();
-$head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />    
+<script type='text/javascript'>$(document).ready(add_bookmark);</script>
 <script type='text/javascript'>
     $(document).ready(function() {
             $('.course_description').slick({
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
-            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });
-    })
+            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
+//Calendar stuff 
+.'var calendar = $("#bootstrapcalendar").calendar({
+                    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
+                    events_source: "'.$urlAppend.'main/calendar_data.php",
+                    language: "'.$langLanguageCode.'",
+                    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
+                    onAfterViewLoad: function(view) {
+                                $("#current-month").text(this.getTitle());
+                                $(".btn-group button").removeClass("active");
+                                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                                }
+        });
+        
+        $(".btn-group button[data-calendar-nav]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.navigate($this.data("calendar-nav"));
+            });
+        });
+
+        $(".btn-group button[data-calendar-view]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.view($this.data("calendar-view"));
+            });
+        });'           
+    
+    ."})
     </script>";
 
 // For statistics: record login
@@ -661,12 +698,22 @@ $tool_content .= "
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
-            </div>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
+            </div>";
+            
+
+//BEGIN - Get user personal calendar
+$today = getdate();
+$day = $today['mday'];
+$month = $today['mon'];
+$year = $today['year'];
+Calendar_Events::get_calendar_settings();
+$user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
+//END - Get personal calendar
+                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langCalendar</h5>
-                <div class='panel padding'>
-                        <img style='margin:1em auto;display:block; max-width:100%;' src='http://users.auth.gr/panchara/eclass/project/img/calendar.png'>
-                </div>
+                    <div class='panel padding'>
+                        $user_personal_calendar
+                    </div>
             </div>
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langAnnouncements</h5>

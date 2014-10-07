@@ -25,6 +25,12 @@ $require_login = TRUE;
 
 $require_valid_uid = true;
 require_once '../include/lib/textLib.inc.php';
+if (!session_id()) {
+    session_start();
+}
+if(isset($_SESSION['dbname'])){
+    $require_current_course = true;
+}
 require_once '../include/init.php';
 require_once 'personal_calendar/calendar_events.class.php';
 
