@@ -131,10 +131,6 @@ if ($uid AND !isset($_GET['logout'])) {
     $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
 
-    $tool_content .= "
-        <div class='col-md-7'>
-                $langInfoAbout
-        </div>";
 
     $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
             WHERE `visible` = 1
@@ -201,6 +197,8 @@ if ($uid AND !isset($_GET['logout'])) {
             </div>
         </div>
 
+
+
         <div class='row'>
             <div class='col-md-12'>
                 <div class='jumbotron jumbotron-login'>
@@ -231,9 +229,21 @@ if ($uid AND !isset($_GET['logout'])) {
             </div>
         </div>
 
+        
+
+
+
         <div class='row'>
-                <div class='col-md-7 deleteThisClass'>COL-MD-8</div>
-                <div class='col-md-5 deleteThisClass'>COL-MD-4</div>
+
+            <div class='col-md-7'>
+                $langInfoAbout
+            </div>
+            
+
+            <div class='col-md-5'>
+                announcements here
+            </div>
+        
         </div>
 
 
