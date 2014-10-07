@@ -66,27 +66,43 @@ $head_content = '<script type="text/javascript">
 $nameTools = $langDropBox;
 
 // action bar 
-if (!isset($_GET['showQuota'])) {
-    $tool_content .= "<div id='operations_container'>
-                        <ul id='opslist'>";
+if (!isset($_GET['showQuota'])) {    
     if (isset($_GET['upload'])) {
-        if ($course_id != 0) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]'>$langBack</a></li>";
-        }
+        $tool_content .= action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : ""),
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')
+                        ));
     } else {
         if ($course_id != 0) {
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm'>$langNewCourseMessage</a></li>
-                              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>";
-        } else {
-            if ($personal_msgs_allowed) {
-                $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1'>$langNewPersoMessage</a></li>";
-            }
-            $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm'>$langNewCourseMessage</a></li>";          
+            $tool_content .= action_bar(array(
+                                array('title' => $langNewCourseMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success'),
+                                array('title' => $langQuotaBar,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
+                                      'icon' => 'fa-pie-chart',
+                                      'level' => 'primary')
+                            ));
+        } else {            
+            $tool_content .= action_bar(array(
+                                array('title' => $langNewCourseMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success'),
+                                array('title' => $langNewPersoMessage,
+                                      'url' => "$_SERVER[SCRIPT_NAME]?upload=1",
+                                      'icon' => 'fa-pencil-square-o',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-success',
+                                      'show' => $personal_msgs_allowed),
+                            ));
         }
-    }
-    $tool_content .= "</ul></div>";
+    }    
 }
 
 if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {

@@ -1,6 +1,6 @@
 /* 
 ==========================================================
-    SASS for structure of eclass v3.0 - version 0.01006a 
+    SASS for structure of eclass v3.0 - version 0.01007a 
 ==========================================================
 */
 
@@ -690,10 +690,212 @@ body.sidebar-opened .toggle-sidebar
 
 
 
+/* INDEX --------------------------------------------------------------------------- */
+
+body.page-login h1{
+  margin: 1.25em 1em;
+}
+
+// LOGIN JUMBOTRON
+.jumbotron.jumbotron-login{
+
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+
+  background-color: #025694;
+  /* fallback from css grandient */
+  
+  background: url('{%template_base%}/img/jumbotron-bg.png') repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  background-position: 30% 60%;
+  background-repeat: no-repeat;
+  background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
+  background: -webkit-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -moz-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+
+  .graphic{
+    position: absolute;
+    z-index: 9;
+
+    width: 77%;
+    max-width:100%;
+    
+    top: -2.8rem;
+  }
+}
+
+// LOGIN FORM
+form.login-form{
+
+  font-size: 0.85em;
+
+  position: relative;
+  z-index: 99;
+
+  background:white;
+  border-radius: 3rem;
+  padding: 2em 3em;
+
+  box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+
+  h2{
+    text-align:center;
+    font-size:1.8em;
+    margin: 2rem 0rem;
+    margin-top: 0rem;
+    color: #232c3a;
+  }
+
+  .form-group{
+    margin:0rem;
+  }
+
+
+  .form-group >*{
+    display:inline-block;
+    float:none;
+  }
+
+
+  .form-group input{
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-radius: 0px;
+    border-width: 1px;
+    
+    box-shadow: none;
+    -moz-box-shadow: none;  
+    -webkit-box-shadow: none;  
+    
+    outline:none;
+    font-size:1.2em;
+    padding: 0.4em;
+    line-height: 1.42857143;
+    color: #555;
+
+    &:focus{
+      border-color: rgba(0,0,0,.12);
+    }
+  }
+
+  .form-group label{
+    margin:0;
+    text-align: center;
+  }
+
+  .form-group i.fa{
+    font-size:1.2em;
+    margin:0;
+    color:rgba(0,0,0,.5);
+  }
+
+  // Remember me + forgot your password
+  .login-settings{
+    margin: 2rem 0rem;
+    font-size:0.9em;
+    
+    > * {
+      margin:0;
+    }
+
+    .checkbox,
+    .link{
+      color:rgba(0,0,0,.5);
+    }
+
+    .checkbox label,
+    .link label{
+      font-weight: bold;
+    }
+
+    .link a{
+        float:right;
+        margin-top:0.3em;
+        color:rgba(0,0,0,.5);
+    }
+
+    .checkbox label span{
+      margin-top: 0.3em;
+      display: inline-block;
+    }
+  }
+
+  .btn.btn-login{
+     width: 100%;
+    height:4rem;
+    border-radius: 4rem;
+    font-weight: 600;
+    
+    color:white;
+    text-transform: uppercase;
+    background:#428bca;
+    letter-spacing:0.1em;
+    &:hover{
+      background:#3071a9;
+    }
+  }
+}
+
+/* DELETE THIS */
+.row .deleteThisClass{
+  height: 400px;
+  border: 1px solid #eee;
+  background: rgba(0,0,0,.05);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
+
+
+@media only screen and (min-width: 768px) and (max-width : 992px) {
+  /* Styles */
+  form.login-form .login-settings .link{
+    float:left!important;
+    margin-top:1em;
+  }
+
+  .jumbotron.jumbotron-login img.graphic{
+    top: 7.1rem;
+    left: -2rem;
+    width: 100%;
+  }
+
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px){
+  .jumbotron.jumbotron-login img.graphic{
+    width: 94%;
+  }
+}
+
+
+
+
+
+
 /* No breakpoints bellow 1366 or smth */
 
 @media (max-width: 1339px){

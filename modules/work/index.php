@@ -96,7 +96,7 @@ if ($is_editor) {
         $('input[id=assign_button_all]').click(hideAssignees);
         function hideAssignees()
         {
-            $('#assignees_tbl').hide();
+            $('#assignees_tbl').addClass('hide');
             $('#assignee_box').find('option').remove();
         }
         function changeAssignLabel()
@@ -117,7 +117,7 @@ if ($is_editor) {
         }        
         function ajaxAssignees()
         {
-            $('#assignees_tbl').show();
+            $('#assignees_tbl').removeClass('hide');
             var type = $('input:radio[name=group_submissions]:checked').val();
             $.post('$works_url[url]',
             {
@@ -640,7 +640,7 @@ function new_assignment() {
                     </div>
                 </div>
             </div>
-            <table id='assignees_tbl' style='display:none;' class='table'>
+            <table id='assignees_tbl' class='table hide'>
             <tr class='title1'>
               <td id='assignees'>$langStudents</td>
               <td class='text-center'>$langMove</td>
@@ -672,7 +672,7 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     
-    global $tool_content, $m, $langEdit, $langBack, $course_code,
+    global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
         $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
     
@@ -735,115 +735,149 @@ function show_edit_assignment($id) {
     } else {
         $deadline = '';
     }
-     
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);
-   
+    $comments = trim($row->comments);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'level' => 'primary',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
               'icon' => 'fa-reply')));    
     $tool_content .= "
-    <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+    <form class='form-horizontal' role='form' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
-    <legend>$m[WorkInfo]</legend>
-    <table class='tbl'>
-    <tr>
-      <th>$m[title]:</th>
-      <td><input type='text' name='title' size='45' value='".q($row->title)."' /></td>
-    </tr>
-    <tr>
-      <th valign='top'>$m[description]:</th>
-      <td>$textarea</td>
-    </tr>";
-    $comments = trim($row->comments);
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
+                <div class='col-sm-10'>
+                  <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$m[title]'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='desc' class='col-sm-2 control-label'>$m[description]:</label>
+                <div class='col-sm-10'>
+                " . rich_text_editor('desc', 4, 20, $row->description) . "
+                </div>
+            </div>";
     if (!empty($comments)) {
-        $tool_content .= "
-                <tr>
-                <th>$m[comments]:</th>
-                <td>" . rich_text_editor('comments', 5, 65, $comments) . "</td>
-                </tr>";
+    $tool_content .= "<div class='form-group'>
+                <label for='desc' class='col-sm-2 control-label'>$m[comments]:</label>
+                <div class='col-sm-10'>
+                " . rich_text_editor('comments', 5, 65, $comments) . "
+                </div>
+            </div>";
     }
     $tool_content .= "
-        <tr>
-            <th class='left' width='150'>$langWorkFile:</th>
-            <td>".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
+            <div class='form-group'>
+                <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                <div class='col-sm-10'>    
+                  ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
             . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
-                                 <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' name='userfile' />")."</td>
-        </tr>";
-    $tool_content .= "
-    <tr>
-        <th>$m[max_grade]:</th>
-        <td><input type='text' name='max_grade' size='5' value='$row->max_grade'/></td>
-    </tr>           
-    <tr>
-        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#deadline_row, #late_sub_row\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#deadline_row, #late_sub_row\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
-        <td>
-    </tr>
-    <tr id='deadline_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
-          <th></th>
-          <td>
-                <div class='input-append date form-group' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-11'>        
-                        <input id='deadline' name='WorkEnd' type='text' value='$deadline'>
+                                 <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='max_grade' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                <div class='col-sm-10'>
+                  <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[deadline]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='is_deadline' value='0' ". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
+                        $m[no_deadline]
+                      </label>
                     </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='is_deadline' value='1' ". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
+                        $m[with_deadline]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
+                <div class='col-xs-8 col-xs-offset-2'>        
+                    <input name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                </div>
+                <div class='col-xs-2'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-                <div>$m[deadline_notif]</div>          
-          </td>
-    </tr>  
-    <tr id='late_sub_row'". (!empty($deadline) ? "" : "style=\"display:none\"") .">
-          <th></th>
-          <td><input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">$m[late_submission_enable]</td>
-    </tr>     
-    <tr>
-      <th valign='top'>$m[group_or_user]:</th>
-      <td><input type='radio' id='user_button' name='group_submissions' value='0'".(($row->group_submissions==1) ? '' : 'checked')." />
-          <label for='user_button'>$m[user_work]</label><br />
-          <input type='radio' id='group_button' name='group_submissions' value='1'".(($row->group_submissions==1) ? 'checked' : '')." />
-          <label for='group_button'>$m[group_work]</label></td>
-    </tr>
-        <tr>
-          <th>$m[WorkAssignTo]:</th>
-          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".(($row->assign_to_specific==1) ? '' : 'checked')."  /><label for='assign_button_all'>".(($row->group_submissions) ? $m['WorkToAllGroups'] : $m['WorkToAllUsers'])."</label>
-          <br /><input type='radio' id='assign_button_some' name='assign_to_specific' value='1'".(($row->assign_to_specific==1) ? 'checked' : '')." /><label for='assign_button_some'>".(($row->group_submissions) ? $m['WorkToGroup'] : $m['WorkToUser'])."</label></td>
-        </tr>        
-        <tr id='assignees_tbl'".(($row->assign_to_specific==1) ? '' : 'style="display:none;"').">
-          <th class='left' valign='top'></th>
-          <td>
-              <table width='99%' align='center' class='tbl_white'>
-              <tr class='title1'>
-                <td id='assignees'>$langStudents</td>
-                <td width='100' class='center'>$langMove</td>
-                <td class='center'>$m[WorkAssignTo]</td>
-              </tr>
-              <tr>
-                <td>
-                  <select id='assign_box' size='15' style='width:180px' multiple>
-                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
-                  </select>
-                </td>
-                <td class='center'>
-                  <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                </td>
-                <td class='right'>
-                  <select id='assignee_box' name='ingroup[]' size='15' style='width:180px' multiple>
-                        ".((isset($assignee_options)) ? $assignee_options : '')."
-                  </select>
-                </td>
-              </tr>
-              </table>
-          </td>
-        </tr>            
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" /></td>
-    </tr>
-    </table>
+                <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
+            </div>
+            <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
+                <div class='col-xs-10 col-xs-offset-2'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
+                        $m[late_submission_enable]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='user_button' name='group_submissions' value='0' ".(($row->group_submissions==1) ? '' : 'checked').">
+                        $m[user_work]
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='group_button' name='group_submissions' value='1' ".(($row->group_submissions==1) ? 'checked' : '').">
+                        $m[group_work]
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
+                        <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".(($row->assign_to_specific==1) ? 'checked' : '').">
+                        <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <table id='assignees_tbl' class='table ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
+            <tr class='title1'>
+              <td id='assignees'>$langStudents</td>
+              <td class='text-center'>$langMove</td>
+              <td>$m[WorkAssignTo]</td>
+            </tr>
+            <tr>
+              <td>
+                <select id='assign_box' size='15' multiple>
+                ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                </select>
+              </td>
+              <td class='text-center'>
+                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+              </td>
+              <td width='40%'>
+                <select id='assignee_box' name='ingroup[]' size='15' multiple>
+                ".((isset($assignee_options)) ? $assignee_options : '')."
+                </select>
+              </td>
+            </tr>
+            </table>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
+                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+            </div>                             
     </fieldset>
     </form>";
 }

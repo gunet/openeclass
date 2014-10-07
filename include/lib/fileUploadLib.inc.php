@@ -420,6 +420,7 @@ function showquota($quota, $used) {
     );     
     $retstring .= action_bar($action_bar_options);
 $retstring .= "
+<div class='panel padding'>
 <form class='form-horizontal' role='form'>
   <div class='form-group'>
     <label class='col-sm-2'>$langQuotaUsed:</label>
@@ -443,7 +444,8 @@ $retstring .= "
       <input type='text' class='form-control' value='$quota' disabled>
     </div>
   </div>  
-</form>";
+</form>
+</panel>";
     $tmp_cwd = getcwd();
 
     return $retstring;

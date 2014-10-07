@@ -46,7 +46,12 @@ if (isset($_GET['mid'])) {
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
         }
-        $out = "<div style=\"float:right;\"><a href=\"inbox.php".$urlstr."\">$langBack</a></div>";
+        $out = action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "inbox.php".$urlstr,
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')
+                        ));        
         $out .= "<div id='del_msg'></div><div id='msg_area'><table>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
