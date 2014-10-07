@@ -148,13 +148,10 @@ $tool_content .= "</div>";
 
 if ($is_editor) {
     $edit_link = "
-
     <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
         <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
         <span class='tiny-icon-text'><!--$langEdit--></span>
-    </a>
-
-    ";
+    </a>";
 } else {
     $edit_link = '';
 }
@@ -385,8 +382,8 @@ if ($total_cunits > 0) {
         // Visibility icon
         $vis = $cu->visible;
         $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
-        $class1_vis = ($vis == 0) ? ' class="invisible"' : '';
-        $class_vis = ($vis == 0) ? 'invisible' : '';
+        $class1_vis = ($vis == 0) ? ' class="not_visible"' : '';
+        $class_vis = ($vis == 0) ? 'not_visible' : '';
         $cunits_content .= "<li class='list-item contentbox'>
                                 <div class='item-content'>
                                     <div class='item-header'>
@@ -430,9 +427,9 @@ if ($total_cunits > 0) {
     $cunits_content .= "</ul></div>"; 
 }
 
-$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'>" . $langCode . ":</b> " . q($public_code) . "" .
-        "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
-        "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / " . $langFaculty . ":</b> ";
+$bar_content .= "<b style='color:#999999; font-size:13px;'>" . $langCode . ":</b> " . q($public_code) . "" .
+                "<b style='color:#999999; font-size:13px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
+                "<b style='color:#999999; font-size:13px;'> / " . $langFaculty . ":</b> ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -441,8 +438,6 @@ foreach ($departments as $dep) {
     $bar_content .= $tree->getFullPath($dep) . $br;
     $i++;
 }
-
-$bar_content .= "  ";
 
 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
@@ -467,13 +462,13 @@ switch ($visible) {
             break;
         }
 }
-$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / $langConfidentiality:</b> $lessonStatus";
+$bar_content_2 = "<b style='color:#999999; font-size:12px;'>$langConfidentiality:</b> $lessonStatus";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<b style='text-transform: uppercase; color:#999999; font-size:10px;'> / $langUsers:</b> $link";
+$bar_content_2 .= "<b style='color:#999999; font-size:13px;'> / $langUsers:</b> $link";
 
 // display course license
 if ($course_license) {
@@ -492,20 +487,15 @@ $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $opencourses_level = "
-
     <div class='row'>
-
-        <div class='col-md-4'>
-            <img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'>
+        <div class='col-md-4'>".icon('open_courses_logo_small', $langOpenCourses)."            
         </div>
-
         <div class='col-md-8 margin-top-thin'>
             ${langOpenCoursesLevel}: $level
             <br />
             <small><a href='$metadataUrl'>$langCourseMetadata " .
             icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</small>
         </div>        
-
     </div>
 
 
@@ -516,7 +506,7 @@ if (isset($level) && !empty($level)) {
             icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td>
         </tr>
         <tr>
-            <td colspan='2'><div class='center'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'></div>
+            <td colspan='2'><div class='center'>".icon('open_courses_logo_small', $langOpenCourses)."</div>
                 <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
             </td>
         </tr>
@@ -568,8 +558,6 @@ $tool_content .= "
 
         <div class='toolbox pull-right'>
 
-
-
             <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
                 <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='top'>Πληροφορίες Μαθήματος</span>
                 <span class='fa fa-caret-down'></span>
@@ -609,12 +597,6 @@ $tool_content .= "
 ";
 
 
-
-
-
-
-
-
 // Contentbox: Course main contentbox
 $tool_content .= "
 <div class='row margin-top-thin'>
@@ -631,19 +613,18 @@ $tool_content .= "
                 <div class=''>$main_content</div>             
             </div>
             
-            <div class ='col-md-7 col-sm-12 col-xs-12'>
+            <div class ='col-md-12 col-sm-12 col-xs-12'>
                 <hr class='margin-top-thin margin-bottom-thin'/>
                 $bar_content
             </div>
-
+            <div class ='col-md-12 col-sm-12 col-xs-12'>                
+                $bar_content_2
+            </div>
 
         </div>
     </div>
 <div>
 ";
-
-
-
 
 // Contentbox: Thematikes enotites
 // Contentbox: Calendar
@@ -662,20 +643,18 @@ $tool_content .= "
 if (!$alter_layout){
     $tool_content .= "
     <div class='col-md-8'>
-        <h5 class='content-title'>$langCourseUnits</h5>".
+        <span class='content-title'>$langCourseUnits</span>".
         (($is_editor)? "
-            <hr class='no-margin'/>
-            <div class='align-right'>
-                <div class='toolbox margin-bottom-thin margin-top-thin'>
+            
+            <span class='align-right'>
+                <span class='toolbox margin-bottom-thin margin-top-thin'>
                     <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
                     </a>
-                </div>                          
-            </div>" : "")."
-                
+                </span>                          
+            </span>" : "")."                
             $cunits_content
-
     </div>";
 }
 
@@ -693,7 +672,7 @@ $tool_content .= "
 
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>${langOpenCoursesLicense}</h5>
+                <h5 class='content-title'>$langLicence</h5>
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
@@ -719,11 +698,9 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
-        </div>
-        
+        </div>        
     </div>
-</div>
-";
+</div>";
 
 
 $tool_content .= "
