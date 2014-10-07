@@ -63,17 +63,17 @@ if ($can_upload) {
         </div>";
     }
     $tool_content .= "
-    <div class='row margin-top-fat'>
-      <div class='col-md-12'>
-    <h5 class='content-title'>$langUpload</h5>
-    <div class='panel padding-fat focused'>
+        <div class='row margin-top-fat'>
+          <div class='col-md-12'>
+        <h5 class='content-title'>$langUpload</h5>
+        <div class='panel padding-fat focused'>
 
-    <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
-      <input type='hidden' name='uploadPath' value='$uploadPath' />
-      $group_hidden_input
-      $fileinput      
-      <hr/>
-      
+        <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
+          <input type='hidden' name='uploadPath' value='$uploadPath' />
+          $group_hidden_input
+          $fileinput
+              
+      <hr class='margin-bottom-fat'/>
       <div class='form-group'>
         <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
         <div class='col-sm-10'>
@@ -194,6 +194,7 @@ if ($can_upload) {
         </div>
       </div>
     </form>
+
     </div>";
 } else {
     $tool_content .= "<span class='alert-warning'>$langNotAllowed</span>";

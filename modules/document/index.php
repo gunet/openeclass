@@ -449,10 +449,8 @@ if ($can_upload) {
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
         $createDir = q($_GET['createDir']);
-        $dialogBox .= "
-        <div class='row'>
+        $dialogBox .= "        
         <div class='col-md-12'>
-
         <h5 class='content-title'>$langCreateDir</h5>
         <div class='panel padding-thin focused'>
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
@@ -465,9 +463,8 @@ if ($can_upload) {
                 <i class='fa fa-plus space-after-icon'></i>
                 $langCreateDir
             </button>
-        </form>
-        </div>
-        </div></div>";
+        </form>        
+        </div></div>";                
     }
 
     // add/update/remove comment
