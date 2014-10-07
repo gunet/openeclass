@@ -162,17 +162,17 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "
-		      <table align='left' width='100%' class='tbl_alt'>
+		      <table class='table table-striped table-bordered table-hover'>
 		      <tr>
-			<th colspan='2'><div align='left'>&nbsp;$langTitle</div></th>
-			<th class='center'>$langPollStart</th>
-			<th class='center'>$langPollEnd</th>";
+			<th><div align='left'>&nbsp;$langTitle</div></th>
+			<th class='text-center'>$langPollStart</th>
+			<th class='text-center'>$langPollEnd</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='center' width='16'>$langAnswers</th>"
-                           . "<th class='center'>$langActions</th>";
+            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>"
+                           . "<th class='text-center'>".icon('fa-cogs')."</th>";
         } else {
-            $tool_content .= "<th class='center'>$langParticipate</th>";
+            $tool_content .= "<th class='text-center'>$langParticipate</th>";
         }
         $tool_content .= "</tr>";
         $index_aa = 1;
@@ -182,27 +182,20 @@ function printPolls() {
 
             if (($visibility) or ($is_editor)) {
                 if ($visibility) {
-                    if ($k % 2 == 0) {
-                        $visibility_css = " class=\"even\"";
-                    } else {
-                        $visibility_css = " class=\"odd\"";
-                    }
+                    $visibility_css = "";
                     $visibility_gif = "fa-eye";
                     $visibility_func = "deactivate";
                     $arrow_png = "arrow";
                     $k++;
                 } else {
-                    $visibility_css = " class=\"invisible\"";
+                    $visibility_css = " class=\"not_visible\"";
                     $visibility_gif = "fa-eye-slash";
                     $visibility_func = "activate";
                     $arrow_png = "arrow";
                     $k++;
                 }
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr $visibility_css>";
-                } else {
-                    $tool_content .= "<tr $visibility_css>";
-                }
+                $tool_content .= "<tr $visibility_css>";
+
                 $temp_CurrentDate = date("Y-m-d H:i");
                 $temp_StartDate = $thepoll->start_date;
                 $temp_EndDate = $thepoll->end_date;
@@ -224,7 +217,6 @@ function printPolls() {
                 }
                 if ($is_editor) {
                     $tool_content .= "
-                        <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
                         <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>".q($thepoll->name)."</a>";
                 } else {
                     $tool_content .= "
@@ -237,30 +229,45 @@ function printPolls() {
                     }
                 }
                 $tool_content .= "                       
-                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>
-                        <td class='center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
+                        <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>
+                        <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <td class='center'>$countAnswers</td>
-                        <td class='center'>" .
-                            icon('fa-search', $langSee, "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid") .
-                            "&nbsp;" . 
-                            icon('fa-edit', $langEdit, "admin.php?course=$course_code&amp;pid=$pid") .
-                            "&nbsp;" . 
-                            icon('fa-eraser', $langPurgeExercises,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
-                                "onClick=\"return confirmation('" . js_escape($langConfirmPurgeExercises) . "');\"") .
-                            "&nbsp;" .
-                            icon('fa-times', $langDelete,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
-                                "onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"") .
-                            "&nbsp;" .
-                            icon($visibility_gif, $langVisible,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}") .
-                            "&nbsp;" .
-                            icon('fa-copy', $langCreateDuplicate,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;clone=yes&amp;pid={$pid}") .
-                            "</td></tr>";
+                        <td class='text-center'>$countAnswers</td>
+                        <td class='text-center option-btn-cell'>" .action_button(array(
+                            array(
+                                'title' => $langSee,
+                                'icon' => 'fa-search',
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                            ),
+                            array(
+                                'title' => $langEdit,
+                                'icon' => 'fa-edit',
+                                'url' => "admin.php?course=$course_code&amp;pid=$pid"                              
+                            ),
+                            array(
+                                'title' => $langPurgeExercises,
+                                'icon' => 'fa-eraser',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmPurgeExercises                               
+                            ),
+                            array(
+                                'title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmDelete                               
+                            ),
+                            array(
+                                'title' => $langVisible,
+                                'icon' => $visibility_gif,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
+                            ),
+                            array(
+                                'title' => $langCreateDuplicate,
+                                'icon' => 'fa-copy',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;clone=yes&amp;pid={$pid}"
+                            )                                        
+                        ))."</td></tr>";
                 } else {
                     $tool_content .= "
                         <td class='center'>";

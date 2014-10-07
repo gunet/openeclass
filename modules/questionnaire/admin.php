@@ -198,20 +198,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
 
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'level' => 'primary',
+              'url' => isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code",
+              'icon' => 'fa-reply'))); 
     $tool_content .= "
-        <div id=\"operations_container\">
-          <ul id=\"opslist\">
-            <li><a href='".(isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code")."'>".$langBack."</a></li>
-	  </ul>
-	</div>
-        
-        <fieldset>
-        <legend>$langInfoPoll</legend>        
+        <fieldset>      
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-2 control-label'>$langTitle :</label>
               <div class='col-sm-10'>
-                <input type='text' class='form-control' id='PollName' placeholder='$langTitle'>
+                <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
                 <span class='help-block'>".Session::getError('PollName')."</span>
               </div>
             </div>
@@ -423,43 +421,76 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 } else {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= "
-        <fieldset>
-            <legend>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</legend>
-            <table width='99%' class='tbl'>
-            <tbody><tr>
-              <th width='180'>$langTitle:</th>
-              <td>".q($poll->name)."</td>
-            </tr>
-            <tr>
-              <th>$langPollStart:</th>
-              <td>".date('d-m-Y H:i',strtotime($poll->start_date))."</td>
-            </tr>
-            <tr>
-                <th>$langPollEnd:</th>
-                <td>".date('d-m-Y H:i',strtotime($poll->end_date))."</td>
-            </tr>
-            <tr>
-              <th>$langPollAnonymize:</th>
-              <td><input type='checkbox' disabled ".(($poll->anonymized)? 'checked' : '')."></td>
-            </tr>
-            <tr>
-              <th>$langDescription:</th>
-              <td>$poll->description</td>
-            </tr>
-            <tr>
-                <th>$langPollEndMessage:</th>
-                <td>$poll->end_message</td>
-            </tr>
-            </tbody></table>
-        </fieldset>
-        <div align='left' id='operations_container'>
-            <ul id='opslist'>
-              <li><a href='".$_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes'>$langNewQu</a></li>
-              <li><a href='".$_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label'>$langNewLa</a></li>
-            </ul>
-        </div>";
+        <div class='panel panel-primary'>
+          <div class='panel-heading'>
+            <h3 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h3>
+          </div>
+          <div class='panel-body'>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langTitle:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $poll->name
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langPollStart:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    ".date('d-m-Y H:i',strtotime($poll->start_date))."
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langPollEnd:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    ".date('d-m-Y H:i',strtotime($poll->end_date))."
+                </div>                
+            </div>            
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langPollAnonymize:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    ".(($poll->anonymized)? icon('fa-check-square-o') : icon('fa-square-o'))."
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langDescription:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $poll->description
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langPollEndMessage:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $poll->end_message
+                </div>                
+            </div>                
+          </div>          
+        </div>        
+    ";
+    $tool_content .= action_bar(array(
+        array('title' => $langNewQu,
+              'level' => 'primary-label',
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes",
+              'icon' => 'fa-plus-circle',
+              'button-class' => 'btn-success'),
+        array('title' => $langNewLa,
+              'level' => 'primary-label',
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
+              'icon' => 'fa-tag',
+              'button-class' => 'btn-success')        
+        )); 
     if ($questions) {    
-        $tool_content .= "<table width='100%' class='tbl_alt'>
+        $tool_content .= "<table class='table table-striped table-bordered table-hover'>
                     <tbody>
                         <tr>
                           <th colspan='2' class='left'>$langQuesList</th>
