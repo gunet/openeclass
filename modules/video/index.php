@@ -503,7 +503,7 @@ $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM
 
 $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
 if ($count_video[0] > 0 or $count_video_links[0] > 0) {
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>
+    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
         <tr><th>$langVideoDirectory</th>
         <th class='text-center'>$langDate</th>
         <th class='text-center'>" . icon('fa-gears') . "</th>";
@@ -553,7 +553,7 @@ if ($count_video[0] > 0 or $count_video_links[0] > 0) {
             }
         }
     }
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
 }

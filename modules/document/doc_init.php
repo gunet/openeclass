@@ -80,6 +80,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';
     $upload_target_url = 'index.php?course=' . $course_code;
     $subsystem_id = 'NULL';
+    $group_id = '';
     $groupset = '';
     $group_sql = "course_id = $course_id AND subsystem = $subsystem";
     $group_hidden_input = '';
