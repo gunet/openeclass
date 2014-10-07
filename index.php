@@ -188,36 +188,45 @@ if ($uid AND !isset($_GET['logout'])) {
     	}
     }
 
-    $tool_content .= "</div><div id='rightbar'>";
+    $tool_content .= "</div>
+
+    ";
     if (!get_config('dont_display_login_form')) {
         $tool_content .= "
 
 
+        <div class='row add-gutter margin-bottom-thin'>
+            <div class='col-md-12'>
+                <h1 class='login-heading'>Open eClass - Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης</h1>
+            </div>
+        </div>
+
         <div class='row'>
-            <h1 class='login-heading'>Open eClass - Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης</h1>        
-            <div class='jumbotron jumbotron-login'>
-                <div class='row'>
-                    <div class='hidden-xs col-sm-7 col-md-7'>
-                        <img class='graphic' src='{%template_base%}/img/indexlogo.png'/>
-                    </div>
-                    <form class='login-form col-xs-12 col-sm-5 col-md-5 col-lg-4 pull-right'>
-                        <h2>Σύνδεση Χρήστη</h2>
-                        <div class='form-group'>
-                            <input autofocus type='email' class='col-xs-10 col-sm-10 col-md-10' id='inputEmail' placeholder='Όνομα χρήστη''><label class='col-xs-2 col-sm-2 col-md-2' for='inputEmail'><i class='fa fa-user'></i></label>
+            <div class='col-md-12'>
+                <div class='jumbotron jumbotron-login'>
+                    <div class='row'>
+                        <div class='hidden-xs col-sm-7 col-md-7'>
+                            <img class='graphic' src='$themeimg/indexlogo.png'/>
                         </div>
-                        <div class='form-group'>
-                            <input type='password' class='col-xs-10 col-sm-10 col-md-10' id='inputPassword' placeholder='Κωδικός''><label class='col-xs-2 col-sm-2 col-md-2' for='inputPassword'><i class='fa fa-lock'></i></label>
-                        </div>
-                        <div class='login-settings row'>
-                            <div class='checkbox pull-left'>
-                              <label><input type='checkbox'><span>Θυμήσου με</span></label>
+                        <form class='login-form col-xs-12 col-sm-5 col-md-5 col-lg-4 pull-right'>
+                            <h2>Σύνδεση Χρήστη</h2>
+                            <div class='form-group'>
+                                <input autofocus type='email' class='col-xs-10 col-sm-10 col-md-10' id='inputEmail' placeholder='Όνομα χρήστη''><label class='col-xs-2 col-sm-2 col-md-2' for='inputEmail'><i class='fa fa-user'></i></label>
                             </div>
-                            <div class='link pull-right'>
-                              <label><a href='#''>Ξεχάσατε το συνθηματικό σας;</a></label>
-                            </div>                          
-                        </div>
-                        <button type='submit' class='btn btn-login'>Login</button>
-                    </form>
+                            <div class='form-group'>
+                                <input type='password' class='col-xs-10 col-sm-10 col-md-10' id='inputPassword' placeholder='Κωδικός''><label class='col-xs-2 col-sm-2 col-md-2' for='inputPassword'><i class='fa fa-lock'></i></label>
+                            </div>
+                            <div class='login-settings row'>
+                                <div class='checkbox pull-left'>
+                                  <label><input type='checkbox'><span>Θυμήσου με</span></label>
+                                </div>
+                                <div class='link pull-right'>
+                                  <label><a href='#''>Ξεχάσατε το συνθηματικό σας;</a></label>
+                                </div>                          
+                            </div>
+                            <button type='submit' class='btn btn-login'>Login</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,8 +238,8 @@ if ($uid AND !isset($_GET['logout'])) {
 
 
 
-
-        <div class='col-md-12 jumbotron'>
+        <div class='row'>
+        <div class='panel col-md-6'>
                 
                 <form action='$urlSecure' method='post'>
                  <table width='100%' class='tbl'>
