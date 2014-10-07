@@ -26,44 +26,8 @@ $questionDescription = $objQuestion->selectDescription();
 $questionId = $objQuestion->selectId();
 $questionType = $objQuestion->selectType();
 $questionTypeWord = $objQuestion->selectTypeWord($questionType);
-// is picture set ?
-$okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
-$tool_content .= "
-    <fieldset>
-    <legend>$langQuestion &nbsp;";
 
-$tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId . "\">
-            <img src='$themeimg/edit.png' title='$langModify sdfsdfsd' alt='$langModify'></a>";
-
-
-$tool_content .= "</legend>
-    <em><small>$questionTypeWord</small><em><br>
-    <b>" . nl2br(q($questionName)) . "</b>&nbsp;&nbsp;";
-
-$questionDescription = standard_text_escape($questionDescription);
-$tool_content .= "<br/><i>$questionDescription</i>";
-// show the picture of the question
-if ($okPicture) {
-    $tool_content .= "<br/><center><img src='../../$picturePath/quiz-$questionId' /></center><br/>";
-}
-$tool_content .= "</fieldset>";
-
-if ($questionType !=6) {
-$tool_content .= "
-    <table width='100%' class='tbl'>
-    <tr>
-    <th><b><u>$langQuestionAnswers</u>:</b>";
-
-// doesn't show the edit link if we come from the question pool to pick a question for an exercise
-if (!isset($fromExercise)) {
-    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId'>
-            <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a>";
-}
-$tool_content .= "<br/></th>
-    </tr>
-    </table>
-    <br/>";
-}
+//Set link to previous screen and text for that link
 if (isset($exerciseId)) {
     $linkback = "admin.php?course=$course_code&amp;exerciseId=$exerciseId";
     $textback = $langBackExerciseManagement;
@@ -71,4 +35,45 @@ if (isset($exerciseId)) {
     $linkback = "question_pool.php?course=$course_code";
     $textback = $langGoBackToQuestionPool;
 }
-$tool_content .= "<div class='right'><a href='$linkback'>$textback</a></div>";
+
+//Action Bar
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => $linkback,
+        'icon' => 'fa-reply',
+        'level' => 'primary-label'
+    )
+));
+    
+// is picture set ?
+$okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+$questionDescription = standard_text_escape($questionDescription);
+
+$tool_content .= "
+    <div class='panel panel-primary'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>$langQuestion &nbsp;".icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</h3>
+      </div>
+      <div class='panel-body'>
+        <h4>" . nl2br(q($questionName)) . "<br><small>$questionTypeWord</small></h4>
+        <p>$questionDescription</p>
+        ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
+      </div>
+    </div>    
+";
+
+if ($questionType !=6) {
+    $tool_content .= "
+        <div class='panel panel-info'>
+          <div class='panel-heading'>
+            <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;".icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=$questionId")."</h3>
+          </div>
+<!--      <div class='panel-body'>
+            Answers should be placed here
+          </div>
+-->          
+        </div>    
+    ";   
+}
+
+$tool_content .= "<div class='pull-right'><a href='$linkback'>$textback</a></div>";
