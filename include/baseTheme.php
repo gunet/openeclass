@@ -88,7 +88,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $require_current_course, $require_help, $siteName, $siteName,
     $status, $switchLangURL, $theme, $themeimg,
     $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
-    $theme_settings, $language;
+    $theme_settings, $language, $saved_is_editor,
+    $langStudentViewEnable, $langStudentViewDisable;
 
     //get blocks content from $toolContent array
     if ($perso_tool_content) {
@@ -450,7 +451,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_var('LANG_SEARCH', $langSearch);
 
-        //if $require_help is true (set by each tool) display the help link
+        // display role switch button if needed
+        if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
+            $t->set_var('STUDENT_VIEW_TITLE', $is_editor? $langStudentViewEnable: $langStudentViewDisable);
+        } else {
+            $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+        }
+
+        // if $require_help is true (set by each tool) display the help link
         if ($require_help == true) {
             if (isset($require_current_course) and !$is_editor) {
                 $helpTopic .= '_student';
