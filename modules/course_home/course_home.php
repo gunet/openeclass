@@ -113,7 +113,7 @@ if ($is_editor) {
     $edit_link = "
 
     <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
-        <i class='fa fa-edit space-before-icon' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
+        <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
         <span class='tiny-icon-text'><!--$langEdit--></span>
     </a>
 
@@ -534,7 +534,7 @@ $tool_content .= "
 
 
             <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
-                <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='bottom'>Πληροφορίες Μαθήματος</span>
+                <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='top'>Πληροφορίες Μαθήματος</span>
                 <span class='fa fa-caret-down'></span>
 
                 <ul class='dropdown-menu'>
@@ -550,7 +550,7 @@ $tool_content .= "
             if ($status != USER_GUEST) {
                 if ($receive_mail) {
                     $tool_content .= "
-                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' data-toggle='tooltip' data-placement='top' title='$langContactProf' >
+                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langContactProf' >
                                 <i class='fa fa-envelope'></i>
                         </a>";
                 }
@@ -560,7 +560,7 @@ $tool_content .= "
             if (visible_module(MODULE_ID_ANNOUNCE))
             {
                 $tool_content .= "
-                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' data-toggle='tooltip' data-placement='bottom' title='" . q($langRSSFeed) . "'>
+                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='tooltip' data-placement='top' title='" . q($langRSSFeed) . "'>
                                 <i class='fa fa-rss'></i>
                         </a>";
             }
@@ -631,7 +631,7 @@ if (!$alter_layout){
             <hr class='no-margin'/>
             <div class='align-right'>
                 <div class='toolbox margin-bottom-thin margin-top-thin'>
-                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='right' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
+                    <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
                     </a>
