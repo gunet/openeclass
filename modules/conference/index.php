@@ -74,15 +74,17 @@ $tool_content .= "
    <fieldset>
     <legend>$langTypeMessage</legend>
     <div class='col-xs-12'>
-      <div class='input-group'>
-        <input type='text' name='msg' size='80' class='form-control'>
-        <input type='hidden' name='chatLine'>
-        <span class='input-group-btn'>
-          <input class='btn btn-primary' type='submit' value='&raquo;'>
-        </span>
-      </div>
-    </div><br><br>
-      <iframe frameborder='0' src='messageList.php' width='96%' height='300' name='messageList' style='border: 1px solid #CAC3B5;margin: 0 16px;'><a href='messageList.php?course=$course_code'>Message list</a></iframe>
+        <div class='input-group'>
+          <input type='text' name='msg' size='80' class='form-control'>
+          <input type='hidden' name='chatLine'>
+          <span class='input-group-btn'>
+            <input class='btn btn-primary' type='submit' value='&raquo;'>
+          </span>
+        </div>
+        <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
+          <iframe class='embed-responsive-item' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;'></iframe>
+        </div>       
+    </div>   
    </fieldset>
    </form>";
 
