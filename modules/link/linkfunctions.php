@@ -131,14 +131,14 @@ function showcategoryadmintools($categoryid) {
     $langModify, $langUp, $langDown, $langCatDel, $tool_content,
     $course_code;
 
-    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";    
+    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
                 array('title' => $langModify,
                       'icon' => 'fa-edit',
-                      'url' => "$basecaturl . 'action=editcategory'"),
+                      'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
-                      'url' => "$basecaturl . 'action=deletecategory'",
+                      'url' => "$basecaturl" . "action=deletecategory",
                       'class' => 'delete',
                       'confirm' => $langCatDel),
                 array('title' => $langUp,
