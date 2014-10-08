@@ -7770,21 +7770,21 @@ div.panel_content .panel > table > tbody:first-child > tr:first-child td,
 }
 
 /* line 223, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel-default {
+.panel-default, .panel-action-button-default {
   border-color: #dddddd;
 }
 /* line 6, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_panels.scss */
-.panel-default > .panel-heading {
+.panel-default > .panel-heading, .panel-action-button-default > .panel-heading {
   color: #333333;
   background-color: whitesmoke;
   border-color: #dddddd;
 }
 /* line 11, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_panels.scss */
-.panel-default > .panel-heading + .panel-collapse > .panel-body {
+.panel-default > .panel-heading + .panel-collapse > .panel-body, .panel-action-button-default > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #dddddd;
 }
 /* line 16, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_panels.scss */
-.panel-default > .panel-footer + .panel-collapse > .panel-body {
+.panel-default > .panel-footer + .panel-collapse > .panel-body, .panel-action-button-default > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #dddddd;
 }
 
@@ -8628,12 +8628,12 @@ button.close {
   }
 }
 /* line 15, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_clearfix.scss */
-.clearfix:before, .clearfix:after {
+.clearfix:before, .panel-action-button-default > .panel-heading:before, .clearfix:after, .panel-action-button-default > .panel-heading:after {
   content: " ";
   display: table;
 }
 /* line 19, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_clearfix.scss */
-.clearfix:after {
+.clearfix:after, .panel-action-button-default > .panel-heading:after {
   clear: both;
 }
 
@@ -8975,4 +8975,14 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+/* line 17, ../sass/styles.scss */
+.panel-action-button-default > .panel-heading {
+  padding: 0 0 0 20px;
+  color: #333333;
+  border-color: #dddddd;
+}
+/* line 22, ../sass/styles.scss */
+.panel-action-button-default > .panel-heading h3 {
+  line-height: 45px;
 }

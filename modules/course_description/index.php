@@ -75,10 +75,10 @@ $q = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM
 if ($q && count($q) > 0) {
     $i = 0;
     foreach ($q as $row) {
-        $tool_content .= "
-        <table width='100%' class='tbl_border'>
-        <tr class='odd'>
-        <td class='bold'>" . q($row->title) . "</td><td width='3'>" .
+        $tool_content .= "            
+            <div class='panel panel-action-button-default'>
+              <div class='panel-heading'>
+                <div class='pull-right'>".
                 action_button(
                         array(
                             array(
@@ -90,7 +90,7 @@ if ($q && count($q) > 0) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$row->id",
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
-                                'confirm' => js_escape($langConfirmDelete)),
+                                'confirm' => $langConfirmDelete),
                             array('title' => $langAddToCourseHome,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$row->id",
                                 'icon' => $row->visible ? 'fa-eye' : 'fa-eye-slash'
@@ -104,17 +104,18 @@ if ($q && count($q) > 0) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$row->id",
                                 'show' => $i + 1 < count($q))
                         )
-                ) . "</td>
-        </tr>";
-        $tool_content .= handleType($row->type);
-        $tool_content .= "<tr>";
-        $colspan = ($is_editor) ? "colspan='6'" : "";
-        $tool_content .= "<td $colspan>" . standard_text_escape($row->comments) . "</td>";
-        $tool_content .= "</tr></table><br />";
+                ) ."</div>
+              <h3 class='panel-title'>$row->title</h3>      
+              </div>
+              <div class='panel-body'>"
+                .handleType($row->type)."<br><br>"
+               . standard_text_escape($row->comments) . 
+              "</div>
+            </div>";
         $i++;
     }
 } else {
-    $tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(true);
