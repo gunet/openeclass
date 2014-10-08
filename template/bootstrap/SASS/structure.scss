@@ -176,6 +176,7 @@ body > .container{
 		background: $color-header;
     border-bottom: 1px solid #DBDBDB;
 
+
 		.navbar-nav{
 			margin: 0;
 			float:right;
@@ -189,6 +190,8 @@ body > .container{
 					padding-top: 15px;
 					padding-bottom: 15px;
 
+          @include transition(all $transition-time linear);
+
 					i.fa{
 						margin:0 1em;		
 					}
@@ -197,7 +200,6 @@ body > .container{
 					&:focus{
 						background: $color-hover;
 						color: white;
-            @include transition(all $transition-time linear);							
 					}
 				}
 
