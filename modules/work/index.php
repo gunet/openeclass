@@ -1716,9 +1716,9 @@ function show_assignments() {
                     <table class='table table-striped table-bordered table-hover'>
                     <tr>
                       <th>$m[title]</th>
-                      <th>$m[subm]</th>
-                      <th>$m[nogr]</th>
-                      <th>$m[deadline]</th>
+                      <th class='text-center'>$m[subm]</th>
+                      <th class='text-center'>$m[nogr]</th>
+                      <th class='text-center'>$m[deadline]</th>
                       <th class='text-center'>".icon('fa-gears')."</th>
                     </tr>";
         $index = 0;
@@ -1733,34 +1733,19 @@ function show_assignments() {
             if (!$num_ungraded) {
                 $num_ungraded = '&nbsp;';
             }
-            if (!$row->active) {
-                $tool_content .= "\n<tr class = 'not_visible'>";
-            } else {
-                if ($index % 2 == 0) {
-                    $tool_content .= "\n<tr class='even'>";
-                } else {
-                    $tool_content .= "\n<tr class='odd'>";
-                }
-            }
-            if((int)$row->deadline){
-                $deadline = nice_format($row->deadline, true);
-            }else{
-                $deadline = $m['no_deadline'];
-            }
-            $tool_content .= "
-			  <td><img src='$themeimg/arrow.png' alt=''>
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'";
-            $tool_content .= ">";
-            $tool_content .= q($row->title);
-
-            $tool_content .= "</a></td>
-			  <td class='text-center'>$num_submitted</td>
-			  <td class='text-center'>$num_ungraded</td>
-			  <td class='text-center'>" . $deadline; 
+            
+            $tool_content .= "\n<tr class='".(!$row->active ? "not_visible":"")."'>";
+            $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
+            $tool_content .= "<td>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>$row->title</a>
+                            </td>
+                            <td class='text-center'>$num_submitted</td>
+                            <td class='text-center'>$num_ungraded</td>
+                            <td class='text-center'>$deadline"; 
             if ($row->time > 0) {
-                $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
+                $tool_content .= " <br><span>($langDaysLeft" . format_time_duration($row->time) . ")</span>";
             } else if((int)$row->deadline){
-                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
+                $tool_content .= " <br><span class='text-danger'>($m[expired])</span>";
             }                         
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
