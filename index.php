@@ -229,13 +229,38 @@ if ($uid AND !isset($_GET['logout'])) {
 
         <div class='row'>
 
-            <div class='col-md-7'>
-                $langInfoAbout
+            <div class='col-md-8'>
+
+               
+                <div class='panel padding'>
+                    $langInfoAbout
+                </div>
+
+                <div class='panel padding'>
+                    announcements here <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                </div>
+
+                   
+
+
+                
             </div>
             
 
-            <div class='col-md-5'>
-                announcements here
+            <div class='col-md-4'>
+               
+
+                <div class='panel padding'>
+                    banner1
+                    <br/><br/>
+                </div>
+
+                <div class='panel padding'>
+                    banner2
+                    <br/><br/>
+                </div>
+
+
             </div>
         
         </div>
@@ -244,7 +269,8 @@ if ($uid AND !isset($_GET['logout'])) {
 
 
         <div class='row'>
-        <div class='panel col-md-6'>
+            <div class='col-md-12'>
+                <div class='panel padding'>
                 
                 <form action='$urlSecure' method='post'>
                  <table width='100%' class='tbl'>
@@ -274,7 +300,7 @@ if ($uid AND !isset($_GET['logout'])) {
         }
         $tool_content .= "</table></form>
                 
-        </div>";
+        </div></div>";
     }
 
     $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
