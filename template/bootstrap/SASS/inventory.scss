@@ -1683,3 +1683,9 @@ span[data-cal-date]
     @include transition(all $transition-time linear);
   }
 }
+
+#cal-slide-content
+{
+  background: $color-background !important;
+  background-image: none;
+}

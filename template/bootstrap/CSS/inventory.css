@@ -1818,3 +1818,9 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
+
+/* line 1688, inventory.scss */
+#cal-slide-content {
+  background: #232c3a !important;
+  background-image: none;
+}
