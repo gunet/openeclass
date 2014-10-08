@@ -1109,7 +1109,7 @@ function show_student_assignment($id) {
     if ($submit_ok) {
         show_submission_form($id, $user_group_info);
     }
-    $tool_content .= "<br/><p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+    $tool_content .= "<br/><div class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
@@ -1125,11 +1125,16 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
                 $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
             } elseif ($user_group_info) {
-                $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
-                        selection($user_group_info, 'group_id') . "</td></tr>";
+                $group_select_form = "
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
+                            <div class='col-sm-10'>
+                              " . selection($user_group_info, 'group_id') . "
+                            </div>
+                        </div>";
             } else {
                 $group_link = $urlAppend . 'modules/group/';
-                $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
+                $tool_content .= "<div class='alert alert-warning'>$m[this_is_group_assignment] <br />" .
                         sprintf(count($user_group_info) ?
                                         $m['group_assignment_publish'] :
                                         $m['group_assignment_no_groups'], $group_link) .
@@ -1138,8 +1143,13 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
         } else {
             $groups_with_no_submissions = groups_with_no_submissions($id);
             if (count($groups_with_no_submissions)>0) {
-                $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
-                        selection($groups_with_no_submissions, 'group_id') . "</td></tr>";
+                $group_select_form = "
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
+                            <div class='col-sm-10'>
+                              " . selection($groups_with_no_submissions, 'group_id') . "
+                            </div>
+                        </div>";                
             }else{
                 Session::Messages($m['NoneWorkGroupNoSubmission'], 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);                
@@ -1148,45 +1158,62 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
     } elseif ($on_behalf_of) {
             $users_with_no_submissions = users_with_no_submissions($id);
             if (count($users_with_no_submissions)>0) {
-                $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
-                        selection($users_with_no_submissions, 'user_id') . "</td></tr>";
+                $group_select_form = "
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
+                            <div class='col-sm-10'>
+                              " .selection($users_with_no_submissions, 'user_id') . "
+                            </div>
+                        </div>";                 
             } else {
                 Session::Messages($m['NoneWorkUserNoSubmission'], 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
-    $notice = $on_behalf_of ? '' : "<br />$langNotice3";
-    $extra = $on_behalf_of ? "<tr><th class='left'>$m[grade]</th>
-                                     <td><input type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]:)
-                                         <input type='hidden' name='on_behalf_of' value='1'></td></tr>
-                                 <tr><th><label for='email_button'>$m[email_users]:</label></th>
-                                     <td><input type='checkbox' value='1' id='email_button' name='email'></td></tr>" : '';
+    $notice = $on_behalf_of ? '' : "<div class='alert alert-info'>".icon('fa-info-circle')." $langNotice3</div>";   
+    $extra = $on_behalf_of ? "                        
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$m[grade]:</label>
+                            <div class='col-sm-10'>
+                              <input type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]:)
+                              <input type='hidden' name='on_behalf_of' value='1'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='email_button' class='col-sm-2 control-label'>$m[email_users]: </label>
+                            <div class='col-sm-10'>
+                              <input type='checkbox' name='email' id='email_button' value='1'> 
+                            </div>
+                        </div>" : '';
     if (!$is_group_assignment or count($user_group_info) or $on_behalf_of) {
         $tool_content .= "
-                     <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+                    <h3>$langSubmit</h3>
+                    <hr><br>
+                    $notice
+                     <form class='form-horizontal' role='form' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
                         <fieldset>
-                        <legend>$langSubmit</legend>
-                        <table width='100%' class='tbl'>
                         $group_select_form
-                        <tr>
-                          <th class='left' width='150'>$langWorkFile:</th>
-                          <td><input type='file' name='userfile' /></td>
-                        </tr>
-                        <tr>
-                          <th class='left'>$m[comments]:</th>
-                          <td><textarea name='stud_comments' rows='5' cols='55'></textarea></td>
-                        </tr>
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                            <div class='col-sm-10'>
+                              <input type='file'  name='userfile' id='userfile'> 
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='stud_comments' class='col-sm-2 control-label'>$m[comments]:</label>
+                            <div class='col-sm-10'>
+                              <textarea name='stud_comments' id='stud_comments' rows='5' cols='55'></textarea>
+                            </div>
+                        </div>
                         $extra
-                        <tr>
-                          <th>&nbsp;</th>
-                          <td align='right'><input type='submit' value='$langSubmit' name='work_submit' />$notice</td>
-                        </tr>
-                        </table>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input type='submit' value='$langSubmit' name='work_submit' />
+                        </div>
                         </fieldset>
                      </form>
-                     <p align='right'><small>$GLOBALS[langMaxFileSize] " .
-                ini_get('upload_max_filesize') . "</small></p>";
+                     <div class='pull-right'><small>$GLOBALS[langMaxFileSize] " .
+                ini_get('upload_max_filesize') . "</small></div><br>";
     }
 }
 

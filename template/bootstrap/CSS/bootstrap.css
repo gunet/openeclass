@@ -8976,13 +8976,18 @@ button.close {
     display: none !important;
   }
 }
-/* line 17, ../sass/styles.scss */
+/* line 14, ../sass/styles.scss */
+input[type="file"] {
+  padding-top: 7px;
+}
+
+/* line 19, ../sass/styles.scss */
 .panel-action-button-default > .panel-heading {
   padding: 0 0 0 20px;
   color: #333333;
   border-color: #dddddd;
 }
-/* line 22, ../sass/styles.scss */
+/* line 24, ../sass/styles.scss */
 .panel-action-button-default > .panel-heading h3 {
   line-height: 45px;
 }
