@@ -562,7 +562,7 @@ $tool_content .= "
 
 // Contentbox: Course main contentbox
 $tool_content .= "
-<div class='row margin-top-thin'>
+<div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
         <div class='panel row padding'>
 
@@ -586,7 +586,7 @@ $tool_content .= "
 
         </div>
     </div>
-<div>
+</div>
 ";
 
 // Contentbox: Thematikes enotites
@@ -606,18 +606,33 @@ $tool_content .= "
 if (!$alter_layout) {
     $tool_content .= "
     <div class='col-md-8'>
-        <span class='content-title'>$langCourseUnits</span>".
+        <div class='row'>
+            <div class='col-md-6'>
+
+                <h5 class='content-title'>$langCourseUnits</h5>
+            </div>
+
+            ".
         (($is_editor)? "
             
-            <span class='align-right'>
-                <span class='toolbox margin-bottom-thin margin-top-thin'>
+            <div class='col-md-6 no-gutters'>
+                <div class='toolbox margin-bottom-thin margin-top-thin pull-right'>
                     <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
                     </a>
-                </span>                          
-            </span>" : "")."                
+                </div>
+            </div>                         
+            " : "")."
+
+            
+
+        </div>
+
+
+        <div class='row'>            
             $cunits_content
+        </div>
     </div>";
 }
 
@@ -664,8 +679,8 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 </ul>
             </div>
         </div>        
-    </div>
-</div>";
+    
+";
 
 
 $tool_content .= "
