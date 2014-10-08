@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,7 +28,7 @@ require_once 'include/lib/textLib.inc.php';
 $nameTools = $langAnnouncements;
 
 $isaid = isset($_GET['aid']);
-$announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?" :
+$announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?d" :
                 "SELECT `date`, `title` , `body` FROM `admin_announcement`
 	        WHERE `visible` = 1 AND lang= ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
 
