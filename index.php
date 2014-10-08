@@ -251,13 +251,11 @@ if ($uid AND !isset($_GET['logout'])) {
                
 
                 <div class='panel padding'>
-                    banner1
-                    <br/><br/>
+                    <img src='$themeimg/open_courses_bnr.png'>
                 </div>
 
                 <div class='panel padding'>
-                    banner2
-                    <br/><br/>
+                    <img src='$themeimg/open_eclass_bnr.png'>
                 </div>
 
 
