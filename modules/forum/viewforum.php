@@ -232,6 +232,7 @@ if (count($result) > 0) { // topics found
         if (!isset($last_visit)) {
             $last_visit = 0;
         }
+        /*
         if ($replies >= $hot_threshold) {
             if ($last_post_time < $last_visit)
                 $image = $hot_folder_image;
@@ -239,19 +240,20 @@ if (count($result) > 0) { // topics found
                 $image = $hot_newposts_image;
         } else {
             if ($last_post_time < $last_visit) {
-                $image = $folder_image;
+                $image = icon('fa-comments');
             } else {
                 $image = $newposts_image;
             }
-        }
-        $tool_content .= "<td width='1'><img src='$image' /></td>";
+        }*/
+        $image = icon('fa-comments');
+        $tool_content .= "<td>".$image."</td>";
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($replies > $posts_per_page) {
             $total_reply_pages = ceil($replies / $posts_per_page);
-            $pagination .= "<strong class='pagination'><span>\n<img src='$posticon_more' />";
+            $pagination .= "<strong class='pagination'><span>".icon('fa-arrow-circle-right')."";
             add_topic_link(0, $total_reply_pages);
             if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
                 $pagination .= "&nbsp;...&nbsp;";

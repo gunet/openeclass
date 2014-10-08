@@ -165,15 +165,16 @@ if ($total_categories > 0) {
                     if (empty($last_post)) {
                         $last_post = $langNoPosts;
                     }
-                    $tool_content .= "<tr class='even'>";
+                    $tool_content .= "<tr>";
                     if (!isset($last_visit)) {
                         $last_visit = 0;
-                    }
+                    }/*
                     if (@$last_post_time > $last_visit && $last_post != $langNoPosts) {
-                        $tool_content .= "<td width='1'><img src='$newposts_image' /></td>";
+                        $tool_content .= "<td><img src='$newposts_image' /></td>";
                     } else {
-                        $tool_content .= "<td width='2'><img src='$folder_image' /></td>";
-                    }
+                        $tool_content .= "<td>".icon('fa-comments')."</td>";
+                    }*/
+                    $tool_content .= "<td>".icon('fa-comments')."</td>";
                     $forum_name = q($forum_data->name);
                     if ($forum_data->poster_id) {
                         $last_user_post = uid_to_name($forum_data->poster_id);
@@ -209,9 +210,9 @@ if ($total_categories > 0) {
                     if ($total_topics > 0 && $total_posts > 0) {
                         $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;
                                                 <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
-						<img src='$icon_topic_latest' />
+						".icon('fa-comment-o', $langLastPost)."
 						</a>
-						<br />$human_last_post_time</span></td>";
+						$human_last_post_time</span></td>";
                     } else {
                         $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
                     }

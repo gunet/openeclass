@@ -23,10 +23,4 @@ $topics_per_page = 10;
 $posts_per_page = 10;
 $hot_threshold = 30;
 
-$folder_image = "$themeimg/topic_read.gif";
-$icon_topic_latest = "$themeimg/icon_topic_latest.gif";
-$hot_folder_image = $newposts_image = $folder_image;
-$hot_newposts_image = "$themeimg/topic_read_hot.gif";
-$posticon_more = "$themeimg/icon_pages.gif";
-
 define('PAGINATION_CONTEXT', 3);
