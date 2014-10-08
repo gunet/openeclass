@@ -309,11 +309,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'learnPath_id' => $lp_learnPath_map)), $url_prefix_map, $backupData, $restoreHelper);
         foreach ($lp_learnPath_map as $old_id => $new_id) {
             // new and old id might overlap as the map contains multiple values!
-            rename("$coursedir/scormPackages/path_$old_id", "$coursedir/scormPackages/__during_restore__$new_id");
+            $old_dir = "$coursedir/scormPackages/path_$old_id";
+            if (file_exists($old_dir) && is_dir($old_dir)) {
+                rename($old_dir, "$coursedir/scormPackages/__during_restore__$new_id");
+            }
         }
         foreach ($lp_learnPath_map as $old_id => $new_id) {
             // better to use an intermediary rename step
-            rename("$coursedir/scormPackages/__during_restore__$new_id", "$coursedir/scormPackages/path_$new_id");
+            $tempLPDir = "$coursedir/scormPackages/__during_restore__$new_id";
+            if (file_exists($tempLPDir) && is_dir($tempLPDir)) {
+                rename($tempLPDir, "$coursedir/scormPackages/path_$new_id");
+            }
         }
 
         // Wiki
