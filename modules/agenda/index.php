@@ -412,7 +412,7 @@ if (count($result) > 0) {
         $tool_content .= "</b> $msg $content</div></td>";
 
         if ($is_editor) {
-            $tool_content .= "<td class='text-right'>";
+            $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                     array('title' => $langModify,
                           'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
