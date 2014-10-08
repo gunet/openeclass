@@ -884,6 +884,22 @@ form.login-form{
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 
+
+@media only screen and (min-width: 768px) and (max-width : 992px) {
+
+  .jumbotron.jumbotron-login img.graphic{
+    bottom: -3.5rem;
+    
+  }
+
+}
+
+
+
+
+
+
+
 /* No breakpoints bellow 1366 or smth */
 
 @media (max-width: 1339px){
