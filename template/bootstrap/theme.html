@@ -146,8 +146,8 @@
 		                            <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
 		                            <!-- END breadCrumbStartBlock -->
 		                            <!-- BEGIN breadCrumbEndBlock -->
-		                            <!-- END breadCrumbEndBlock -->
 		                        </ol>
+                                <!-- END breadCrumbEndBlock -->
 		        			</div>
 	                    </div>
 
@@ -237,70 +237,20 @@
 
 								<div class="side-list accordion">
 									
-									<h5 class="lesson-title accordion-title">Διαφορικές εξισώσεις με μερικές παραγώγους</h5>
+                                    <!-- BEGIN sideBarCourseBlock -->
+                                    <h5 class="lesson-title accordion-title"><a href='{%sideBarCourseURL%}'>{%sideBarCourseTitle%}</a></h5>
 									<div>
 										<ul>
-											<li class="lesson-id">ID: 1230</li>
-											<li class="lesson-professor">Μίκης Θεοδωράκης</li>
+                                            <li class="lesson-id">ID: {%sideBarCourseCode%}</li>
+                                            <li class="lesson-professor">{%sideBarCourseProf%}</li>
 											<li class="lesson-notifications">
-												<span class="item">
-													<i class="fa fa-calendar"></i>
-													<span class="count">3</span></span>
-													<span class="item"><i class="fa fa-file-text"></i>
-													<span class="count">2</span>
-												</span>
+                                                <!-- BEGIN sideBarCourseNotifyBlock -->
+                                                <span class="item"><i class="fa {%sideBarCourseNotifyIcon%}"></i><span class="count">{%sideBarCourseNotifyCount%}</span></span>
+                                                <!-- END sideBarCourseNotifyBlock -->
 											</li>
 										</ul>
 									</div>
-
-									<h5 class="lesson-title accordion-title">Εφαρμοσμένη Ανάλυση Παλινδρόμησης και Διασποράς</h5>
-									<div>
-										<ul>
-											<li class="lesson-id">ID: 1230</li>
-											<li class="lesson-professor">Γεώργιος Ξενοφών</li>
-											<li class="lesson-notifications">
-												<span class="item"><i class="fa fa-play"></i><span class="count">12</span></span>
-												<span class="item"><i class="fa fa-calendar"></i><span class="count">99</span></span>
-												<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
-											</li>
-										</ul>
-									</div>
-
-									<h5 class="lesson-title accordion-title">Μαθηματικές Μέθοδοι στην Επιχειρησιακή Έρευνα</h5>
-									<div>
-										<ul>
-											<li class="lesson-id">ID: 1230</li>
-											<li class="lesson-professor">Γιάννης Τσαρτσαφλής</li>
-											<li class="lesson-notifications">
-												<span class="item"><i class="fa fa fa-bullhorn"></i><span class="count">2</span></span>
-												<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
-											</li>
-										</ul>
-									</div>
-
-									<h5 class="lesson-title accordion-title">Στατιστική</h5>
-									<div>
-										<ul>
-											<li class="lesson-id">ID: 1230</li>
-											<li class="lesson-professor">Ελένη Μακιαβέλη</li>
-											<li class="lesson-notifications">
-												<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
-												<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
-											</li>
-										</ul>
-									</div>
-
-									<h5 class="lesson-title accordion-title">Theming Drupal: The most time efficient way to beatify your omega subtheme</h5>
-									<div>
-										<ul>
-											<li class="lesson-id">ID: 9912</li>
-											<li class="lesson-professor">Παναγιώτης Χαραλαμπίδης</li>
-											<li class="lesson-notifications">
-												<span class="item"><i class="fa fa-calendar"></i><span class="count">3</span></span>
-												<span class="item"><i class="fa fa-file-text"></i><span class="count">2</span></span>
-											</li>
-										</ul>
-									</div>
+                                    <!-- END sideBarCourseBlock -->
 
 								</div>
 							</li>
