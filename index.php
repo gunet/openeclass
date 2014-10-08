@@ -40,11 +40,6 @@ require_once 'include/phpass/PasswordHash.php';
 // $homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 
-// check if we can connect to database. If not then eclass is most likely not installed
-if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword) && !Database::get()) {
-    require_once 'include/not_installed.php';
-}
-
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';
 if (isset($dbname)) {
