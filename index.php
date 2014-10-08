@@ -157,7 +157,7 @@ if ($uid AND !isset($_GET['logout'])) {
                         <div class='hidden-xs col-sm-7 col-md-7' style='position: static;'>
                             <img class='graphic' src='$themeimg/indexlogo.png'/>
                         </div>                        
-                        <form class='login-form col-xs-12 col-sm-5 col-md-5 col-lg-4 pull-right' action='$urlSecure' method='post'>
+                        <form class='login-form col-xs-12 col-sm-7 col-md-5 col-lg-4 pull-right' action='$urlSecure' method='post'>
                             <h2>$langUserLogin</h2>
                             <div class='form-group'>
                                 <input autofocus type='text' class='col-xs-10 col-sm-10 col-md-10' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
