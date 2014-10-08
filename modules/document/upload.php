@@ -197,7 +197,7 @@ if ($can_upload) {
 
     </div>";
 } else {
-    $tool_content .= "<span class='alert-warning'>$langNotAllowed</span>";
+    $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
 if (defined('COMMON_DOCUMENTS')) {

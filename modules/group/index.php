@@ -499,35 +499,31 @@ if ($is_editor) {
     // groups list
     if ($num_of_groups > 0) {
         $tool_content .= "<br />
-                <table width='100%' align='left' class='tbl_alt'>
+                <div class='table-responsive'>
+                <table class='table table-striped table-bordered table-hover'>
                 <tr>
-                  <th colspan='2'><div align='left'>$langGroupName</div></th>
+                  <th>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='30'>$langRegistered</th>
                   <th width='30'>$langMax</th>
-                  <th width='30'>$langActions</th>
+                  <th class='text-center'>".icon('fa-gears', $langActions)."</th>
                 </tr>";
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
-            if ($myIterator % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-            $tool_content .= "<td width='16'>
-                        <img src='$themeimg/arrow.png' alt='' /></td><td>
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>
                         <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {                
                 $tool_content .= display_user($t->user_id) . "<br />";
             }
-            $tool_content .= "</td><td class='center'>$member_count</td>";
+            $tool_content .= "</td><td class='text-center'>$member_count</td>";
             if ($max_members == 0) {
                 $tool_content .= "<td>-</td>";
             } else {
-                $tool_content .= "<td class='center'>$max_members</td>";
+                $tool_content .= "<td class='text-center'>$max_members</td>";
             }
-            $tool_content .= "<td class='center'>" .
+            $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEdit,
                             'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
@@ -541,9 +537,9 @@ if ($is_editor) {
             $totalRegistered += $member_count;
             $myIterator++;
         }
-        $tool_content .= "</table><br />";
+        $tool_content .= "</table></div><br>";
     } else {
-        $tool_content .= "<p class='alert1'>$langNoGroup</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     }          
     
 } else {

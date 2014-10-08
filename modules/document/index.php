@@ -1106,7 +1106,7 @@ if ($can_upload) {
 $doc_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM document WHERE $group_sql $filter" .
                 ($can_upload ? '' : " AND visible=1"))->count;
 if ($doc_count == 0) {
-    $tool_content .= "<div class='text-center alert-warning'>$langNoDocuments</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
 } else {
     // Current Directory Line
     $tool_content .= "
