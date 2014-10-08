@@ -552,24 +552,6 @@ $tool_content .= "
             </div>
     ";
 
-            // Button: email - contact professor
-            if ($status != USER_GUEST) {
-                if ($receive_mail) {
-                    $tool_content .= "
-                        <a href='../../modules/contact/index.php?course=$course_code' id='email_btn' class='btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langContactProf' >
-                                <i class='fa fa-envelope'></i>
-                        </a>";
-                }
-            }
-
-            // Button: rss
-            if (visible_module(MODULE_ID_ANNOUNCE)) {
-                $tool_content .= "
-                        <a href='${urlServer}modules/announcements/rss.php?c=$course_code' class='btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='tooltip' data-placement='top' title='" . q($langRSSFeed) . "'>
-                                <i class='fa fa-rss'></i>
-                        </a>";
-            }
-
             // Button: toggle student view
             $tool_content .= "
         </div>
@@ -655,8 +637,7 @@ if (isset($level) && !empty($level)) {
 
 $tool_content .= "
         <div class='row'>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>$langLicence</h5>
+            <div class='col-md-$cunits_sidebar_subcolumns'>                
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
