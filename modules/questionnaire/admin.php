@@ -38,7 +38,7 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
 }
-if (isset($_POST['cancelPoll']) || isset($_POST['cancelQuestion']) || isset($_POST['cancelAnswers'])) {
+if (isset($_POST['cancelPoll']) || isset($_POST['cancelAnswers'])) {
     if(isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$_GET[pid]");          
     } else {
@@ -320,34 +320,50 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
      
     $action_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid".(isset($_GET['modifyQuestion']) ? "&amp;modifyQuestion=$question->pqid" : "&amp;newQuestion=yes");
     $action_url .= isset($_GET['questionType']) ?  '&amp;questionType=label' : '';
-    $tool_content .= "<form action='$action_url' method='post'>";
-    $tool_content .= "
+    
+    $tool_content .= "<hr><br><form class='form-horizontal' role='form' action='$action_url' method='post'>
 	<fieldset>
-	  <legend>$langInfoQuestion</legend>
-	  <table class='tbl'>
-	  <tr>
-	    <th>$langQuestion:</th>
-	    <td>".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' name='questionName'" . "size='50' value='".(isset($question)? q($question->question_text) : '')."'>")."</td>
-	  </tr>";
+            <div class='form-group'>
+                <label for='questionName' class='col-sm-2 control-label'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
+                <div class='col-sm-10'>
+                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' id='questionName' name='questionName' size='50' value='".(isset($question)? q($question->question_text) : '')."'>")."
+                </div>
+            </div>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
-        $tool_content .= "<tr><th>&nbsp;</th><td><input type='hidden' name='answerType' value='".QTYPE_LABEL."'></td></tr><tr><th>&nbsp;</th>";   
+        $tool_content .= "<input type='hidden' name='answerType' value='".QTYPE_LABEL."'>";
     } else {
-        $tool_content .= "<tr>
-            <th valign='top'>$langAnswerType: </th>
-            <td><input type='radio' name='answerType' value='".QTYPE_SINGLE."' ".((isset($question) && $question->qtype == QTYPE_SINGLE) || !isset($question) ? 'checked="checked"' : '').">". $aType[QTYPE_SINGLE - 1] . "<br>"
-            . "<input type='radio' name='answerType' value='".QTYPE_MULTIPLE."' ".(isset($question) && $question->qtype == QTYPE_MULTIPLE ? 'checked="checked"' : '').">". $aType[QTYPE_MULTIPLE - 1] . "<br>"
-            . "<input type='radio' name='answerType' value='".QTYPE_FILL."' ".(isset($question) && $question->qtype == QTYPE_FILL ? 'checked="checked"' : '').">". $aType[QTYPE_FILL - 1] . "<br>
-            </td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>";
+        $tool_content .= "
+            <div class='form-group'>
+                <label for='answerType' class='col-sm-2 control-label'>$langExerciseType:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' id='answerType' value='1' value='".QTYPE_SINGLE."' ".((isset($question) && $question->qtype == QTYPE_SINGLE) || !isset($question) ? 'checked' : '').">
+                        ". $aType[QTYPE_SINGLE - 1] . "
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' id='answerType' value='".QTYPE_MULTIPLE."' ".(isset($question) && $question->qtype == QTYPE_MULTIPLE ? 'checked' : '').">
+                        ". $aType[QTYPE_MULTIPLE - 1] . "
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' id='answerType' value='".QTYPE_FILL."' ".(isset($question) && $question->qtype == QTYPE_FILL ? 'checked="checked"' : '').">
+                        ". $aType[QTYPE_FILL - 1] . "
+                      </label>
+                    </div>                    
+                </div>
+            </div>";
     }
-    if (isset($_GET['newQuestion'])) {
-        $tool_content .= "<td><input type='submit' name='submitQuestion' value='$langCreate'>&nbsp;&nbsp;";
-    } else {
-        $tool_content .= "<td><input type='submit' name='submitQuestion' value='$langModify'>&nbsp;&nbsp;";
-    }
-    $tool_content .= "<input type='submit' name='cancelQuestion' value='$langCancel'></td></tr></table></form>";
+    $tool_content .= "
+            <div class='col-md-10 col-md-offset-2'>
+                <input type='submit' class='btn btn-primary' name='submitQuestion' value='".(isset($_GET['newQuestion']) ? $langCreate : $langModify)."'>
+                <a href='admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : "")."' class='btn btn-default'>$langCancel</a>
+            </div>
+        </fieldset>
+    </form>";
 
 //Modify Answers    
 } elseif (isset($_GET['modifyAnswers'])) {    
@@ -418,8 +434,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </fieldset>
     ";   
 // View edit poll page     
-} else {
+} else {    
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'level' => 'primary',
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply')));    
     $tool_content .= "
         <div class='panel panel-primary'>
           <div class='panel-heading'>
@@ -493,8 +514,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "<table class='table table-striped table-bordered table-hover'>
                     <tbody>
                         <tr>
-                          <th colspan='2' class='left'>$langQuesList</th>
-                          <th colspan='4' class='center'>$langCommands</th>
+                          <th colspan='2'>$langQuesList</th>
+                          <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
                         </tr>";
         $i=1;
         $nbrQuestions = count($questions);
@@ -503,10 +524,32 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <td align='right' width='1'>$i.</td>
                             <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text) : $question->question_text)."<br>".
                             $aType[$question->qtype - 1]."</td>
-                            <td class='right' width='50'>".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&editQuestion=$question->pqid")."&nbsp;".  icon('fa-times', $langDelete, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&deleteQuestion=$question->pqid", "onclick='return confirm(\"$langConfirmYourChoice\");'")."</td>
-                            <td width='20'>".(($i!=1) ? icon('fa-arrow-up', $langUp, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid") : '')."</td>
-                            <td width='20'>".(($i!=$nbrQuestions) ? icon('fa-arrow-down', $langDown, $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid") : '')."</td>
-                        </tr>";
+                            <td class='option-btn-cell'>".action_button(array(
+                                array(
+                                    'title' => $langEdit,
+                                    'icon' => 'fa-edit',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid&editQuestion=$question->pqid"
+                                ),
+                                array(
+                                    'title' => $langDelete,
+                                    'icon' => 'fa-times',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid&deleteQuestion=$question->pqid",
+                                    'class' => 'delete',
+                                    'confirm' => $langConfirmYourChoice                                  
+                                ),
+                                array(
+                                    'title' => $langUp,
+                                    'icon' => 'fa-arrow-up',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid",
+                                    'show' => $i!=1
+                                ),
+                                array(
+                                    'title' => $langDown,
+                                    'icon' => 'fa-arrow-down',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid",
+                                    'show' => $i!=$nbrQuestions                                   
+                                )
+                            ))."</td></tr>";
             $i++;
         }
         $tool_content .= "</tbody></table>";
