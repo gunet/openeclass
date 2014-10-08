@@ -248,6 +248,7 @@ if ($uid AND !isset($_GET['logout'])) {
 
 
 
+
         <div class='row'>
         <div class='panel col-md-6'>
                 
