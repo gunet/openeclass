@@ -273,8 +273,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'file_id' => $document_map), 'delete' => array('file'), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
 
         // Video
-        $video_map = restore_table($restoreThis, 'video', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
-        $videolink_map = restore_table($restoreThis, 'videolink', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $videocat_map = restore_table($restoreThis, 'video_category', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $video_map = restore_table($restoreThis, 'video', array(
+            'map' => array('category' => $videocat_map),
+            'set' => array('course_id' => $course_id),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        $videolink_map = restore_table($restoreThis, 'videolink', array(
+            'map' => array('category' => $videocat_map),
+            'set' => array('course_id' => $course_id),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Dropbox
         $dropbox_map = restore_table($restoreThis, 'dropbox_msg', array('set' => array('course_id' => $course_id),

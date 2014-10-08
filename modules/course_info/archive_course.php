@@ -89,6 +89,7 @@ $archive_conditions = array(
     'course_description' => $sql_course,
     'glossary' => $sql_course,
     'glossary_category' => $sql_course,
+    'video_category' => $sql_course,
     'video' => $sql_course,
     'videolink' => $sql_course,
     'dropbox_msg' => $sql_course,

@@ -22,8 +22,8 @@
 
 class RestoreHelper {
 
-    const STYLE_2X = 2;
-    const STYLE_3X = 3;
+    const STYLE_2X = '2.0';
+    const STYLE_3X = '3.0';
     const STYLE_3X_MIN = '2.99';
     const FIELD_DROP = 901;
 
@@ -76,7 +76,7 @@ class RestoreHelper {
     }
 
     public static function resolveBackupVersion($eclassVersion) {
-        if ($eclassVersion >= self::STYLE_3X_MIN) {
+        if (version_compare($eclassVersion, self::STYLE_3X_MIN, '>=')) {
             return self::STYLE_3X;
         } else {
             return self::STYLE_2X;
