@@ -883,70 +883,49 @@ form.login-form .btn.btn-login:hover {
 }
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
-@media only screen and (min-width: 768px) and (max-width: 992px) {
-  /* Styles */
-  /* line 890, structure.scss */
-  form.login-form .login-settings .link {
-    float: left!important;
-    margin-top: 1em;
-  }
-
-  /* line 895, structure.scss */
-  .jumbotron.jumbotron-login img.graphic {
-    top: 7.1rem;
-    left: -2rem;
-    width: 100%;
-  }
-}
-@media only screen and (min-width: 992px) and (max-width: 1200px) {
-  /* line 904, structure.scss */
-  .jumbotron.jumbotron-login img.graphic {
-    width: 94%;
-  }
-}
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 917, structure.scss */
+  /* line 890, structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 923, structure.scss */
+  /* line 896, structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 930, structure.scss */
+  /* line 903, structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 936, structure.scss */
+  /* line 909, structure.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 941, structure.scss */
+  /* line 914, structure.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 945, structure.scss */
+  /* line 918, structure.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 949, structure.scss */
+  /* line 922, structure.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 956, structure.scss */
+  /* line 929, structure.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,
