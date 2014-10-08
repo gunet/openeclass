@@ -829,7 +829,7 @@ form.login-form .form-group label {
 form.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
-  color: rgba(0, 0, 0, 0.5);
+  color: #aaaaaa;
 }
 /* line 825, structure.scss */
 form.login-form .login-settings {
