@@ -721,7 +721,7 @@ body.page-login h1 {
   padding-top: 3rem;
   padding-bottom: 3rem;
   margin-bottom: 60px;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: -15px;
   margin-right: -15px;
   border-radius: 0px;
@@ -748,7 +748,7 @@ body.page-login h1 {
   width: 77%;
   max-width: 100%;
   bottom: 1.5rem;
-  height: 100%;
+  height: 90%;
   width: auto;
 }
 
