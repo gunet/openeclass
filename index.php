@@ -184,23 +184,17 @@ if ($uid AND !isset($_GET['logout'])) {
     	}
     }
 
-    $tool_content .= "</div>
-
-    ";
+    
     if (!get_config('dont_display_login_form')) {
         $tool_content .= "
 
 
-        <div class='row add-gutter margin-bottom-thin'>
-            <div class='col-md-12'>
-                <h1 class='login-heading'>Open eClass - Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης</h1>
-            </div>
-        </div>
+        
 
 
 
-        <div class='row'>
-            <div class='col-md-12'>
+        <div class='row margin-top-fat'>
+            <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
                         <div class='hidden-xs col-sm-7 col-md-7'>
@@ -284,6 +278,8 @@ if ($uid AND !isset($_GET['logout'])) {
     }
 
     $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
+
+    $tool_content .= "</div>";    
 
     draw($tool_content, 0, null, $rss_link);
 }
