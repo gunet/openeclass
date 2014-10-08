@@ -403,13 +403,13 @@ if (count($result) > 0) {
         } else {
             $msg = '';
         }
-        $tool_content .= "<br><b><div class='event'>";
+        $tool_content .= "<br><b>";
         if ($myrow->title == '') {
             $tool_content .= $langAgendaNoTitle;
         } else {
             $tool_content .= q($myrow->title);
         }
-        $tool_content .= "</b> $msg $content</div></td>";
+        $tool_content .= " $msg $content</b></td>";
 
         if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
