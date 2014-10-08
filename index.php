@@ -148,6 +148,8 @@ if ($uid AND !isset($_GET['logout'])) {
    
     if (!get_config('dont_display_login_form')) {
         $tool_content .= "
+
+
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
@@ -208,7 +210,9 @@ if ($uid AND !isset($_GET['logout'])) {
         }        
     }
 
-        $tool_content .= "<div class='row'>
+        $tool_content .= "
+
+        <div class='row'>
 
             <div class='col-md-8'>
                 <div class='panel padding'>
@@ -228,23 +232,18 @@ if ($uid AND !isset($_GET['logout'])) {
                     <img src='$themeimg/open_eclass_bnr.png'>
                 </div>
 
-            </div>";
-
-        
-        $tool_content .= "<div class='row'>";
+                ";
         $online_users = getOnlineUsers();
-        if ($online_users > 0) {
-            $tool_content .= "<br />$langOnlineUsers: $online_users";
-        }
-        $tool_content .= "<br />$langOnlineUsers: $online_users
-            </div>";
-        $tool_content .= "</div></div>
+        $tool_content .= "
+                <div class='panel padding'>
+                    $langOnlineUsers: $online_users
+                </div>
 
-        <div class='row'>";
-        
-        
-        
-    }    
-    $tool_content .= "</div>";    
+            </div>
+        </div>";
+
+    }
+
+
     draw($tool_content, 0, null, $rss_link);
 }
