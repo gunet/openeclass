@@ -756,11 +756,27 @@ form.login-form {
   background: white;
   border-radius: 3rem;
   padding: 2em 3em;
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
 }
-/* line 755, structure.scss */
+/* line 754, structure.scss */
+form.login-form:hover {
+  box-shadow: 0px 0px 20px 3px black;
+  -moz-box-shadow: 0px 0px 20px 3px black;
+  -webkit-box-shadow: 0px 0px 20px 3px black;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 762, structure.scss */
 form.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -768,16 +784,16 @@ form.login-form h2 {
   margin-top: 0rem;
   color: #232c3a;
 }
-/* line 763, structure.scss */
+/* line 770, structure.scss */
 form.login-form .form-group {
   margin: 0rem;
 }
-/* line 768, structure.scss */
+/* line 775, structure.scss */
 form.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
-/* line 774, structure.scss */
+/* line 781, structure.scss */
 form.login-form .form-group input {
   border-top: none;
   border-right: none;
@@ -793,52 +809,52 @@ form.login-form .form-group input {
   line-height: 1.42857143;
   color: #555;
 }
-/* line 791, structure.scss */
+/* line 798, structure.scss */
 form.login-form .form-group input:focus {
   border-color: rgba(0, 0, 0, 0.12);
 }
-/* line 796, structure.scss */
+/* line 804, structure.scss */
 form.login-form .form-group label {
   margin: 0;
   text-align: center;
 }
-/* line 801, structure.scss */
+/* line 809, structure.scss */
 form.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 808, structure.scss */
+/* line 816, structure.scss */
 form.login-form .login-settings {
   margin: 2rem 0rem;
   font-size: 0.9em;
 }
-/* line 812, structure.scss */
+/* line 820, structure.scss */
 form.login-form .login-settings > * {
   margin: 0;
 }
-/* line 817, structure.scss */
+/* line 825, structure.scss */
 form.login-form .login-settings .checkbox,
 form.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 822, structure.scss */
+/* line 830, structure.scss */
 form.login-form .login-settings .checkbox label,
 form.login-form .login-settings .link label {
   font-weight: bold;
 }
-/* line 826, structure.scss */
+/* line 834, structure.scss */
 form.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 832, structure.scss */
+/* line 840, structure.scss */
 form.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
-/* line 838, structure.scss */
+/* line 846, structure.scss */
 form.login-form .btn.btn-login {
   width: 100%;
   height: 4rem;
@@ -849,13 +865,13 @@ form.login-form .btn.btn-login {
   background: #428bca;
   letter-spacing: 0.1em;
 }
-/* line 848, structure.scss */
+/* line 856, structure.scss */
 form.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
 /* DELETE THIS */
-/* line 855, structure.scss */
+/* line 863, structure.scss */
 .row .deleteThisClass {
   height: 400px;
   border: 1px solid #eee;
@@ -865,13 +881,13 @@ form.login-form .btn.btn-login:hover {
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 @media only screen and (min-width: 768px) and (max-width: 992px) {
   /* Styles */
-  /* line 878, structure.scss */
+  /* line 886, structure.scss */
   form.login-form .login-settings .link {
     float: left!important;
     margin-top: 1em;
   }
 
-  /* line 883, structure.scss */
+  /* line 891, structure.scss */
   .jumbotron.jumbotron-login img.graphic {
     top: 7.1rem;
     left: -2rem;
@@ -879,54 +895,54 @@ form.login-form .btn.btn-login:hover {
   }
 }
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
-  /* line 892, structure.scss */
+  /* line 900, structure.scss */
   .jumbotron.jumbotron-login img.graphic {
     width: 94%;
   }
 }
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 905, structure.scss */
+  /* line 913, structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 911, structure.scss */
+  /* line 919, structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 918, structure.scss */
+  /* line 926, structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 924, structure.scss */
+  /* line 932, structure.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 929, structure.scss */
+  /* line 937, structure.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 933, structure.scss */
+  /* line 941, structure.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 937, structure.scss */
+  /* line 945, structure.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 944, structure.scss */
+  /* line 952, structure.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,

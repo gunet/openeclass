@@ -748,9 +748,16 @@ form.login-form{
   border-radius: 3rem;
   padding: 2em 3em;
 
-  box-shadow: 0px 0px 25px rgba(0,0,0,.4);
-  -moz-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
-  -webkit-box-shadow: 0px 0px 25px rgba(0,0,0,.4);
+  @include box-shadow(0px 0px 25px rgba(0,0,0,.5));
+  @include transition(all $transition-time linear);
+
+   &:hover{
+
+    @include box-shadow(0px 0px 20px 3px rgb(0,0,0));
+    @include transition(all $transition-time linear);
+
+  }
+
 
   h2{
     text-align:center;
@@ -791,6 +798,7 @@ form.login-form{
     &:focus{
       border-color: rgba(0,0,0,.12);
     }
+
   }
 
   .form-group label{
