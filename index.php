@@ -154,7 +154,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
-                        <div class='hidden-xs col-sm-7 col-md-7'>
+                        <div class='hidden-xs col-sm-7 col-md-7' style='position: static;'>
                             <img class='graphic' src='$themeimg/indexlogo.png'/>
                         </div>                        
                         <form class='login-form col-xs-12 col-sm-5 col-md-5 col-lg-4 pull-right' action='$urlSecure' method='post'>
