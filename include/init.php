@@ -433,6 +433,17 @@ if (isset($_SESSION['courses'])) {
     unset($status);
 }
 
+// Temporary student view
+if (isset($_SESSION['student_view'])) {
+    if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
+        $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
+        $saved_is_editor = $is_editor;
+        $is_admin = $is_editor = $is_course_admin = false;
+    } else {
+        unset($_SESSION['student_view']);
+    }
+}
+
 $is_opencourses_reviewer = FALSE;
 if (get_config('opencourses_enable') && isset($currentCourse) && check_opencourses_reviewer()) {
     $is_opencourses_reviewer = TRUE;
@@ -449,17 +460,6 @@ if (isset($require_editor) and $require_editor) {
     if (!$is_editor) {
         $toolContent_ErrorExists = $langCheckProf;
         $errorMessagePath = "../../";
-    }
-}
-
-// Temporary student view
-if (isset($_SESSION['student_view'])) {
-    if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
-        $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
-        $saved_is_editor = $is_editor;
-        $is_admin = $is_editor = $is_course_admin = false;
-    } else {
-        unset($_SESSION['student_view']);
     }
 }
 
