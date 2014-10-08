@@ -160,10 +160,10 @@ if ($uid AND !isset($_GET['logout'])) {
                         <form class='login-form col-xs-12 col-sm-7 col-md-5 col-lg-4 pull-right' action='$urlSecure' method='post'>
                             <h2>$langUserLogin</h2>
                             <div class='form-group'>
-                                <input autofocus type='text' class='col-xs-10 col-sm-10 col-md-10' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                             </div>
                             <div class='form-group'>
-                                <input type='password' class='col-xs-10 col-sm-10 col-md-10' name='pass' placeholder='$langPass'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <input type='password' name='pass' placeholder='$langPass'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                             </div>
                             <div class='login-settings row'>";
                                 /*<div class='checkbox pull-left'>

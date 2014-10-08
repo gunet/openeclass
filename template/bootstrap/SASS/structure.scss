@@ -783,6 +783,10 @@ form.login-form{
 
 
   .form-group input{
+
+    width: 82%;
+
+    border-bottom: 1px solid #eeeeee;
     border-top: none;
     border-right: none;
     border-left: none;
@@ -794,18 +798,19 @@ form.login-form{
     -webkit-box-shadow: none;  
     
     outline:none;
-    font-size:1.2em;
+    font-size:1.1em;
     padding: 0.4em;
     line-height: 1.42857143;
-    color: #555;
+    color: #444444;
 
     &:focus{
-      border-color: rgba(0,0,0,.12);
+      border-color: $color-hover;
     }
 
   }
 
   .form-group label{
+    width: 17%;
     margin:0;
     text-align: center;
   }
@@ -854,12 +859,14 @@ form.login-form{
     font-weight: 600;
     
     color:white;
-    text-transform: uppercase;
+
     background:#428bca;
     letter-spacing:0.1em;
+    outline: none;
     &:hover{
       background:#3071a9;
     }
+    
   }
 }
 
