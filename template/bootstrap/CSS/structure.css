@@ -133,18 +133,21 @@ body > .container {
 /* line 49, structure.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
 }
-/* line 53, structure.scss */
+/* line 55, structure.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px!important;
 }
-/* line 56, structure.scss */
+/* line 58, structure.scss */
 #leftnav .panel .panel-heading .panel-title {
   text-align: center;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 62, structure.scss */
+/* line 64, structure.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -153,32 +156,32 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 70, structure.scss */
+/* line 72, structure.scss */
 #leftnav .panel > a {
   outline: 0;
   display: block;
   background: rgba(0, 0, 0, 0.2) !important;
 }
-/* line 75, structure.scss */
+/* line 77, structure.scss */
 #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 0px!important;
   color: #4da1e4;
 }
-/* line 80, structure.scss */
+/* line 82, structure.scss */
 #leftnav .panel > a:hover {
   background: rgba(255, 255, 255, 0.25);
 }
-/* line 84, structure.scss */
+/* line 86, structure.scss */
 #leftnav .panel > a:hover, #leftnav .panel > a:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 89, structure.scss */
+/* line 91, structure.scss */
 #leftnav .panel a {
   background: transparent;
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 95, structure.scss */
+/* line 97, structure.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
@@ -190,12 +193,12 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 104, structure.scss */
+/* line 106, structure.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 109, structure.scss */
+/* line 111, structure.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -208,7 +211,7 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 120, structure.scss */
+/* line 122, structure.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -218,24 +221,24 @@ body > .container {
   -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
 }
-/* line 132, structure.scss */
+/* line 134, structure.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 136, structure.scss */
+/* line 138, structure.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 /* LOGO - Extent bootstrap style -------------------------------------*/
-/* line 151, structure.scss */
+/* line 153, structure.scss */
 .logo {
   min-height: 20px;
   min-width: 20px;
 }
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-/* line 161, structure.scss */
+/* line 163, structure.scss */
 #main-content {
   background: #fafafa;
   border-radius: 4px;
@@ -244,34 +247,34 @@ body > .container {
   -moz-box-shadow: 0px -5px 10px 0px black;
   -webkit-box-shadow: 0px -5px 10px 0px black;
 }
-/* line 171, structure.scss */
+/* line 173, structure.scss */
 #main-content #header.navbar {
   padding: 0;
   border: 0;
   background: #eeeeee;
   border-bottom: 1px solid #DBDBDB;
 }
-/* line 177, structure.scss */
+/* line 179, structure.scss */
 #main-content #header.navbar .navbar-nav {
   margin: 0;
   float: right;
 }
-/* line 181, structure.scss */
+/* line 183, structure.scss */
 #main-content #header.navbar .navbar-nav > li {
   border-left: 1px solid #e7e7e7;
   float: left;
   cursor: pointer;
 }
-/* line 186, structure.scss */
+/* line 188, structure.scss */
 #main-content #header.navbar .navbar-nav > li a {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 190, structure.scss */
+/* line 192, structure.scss */
 #main-content #header.navbar .navbar-nav > li a i.fa {
   margin: 0 1em;
 }
-/* line 195, structure.scss */
+/* line 197, structure.scss */
 #main-content #header.navbar .navbar-nav > li a:hover, #main-content #header.navbar .navbar-nav > li a:focus {
   background: #4da1e4;
   color: white;
@@ -281,23 +284,23 @@ body > .container {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 203, structure.scss */
+/* line 205, structure.scss */
 #main-content #header.navbar .navbar-nav > li .user-icon {
   width: 20px;
   margin-right: 10px;
 }
-/* line 208, structure.scss */
+/* line 210, structure.scss */
 #main-content #header.navbar .navbar-nav > li:last-child > a {
   border-radius: 0 4px 0px 0px;
 }
 
-/* line 220, structure.scss */
+/* line 222, structure.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
 /* FOOTER --------------------------------------------------------------------------------------*/
-/* line 236, structure.scss */
+/* line 238, structure.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
@@ -308,19 +311,19 @@ footer.footer {
 }
 
 /* SIDEBAR ------------------------------------------------------------------------------------ */
-/* line 256, structure.scss */
+/* line 258, structure.scss */
 body.sidebar-opened #sidebar {
   right: 0px;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   opacity: 1;
 }
 
-/* line 265, structure.scss */
+/* line 267, structure.scss */
 body.sidebar-opened .toggle-sidebar {
   background: #e3e4e6;
 }
 
-/* line 270, structure.scss */
+/* line 272, structure.scss */
 #sidebar {
   position: absolute;
   height: 100%;
@@ -345,14 +348,14 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 296, structure.scss */
+/* line 298, structure.scss */
 #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
   color: #686868;
   font-weight: 600;
   margin-bottom: 0.6em;
   margin-top: 0.3em;
 }
-/* line 303, structure.scss */
+/* line 305, structure.scss */
 #sidebar .toggle-sidebar {
   text-align: center;
   width: 3em;
@@ -365,23 +368,23 @@ body.sidebar-opened .toggle-sidebar {
   border: 1px solid #CFCFCF;
   cursor: default;
 }
-/* line 316, structure.scss */
+/* line 318, structure.scss */
 #sidebar .toggle-sidebar:hover {
   background: #4da1e4;
   border-color: #4da1e4;
   color: white;
 }
-/* line 323, structure.scss */
+/* line 325, structure.scss */
 #sidebar ul, #sidebar li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
-/* line 329, structure.scss */
+/* line 331, structure.scss */
 #sidebar .side-list {
   padding-bottom: 1em;
 }
-/* line 333, structure.scss */
+/* line 335, structure.scss */
 #sidebar .side-list .lesson-title {
   background: #344458;
   font-size: 0.85em;
@@ -401,87 +404,87 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 361, structure.scss */
+/* line 363, structure.scss */
 #sidebar .side-list .lesson-title:first-of-type {
   border-top-width: 1px;
   border-radius: 4px 4px 0px 0px;
   -webkit-border-radius: 4px 4px 0px 0px;
   -moz-border-radius: 4px 4px 0px 0px;
 }
-/* line 367, structure.scss */
+/* line 369, structure.scss */
 #sidebar .side-list .lesson-title:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 371, structure.scss */
+/* line 373, structure.scss */
 #sidebar .side-list .lesson-title:hover {
   background: #48586D;
   color: rgba(255, 255, 255, 0.85);
 }
-/* line 375, structure.scss */
+/* line 377, structure.scss */
 #sidebar .side-list .lesson-title:hover:after {
   color: rgba(255, 255, 255, 0.6);
 }
-/* line 380, structure.scss */
+/* line 382, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active {
   border-bottom: none;
   color: white;
   background: #425164;
 }
-/* line 385, structure.scss */
+/* line 387, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
   border-radius: 0px;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 389, structure.scss */
+/* line 391, structure.scss */
 #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
   color: #4da1e4;
 }
-/* line 395, structure.scss */
+/* line 397, structure.scss */
 #sidebar .side-list > div {
   background: #253447;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 16px;
 }
-/* line 405, structure.scss */
+/* line 407, structure.scss */
 #sidebar .side-list > div:last-of-type {
   border-radius: 0px 0px 4px 4px;
   -webkit-border-radius: 0px 0px 4px 4px;
   -moz-border-radius: 0px 0px 4px 4px;
 }
-/* line 410, structure.scss */
+/* line 412, structure.scss */
 #sidebar .side-list ul {
   padding: 0em 2em 1em 1.35em;
   font-size: 0.75em;
 }
-/* line 414, structure.scss */
+/* line 416, structure.scss */
 #sidebar .side-list ul > li {
   padding: 5px 0em;
 }
-/* line 419, structure.scss */
+/* line 421, structure.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 425, structure.scss */
+/* line 427, structure.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 430, structure.scss */
+/* line 432, structure.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 434, structure.scss */
+/* line 436, structure.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 438, structure.scss */
+/* line 440, structure.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -498,13 +501,13 @@ body.sidebar-opened .toggle-sidebar {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 460, structure.scss */
+/* line 462, structure.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* line 475, structure.scss */
+/* line 477, structure.scss */
 #sidebar .blocks .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -514,7 +517,7 @@ body.sidebar-opened .toggle-sidebar {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 487, structure.scss */
+/* line 489, structure.scss */
 #sidebar .blocks .title {
   margin: 0;
   padding: 2em 0em!important;
@@ -523,18 +526,18 @@ body.sidebar-opened .toggle-sidebar {
   text-align: center;
   overflow: hidden;
 }
-/* line 499, structure.scss */
+/* line 501, structure.scss */
 #sidebar .blocks .title .txt {
   text-transform: uppercase;
 }
-/* line 504, structure.scss */
+/* line 506, structure.scss */
 #sidebar .blocks .title i.fa {
   display: block;
   opacity: .9;
   font-size: 2.3em;
   margin-top: 0.4em;
 }
-/* line 514, structure.scss */
+/* line 516, structure.scss */
 #sidebar .blocks .title .tricky {
   margin-left: -100%;
   width: 200%;
@@ -546,7 +549,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: margin-left 120ms linear;
   transition: margin-left 120ms linear;
 }
-/* line 522, structure.scss */
+/* line 524, structure.scss */
 #sidebar .blocks .title .tricky > div {
   display: inline-block;
   width: 49%;
@@ -561,85 +564,85 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: opacity 60ms linear;
   transition: opacity 60ms linear;
 }
-/* line 534, structure.scss */
+/* line 536, structure.scss */
 #sidebar .blocks .title .tricky .icon {
   opacity: 1;
 }
-/* line 538, structure.scss */
+/* line 540, structure.scss */
 #sidebar .blocks .title .tricky .description {
   font-weight: 400;
   padding: 0.5em 1em;
   opacity: 0;
 }
-/* line 546, structure.scss */
+/* line 548, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
   margin-left: 0%;
 }
-/* line 549, structure.scss */
+/* line 551, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
   opacity: .55;
 }
-/* line 553, structure.scss */
+/* line 555, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
   opacity: 0;
 }
-/* line 559, structure.scss */
+/* line 561, structure.scss */
 #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
   color: #4da1e4;
 }
-/* line 565, structure.scss */
+/* line 567, structure.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky {
   margin-left: 0%;
 }
-/* line 567, structure.scss */
+/* line 569, structure.scss */
 #sidebar .blocks .title.ui-accordion-header-active .tricky .description {
   opacity: .55;
 }
-/* line 575, structure.scss */
+/* line 577, structure.scss */
 #sidebar .blocks li.block {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-/* line 579, structure.scss */
+/* line 581, structure.scss */
 #sidebar .blocks li.block > .ui-accordion-content,
 #sidebar .blocks li.block > .ui-accordion-header-active {
   background: rgba(255, 255, 255, 0.3);
 }
-/* line 583, structure.scss */
+/* line 585, structure.scss */
 #sidebar .blocks li.block > .ui-accordion-content {
   padding: 1em 0em;
 }
-/* line 587, structure.scss */
+/* line 589, structure.scss */
 #sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
   width: 90%;
   margin: 0em auto 1em auto;
   display: block;
 }
-/* line 593, structure.scss */
+/* line 595, structure.scss */
 #sidebar .blocks li.block textarea {
   min-height: 12em;
 }
-/* line 597, structure.scss */
+/* line 599, structure.scss */
 #sidebar .blocks li.block button {
   margin: 1.1em;
   margin-top: 0em;
   font-size: 0.8em;
 }
-/* line 603, structure.scss */
+/* line 605, structure.scss */
 #sidebar .blocks li.block .goto {
   float: right;
   color: #7E7E7E;
   padding: 0.5em;
   margin-right: 0.5em;
 }
-/* line 610, structure.scss */
+/* line 612, structure.scss */
 #sidebar .blocks li.block .input-parent {
   position: relative;
 }
-/* line 613, structure.scss */
+/* line 615, structure.scss */
 #sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
   padding-left: 2em;
 }
-/* line 617, structure.scss */
+/* line 619, structure.scss */
 #sidebar .blocks li.block .input-parent .fa {
   position: absolute;
   top: 0.7em;
@@ -649,20 +652,20 @@ body.sidebar-opened .toggle-sidebar {
 }
 
 /* ACCORDIONS --------------------------------------------------------------------*/
-/* line 634, structure.scss */
+/* line 636, structure.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 638, structure.scss */
+/* line 640, structure.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 647, structure.scss */
+/* line 649, structure.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em!important;
@@ -671,7 +674,7 @@ body.sidebar-opened .toggle-sidebar {
   outline: none!important;
   cursor: pointer;
 }
-/* line 656, structure.scss */
+/* line 658, structure.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -696,7 +699,7 @@ body.sidebar-opened .toggle-sidebar {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 679, structure.scss */
+/* line 681, structure.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -712,12 +715,12 @@ body.sidebar-opened .toggle-sidebar {
 }
 
 /* INDEX --------------------------------------------------------------------------- */
-/* line 696, structure.scss */
+/* line 698, structure.scss */
 body.page-login h1 {
   margin: 1.25em 1em;
 }
 
-/* line 701, structure.scss */
+/* line 703, structure.scss */
 .jumbotron.jumbotron-login {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -742,7 +745,7 @@ body.page-login h1 {
   background: -moz-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
   background: -ms-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
 }
-/* line 731, structure.scss */
+/* line 733, structure.scss */
 .jumbotron.jumbotron-login .graphic {
   position: absolute;
   z-index: 9;
@@ -753,7 +756,7 @@ body.page-login h1 {
   width: auto;
 }
 
-/* line 745, structure.scss */
+/* line 747, structure.scss */
 form.login-form {
   font-size: 0.85em;
   position: relative;
@@ -770,7 +773,7 @@ form.login-form {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 759, structure.scss */
+/* line 761, structure.scss */
 form.login-form:hover {
   box-shadow: 0px 0px 20px 3px black;
   -moz-box-shadow: 0px 0px 20px 3px black;
@@ -781,7 +784,7 @@ form.login-form:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 767, structure.scss */
+/* line 769, structure.scss */
 form.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -789,16 +792,16 @@ form.login-form h2 {
   margin-top: 0rem;
   color: #232c3a;
 }
-/* line 775, structure.scss */
+/* line 777, structure.scss */
 form.login-form .form-group {
   margin: 0rem;
 }
-/* line 780, structure.scss */
+/* line 782, structure.scss */
 form.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
-/* line 786, structure.scss */
+/* line 788, structure.scss */
 form.login-form .form-group input {
   width: 82%;
   border-bottom: 1px solid #eeeeee;
@@ -816,53 +819,53 @@ form.login-form .form-group input {
   line-height: 1.42857143;
   color: #444444;
 }
-/* line 807, structure.scss */
+/* line 809, structure.scss */
 form.login-form .form-group input:focus {
   border-color: #4da1e4;
 }
-/* line 813, structure.scss */
+/* line 815, structure.scss */
 form.login-form .form-group label {
   width: 17%;
   margin: 0;
   text-align: center;
 }
-/* line 819, structure.scss */
+/* line 821, structure.scss */
 form.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: #aaaaaa;
 }
-/* line 826, structure.scss */
+/* line 828, structure.scss */
 form.login-form .login-settings {
   margin: 2rem 0rem;
   font-size: 0.9em;
 }
-/* line 830, structure.scss */
+/* line 832, structure.scss */
 form.login-form .login-settings > * {
   margin: 0;
 }
-/* line 835, structure.scss */
+/* line 837, structure.scss */
 form.login-form .login-settings .checkbox,
 form.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 840, structure.scss */
+/* line 842, structure.scss */
 form.login-form .login-settings .checkbox label,
 form.login-form .login-settings .link label {
   font-weight: bold;
 }
-/* line 844, structure.scss */
+/* line 846, structure.scss */
 form.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 850, structure.scss */
+/* line 852, structure.scss */
 form.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
-/* line 856, structure.scss */
+/* line 858, structure.scss */
 form.login-form .btn.btn-login {
   width: 100%;
   height: 4rem;
@@ -873,13 +876,13 @@ form.login-form .btn.btn-login {
   letter-spacing: 0.1em;
   outline: none;
 }
-/* line 867, structure.scss */
+/* line 869, structure.scss */
 form.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
 /* DELETE THIS */
-/* line 875, structure.scss */
+/* line 877, structure.scss */
 .row .deleteThisClass {
   height: 400px;
   border: 1px solid #eee;
@@ -888,54 +891,54 @@ form.login-form .btn.btn-login:hover {
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-  /* line 898, structure.scss */
+  /* line 900, structure.scss */
   .jumbotron.jumbotron-login img.graphic {
     bottom: -3.5rem;
   }
 }
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 914, structure.scss */
+  /* line 916, structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 920, structure.scss */
+  /* line 922, structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 927, structure.scss */
+  /* line 929, structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 933, structure.scss */
+  /* line 935, structure.scss */
   #Frame, body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 938, structure.scss */
+  /* line 940, structure.scss */
   #leftnav .panel a {
     font-size: 1.5em;
   }
 
-  /* line 942, structure.scss */
+  /* line 944, structure.scss */
   #main-content .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 946, structure.scss */
+  /* line 948, structure.scss */
   #leftnav .panel a.list-group-item {
     padding: 1em 0.8em;
   }
 
-  /* line 953, structure.scss */
+  /* line 955, structure.scss */
   #main-content,
   #leftnav .panel a.list-group-item,
   #main-content #header.navbar .navbar-nav > li:last-child > a,

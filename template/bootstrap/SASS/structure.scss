@@ -48,6 +48,8 @@ body > .container{
 
     .list-group{
       border-radius:0;
+      @include box-shadow(none);
+
     }
 
 		.panel-heading{
@@ -794,9 +796,9 @@ form.login-form{
     border-radius: 0px;
     border-width: 1px;
     
-    box-shadow: none;
-    -moz-box-shadow: none;  
-    -webkit-box-shadow: none;  
+
+    @include box-shadow(none);
+
     
     outline:none;
     font-size:1.1em;
