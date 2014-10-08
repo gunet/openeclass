@@ -1650,3 +1650,36 @@ td.option-btn-cell{
    width: 5px;
     padding: 0px !important;
 }
+
+
+
+
+
+
+
+
+
+/* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
+span[data-cal-date]
+{
+  margin-right: 5px !important;
+  margin-top: 5px !important;
+}
+
+.event
+{
+  width: 14px !important;
+  height: 14px !important;
+  opacity: 0.7 !important;
+  border-radius: 7px !important;
+  border: 0px !important;
+  margin-bottom: 4px !important;
+
+  @include box-shadow(0 0px 0px #BBBBBB !important);
+  @include transition(all $transition-time linear);
+
+  &:hover{
+    opacity: 1 !important;
+    @include transition(all $transition-time linear);
+  }
+}

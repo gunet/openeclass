@@ -129,7 +129,7 @@ $tool_content = "
         <div class='row'>
         <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
-                <div class='panel'>
+                <div class='panel padding'>
                         {%PERSONAL_CALENDAR_CONTENT%}
                 </div>
         </div></div>
