@@ -73,10 +73,16 @@ $tool_content .= "
    <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>
     <legend>$langTypeMessage</legend>
-      <input type='text' name='msg' size='80'>
-      <input type='hidden' name='chatLine'>
-      <input type='submit' value=' &raquo;  '><br /><br />
-      <iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 1px solid #CAC3B5;'><a href='messageList.php?course=$course_code'>Message list</a></iframe>
+    <div class='col-xs-12'>
+      <div class='input-group'>
+        <input type='text' name='msg' size='80' class='form-control'>
+        <input type='hidden' name='chatLine'>
+        <span class='input-group-btn'>
+          <input class='btn btn-primary' type='submit' value='&raquo;'>
+        </span>
+      </div>
+    </div><br><br>
+      <iframe frameborder='0' src='messageList.php' width='96%' height='300' name='messageList' style='border: 1px solid #CAC3B5;margin: 0 16px;'><a href='messageList.php?course=$course_code'>Message list</a></iframe>
    </fieldset>
    </form>";
 
