@@ -170,8 +170,8 @@ function getUserLessonInfo($uid) {
                 $lesson_content .= "<a href='${urlServer}main/unregcours.php?cid=" . $data->course_id . "&amp;uid=" . $uid . "'>
 				   <img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= "<a href='${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code . "'>
-				    <img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
+                $lesson_content .= icon('fa-wrench', $langAdm,
+                    "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code);
             }
             $lesson_content .= "</td></tr>";
         }
