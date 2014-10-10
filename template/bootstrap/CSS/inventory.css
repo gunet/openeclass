@@ -1646,7 +1646,7 @@ textarea{
 /* line 1538, inventory.scss */
 .opt-btn {
   position: absolute;
-  background-color: #F8F8F8 !important;
+  background-color: #F8F8F8;
 }
 
 /* line 1543, inventory.scss */

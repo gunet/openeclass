@@ -76,7 +76,7 @@ if ($q && count($q) > 0) {
     $i = 0;
     foreach ($q as $row) {
         $tool_content .= "            
-            <div class='panel panel-action-button-default'>
+            <div class='panel panel-action-btn-default'>
               <div class='panel-heading'>
                 <div class='pull-right'>".
                 action_button(
