@@ -7,7 +7,7 @@ syntax: regexp
 ^config/.*\.php
 ^html/
 
-^nbproject/private/
+^nbproject/
 
 ^\.buildpath$
 ^\.project$
