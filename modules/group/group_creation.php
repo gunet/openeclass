@@ -34,30 +34,37 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langNewGroupCreate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-$tool_content .= "<div id='operations_container'>
-                    <ul id='opslist'>
-                        <li><a href='index.php?course=$course_code'>$langBack</a></li>
-                    </ul>
-                </div>";
+$tool_content .= action_bar(array(
+    array(
+        'title' => $langBack,
+        'level' => 'primary-label',
+        'icon' => 'fa-reply',
+        'url' => "index.php?course=$course_code"
+    )
+));
                 
-$tool_content .= " <form method='post' action='index.php?course=$course_code'>
-    <fieldset>
-    <legend>$langNewGroupCreateData</legend>
-    <table width='99%' class='tbl'>
-    <tr>
-      <th width='160' class='left'>$langNewGroups:</th>
-      <td><input type='text' name='group_quantity' size='3' value='1'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langNewGroupMembers:</th>
-      <td><input type='text' name='group_max' size='3' value='8'>&nbsp;$langMax $langPlaces</td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' value='$langCreate' name='creation'></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+$tool_content .= " 
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
+        <fieldset>
+        <div class='form-group'>
+            <label for='group_quantity' class='col-sm-2 control-label'>$langNewGroups:</label>
+            <div class='col-sm-10'>
+              <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='1' placeholder='$langNewGroups'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='group_max' class='col-sm-2 control-label'>$langNewGroupMembers:</label>
+            <div class='col-sm-10'>
+              <input name='group_max' type='text' class='form-control' id='group_max' value='8' placeholder='$langNewGroupMembers'> &nbsp;$langMax $langPlaces
+            </div>
+        </div>
+        <div class='col-sm-10 col-sm-offset-2'>
+            <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
+            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        </div>
+        </fieldset>
+        </form>
+    </div>";
 
 draw($tool_content, 2);
