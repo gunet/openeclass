@@ -83,7 +83,7 @@ if ($nbrQuestions) {
     $i = 1;
     $tool_content .= "
         <div class='table-responsive'>
-	    <table class='table table-striped table-bordered table-hover'>
+	    <table class='table-default'>
 	    <tr>
 	      <th colspan='2' class='text-left'>$langQuestionList</th>
 	      <th class='text-center'>".icon('fa-gears', $langActions)."</th>

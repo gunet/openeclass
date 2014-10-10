@@ -325,7 +325,7 @@ hContent;
                 <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
                 <legend>$langAddV</legend>
-                <table class='table table-striped table-bordered table-hover'>
+                <table class='table-default'>
                 <tr>
                 <th valign='top'>$langWorkFile:</th>
                 <td>
@@ -503,7 +503,7 @@ $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM
 
 $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
 if ($count_video[0] > 0 or $count_video_links[0] > 0) {
-    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>
         <tr><th>$langVideoDirectory</th>
         <th class='text-center'>$langDate</th>
         <th class='text-center'>" . icon('fa-gears') . "</th>";

@@ -735,7 +735,7 @@ function bbb_session_details() {
         if (!$is_editor) {
             $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
         }    
-        $tool_content .= "<div class='row'><div class='col-md-12'><div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
+        $tool_content .= "<div class='row'><div class='col-md-12'><div class='table-responsive'><table class='table-default'>
                           <tr>
                               <th class = 'text-center'>$langTitle</th>
                               <th class = 'text-center'>$langNewBBBSessionDesc</th>

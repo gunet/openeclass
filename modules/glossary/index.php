@@ -358,7 +358,7 @@ $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, cat
                         ORDER BY term", $course_id, $terms);
 if (count($sql) > 0) {
     $tool_content .= "<div class='table-responsive'>";
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
+    $tool_content .= "<table class='table-default'>";
     $tool_content .= "<tr>
 		 <th class='text-left'>$langGlossaryTerm</th>
 		 <th class='text-left'>$langGlossaryDefinition</th>";

@@ -117,7 +117,7 @@ if (!$q) {
     $tool_content .= "<p class='alert1'>$langNoEBook</p>";
 } else {
     $tool_content .= "<div class='table-responsive'>";
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>
+    $tool_content .= "<table class='table-default'>
      <tr>
        <th class = 'text-left'>$langEBook</th>" .
             ($is_editor ?

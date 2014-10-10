@@ -1148,7 +1148,7 @@ if ($doc_count == 0) {
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
-                <table class='table table-striped table-bordered table-hover'>
+                <table class='table-default'>
                     <tr>";
     $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
                      "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .

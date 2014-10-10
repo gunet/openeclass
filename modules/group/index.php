@@ -500,7 +500,7 @@ if ($is_editor) {
     if ($num_of_groups > 0) {
         $tool_content .= "<br />
                 <div class='table-responsive'>
-                <table class='table table-striped table-bordered table-hover'>
+                <table class='table-default'>
                 <tr>
                   <th>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>

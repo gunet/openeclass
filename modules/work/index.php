@@ -1612,7 +1612,7 @@ function show_non_submitted($id) {
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
                             <div class='table-responsive'>
-                            <table class='table table-striped table-bordered table-hover'>
+                            <table class='table-default'>
                             <tr>
                           <th width='3'>&nbsp;</th>";
                 sort_link($m['username'], 'username');
@@ -1662,7 +1662,7 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
     
     if (count($result)>0) {
-        $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>
                                   <tr>
                                       <th>$m[title]</th>
                                       <th class='text-center'>$m[deadline]</th>
@@ -1741,7 +1741,7 @@ function show_assignments() {
     if (count($result)>0) {
         $tool_content .= "
                     <div class='table-responsive'>
-                    <table class='table table-striped table-bordered table-hover'>
+                    <table class='table-default'>
                     <tr>
                       <th>$m[title]</th>
                       <th class='text-center'>$m[subm]</th>

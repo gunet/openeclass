@@ -375,7 +375,7 @@ switch ($action) {
             // wiki list not empty
             if (is_array($wikiList) && count($wikiList) > 0) {
 
-                $tool_content .= '<div class="row"><div class="col-md-12"><div class="table-responsive"><table class="table table-striped table-bordered table-hover">' . "\n";
+                $tool_content .= '<div class="row"><div class="col-md-12"><div class="table-responsive"><table class="table-default">' . "\n";
 
                 // if admin, display title, edit and delete
                 if ($is_allowedToAdmin) {

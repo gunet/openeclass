@@ -184,7 +184,7 @@ if (!$nbrExercises) {
         }
     }
 
-    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {

@@ -139,7 +139,7 @@ if ($is_editor) {
         $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
     }
 
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
+    $tool_content .= "<table class='table-default'>";
 
     $from = $page * QUESTIONS_PER_PAGE;
 
