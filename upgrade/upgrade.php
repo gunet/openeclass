@@ -678,12 +678,10 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             }
         }
         
-        if (version_compare($oldversion, '2.9.1') == 1) {
+        if (version_compare($oldversion, '2.10', '<')) {
             mysql_field_exists($mysqlMainDb, 'course_units', 'public') or
                 db_query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
-        }
-        
-        if (version_compare($oldversion, '2.10', '<')) {
+
             if (!mysql_table_exists($mysqlMainDb, 'course_description_type')) {
                 db_query("CREATE TABLE `course_description_type` (
                     `id` smallint(6) NOT NULL AUTO_INCREMENT,
