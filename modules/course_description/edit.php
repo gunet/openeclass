@@ -59,42 +59,42 @@ foreach ($q as $type) {
     }
     $types[$type->id] = $title;
 }
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+$tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))) .
-        "</div>";
+                'level' => 'primary-label')));
 
-$tool_content .= "<form method='post' action='index.php?course=$course_code'>";
+$tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
     $tool_content .= "<input type='hidden' name='editId' value='$editId' />";
 }
 $tool_content .= "
-    <fieldset>        
-    <table class='tbl'>
-    <tr>
-        <th width='100'>$langType:</th>
-        <td>" . selection($types, 'editType', $defaultType, 'id="typSel"') . "
-    </tr>
-    <tr>
-       <th>$langTitle:</th>
-       <td><input type='text' name='editTitle' value='$cdtitle' size='40' id='titleSel'/></td>
-    </tr>
-    <tr>
-       <th valign='top'>$langContent:</th>
-       <td>" . @rich_text_editor('editComments', 4, 20, $comments) . "</td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td class='right'>
-            <input class='Login' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "' />
-        </td>
-    </tr>
-    </table>
+    <fieldset>
+        <div class='form-group'>
+            <label for='typSel' class='col-sm-2 control-label'>$langType:</label>
+            <div class='col-sm-10'>
+            " . selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') . "
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='titleSel' class='col-sm-2 control-label'>$langTitle:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='editTitle' class='form-control' value='$cdtitle' size='40' id='titleSel'/>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='editComments' class='col-sm-2 control-label'>$langContent:</label>
+            <div class='col-sm-10'>
+            " . @rich_text_editor('editComments', 4, 20, $comments) . "
+            </div>
+        </div>
+        <div class='col-sm-10 col-sm-offset-2'>
+            <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
+            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        </div>
   </fieldset>
-  </form>";
+  </form></div>";
 
 
 $head_content .= <<<hCont
