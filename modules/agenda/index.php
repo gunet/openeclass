@@ -342,7 +342,7 @@ if ($is_editor) {
 if (count($result) > 0) {
     $barMonth = '';
     $nowBarShowed = false;
-    $tool_content .= "<div class='table-responsive'><table class='table table-striped table-bordered table-hover'>
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>
                     <tr><th class='left'>$langEvents</th>";
     if ($is_editor) {
         $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";

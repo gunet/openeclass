@@ -2,6 +2,7 @@
 @import "variables";
 @import "bootstrap";
 
+//Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
 .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
     @extend .table, .table-striped;  
 }
@@ -14,9 +15,16 @@ input[type="submit"] {
 input[type="file"] {
     padding-top: 7px;
 }
+
+//Custom Form Wrapper class
 .form-wrapper {
     @extend .well, .well-lg;    
 }
+//Custtom default table class
+.table-default {
+    @extend .table, .table-striped, .table-bordered, .table-hover;
+}
+// Custtom Panel Classes to support action_button() in panel heading
 .panel-action-btn-default {
     @extend .panel-default;   
     & > .panel-heading {

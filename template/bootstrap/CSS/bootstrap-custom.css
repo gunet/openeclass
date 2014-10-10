@@ -337,7 +337,7 @@ th {
   }
 
   /* line 77, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_print.scss */
-  .table td, .tbl td, .tbl_1 td, .tbl_alt td, #t1 td, .tbl_courseid td, #t3 td, .tbl_lesson td, div.panel_content table td, #t1pre td, #t1post td, #t1other td,
+  .table td, .tbl td, .tbl_1 td, .tbl_alt td, #t1 td, .tbl_courseid td, #t3 td, .tbl_lesson td, div.panel_content table td, #t1pre td, #t1post td, #t1other td, .table-default td,
   .table th,
   .tbl th,
   .tbl_1 th,
@@ -349,7 +349,8 @@ th {
   div.panel_content table th,
   #t1pre th,
   #t1post th,
-  #t1other th {
+  #t1other th,
+  .table-default th {
     background-color: #fff !important;
   }
 
@@ -366,13 +367,14 @@ th {
   }
 
   /* line 91, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_print.scss */
-  .table, .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other {
+  .table, .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other, .table-default {
     border-collapse: collapse !important;
   }
 
   /* line 96, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_print.scss */
-  .table-bordered th,
-  .table-bordered td {
+  .table-bordered th, .table-default th,
+  .table-bordered td,
+  .table-default td {
     border: 1px solid #ddd !important;
   }
 }
@@ -3145,12 +3147,12 @@ th {
 }
 
 /* line 17, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table, .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other {
+.table, .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other, .table-default {
   width: 100%;
   margin-bottom: 20px;
 }
 /* line 26, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table > thead > tr > th, .tbl > thead > tr > th, .tbl_1 > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, .tbl_courseid > thead > tr > th, #t3 > thead > tr > th, .tbl_lesson > thead > tr > th, div.panel_content table > thead > tr > th, #t1pre > thead > tr > th, #t1post > thead > tr > th, #t1other > thead > tr > th,
+.table > thead > tr > th, .tbl > thead > tr > th, .tbl_1 > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, .tbl_courseid > thead > tr > th, #t3 > thead > tr > th, .tbl_lesson > thead > tr > th, div.panel_content table > thead > tr > th, #t1pre > thead > tr > th, #t1post > thead > tr > th, #t1other > thead > tr > th, .table-default > thead > tr > th,
 .table > thead > tr > td,
 .tbl > thead > tr > td,
 .tbl_1 > thead > tr > td,
@@ -3163,6 +3165,7 @@ div.panel_content table > thead > tr > td,
 #t1pre > thead > tr > td,
 #t1post > thead > tr > td,
 #t1other > thead > tr > td,
+.table-default > thead > tr > td,
 .table > tbody > tr > th,
 .tbl > tbody > tr > th,
 .tbl_1 > tbody > tr > th,
@@ -3175,6 +3178,7 @@ div.panel_content table > tbody > tr > th,
 #t1pre > tbody > tr > th,
 #t1post > tbody > tr > th,
 #t1other > tbody > tr > th,
+.table-default > tbody > tr > th,
 .table > tbody > tr > td,
 .tbl > tbody > tr > td,
 .tbl_1 > tbody > tr > td,
@@ -3187,6 +3191,7 @@ div.panel_content table > tbody > tr > td,
 #t1pre > tbody > tr > td,
 #t1post > tbody > tr > td,
 #t1other > tbody > tr > td,
+.table-default > tbody > tr > td,
 .table > tfoot > tr > th,
 .tbl > tfoot > tr > th,
 .tbl_1 > tfoot > tr > th,
@@ -3199,6 +3204,7 @@ div.panel_content table > tfoot > tr > th,
 #t1pre > tfoot > tr > th,
 #t1post > tfoot > tr > th,
 #t1other > tfoot > tr > th,
+.table-default > tfoot > tr > th,
 .table > tfoot > tr > td,
 .tbl > tfoot > tr > td,
 .tbl_1 > tfoot > tr > td,
@@ -3210,19 +3216,20 @@ div.panel_content table > tfoot > tr > th,
 div.panel_content table > tfoot > tr > td,
 #t1pre > tfoot > tr > td,
 #t1post > tfoot > tr > td,
-#t1other > tfoot > tr > td {
+#t1other > tfoot > tr > td,
+.table-default > tfoot > tr > td {
   padding: 8px;
   line-height: 1.428571429;
   vertical-align: top;
   border-top: 1px solid #dddddd;
 }
 /* line 35, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table > thead > tr > th, .tbl > thead > tr > th, .tbl_1 > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, .tbl_courseid > thead > tr > th, #t3 > thead > tr > th, .tbl_lesson > thead > tr > th, div.panel_content table > thead > tr > th, #t1pre > thead > tr > th, #t1post > thead > tr > th, #t1other > thead > tr > th {
+.table > thead > tr > th, .tbl > thead > tr > th, .tbl_1 > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, .tbl_courseid > thead > tr > th, #t3 > thead > tr > th, .tbl_lesson > thead > tr > th, div.panel_content table > thead > tr > th, #t1pre > thead > tr > th, #t1post > thead > tr > th, #t1other > thead > tr > th, .table-default > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #dddddd;
 }
 /* line 45, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table > caption + thead > tr:first-child > th, .tbl > caption + thead > tr:first-child > th, .tbl_1 > caption + thead > tr:first-child > th, .tbl_alt > caption + thead > tr:first-child > th, #t1 > caption + thead > tr:first-child > th, .tbl_courseid > caption + thead > tr:first-child > th, #t3 > caption + thead > tr:first-child > th, .tbl_lesson > caption + thead > tr:first-child > th, div.panel_content table > caption + thead > tr:first-child > th, #t1pre > caption + thead > tr:first-child > th, #t1post > caption + thead > tr:first-child > th, #t1other > caption + thead > tr:first-child > th,
+.table > caption + thead > tr:first-child > th, .tbl > caption + thead > tr:first-child > th, .tbl_1 > caption + thead > tr:first-child > th, .tbl_alt > caption + thead > tr:first-child > th, #t1 > caption + thead > tr:first-child > th, .tbl_courseid > caption + thead > tr:first-child > th, #t3 > caption + thead > tr:first-child > th, .tbl_lesson > caption + thead > tr:first-child > th, div.panel_content table > caption + thead > tr:first-child > th, #t1pre > caption + thead > tr:first-child > th, #t1post > caption + thead > tr:first-child > th, #t1other > caption + thead > tr:first-child > th, .table-default > caption + thead > tr:first-child > th,
 .table > caption + thead > tr:first-child > td,
 .tbl > caption + thead > tr:first-child > td,
 .tbl_1 > caption + thead > tr:first-child > td,
@@ -3235,6 +3242,7 @@ div.panel_content table > caption + thead > tr:first-child > td,
 #t1pre > caption + thead > tr:first-child > td,
 #t1post > caption + thead > tr:first-child > td,
 #t1other > caption + thead > tr:first-child > td,
+.table-default > caption + thead > tr:first-child > td,
 .table > colgroup + thead > tr:first-child > th,
 .tbl > colgroup + thead > tr:first-child > th,
 .tbl_1 > colgroup + thead > tr:first-child > th,
@@ -3247,6 +3255,7 @@ div.panel_content table > colgroup + thead > tr:first-child > th,
 #t1pre > colgroup + thead > tr:first-child > th,
 #t1post > colgroup + thead > tr:first-child > th,
 #t1other > colgroup + thead > tr:first-child > th,
+.table-default > colgroup + thead > tr:first-child > th,
 .table > colgroup + thead > tr:first-child > td,
 .tbl > colgroup + thead > tr:first-child > td,
 .tbl_1 > colgroup + thead > tr:first-child > td,
@@ -3259,6 +3268,7 @@ div.panel_content table > colgroup + thead > tr:first-child > td,
 #t1pre > colgroup + thead > tr:first-child > td,
 #t1post > colgroup + thead > tr:first-child > td,
 #t1other > colgroup + thead > tr:first-child > td,
+.table-default > colgroup + thead > tr:first-child > td,
 .table > thead:first-child > tr:first-child > th,
 .tbl > thead:first-child > tr:first-child > th,
 .tbl_1 > thead:first-child > tr:first-child > th,
@@ -3271,6 +3281,7 @@ div.panel_content table > thead:first-child > tr:first-child > th,
 #t1pre > thead:first-child > tr:first-child > th,
 #t1post > thead:first-child > tr:first-child > th,
 #t1other > thead:first-child > tr:first-child > th,
+.table-default > thead:first-child > tr:first-child > th,
 .table > thead:first-child > tr:first-child > td,
 .tbl > thead:first-child > tr:first-child > td,
 .tbl_1 > thead:first-child > tr:first-child > td,
@@ -3282,15 +3293,16 @@ div.panel_content table > thead:first-child > tr:first-child > th,
 div.panel_content table > thead:first-child > tr:first-child > td,
 #t1pre > thead:first-child > tr:first-child > td,
 #t1post > thead:first-child > tr:first-child > td,
-#t1other > thead:first-child > tr:first-child > td {
+#t1other > thead:first-child > tr:first-child > td,
+.table-default > thead:first-child > tr:first-child > td {
   border-top: 0;
 }
 /* line 51, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table > tbody + tbody, .tbl > tbody + tbody, .tbl_1 > tbody + tbody, .tbl_alt > tbody + tbody, #t1 > tbody + tbody, .tbl_courseid > tbody + tbody, #t3 > tbody + tbody, .tbl_lesson > tbody + tbody, div.panel_content table > tbody + tbody, #t1pre > tbody + tbody, #t1post > tbody + tbody, #t1other > tbody + tbody {
+.table > tbody + tbody, .tbl > tbody + tbody, .tbl_1 > tbody + tbody, .tbl_alt > tbody + tbody, #t1 > tbody + tbody, .tbl_courseid > tbody + tbody, #t3 > tbody + tbody, .tbl_lesson > tbody + tbody, div.panel_content table > tbody + tbody, #t1pre > tbody + tbody, #t1post > tbody + tbody, #t1other > tbody + tbody, .table-default > tbody + tbody {
   border-top: 2px solid #dddddd;
 }
 /* line 56, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table .table, .tbl .table, .tbl_1 .table, .tbl_alt .table, #t1 .table, .tbl_courseid .table, #t3 .table, .tbl_lesson .table, div.panel_content table .table, #t1pre .table, #t1post .table, #t1other .table, .table .tbl, .tbl .tbl, .tbl_1 .tbl, .tbl_alt .tbl, #t1 .tbl, .tbl_courseid .tbl, #t3 .tbl, .tbl_lesson .tbl, div.panel_content table .tbl, #t1pre .tbl, #t1post .tbl, #t1other .tbl, .table .tbl_1, .tbl .tbl_1, .tbl_1 .tbl_1, .tbl_alt .tbl_1, #t1 .tbl_1, .tbl_courseid .tbl_1, #t3 .tbl_1, .tbl_lesson .tbl_1, div.panel_content table .tbl_1, #t1pre .tbl_1, #t1post .tbl_1, #t1other .tbl_1, .table .tbl_alt, .tbl .tbl_alt, .tbl_1 .tbl_alt, .tbl_alt .tbl_alt, #t1 .tbl_alt, .tbl_courseid .tbl_alt, #t3 .tbl_alt, .tbl_lesson .tbl_alt, div.panel_content table .tbl_alt, #t1pre .tbl_alt, #t1post .tbl_alt, #t1other .tbl_alt, .table #t1, .tbl #t1, .tbl_1 #t1, .tbl_alt #t1, #t1 #t1, .tbl_courseid #t1, #t3 #t1, .tbl_lesson #t1, div.panel_content table #t1, #t1pre #t1, #t1post #t1, #t1other #t1, .table .tbl_courseid, .tbl .tbl_courseid, .tbl_1 .tbl_courseid, .tbl_alt .tbl_courseid, #t1 .tbl_courseid, .tbl_courseid .tbl_courseid, #t3 .tbl_courseid, .tbl_lesson .tbl_courseid, div.panel_content table .tbl_courseid, #t1pre .tbl_courseid, #t1post .tbl_courseid, #t1other .tbl_courseid, .table #t3, .tbl #t3, .tbl_1 #t3, .tbl_alt #t3, #t1 #t3, .tbl_courseid #t3, #t3 #t3, .tbl_lesson #t3, div.panel_content table #t3, #t1pre #t3, #t1post #t3, #t1other #t3, .table .tbl_lesson, .tbl .tbl_lesson, .tbl_1 .tbl_lesson, .tbl_alt .tbl_lesson, #t1 .tbl_lesson, .tbl_courseid .tbl_lesson, #t3 .tbl_lesson, .tbl_lesson .tbl_lesson, div.panel_content table .tbl_lesson, #t1pre .tbl_lesson, #t1post .tbl_lesson, #t1other .tbl_lesson, .table div.panel_content table, div.panel_content .table table, .tbl div.panel_content table, div.panel_content .tbl table, .tbl_1 div.panel_content table, div.panel_content .tbl_1 table, .tbl_alt div.panel_content table, div.panel_content .tbl_alt table, #t1 div.panel_content table, div.panel_content #t1 table, .tbl_courseid div.panel_content table, div.panel_content .tbl_courseid table, #t3 div.panel_content table, div.panel_content #t3 table, .tbl_lesson div.panel_content table, div.panel_content .tbl_lesson table, div.panel_content table table, #t1pre div.panel_content table, div.panel_content #t1pre table, #t1post div.panel_content table, div.panel_content #t1post table, #t1other div.panel_content table, div.panel_content #t1other table, .table #t1pre, .tbl #t1pre, .tbl_1 #t1pre, .tbl_alt #t1pre, #t1 #t1pre, .tbl_courseid #t1pre, #t3 #t1pre, .tbl_lesson #t1pre, div.panel_content table #t1pre, #t1pre #t1pre, #t1post #t1pre, #t1other #t1pre, .table #t1post, .tbl #t1post, .tbl_1 #t1post, .tbl_alt #t1post, #t1 #t1post, .tbl_courseid #t1post, #t3 #t1post, .tbl_lesson #t1post, div.panel_content table #t1post, #t1pre #t1post, #t1post #t1post, #t1other #t1post, .table #t1other, .tbl #t1other, .tbl_1 #t1other, .tbl_alt #t1other, #t1 #t1other, .tbl_courseid #t1other, #t3 #t1other, .tbl_lesson #t1other, div.panel_content table #t1other, #t1pre #t1other, #t1post #t1other, #t1other #t1other {
+.table .table, .tbl .table, .tbl_1 .table, .tbl_alt .table, #t1 .table, .tbl_courseid .table, #t3 .table, .tbl_lesson .table, div.panel_content table .table, #t1pre .table, #t1post .table, #t1other .table, .table-default .table, .table .tbl, .tbl .tbl, .tbl_1 .tbl, .tbl_alt .tbl, #t1 .tbl, .tbl_courseid .tbl, #t3 .tbl, .tbl_lesson .tbl, div.panel_content table .tbl, #t1pre .tbl, #t1post .tbl, #t1other .tbl, .table-default .tbl, .table .tbl_1, .tbl .tbl_1, .tbl_1 .tbl_1, .tbl_alt .tbl_1, #t1 .tbl_1, .tbl_courseid .tbl_1, #t3 .tbl_1, .tbl_lesson .tbl_1, div.panel_content table .tbl_1, #t1pre .tbl_1, #t1post .tbl_1, #t1other .tbl_1, .table-default .tbl_1, .table .tbl_alt, .tbl .tbl_alt, .tbl_1 .tbl_alt, .tbl_alt .tbl_alt, #t1 .tbl_alt, .tbl_courseid .tbl_alt, #t3 .tbl_alt, .tbl_lesson .tbl_alt, div.panel_content table .tbl_alt, #t1pre .tbl_alt, #t1post .tbl_alt, #t1other .tbl_alt, .table-default .tbl_alt, .table #t1, .tbl #t1, .tbl_1 #t1, .tbl_alt #t1, #t1 #t1, .tbl_courseid #t1, #t3 #t1, .tbl_lesson #t1, div.panel_content table #t1, #t1pre #t1, #t1post #t1, #t1other #t1, .table-default #t1, .table .tbl_courseid, .tbl .tbl_courseid, .tbl_1 .tbl_courseid, .tbl_alt .tbl_courseid, #t1 .tbl_courseid, .tbl_courseid .tbl_courseid, #t3 .tbl_courseid, .tbl_lesson .tbl_courseid, div.panel_content table .tbl_courseid, #t1pre .tbl_courseid, #t1post .tbl_courseid, #t1other .tbl_courseid, .table-default .tbl_courseid, .table #t3, .tbl #t3, .tbl_1 #t3, .tbl_alt #t3, #t1 #t3, .tbl_courseid #t3, #t3 #t3, .tbl_lesson #t3, div.panel_content table #t3, #t1pre #t3, #t1post #t3, #t1other #t3, .table-default #t3, .table .tbl_lesson, .tbl .tbl_lesson, .tbl_1 .tbl_lesson, .tbl_alt .tbl_lesson, #t1 .tbl_lesson, .tbl_courseid .tbl_lesson, #t3 .tbl_lesson, .tbl_lesson .tbl_lesson, div.panel_content table .tbl_lesson, #t1pre .tbl_lesson, #t1post .tbl_lesson, #t1other .tbl_lesson, .table-default .tbl_lesson, .table div.panel_content table, div.panel_content .table table, .tbl div.panel_content table, div.panel_content .tbl table, .tbl_1 div.panel_content table, div.panel_content .tbl_1 table, .tbl_alt div.panel_content table, div.panel_content .tbl_alt table, #t1 div.panel_content table, div.panel_content #t1 table, .tbl_courseid div.panel_content table, div.panel_content .tbl_courseid table, #t3 div.panel_content table, div.panel_content #t3 table, .tbl_lesson div.panel_content table, div.panel_content .tbl_lesson table, div.panel_content table table, #t1pre div.panel_content table, div.panel_content #t1pre table, #t1post div.panel_content table, div.panel_content #t1post table, #t1other div.panel_content table, div.panel_content #t1other table, .table-default div.panel_content table, div.panel_content .table-default table, .table #t1pre, .tbl #t1pre, .tbl_1 #t1pre, .tbl_alt #t1pre, #t1 #t1pre, .tbl_courseid #t1pre, #t3 #t1pre, .tbl_lesson #t1pre, div.panel_content table #t1pre, #t1pre #t1pre, #t1post #t1pre, #t1other #t1pre, .table-default #t1pre, .table #t1post, .tbl #t1post, .tbl_1 #t1post, .tbl_alt #t1post, #t1 #t1post, .tbl_courseid #t1post, #t3 #t1post, .tbl_lesson #t1post, div.panel_content table #t1post, #t1pre #t1post, #t1post #t1post, #t1other #t1post, .table-default #t1post, .table #t1other, .tbl #t1other, .tbl_1 #t1other, .tbl_alt #t1other, #t1 #t1other, .tbl_courseid #t1other, #t3 #t1other, .tbl_lesson #t1other, div.panel_content table #t1other, #t1pre #t1other, #t1post #t1other, #t1other #t1other, .table-default #t1other, .table .table-default, .tbl .table-default, .tbl_1 .table-default, .tbl_alt .table-default, #t1 .table-default, .tbl_courseid .table-default, #t3 .table-default, .tbl_lesson .table-default, div.panel_content table .table-default, #t1pre .table-default, #t1post .table-default, #t1other .table-default, .table-default .table-default {
   background-color: white;
 }
 
@@ -3305,26 +3317,32 @@ div.panel_content table > thead:first-child > tr:first-child > td,
 }
 
 /* line 82, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table-bordered {
+.table-bordered, .table-default {
   border: 1px solid #dddddd;
 }
 /* line 89, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > th, .table-default > thead > tr > th,
 .table-bordered > thead > tr > td,
+.table-default > thead > tr > td,
 .table-bordered > tbody > tr > th,
+.table-default > tbody > tr > th,
 .table-bordered > tbody > tr > td,
+.table-default > tbody > tr > td,
 .table-bordered > tfoot > tr > th,
-.table-bordered > tfoot > tr > td {
+.table-default > tfoot > tr > th,
+.table-bordered > tfoot > tr > td,
+.table-default > tfoot > tr > td {
   border: 1px solid #dddddd;
 }
 /* line 96, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table-bordered > thead > tr > th,
-.table-bordered > thead > tr > td {
+.table-bordered > thead > tr > th, .table-default > thead > tr > th,
+.table-bordered > thead > tr > td,
+.table-default > thead > tr > td {
   border-bottom-width: 2px;
 }
 
 /* line 110, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table-striped > tbody > tr:nth-child(odd) > td, .tbl > tbody > tr:nth-child(odd) > td, .tbl_1 > tbody > tr:nth-child(odd) > td, .tbl_alt > tbody > tr:nth-child(odd) > td, #t1 > tbody > tr:nth-child(odd) > td, .tbl_courseid > tbody > tr:nth-child(odd) > td, #t3 > tbody > tr:nth-child(odd) > td, .tbl_lesson > tbody > tr:nth-child(odd) > td, div.panel_content table > tbody > tr:nth-child(odd) > td, #t1pre > tbody > tr:nth-child(odd) > td, #t1post > tbody > tr:nth-child(odd) > td, #t1other > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > td, .tbl > tbody > tr:nth-child(odd) > td, .tbl_1 > tbody > tr:nth-child(odd) > td, .tbl_alt > tbody > tr:nth-child(odd) > td, #t1 > tbody > tr:nth-child(odd) > td, .tbl_courseid > tbody > tr:nth-child(odd) > td, #t3 > tbody > tr:nth-child(odd) > td, .tbl_lesson > tbody > tr:nth-child(odd) > td, div.panel_content table > tbody > tr:nth-child(odd) > td, #t1pre > tbody > tr:nth-child(odd) > td, #t1post > tbody > tr:nth-child(odd) > td, #t1other > tbody > tr:nth-child(odd) > td, .table-default > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th,
 .tbl > tbody > tr:nth-child(odd) > th,
 .tbl_1 > tbody > tr:nth-child(odd) > th,
@@ -3336,13 +3354,15 @@ div.panel_content table > thead:first-child > tr:first-child > td,
 div.panel_content table > tbody > tr:nth-child(odd) > th,
 #t1pre > tbody > tr:nth-child(odd) > th,
 #t1post > tbody > tr:nth-child(odd) > th,
-#t1other > tbody > tr:nth-child(odd) > th {
+#t1other > tbody > tr:nth-child(odd) > th,
+.table-default > tbody > tr:nth-child(odd) > th {
   background-color: #f9f9f9;
 }
 
 /* line 124, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-.table-hover > tbody > tr:hover > td,
-.table-hover > tbody > tr:hover > th {
+.table-hover > tbody > tr:hover > td, .table-default > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th,
+.table-default > tbody > tr:hover > th {
   background-color: whitesmoke;
 }
 
@@ -3362,7 +3382,7 @@ table th[class*="col-"] {
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.active, .tbl > thead > tr > td.active, .tbl_1 > thead > tr > td.active, .tbl_alt > thead > tr > td.active, #t1 > thead > tr > td.active, .tbl_courseid > thead > tr > td.active, #t3 > thead > tr > td.active, .tbl_lesson > thead > tr > td.active, div.panel_content table > thead > tr > td.active, #t1pre > thead > tr > td.active, #t1post > thead > tr > td.active, #t1other > thead > tr > td.active,
+.table > thead > tr > td.active, .tbl > thead > tr > td.active, .tbl_1 > thead > tr > td.active, .tbl_alt > thead > tr > td.active, #t1 > thead > tr > td.active, .tbl_courseid > thead > tr > td.active, #t3 > thead > tr > td.active, .tbl_lesson > thead > tr > td.active, div.panel_content table > thead > tr > td.active, #t1pre > thead > tr > td.active, #t1post > thead > tr > td.active, #t1other > thead > tr > td.active, .table-default > thead > tr > td.active,
 .table > thead > tr > th.active,
 .tbl > thead > tr > th.active,
 .tbl_1 > thead > tr > th.active,
@@ -3374,7 +3394,8 @@ table th[class*="col-"] {
 div.panel_content table > thead > tr > th.active,
 #t1pre > thead > tr > th.active,
 #t1post > thead > tr > th.active,
-#t1other > thead > tr > th.active, .table > thead > tr.active > td, .tbl > thead > tr.active > td, .tbl_1 > thead > tr.active > td, .tbl_alt > thead > tr.active > td, #t1 > thead > tr.active > td, .tbl_courseid > thead > tr.active > td, #t3 > thead > tr.active > td, .tbl_lesson > thead > tr.active > td, div.panel_content table > thead > tr.active > td, #t1pre > thead > tr.active > td, #t1post > thead > tr.active > td, #t1other > thead > tr.active > td, .table > thead > tr.active > th, .tbl > thead > tr.active > th, .tbl_1 > thead > tr.active > th, .tbl_alt > thead > tr.active > th, #t1 > thead > tr.active > th, .tbl_courseid > thead > tr.active > th, #t3 > thead > tr.active > th, .tbl_lesson > thead > tr.active > th, div.panel_content table > thead > tr.active > th, #t1pre > thead > tr.active > th, #t1post > thead > tr.active > th, #t1other > thead > tr.active > th,
+#t1other > thead > tr > th.active,
+.table-default > thead > tr > th.active, .table > thead > tr.active > td, .tbl > thead > tr.active > td, .tbl_1 > thead > tr.active > td, .tbl_alt > thead > tr.active > td, #t1 > thead > tr.active > td, .tbl_courseid > thead > tr.active > td, #t3 > thead > tr.active > td, .tbl_lesson > thead > tr.active > td, div.panel_content table > thead > tr.active > td, #t1pre > thead > tr.active > td, #t1post > thead > tr.active > td, #t1other > thead > tr.active > td, .table-default > thead > tr.active > td, .table > thead > tr.active > th, .tbl > thead > tr.active > th, .tbl_1 > thead > tr.active > th, .tbl_alt > thead > tr.active > th, #t1 > thead > tr.active > th, .tbl_courseid > thead > tr.active > th, #t3 > thead > tr.active > th, .tbl_lesson > thead > tr.active > th, div.panel_content table > thead > tr.active > th, #t1pre > thead > tr.active > th, #t1post > thead > tr.active > th, #t1other > thead > tr.active > th, .table-default > thead > tr.active > th,
 .table > tbody > tr > td.active,
 .tbl > tbody > tr > td.active,
 .tbl_1 > tbody > tr > td.active,
@@ -3387,6 +3408,7 @@ div.panel_content table > tbody > tr > td.active,
 #t1pre > tbody > tr > td.active,
 #t1post > tbody > tr > td.active,
 #t1other > tbody > tr > td.active,
+.table-default > tbody > tr > td.active,
 .table > tbody > tr > th.active,
 .tbl > tbody > tr > th.active,
 .tbl_1 > tbody > tr > th.active,
@@ -3399,6 +3421,7 @@ div.panel_content table > tbody > tr > th.active,
 #t1pre > tbody > tr > th.active,
 #t1post > tbody > tr > th.active,
 #t1other > tbody > tr > th.active,
+.table-default > tbody > tr > th.active,
 .table > tbody > tr.active > td,
 .tbl > tbody > tr.active > td,
 .tbl_1 > tbody > tr.active > td,
@@ -3411,6 +3434,7 @@ div.panel_content table > tbody > tr.active > td,
 #t1pre > tbody > tr.active > td,
 #t1post > tbody > tr.active > td,
 #t1other > tbody > tr.active > td,
+.table-default > tbody > tr.active > td,
 .table > tbody > tr.active > th,
 .tbl > tbody > tr.active > th,
 .tbl_1 > tbody > tr.active > th,
@@ -3423,6 +3447,7 @@ div.panel_content table > tbody > tr.active > th,
 #t1pre > tbody > tr.active > th,
 #t1post > tbody > tr.active > th,
 #t1other > tbody > tr.active > th,
+.table-default > tbody > tr.active > th,
 .table > tfoot > tr > td.active,
 .tbl > tfoot > tr > td.active,
 .tbl_1 > tfoot > tr > td.active,
@@ -3435,6 +3460,7 @@ div.panel_content table > tfoot > tr > td.active,
 #t1pre > tfoot > tr > td.active,
 #t1post > tfoot > tr > td.active,
 #t1other > tfoot > tr > td.active,
+.table-default > tfoot > tr > td.active,
 .table > tfoot > tr > th.active,
 .tbl > tfoot > tr > th.active,
 .tbl_1 > tfoot > tr > th.active,
@@ -3447,6 +3473,7 @@ div.panel_content table > tfoot > tr > th.active,
 #t1pre > tfoot > tr > th.active,
 #t1post > tfoot > tr > th.active,
 #t1other > tfoot > tr > th.active,
+.table-default > tfoot > tr > th.active,
 .table > tfoot > tr.active > td,
 .tbl > tfoot > tr.active > td,
 .tbl_1 > tfoot > tr.active > td,
@@ -3459,6 +3486,7 @@ div.panel_content table > tfoot > tr.active > td,
 #t1pre > tfoot > tr.active > td,
 #t1post > tfoot > tr.active > td,
 #t1other > tfoot > tr.active > td,
+.table-default > tfoot > tr.active > td,
 .table > tfoot > tr.active > th,
 .tbl > tfoot > tr.active > th,
 .tbl_1 > tfoot > tr.active > th,
@@ -3470,18 +3498,20 @@ div.panel_content table > tfoot > tr.active > td,
 div.panel_content table > tfoot > tr.active > th,
 #t1pre > tfoot > tr.active > th,
 #t1post > tfoot > tr.active > th,
-#t1other > tfoot > tr.active > th {
+#t1other > tfoot > tr.active > th,
+.table-default > tfoot > tr.active > th {
   background-color: whitesmoke;
 }
 
 /* line 24, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table-hover > tbody > tr > td.active:hover,
-.table-hover > tbody > tr > th.active:hover, .table-hover > tbody > tr.active:hover > td, .table-hover > tbody > tr:hover > .active, .table-hover > tbody > tr.active:hover > th {
+.table-hover > tbody > tr > td.active:hover, .table-default > tbody > tr > td.active:hover,
+.table-hover > tbody > tr > th.active:hover,
+.table-default > tbody > tr > th.active:hover, .table-hover > tbody > tr.active:hover > td, .table-default > tbody > tr.active:hover > td, .table-hover > tbody > tr:hover > .active, .table-default > tbody > tr:hover > .active, .table-hover > tbody > tr.active:hover > th, .table-default > tbody > tr.active:hover > th {
   background-color: #e8e8e8;
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.success, .tbl > thead > tr > td.success, .tbl_1 > thead > tr > td.success, .tbl_alt > thead > tr > td.success, #t1 > thead > tr > td.success, .tbl_courseid > thead > tr > td.success, #t3 > thead > tr > td.success, .tbl_lesson > thead > tr > td.success, div.panel_content table > thead > tr > td.success, #t1pre > thead > tr > td.success, #t1post > thead > tr > td.success, #t1other > thead > tr > td.success,
+.table > thead > tr > td.success, .tbl > thead > tr > td.success, .tbl_1 > thead > tr > td.success, .tbl_alt > thead > tr > td.success, #t1 > thead > tr > td.success, .tbl_courseid > thead > tr > td.success, #t3 > thead > tr > td.success, .tbl_lesson > thead > tr > td.success, div.panel_content table > thead > tr > td.success, #t1pre > thead > tr > td.success, #t1post > thead > tr > td.success, #t1other > thead > tr > td.success, .table-default > thead > tr > td.success,
 .table > thead > tr > th.success,
 .tbl > thead > tr > th.success,
 .tbl_1 > thead > tr > th.success,
@@ -3493,7 +3523,8 @@ div.panel_content table > tfoot > tr.active > th,
 div.panel_content table > thead > tr > th.success,
 #t1pre > thead > tr > th.success,
 #t1post > thead > tr > th.success,
-#t1other > thead > tr > th.success, .table > thead > tr.success > td, .tbl > thead > tr.success > td, .tbl_1 > thead > tr.success > td, .tbl_alt > thead > tr.success > td, #t1 > thead > tr.success > td, .tbl_courseid > thead > tr.success > td, #t3 > thead > tr.success > td, .tbl_lesson > thead > tr.success > td, div.panel_content table > thead > tr.success > td, #t1pre > thead > tr.success > td, #t1post > thead > tr.success > td, #t1other > thead > tr.success > td, .table > thead > tr.success > th, .tbl > thead > tr.success > th, .tbl_1 > thead > tr.success > th, .tbl_alt > thead > tr.success > th, #t1 > thead > tr.success > th, .tbl_courseid > thead > tr.success > th, #t3 > thead > tr.success > th, .tbl_lesson > thead > tr.success > th, div.panel_content table > thead > tr.success > th, #t1pre > thead > tr.success > th, #t1post > thead > tr.success > th, #t1other > thead > tr.success > th,
+#t1other > thead > tr > th.success,
+.table-default > thead > tr > th.success, .table > thead > tr.success > td, .tbl > thead > tr.success > td, .tbl_1 > thead > tr.success > td, .tbl_alt > thead > tr.success > td, #t1 > thead > tr.success > td, .tbl_courseid > thead > tr.success > td, #t3 > thead > tr.success > td, .tbl_lesson > thead > tr.success > td, div.panel_content table > thead > tr.success > td, #t1pre > thead > tr.success > td, #t1post > thead > tr.success > td, #t1other > thead > tr.success > td, .table-default > thead > tr.success > td, .table > thead > tr.success > th, .tbl > thead > tr.success > th, .tbl_1 > thead > tr.success > th, .tbl_alt > thead > tr.success > th, #t1 > thead > tr.success > th, .tbl_courseid > thead > tr.success > th, #t3 > thead > tr.success > th, .tbl_lesson > thead > tr.success > th, div.panel_content table > thead > tr.success > th, #t1pre > thead > tr.success > th, #t1post > thead > tr.success > th, #t1other > thead > tr.success > th, .table-default > thead > tr.success > th,
 .table > tbody > tr > td.success,
 .tbl > tbody > tr > td.success,
 .tbl_1 > tbody > tr > td.success,
@@ -3506,6 +3537,7 @@ div.panel_content table > tbody > tr > td.success,
 #t1pre > tbody > tr > td.success,
 #t1post > tbody > tr > td.success,
 #t1other > tbody > tr > td.success,
+.table-default > tbody > tr > td.success,
 .table > tbody > tr > th.success,
 .tbl > tbody > tr > th.success,
 .tbl_1 > tbody > tr > th.success,
@@ -3518,6 +3550,7 @@ div.panel_content table > tbody > tr > th.success,
 #t1pre > tbody > tr > th.success,
 #t1post > tbody > tr > th.success,
 #t1other > tbody > tr > th.success,
+.table-default > tbody > tr > th.success,
 .table > tbody > tr.success > td,
 .tbl > tbody > tr.success > td,
 .tbl_1 > tbody > tr.success > td,
@@ -3530,6 +3563,7 @@ div.panel_content table > tbody > tr.success > td,
 #t1pre > tbody > tr.success > td,
 #t1post > tbody > tr.success > td,
 #t1other > tbody > tr.success > td,
+.table-default > tbody > tr.success > td,
 .table > tbody > tr.success > th,
 .tbl > tbody > tr.success > th,
 .tbl_1 > tbody > tr.success > th,
@@ -3542,6 +3576,7 @@ div.panel_content table > tbody > tr.success > th,
 #t1pre > tbody > tr.success > th,
 #t1post > tbody > tr.success > th,
 #t1other > tbody > tr.success > th,
+.table-default > tbody > tr.success > th,
 .table > tfoot > tr > td.success,
 .tbl > tfoot > tr > td.success,
 .tbl_1 > tfoot > tr > td.success,
@@ -3554,6 +3589,7 @@ div.panel_content table > tfoot > tr > td.success,
 #t1pre > tfoot > tr > td.success,
 #t1post > tfoot > tr > td.success,
 #t1other > tfoot > tr > td.success,
+.table-default > tfoot > tr > td.success,
 .table > tfoot > tr > th.success,
 .tbl > tfoot > tr > th.success,
 .tbl_1 > tfoot > tr > th.success,
@@ -3566,6 +3602,7 @@ div.panel_content table > tfoot > tr > th.success,
 #t1pre > tfoot > tr > th.success,
 #t1post > tfoot > tr > th.success,
 #t1other > tfoot > tr > th.success,
+.table-default > tfoot > tr > th.success,
 .table > tfoot > tr.success > td,
 .tbl > tfoot > tr.success > td,
 .tbl_1 > tfoot > tr.success > td,
@@ -3578,6 +3615,7 @@ div.panel_content table > tfoot > tr.success > td,
 #t1pre > tfoot > tr.success > td,
 #t1post > tfoot > tr.success > td,
 #t1other > tfoot > tr.success > td,
+.table-default > tfoot > tr.success > td,
 .table > tfoot > tr.success > th,
 .tbl > tfoot > tr.success > th,
 .tbl_1 > tfoot > tr.success > th,
@@ -3589,18 +3627,20 @@ div.panel_content table > tfoot > tr.success > td,
 div.panel_content table > tfoot > tr.success > th,
 #t1pre > tfoot > tr.success > th,
 #t1post > tfoot > tr.success > th,
-#t1other > tfoot > tr.success > th {
+#t1other > tfoot > tr.success > th,
+.table-default > tfoot > tr.success > th {
   background-color: #dff0d8;
 }
 
 /* line 24, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table-hover > tbody > tr > td.success:hover,
-.table-hover > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > th {
+.table-hover > tbody > tr > td.success:hover, .table-default > tbody > tr > td.success:hover,
+.table-hover > tbody > tr > th.success:hover,
+.table-default > tbody > tr > th.success:hover, .table-hover > tbody > tr.success:hover > td, .table-default > tbody > tr.success:hover > td, .table-hover > tbody > tr:hover > .success, .table-default > tbody > tr:hover > .success, .table-hover > tbody > tr.success:hover > th, .table-default > tbody > tr.success:hover > th {
   background-color: #d0e9c6;
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.info, .tbl > thead > tr > td.info, .tbl_1 > thead > tr > td.info, .tbl_alt > thead > tr > td.info, #t1 > thead > tr > td.info, .tbl_courseid > thead > tr > td.info, #t3 > thead > tr > td.info, .tbl_lesson > thead > tr > td.info, div.panel_content table > thead > tr > td.info, #t1pre > thead > tr > td.info, #t1post > thead > tr > td.info, #t1other > thead > tr > td.info,
+.table > thead > tr > td.info, .tbl > thead > tr > td.info, .tbl_1 > thead > tr > td.info, .tbl_alt > thead > tr > td.info, #t1 > thead > tr > td.info, .tbl_courseid > thead > tr > td.info, #t3 > thead > tr > td.info, .tbl_lesson > thead > tr > td.info, div.panel_content table > thead > tr > td.info, #t1pre > thead > tr > td.info, #t1post > thead > tr > td.info, #t1other > thead > tr > td.info, .table-default > thead > tr > td.info,
 .table > thead > tr > th.info,
 .tbl > thead > tr > th.info,
 .tbl_1 > thead > tr > th.info,
@@ -3612,7 +3652,8 @@ div.panel_content table > tfoot > tr.success > th,
 div.panel_content table > thead > tr > th.info,
 #t1pre > thead > tr > th.info,
 #t1post > thead > tr > th.info,
-#t1other > thead > tr > th.info, .table > thead > tr.info > td, .tbl > thead > tr.info > td, .tbl_1 > thead > tr.info > td, .tbl_alt > thead > tr.info > td, #t1 > thead > tr.info > td, .tbl_courseid > thead > tr.info > td, #t3 > thead > tr.info > td, .tbl_lesson > thead > tr.info > td, div.panel_content table > thead > tr.info > td, #t1pre > thead > tr.info > td, #t1post > thead > tr.info > td, #t1other > thead > tr.info > td, .table > thead > tr.info > th, .tbl > thead > tr.info > th, .tbl_1 > thead > tr.info > th, .tbl_alt > thead > tr.info > th, #t1 > thead > tr.info > th, .tbl_courseid > thead > tr.info > th, #t3 > thead > tr.info > th, .tbl_lesson > thead > tr.info > th, div.panel_content table > thead > tr.info > th, #t1pre > thead > tr.info > th, #t1post > thead > tr.info > th, #t1other > thead > tr.info > th,
+#t1other > thead > tr > th.info,
+.table-default > thead > tr > th.info, .table > thead > tr.info > td, .tbl > thead > tr.info > td, .tbl_1 > thead > tr.info > td, .tbl_alt > thead > tr.info > td, #t1 > thead > tr.info > td, .tbl_courseid > thead > tr.info > td, #t3 > thead > tr.info > td, .tbl_lesson > thead > tr.info > td, div.panel_content table > thead > tr.info > td, #t1pre > thead > tr.info > td, #t1post > thead > tr.info > td, #t1other > thead > tr.info > td, .table-default > thead > tr.info > td, .table > thead > tr.info > th, .tbl > thead > tr.info > th, .tbl_1 > thead > tr.info > th, .tbl_alt > thead > tr.info > th, #t1 > thead > tr.info > th, .tbl_courseid > thead > tr.info > th, #t3 > thead > tr.info > th, .tbl_lesson > thead > tr.info > th, div.panel_content table > thead > tr.info > th, #t1pre > thead > tr.info > th, #t1post > thead > tr.info > th, #t1other > thead > tr.info > th, .table-default > thead > tr.info > th,
 .table > tbody > tr > td.info,
 .tbl > tbody > tr > td.info,
 .tbl_1 > tbody > tr > td.info,
@@ -3625,6 +3666,7 @@ div.panel_content table > tbody > tr > td.info,
 #t1pre > tbody > tr > td.info,
 #t1post > tbody > tr > td.info,
 #t1other > tbody > tr > td.info,
+.table-default > tbody > tr > td.info,
 .table > tbody > tr > th.info,
 .tbl > tbody > tr > th.info,
 .tbl_1 > tbody > tr > th.info,
@@ -3637,6 +3679,7 @@ div.panel_content table > tbody > tr > th.info,
 #t1pre > tbody > tr > th.info,
 #t1post > tbody > tr > th.info,
 #t1other > tbody > tr > th.info,
+.table-default > tbody > tr > th.info,
 .table > tbody > tr.info > td,
 .tbl > tbody > tr.info > td,
 .tbl_1 > tbody > tr.info > td,
@@ -3649,6 +3692,7 @@ div.panel_content table > tbody > tr.info > td,
 #t1pre > tbody > tr.info > td,
 #t1post > tbody > tr.info > td,
 #t1other > tbody > tr.info > td,
+.table-default > tbody > tr.info > td,
 .table > tbody > tr.info > th,
 .tbl > tbody > tr.info > th,
 .tbl_1 > tbody > tr.info > th,
@@ -3661,6 +3705,7 @@ div.panel_content table > tbody > tr.info > th,
 #t1pre > tbody > tr.info > th,
 #t1post > tbody > tr.info > th,
 #t1other > tbody > tr.info > th,
+.table-default > tbody > tr.info > th,
 .table > tfoot > tr > td.info,
 .tbl > tfoot > tr > td.info,
 .tbl_1 > tfoot > tr > td.info,
@@ -3673,6 +3718,7 @@ div.panel_content table > tfoot > tr > td.info,
 #t1pre > tfoot > tr > td.info,
 #t1post > tfoot > tr > td.info,
 #t1other > tfoot > tr > td.info,
+.table-default > tfoot > tr > td.info,
 .table > tfoot > tr > th.info,
 .tbl > tfoot > tr > th.info,
 .tbl_1 > tfoot > tr > th.info,
@@ -3685,6 +3731,7 @@ div.panel_content table > tfoot > tr > th.info,
 #t1pre > tfoot > tr > th.info,
 #t1post > tfoot > tr > th.info,
 #t1other > tfoot > tr > th.info,
+.table-default > tfoot > tr > th.info,
 .table > tfoot > tr.info > td,
 .tbl > tfoot > tr.info > td,
 .tbl_1 > tfoot > tr.info > td,
@@ -3697,6 +3744,7 @@ div.panel_content table > tfoot > tr.info > td,
 #t1pre > tfoot > tr.info > td,
 #t1post > tfoot > tr.info > td,
 #t1other > tfoot > tr.info > td,
+.table-default > tfoot > tr.info > td,
 .table > tfoot > tr.info > th,
 .tbl > tfoot > tr.info > th,
 .tbl_1 > tfoot > tr.info > th,
@@ -3708,18 +3756,20 @@ div.panel_content table > tfoot > tr.info > td,
 div.panel_content table > tfoot > tr.info > th,
 #t1pre > tfoot > tr.info > th,
 #t1post > tfoot > tr.info > th,
-#t1other > tfoot > tr.info > th {
+#t1other > tfoot > tr.info > th,
+.table-default > tfoot > tr.info > th {
   background-color: #d9edf7;
 }
 
 /* line 24, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table-hover > tbody > tr > td.info:hover,
-.table-hover > tbody > tr > th.info:hover, .table-hover > tbody > tr.info:hover > td, .table-hover > tbody > tr:hover > .info, .table-hover > tbody > tr.info:hover > th {
+.table-hover > tbody > tr > td.info:hover, .table-default > tbody > tr > td.info:hover,
+.table-hover > tbody > tr > th.info:hover,
+.table-default > tbody > tr > th.info:hover, .table-hover > tbody > tr.info:hover > td, .table-default > tbody > tr.info:hover > td, .table-hover > tbody > tr:hover > .info, .table-default > tbody > tr:hover > .info, .table-hover > tbody > tr.info:hover > th, .table-default > tbody > tr.info:hover > th {
   background-color: #c4e3f3;
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.warning, .tbl > thead > tr > td.warning, .tbl_1 > thead > tr > td.warning, .tbl_alt > thead > tr > td.warning, #t1 > thead > tr > td.warning, .tbl_courseid > thead > tr > td.warning, #t3 > thead > tr > td.warning, .tbl_lesson > thead > tr > td.warning, div.panel_content table > thead > tr > td.warning, #t1pre > thead > tr > td.warning, #t1post > thead > tr > td.warning, #t1other > thead > tr > td.warning,
+.table > thead > tr > td.warning, .tbl > thead > tr > td.warning, .tbl_1 > thead > tr > td.warning, .tbl_alt > thead > tr > td.warning, #t1 > thead > tr > td.warning, .tbl_courseid > thead > tr > td.warning, #t3 > thead > tr > td.warning, .tbl_lesson > thead > tr > td.warning, div.panel_content table > thead > tr > td.warning, #t1pre > thead > tr > td.warning, #t1post > thead > tr > td.warning, #t1other > thead > tr > td.warning, .table-default > thead > tr > td.warning,
 .table > thead > tr > th.warning,
 .tbl > thead > tr > th.warning,
 .tbl_1 > thead > tr > th.warning,
@@ -3731,7 +3781,8 @@ div.panel_content table > tfoot > tr.info > th,
 div.panel_content table > thead > tr > th.warning,
 #t1pre > thead > tr > th.warning,
 #t1post > thead > tr > th.warning,
-#t1other > thead > tr > th.warning, .table > thead > tr.warning > td, .tbl > thead > tr.warning > td, .tbl_1 > thead > tr.warning > td, .tbl_alt > thead > tr.warning > td, #t1 > thead > tr.warning > td, .tbl_courseid > thead > tr.warning > td, #t3 > thead > tr.warning > td, .tbl_lesson > thead > tr.warning > td, div.panel_content table > thead > tr.warning > td, #t1pre > thead > tr.warning > td, #t1post > thead > tr.warning > td, #t1other > thead > tr.warning > td, .table > thead > tr.warning > th, .tbl > thead > tr.warning > th, .tbl_1 > thead > tr.warning > th, .tbl_alt > thead > tr.warning > th, #t1 > thead > tr.warning > th, .tbl_courseid > thead > tr.warning > th, #t3 > thead > tr.warning > th, .tbl_lesson > thead > tr.warning > th, div.panel_content table > thead > tr.warning > th, #t1pre > thead > tr.warning > th, #t1post > thead > tr.warning > th, #t1other > thead > tr.warning > th,
+#t1other > thead > tr > th.warning,
+.table-default > thead > tr > th.warning, .table > thead > tr.warning > td, .tbl > thead > tr.warning > td, .tbl_1 > thead > tr.warning > td, .tbl_alt > thead > tr.warning > td, #t1 > thead > tr.warning > td, .tbl_courseid > thead > tr.warning > td, #t3 > thead > tr.warning > td, .tbl_lesson > thead > tr.warning > td, div.panel_content table > thead > tr.warning > td, #t1pre > thead > tr.warning > td, #t1post > thead > tr.warning > td, #t1other > thead > tr.warning > td, .table-default > thead > tr.warning > td, .table > thead > tr.warning > th, .tbl > thead > tr.warning > th, .tbl_1 > thead > tr.warning > th, .tbl_alt > thead > tr.warning > th, #t1 > thead > tr.warning > th, .tbl_courseid > thead > tr.warning > th, #t3 > thead > tr.warning > th, .tbl_lesson > thead > tr.warning > th, div.panel_content table > thead > tr.warning > th, #t1pre > thead > tr.warning > th, #t1post > thead > tr.warning > th, #t1other > thead > tr.warning > th, .table-default > thead > tr.warning > th,
 .table > tbody > tr > td.warning,
 .tbl > tbody > tr > td.warning,
 .tbl_1 > tbody > tr > td.warning,
@@ -3744,6 +3795,7 @@ div.panel_content table > tbody > tr > td.warning,
 #t1pre > tbody > tr > td.warning,
 #t1post > tbody > tr > td.warning,
 #t1other > tbody > tr > td.warning,
+.table-default > tbody > tr > td.warning,
 .table > tbody > tr > th.warning,
 .tbl > tbody > tr > th.warning,
 .tbl_1 > tbody > tr > th.warning,
@@ -3756,6 +3808,7 @@ div.panel_content table > tbody > tr > th.warning,
 #t1pre > tbody > tr > th.warning,
 #t1post > tbody > tr > th.warning,
 #t1other > tbody > tr > th.warning,
+.table-default > tbody > tr > th.warning,
 .table > tbody > tr.warning > td,
 .tbl > tbody > tr.warning > td,
 .tbl_1 > tbody > tr.warning > td,
@@ -3768,6 +3821,7 @@ div.panel_content table > tbody > tr.warning > td,
 #t1pre > tbody > tr.warning > td,
 #t1post > tbody > tr.warning > td,
 #t1other > tbody > tr.warning > td,
+.table-default > tbody > tr.warning > td,
 .table > tbody > tr.warning > th,
 .tbl > tbody > tr.warning > th,
 .tbl_1 > tbody > tr.warning > th,
@@ -3780,6 +3834,7 @@ div.panel_content table > tbody > tr.warning > th,
 #t1pre > tbody > tr.warning > th,
 #t1post > tbody > tr.warning > th,
 #t1other > tbody > tr.warning > th,
+.table-default > tbody > tr.warning > th,
 .table > tfoot > tr > td.warning,
 .tbl > tfoot > tr > td.warning,
 .tbl_1 > tfoot > tr > td.warning,
@@ -3792,6 +3847,7 @@ div.panel_content table > tfoot > tr > td.warning,
 #t1pre > tfoot > tr > td.warning,
 #t1post > tfoot > tr > td.warning,
 #t1other > tfoot > tr > td.warning,
+.table-default > tfoot > tr > td.warning,
 .table > tfoot > tr > th.warning,
 .tbl > tfoot > tr > th.warning,
 .tbl_1 > tfoot > tr > th.warning,
@@ -3804,6 +3860,7 @@ div.panel_content table > tfoot > tr > th.warning,
 #t1pre > tfoot > tr > th.warning,
 #t1post > tfoot > tr > th.warning,
 #t1other > tfoot > tr > th.warning,
+.table-default > tfoot > tr > th.warning,
 .table > tfoot > tr.warning > td,
 .tbl > tfoot > tr.warning > td,
 .tbl_1 > tfoot > tr.warning > td,
@@ -3816,6 +3873,7 @@ div.panel_content table > tfoot > tr.warning > td,
 #t1pre > tfoot > tr.warning > td,
 #t1post > tfoot > tr.warning > td,
 #t1other > tfoot > tr.warning > td,
+.table-default > tfoot > tr.warning > td,
 .table > tfoot > tr.warning > th,
 .tbl > tfoot > tr.warning > th,
 .tbl_1 > tfoot > tr.warning > th,
@@ -3827,18 +3885,20 @@ div.panel_content table > tfoot > tr.warning > td,
 div.panel_content table > tfoot > tr.warning > th,
 #t1pre > tfoot > tr.warning > th,
 #t1post > tfoot > tr.warning > th,
-#t1other > tfoot > tr.warning > th {
+#t1other > tfoot > tr.warning > th,
+.table-default > tfoot > tr.warning > th {
   background-color: #fcf8e3;
 }
 
 /* line 24, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table-hover > tbody > tr > td.warning:hover,
-.table-hover > tbody > tr > th.warning:hover, .table-hover > tbody > tr.warning:hover > td, .table-hover > tbody > tr:hover > .warning, .table-hover > tbody > tr.warning:hover > th {
+.table-hover > tbody > tr > td.warning:hover, .table-default > tbody > tr > td.warning:hover,
+.table-hover > tbody > tr > th.warning:hover,
+.table-default > tbody > tr > th.warning:hover, .table-hover > tbody > tr.warning:hover > td, .table-default > tbody > tr.warning:hover > td, .table-hover > tbody > tr:hover > .warning, .table-default > tbody > tr:hover > .warning, .table-hover > tbody > tr.warning:hover > th, .table-default > tbody > tr.warning:hover > th {
   background-color: #faf2cc;
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.danger, .tbl > thead > tr > td.danger, .tbl_1 > thead > tr > td.danger, .tbl_alt > thead > tr > td.danger, #t1 > thead > tr > td.danger, .tbl_courseid > thead > tr > td.danger, #t3 > thead > tr > td.danger, .tbl_lesson > thead > tr > td.danger, div.panel_content table > thead > tr > td.danger, #t1pre > thead > tr > td.danger, #t1post > thead > tr > td.danger, #t1other > thead > tr > td.danger,
+.table > thead > tr > td.danger, .tbl > thead > tr > td.danger, .tbl_1 > thead > tr > td.danger, .tbl_alt > thead > tr > td.danger, #t1 > thead > tr > td.danger, .tbl_courseid > thead > tr > td.danger, #t3 > thead > tr > td.danger, .tbl_lesson > thead > tr > td.danger, div.panel_content table > thead > tr > td.danger, #t1pre > thead > tr > td.danger, #t1post > thead > tr > td.danger, #t1other > thead > tr > td.danger, .table-default > thead > tr > td.danger,
 .table > thead > tr > th.danger,
 .tbl > thead > tr > th.danger,
 .tbl_1 > thead > tr > th.danger,
@@ -3850,7 +3910,8 @@ div.panel_content table > tfoot > tr.warning > th,
 div.panel_content table > thead > tr > th.danger,
 #t1pre > thead > tr > th.danger,
 #t1post > thead > tr > th.danger,
-#t1other > thead > tr > th.danger, .table > thead > tr.danger > td, .tbl > thead > tr.danger > td, .tbl_1 > thead > tr.danger > td, .tbl_alt > thead > tr.danger > td, #t1 > thead > tr.danger > td, .tbl_courseid > thead > tr.danger > td, #t3 > thead > tr.danger > td, .tbl_lesson > thead > tr.danger > td, div.panel_content table > thead > tr.danger > td, #t1pre > thead > tr.danger > td, #t1post > thead > tr.danger > td, #t1other > thead > tr.danger > td, .table > thead > tr.danger > th, .tbl > thead > tr.danger > th, .tbl_1 > thead > tr.danger > th, .tbl_alt > thead > tr.danger > th, #t1 > thead > tr.danger > th, .tbl_courseid > thead > tr.danger > th, #t3 > thead > tr.danger > th, .tbl_lesson > thead > tr.danger > th, div.panel_content table > thead > tr.danger > th, #t1pre > thead > tr.danger > th, #t1post > thead > tr.danger > th, #t1other > thead > tr.danger > th,
+#t1other > thead > tr > th.danger,
+.table-default > thead > tr > th.danger, .table > thead > tr.danger > td, .tbl > thead > tr.danger > td, .tbl_1 > thead > tr.danger > td, .tbl_alt > thead > tr.danger > td, #t1 > thead > tr.danger > td, .tbl_courseid > thead > tr.danger > td, #t3 > thead > tr.danger > td, .tbl_lesson > thead > tr.danger > td, div.panel_content table > thead > tr.danger > td, #t1pre > thead > tr.danger > td, #t1post > thead > tr.danger > td, #t1other > thead > tr.danger > td, .table-default > thead > tr.danger > td, .table > thead > tr.danger > th, .tbl > thead > tr.danger > th, .tbl_1 > thead > tr.danger > th, .tbl_alt > thead > tr.danger > th, #t1 > thead > tr.danger > th, .tbl_courseid > thead > tr.danger > th, #t3 > thead > tr.danger > th, .tbl_lesson > thead > tr.danger > th, div.panel_content table > thead > tr.danger > th, #t1pre > thead > tr.danger > th, #t1post > thead > tr.danger > th, #t1other > thead > tr.danger > th, .table-default > thead > tr.danger > th,
 .table > tbody > tr > td.danger,
 .tbl > tbody > tr > td.danger,
 .tbl_1 > tbody > tr > td.danger,
@@ -3863,6 +3924,7 @@ div.panel_content table > tbody > tr > td.danger,
 #t1pre > tbody > tr > td.danger,
 #t1post > tbody > tr > td.danger,
 #t1other > tbody > tr > td.danger,
+.table-default > tbody > tr > td.danger,
 .table > tbody > tr > th.danger,
 .tbl > tbody > tr > th.danger,
 .tbl_1 > tbody > tr > th.danger,
@@ -3875,6 +3937,7 @@ div.panel_content table > tbody > tr > th.danger,
 #t1pre > tbody > tr > th.danger,
 #t1post > tbody > tr > th.danger,
 #t1other > tbody > tr > th.danger,
+.table-default > tbody > tr > th.danger,
 .table > tbody > tr.danger > td,
 .tbl > tbody > tr.danger > td,
 .tbl_1 > tbody > tr.danger > td,
@@ -3887,6 +3950,7 @@ div.panel_content table > tbody > tr.danger > td,
 #t1pre > tbody > tr.danger > td,
 #t1post > tbody > tr.danger > td,
 #t1other > tbody > tr.danger > td,
+.table-default > tbody > tr.danger > td,
 .table > tbody > tr.danger > th,
 .tbl > tbody > tr.danger > th,
 .tbl_1 > tbody > tr.danger > th,
@@ -3899,6 +3963,7 @@ div.panel_content table > tbody > tr.danger > th,
 #t1pre > tbody > tr.danger > th,
 #t1post > tbody > tr.danger > th,
 #t1other > tbody > tr.danger > th,
+.table-default > tbody > tr.danger > th,
 .table > tfoot > tr > td.danger,
 .tbl > tfoot > tr > td.danger,
 .tbl_1 > tfoot > tr > td.danger,
@@ -3911,6 +3976,7 @@ div.panel_content table > tfoot > tr > td.danger,
 #t1pre > tfoot > tr > td.danger,
 #t1post > tfoot > tr > td.danger,
 #t1other > tfoot > tr > td.danger,
+.table-default > tfoot > tr > td.danger,
 .table > tfoot > tr > th.danger,
 .tbl > tfoot > tr > th.danger,
 .tbl_1 > tfoot > tr > th.danger,
@@ -3923,6 +3989,7 @@ div.panel_content table > tfoot > tr > th.danger,
 #t1pre > tfoot > tr > th.danger,
 #t1post > tfoot > tr > th.danger,
 #t1other > tfoot > tr > th.danger,
+.table-default > tfoot > tr > th.danger,
 .table > tfoot > tr.danger > td,
 .tbl > tfoot > tr.danger > td,
 .tbl_1 > tfoot > tr.danger > td,
@@ -3935,6 +4002,7 @@ div.panel_content table > tfoot > tr.danger > td,
 #t1pre > tfoot > tr.danger > td,
 #t1post > tfoot > tr.danger > td,
 #t1other > tfoot > tr.danger > td,
+.table-default > tfoot > tr.danger > td,
 .table > tfoot > tr.danger > th,
 .tbl > tfoot > tr.danger > th,
 .tbl_1 > tfoot > tr.danger > th,
@@ -3946,13 +4014,15 @@ div.panel_content table > tfoot > tr.danger > td,
 div.panel_content table > tfoot > tr.danger > th,
 #t1pre > tfoot > tr.danger > th,
 #t1post > tfoot > tr.danger > th,
-#t1other > tfoot > tr.danger > th {
+#t1other > tfoot > tr.danger > th,
+.table-default > tfoot > tr.danger > th {
   background-color: #f2dede;
 }
 
 /* line 24, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table-hover > tbody > tr > td.danger:hover,
-.table-hover > tbody > tr > th.danger:hover, .table-hover > tbody > tr.danger:hover > td, .table-hover > tbody > tr:hover > .danger, .table-hover > tbody > tr.danger:hover > th {
+.table-hover > tbody > tr > td.danger:hover, .table-default > tbody > tr > td.danger:hover,
+.table-hover > tbody > tr > th.danger:hover,
+.table-default > tbody > tr > th.danger:hover, .table-hover > tbody > tr.danger:hover > td, .table-default > tbody > tr.danger:hover > td, .table-hover > tbody > tr:hover > .danger, .table-default > tbody > tr:hover > .danger, .table-hover > tbody > tr.danger:hover > th, .table-default > tbody > tr.danger:hover > th {
   background-color: #ebcccc;
 }
 
@@ -3968,11 +4038,11 @@ div.panel_content table > tfoot > tr.danger > th,
     -webkit-overflow-scrolling: touch;
   }
   /* line 182, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table, .table-responsive > .tbl, .table-responsive > .tbl_1, .table-responsive > .tbl_alt, .table-responsive > #t1, .table-responsive > .tbl_courseid, .table-responsive > #t3, .table-responsive > .tbl_lesson, div.panel_content .table-responsive > table, .table-responsive > #t1pre, .table-responsive > #t1post, .table-responsive > #t1other {
+  .table-responsive > .table, .table-responsive > .tbl, .table-responsive > .tbl_1, .table-responsive > .tbl_alt, .table-responsive > #t1, .table-responsive > .tbl_courseid, .table-responsive > #t3, .table-responsive > .tbl_lesson, div.panel_content .table-responsive > table, .table-responsive > #t1pre, .table-responsive > #t1post, .table-responsive > #t1other, .table-responsive > .table-default {
     margin-bottom: 0;
   }
   /* line 191, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table > thead > tr > th, .table-responsive > .tbl > thead > tr > th, .table-responsive > .tbl_1 > thead > tr > th, .table-responsive > .tbl_alt > thead > tr > th, .table-responsive > #t1 > thead > tr > th, .table-responsive > .tbl_courseid > thead > tr > th, .table-responsive > #t3 > thead > tr > th, .table-responsive > .tbl_lesson > thead > tr > th, div.panel_content .table-responsive > table > thead > tr > th, .table-responsive > #t1pre > thead > tr > th, .table-responsive > #t1post > thead > tr > th, .table-responsive > #t1other > thead > tr > th,
+  .table-responsive > .table > thead > tr > th, .table-responsive > .tbl > thead > tr > th, .table-responsive > .tbl_1 > thead > tr > th, .table-responsive > .tbl_alt > thead > tr > th, .table-responsive > #t1 > thead > tr > th, .table-responsive > .tbl_courseid > thead > tr > th, .table-responsive > #t3 > thead > tr > th, .table-responsive > .tbl_lesson > thead > tr > th, div.panel_content .table-responsive > table > thead > tr > th, .table-responsive > #t1pre > thead > tr > th, .table-responsive > #t1post > thead > tr > th, .table-responsive > #t1other > thead > tr > th, .table-responsive > .table-default > thead > tr > th,
   .table-responsive > .table > thead > tr > td,
   .table-responsive > .tbl > thead > tr > td,
   .table-responsive > .tbl_1 > thead > tr > td,
@@ -3985,6 +4055,7 @@ div.panel_content table > tfoot > tr.danger > th,
   .table-responsive > #t1pre > thead > tr > td,
   .table-responsive > #t1post > thead > tr > td,
   .table-responsive > #t1other > thead > tr > td,
+  .table-responsive > .table-default > thead > tr > td,
   .table-responsive > .table > tbody > tr > th,
   .table-responsive > .tbl > tbody > tr > th,
   .table-responsive > .tbl_1 > tbody > tr > th,
@@ -3997,6 +4068,7 @@ div.panel_content table > tfoot > tr.danger > th,
   .table-responsive > #t1pre > tbody > tr > th,
   .table-responsive > #t1post > tbody > tr > th,
   .table-responsive > #t1other > tbody > tr > th,
+  .table-responsive > .table-default > tbody > tr > th,
   .table-responsive > .table > tbody > tr > td,
   .table-responsive > .tbl > tbody > tr > td,
   .table-responsive > .tbl_1 > tbody > tr > td,
@@ -4009,6 +4081,7 @@ div.panel_content table > tfoot > tr.danger > th,
   .table-responsive > #t1pre > tbody > tr > td,
   .table-responsive > #t1post > tbody > tr > td,
   .table-responsive > #t1other > tbody > tr > td,
+  .table-responsive > .table-default > tbody > tr > td,
   .table-responsive > .table > tfoot > tr > th,
   .table-responsive > .tbl > tfoot > tr > th,
   .table-responsive > .tbl_1 > tfoot > tr > th,
@@ -4021,6 +4094,7 @@ div.panel_content table > tfoot > tr.danger > th,
   .table-responsive > #t1pre > tfoot > tr > th,
   .table-responsive > #t1post > tfoot > tr > th,
   .table-responsive > #t1other > tfoot > tr > th,
+  .table-responsive > .table-default > tfoot > tr > th,
   .table-responsive > .table > tfoot > tr > td,
   .table-responsive > .tbl > tfoot > tr > td,
   .table-responsive > .tbl_1 > tfoot > tr > td,
@@ -4032,36 +4106,50 @@ div.panel_content table > tfoot > tr.danger > th,
   div.panel_content .table-responsive > table > tfoot > tr > td,
   .table-responsive > #t1pre > tfoot > tr > td,
   .table-responsive > #t1post > tfoot > tr > td,
-  .table-responsive > #t1other > tfoot > tr > td {
+  .table-responsive > #t1other > tfoot > tr > td,
+  .table-responsive > .table-default > tfoot > tr > td {
     white-space: nowrap;
   }
   /* line 199, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table-bordered {
+  .table-responsive > .table-bordered, .table-responsive > .table-default {
     border: 0;
   }
   /* line 208, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table-bordered > thead > tr > th:first-child,
+  .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-default > thead > tr > th:first-child,
   .table-responsive > .table-bordered > thead > tr > td:first-child,
+  .table-responsive > .table-default > thead > tr > td:first-child,
   .table-responsive > .table-bordered > tbody > tr > th:first-child,
+  .table-responsive > .table-default > tbody > tr > th:first-child,
   .table-responsive > .table-bordered > tbody > tr > td:first-child,
+  .table-responsive > .table-default > tbody > tr > td:first-child,
   .table-responsive > .table-bordered > tfoot > tr > th:first-child,
-  .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+  .table-responsive > .table-default > tfoot > tr > th:first-child,
+  .table-responsive > .table-bordered > tfoot > tr > td:first-child,
+  .table-responsive > .table-default > tfoot > tr > td:first-child {
     border-left: 0;
   }
   /* line 212, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table-bordered > thead > tr > th:last-child,
+  .table-responsive > .table-bordered > thead > tr > th:last-child, .table-responsive > .table-default > thead > tr > th:last-child,
   .table-responsive > .table-bordered > thead > tr > td:last-child,
+  .table-responsive > .table-default > thead > tr > td:last-child,
   .table-responsive > .table-bordered > tbody > tr > th:last-child,
+  .table-responsive > .table-default > tbody > tr > th:last-child,
   .table-responsive > .table-bordered > tbody > tr > td:last-child,
+  .table-responsive > .table-default > tbody > tr > td:last-child,
   .table-responsive > .table-bordered > tfoot > tr > th:last-child,
-  .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+  .table-responsive > .table-default > tfoot > tr > th:last-child,
+  .table-responsive > .table-bordered > tfoot > tr > td:last-child,
+  .table-responsive > .table-default > tfoot > tr > td:last-child {
     border-right: 0;
   }
   /* line 225, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table-bordered > tbody > tr:last-child > th,
+  .table-responsive > .table-bordered > tbody > tr:last-child > th, .table-responsive > .table-default > tbody > tr:last-child > th,
   .table-responsive > .table-bordered > tbody > tr:last-child > td,
+  .table-responsive > .table-default > tbody > tr:last-child > td,
   .table-responsive > .table-bordered > tfoot > tr:last-child > th,
-  .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+  .table-responsive > .table-default > tfoot > tr:last-child > th,
+  .table-responsive > .table-bordered > tfoot > tr:last-child > td,
+  .table-responsive > .table-default > tfoot > tr:last-child > td {
     border-bottom: 0;
   }
 }
@@ -7254,7 +7342,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 }
 
 /* line 98, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table, .panel > .tbl, .panel > .tbl_1, .panel > .tbl_alt, .panel > #t1, .panel > .tbl_courseid, .panel > #t3, .panel > .tbl_lesson, div.panel_content .panel > table, .panel > #t1pre, .panel > #t1post, .panel > #t1other,
+.panel > .table, .panel > .tbl, .panel > .tbl_1, .panel > .tbl_alt, .panel > #t1, .panel > .tbl_courseid, .panel > #t3, .panel > .tbl_lesson, div.panel_content .panel > table, .panel > #t1pre, .panel > #t1post, .panel > #t1other, .panel > .table-default,
 .panel > .table-responsive > .table,
 .panel > .table-responsive > .tbl,
 .panel > .table-responsive > .tbl_1,
@@ -7266,11 +7354,12 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 div.panel_content .panel > .table-responsive > table,
 .panel > .table-responsive > #t1pre,
 .panel > .table-responsive > #t1post,
-.panel > .table-responsive > #t1other {
+.panel > .table-responsive > #t1other,
+.panel > .table-responsive > .table-default {
   margin-bottom: 0;
 }
 /* line 103, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child, .panel > .tbl:first-child, .panel > .tbl_1:first-child, .panel > .tbl_alt:first-child, .panel > #t1:first-child, .panel > .tbl_courseid:first-child, .panel > #t3:first-child, .panel > .tbl_lesson:first-child, div.panel_content .panel > table:first-child, .panel > #t1pre:first-child, .panel > #t1post:first-child, .panel > #t1other:first-child,
+.panel > .table:first-child, .panel > .tbl:first-child, .panel > .tbl_1:first-child, .panel > .tbl_alt:first-child, .panel > #t1:first-child, .panel > .tbl_courseid:first-child, .panel > #t3:first-child, .panel > .tbl_lesson:first-child, div.panel_content .panel > table:first-child, .panel > #t1pre:first-child, .panel > #t1post:first-child, .panel > #t1other:first-child, .panel > .table-default:first-child,
 .panel > .table-responsive:first-child > .table:first-child,
 .panel > .table-responsive:first-child > .tbl:first-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child,
@@ -7282,12 +7371,13 @@ div.panel_content .panel > .table-responsive > table,
 div.panel_content .panel > .table-responsive:first-child > table:first-child,
 .panel > .table-responsive:first-child > #t1pre:first-child,
 .panel > .table-responsive:first-child > #t1post:first-child,
-.panel > .table-responsive:first-child > #t1other:first-child {
+.panel > .table-responsive:first-child > #t1other:first-child,
+.panel > .table-responsive:first-child > .table-default:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
 /* line 110, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_1:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_courseid:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_lesson:first-child > thead:first-child > tr:first-child td:first-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1pre:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1post:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1other:first-child > thead:first-child > tr:first-child td:first-child,
+.panel > .table:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_1:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_courseid:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_lesson:first-child > thead:first-child > tr:first-child td:first-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1pre:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1post:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1other:first-child > thead:first-child > tr:first-child td:first-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .tbl:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .tbl_1:first-child > thead:first-child > tr:first-child th:first-child,
@@ -7300,6 +7390,7 @@ div.panel_content .panel > table:first-child > thead:first-child > tr:first-chil
 .panel > #t1pre:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > #t1post:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > #t1other:first-child > thead:first-child > tr:first-child th:first-child,
+.panel > .table-default:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .tbl:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .tbl_1:first-child > tbody:first-child > tr:first-child td:first-child,
@@ -7312,6 +7403,7 @@ div.panel_content .panel > table:first-child > tbody:first-child > tr:first-chil
 .panel > #t1pre:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > #t1post:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > #t1other:first-child > tbody:first-child > tr:first-child td:first-child,
+.panel > .table-default:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .tbl:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .tbl_1:first-child > tbody:first-child > tr:first-child th:first-child,
@@ -7324,6 +7416,7 @@ div.panel_content .panel > table:first-child > tbody:first-child > tr:first-chil
 .panel > #t1pre:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > #t1post:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > #t1other:first-child > tbody:first-child > tr:first-child th:first-child,
+.panel > .table-default:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > thead:first-child > tr:first-child td:first-child,
@@ -7336,6 +7429,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > #t1post:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > #t1other:first-child > thead:first-child > tr:first-child td:first-child,
+.panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > thead:first-child > tr:first-child th:first-child,
@@ -7348,6 +7442,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > #t1post:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > #t1other:first-child > thead:first-child > tr:first-child th:first-child,
+.panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > tbody:first-child > tr:first-child td:first-child,
@@ -7360,6 +7455,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > #t1post:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child td:first-child,
+.panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > tbody:first-child > tr:first-child th:first-child,
@@ -7371,11 +7467,12 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > #t1pre:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > #t1post:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child th:first-child {
+.panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child th:first-child,
+.panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child th:first-child {
   border-top-left-radius: 3px;
 }
 /* line 114, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_1:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_courseid:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_lesson:first-child > thead:first-child > tr:first-child td:last-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1pre:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1post:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1other:first-child > thead:first-child > tr:first-child td:last-child,
+.panel > .table:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_1:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_courseid:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_lesson:first-child > thead:first-child > tr:first-child td:last-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1pre:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1post:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1other:first-child > thead:first-child > tr:first-child td:last-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .tbl:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .tbl_1:first-child > thead:first-child > tr:first-child th:last-child,
@@ -7388,6 +7485,7 @@ div.panel_content .panel > table:first-child > thead:first-child > tr:first-chil
 .panel > #t1pre:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > #t1post:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > #t1other:first-child > thead:first-child > tr:first-child th:last-child,
+.panel > .table-default:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .tbl:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .tbl_1:first-child > tbody:first-child > tr:first-child td:last-child,
@@ -7400,6 +7498,7 @@ div.panel_content .panel > table:first-child > tbody:first-child > tr:first-chil
 .panel > #t1pre:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > #t1post:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > #t1other:first-child > tbody:first-child > tr:first-child td:last-child,
+.panel > .table-default:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .tbl:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .tbl_1:first-child > tbody:first-child > tr:first-child th:last-child,
@@ -7412,6 +7511,7 @@ div.panel_content .panel > table:first-child > tbody:first-child > tr:first-chil
 .panel > #t1pre:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > #t1post:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > #t1other:first-child > tbody:first-child > tr:first-child th:last-child,
+.panel > .table-default:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > thead:first-child > tr:first-child td:last-child,
@@ -7424,6 +7524,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > #t1post:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > #t1other:first-child > thead:first-child > tr:first-child td:last-child,
+.panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > thead:first-child > tr:first-child th:last-child,
@@ -7436,6 +7537,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > #t1post:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > #t1other:first-child > thead:first-child > tr:first-child th:last-child,
+.panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > tbody:first-child > tr:first-child td:last-child,
@@ -7448,6 +7550,7 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 .panel > .table-responsive:first-child > #t1pre:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > #t1post:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child td:last-child,
+.panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .tbl_1:first-child > tbody:first-child > tr:first-child th:last-child,
@@ -7459,11 +7562,12 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > #t1pre:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > #t1post:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child th:last-child {
+.panel > .table-responsive:first-child > #t1other:first-child > tbody:first-child > tr:first-child th:last-child,
+.panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child th:last-child {
   border-top-right-radius: 3px;
 }
 /* line 122, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child, .panel > .tbl:last-child, .panel > .tbl_1:last-child, .panel > .tbl_alt:last-child, .panel > #t1:last-child, .panel > .tbl_courseid:last-child, .panel > #t3:last-child, .panel > .tbl_lesson:last-child, div.panel_content .panel > table:last-child, .panel > #t1pre:last-child, .panel > #t1post:last-child, .panel > #t1other:last-child,
+.panel > .table:last-child, .panel > .tbl:last-child, .panel > .tbl_1:last-child, .panel > .tbl_alt:last-child, .panel > #t1:last-child, .panel > .tbl_courseid:last-child, .panel > #t3:last-child, .panel > .tbl_lesson:last-child, div.panel_content .panel > table:last-child, .panel > #t1pre:last-child, .panel > #t1post:last-child, .panel > #t1other:last-child, .panel > .table-default:last-child,
 .panel > .table-responsive:last-child > .table:last-child,
 .panel > .table-responsive:last-child > .tbl:last-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child,
@@ -7475,12 +7579,13 @@ div.panel_content .panel > .table-responsive:first-child > table:first-child > t
 div.panel_content .panel > .table-responsive:last-child > table:last-child,
 .panel > .table-responsive:last-child > #t1pre:last-child,
 .panel > .table-responsive:last-child > #t1post:last-child,
-.panel > .table-responsive:last-child > #t1other:last-child {
+.panel > .table-responsive:last-child > #t1other:last-child,
+.panel > .table-responsive:last-child > .table-default:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
 /* line 129, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_1:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_courseid:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_lesson:last-child > tbody:last-child > tr:last-child td:first-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1pre:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1post:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1other:last-child > tbody:last-child > tr:last-child td:first-child,
+.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_1:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_courseid:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_lesson:last-child > tbody:last-child > tr:last-child td:first-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1pre:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1post:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1other:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .tbl:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .tbl_1:last-child > tbody:last-child > tr:last-child th:first-child,
@@ -7493,6 +7598,7 @@ div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child t
 .panel > #t1pre:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > #t1post:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > #t1other:last-child > tbody:last-child > tr:last-child th:first-child,
+.panel > .table-default:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .tbl:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .tbl_1:last-child > tfoot:last-child > tr:last-child td:first-child,
@@ -7505,6 +7611,7 @@ div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child t
 .panel > #t1pre:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > #t1post:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > #t1other:last-child > tfoot:last-child > tr:last-child td:first-child,
+.panel > .table-default:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .tbl:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .tbl_1:last-child > tfoot:last-child > tr:last-child th:first-child,
@@ -7517,6 +7624,7 @@ div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child t
 .panel > #t1pre:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > #t1post:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > #t1other:last-child > tfoot:last-child > tr:last-child th:first-child,
+.panel > .table-default:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tbody:last-child > tr:last-child td:first-child,
@@ -7529,6 +7637,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tbo
 .panel > .table-responsive:last-child > #t1pre:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tbody:last-child > tr:last-child td:first-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tbody:last-child > tr:last-child th:first-child,
@@ -7541,6 +7650,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tbo
 .panel > .table-responsive:last-child > #t1pre:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tbody:last-child > tr:last-child th:first-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tfoot:last-child > tr:last-child td:first-child,
@@ -7553,6 +7663,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tfo
 .panel > .table-responsive:last-child > #t1pre:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child td:first-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tfoot:last-child > tr:last-child th:first-child,
@@ -7564,11 +7675,12 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tfo
 div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > #t1pre:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child th:first-child {
+.panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child th:first-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child th:first-child {
   border-bottom-left-radius: 3px;
 }
 /* line 133, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_1:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_courseid:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_lesson:last-child > tbody:last-child > tr:last-child td:last-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1pre:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1post:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1other:last-child > tbody:last-child > tr:last-child td:last-child,
+.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_1:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_courseid:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_lesson:last-child > tbody:last-child > tr:last-child td:last-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1pre:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1post:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1other:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .tbl:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .tbl_1:last-child > tbody:last-child > tr:last-child th:last-child,
@@ -7581,6 +7693,7 @@ div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child t
 .panel > #t1pre:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > #t1post:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > #t1other:last-child > tbody:last-child > tr:last-child th:last-child,
+.panel > .table-default:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .tbl:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .tbl_1:last-child > tfoot:last-child > tr:last-child td:last-child,
@@ -7593,6 +7706,7 @@ div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child t
 .panel > #t1pre:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > #t1post:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > #t1other:last-child > tfoot:last-child > tr:last-child td:last-child,
+.panel > .table-default:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .tbl:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .tbl_1:last-child > tfoot:last-child > tr:last-child th:last-child,
@@ -7605,6 +7719,7 @@ div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child t
 .panel > #t1pre:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > #t1post:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > #t1other:last-child > tfoot:last-child > tr:last-child th:last-child,
+.panel > .table-default:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tbody:last-child > tr:last-child td:last-child,
@@ -7617,6 +7732,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tbo
 .panel > .table-responsive:last-child > #t1pre:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tbody:last-child > tr:last-child td:last-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tbody:last-child > tr:last-child th:last-child,
@@ -7629,6 +7745,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tbo
 .panel > .table-responsive:last-child > #t1pre:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tbody:last-child > tr:last-child th:last-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tfoot:last-child > tr:last-child td:last-child,
@@ -7641,6 +7758,7 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tfo
 .panel > .table-responsive:last-child > #t1pre:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child td:last-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .tbl_1:last-child > tfoot:last-child > tr:last-child th:last-child,
@@ -7652,16 +7770,17 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tfo
 div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > #t1pre:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > #t1post:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child th:last-child {
+.panel > .table-responsive:last-child > #t1other:last-child > tfoot:last-child > tr:last-child th:last-child,
+.panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child th:last-child {
   border-bottom-right-radius: 3px;
 }
 /* line 140, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .panel-body + .table, .panel > .panel-body + .tbl, .panel > .panel-body + .tbl_1, .panel > .panel-body + .tbl_alt, .panel > .panel-body + #t1, .panel > .panel-body + .tbl_courseid, .panel > .panel-body + #t3, .panel > .panel-body + .tbl_lesson, div.panel_content .panel > .panel-body + table, .panel > .panel-body + #t1pre, .panel > .panel-body + #t1post, .panel > .panel-body + #t1other,
+.panel > .panel-body + .table, .panel > .panel-body + .tbl, .panel > .panel-body + .tbl_1, .panel > .panel-body + .tbl_alt, .panel > .panel-body + #t1, .panel > .panel-body + .tbl_courseid, .panel > .panel-body + #t3, .panel > .panel-body + .tbl_lesson, div.panel_content .panel > .panel-body + table, .panel > .panel-body + #t1pre, .panel > .panel-body + #t1post, .panel > .panel-body + #t1other, .panel > .panel-body + .table-default,
 .panel > .panel-body + .table-responsive {
   border-top: 1px solid #dddddd;
 }
 /* line 144, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table > tbody:first-child > tr:first-child th, .panel > .tbl > tbody:first-child > tr:first-child th, .panel > .tbl_1 > tbody:first-child > tr:first-child th, .panel > .tbl_alt > tbody:first-child > tr:first-child th, .panel > #t1 > tbody:first-child > tr:first-child th, .panel > .tbl_courseid > tbody:first-child > tr:first-child th, .panel > #t3 > tbody:first-child > tr:first-child th, .panel > .tbl_lesson > tbody:first-child > tr:first-child th, div.panel_content .panel > table > tbody:first-child > tr:first-child th, .panel > #t1pre > tbody:first-child > tr:first-child th, .panel > #t1post > tbody:first-child > tr:first-child th, .panel > #t1other > tbody:first-child > tr:first-child th,
+.panel > .table > tbody:first-child > tr:first-child th, .panel > .tbl > tbody:first-child > tr:first-child th, .panel > .tbl_1 > tbody:first-child > tr:first-child th, .panel > .tbl_alt > tbody:first-child > tr:first-child th, .panel > #t1 > tbody:first-child > tr:first-child th, .panel > .tbl_courseid > tbody:first-child > tr:first-child th, .panel > #t3 > tbody:first-child > tr:first-child th, .panel > .tbl_lesson > tbody:first-child > tr:first-child th, div.panel_content .panel > table > tbody:first-child > tr:first-child th, .panel > #t1pre > tbody:first-child > tr:first-child th, .panel > #t1post > tbody:first-child > tr:first-child th, .panel > #t1other > tbody:first-child > tr:first-child th, .panel > .table-default > tbody:first-child > tr:first-child th,
 .panel > .table > tbody:first-child > tr:first-child td,
 .panel > .tbl > tbody:first-child > tr:first-child td,
 .panel > .tbl_1 > tbody:first-child > tr:first-child td,
@@ -7673,64 +7792,102 @@ div.panel_content .panel > .table-responsive:last-child > table:last-child > tfo
 div.panel_content .panel > table > tbody:first-child > tr:first-child td,
 .panel > #t1pre > tbody:first-child > tr:first-child td,
 .panel > #t1post > tbody:first-child > tr:first-child td,
-.panel > #t1other > tbody:first-child > tr:first-child td {
+.panel > #t1other > tbody:first-child > tr:first-child td,
+.panel > .table-default > tbody:first-child > tr:first-child td {
   border-top: 0;
 }
 /* line 148, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table-bordered,
-.panel > .table-responsive > .table-bordered {
+.panel > .table-bordered, .panel > .table-default,
+.panel > .table-responsive > .table-bordered,
+.panel > .table-responsive > .table-default {
   border: 0;
 }
 /* line 155, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table-bordered > thead > tr > th:first-child,
+.panel > .table-bordered > thead > tr > th:first-child, .panel > .table-default > thead > tr > th:first-child,
 .panel > .table-bordered > thead > tr > td:first-child,
+.panel > .table-default > thead > tr > td:first-child,
 .panel > .table-bordered > tbody > tr > th:first-child,
+.panel > .table-default > tbody > tr > th:first-child,
 .panel > .table-bordered > tbody > tr > td:first-child,
+.panel > .table-default > tbody > tr > td:first-child,
 .panel > .table-bordered > tfoot > tr > th:first-child,
+.panel > .table-default > tfoot > tr > th:first-child,
 .panel > .table-bordered > tfoot > tr > td:first-child,
+.panel > .table-default > tfoot > tr > td:first-child,
 .panel > .table-responsive > .table-bordered > thead > tr > th:first-child,
+.panel > .table-responsive > .table-default > thead > tr > th:first-child,
 .panel > .table-responsive > .table-bordered > thead > tr > td:first-child,
+.panel > .table-responsive > .table-default > thead > tr > td:first-child,
 .panel > .table-responsive > .table-bordered > tbody > tr > th:first-child,
+.panel > .table-responsive > .table-default > tbody > tr > th:first-child,
 .panel > .table-responsive > .table-bordered > tbody > tr > td:first-child,
+.panel > .table-responsive > .table-default > tbody > tr > td:first-child,
 .panel > .table-responsive > .table-bordered > tfoot > tr > th:first-child,
-.panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+.panel > .table-responsive > .table-default > tfoot > tr > th:first-child,
+.panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child,
+.panel > .table-responsive > .table-default > tfoot > tr > td:first-child {
   border-left: 0;
 }
 /* line 159, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table-bordered > thead > tr > th:last-child,
+.panel > .table-bordered > thead > tr > th:last-child, .panel > .table-default > thead > tr > th:last-child,
 .panel > .table-bordered > thead > tr > td:last-child,
+.panel > .table-default > thead > tr > td:last-child,
 .panel > .table-bordered > tbody > tr > th:last-child,
+.panel > .table-default > tbody > tr > th:last-child,
 .panel > .table-bordered > tbody > tr > td:last-child,
+.panel > .table-default > tbody > tr > td:last-child,
 .panel > .table-bordered > tfoot > tr > th:last-child,
+.panel > .table-default > tfoot > tr > th:last-child,
 .panel > .table-bordered > tfoot > tr > td:last-child,
+.panel > .table-default > tfoot > tr > td:last-child,
 .panel > .table-responsive > .table-bordered > thead > tr > th:last-child,
+.panel > .table-responsive > .table-default > thead > tr > th:last-child,
 .panel > .table-responsive > .table-bordered > thead > tr > td:last-child,
+.panel > .table-responsive > .table-default > thead > tr > td:last-child,
 .panel > .table-responsive > .table-bordered > tbody > tr > th:last-child,
+.panel > .table-responsive > .table-default > tbody > tr > th:last-child,
 .panel > .table-responsive > .table-bordered > tbody > tr > td:last-child,
+.panel > .table-responsive > .table-default > tbody > tr > td:last-child,
 .panel > .table-responsive > .table-bordered > tfoot > tr > th:last-child,
-.panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+.panel > .table-responsive > .table-default > tfoot > tr > th:last-child,
+.panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child,
+.panel > .table-responsive > .table-default > tfoot > tr > td:last-child {
   border-right: 0;
 }
 /* line 168, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table-bordered > thead > tr:first-child > td,
+.panel > .table-bordered > thead > tr:first-child > td, .panel > .table-default > thead > tr:first-child > td,
 .panel > .table-bordered > thead > tr:first-child > th,
+.panel > .table-default > thead > tr:first-child > th,
 .panel > .table-bordered > tbody > tr:first-child > td,
+.panel > .table-default > tbody > tr:first-child > td,
 .panel > .table-bordered > tbody > tr:first-child > th,
+.panel > .table-default > tbody > tr:first-child > th,
 .panel > .table-responsive > .table-bordered > thead > tr:first-child > td,
+.panel > .table-responsive > .table-default > thead > tr:first-child > td,
 .panel > .table-responsive > .table-bordered > thead > tr:first-child > th,
+.panel > .table-responsive > .table-default > thead > tr:first-child > th,
 .panel > .table-responsive > .table-bordered > tbody > tr:first-child > td,
-.panel > .table-responsive > .table-bordered > tbody > tr:first-child > th {
+.panel > .table-responsive > .table-default > tbody > tr:first-child > td,
+.panel > .table-responsive > .table-bordered > tbody > tr:first-child > th,
+.panel > .table-responsive > .table-default > tbody > tr:first-child > th {
   border-bottom: 0;
 }
 /* line 177, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table-bordered > tbody > tr:last-child > td,
+.panel > .table-bordered > tbody > tr:last-child > td, .panel > .table-default > tbody > tr:last-child > td,
 .panel > .table-bordered > tbody > tr:last-child > th,
+.panel > .table-default > tbody > tr:last-child > th,
 .panel > .table-bordered > tfoot > tr:last-child > td,
+.panel > .table-default > tfoot > tr:last-child > td,
 .panel > .table-bordered > tfoot > tr:last-child > th,
+.panel > .table-default > tfoot > tr:last-child > th,
 .panel > .table-responsive > .table-bordered > tbody > tr:last-child > td,
+.panel > .table-responsive > .table-default > tbody > tr:last-child > td,
 .panel > .table-responsive > .table-bordered > tbody > tr:last-child > th,
+.panel > .table-responsive > .table-default > tbody > tr:last-child > th,
 .panel > .table-responsive > .table-bordered > tfoot > tr:last-child > td,
-.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > th {
+.panel > .table-responsive > .table-default > tfoot > tr:last-child > td,
+.panel > .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+.panel > .table-responsive > .table-default > tfoot > tr:last-child > th {
   border-bottom: 0;
 }
 /* line 183, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/_panels.scss */
@@ -8976,33 +9133,33 @@ button.close {
     display: none !important;
   }
 }
-/* line 14, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 15, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 input[type="file"] {
   padding-top: 7px;
 }
 
-/* line 22, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 30, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 25, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 33, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 28, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 36, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 35, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 43, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 38, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 46, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 41, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
+/* line 49, ../SASS/bootstrap-sass/sass/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
