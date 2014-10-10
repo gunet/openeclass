@@ -274,30 +274,39 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid", 
         'name' => $poll->name
-    );            
+    );
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => "admin.php?course=$course_code&amp;pid=$pid"
+        )
+    ));
+    
     $tool_content .= "
-        <fieldset>
-            <legend>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</legend>
-            <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>".q($question->question_text)."</b></em><br>
-        </fieldset>        
-    ";
+    <div class='panel panel-primary'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</h3>
+      </div>
+      <div class='panel-body'>
+        <h4>$question->question_text<br><small>".$aType[$question->qtype - 1]."</small></h4>
+      </div>
+    </div>";     
     if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL) {
         $tool_content .= "
-          <table width='100%' class='tbl'>
-            <tbody>
-            <tr>
-                <th>
-                    <b><u>$langQuestionAnswers</u>:</b>&nbsp;&nbsp;
-                    " . icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "<br>
-                </th>
-            </tr>
-            </tbody>
-          </table><br>  
-        ";
+        <div class='panel panel-info'>
+                  <div class='panel-heading'>
+                    <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;" . icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "</a></h3>
+                  </div>
+        <!--      <div class='panel-body'>
+                    Answers should be placed here
+                  </div>
+        -->          
+        </div>";            
     }
     $tool_content .= "
-        <div class='right'><a href='admin.php?course=$course_code&amp;pid=$pid'>$langBackPollManagement</a></div>    
+        <div class='pull-right'><a href='admin.php?course=$course_code&amp;pid=$pid'>$langBackPollManagement</a></div>    
     ";
 // Modify/Create question form        
 } elseif (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -322,8 +331,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
      
     $action_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid".(isset($_GET['modifyQuestion']) ? "&amp;modifyQuestion=$question->pqid" : "&amp;newQuestion=yes");
     $action_url .= isset($_GET['questionType']) ?  '&amp;questionType=label' : '';
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'url' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : ""),
+            'icon' => 'fa-reply'
+        )
+    ));
     
-    $tool_content .= "<hr><br><form class='form-horizontal' role='form' action='$action_url' method='post'>
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$action_url' method='post'>
 	<fieldset>
             <div class='form-group'>
                 <label for='questionName' class='col-sm-2 control-label'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
@@ -365,10 +382,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <a href='admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : "")."' class='btn btn-default'>$langCancel</a>
             </div>
         </fieldset>
-    </form>";
+    </form></div>";
 
 //Modify Answers    
-} elseif (isset($_GET['modifyAnswers'])) {    
+} elseif (isset($_GET['modifyAnswers'])) {
+    $head_content .= "
+    <script>
+        $(function() {
+            $(poll_init);
+        });
+    </script>
+    ";
     $question_id = $_GET['modifyAnswers'];
     $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
@@ -380,61 +404,73 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid", 
         'name' => $langPollManagement
-    );     
-    $tool_content .= "
-        <fieldset>
-            <legend>$langQuestion</legend>
-            <em><small>".$aType[$question->qtype - 1]."</small><br>
-            <b>".q($question->question_text)."</b></em><br>
-        </fieldset>        
-    ";
-    $tool_content .= "
-    <fieldset>
-    <legend>$langQuestionAnswers</legend>
-    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
-        <table width='100%' class='tbl poll_item'>
-            <tbody>
-            <tr>
-              <td>
-              $langPollAddAnswer: <input type='submit' name='MoreAnswers' value='+'></td>
-            </tr>
-            <tr>
-                <td>
-                    <ul class='poll_answers'>";
-    if (count($answers) > 0) {
-        foreach ($answers as $answer) {
-            $tool_content .= "
-                <li>
-                    <input type='text' name='answers[]' value='".q($answer->answer_text)."' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
-                </li>            
-            ";
-        }
-    } else {
+    );
+    $tool_content .= "       
+        <div class='panel panel-primary'>
+            <div class='panel-heading'>
+              <h3 class='panel-title'>$langQuestion</h3>
+            </div>
+            <div class='panel-body'>
+                  <h4>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h4>                         
+            </div>
+        </div>";
+    
+    $tool_content .= "      
+        <div class='panel panel-info'>
+            <div class='panel-heading'>
+                <h3 class='panel-title'>$langQuestionAnswers</h3>
+            </div>
+            <div class='panel-body'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                   
+                    <fieldset>
+                    <div class='form-group'>
+                        <label for='questionName' class='col-xs-3 control-label'>$langPollAddAnswer:</label>
+                        <div class='col-xs-9'>
+                          <input type='submit' name='MoreAnswers' value='+'>
+                        </div>
+                    </div><hr><br>";
+        if (count($answers) > 0) {
+              foreach ($answers as $answer) {    
+              $tool_content .="      
+                  <div class='form-group'>
+                        <div class='col-xs-11'>
+                            <input type='text' name='answers[]' value='$answer->answer_text'>                        
+                        </div>
+                        <div class='col-xs-1'>
+                            " . icon('fa-times', $langDelete, '#') . "
+                        </div>
+                    </div>";
+              }
+        } else {
+              $tool_content .="      
+                  <div class='form-group'>
+                        <div class='col-xs-11'>
+                            <input type='text' name='answers[]' value=''>                        
+                        </div>
+                        <div class='col-xs-1'>
+                            " . icon('fa-times', $langDelete, '#') . "
+                        </div>
+                    </div>
+                  <div class='form-group'>
+                        <div class='col-xs-11'>
+                            <input type='text' name='answers[]' value=''>                        
+                        </div>
+                        <div class='col-xs-1'>
+                            " . icon('fa-times', $langDelete, '#') . "
+                        </div>
+                    </div>";
+        }                                        
         $tool_content .= "
-            <li>
-                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
-            </li>
-            <li>
-                <input type='text' name='answers[]' value='' size='80'>&nbsp;" . icon('fa-times', $langDelete) . "&nbsp;" . icon('fa-arrows', $langMove, null, "id='moveIconImg'") . "
-            </li>             
-        ";        
-    }
-        
-    $tool_content .= "</ul>
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class='right'>
-                    <input type='submit' name='submitAnswers' value='$langCreate'>&nbsp;&nbsp;
-                    <input type='submit' name='cancelAnswers' value='$langCancel'>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </form>
-    </fieldset>
-    ";   
+                    <div class='row'>
+                        <div class='col-sm-10 col-sm-offset-2'>                          
+                            <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
+                            <a class='btn btn-default' href='admin.php?course=TMAPOST106&pid=$pid&editQuestion=$question_id'>$langCancel</a>
+                        </div>
+                    </div>
+                    </fieldset>
+                    </form>
+            </div>
+        </div>";
 // View edit poll page     
 } else {    
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);

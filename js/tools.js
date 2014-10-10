@@ -337,20 +337,18 @@ function secondsToHms(d) {
 // Questionnaire / Poll
 function poll_init() {
     delete_init();
-    $('input[type=submit][value="+"]').on('click', function (event) {
-        //var qid = this.name.substring(11); // name is "MoreAnswersNN", extract NN
-        var last_li = $(this).closest('tr').next().find('li').last();
-        last_li.after(last_li.clone()).next().find('input').removeAttr('value');
+    $('input[type=submit][value="+"]').on('click', function (e) {
+        e.preventDefault();
+        var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
+        last_form_group.after(last_form_group.clone()).next().find('input').removeAttr('value');
         delete_init();
-        event.preventDefault();
+        
     });
-    $('.poll_answers').sortable();
-    $('.poll_answers').find('#moveIconImg').css('cursor', 'move');
-
 }
 function delete_init(){
-    $('.poll_answers img').not('#moveIconImg').css('cursor', 'pointer').on('click', function () {
-        $(this).closest('li').remove();
+    $('.form-group a').css('cursor', 'pointer').on('click', function (e) {
+        e.preventDefault();
+        $(this).closest('.form-group').remove();
     });
 }
 function icon_src_to_name(src) {

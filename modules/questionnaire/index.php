@@ -162,7 +162,7 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "
-		      <table class='table table-striped table-bordered table-hover'>
+		      <table class='table-default'>
 		      <tr>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
 			<th class='text-center'>$langPollStart</th>
