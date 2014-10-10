@@ -198,10 +198,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
 
+    $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'level' => 'primary',
-              'url' => isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code",
+              'url' => $link_back,
               'icon' => 'fa-reply'))); 
     $tool_content .= " 
     <div class='form-wrapper'>    
@@ -255,7 +256,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='submitPoll' value='".(isset($_GET['newPoll']) ? $langCreate : $langModify)."'>
-                <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                <a href='$link_back' class='btn btn-default'>$langCancel</a>    
               </div>
             </div>
         </fieldset>        
