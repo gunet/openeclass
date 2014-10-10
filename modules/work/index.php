@@ -543,6 +543,7 @@ function new_assignment() {
               'icon' => 'fa-reply')));
     
     $tool_content .= "
+        <div class='form-wrapper'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='form-group'>
@@ -666,7 +667,7 @@ function new_assignment() {
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
             </div>                   
         </fieldset>
-        </form>";    
+        </form></div>";    
 }
 
 //form for editing

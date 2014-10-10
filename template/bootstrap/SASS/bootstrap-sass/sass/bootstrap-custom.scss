@@ -1,0 +1,45 @@
+// customize bootstrap variables here:
+@import "variables";
+@import "bootstrap";
+
+.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
+    @extend .table, .table-striped;  
+}
+input[type="text"], select, textarea {
+  @extend .form-control;
+}
+input[type="submit"] {
+  @extend .btn, .btn-primary;
+}
+input[type="file"] {
+    padding-top: 7px;
+}
+.form-wrapper {
+    @extend .well, .well-lg;    
+}
+.panel-action-btn-default {
+    @extend .panel-default;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px 
+        }
+        .opt-btn {
+            background-color: whitesmoke;
+        }
+    }
+}
+.panel-action-btn-primary {
+    @extend .panel-primary;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px 
+        }
+        .opt-btn {
+            background-color: whitesmoke;
+        }
+    }
+}
