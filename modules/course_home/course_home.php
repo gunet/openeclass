@@ -306,20 +306,20 @@ if ($is_editor) {
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
         $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
-        if($course_format == "units"){
-        move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
-        }else{
+        if ($course_format == "units" or $course_format == "simple") {
+            move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
+        } else {
             $res_id = intval($_REQUEST['down']);
             if ($id = check_admin_unit_resource($res_id)) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
             }
         }
-    } elseif (isset($_REQUEST['up'])) { // change order up
+    } elseif (isset($_REQUEST['up'])) { // change order up        
         $id = intval($_REQUEST['up']);
-        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
-        if($course_format == "units"){
-        move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
-        }else{
+        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type;        
+        if ($course_format == "units" or $course_format == "simple") {
+            move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
+        } else {
             $res_id = intval($_REQUEST['up']);
             if ($id = check_admin_unit_resource($res_id)) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
@@ -381,8 +381,7 @@ if ($total_cunits > 0) {
         $access = $cu->public;
         // Visibility icon
         $vis = $cu->visible;
-        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
-        $class1_vis = ($vis == 0) ? ' class="not_visible"' : '';
+        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';        
         $class_vis = ($vis == 0) ? 'not_visible' : '';
         $cunits_content .= "<li class='list-item contentbox'>
                                 <div class='item-content'>
@@ -398,7 +397,7 @@ if ($total_cunits > 0) {
                 action_button(array(
                     array('title' => $langVisibility,
                           'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
-                          'icon' => 'fa-eye'),
+                          'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
                     array('title' => $langEdit,
                           'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                           'icon' => 'fa-edit'),
@@ -625,11 +624,7 @@ if (!$alter_layout) {
             </div>                         
             " : "")."
 
-            
-
         </div>
-
-
         <div class='row'>            
             $cunits_content
         </div>
