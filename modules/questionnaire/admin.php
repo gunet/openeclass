@@ -203,9 +203,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'level' => 'primary',
               'url' => isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code",
               'icon' => 'fa-reply'))); 
-    $tool_content .= "
-        <fieldset>      
+    $tool_content .= " 
+    <div class='form-wrapper'>    
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
+            <fieldset>
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-2 control-label'>$langTitle :</label>
               <div class='col-sm-10'>
@@ -257,9 +258,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <input type='submit' class='btn btn-default' name='cancelPoll' value='$langCancel'>    
               </div>
             </div>
+        </fieldset>        
         </form>
-        </fieldset>
-        ";
+    </div>";
 } elseif (isset($_GET['editQuestion'])) {
     if (isset($_GET['editQuestion'])) {
         $question_id = $_GET['editQuestion'];

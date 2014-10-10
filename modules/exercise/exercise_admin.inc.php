@@ -106,139 +106,140 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         )
     ));    
    $tool_content .= "
-       <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
-        <fieldset>       
-            <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
-              <label for='exerciseTitle' class='col-sm-2 control-label'>$langExerciseName :</label>
-              <div class='col-sm-10'>
-                <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
-                <span class='help-block'>".Session::getError('exerciseTitle')."</span>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseDescription:</label>
-              <div class='col-sm-10'>
-              " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
-              </div>
-            </div>
-            <div class='form-group'>
-                <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseType:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='exerciseType' value='1' ".(($exerciseType <= 1)? 'checked' : '').">
-                        $langSimpleExercise
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='exerciseType' value='2' ".(($exerciseType >= 2)? 'checked' : '').">
-                        $langSequentialExercise
-                      </label>
-                    </div>
-                </div>
-            </div>    
-            <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-                <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart :</label>
-                <div class='col-xs-10 col-sm-9'>        
-                    <input name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
-                </div>
-                <div class='col-xs-2 col-sm-1'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
-            </div>            
-            <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd :</label>
-                <div class='col-xs-10 col-sm-9'>        
-                    <input name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
-                </div>
-                <div class='col-xs-2 col-sm-1'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='exerciseTempSave' class='col-sm-2 control-label'>$langTemporarySave:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)? 'checked' : '').">
-                        $langDeactivate
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)? 'checked' : '').">
-                        $langActivate
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group'>
-              <label for='exerciseTimeConstraint' class='col-sm-2 control-label'>$langExerciseConstrain:</label>
-              <div class='col-sm-10'>
-                <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
-                <span class='help-block'>$langExerciseConstrainUnit ($langExerciseConstrainExplanation)</span>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='exerciseAttemptsAllowed' class='col-sm-2 control-label'>$langExerciseAttemptsAllowed:</label>
-              <div class='col-sm-10'>
-                <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
-                <span class='help-block'>$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)</span>
-              </div>
-            </div>            
-            <div class='form-group'>
-              <label for='questionDrawn' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-              <div class='col-sm-10'>
-                <input type='text' class='form-control' name='questionDrawn' id='questionDrawn' value='$randomQuestions' placeholder='$langRandomQuestions'>
-                <span class='help-block'>$langFromRandomQuestions</span>
-              </div>
-            </div>
-            <div class='form-group'>
-                <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='dispresults' value='1' ".(($displayResults == 1)? 'checked' : '').">
-                        $langAnswersDisp
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='dispresults' value='0' ".(($displayResults == 0)? 'checked' : '').">
-                        $langAnswersNotDisp
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='dispresults' class='col-sm-2 control-label'>$langScore:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='dispscore' value='1' ".(($displayScore == 1)? 'checked' : '').">
-                        $langScoreDisp
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='dispscore' value='0' ".(($displayScore == 0)? 'checked' : '').">
-                        $langScoreNotDisp
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group'>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
-                <a href='".(($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code")."' class='btn btn-default'>$langCancel</a>    
-              </div>
-            </div>
-        </fieldset>
-        </form>
-        ";    
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
+             <fieldset>       
+                 <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
+                   <label for='exerciseTitle' class='col-sm-2 control-label'>$langExerciseName :</label>
+                   <div class='col-sm-10'>
+                     <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
+                     <span class='help-block'>".Session::getError('exerciseTitle')."</span>
+                   </div>
+                 </div>
+                 <div class='form-group'>
+                   <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseDescription:</label>
+                   <div class='col-sm-10'>
+                   " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
+                   </div>
+                 </div>
+                 <div class='form-group'>
+                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langExerciseType:</label>
+                     <div class='col-sm-10'>            
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='exerciseType' value='1' ".(($exerciseType <= 1)? 'checked' : '').">
+                             $langSimpleExercise
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='exerciseType' value='2' ".(($exerciseType >= 2)? 'checked' : '').">
+                             $langSequentialExercise
+                           </label>
+                         </div>
+                     </div>
+                 </div>    
+                 <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+                     <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart :</label>
+                     <div class='col-xs-10 col-sm-9'>        
+                         <input name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
+                     </div>
+                     <div class='col-xs-2 col-sm-1'>  
+                         <span class='add-on'><i class='fa fa-times'></i></span>
+                         <span class='add-on'><i class='fa fa-calendar'></i></span>
+                     </div>
+                 </div>            
+                 <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
+                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd :</label>
+                     <div class='col-xs-10 col-sm-9'>        
+                         <input name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
+                     </div>
+                     <div class='col-xs-2 col-sm-1'>  
+                         <span class='add-on'><i class='fa fa-times'></i></span>
+                         <span class='add-on'><i class='fa fa-calendar'></i></span>
+                     </div>
+                 </div>
+                 <div class='form-group'>
+                     <label for='exerciseTempSave' class='col-sm-2 control-label'>$langTemporarySave:</label>
+                     <div class='col-sm-10'>            
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)? 'checked' : '').">
+                             $langDeactivate
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)? 'checked' : '').">
+                             $langActivate
+                           </label>
+                         </div>
+                     </div>
+                 </div>
+                 <div class='form-group'>
+                   <label for='exerciseTimeConstraint' class='col-sm-2 control-label'>$langExerciseConstrain:</label>
+                   <div class='col-sm-10'>
+                     <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
+                     <span class='help-block'>$langExerciseConstrainUnit ($langExerciseConstrainExplanation)</span>
+                   </div>
+                 </div>
+                 <div class='form-group'>
+                   <label for='exerciseAttemptsAllowed' class='col-sm-2 control-label'>$langExerciseAttemptsAllowed:</label>
+                   <div class='col-sm-10'>
+                     <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
+                     <span class='help-block'>$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)</span>
+                   </div>
+                 </div>            
+                 <div class='form-group'>
+                   <label for='questionDrawn' class='col-sm-2 control-label'>$langRandomQuestions:</label>
+                   <div class='col-sm-10'>
+                     <input type='text' class='form-control' name='questionDrawn' id='questionDrawn' value='$randomQuestions' placeholder='$langRandomQuestions'>
+                     <span class='help-block'>$langFromRandomQuestions</span>
+                   </div>
+                 </div>
+                 <div class='form-group'>
+                     <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
+                     <div class='col-sm-10'>            
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='dispresults' value='1' ".(($displayResults == 1)? 'checked' : '').">
+                             $langAnswersDisp
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='dispresults' value='0' ".(($displayResults == 0)? 'checked' : '').">
+                             $langAnswersNotDisp
+                           </label>
+                         </div>
+                     </div>
+                 </div>
+                 <div class='form-group'>
+                     <label for='dispresults' class='col-sm-2 control-label'>$langScore:</label>
+                     <div class='col-sm-10'>            
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='dispscore' value='1' ".(($displayScore == 1)? 'checked' : '').">
+                             $langScoreDisp
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='dispscore' value='0' ".(($displayScore == 0)? 'checked' : '').">
+                             $langScoreNotDisp
+                           </label>
+                         </div>
+                     </div>
+                 </div>
+                 <div class='form-group'>
+                   <div class='col-sm-offset-2 col-sm-10'>
+                     <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
+                     <a href='".(($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code")."' class='btn btn-default'>$langCancel</a>    
+                   </div>
+                 </div>
+             </fieldset>
+             </form>
+        </div>";    
 } else {
     
     $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
