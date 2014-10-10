@@ -432,7 +432,7 @@ if (count($result) > 0) {
     }
     $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoEvents</p>";
+    $tool_content .= "<p class='alert alert-warning text-center'>$langNoEvents</p>";
 }
 add_units_navigation(TRUE);
 

@@ -12,7 +12,7 @@ function checkStrength(password) {
     // length is too short
     if (password.length < 6) {
         $('#result').removeClass();
-        $('#result').addClass('pwstrength pwstrengthShort');
+        $('#result').addClass('label label-danger');
         return lang.pwStrengthTooShort;
     }
  
@@ -34,15 +34,15 @@ function checkStrength(password) {
     //if value is less than 2
     if (strength < 2 ) {
         $('#result').removeClass();
-        $('#result').addClass('pwstrength pwstrengthWeak');
+        $('#result').addClass('label label-warning');
         return lang.pwStrengthWeak;
     } else if (strength == 2 ) {
         $('#result').removeClass();
-        $('#result').addClass('pwstrength pwstrengthGood');
+        $('#result').addClass('label label-success');
         return lang.pwStrengthGood;
     } else {
         $('#result').removeClass();
-        $('#result').addClass('pwstrength pwstrengthStrong');
+        $('#result').addClass('label label-success');
         return lang.pwStrengthStrong;
     }
 }

@@ -299,7 +299,7 @@ if (count($resultcategories) > 0) {
     }
     $tool_content .= "</table>";
 } else {   // no category   
-    $tool_content .= "<div class='text-center alert-warning'>$langNoLinksExist</div>";
+    $tool_content .= "<div class='alert alert-warning text-center'>$langNoLinksExist</div>";
 }
 add_units_navigation(true);
 draw($tool_content, $menuTypeID, null, $head_content);

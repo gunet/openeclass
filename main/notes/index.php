@@ -271,7 +271,7 @@ if ($noteNumber < 1) {
         $no_content = false;
     }
     if ($no_content) {
-        $tool_content .= "<p class='alert1'>$langNoNote</p>\n";
+        $tool_content .= "<p class='alert alert-warning text-center'>$langNoNote</p>\n";
     }
 }
 

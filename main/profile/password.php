@@ -55,8 +55,8 @@ $head_content .= <<<hContent
     };
                         
     $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
+        $('#password_form').keyup(function() {
+            $('#result').html(checkStrength($('#password_form').val()))
         });
     });
 
@@ -64,19 +64,22 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$passurl = $urlSecure . 'main/profile/password.php';
+$passUrl = $urlSecure . 'main/profile/password.php';
+$passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['password_form']) or empty($_POST['password_form1']) or empty($_POST['old_pass'])) {
-        header("Location:" . $passurl . "?msg=2");
-        exit();
+        Session::Messages($langFieldsMissing);
+        header($passLocation);
+        exit;
     }
     if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {
-        header("Location:" . $passurl . "?msg=1");
-        exit();
+        Session::Messages($langPassTwo);
+        header($passLocation);
+        exit;
     }
 
-    //all checks ok. Change password!    
+    // all checks ok. Change password!    
     $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
 
     $hasher = new PasswordHash(8, false);
@@ -85,83 +88,57 @@ if (isset($_POST['submit'])) {
     if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
         Database::get()->query("UPDATE user SET password = ?s
                                  WHERE id = ?d", $new_pass, $_SESSION['uid']);
-        Log::record(0, 0, LOG_PROFILE, array('uid' => $_SESSION['uid'],
-            'pass_change' => 1));
-        header("Location:" . $passurl . "?msg=4");
-        exit();
+        Log::record(0, 0, LOG_PROFILE,
+            array('uid' => $_SESSION['uid'], 'pass_change' => 1));
+        Session::Messages($langPassChanged, 'alert-success');
+        redirect_to_home_page('main/profile/profile.php');
+        exit;
     } else {
-        header("Location:" . $passurl . "?msg=3");
-        exit();
+        Session::Messages($langPassOldWrong);
+        header($passLocation);
+        exit;
     }
 }
 
-//Show message if exists
-if (isset($_GET['msg'])) {
-    $msg = $_GET['msg'];
-    switch ($msg) {
-
-        case 1: { // Passwords not acceptable
-                $message = $langPassTwo;
-                $urlText = '';
-                $type = 'alert1';
-                break;
-            }
-
-        case 2: { // admin tools
-                $message = $langFieldsMissing;
-                $urlText = '';
-                $type = 'alert1';
-                break;
-            }
-        case 3: { // wrong old password entered
-                $message = $langPassOldWrong;
-                $urlText = '';
-                $type = 'caution';
-                break;
-            }
-
-        case 4: { // password successfully changed
-                $message = $langPassChanged;
-                $urlText = $langHome;
-                $type = 'success';
-                break;
-            }
-    }
-    $tool_content .= "<div class='$type'>$message<br /></div>";
-    
-    if ($urlText)
-        $tool_content .= action_bar(array(
-            array('title' => $urlText,
-                'url' => "$urlServer",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
-}
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+          'url' => 'profile.php',
+          'icon' => 'fa-reply',
+          'level' => 'primary-label')));
 
 if (!isset($_POST['changePass'])) {
-    $tool_content .= "
-	<form method='post' action='$passurl'>
-        <fieldset>
-        <legend>$langPassword</legend>
-	<table class='tbl'>
-	<tr>
-	   <th>$langOldPass</th>
-	   <td><input type='password' size='40' name='old_pass' value='' autocomplete='off'></td>
-	</tr>
-	<tr>
-	   <th>$langNewPass1</th>
-	   <td><input type='password' size='40' name='password_form' id='password' value='' autocomplete='off'/>&nbsp;<span id='result'></span></td>
-	</tr>
-	<tr>
-	   <th>$langNewPass2</th>
-	   <td><input type='password' size='40' name='password_form1' value='' autocomplete='off'></td>
-	</tr>
-	<tr>
-	   <th>&nbsp;</th>
-	   <td><input type='submit' name='submit' value='$langModify'></td>
-	</tr>
-	</table>
-        </fieldset>
-        </form>";
+    $tool_content .= "<div class='form-wrapper'>
+<form class='form-horizontal' role='form' method='post' action='$passUrl'>
+  <fieldset>
+    <div class='form-group'>
+      <label for='old_pass' class='col-sm-2 control-label'>$langOldPass: </label>
+      <div class='col-sm-8'>
+	    <input type='password' class='form-control' id='old_pass' name='old_pass' value='' autocomplete='off'>
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='password_form' class='col-sm-2 control-label'>$langNewPass1: </label>
+      <div class='col-sm-8'>
+	    <input type='password' class='form-control' id='password_form' name='password_form' value='' autocomplete='off'>
+      </div>
+      <div class='col-sm-2 text-center padding-thin'>
+        <span id='result'></span>
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='password_form1' class='col-sm-2 control-label'>$langNewPass2: </label>
+      <div class='col-sm-8'>
+        <input type='password' class='form-control' id='password_form1' name='password_form1' value='' autocomplete='off'>
+      </div>
+    </div>
+    <div class='form-group'>
+      <div class='col-sm-offset-2 col-sm-8'>
+         <input type='submit' class='btn btn-primary' name='submit' value='$langModify'>
+         <a href='profile.php' class='btn btn-default'>$langCancel</a>
+      </div>
+    </div>
+  </fieldset>
+</form>";
 }
 
 draw($tool_content, 1, null, $head_content);
