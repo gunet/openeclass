@@ -49,10 +49,13 @@ if ((!empty($activate)) && ($activate == 1)) {
     $countinactive = Database::get()->query("UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time())->affectedRows;
     if ($countinactive > 0) {
         $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";
-        $tool_content .= "<a href='index.php'>$langBack</a>";
     } else {
         $tool_content .= $langNoChanges;
-        $tool_content .= "<a href='index.php'>$langBack</a>";
     }
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
 }
 draw($tool_content, 3);

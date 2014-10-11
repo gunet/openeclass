@@ -23,7 +23,6 @@
  * 	@file searchuser.php
  *      @brief: user search form based upon criteria/filters
  */
-
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -41,7 +40,7 @@ $head_content .= "<script type='text/javascript'>
             $('#id_user_registered_at').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
-                language: '".$language."',
+                language: '" . $language . "',
                 autoclose: true    
             });
         });
@@ -76,13 +75,18 @@ if (isDepartmentAdmin()) {
 }
 
 // Display Actions Toolbar
-$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='listusers.php?search=yes'>$langAllUsers</a></li>
-      <li><a href='listusers.php?search=inactive'>$langInactiveUsers</a></li>
-    </ul>
-  </div>";
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langAllUsers,
+                'url' => "listusers.php?search=yes",
+                'icon' => 'fa-search',
+                'level' => 'primary-label'),
+            array('title' => $langInactiveUsers,
+                'url' => "listusers.php?search=inactive",
+                'icon' => 'fa-search',
+                'level' => 'primary-label')
+        ))
+        . "</div>";
 
 // display the search form
 $tool_content .= "
@@ -190,7 +194,11 @@ $tool_content .= $html . "
 </form>";
 // end form
 
-$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 // display administrator menu
 draw($tool_content, 3, null, $head_content);
