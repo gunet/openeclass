@@ -11,7 +11,7 @@ function animate_btn(){
 
 $(document).ready( function () {
 
-    menuheight();
+    //menuheight();
 
     // Sidebar switcher - custom CSS
     $('.toggle-sidebar').on('click',function(e){
@@ -45,17 +45,17 @@ $(document).ready( function () {
 
 
     // Menu height 
-    function menuheight(){
-
-      var nav_item_height = $('#leftnav .navlist > li:first-child .title').outerHeight();
-      var nav_length = $('#leftnav .navlist > li').length;
-      var logo_height = $('.logo').outerHeight();
-      var window_height = $(window).height();
-
-      var nav_available_height = window_height - logo_height - (nav_item_height*nav_length);
-    
-      $('#leftnav .navlist > li > ul').css('height','150px !important;');
-    }
+//    function menuheight(){
+//
+//      var nav_item_height = $('#leftnav .navlist > li:first-child .title').outerHeight();
+//      var nav_length = $('#leftnav .navlist > li').length;
+//      var logo_height = $('.logo').outerHeight();
+//      var window_height = $(window).height();
+//
+//      var nav_available_height = window_height - logo_height - (nav_item_height*nav_length);
+//    
+//      $('#leftnav .navlist > li > ul').css('height','150px !important;');
+//    }
 
     $(".expandable-btn").click(function(){
         $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
@@ -70,5 +70,20 @@ $(document).ready( function () {
     //var tool_length=((($("div.opt-btn-more-tool.tool-btn").length / 2) + 1)*53)+"px";
     //alert(tool_length);
     animate_btn();
+    
+    $(window).load(function ()
+    {
+        var initialHeigth;
+        var windowHeight = $(window).height();
+        var contentHeight = $("#Frame").height();
+        //var leftnavHeight = $("#leftnav").height();
+
+        //var offsetHeight = 99+"2em";
+        initialHeight = (windowHeight < contentHeight) ? initialHeight = contentHeight - 131 : initialHeight = windowHeight - 131;
+        $("#Frame").css({"min-height": initialHeight});
+        //leftnavHeight = $("#Frame").height();
+        //$("#leftnav").css({"min-height": leftnavHeight});
+
+    });
     
 }); 

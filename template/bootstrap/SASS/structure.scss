@@ -18,10 +18,6 @@ body > .container{
   padding: 0 15px;
 }
 
-#Frame{
-	margin: 1em 0em;
-}
-
 
 
 /* LEFTNAV - MAIN MENU, LOGO */
@@ -41,10 +37,10 @@ body > .container{
     margin-bottom: 1em;
     background: inherit;
 		
-    border-top: 1px solid rgba(255,255,255,.1);
-    border-bottom: 1px solid rgba(255,255,255,.1);
+    border-top: 2px solid rgba(255,255,255,.1);
+    border-bottom: 2px solid rgba(255,255,255,.1);
 
-    border-radius: 4px 0px 0px 4px;
+    border-radius: 5px 0px 0px 5px;
 
     .list-group{
       border-radius:0;
@@ -162,18 +158,14 @@ body > .container{
 #main-content
 {
   background: $color-main-content;
-  border-radius: 4px;
+  overflow: hidden;
+}
 
-	overflow: hidden;
-	
-	box-shadow: 0px -5px 10px 0px black;
-	-moz-box-shadow: 0px -5px 10px 0px black;
-	-webkit-box-shadow: 0px -5px 10px 0px black;
-
-	#header.navbar{
-		padding: 0;
-		border: 0;
-		background: $color-header;
+#header.navbar{
+    margin-bottom: 0px;
+    padding: 0;
+    border: 0;
+    background: $color-header;
     border-bottom: 1px solid #DBDBDB;
 
 
@@ -217,9 +209,6 @@ body > .container{
 
 	}
 
-}
-
-
 .navbar-default
 {
   border-radius: 4px 4px 0px 0px; 
@@ -241,9 +230,9 @@ footer.footer
   text-align: center;
   padding: 1em;
   background: $color-footer;
-  margin-top: 2em;
   color: rgb(167, 167, 167);
   border-top: 1px solid #DBDBDB;
+  border-radius: 0 0 4px 4px;
 }
 
 
@@ -934,7 +923,7 @@ form.login-form{
 }
 
 @media (max-width: 992px){
-  #Frame, body>.container{
+  body>.container{
     padding:0;
     margin:0;
   }
@@ -943,7 +932,7 @@ form.login-form{
     font-size: 1.5em;
   }
 
-  #main-content .navbar .navbar-nav > li a{
+  .navbar .navbar-nav > li a{
     padding: 15px 0.5em;    
   }
 
@@ -953,7 +942,7 @@ form.login-form{
 
   #main-content,
   #leftnav .panel a.list-group-item,
-  #main-content #header.navbar .navbar-nav > li:last-child > a,
+  #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default{
     border-radius: 0px!important;
   }
