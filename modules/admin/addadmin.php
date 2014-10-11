@@ -29,7 +29,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 // Initialize the incoming variables
 $username = isset($_POST['username']) ? $_POST['username'] : '';
 
-if (isset($_POST['submit']) and !empty($username)) {
+if (isset($_POST['submit']) and ! empty($username)) {
 
     $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
     if ($res) {
@@ -45,7 +45,7 @@ if (isset($_POST['submit']) and !empty($username)) {
                 break;
         }
 
-        if (isset($privilege)) {            
+        if (isset($privilege)) {
             if (Database::get()->querySingle("SELECT * FROM admin WHERE user_id = ?d", $user_id)) {
                 $affected = Database::get()->query("UPDATE admin SET privilege = ?d
                                 WHERE user_id = ?d", $privilege, $user_id)->affectedRows;
@@ -65,7 +65,7 @@ if (isset($_POST['submit']) and !empty($username)) {
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {            
+        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
             $tool_content .= "<p class='success'>$langNotAdmin</p>";
         } else {
             $tool_content .= "<p class='caution'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
@@ -84,7 +84,7 @@ $tool_content .= "
     <th>$langSurnameName</th>
     <th>$langUsername</th>
     <th class='center'>$langRole</th>
-    <th class='center'>$langActions</th>
+    <th class='text-center'>" . icon('fa-gears') . "</th>
   </tr>";
 
 // Display the list of admins
@@ -93,7 +93,7 @@ Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privi
                     WHERE user.id = admin.user_id
                     ORDER BY id", function ($row) use (&$tool_content, $langAdministrator, $langPowerUser, $langManageUser, $langManageDepartment, $themeimg, $langDelete) {
     $tool_content .= "<tr>
-        <td align='right'>" . q($row->id) . ".</td>
+        <td align='left'>" . q($row->id) . ".</td>
         <td>" . q($row->givenname) . " " . q($row->surname) . "</td>
         <td>" . q($row->username) . "</td>";
     switch ($row->privilege) {
@@ -106,15 +106,18 @@ Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privi
         case '3' : $message = $langManageDepartment;
             break;
     }
-    $tool_content .= "<td align='center'>$message</td>";
+    $tool_content .= "<td align='left'>$message</td>";
     if ($row->id != 1) {
-        $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row->id) . "'>
-                        <img src='$themeimg/delete.png' title='$langDelete' />
-                        </a>
-                      </td>";
+        $tool_content .="<td class='center'>" .
+                action_button(array(
+                    array('title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row->id),
+                        'class' => 'delete',
+                        'icon' => 'fa-times'),
+                )) .
+                "</td>";
     } else {
-        $tool_content .= "<td class='center'>---</td>";
+        $tool_content .= "<td class='center'></td>";
     }
     $tool_content .= "</tr>";
 });

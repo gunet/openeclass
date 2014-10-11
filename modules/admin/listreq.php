@@ -41,12 +41,12 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,                
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '".$langNoResult."',
+                   'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '".$langSearch."',
+                   'sSearch':       '" . $langSearch . "',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -123,13 +123,23 @@ switch ($show) {
 
 // Display Actions Toolbar
 $tool_content .= "
-      <div id='operations_container'>
-        <ul id='opslist'>
-	  <li><a href='newuseradmin.php$linkget'>$linkreg</a></li>
-          <li><a href='$_SERVER[SCRIPT_NAME]?show=closed$reqtype'>$langReqHaveClosed</a></li>
-          <li><a href='$_SERVER[SCRIPT_NAME]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
-        </ul>
-      </div>";
+      <div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $linkreg,
+                'url' => "newuseradmin.php$linkget",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+            array('title' => $langReqHaveClosed,
+                'url' => "$_SERVER[SCRIPT_NAME]?show=closed$reqtype",
+                'icon' => 'fa-close',
+                'level' => 'primary'),
+            array('title' => $langReqHaveBlocked,
+                'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
+                'icon' => 'fa-ban',
+                'level' => 'primary'),
+        )) .
+        "</div>";
 
 // -----------------------------------
 // display closed requests
@@ -147,7 +157,7 @@ if (!empty($show) and $show == 'closed') {
                              phone, am, date_open, date_closed, comment
                           FROM user_request
                           WHERE (state = 2 AND status = $list_status)";
-        
+
         $q .= "ORDER BY date_open DESC";
 
         $sql = Database::get()->queryArray($q);
@@ -318,7 +328,7 @@ else {
             $tool_content .= "<td align='right' width='1'>
                         <img src='$themeimg/arrow.png' title='bullet'></td>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
-            $tool_content .= "<td>" . q($req->username) . "</td>";            
+            $tool_content .= "<td>" . q($req->username) . "</td>";
             $tool_content .= "<td>" . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . "</td>";
             $tool_content .= "<td align='center'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
@@ -368,10 +378,12 @@ else {
 if (!empty($show) or ! empty($close)) {
     $tool_content .= "<div style='margin-top:60px;'><p align='right'><a href='$_SERVER[SCRIPT_NAME]$linkget'>$langBackRequests</a></p></div>";
 }
-$tool_content .= "<div style='margin-top:10px;'><p align='right'><a href='index.php'>$langBack</a></p></div>";
-
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
-
 
 /**
  * @brief function to display table header
@@ -391,7 +403,7 @@ function table_header($addon = FALSE, $message = FALSE) {
     global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langUsername;
     global $langDateRequest_small;
 
-    $string = '<thead>';    
+    $string = '<thead>';
     if ($addon) {
         $rowspan = 2;
         $datestring = "<th colspan='2'>$langDate</th>

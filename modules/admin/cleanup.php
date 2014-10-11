@@ -39,7 +39,11 @@ if (isset($_POST['submit'])) {
 	     </form></div>";
 }
 
-$tool_content .= "<br /><p align=right><a href=\"index.php\">$langBackAdmin</a></p>";
+$tool_content .= action_bar(array(
+    array('title' => $langBackAdmin,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 draw($tool_content, 3);
 

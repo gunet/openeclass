@@ -64,7 +64,11 @@ ob_end_clean();
 $tool_content .= '</div>';
 
 // Display link to go back to index.php
-$tool_content .= "<br /><center><p><a href='index.php'>$langBack</a></p></center>";
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 $local_head_contents = '<style type="text/css">
         pre {margin: 0px; font-family: monospace;}

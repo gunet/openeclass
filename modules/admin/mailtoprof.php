@@ -48,23 +48,21 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         } else {
             $sql = Database::get()->queryArray("SELECT email, id FROM user");
         }
-    }
-    elseif ($_POST['sendTo'] == "1") { // Only professors
+    } elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin()) {
             $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user 
-                                                                AND user.status = ".USER_TEACHER." AND " . $depwh);
+                                                                AND user.status = " . USER_TEACHER . " AND " . $depwh);
         } else {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = ".USER_TEACHER."");
+            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_TEACHER . "");
         }
-    }
-    elseif ($_POST['sendTo'] == "2") { // Only students
+    } elseif ($_POST['sendTo'] == "2") { // Only students
         if (isDepartmentAdmin()) {
             $sql = Database::get()->queryArray("SELECT email, id FROM user, user_department WHERE user.id = user_department.user
-                                            AND user.status = ".USER_STUDENT." AND " . $depwh);
+                                            AND user.status = " . USER_STUDENT . " AND " . $depwh);
         } else {
-            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = ".USER_STUDENT."");
+            $sql = Database::get()->queryArray("SELECT email, id FROM user where status = " . USER_STUDENT . "");
         }
-    }    
+    }
 
     $recipients = array();
     $emailsubject = $langInfoAboutEclass;
@@ -75,11 +73,11 @@ $langManager $siteName
 $langEmail: " . get_config('email_helpdesk') . "
 ";
     // Send email to all addresses
-    foreach ($sql as $m) {        
+    foreach ($sql as $m) {
         $emailTo = $m->email;
         $user_id = $m->id;
         // checks if user is notified by email
-        if (get_user_email_notification($user_id)) {            
+        if (get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
         $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
@@ -121,5 +119,9 @@ $langEmail: " . get_config('email_helpdesk') . "
 	</form>";
 }
 // Display link back to index.php
-$tool_content .= "<p align='right'><a href='index.php'>" . $langBack . "</a></p>";
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 draw($tool_content, 3);

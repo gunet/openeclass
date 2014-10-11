@@ -43,7 +43,7 @@ $head_content .= "<script type='text/javascript'>
             $('#id_date').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
-                language: '".$language."',
+                language: '" . $language . "',
                 autoclose: true    
             });
         });
@@ -131,6 +131,9 @@ $tool_content .= "<tr><th>&nbsp;</th>
       </tr>";
 $tool_content .= "</table></fieldset></form>";
 
-$tool_content .= "<p align='right'><a href='index.php'>" . $langBack . "</a></p>";
-
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);

@@ -23,7 +23,6 @@
  * @file listcours.php
  * @brief display list of courses
  */
-
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -32,7 +31,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $tree = new Hierarchy();
     $course = new Course();
     $user = new User();
@@ -40,9 +39,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     // A search has been submitted
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $searchurl = "&search=yes";
-    $searchtitle = isset($_GET['formsearchtitle'])? $_GET['formsearchtitle'] : '';
-    $searchcode  = isset($_GET['formsearchcode'])? $_GET['formsearchcode'] : '';
-    $searchtype = isset($_GET['formsearchtype'])? intval($_GET['formsearchtype']) : '-1';
+    $searchtitle = isset($_GET['formsearchtitle']) ? $_GET['formsearchtitle'] : '';
+    $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
+    $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
     $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
     // pagination
     $limit = intval($_GET['iDisplayLength']);
@@ -73,8 +72,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         $query .= ' AND hierarchy.id IN (' . implode(', ', array_fill(0, $ids, '?d')) . ')';
     }
-    if (isset($_GET['reg_flag']) and !empty($_GET['date'])) {
-        $query .= ' AND created ' .  (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
+    if (isset($_GET['reg_flag']) and ! empty($_GET['date'])) {
+        $query .= ' AND created ' . (($_GET['reg_flag'] == 1) ? '>=' : '<=') . ' ?s';
         $date_created_at = DateTime::createFromFormat("d-m-Y H:i", $_GET['date']);
         $terms[] = $date_created_at->format("Y-m-d H:i:s");
     }
@@ -93,7 +92,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     // sorting
     $extra_query = "ORDER BY course.title " .
-        ($_GET['sSortDir_0'] == 'desc'? 'DESC': '');
+            ($_GET['sSortDir_0'] == 'desc' ? 'DESC' : '');
     // pagination
     if ($limit > 0) {
         $extra_query .= " LIMIT ?d, ?d";
@@ -106,8 +105,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
-                                    $query $filter_query $extra_query",
-                            $terms, $filter_terms, $extra_terms);
+                                    $query $filter_query $extra_query", $terms, $filter_terms, $extra_terms);
     $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
                                                 AND hierarchy.id = course_department.department
@@ -155,19 +153,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // Add links to course users, delete course and course edit
-        $icon_content = icon('fa-user', $langUsers, "listusers.php?c=$logs->id")."&nbsp;";
+        $icon_content = icon('fa-user', $langUsers, "listusers.php?c=$logs->id") . "&nbsp;";
         if (!isDepartmentAdmin()) {
-            $icon_content .= icon('fa-list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE")."&nbsp;";
+            $icon_content .= icon('fa-list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE") . "&nbsp;";
         }
-        $icon_content .= icon('fa-edit', $langEdit, "editcours.php?c=$logs->code")."&nbsp;";
+        $icon_content .= icon('fa-edit', $langEdit, "editcours.php?c=$logs->code") . "&nbsp;";
         $icon_content .= icon('fa-times', $langDelete, "delcours.php?c=$logs->id");
 
         $data['aaData'][] = array(
-                        '0' => $course_title,
-                        '1' => icon($icon, $title),
-                        '2' => $dep,
-                        '3' => $icon_content
-                    );
+            '0' => $course_title,
+            '1' => icon($icon, $title),
+            '2' => $dep,
+            '3' => $icon_content
+        );
     }
     echo json_encode($data);
     exit();
@@ -196,12 +194,12 @@ $head_content .= "<script type='text/javascript'>
                 ],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '".$langNoResult."',
+                   'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '".$langSearch."',
+                   'sSearch':       '" . $langSearch . "',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -221,11 +219,14 @@ $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
 $nameTools = $langListCours;
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch'>$langAllCourses</a></li>
-    </ul>
-    </div>";
+$tool_content .= "<div id='operations_container'>" .
+        action_bar(array(
+            array('title' => $langAllCourses,
+                'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
+                'icon' => 'fa-search',
+                'level' => 'primary-label'),
+        )) .
+        "</div>";
 
 $width = (!isDepartmentAdmin()) ? 100 : 80;
 // Construct course list table
@@ -240,6 +241,10 @@ $tool_content .= "<table id='course_results_table' class='display'>
 
 $tool_content .= "<tbody></tbody></table>";
 $tool_content .= "<div align='center' style='margin-top: 60px; margin-bottom:10px;'>";
-$tool_content .= "<a href='searchcours.php'>$langReturnSearch</a></div>";
+$tool_content .= action_bar(array(
+    array('title' => $langReturnSearch,
+        'url' => "searchcours.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 draw($tool_content, 3, null, $head_content);

@@ -272,7 +272,12 @@ if (isset($_POST['submit'])) {
         </form>";
 }
 
-$tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
+$tool_content .= action_bar(array(
+    array('title' => $langBackAdmin,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
+
 draw($tool_content, 3, null, $head_content);
 
 // Helper function
@@ -292,8 +297,7 @@ function find_prof($uname) {
     } else {
         $names = explode(' ', $uname);
         if (count($names) == 2 and
-            $uid = prof_query('(surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)',
-                              array($names[0], $names[1], $names[0], $names[1]))) {
+                $uid = prof_query('(surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)', array($names[0], $names[1], $names[0], $names[1]))) {
             return $uid;
         }
     }
