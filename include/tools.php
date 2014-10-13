@@ -368,7 +368,7 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/multicourseuser.php");
 	array_push($sideMenuImg, "arrow.png");
 	array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
-	array_push($sideMenuLink, "../admin/multideluser.php");
+	array_push($sideMenuLink, "../admin/multiedituser.php");
 	array_push($sideMenuImg, "arrow.png");
 	array_push($sideMenuText, $GLOBALS['langInfoMail']);
 	array_push($sideMenuLink, "../admin/mailtoprof.php");

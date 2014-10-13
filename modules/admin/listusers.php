@@ -332,13 +332,13 @@ $tool_content .= "<tbody></tbody></table>";
 
 // delete all function
 $tool_content .= "<div align='center' style='margin-top: 60px; margin-bottom:10px;'>";
-$tool_content .= "<form action='multideluser.php' method='post' name='delall_user_search'>";
+$tool_content .= "<form action='multiedituser.php' method='post' name='delall_user_search'>";
 // redirect all request vars towards delete all action
 foreach ($_GET as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 $tool_content .= "<input type='submit' name='dellall_submit' value='".q($langDelList)."'>";
-if ($_GET['search'] == 'inactive') { // inactive users
+if (isset($_GET['search']) and $_GET['search'] == 'inactive') { // inactive users
     $tool_content .= " <input type='submit' name='activate_submit' value='".q($langAddSixMonths)."'>";
 }
 $tool_content .= "</form></div>
