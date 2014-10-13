@@ -49,61 +49,90 @@ $checked['private_forum_yes'] = $private_forum ? ' checked="1"' : '';
 $checked['private_forum_no'] = $private_forum ? '' : ' checked="1"';
 $checked['wiki'] = ($wiki==0) ? '' : ' checked="1"';
 
-$tool_content .= "<div id='operations_container'>
-                    <ul id='opslist'>
-                        <li><a href='index.php?course=$course_code'>$langBack</a></li>
-                    </ul>
-                </div>";
+$tool_content .= action_bar(array(
+    array(
+        'title' => $langBack,
+        'level' => 'primary-label',
+        'icon' => 'fa-reply',
+        'url' => "index.php?course=$course_code"
+    )
+));
 
 $tool_content .= "
-<form method='post' action='index.php?course=$course_code'>
-    <fieldset>
-    <legend>$langGroupProperties / $langTools</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th class='left' width='180'>$langGroupStudentRegistrationType:</th>
-      <td class='smaller'>
-       <input type='checkbox' name='self_reg' value='1'$checked[self_reg] />&nbsp;$langGroupAllowStudentRegistration<br />
-       <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg] />&nbsp;$langGroupAllowMultipleRegistration<br />
-       </td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-    <th class='left'>$langGroupForum:</th>
-      <td>
-        <input type='checkbox' name='has_forum' value='1'$checked[has_forum] />
-      </td>
-    </tr>
-    <tr>
-      <th class='left'>$langPrivate_1:</th>
-      <td class='smaller'>
-        <input type='radio' name='private_forum' value='1'$checked[private_forum_yes] />
-                &nbsp;$langPrivate_2&nbsp;<br />
-        <input type='radio' name='private_forum' value='0'$checked[private_forum_no] />
-                &nbsp;$langPrivate_3
-      </td>
-    </tr>
-    <tr>
-      <th class='left'>$langDoc:</th>
-      <td>
-        <input type='checkbox' name='documents' value='1'$checked[documents] />
-      </td>
-    </tr>
-    <tr>
-      <th class='left'>$langWiki:</th>
-      <td>
-        <input type='checkbox' name='wiki' value='1'$checked[wiki] />
-      </td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td class='right'><input type='submit' name='properties' value='$langModify' /></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+<div class='form-wrapper'>    
+    <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
+        <fieldset>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
+                <div class='col-xs-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='self_reg' value='1'$checked[self_reg]>
+                        $langGroupAllowStudentRegistration
+                      </label>
+                    </div>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg]>
+                        $langGroupAllowMultipleRegistration
+                      </label>
+                    </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupForum:</label>
+                <div class='col-xs-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='has_forum' value='1'$checked[has_forum]>
+                        $langGroupAllowMultipleRegistration
+                      </label>
+                    </div>                    
+                </div>
+            </div>           
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langPrivate_1:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='1' checked=''$checked[private_forum_yes]>
+                        $langPrivate_2
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='0'$checked[private_forum_no]>
+                        $langPrivate_3
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langDoc:</label>
+                <div class='col-xs-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='documents' value='1'$checked[documents]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>  
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langWiki:</label>
+                <div class='col-xs-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='wiki' value='1'$checked[wiki]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input type='submit' class='btn btn-primary' name='properties' value='$langModify'>
+                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            </div>
+        </fieldset>
+        </form>
+    </div>";
 draw($tool_content, 2);
 
