@@ -75,6 +75,25 @@ $(function() {
                    }
     });
 });
+
+function showCCFields() {
+        $('.assignShow').show();
+}
+function hideCCFields() {
+        $('.assignShow').hide();
+}
+
+$(document).ready(function() {
+    $('.assignCheck').change(function () {
+        if ($('.assignCheck').is(':checked')) {
+            showCCFields();
+        } else {
+            hideCCFields();
+        }
+    }).change();
+    
+});
+
 </script>";
 
 
@@ -882,9 +901,13 @@ if ($is_editor) {
         $tool_content .= "<fieldset><legend>$langAttendanceActToAdd</legend>";
         
         if ($checkForAssNumber > 0) {            
-            $tool_content .= "<table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
-            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "$checkForAssNumber $langWorks - <small>$langDisplay <input type='checkbox' class='assignCheck'></small>";
+            
+            
+            $tool_content .= "<table width='100%' class='sortable assignShow' id='t1'>";
+            $tool_content .= "<tr><th>$langWorks</th></tr>";
+            
+            $tool_content .= "<tr ><th colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>$langDescription</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
             $k = 0;        
@@ -929,7 +952,7 @@ if ($is_editor) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
             $tool_content .= "<tr><th colspan='2'>$langExercises</th></tr>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>$langDescription</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
             $k = 0;        
