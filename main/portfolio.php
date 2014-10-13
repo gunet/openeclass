@@ -34,6 +34,7 @@ include '../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/graphics/plotter.php';
 
 $nameTools = $langWelcomeToPortfolio;
 
@@ -157,35 +158,11 @@ $tool_content .= "
             <div class='panel-body'>
                 <div class='row'>
                     <div class='col-sm-3'>
-                            <div><img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle' alt='Circular Image'></div>
+                            <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;margin:0 auto;' class='img-circle' alt='Circular Image'>
+                            <h4 class='text-center'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
                     </div>
                     <div class='col-sm-9'>
-                        <div> 
-                                Test area:
-                                <div class='btn-group'>
-                                        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-                                            Πληροφορίες Μαθήματος
-                                            <span class='caret'></span>
-                                        </button>
-             
-                                        <ul class='dropdown-menu' role='menu'>
-                                            <li><a href='#''>Επιλογή 1</a></li>
-                                            <li><a href='#''>Επιλογή 2/a></li>
-                                            <li><a href='#''>Επιλογή 3</a></li>
-                                            <li class='divider'></li>
-                                            <li><a href='#''>Επιλογή 4</a></li>
-                                        </ul>
-                                </div>
-
-
-                                <div class='tbl'>
-                                    TEST
-                                </div>
-
-
-                                <canvas id='canvas' height='150' width='600'></canvas>
-
-                        </div>
+                        <div class='stats'>".courseVisitsPlot()."</div>
                     </div> 
                 </div>
             </div>
@@ -194,3 +171,50 @@ $tool_content .= "
 </div>
 ";
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
+
+function courseVisitsPlot() {
+    global $uid, $langCourseVisits;
+    $totalHits = 0;
+    $totalDuration = 0;
+
+    $result = Database::get()->queryArray("SELECT a.code code, a.title title
+                                        FROM course AS a LEFT JOIN course_user AS b
+                                             ON a.id = b.course_id
+                                        WHERE b.user_id = ?d
+                                        AND a.visible != " . COURSE_INACTIVE . "
+                                        ORDER BY a.title", $uid);
+
+    if (count($result) > 0) {  // found courses ?    
+        foreach ($result as $row) {
+            $course_codes[] = $row->code;
+            $course_names[$row->code] = $row->title;
+        }
+        foreach ($course_codes as $code) {
+            $cid = course_code_to_id($code);
+            $row = Database::get()->querySingle("SELECT SUM(hits) AS cnt FROM actions_daily
+                                WHERE user_id = ?d
+                                AND course_id =?d", $uid, $cid);
+            if ($row) {
+                $totalHits += $row->cnt;
+                $hits[$code] = $row->cnt;
+            }
+            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration FROM actions_daily
+                                        WHERE user_id = ?d
+                                        AND course_id = ?d", $uid, $cid);
+            $duration[$code] = $result->duration;
+            $totalDuration += $duration[$code];
+        }
+
+        $chart = new Plotter(600, 300);
+        $chart->setTitle($langCourseVisits);
+        foreach ($hits as $code => $count) {
+            if ($count > 0) {
+                $chart->addPoint($course_names[$code], $count);
+                $chart->modDimension(7, 0);
+            }
+        }
+        return $chart->plot();
+    } else {
+        return "Δεν υπάρχουν διθέσιμα στατιστικά!";
+    }
+}
