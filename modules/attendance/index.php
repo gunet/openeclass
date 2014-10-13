@@ -729,7 +729,7 @@ if ($is_editor) {
                     Database::get()->querySingle("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $newUsers->userID);
                 }
             }else{
-                $tool_content .= "<div class='alert1'>Δεν υπάρχουν φοιτητές στο διάστημα που επιλέξατε</div>";
+                $tool_content .= "<div class='alert1'>$langNoStudents</div>";
             }
             
         }
@@ -739,12 +739,12 @@ if ($is_editor) {
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
             <fieldset>
-            <h3>Ανανέωση της λίστας μαθητών (reset)</h3>
+            <h3>$langRefreshList</h3>
             <select name='usersLimit'>
                 <option value=''>$langChoice</option>
                 <option value='1'>$langAttendanceActiveUsersSemester</option>
-                <option value='2'>Φοιτητές μόνο τελευταίου τριμήνου</option>
-                <option value='3'>Όλοι οι εγγεγραμμένοι φοιτητές</option>
+                <option value='2'>$langStudLastSemester</option>
+                <option value='3'>$langAllRegStudents</option>
             </select>
             <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
             </fieldset>
@@ -786,11 +786,11 @@ if ($is_editor) {
                 </tbody>
             </table>";
 
-            $tool_content .= "<input type='Submit' name='deleteSelectedUsers' value='Διαγραφή επιλεγμένων'>";
+            $tool_content .= "<input type='Submit' name='deleteSelectedUsers' value='$langDelete'>";
 
             $tool_content .= "</form>";
         }else{
-            $tool_content .= "<div class='alert1'>Δεν υπάρχουν μαθητές στο παρουσιολόγιο</div>";
+            $tool_content .= "<div class='alert1'>$langNoStudentsInAttendance</div>";
         }
         
         
@@ -818,8 +818,9 @@ if ($is_editor) {
         }
         $k = 0;
         if ($result){
-            foreach ($result as $announce) {
-                $content = standard_text_escape($announce->description);
+            foreach ($result as $announce) {               
+                $content = ellipsize_html($announce->description, 50);
+                
                 $d = strtotime($announce->date);
                 
                 if ($k % 2 == 0) {
@@ -842,7 +843,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                if($announce->module_auto_id){
+                if($announce->module_auto_id) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActCour";
                     if($announce->auto){
                         $tool_content .= "<br>($langAttendanceInsAut)";
@@ -850,7 +851,7 @@ if ($is_editor) {
                         $tool_content .= "<br>($langAttendanceInsMan)";
                     }
                     $tool_content .= "</td>";
-                }else{
+                } else {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
 
@@ -878,17 +879,17 @@ if ($is_editor) {
         $checkForAssNumber = count($checkForAss);
         
         $tool_content .= "<br><br>";
-
-        if ($checkForAssNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langAttendanceActToAddAss</legend>";
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+        $tool_content .= "<fieldset><legend>$langAttendanceActToAdd</legend>";
+        
+        if ($checkForAssNumber > 0) {            
+            $tool_content .= "<table width='100%' class='sortable' id='t1'>";
+            $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
+            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
             $k = 0;        
             foreach ($checkForAss as $newAssToAttendance) {
-                $content = standard_text_escape($newAssToAttendance->description);                
+                $content = ellipsize_html($newAssToAttendance->description, 50);
                 $d = strtotime($newAssToAttendance->deadline);
                 if ($k % 2 == 0) {
                     $tool_content .= "<tr class='even'>";
@@ -913,9 +914,7 @@ if ($is_editor) {
                 $tool_content .= "<td width='70' class='center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newAssToAttendance->id&amp;type=1")."&nbsp;";
                 $k++;         
             }
-            $tool_content .= "</table></fieldset>";
-        } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageAss4</p>";
+            $tool_content .= "</table>";
         }        
         
         
@@ -926,16 +925,16 @@ if ($is_editor) {
 
         $tool_content .= "<br><br>";
 
-        if ($checkForExerNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langAttendanceActToAddExe</legend>";
+        if ($checkForExerNumber > 0) {            
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable' id='t1'>";
+            $tool_content .= "<tr><th colspan='2'>$langExercises</th></tr>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
             $k = 0;        
             foreach ($checkForExer as $newExerToAttendance) {
-                $content = standard_text_escape($newExerToAttendance->description);
+                $content = ellipsize_html($newExerToAttendance->description, 50);
                 $d = strtotime($newExerToAttendance->end_date);
 
                 if ($k % 2 == 0) {
@@ -962,8 +961,6 @@ if ($is_editor) {
                 $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
-        } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageExe4</p>";
         }        
         
 
