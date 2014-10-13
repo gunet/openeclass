@@ -137,7 +137,7 @@ $tool_content = "
         if ($user_announcements) {
             $tool_content .= "
                 <div class='row'>
-        <div class='col-md-12'>
+            <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
                 <div class='panel'>
                         <ul class='tablelist panel'>
@@ -145,8 +145,9 @@ $tool_content = "
                         </ul>
                 </div>
                 </div>
-        </div></div>";
+        </div>";
 }
+$tool_content .= "</div>";
 
 $tool_content .= "
 </div>
@@ -166,11 +167,7 @@ $tool_content .= "
                                             Πληροφορίες Μαθήματος
                                             <span class='caret'></span>
                                         </button>
-
-                                        
-                                        
-                                        
-
+             
                                         <ul class='dropdown-menu' role='menu'>
                                             <li><a href='#''>Επιλογή 1</a></li>
                                             <li><a href='#''>Επιλογή 2/a></li>
