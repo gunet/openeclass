@@ -277,7 +277,6 @@ $tool_content .= action_bar(array(
         'url' => "index.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
-
 draw($tool_content, 3, null, $head_content);
 
 // Helper function
