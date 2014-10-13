@@ -68,14 +68,13 @@ $num_chars_teaser_break = 500;//chars before teaser break
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
 if ($is_editor) {
-    if (isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost") {
-        $tool_content .= "
-            <div id='operations_container'>
-            <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
-            </ul>
-            </div>";
-    }    
+    $tool_content .= action_bar(array(
+                         array('title' => $langBack,
+                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
+                               'icon' => 'fa-reply',
+                               'level' => 'primary-label',
+                               'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
+    ));
     if ($action == "settings") {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
@@ -317,15 +316,13 @@ if (isset($message) && $message) {
 
 //show blog post
 if ($action == "showPost") {
-    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
-        $tool_content .= "
-            <div id='operations_container'>
-            <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
-            </ul>
-            </div>";
-    }
-    
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label',
+                    'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid))
+    ));
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         $post->incViews();
@@ -371,17 +368,19 @@ if ($action == "showPost") {
 
 //show all blog posts
 if ($action == "showBlog") {
-    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
-        $tool_content .= "
-        <div id='operations_container'>
-            <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>";
-        if ($is_editor) {
-        	$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings'>" . $langConfig . "</a></li>";
-        }
-        $tool_content .= "</ul>
-        </div>";
-    }
+    $tool_content .= action_bar(array(
+                        array('title' => $langBlogAddPost,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost",
+                              'icon' => 'fa-plus-circle',
+                              'level' => 'primary-label',
+                              'button-class' => 'btn-success',
+                              'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid)),
+                        array('title' => $langConfig,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
+                              'icon' => 'fa-gear',
+                              'level' => 'primary',
+                              'show' => $is_editor && $blog->permCreate($is_editor, $stud_allow_create, $uid))
+                     ));
     
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
