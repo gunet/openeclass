@@ -3536,3 +3536,8 @@ $langOnlineUsers = 'Online Users';
  * ************************************************************ */
 $langTheField = 'The field';
 $langFormErrors = 'Form contains errors. Please correct and resubmit form.';
+/* * ***********************************************************
+ * Other
+ * ************************************************************ */
+$langMoreOptions = 'More options';
+$langLessOptions = 'Less options';

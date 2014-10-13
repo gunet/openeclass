@@ -521,7 +521,7 @@ function submit_work($id, $on_behalf_of = null) {
 //  assignment - prof view only
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id;
-    global $desc, $language, $head_content, $langCancel;
+    global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
     global $langBack, $langStudents, $langMove, $langWorkFile;
     
     load_js('bootstrap-datetimepicker');
@@ -531,8 +531,21 @@ function new_assignment() {
                 format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
                 language: '".$language."',
                 autoclose: true
-                });
-        });
+                });               
+            $('#hidden-opt-btn').on('click', function(e) {
+                e.preventDefault();
+                $('#hidden-opt').collapse('toggle');
+            });
+            $('#hidden-opt').on('shown.bs.collapse', function () {              
+                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                var caret = '<i class=\"fa fa-caret-up\"></i>';
+                $('#hidden-opt-btn').html('$langLessOptions '+caret);
+            })
+            $('#hidden-opt').on('hidden.bs.collapse', function () {  
+                var caret = '<i class=\"fa fa-caret-down\"></i>';
+                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
+            })               
+        });      
     </script>";
     $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
     
@@ -558,110 +571,115 @@ function new_assignment() {
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
-            <div class='form-group'>
-                <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                <div class='col-sm-10'>    
-                  <input type='file' id='userfile' name='userfile'>
-                </div>
+            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
+                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
-                <div class='col-sm-10'>
-                  <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[deadline]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='is_deadline' value='0' ". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
-                        $m[no_deadline]
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='is_deadline' value='1' ". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
-                        $m[with_deadline]
-                      </label>
+            <div class='collapse' id='hidden-opt'>
+                <div class='form-group'>
+                    <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                    <div class='col-sm-10'>    
+                      <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
-            </div>
-            <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
-                <div class='col-xs-8 col-xs-offset-2'>        
-                    <input name='WorkEnd' id='deadline' type='text' value='$workEnd'>
-                </div>
-                <div class='col-xs-2'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
-                <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
-            </div>
-            <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
-                <div class='col-xs-10 col-xs-offset-2'>             
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='late_submission' value='1'>
-                        $m[late_submission_enable]
-                      </label>
+                <div class='form-group'>
+                    <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                    <div class='col-sm-10'>
+                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'>
                     </div>
                 </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='user_button' name='group_submissions' value='0' checked>
-                        $m[user_work]
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='group_button' name='group_submissions' value='1'>
-                        $m[group_work]
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
-                        <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='assign_button_some' name='assign_to_specific' value='1'>
-                        <span id='assign_button_some_text'>$m[WorkToUser]</span>
-                      </label>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[deadline]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='is_deadline' value='0' ". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
+                            $m[no_deadline]
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='is_deadline' value='1' ". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
+                            $m[with_deadline]
+                          </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <table id='assignees_tbl' class='table hide'>
-            <tr class='title1'>
-              <td id='assignees'>$langStudents</td>
-              <td class='text-center'>$langMove</td>
-              <td>$m[WorkAssignTo]</td>
-            </tr>
-            <tr>
-              <td>
-                <select id='assign_box' size='15' multiple>
-                </select>
-              </td>
-              <td class='text-center'>
-                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-              </td>
-              <td width='40%'>
-                <select id='assignee_box' name='ingroup[]' size='15' multiple>
+                <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-8 col-xs-offset-2'>        
+                        <input name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                    </div>
+                    <div class='col-xs-2'>  
+                        <span class='add-on'><i class='fa fa-times'></i></span>
+                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
+                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
+                </div>
+                <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
+                    <div class='col-xs-10 col-xs-offset-2'>             
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='late_submission' value='1'>
+                            $m[late_submission_enable]
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='user_button' name='group_submissions' value='0' checked>
+                            $m[user_work]
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='group_button' name='group_submissions' value='1'>
+                            $m[group_work]
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
+                            <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1'>
+                            <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <table id='assignees_tbl' class='table hide'>
+                    <tr class='title1'>
+                      <td id='assignees'>$langStudents</td>
+                      <td class='text-center'>$langMove</td>
+                      <td>$m[WorkAssignTo]</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <select id='assign_box' size='15' multiple>
+                        </select>
+                      </td>
+                      <td class='text-center'>
+                        <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                      </td>
+                      <td width='40%'>
+                        <select id='assignee_box' name='ingroup[]' size='15' multiple>
 
-                </select>
-              </td>
-            </tr>
-            </table>
+                        </select>
+                      </td>
+                    </tr>
+                </table>
+            </div>
             <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" />
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
@@ -675,7 +693,8 @@ function show_edit_assignment($id) {
     
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
-        $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
+        $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment,
+        $langLessOptions, $langMoreOptions;
     
     load_js('bootstrap-datetimepicker');
     $head_content .= "<script type='text/javascript'>
@@ -685,6 +704,19 @@ function show_edit_assignment($id) {
                 pickerPosition: 'bottom-left', language: '".$language."',
                 autoclose: true
             });
+            $('#hidden-opt-btn').on('click', function(e) {
+                e.preventDefault();
+                $('#hidden-opt').collapse('toggle');
+            });
+            $('#hidden-opt').on('shown.bs.collapse', function () {              
+                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                var caret = '<i class=\"fa fa-caret-up\"></i>';
+                $('#hidden-opt-btn').html('$langLessOptions '+caret);
+            })
+            $('#hidden-opt').on('hidden.bs.collapse', function () {  
+                var caret = '<i class=\"fa fa-caret-down\"></i>';
+                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
+            })            
         });
     </script>";
     
@@ -767,114 +799,120 @@ function show_edit_assignment($id) {
                 </div>
             </div>";
     }
+    
     $tool_content .= "
-            <div class='form-group'>
-                <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                <div class='col-sm-10'>    
-                  ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
-            . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
-                                 <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
-                </div>
+            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
+                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            <div class='form-group'>
-                <label for='max_grade' class='col-sm-2 control-label'>$m[max_grade]:</label>
-                <div class='col-sm-10'>
-                  <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[deadline]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='is_deadline' value='0' ". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
-                        $m[no_deadline]
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='is_deadline' value='1' ". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
-                        $m[with_deadline]
-                      </label>
+            <div class='collapse' id='hidden-opt'>
+                <div class='form-group'>
+                    <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                    <div class='col-sm-10'>    
+                      ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
+                . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
+                                     <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>
-            </div>
-            <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
-                <div class='col-xs-8 col-xs-offset-2'>        
-                    <input name='WorkEnd' id='deadline' type='text' value='$deadline'>
-                </div>
-                <div class='col-xs-2'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
-                <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
-            </div>
-            <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
-                <div class='col-xs-10 col-xs-offset-2'>             
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
-                        $m[late_submission_enable]
-                      </label>
+                <div class='form-group'>
+                    <label for='max_grade' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                    <div class='col-sm-10'>
+                      <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
                     </div>
                 </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='user_button' name='group_submissions' value='0' ".(($row->group_submissions==1) ? '' : 'checked').">
-                        $m[user_work]
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='group_button' name='group_submissions' value='1' ".(($row->group_submissions==1) ? 'checked' : '').">
-                        $m[group_work]
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
-                <div class='col-sm-10'>            
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
-                        <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".(($row->assign_to_specific==1) ? 'checked' : '').">
-                        <span id='assign_button_some_text'>$m[WorkToUser]</span>
-                      </label>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[deadline]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='is_deadline' value='0' ". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
+                            $m[no_deadline]
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='is_deadline' value='1' ". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
+                            $m[with_deadline]
+                          </label>
+                        </div>
                     </div>
                 </div>
+                <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
+                    <div class='col-xs-8 col-xs-offset-2'>        
+                        <input name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                    </div>
+                    <div class='col-xs-2'>  
+                        <span class='add-on'><i class='fa fa-times'></i></span>
+                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
+                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
+                </div>
+                <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
+                    <div class='col-xs-10 col-xs-offset-2'>             
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
+                            $m[late_submission_enable]
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='user_button' name='group_submissions' value='0' ".(($row->group_submissions==1) ? '' : 'checked').">
+                            $m[user_work]
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='group_button' name='group_submissions' value='1' ".(($row->group_submissions==1) ? 'checked' : '').">
+                            $m[group_work]
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
+                            <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>                      
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".(($row->assign_to_specific==1) ? 'checked' : '').">
+                            <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <table id='assignees_tbl' class='table ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
+                <tr class='title1'>
+                  <td id='assignees'>$langStudents</td>
+                  <td class='text-center'>$langMove</td>
+                  <td>$m[WorkAssignTo]</td>
+                </tr>
+                <tr>
+                  <td>
+                    <select id='assign_box' size='15' multiple>
+                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                    </select>
+                  </td>
+                  <td class='text-center'>
+                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                  </td>
+                  <td width='40%'>
+                    <select id='assignee_box' name='ingroup[]' size='15' multiple>
+                    ".((isset($assignee_options)) ? $assignee_options : '')."
+                    </select>
+                  </td>
+                </tr>
+                </table>
             </div>
-            <table id='assignees_tbl' class='table ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
-            <tr class='title1'>
-              <td id='assignees'>$langStudents</td>
-              <td class='text-center'>$langMove</td>
-              <td>$m[WorkAssignTo]</td>
-            </tr>
-            <tr>
-              <td>
-                <select id='assign_box' size='15' multiple>
-                ".((isset($unassigned_options)) ? $unassigned_options : '')."
-                </select>
-              </td>
-              <td class='text-center'>
-                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-              </td>
-              <td width='40%'>
-                <select id='assignee_box' name='ingroup[]' size='15' multiple>
-                ".((isset($assignee_options)) ? $assignee_options : '')."
-                </select>
-              </td>
-            </tr>
-            </table>
             <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
@@ -1771,9 +1809,9 @@ function show_assignments() {
                             <td class='text-center'>$num_ungraded</td>
                             <td class='text-center'>$deadline"; 
             if ($row->time > 0) {
-                $tool_content .= " <br><span>($langDaysLeft" . format_time_duration($row->time) . ")</span>";
+                $tool_content .= " <br><span class='label label-warning'>$langDaysLeft" . format_time_duration($row->time) . "</span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='text-danger'>($m[expired])</span>";
+                $tool_content .= " <br><span class='label label-danger'>$m[expired]</span>";
             }                         
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
