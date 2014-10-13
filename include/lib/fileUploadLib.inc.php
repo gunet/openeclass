@@ -445,7 +445,7 @@ $retstring .= "
     </div>
   </div>  
 </form>
-</panel>";
+</div>";
     $tmp_cwd = getcwd();
 
     return $retstring;
