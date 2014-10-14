@@ -1449,6 +1449,8 @@ function delete_course($cid) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
     $idx->removeAllByCourse($cid);
+    
+    Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }
 
 /**

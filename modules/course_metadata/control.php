@@ -139,9 +139,9 @@ if (isset($_POST['submit'])) {
 $checkedAMinusLevel = ($xmlData['course_confirmAMinusLevel'] == 'true') ? "checked='checked'" : '';
 $checkedALevel = ($xmlData['course_confirmALevel'] == 'true') ? "checked='checked'" : '';
 $checkedAPlusLevel = ($xmlData['course_confirmAPlusLevel'] == 'true') ? "checked='checked'" : '';
-$disabledAMinusLevel = (!$looksAMinus) ? "disabled='disabled'" : '';
-$disabledALevel = (!$looksA) ? "disabled='disabled'" : '';
-$disabledAPlusLevel = (!$looksAPlus) ? "disabled='disabled'" : '';
+$disabledAMinusLevel = (!$looksAMinus && !$checkedAMinusLevel) ? "disabled='disabled'" : '';
+$disabledALevel = (!$looksA && !$checkedALevel) ? "disabled='disabled'" : '';
+$disabledAPlusLevel = (!$looksAPlus && !$checkedAPlusLevel) ? "disabled='disabled'" : '';
 
 // images
 $openAccessImg = ($hasOpenAccess) ? 'tick' : 'delete';
