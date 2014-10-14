@@ -1459,7 +1459,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `description` TEXT,
                             `weight` FLOAT(11,2) DEFAULT NULL,
                             `q_position` INT(11) DEFAULT 1,
-                            `type` INT(11) DEFAULT 1 )
+                            `type` INT(11) DEFAULT 1,
+                            `difficulty` INT(1) DEFAULT 1)
                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                             `id` INT(11) NOT NULL DEFAULT '0',

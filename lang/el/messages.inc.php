@@ -1456,6 +1456,11 @@ $langDeletePicture = "Διαγραφή της εικόνας";
 $langQuestionDescription = "Προαιρετικό σχόλιο";
 $langGiveQuestion = "Δώστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
+$langQuestionVeryEasy = "Πολύ εύκολη";
+$langQuestionEasy = "Eύκολη";
+$langQuestionModerate = "Μέτρια";
+$langQuestionDifficult = "Δύσκολη";
+$langQuestionVeryDifficult = "Πολύ δύσκολη";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";

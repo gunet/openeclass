@@ -19,9 +19,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+load_js('bootstrap-slider');
 $head_content .= " 
 <script>
 $(function() {
+    var diffArray = ['$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
+    $('#questionDifficulty').slider({
+	formatter: function(value) {
+		return diffArray[value-1]+' ('+value+')';
+	}    
+    });
     $('input[name=answerType]').click(hideGrade);
     $('input#free_text_selector').click(showGrade);
     function hideGrade(){
@@ -47,6 +54,7 @@ if (isset($_POST['submitQuestion'])) {
     $objQuestion->updateTitle($questionName);
     $objQuestion->updateDescription($questionDescription);
     $objQuestion->updateType($answerType);
+    $objQuestion->updateDifficulty($difficulty);
     
     //If grade field set (only in Free text questions)
     if (isset($questionGrade)) {
@@ -89,6 +97,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
         $answerType = $objQuestion->selectType();
+        $difficulty = $objQuestion->selectDifficulty();
         $questionWeight = $objQuestion->selectWeighting();
     }
 }
@@ -132,6 +141,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                   ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
                 </div>
             </div>
+            <div class='form-group'>
+                <label for='questionDifficulty' class='col-sm-2 control-label'>Βαθμός δυσκολίας:</label>
+                <div class='col-sm-10'>
+                    <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
+                </div>
+            </div>            
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
                 <div class='col-sm-10'>
