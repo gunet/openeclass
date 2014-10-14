@@ -38,13 +38,6 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
 }
-if (isset($_POST['cancelPoll']) || isset($_POST['cancelAnswers'])) {
-    if(isset($_GET['pid'])) {
-        redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$_GET[pid]");          
-    } else {
-        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");       
-    }
-}
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
     $pid = intval($_GET['pid']);
