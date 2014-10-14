@@ -3206,6 +3206,7 @@ $langCMeta['animal'] = "Animal and Dairy Science";
 $langCMeta['veterin'] = "Veterinary Science";
 $langCMeta['agribio'] = "Agricultural Biotechnology";
 $langCMeta['othereng'] = "Other Engineering and Technologies";
+$langCMeta['architects'] = "Architectural Engineering";
 $langCMeta['civil'] = "Civil Engineering";
 $langCMeta['eeeeie'] = "Electrical Engineering, Electronic Engineering, Information Engineering";
 $langCMeta['mechan'] = "Mechanical Engineering";

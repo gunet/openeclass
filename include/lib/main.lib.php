@@ -1604,6 +1604,8 @@ function delete_course($cid)
                 mkdir($garbage, 0775);
         }
 	rename("${webDir}courses/$course_code", "$garbage/$course_code");
+        
+        db_query("UPDATE oai_record SET deleted = 1, datestamp = " . quote(gmdate('Y-m-d H:i:s')) . " WHERE course_id = " . intval($cid));
 }
 
 function csv_escape($string, $force = false)
