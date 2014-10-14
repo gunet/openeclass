@@ -771,7 +771,7 @@ if ($is_editor) {
         
         
         //attendance users
-        $tool_content .= "<h3>Μαθητές παρουσιολογίου</h3><br><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">";
+        $tool_content .= "<h3>$langAttendanceActiveUsers</h3><br><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">";
         
         $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
         
