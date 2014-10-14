@@ -215,6 +215,13 @@ function submit_link() {
 
 }
 
+/**
+ * @brief fill in category form values
+ * @global type $course_id
+ * @global type $form_name
+ * @global type $form_description
+ * @param type $id
+ */
 function category_form_defaults($id) {
     global $course_id, $form_name, $form_description;
 
@@ -227,6 +234,15 @@ function category_form_defaults($id) {
     }
 }
 
+/**
+ * @brief fill in link form values
+ * @global type $course_id
+ * @global type $form_url
+ * @global type $form_title
+ * @global type $form_description
+ * @global type $category
+ * @param type $id
+ */
 function link_form_defaults($id) {
     global $course_id, $form_url, $form_title, $form_description, $category;
 
@@ -241,18 +257,26 @@ function link_form_defaults($id) {
     }
 }
 
-// Enter the modified info submitted from the category form into the database
+/**
+ * @brief Enter the modified info submitted from the category form into the database
+ * @global type $course_id
+ * @global type $langCategoryAdded
+ * @global type $langCategoryModded
+ * @global type $categoryname
+ * @global type $description
+ * @global type $catlinkstatus
+ */
 function submit_category() {
     global $course_id, $langCategoryAdded, $langCategoryModded,
     $categoryname, $description, $catlinkstatus;
 
     register_posted_variables(array('categoryname' => true,
-        'description' => true), 'all', 'trim');
+                                    'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
     $terms = array($categoryname, purify($description));
 
     if (isset($_POST['id'])) {
-        $id = intval($_POST['id']);
+        $id = $_POST['id'];
         Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
         $catlinkstatus = $langCategoryModded;
         $log_type = LOG_MODIFY;
@@ -270,6 +294,13 @@ function submit_category() {
         'description' => $txt_description));
 }
 
+/**
+ * @brief delete link
+ * @global type $course_id
+ * @global type $langLinkDeleted
+ * @global type $catlinkstatus
+ * @param type $id
+ */
 function delete_link($id) {
     global $course_id, $langLinkDeleted, $catlinkstatus;
 
@@ -281,10 +312,17 @@ function delete_link($id) {
     $lidx->remove($id);
     $catlinkstatus = $langLinkDeleted;
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
-        'url' => $url,
-        'title' => $title));
+                                                               'url' => $url,
+                                                               'title' => $title));
 }
 
+/**
+ * @brief delete category
+ * @global type $course_id
+ * @global type $langCategoryDeleted
+ * @global type $catlinkstatus
+ * @param type $id
+ */
 function delete_category($id) {
     global $course_id, $langCategoryDeleted, $catlinkstatus;
 
@@ -293,5 +331,5 @@ function delete_category($id) {
     Database::get()->query("DELETE FROM `link_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $catlinkstatus = $langCategoryDeleted;
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
-        'category' => $category));
+                                                               'category' => $category));
 }
