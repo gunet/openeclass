@@ -143,7 +143,17 @@ class Session {
         } else {
             return FALSE;
         }
-    }   
+    }
+    public static function hasErrors() {
+        if(isset($_SESSION['flash_old'])) {
+            foreach ($_SESSION['flash_old'] as $row) {
+                if (isset($_SESSION[$row]['errors'][0])){                
+                    return TRUE;
+                }
+            }
+        }
+        return FALSE;
+    }    
     public static function getError($key) {
         if (isset($_SESSION[$key]['errors'][0])){
             return $_SESSION[$key]['errors'][0];

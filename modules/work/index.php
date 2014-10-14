@@ -247,15 +247,16 @@ if ($is_editor) {
                 $nameTools = $langWorks;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
-                if($_POST['title']){
-                    if (edit_assignment($id)) {
-                        Session::Messages($langEditSuccess,'alert-success');
-                    }
-                    redirect_to_home_page('modules/work/index.php?course='.$course_code);
-                } else {
-                    Session::Messages($m['WorkTitleValidation'],'alert-danger');
-                    redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
-                }         
+                edit_assignment($id);
+//                if($_POST['title']){
+//                    if (edit_assignment($id)) {
+//                        Session::Messages($langEditSuccess,'alert-success');
+//                    }
+//                    redirect_to_home_page('modules/work/index.php?course='.$course_code);
+//                } else {
+//                    Session::Messages($m['WorkTitleValidation'],'alert-danger');
+//                    redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
+//                }         
             } elseif ($choice == 'add') {
                 $nameTools = $langAddGrade;
                 $navigation[] = $works_url;
@@ -773,16 +774,22 @@ function show_edit_assignment($id) {
         array('title' => $langBack,
               'level' => 'primary',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
-              'icon' => 'fa-reply')));    
+              'icon' => 'fa-reply')));
+    
+    //Get possible errors
+    $title_error = Session::getError('title');    
+    
     $tool_content .= "
+    <div class='form-wrapper'>
     <form class='form-horizontal' role='form' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
-            <div class='form-group'>
+            <div class='form-group ".($title_error ? "has-error" : "")."'>
                 <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
                 <div class='col-sm-10'>
                   <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$m[title]'>
+                  <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='form-group'>
@@ -804,7 +811,7 @@ function show_edit_assignment($id) {
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            <div class='collapse' id='hidden-opt'>
+            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>    
@@ -918,90 +925,103 @@ function show_edit_assignment($id) {
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
             </div>                             
     </fieldset>
-    </form>";
+    </form></div>";
 }
 
 // edit assignment
 function edit_assignment($id) {
 
-    global $tool_content, $langBackAssignment, $langEditSuccess,
-    $langEditError, $course_code, $works_url, $course_id, $uid, $workPath;
-
-    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-    $title = $_POST['title'];
-    $desc = purify($_POST['desc']);
-    $deadline = trim($_POST['WorkEnd']) == FALSE ? '0000-00-00 00:00': date('Y-m-d H:i', strtotime($_POST['WorkEnd']));
-    $late_submission = ((isset($_POST['late_submission']) && trim($_POST['WorkEnd']) != FALSE) ? 1 : 0);
-    $group_submissions = $_POST['group_submissions'];
-    $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
-    $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
-    $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+    global $tool_content, $langBackAssignment, $langEditSuccess, $m, $langTheField,
+    $langEditError, $course_code, $works_url, $course_id, $uid, $workPath, $langFormErrors;
     
-    if ($assign_to_specific == 1 && empty($assigned_to)) {
-        $assign_to_specific = 0;
-    }
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['title']);
+    $v->labels(array(
+        'title' => "$langTheField $m[title]"
+    ));
+    if($v->validate()) {
+        $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+        $title = $_POST['title'];
+        $desc = purify($_POST['desc']);
+        $deadline = trim($_POST['WorkEnd']) == FALSE ? '0000-00-00 00:00': date('Y-m-d H:i', strtotime($_POST['WorkEnd']));
+        $late_submission = ((isset($_POST['late_submission']) && trim($_POST['WorkEnd']) != FALSE) ? 1 : 0);
+        $group_submissions = $_POST['group_submissions'];
+        $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
+        $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
+        $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY); 
+       
+        if ($assign_to_specific == 1 && empty($assigned_to)) {
+             $assign_to_specific = 0;
+         }
 
-    if (!isset($_POST['comments'])) {
-        $comments = '';
+         if (!isset($_POST['comments'])) {
+             $comments = '';
+         } else {
+             $comments = purify($_POST['comments']);
+         }
+
+         if (!isset($_FILES) || !$_FILES['userfile']['size']) {
+             $_FILES['userfile']['name'] = '';
+             $_FILES['userfile']['tmp_name'] = '';
+             $filename = $row->file_path;
+             $file_name = $row->file_name;
+         } else {
+             validateUploadedFile($_FILES['userfile']['name'], 2);
+             if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+                                'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
+                                'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                 $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                 $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                 return;
+             }
+             $local_name = uid_to_name($uid);
+             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+             if (!empty($am)) {
+                 $local_name .= $am;
+             }                
+             $local_name = greek_to_latin($local_name);
+             $local_name = replace_dangerous_char($local_name);
+             $secret = $row->secret_directory;
+             $ext = get_file_extension($_FILES['userfile']['name']);
+             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);                
+             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+                 @chmod("$workPath/admin_files/$filename", 0644);
+                 $file_name = $_FILES['userfile']['name'];
+             }        
+         }   
+         Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
+             group_submissions = ?d, comments = ?s, deadline = ?t, late_submission = ?d, max_grade = ?d, 
+             assign_to_specific = ?d, file_path = ?s, file_name = ?s
+             WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
+             $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
+
+         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+
+         if ($assign_to_specific && !empty($assigned_to)) {
+             if ($group_submissions == 1) {
+                 $column = 'group_id';
+                 $other_column = 'user_id';
+             } else {
+                 $column = 'user_id';
+                 $other_column = 'group_id';
+             }
+             foreach ($assigned_to as $assignee_id) {
+                 Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+             }
+         }    
+         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
+                 'title' => $title,
+                 'description' => $desc,
+                 'deadline' => $deadline,
+                 'group' => $group_submissions));   \
+         
+        Session::Messages($langEditSuccess,'alert-success');         
+        redirect_to_home_page("modules/work/index.php?course=$course_code");
     } else {
-        $comments = purify($_POST['comments']);
+//        $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");        
     }
-    
-    if (!isset($_FILES) || !$_FILES['userfile']['size']) {
-        $_FILES['userfile']['name'] = '';
-        $_FILES['userfile']['tmp_name'] = '';
-        $filename = $row->file_path;
-        $file_name = $row->file_name;
-    } else {
-        validateUploadedFile($_FILES['userfile']['name'], 2);
-        if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-                           'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-                           'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-            $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-            $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-            return;
-        }
-        $local_name = uid_to_name($uid);
-        $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
-        if (!empty($am)) {
-            $local_name .= $am;
-        }                
-        $local_name = greek_to_latin($local_name);
-        $local_name = replace_dangerous_char($local_name);
-        $secret = $row->secret_directory;
-        $ext = get_file_extension($_FILES['userfile']['name']);
-        $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);                
-        if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
-            @chmod("$workPath/admin_files/$filename", 0644);
-            $file_name = $_FILES['userfile']['name'];
-        }        
-    }   
-    Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-        group_submissions = ?d, comments = ?s, deadline = ?t, late_submission = ?d, max_grade = ?d, 
-        assign_to_specific = ?d, file_path = ?s, file_name = ?s
-        WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-        $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
-
-    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-
-    if ($assign_to_specific && !empty($assigned_to)) {
-        if ($group_submissions == 1) {
-            $column = 'group_id';
-            $other_column = 'user_id';
-        } else {
-            $column = 'user_id';
-            $other_column = 'group_id';
-        }
-        foreach ($assigned_to as $assignee_id) {
-            Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
-        }
-    }    
-    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
-            'title' => $title,
-            'description' => $desc,
-            'deadline' => $deadline,
-            'group' => $group_submissions));
-    return true;
 }
 
 /**
