@@ -42,55 +42,67 @@ $(function() {
  ";
 // the question form has been submitted
 if (isset($_POST['submitQuestion'])) {
-    $questionName = trim($questionName);
-    $questionDescription = purify($questionDescription);
-    // no name given
-    if (empty($questionName)) {
-        $msgErr = $langGiveQuestion;
-    }
-    if (isset($_GET['modifyQuestion'])) {
-        $objQuestion->read($_GET['modifyQuestion']);
-    }
-    $objQuestion->updateTitle($questionName);
-    $objQuestion->updateDescription($questionDescription);
-    $objQuestion->updateType($answerType);
-    $objQuestion->updateDifficulty($difficulty);
-    
-    //If grade field set (only in Free text questions)
-    if (isset($questionGrade)) {
-        $objQuestion->updateWeighting($questionGrade);
-    }
-    (isset($exerciseId)) ? $objQuestion->save($exerciseId) : $objQuestion->save();
-    $questionId = $objQuestion->selectId();
-    // upload or delete picture
-    if (isset($_POST['deletePicture'])) {
-        $objQuestion->removePicture();
-    } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-
-        require_once 'include/lib/fileUploadLib.inc.php';
-        validateUploadedFile($_FILES['imageUpload']['name'], 2);
-
-        $type = $_FILES['imageUpload']['type'];
-        if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
-            $tool_content .= "<div class='caution'>$langInvalidPicture</div>";
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['questionName']);
+    $v->labels(array(
+        'questionName' => "$langTheField $langQuestion"
+    ));
+    if($v->validate()) {
+        $questionName = trim($questionName);
+        $questionDescription = purify($questionDescription);
+        // no name given
+        if (empty($questionName)) {
+            $msgErr = $langGiveQuestion;
         }
-    }
-    if (isset($exerciseId)) {
-        // adds the question ID into the question list of the Exercise object
-        if ($objExercise->addToList($questionId)) {
-            $objExercise->save();
-            $nbrQuestions++;
+        if (isset($_GET['modifyQuestion'])) {
+            $objQuestion->read($_GET['modifyQuestion']);
         }
-    }
-    //if the answer type is free text (which means doesn't have predefined answers) 
-    //redirects to either pool or edit exercise page
-    //else it redirect to modifyanswers page in order to add answers to question
-    if ($answerType == FREE_TEXT) {
-        $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId" : "modules/exercise/question_pool.php?course=$course_code";
+        $objQuestion->updateTitle($questionName);
+        $objQuestion->updateDescription($questionDescription);
+        $objQuestion->updateType($answerType);
+        $objQuestion->updateDifficulty($difficulty);
+
+        //If grade field set (only in Free text questions)
+        if (isset($questionGrade)) {
+            $objQuestion->updateWeighting($questionGrade);
+        }
+        (isset($exerciseId)) ? $objQuestion->save($exerciseId) : $objQuestion->save();
+        $questionId = $objQuestion->selectId();
+        // upload or delete picture
+        if (isset($_POST['deletePicture'])) {
+            $objQuestion->removePicture();
+        } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+
+            require_once 'include/lib/fileUploadLib.inc.php';
+            validateUploadedFile($_FILES['imageUpload']['name'], 2);
+
+            $type = $_FILES['imageUpload']['type'];
+            if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
+                $tool_content .= "<div class='caution'>$langInvalidPicture</div>";
+            }
+        }
+        if (isset($exerciseId)) {
+            // adds the question ID into the question list of the Exercise object
+            if ($objExercise->addToList($questionId)) {
+                $objExercise->save();
+                $nbrQuestions++;
+            }
+        }
+        //if the answer type is free text (which means doesn't have predefined answers) 
+        //redirects to either pool or edit exercise page
+        //else it redirect to modifyanswers page in order to add answers to question
+        if ($answerType == FREE_TEXT) {
+            $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId" : "modules/exercise/question_pool.php?course=$course_code";
+        } else {
+            $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
+        }
+        redirect_to_home_page($redirect_url);
     } else {
-        $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        $new_or_modif = isset($_GET['modifyQuestion']) ? "&modifyQuestion=$_GET[modifyQuestion]" : "&newQuestion=yes";
+        $exercise_or_pool = isset($_GET['exerciseId']) ? "&exerciseId=$_GET[exerciseId]" : "";
+        redirect_to_home_page("modules/exercise/admin.php?course={$course_code}{$exercise_or_pool}{$new_or_modif}");
     }
-    redirect_to_home_page($redirect_url);
 } else {
 // if we don't come here after having cancelled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
@@ -127,12 +139,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         )
     ));
     
-    $tool_content .= "<form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
     $tool_content .= "
-            <div class='form-group'>
+            <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
                 <div class='col-sm-10'>
                   <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
+                  <span class='help-block'>".Session::getError('questionName')."</span>
                 </div>
             </div>
             <div class='form-group'>
@@ -214,11 +227,14 @@ $tool_content .= "<div class='form-group'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$m[grade]' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
                 </div>
             </div>
-            <div class='col-sm-offset-2 col-sm-10'>            
-                <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
-                <a href='$link_back' class='btn btn-default'>$langCancel</a>      
+            <div class='row'>
+                <div class='col-sm-10 col-sm-offset-2 '>            
+                    <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
+                    <a href='$link_back' class='btn btn-default'>$langCancel</a>      
+                </div>
             </div>
           </fieldset>
-	</form>    
+	</form>
+    </div>    
     ";
 }
