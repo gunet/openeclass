@@ -38,18 +38,18 @@ $eclass_prof_reg = get_config('eclass_prof_reg');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 // security check
 if (!$user_registration) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
 if ($prof and !$eclass_prof_reg) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
 
 if (!$prof and $eclass_stud_reg != 1) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }

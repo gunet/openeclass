@@ -215,8 +215,8 @@ foreach ($departments as $dep) {
 // Check if the teacher is allowed to create in the departments he chose
 if (!$deps_valid) {
     $nameTools = "";
-    $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
-                    <p class='eclass_button'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
+                    <p class='pull-right'><a class='btn btn-default' href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
     draw($tool_content, 1, null, $head_content);
     exit();
 }

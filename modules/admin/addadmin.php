@@ -60,7 +60,7 @@ if (isset($_POST['submit']) and ! empty($username)) {
             $tool_content .= "<div class='alert alert-danger'>$langError</div>";
         }
     } else {
-        $tool_content .= "<p class='caution'>$langTheUser " . q($username) . " $langNotFound.</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langTheUser " . q($username) . " $langNotFound.</div>";
     }
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
@@ -71,7 +71,7 @@ if (isset($_POST['submit']) and ! empty($username)) {
             $tool_content .= "<div class='alert alert-danger'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
         }
     } else {
-        $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langCannotDeleteAdmin</div>";
     }
 }
 

@@ -297,11 +297,11 @@ if (!isset($_POST['submit'])) {
         }
     } else {
         // errors exist - registration failed
-        $tool_content .= "<p class='caution'>";
+        $tool_content .= "<div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
             $tool_content .= " $error";
         }
-        $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?" .
+        $tool_content .= "</div><p><a href='$_SERVER[SCRIPT_NAME]?" .
                 'givenname_form=' . urlencode($givenname_form) .
                 '&amp;surname_form=' . urlencode($surname_form) .
                 '&amp;uname=' . urlencode($uname) .

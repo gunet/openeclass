@@ -625,7 +625,7 @@ function validateUploadedFile($filename, $menuTypeID = 2) {
     global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<p class='caution'>$langUploadedFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
+        $tool_content .= "<div class='alert alert-danger'>$langUploadedFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
@@ -641,7 +641,7 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
     global $tool_content, $head_content, $langBack, $langRenamedFileNotAllowed;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<p class='caution'>$langRenamedFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
+        $tool_content .= "<div class='alert alert-danger'>$langRenamedFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
@@ -666,7 +666,7 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
         $filename = basename($entry['filename']);
 
         if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<p class='caution'>$langUploadedZipFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
+            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
             draw($tool_content, $menuTypeID, null, $head_content);
             exit;
         }

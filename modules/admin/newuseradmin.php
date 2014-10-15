@@ -94,21 +94,21 @@ if ($submit) {
 
     // check if there are empty fields
     if (!$all_set) {
-        $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</p>";
         $tool_content .= action_bar(array(
             array('title' => $langAgain,
                 'url' => "$backlink",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
     } elseif ($user_exist) {
-        $tool_content .= "<p class='caution'>$langUserFree</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div>";
         $tool_content .= action_bar(array(
             array('title' => $langAgain,
                 'url' => "$backlink",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
     } elseif (!email_seems_valid($email_form)) {
-        $tool_content .= "<p class='caution_small'>$langEmailWrong.</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langEmailWrong.</div>";
         $tool_content .= action_bar(array(
             array('title' => $langAgain,
                 'url' => "$backlink",

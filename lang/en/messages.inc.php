@@ -1774,7 +1774,6 @@ $langPollEdited = "Questionnaire edited succesfully.";
 $langPollCreator = "Creator";
 $langPollCreation = "Creation Date";
 $langPollCreateDate = "Questionnaire created on";
-$langPollCreationError = "Questionnaire creation error. Please try again.";
 $langPollDeleted = "Questionnaire deleted successfully.";
 $langPollResultsDeleted = "Questionnaire results deleted successfully.";
 $langPollResultsAccess = "You dont have access rights to Questionnaire results.";

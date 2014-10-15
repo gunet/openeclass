@@ -66,7 +66,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 
 if (!does_exists($forum_id, "forum")) {
-    $tool_content .= "<div class='caution'>$langErrorPost</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langErrorPost</div>";
     draw($tool_content, 2);
     exit;
 }

@@ -43,7 +43,7 @@ if (isset($_GET['delete'])) {
     if ($sql->affectedRows > 0) {
         $tool_content .= "<div class='alert alert-success'>$langRegDone<br /><br />";
     } else {
-        $tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
+        $tool_content .= "<div class='alert alert-danger'>$langNoChanges<br /><br />";
     }
     $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else { // display form

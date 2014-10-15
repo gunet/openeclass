@@ -87,7 +87,7 @@ if ($can_upload) {
 </fieldset>
 </form>";
 } else {
-	$tool_content .= "<span class='caution'>$langNotAllowed</span>";
+	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
 
 draw($tool_content, 

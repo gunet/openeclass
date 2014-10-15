@@ -262,8 +262,8 @@ hContent;
                     validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
 
                     if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
-                        $tool_content .= "<p class='caution'>$langNoSpace<br />
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
+                        $tool_content .= "<div class='alert alert-danger'>$langNoSpace<br>
+                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
                         draw($tool_content, $menuTypeID, null, $head_content);
                         exit;
                     } else {
@@ -273,8 +273,8 @@ hContent;
                         $file_name = preg_replace("/\.php.*$/", ".phps", $file_name);
                         // check for dangerous file extensions
                         if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
-                            $tool_content .= "<div class='alert alert-warning'>$langUnwantedFiletype:  $file_name<br>";
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
+                            $tool_content .= "<div class='alert alert-danger'>$langUnwantedFiletype:  $file_name<br>";
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
                             draw($tool_content, $menuTypeID, null, $head_content);
                             exit;
                         }

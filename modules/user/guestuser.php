@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
-        $tool_content .= "<p class='caution'>$langGuestExist</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langGuestExist</div>";
         $submit_label = $langModify;
     } else {
         $guest_info = new stdClass();

@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
-        $tool_content .= "<p class='caution'>$langInvalidLink</p>" .
+        $tool_content .= "<div class='alert alert-danger'>$langInvalidLink</div>" .
                 action_bar(array(
                     array('title' => $langBack,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2",

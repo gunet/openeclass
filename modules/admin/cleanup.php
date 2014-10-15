@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
     }
 } else {
     $tool_content .= "
-<div class='caution'>$langCleanupInfo</div>
+<div class='alert alert-danger'>$langCleanupInfo</div>
 <div class='center'>
 	     <form method='post' action='$_SERVER[SCRIPT_NAME]'>
 		 <input type='submit' name='submit' value='$langCleanup'>

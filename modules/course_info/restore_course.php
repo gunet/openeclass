@@ -65,7 +65,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $pathToArchive = $_POST['pathToArchive'];
     validateUploadedFile(basename($pathToArchive), 3);
     if (get_file_extension($pathToArchive) !== 'zip') {
-        $tool_content .= "<p class='caution'>" . $langErrorFileMustBeZip . "</p>";
+        $tool_content .= "<div class='alert alert-danger'>" . $langErrorFileMustBeZip . "</div>";
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
@@ -73,7 +73,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
-        $tool_content .= "<p class='caution'>$langFileNotFound</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langFileNotFound</div>";
     }
 } elseif (isset($_POST['create_restored_course'])) {
     register_posted_variables(array('restoreThis' => true,

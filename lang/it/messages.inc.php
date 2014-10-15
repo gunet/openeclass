@@ -1576,7 +1576,6 @@ $langPollEdited = "Il questionario è modificato con successo.";
 $langPollCreator = "Creatore";
 $langPollCreation = "Data di Creazione";
 $langPollCreateDate = "Il questionario è stato creato il";
-$langPollCreationError = "<p class='caution'>Errore durante la creazione del questionario. Prego, riprova</p>.";
 $langPollDeleted = "Il questionario è eliminato con successo.";
 $langPollDeactivated = "Il questionario è disattivato con successo!";
 $langPollActivated = "Il questionario è attivato con successo!";

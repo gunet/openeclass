@@ -30,7 +30,7 @@ $navigation[] = array("url" => "profile/profile.php", "name" => $langModifyProfi
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     // admin cannot be deleted
     if ($is_admin) {
-        $tool_content .= "<div class='caution'>$langAdminNo";
+        $tool_content .= "<div class='alert alert-danger'>$langAdminNo";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "profile/profile.php",
@@ -53,7 +53,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             $tool_content .= "</li></ul>";
             $tool_content .= "</td></tr></table>";
         } else {
-            $tool_content .= "<div class='caution'><b>$langNotice: </b> ";
+            $tool_content .= "<div class='alert alert-danger'><b>$langNotice: </b> ";
             $tool_content .= "$langExplain<br />";
             $tool_content .= action_bar(array(
                 array('title' => $langBack,

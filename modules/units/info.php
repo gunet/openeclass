@@ -39,7 +39,7 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);   
     if (!$cu) {
         $nameTools = $langUnitUnknown;
-        $tool_content .= "<p class='caution'>$langUnknownResType</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
         draw($tool_content, 2, null, $head_content);
         exit;
     } 

@@ -59,13 +59,13 @@ if (isset($_SESSION['u_prof'])) {
     $prof = intval($_SESSION['u_prof']);
 }
 if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
 
 if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }

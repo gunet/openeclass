@@ -78,7 +78,7 @@ if (isset($_POST['submitQuestion'])) {
 
             $type = $_FILES['imageUpload']['type'];
             if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
-                $tool_content .= "<div class='caution'>$langInvalidPicture</div>";
+                $tool_content .= "<div class='alert alert-danger'>$langInvalidPicture</div>";
             }
         }
         if (isset($exerciseId)) {
@@ -119,7 +119,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
     // if there is an error message
     if (!empty($msgErr)) {
-        $tool_content .= "<p class='caution'>$msgErr</p>\n";
+        $tool_content .= "<div class='alert alert-danger'>$msgErr</div>\n";
     }
 
     

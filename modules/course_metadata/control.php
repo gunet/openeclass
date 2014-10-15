@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
         $level = CourseXMLElement::A_MINUS_LEVEL;
     } else {
-        $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langOpenCoursesWasNotSet</div>";
         $is_certified = 0;
     }
 

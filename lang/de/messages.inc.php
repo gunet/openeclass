@@ -1618,7 +1618,6 @@ $langPollEdited = "Der Fragebogen wurde erfolgreich bearbeitet.";
 $langPollCreator = "Urheber";
 $langPollCreation = "Erzeugungsdatum";
 $langPollCreateDate = "Fragebogen wurde erzeugt am";
-$langPollCreationError = "<p class='caution'>Fehler beim Erzeugen des Fragebogens. Bitte versuchen Sie es noch einmal.</p>";
 $langPollDeleted = "Der Fragebogen wurde erfolgreich gelöscht.";
 $langPollDeactivated = "Der Fragebogen wurde erfolgreich deaktiviert.";
 $langPollActivated = "Der Fragebogen wurde erfolgreich aktiviert";

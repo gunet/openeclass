@@ -150,7 +150,7 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
     $title = "<h1 class=\"wikiTitle\">$langWikiPreviewTitle$title</h1>\n";
     $out .= $title;
     $out .= '</div>' . "\n";
-    $out .= "<div class='caution'>$langWikiPreviewWarning</div><br />";
+    $out .= "<div class='alert alert-danger'>$langWikiPreviewWarning</div><br />";
     $out .= '<div class="wiki2xhtml">' . "\n";
 
     if ($content != '') {

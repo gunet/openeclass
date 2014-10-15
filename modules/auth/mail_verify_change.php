@@ -38,7 +38,7 @@ $nameTools = $langMailVerify;
 $uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 
 if (empty($uid)) {
-    $tool_content .= "<div class='caution'>$langMailVerificationError2</div> ";
+    $tool_content .= "<div class='alert alert-danger'>$langMailVerificationError2</div> ";
     draw($tool_content, 0);
     exit;
 }
@@ -76,7 +76,7 @@ if (!empty($_POST['submit'])) {
     }
     // email wrong or empty
     else {
-        $tool_content .= "<div class='caution'>$langMailVerificationWrong</div> ";
+        $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
 } elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
     $tool_content .= "<div class='info'>$langMailVerificationReq</div> ";

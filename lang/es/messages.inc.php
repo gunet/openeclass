@@ -1669,7 +1669,6 @@ $langPollEdited = "El cuestionario fue editado con éxito.<br><br> <a href=\"ind
 $langPollCreator = "Creador";
 $langPollCreation = "Fecha de creación";
 $langPollCreateDate = "Cuestionario credo en";
-$langPollCreationError = "Error de creación del cuestionario. Prueba otra vez.";
 $langPollDeleted = "Cuestionario borrado con éxito.<br><br><a href=\"index.php\">Back</a>.";
 $langPollDeactivated = "Cuestionario desactivado con éxito.";
 $langPollActivated = "Cuestionario¡ activado con éxito.";

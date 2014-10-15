@@ -21,7 +21,7 @@
 
 
 if (!function_exists('ldap_connect')) { // Is php4-ldap really there?
-    $tool_content .= "<p class='caution'<strong>$langLdapNotWork.</p>";
+    $tool_content .= "<div class='alert alert-danger'<strong>$langLdapNotWork.</div>";
 }
 
 $ldapdata = $auth_data;

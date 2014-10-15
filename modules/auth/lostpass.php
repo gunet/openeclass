@@ -125,7 +125,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             </form>";
         }
     } else {
-        $tool_content = "<div class='caution'>$langAccountResetInvalidLink</div>
+        $tool_content = "<div class='alert alert-danger'>$langAccountResetInvalidLink</div>
                                  $homelink";
     }
 } elseif (isset($_POST['send_link'])) {
@@ -154,7 +154,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);            
         } else { //other type of auth...
             $auth = array_search($res->password, $auth_ids) or 1;
-            $tool_content = "<div class='caution'>
+            $tool_content = "<div class='alert alert-danger'>
                                 <p><strong>$langPassCannotChange1</strong></p>
                                 <p>$langPassCannotChange2 " . get_auth_info($auth) .
                     ". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
@@ -165,7 +165,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         if ($found_editable_password) {
             $emailsubject = $lang_remind_pass;
             if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
-                $tool_content = "<div class='caution'>
+                $tool_content = "<div class='alert alert-danger'>
                                 <p><strong>$langAccountEmailError1</strong></p>
                                 <p>$langAccountEmailError2 $email.</p>
                                 <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
@@ -183,11 +183,11 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 	                a.user_id IS NULL AND  
 	                (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
         if ($res) {
-            $tool_content .= "<div class='caution'>
+            $tool_content .= "<div class='alert alert-danger'>
                         <p>$langLostPassPending</p></div>
                         $homelink";
         } else {
-            $tool_content .= "<div class='caution'>
+            $tool_content .= "<div class='alert alert-danger'>
                         <p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
                         <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
                         $homelink";

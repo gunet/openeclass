@@ -535,10 +535,10 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     warnIfExtNotLoaded("ldap");    
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall1</div>";
     }
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
     $tool_content .= "
 	<p class='sub_title1'>$langOtherReq</p>
@@ -612,7 +612,7 @@ function mkdir_try($dirname) {
     
     if (!is_dir('../' . $dirname)) {
         if (!mkdir('../' . $dirname, 0775)) {
-            $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $dirname);
+            $errorContent[] = sprintf("<div class='alert alert-danger'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>", $dirname);
             $configErrorExists = true;
         }
     }
@@ -635,7 +635,7 @@ function touch_try($filename) {
         $install_info_file, $langHere;
     
     if (@!touch('../' . $filename)) {
-        $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $filename);
+        $errorContent[] = sprintf("<div class='alert alert-danger'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>", $filename);
         $configErrorExists = true;
     }
 }

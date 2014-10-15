@@ -38,7 +38,7 @@ if (isset($_REQUEST['u'])) {
     $u = intval($_REQUEST['u']);
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
-        $tool_content = "<p class='caution'>$langUserMergeAdminForbidden</p>";
+        $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
         draw($tool_content, 3);
         exit;
     }

@@ -786,7 +786,7 @@ switch ($action) {
     	
 		$tool_content .= '</div>' . "\n";
 		$message = $langWikiLockInfo;
-		$tool_content .= "<div class='caution'>$message</div></br />";
+		$tool_content .= "<div class='alert alert-danger'>$message</div></br />";
 
 
 		if (isset($content) && $content != '') {

@@ -148,10 +148,10 @@ $default_teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h
 
 if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['is_admin'] == true) and ! $command_line) {
     if (ini_get('register_globals')) { // check if register globals is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall1</div>";
     }
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
     // get old contact values
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>" .

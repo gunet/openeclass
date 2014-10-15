@@ -86,7 +86,7 @@ if (empty($auth)) {
     }
 } else {
     if (empty($settings)) {
-        $tool_content .= "<p class='caution'>$langErrActiv $langActFailure</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langErrActiv $langActFailure</div>";
     } else {
         if ($active == 'yes') {
             $tool_content .= "<div class='alert alert-success'>";

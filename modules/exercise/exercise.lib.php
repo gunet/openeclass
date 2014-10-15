@@ -196,7 +196,7 @@ function showQuestion($questionId, $onlyAnswers = false, $exerciseResult = array
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "
                   <tr>
-                    <td colspan='2'><p class='caution'>$langNoAnswer</td>
+                    <td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td>
                   </tr>";
     }
     // destruction of the Answer object

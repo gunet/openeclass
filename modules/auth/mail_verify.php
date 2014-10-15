@@ -128,7 +128,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
             // code and id given but they are wrong!
             else {
                 $user_error_msg = $langMailVerifyCodeError;
-                $tool_content = "<div class='caution'>$user_error_msg </div>
+                $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
 					<p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
 					$langBackPage</p>";
             }
@@ -138,7 +138,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
         } else {
             $user_error_msg = $langMailVerifyNoAccount;
         }
-        $tool_content = "<div class='caution'>$user_error_msg </div>
+        $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
                             <p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
                             $langBackPage</p>";
     }    
@@ -146,7 +146,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
 // no code given and no id given
 else {
     $user_error_msg = $langMailVerifyNoCode;
-    $tool_content = "<div class='caution'>$user_error_msg </div>
+    $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
 		<p>$click <a href='$urlServer' class='mainpage'>$langHere</a>
 		$langBackPage</p>";
 }

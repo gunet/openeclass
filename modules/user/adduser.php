@@ -151,7 +151,7 @@ if (isset($_GET['add'])) {
             }
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<p class='caution'>$langNoUsersFound</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langNoUsersFound</div>";
         }
         Database::get()->query("DROP TABLE lala");
     }

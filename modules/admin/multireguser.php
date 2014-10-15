@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
 
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
-            $tool_content = "<p class='caution'>$langMultiRegFieldError <b>" . q($field) . "</b></p>";
+            $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
             draw($tool_content, 3, 'admin');
             exit;
         }
