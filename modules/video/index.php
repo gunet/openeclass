@@ -119,7 +119,7 @@ hContent;
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
         }
     }
         
@@ -157,7 +157,10 @@ hContent;
      * display form for add / edit category
      */
     if (isset($_GET['action'])) {
-        $tool_content .=  "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+        $nameTools =  ($_GET['action'] == 'edit-category') ? $langCategoryMod : $langCategoryAdd;
+        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .=  "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         if ($_GET['action'] == 'editcategory') {
             $myrow = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
             if ($myrow) {
@@ -172,16 +175,21 @@ hContent;
                 $form_name = $form_description = '';
                 $form_legend = $langCategoryAdd;
         }
-        $tool_content .= "<fieldset><legend>$form_legend</legend>
-                        <table width='100%' class='tbl'>
-                        <tr><th>$langCategoryName:</th>
-                            <td><input type='text' name='categoryname' size='53'$form_name /></td></tr>
-                        <tr><th>$langDescription:</th>
-                            <td><textarea rows='5' cols='50' name='description'>$form_description</textarea></td></tr>
-                        <tr><th>&nbsp;</th>
-                            <td class='right'><input type='submit' name='submitCategory' value='$form_legend' /></td></tr>
-                        </table></fieldset></form>";
-
+        $tool_content .= "<fieldset>
+                        <div class='form-group'>
+                            <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
+                            <div class='col-sm-10'><input type='text' name='categoryname' size='53'$form_name /></div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                            <div class='col-sm-10'><textarea rows='5' cols='50' name='description'>$form_description</textarea></div>
+                        </div>
+                        <div class='col-sm-offset-2 col-sm-10'>
+                            <input class='btn btn-primary' type='submit' name='submitCategory' value='" . q($form_legend) . "'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                        </div>
+                        </fieldset></form>
+                    </div>";
     }
 
     if (isset($_POST['submitCategory'])) {
@@ -190,7 +198,7 @@ hContent;
 
     if (isset($_POST['edit_submit'])) { // edit
         if(isset($_POST['id'])) {
-            $id = intval($_POST['id']);
+            $id = $_POST['id'];
             if (isset($_POST['table'])) {
                     $table = select_table($_POST['table']);
             }
@@ -203,7 +211,7 @@ hContent;
                                 category = ?d
                              WHERE id = ?d",
                             $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
-            } elseif ($table == 'videolink') {
+            } elseif ($table == 'videolink') {                
                 Database::get()->query("UPDATE videolink
                         SET url = ?s,
                             title = ?s,
@@ -223,18 +231,15 @@ hContent;
             }
             $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
             Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY, array('id' => $id,
-                                                                        'url' => canonicalize_url($_POST['url']),
-                                                                        'title' => $_POST['title'],
-                                                                        'description' => $txt_description));
-            $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div><br>";
+                                                                       'url' => canonicalize_url($_POST['url']),
+                                                                       'title' => $_POST['title'],
+                                                                       'description' => $txt_description));
+            $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div>";
         }
     }
     if (isset($_POST['add_submit'])) {  // add
             if(isset($_POST['URL'])) { // add videolink
-                    $url = $_POST['URL'];
-                    if (!is_url_accepted($url,"https?")) {
-                        $tool_content .= "<p class='error'>$langLinkNotPermitted</p><br />";
-                    } else {
+                    $url = $_POST['URL'];                    
                     if ($_POST['title'] == '') {
                         $title = $url;
                     } else {
@@ -247,11 +252,10 @@ hContent;
                     $vldx->store($id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
-                                                                            'url' => canonicalize_url($url),
-                                                                            'title' => $title,
-                                                                            'description' => $txt_description));
-                    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div><br>";
-                }
+                                                                                'url' => canonicalize_url($url),
+                                                                                'title' => $title,
+                                                                                'description' => $txt_description));
+                    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";                
             } else {  // add video
                     if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 
@@ -269,8 +273,8 @@ hContent;
                         $file_name = preg_replace("/\.php.*$/", ".phps", $file_name);
                         // check for dangerous file extensions
                         if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
-                            $tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
+                            $tool_content .= "<div class='alert alert-warning'>$langUnwantedFiletype:  $file_name<br>";
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
                             draw($tool_content, $menuTypeID, null, $head_content);
                             exit;
                         }
@@ -281,7 +285,7 @@ hContent;
                         $iscopy = copy("$tmpfile", "$updir/$safe_filename");
                         if (!$iscopy) {
                             $tool_content .= "<div class='alert alert-success'>$langFileNot<br>
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
+                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
                             draw($tool_content, $menuTypeID, null, $head_content);
                             exit;
                         }
@@ -300,7 +304,7 @@ hContent;
                                                                                 'url' => $_POST['url'],
                                                                                 'title' => $_POST['title'],
                                                                                 'description' => $txt_description));
-                    $tool_content .= "<div class='alert alert-success'>$langFAdd</div><br>";
+                    $tool_content .= "<div class='alert alert-success'>$langFAdd</div>";
                 }
             }
         }	// end of add
@@ -319,43 +323,59 @@ hContent;
                     $table = select_table($_GET['table']);
                     delete_video($_GET['id'], $table);
                 }
-                $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div><br>";
-        } elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
-            $tool_content .= "
-                <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
-                <fieldset>
-                <legend>$langAddV</legend>
-                <table class='table-default'>
-                <tr>
-                <th valign='top'>$langWorkFile:</th>
-                <td>
-                <input type='hidden' name='id' value=''>
-                <input type='file' name='userFile' size='38'>
-                <br />
-                <span class='smaller'>$langPathUploadFile</span>
-                </td>
-                <tr>
-                <th>$langTitle:</th>
-                <td><input type='text' name='title' size='55'></td>
-                </tr>
-                <tr>
-                <th>$langDescr:</th>
-                <td><textarea rows='3' name='description' cols='52'></textarea></td>
-                </tr>
-                <tr>
-                <th>$langcreator:</th>
-                <td><input type='text' name='creator' value='$nick' size='55'></td>
-                </tr>
-                <tr>
-                <th>$langpublisher:</th>
-                <td><input type='text' name='publisher' value='$nick' size='55'></td>
-                </tr>
-                <tr>
-                <th>$langDate:</th>
-                <td><input type='text' name='date' value='" . date('Y-m-d G:i:s') . "' size='55'></td>
-                </tr>
-                <tr><th>$langCategory:</th>
-                <td><select name='selectcategory'>
+                $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
+        } elseif (isset($_GET['form_input'])) { // display video form
+                  if ($_GET['form_input'] == 'file') {
+                      $nameTools = $langAddV;
+                  } else {
+                      $nameTools = $langAddVideoLink;
+                  }
+                $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+                
+                $tool_content .= "<div class='form-wrapper'>";
+                if ($_GET['form_input'] == 'file') {
+                    $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">";
+                } else {
+                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">";
+                }
+                $tool_content .= "<fieldset>";
+                if ($_GET['form_input'] == 'file') {
+                        $tool_content .= "<div class='form-group'>
+                            <label for='FileName' class='col-sm-2 control-label'>$langWorkFile:</label>                
+                            <input type='hidden' name='id' value=''>
+                            <div class='col-sm-10'><input type='file' name='userFile'></div>
+                        </div>";
+                } else {
+                        $tool_content .= "<div class='form-group'>
+                        <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
+                          <input type='hidden' name='id' value=''>
+                          <div class='col-sm-10'><input type='text' name='URL'></div>
+                      </div>";
+                }
+                $tool_content .= "<div class='form-group'>
+                    <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
+                    <div class='col-sm-10'><input type='text' name='title' size='55'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Desc' class='col-sm-2 control-label'>$langDescr:</label>
+                    <div class='col-sm-10'><textarea rows='3' name='description' cols='52'></textarea></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
+                    <div class='col-sm-10'><input type='text' name='creator' value='$nick'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Publisher' class='col-sm-2 control-label'>$langpublisher:</label>
+                    <div class='col-sm-10'><input type='text' name='publisher' value='$nick'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Date' class='col-sm-2 control-label'>$langDate:</label>
+                    <div class='col-sm-10'><input type='text' name='date' value='" . date('Y-m-d G:i') . "'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
+                <div class='col-sm-10'>
+                <select class='form-control' name='selectcategory'>
                 <option value='0'>--</option>";
                 $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
                 foreach ($resultcategories as $myrow) {
@@ -363,72 +383,35 @@ hContent;
                     $tool_content .= '>' . q($myrow->name) . "</option>";
                 }
                 $tool_content .=  "</select>
-                </tr>
-                <tr>
-                <th>&nbsp;</th>
-                <td class='right'><input type='submit' name='add_submit' value='" . q($langUpload) . "'></td>
-                </tr>
-                </table>
-                </fieldset>
-                <div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div></form> <br>";
-
-        } elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'url') { // display video links form
-            $nameTools = $langAddVideoLink;
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-            $tool_content .= "
-                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
-                <table width='100%' class='tbl'>
-                <tr>
-                  <th valign='top' width='190'>$langGiveURL:<input type='hidden' name='id' value=''></th>
-                  <td class='smaller'><input type='text' name='URL' size='55'>
-                      <br />
-                      $langURL
-                  </td>
-                <tr>
-                  <th>$langTitle:</th>
-                  <td><input type='text' name='title' size='55'></td>
-                </tr>
-                <tr>
-                  <th>$langDescr:</th>
-                  <td><textarea rows='3' name='description' cols='52'></textarea></td>
-                </tr>
-                <tr>
-                  <th>$langcreator:</th>
-                  <td><input type='text' name='creator' value='$nick' size='55'></td>
-                </tr>
-                <tr>
-                  <th>$langpublisher:</th>
-                  <td><input type='text' name='publisher' value='$nick' size='55'></td>
-                </tr>
-                <tr>
-                  <th>$langDate:</th>
-                  <td><input type='text' name='date' value='" . date('Y-m-d G:i') . "' size='55'></td>
-                </tr>
-                </tr>
-                <tr><th>$langCategory:</th>
-                <td><select name='selectcategory'>
-                <option value='0'>--</option>";
-                $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-                foreach ($resultcategories as $myrow) {
-                    $tool_content .=  "<option value='$myrow->id'";
-                    $tool_content .= '>' . q($myrow->name) . "</option>";
+                    </div>
+                </div>";
+                if ($_GET['form_input'] == 'file') {
+                    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>                
+                        <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langUpload) . "'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                    </div>";
+                } else {
+                    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                        <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langAdd) . "'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                    </div>";
                 }
-                $tool_content .=  "</select>
-                </tr>
-                <tr>
-                  <th>&nbsp;</th>
-                  <td class='right'><input type='submit' name='add_submit' value='$langAdd'></td>
-                </tr>
-                </table>
-                </form>
-                <br/>";
+                $tool_content .= "</fieldset>";
+                if ($_GET['form_input'] == 'file') {
+                    $tool_content .= "<div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+                }
+                $tool_content .= "</form>
+                </div>";
         }
 
     // ------------------- if no submit -----------------------
     if (isset($_GET['id']) and isset($_GET['table_edit']))  {
-            $id = intval($_GET['id']);
+            $id = $_GET['id'];
             $table_edit = select_table($_GET['table_edit']);
-
+            
+            $nameTools = $langModify;
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+            
             $myrow = Database::get()->querySingle("SELECT * FROM $table_edit WHERE course_id = ?d AND id = ?d ORDER BY title", $course_id, $id);
 
             $id = $myrow->id;
@@ -438,59 +421,59 @@ hContent;
             $creator = $myrow->creator;
             $publisher = $myrow->publisher;
             $category = $myrow->category;
-            $nameTools = $langModify;
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-            $tool_content .= "
-                <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
-                <table width='100%' class='tbl'>";
+            
+            $tool_content .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
+                <fieldset>";
             if ($table_edit == 'videolink') {
-                $tool_content .= "
-                        <tr>
-                        <th>$langURL:</th>
-                        <td><input type='text' name='url' value='" . q($url) . "' size='55'></td>
-                        </tr>";
+                $tool_content .= "<div class='form-group'>
+                    <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
+                        <input type='hidden' name='id' value=''>
+                        <div class='col-sm-10'><input type='text' name='url' value = '" . q($url) . "'></div>
+                    </div>";                      
             } elseif ($table_edit == 'video') {
-                $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>";
-            }
-            @$tool_content .= "
-                <tr>
-                  <th width='90'>$langTitle:</th>
-                  <td><input type='text' name='title' value='" . q($title) . "' size='55'></td>
-                </tr>
-                <tr>
-                  <th>$langDescr:</th>
-                  <td><textarea rows='3' name='description' cols='52'>" . q($description) . "</textarea></td>
-               </tr>
-               <tr>
-                 <th>$langcreator:</th>
-                 <td><input type='text' name='creator' value='" . q($creator) . "' size='55'></td>
-               </tr>
-               <tr>
-                 <th>$langpublisher:</th>
-                 <td><input type='text' name='publisher' value='" . q($publisher) . "' size='55'></td>
-               </tr>
-               <tr><th>$langCategory:</th>
-            <td><select name='selectcategory'>
-            <option value='0'>--</option>";
-            $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-            foreach ($resultcategories as $myrow) {
-                $tool_content .=  "<option value='$myrow->id'";
-                if (isset($category) and $category == $myrow->id) {
-                        $tool_content .= " selected='selected'";
+                    $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>";
+            }            
+            $tool_content .= "<div class='form-group'>                
+                  <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
+                  <div class='col-sm-10'><input type='text' name='title' value= '" . q($title) . "'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Description' class='col-sm-2 control-label'>$langDescr:</label>
+                    <div class='col-sm-10'><textarea rows='3' name='description' cols='52'>" . q($description) . "</textarea></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
+                    <div class='col-sm-10'><input type='text' name='creator' value='" . q($creator). "'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Publisher' class='col-sm-2 control-label'>$langpublisher:</label>
+                    <div class='col-sm-10'><input type='text' name='publisher' value='"  . q($publisher) . "'></div>
+                </div>
+                <div class='form-group'>
+                    <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
+                    <div class='col-sm-10'>
+                   <select class='form-control' name='selectcategory'>
+                <option value='0'>--</option>";
+                $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
+                foreach ($resultcategories as $myrow) {
+                    $tool_content .=  "<option value='$myrow->id'";
+                    if (isset($category) and $category == $myrow->id) {
+                            $tool_content .= " selected='selected'";
+                    }
+                    $tool_content .= '>' . q($myrow->name) . "</option>";
                 }
-                $tool_content .= '>' . q($myrow->name) . "</option>";
-            }
-            $tool_content .=  "</select>
-            </tr>
-            <tr>
-              <th>&nbsp;</th>
-              <td class='right'><input type='submit' name='edit_submit' value='$langModify'>
-                  <input type='hidden' name='id' value='$id'>
-                  <input type='hidden' name='table' value='$table_edit'>
-              </td>
-            </tr>
-            </table>
-            </form>";
+                $tool_content .= "</select></div>
+                </div>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langModify) . "'>
+                    <input type='hidden' name='id' value='$id'>
+                    <input type='hidden' name='table' value='$table_edit'>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                </div>
+                </fieldset>
+                </form>
+                </div>";
     }
 
 }   // end of admin check
