@@ -193,15 +193,15 @@ if ($action == "delPost") {
     if ($post->loadFromDB($pId)) {
         if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
             if($post->delete()) {
-                $message = "<p class='success'>$langBlogPostDelSucc</p>";
+                $message = "<div class='alert alert-success'>$langBlogPostDelSucc</div>";
             } else {
-                $message = "<p class='alert1'>$langBlogPostDelFail</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostDelFail</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedDel</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedDel</div>";
         }
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
     $action = "showBlog";
 }
@@ -233,7 +233,7 @@ if ($action == "createPost") {
         </fieldset>
         </form>";
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
     }
     
 }
@@ -268,10 +268,10 @@ if ($action == "editPost") {
     		</fieldset>
     		</form>";
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
         }
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
 
 }
@@ -283,27 +283,27 @@ if ($action == "savePost") {
         if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
             $post = new BlogPost();
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
-                $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+                $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
             } else {
-                $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
             if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
-                    $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+                    $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
                 } else {
-                    $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                    $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
                 }
             } else {
-                $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
         }
     } 
     $action = "showBlog";
@@ -361,7 +361,7 @@ if ($action == "showPost") {
         }
         
     } else {
-        $tool_content .= "<p class='alert1'>$langBlogPostNotFound</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
 
 }
@@ -384,7 +384,7 @@ if ($action == "showBlog") {
     
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
-        $tool_content .= "<p class='alert1'>$langBlogEmpty</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
     } else {//show blog posts
         //if page num was changed at the url and exceeds pages number show the first page
         if ($page > ceil($num_posts/$posts_per_page)-1) {

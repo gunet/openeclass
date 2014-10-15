@@ -2226,7 +2226,7 @@ The system has automatically redirected you to the start page to login. This cou
 by a mistyped URL or due to session timeout.</p>';
 $langLoginRequired = '<p class="caution"><b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).</p>
 ';
-$langSessionIsLost = "<p class='alert1'><b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.</p>";
+$langSessionIsLost = "<b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.";
 $langCheckProf = "<p class='caution'><b>Your action requires $langsTeacher privileges. </b><br/> The system has
 automatically redirect you to the start page to login. If you are the lesson's $langsTeacher you will be
 allowed access to the course administration tools.</p>";

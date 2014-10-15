@@ -344,9 +344,9 @@ if ($is_editor) {
             $showAttendanceActivities = 1; //show list activities
             
             if($delAct){
-                $message = "<p class='success'>$langAttendanceDel</p>";
+                $message = "<div class='alert alert-success'>$langAttendanceDel</div>";
             }else{
-                $message = "<p class='alert1'>$langAttendanceDelFailure</p>";
+                $message = "<div class='alert alert-warning'>$langAttendanceDelFailure</div>";
             }
             $tool_content .= $message . "<br/>";
         }
@@ -364,7 +364,7 @@ if ($is_editor) {
             $tool_content .= "<th width='60' class='center'>$langAttendanceMEANS</th>";
             $tool_content .= "</tr>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>\n";
         }
         $k = 0;
         if ($result){
@@ -472,7 +472,7 @@ if ($is_editor) {
                 $tool_content .= "<th width='60' class='center'>" . $langAttendanceBooking . "</th>";
                 $tool_content .= "</tr>";
             } else {
-                $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
+                $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>\n";
             }
             
             //ui counter 
@@ -833,7 +833,7 @@ if ($is_editor) {
             $tool_content .= "</tr>";
         }
         else{
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>\n";
         }
         $k = 0;
         if ($result){
@@ -1051,7 +1051,7 @@ if ($is_editor) {
                             <table width='100%' class='sortable' id='t2'>";
         $tool_content .= "<tr><th colspan='2'>$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceΑbsencesYesNo</th></tr>";
     } else {
-        $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage5</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage5</div>";
     }
     $k = 0;
 

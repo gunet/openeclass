@@ -98,7 +98,7 @@ if (empty($ldap_login_attr)) {
 // You have to logout from CAS and preferably close your browser
 // to change CAS settings
 if (!empty($_SESSION['cas_warn']) and $auth == 7) {
-    $tool_content .= "<p class='alert1'>$langCASnochange</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
 }
 
 if ($submit or ! empty($_SESSION['cas_do'])) {
@@ -118,7 +118,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         }
 
         if (!empty($cas_ret['error']))
-            $tool_content .= "<p class='alert1'>$cas_ret[error]</p>";
+            $tool_content .= "<div class='alert alert-warning'>$cas_ret[error]</div>";
     }
 
     // if form is submitted
@@ -232,13 +232,13 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         WHERE
                         	auth_id = ?d"
                     , function ($error) use(&$tool_content, $langErrActiv) {
-                $tool_content .= "<p class='alert1'>$langErrActiv</p>";
+                $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
             }, $auth_settings, $auth_instructions, $auth_ids[$auth], $auth);
             if ($result) {
                 if ($result->affectedRows == 1) {
-                    $tool_content .= "<p class='success'>$langHasActivate</p>";
+                    $tool_content .= "<div class='alert alert-success'>$langHasActivate</div>";
                 } else {
-                    $tool_content .= "<p class='alert1'>$langAlreadyActiv</p>";
+                    $tool_content .= "<div class='alert alert-warning'>$langAlreadyActiv</div>";
                 }
             } else {
                 
@@ -285,7 +285,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     }
     if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
         $auth = 7;
-        $tool_content .= "<p class='alert1'>$langCASnochange</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
     }
     if ($auth != 6 && $auth != 7) {
         $tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>

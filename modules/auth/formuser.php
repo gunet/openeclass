@@ -104,7 +104,7 @@ if (get_config("display_captcha")) {
 
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
-        $tool_content .= "<p class='alert1'>$message</p>";
+        $tool_content .= "<div class='alert alert-warning'>$message</div>";
     }
 }
 
@@ -142,7 +142,7 @@ if ($all_set) {
                 "$contactphone: $userphone\n\n\n$logo\n\n";
 
         if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
-            $tool_content .= "<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
+            $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
         }
 
         // User Message
@@ -158,7 +158,7 @@ if ($all_set) {
         $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&rid=' . $request_id);
         $emailhelpdesk = get_config('email_helpdesk');
         if (!send_mail($siteName, $emailAdministrator, '', $usermail, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
-            $mail_ver_error = sprintf("<p class='alert1'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
+            $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);
             exit;

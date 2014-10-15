@@ -643,22 +643,22 @@ function process_login() {
                 case 1: $warning .= "";
                     session_regenerate_id();
                     break;
-                case 2: $warning .= "<p class='alert1'>$langInvalidId</p>";
+                case 2: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
                     break;
-                case 3: $warning .= "<p class='alert1'>$langAccountInactive1 " .
+                case 3: $warning .= "<div class='alert alert-warning'>$langAccountInactive1 " .
                             "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
-                            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></p>";
+                            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
                     break;
-                case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
+                case 4: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
                     increaseLoginFailure();
                     break;
-                case 5: $warning .= "<p class='alert1'>$langNoCookies</p>";
+                case 5: $warning .= "<div class='alert alert-warning'>$langNoCookies</div>";
                     break;
-                case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+                case 6: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></div>";
                     break;
-                case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+                case 7: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></div>";
                     break;
-                case 8: $warning .= "<p class='alert1'>$langTooManyFails</p>";
+                case 8: $warning .= "<div class='alert alert-warning'>$langTooManyFails</div>";
                     break;
                 default:
                     break;

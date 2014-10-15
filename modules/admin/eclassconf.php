@@ -286,7 +286,7 @@ if (isset($_POST['submit'])) {
     
     // schedule indexing if necessary
     if ($scheduleIndexing) {
-        $tool_content .= "<p class='alert1'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></p>";
+        $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
         $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */

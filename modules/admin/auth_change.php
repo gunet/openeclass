@@ -81,7 +81,7 @@ if ($submit && $auth && $auth_change) {
 }
 
 if (count($auth_methods_active) == 0) {
-    $tool_content .= "<p class='alert1'>$langAuthChangeno</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langAuthChangeno</div>";
 } else {
     $tool_content .= "
 		<tr>

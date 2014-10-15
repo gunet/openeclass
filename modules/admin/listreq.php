@@ -369,7 +369,7 @@ else {
         $tool_content .= "</tbody>";
         $tool_content .= "</table>";
     } else {
-        $tool_content .= "<p class='alert1'>$langUserNoRequests</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langUserNoRequests</div>";
     }
 }
 
