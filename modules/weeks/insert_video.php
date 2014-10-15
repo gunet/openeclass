@@ -72,6 +72,6 @@ function list_videos() {
     if ($count > 0) {
         $tool_content .= "<tr><th colspan='4'><div align='right'><input type='submit' name='submit_video' value='$langAddModulesButton' />&nbsp;&nbsp;</div></th></tr></table></form>";
     } else {
-        $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";
     }
 }

@@ -187,7 +187,7 @@ class Log {
             $tool_content .= "</tbody>";
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<div class='alert1'>$langNoUsersLog</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
         return;
     }

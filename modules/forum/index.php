@@ -257,7 +257,7 @@ if ($total_categories > 0) {
         $tool_content .= "</table>";
     }
 } else {
-    $tool_content .= "<p class='alert1'>$langNoForums</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
 }
 add_units_navigation(true);
 if ($is_editor) {

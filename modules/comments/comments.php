@@ -52,11 +52,11 @@ if (setting_get($setting_id, $course_id) == 1) {
                 $response[3] .='</div>';
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<p class='alert1'>".$langCommentsSaveFail."</p>";
+                $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<p class='alert1'>".$langCommentsNewNoPerm."</p>";
+            $response[1] = "<div class='alert alert-warning'>".$langCommentsNewNoPerm."</div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'delete') {
@@ -65,18 +65,18 @@ if (setting_get($setting_id, $course_id) == 1) {
             if ($comment->permEdit($is_editor, $uid)) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
-                    $response[1] = "<p class='success'>".$langCommentsDelSuccess."</p>"; 
+                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>"; 
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<p class='alert1'>".$langCommentsDelFail."</p>";
+                    $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<p class='alert1'>".$langCommentsDelNoPerm."</p>";
+                $response[1] = "<div class='alert alert-warning'>".$langCommentsDelNoPerm."</div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<p class='alert1'>".$langCommentsLoadFail."</p>";
+            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editLoad') {
@@ -89,11 +89,11 @@ if (setting_get($setting_id, $course_id) == 1) {
                 $response[2] .= '<input type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<p class='alert1'>".$langCommentsEditNoPerm."</p>";
+                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<p class='alert1'>".$langCommentsLoadFail."</p>";
+            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editSave') {
@@ -106,15 +106,15 @@ if (setting_get($setting_id, $course_id) == 1) {
                     $response[2] = '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<p class='alert1'>".$langCommentsSaveFail."</p>";
+                    $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<p class='alert1'>".$langCommentsEditNoPerm."</p>";
+                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<p class='alert1'>".$langCommentsLoadFail."</p>";
+            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
         }
         echo json_encode($response);
     }

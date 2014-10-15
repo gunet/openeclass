@@ -51,11 +51,11 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($not_found)) {
-        $tool_content .= "<p class='alert1'>$langUsersNotExist<br>";
+        $tool_content .= "<div class='alert alert-warning'>$langUsersNotExist<br>";
         foreach ($not_found as $uname) {
             $tool_content .= q($uname) . '<br>';
         }
-        $tool_content .= '</p>';
+        $tool_content .= '</div>';
     }
 
     if (count($ok)) {

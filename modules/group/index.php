@@ -546,7 +546,7 @@ if ($is_editor) {
     // Begin student view
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $course_id);
     if (count($q) == 0) {
-        $tool_content .= "<p class='alert1'>$langNoGroup</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
         $tool_content .= "<table width='100%' align='left' class='tbl_alt'>
                 <tr>

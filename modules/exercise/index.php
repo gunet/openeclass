@@ -170,7 +170,7 @@ if ($is_editor) {
 }
 
 if (!$nbrExercises) {
-    $tool_content .= "<p class='alert1'>$langNoEx</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoEx</div>";
 } else {
     $maxpage = 1 + intval($num_of_ex / $limitExPage);
     if ($maxpage > 0) {

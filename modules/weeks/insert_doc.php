@@ -116,7 +116,7 @@ function list_docs() {
             'object' => MediaResourceFactory::initFromDocument($row));
     }
     if (count($fileinfo) == 0) {
-        $tool_content .= "\n  <p class='alert1'>$langNoDocuments</p>\n";
+        $tool_content .= "\n  <div class='alert alert-warning'>$langNoDocuments</div>\n";
     } else {
         if (empty($path)) {
             $dirname = '';

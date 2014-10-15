@@ -453,7 +453,7 @@ if ($is_editor) {
             //check if there are booking records for the user, otherwise alert message for first input
             $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
             if(!$checkForRecords){
-                $tool_content .="<div class='alert1'>$langAttendanceNewBookRecord</div>";
+                $tool_content .="<div class='alert alert-warning'>$langAttendanceNewBookRecord</div>";
             }
             
             //get all the activities
@@ -748,7 +748,7 @@ if ($is_editor) {
                     Database::get()->querySingle("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $newUsers->userID);
                 }
             }else{
-                $tool_content .= "<div class='alert1'>$langNoStudents</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langNoStudents</div>";
             }
             
         }
@@ -809,7 +809,7 @@ if ($is_editor) {
 
             $tool_content .= "</form>";
         }else{
-            $tool_content .= "<div class='alert1'>$langNoStudentsInAttendance</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoStudentsInAttendance</div>";
         }
         
         
@@ -1038,7 +1038,7 @@ if ($is_editor) {
     //check if there are booking records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert1'>$langAttendanceStudentFailure</div>";
+        $tool_content .="<div class='alert alert-warning'>$langAttendanceStudentFailure</div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);

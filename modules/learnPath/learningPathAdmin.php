@@ -489,7 +489,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`
 $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
-    $tool_content .= "<p class='alert1'>$langNoModule</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();
 }

@@ -153,7 +153,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     
     if ($course_id == 0 && $type == 'pm') {
         if (!$personal_msgs_allowed) {
-            $tool_content .= "<p class='alert1'>$langGeneralError</p>";
+            $tool_content .= "<div class='alert alert-warning'>$langGeneralError</div>";
             draw($tool_content, 1, null, $head_content);
             exit;
         }

@@ -38,7 +38,7 @@ if ($language == 'el') {
 }
 // Main body
 $tool_content .= "
-<div class='alert1'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>
+<div class='alert alert-warning'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>
 <p> &nbsp; </p>
 <p class='red'>$langExpl2Upgrade</p>";
 set_time_limit(0);

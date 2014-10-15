@@ -163,7 +163,7 @@ if ($table_cont) {
 }
 
 if (!($table_cont)) {
-    $tool_content .= "<p class='alert1'>$langNoLogins</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoLogins</div>";
 }
 
 $result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter

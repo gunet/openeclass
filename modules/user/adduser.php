@@ -52,7 +52,7 @@ if (isset($_GET['add'])) {
             send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
     } else {
-        $tool_content .= "<p class='alert1'>$langAddError</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
     }
     $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
 } else {

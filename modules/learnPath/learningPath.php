@@ -127,7 +127,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($fetchedList) == 0) {
-    $tool_content .= "<p class='alert1'>$langNoModule</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
     add_units_navigation();
     draw($tool_content, 2);
     exit();

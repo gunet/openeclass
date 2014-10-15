@@ -31,9 +31,9 @@ if (!$is_editor or !$r) {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
     chdir($basedir);
     if ($zip->extract()) {
-        $tool_content .= "<p class='success'>$langEBookReplaceDoneZip</p>\n";
+        $tool_content .= "<div class='alert alert-success'>$langEBookReplaceDoneZip</div>\n";
     } else {
-        $tool_content .= "<p class='alert1'>$langErrorReadingZipFile</p>\n";
+        $tool_content .= "<div class='alert alert-warning'>$langErrorReadingZipFile</div>\n";
     }
     $tool_content .= "<p><a href='edit.php?course=$course_code&amp;id=$id'>$langBack</a></p>\n";
 } else {

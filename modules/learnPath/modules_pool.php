@@ -266,7 +266,7 @@ foreach ($result as $list) {
 $tool_content .= "</table>";
 
 if ($atleastOne == false) {
-    $tool_content .= "<p class='alert1'>$langNoModule</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
 }
 
 draw($tool_content, 2, null, $head_content, $body_action);

@@ -76,19 +76,17 @@ $forum_id = $myrow->id;
 $nameTools = q($forum_name);
 
 if (isset($_GET['empty'])) { // if we come from newtopic.php
-    $tool_content .= "<p class='alert1'>$langEmptyNewTopic</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";
 }
 
 if ($can_post) {
-    $tool_content .= "
-	<div id='operations_container'>" .
+    $tool_content .= 
             action_bar(array(
                 array('title' => $langNewTopic,
                     'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'))) .
-            "</div>";
+                    'button-class' => 'btn-success')));
 }
 
 /*
@@ -310,6 +308,6 @@ if (count($result) > 0) { // topics found
     } // end of while
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<div class='alert1'>$langNoTopics</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoTopics</div>";
 }
 draw($tool_content, 2, null, $head_content);

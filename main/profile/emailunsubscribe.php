@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
             $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $tool_content .= "<div class='alert1'>$langMailNotVerified $link</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         }
     }
     if (!get_user_email_notification_from_courses($uid)) {

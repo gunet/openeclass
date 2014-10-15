@@ -109,7 +109,7 @@ if (count($result) > 0) {
     }
     $tool_content .= "<p>" . $langVisits . "</p>" . $chart->plot();
 } else {
-    $tool_content .= "<div class='alert1'>$langNoStatistics</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 }
 $tool_content .= '<br />';
 

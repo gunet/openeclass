@@ -364,7 +364,7 @@ if ($is_editor) {
         $visible = isset($_POST['visible']) ? 1 : 0;
 
         if (($_POST['id'] && $weight > weightleft($gradebook_id, $_POST['id']) && $weight != 100) || (!$_POST['id'] && $weight > weightleft($gradebook_id, $_POST['id']))) {
-            $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
+            $message = "<div class='alert alert-warning'>$langGradebookWeightAlert</div>";
             $tool_content .= $message . "<br/>";
         } else {
             if (isset($_POST['id'])) {
@@ -394,10 +394,10 @@ if ($is_editor) {
             $showGradebookActivities = 1; //show list activities
             if($delAct){
                 $langAnnDel = $langGradebookDel;
-                $message = "<p class='success'>$langAnnDel</p>";
+                $message = "<div class='alert alert-success'>$langAnnDel</div>";
             }else{
                 $langAnnDel = $langGradebookDelFailure;
-                $message = "<p class='alert1'>$langAnnDel</p>";
+                $message = "<div class='alert alert-warning'>$langAnnDel</div>";
             }
             $tool_content .= $message . "<br/>";
         }
@@ -419,7 +419,7 @@ if ($is_editor) {
             $tool_content .= "<th width='10' class='center'>Ορατό</th>";
             $tool_content .= "</tr>";
         } else {
-            $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>\n";
         }
         //ui counter
         $k = 0;
@@ -540,7 +540,7 @@ if ($is_editor) {
                 //check if there are booking records for the user, otherwise alert message for first input
                 $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
                 if(!$checkForRecords){
-                    $tool_content .="<div class='alert1'>$langGradebookNewUser</div>";
+                    $tool_content .="<div class='alert alert-warning'>$langGradebookNewUser</div>";
                 }
 
                 //get all the activities
@@ -556,7 +556,7 @@ if ($is_editor) {
                     $tool_content .= "<th width='10'  class='center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
-                    $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+                    $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>\n";
                 }
                 //ui counter
                 $k = 0;
@@ -641,7 +641,7 @@ if ($is_editor) {
                 $tool_content .= "<tr><td colspan=7 class='smaller'>" . $langGradebookUpToDegree . $gradebook_range . "</td></tr></table></form></fieldset>";
 
             }else{
-            $tool_content .="<div class='alert1'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
+            $tool_content .="<div class='alert alert-warning'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
             }
         }
 
@@ -679,7 +679,7 @@ if ($is_editor) {
                             if(weightleft($gradebook_id, 0) == 0) {
                                 $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID);
                             } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
-                                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . "<div class='alert1'>" . $langGradebookGradeAlert . "</div>";
+                                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . "<div class='alert alert-warning'>" . $langGradebookGradeAlert . "</div>";
                             }
                             if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
                                 $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
@@ -795,7 +795,7 @@ if ($is_editor) {
             if(weightleft($gradebook_id, 0) == 0){
                 $tool_content .= userGradeTotal($gradebook_id, $myrow->userID);
             }elseif(userGradeTotal($gradebook_id, $myrow->userID) != "-"){ //alert message only when grades have been submitted
-                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID)."<div class='alert1'>".$langGradebookGradeAlert."</div>";
+                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID)."<div class='alert alert-warning'>".$langGradebookGradeAlert."</div>";
             }
             if(userGradeTotal($gradebook_id, $myrow->userID) > $gradebook_range){
                 $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
@@ -865,7 +865,7 @@ if ($is_editor) {
                     Database::get()->querySingle("INSERT INTO gradebook_users (gradebook_id, uid) VALUES (?d, ?d)", $gradebook_id, $newUsers->userID);
                 }
             } else {
-                $tool_content .= "<div class='alert1'>$langNoStudents</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langNoStudents</div>";
             }
         }
 
@@ -925,7 +925,7 @@ if ($is_editor) {
 
             $tool_content .= "</form>";
         } else {
-            $tool_content .= "<div class='alert1'>$langNoStudentsInAttendance</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoStudentsInAttendance</div>";
         }
 
 
@@ -938,7 +938,7 @@ if ($is_editor) {
 
         //check if there is spare weight
         if(weightleft($gradebook_id, 0)){
-            $weightLeftMessage = "<div class='alert1'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
+            $weightLeftMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
         }
         else{
             $weightLeftMessage = "";
@@ -959,7 +959,7 @@ if ($is_editor) {
             $tool_content .= "</tr>";
         }
         else{
-            $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>\n";
         }
         $k = 0;
         if ($result){
@@ -1293,7 +1293,7 @@ if ($is_editor) {
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.visible = ?d AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $visible, $userID, $gradebook_id)->count;
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert1'>$langGradebookTotalGradeNoInput</div>";
+        $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_activities.visible = ?d AND gradebook_id = ?d  ORDER BY `DATE` DESC", $visible, $gradebook_id);
@@ -1304,14 +1304,14 @@ if ($is_editor) {
         $tool_content .= "<div class='info'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
 
         if(weightleft($gradebook_id, 0) != 0){
-            $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";
         }
 
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
         $tool_content .= "<tr><th  colspan='2'>Τίτλος</th><th >$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
     } else {
-        $tool_content .= "<p class='alert1'>$langGradebookNoActMessage5</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage5</div>";
     }
     $k = 0;
 

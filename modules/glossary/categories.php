@@ -198,7 +198,7 @@ if ($q and count($q)) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
 }
 
 draw($tool_content, 2, null, $head_content);

@@ -361,14 +361,14 @@ if (get_config('email_verification_required')) {
     switch ($user_email_status) {
         case EMAIL_VERIFICATION_REQUIRED:
             $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $message = "<div class='alert1'>$langMailNotVerified $link</div>";
+            $message = "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
             break;
         case EMAIL_VERIFIED:
             $message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
             break;
         case EMAIL_UNVERIFIED:
             $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $message = "<div class='alert1'>$langMailNotVerified $link</div>";
+            $message = "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         default:
             break;
     }

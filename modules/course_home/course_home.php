@@ -513,7 +513,7 @@ if (isset($level) && !empty($level)) {
 
 $emailnotification = '';
 if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $course_id)) {
-    $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
+    $emailnotification = "<div class='alert alert-warning'>$langNoUserEmailNotification
         (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course

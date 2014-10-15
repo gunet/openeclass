@@ -72,7 +72,7 @@ $fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!isset($_POST['submit2']) and ! $command_line) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
-        $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
+        $tool_content .= "<div class='alert alert-warning'>$langUpgAdminError</div>
             <center><a href='index.php'>$langBack</a></center>";
         draw($tool_content, 0);
         exit;
@@ -80,7 +80,7 @@ if (!isset($_POST['submit2']) and ! $command_line) {
 }
 
 if (!DBHelper::tableExists('config')) {
-    $tool_content .= "<p class='alert1'>$langUpgTooOld</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langUpgTooOld</div>";
     draw($tool_content, 0);
     exit;
 }
@@ -304,7 +304,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_teacher_owndep', '0')");
 
                 if (version_compare($oldversion, '2.1.3', '<') or (!isset($oldversion))) {                    
-                    echo "<hr><p class='alert1'>$langUpgTooOld</p>
+                    echo "<hr><div class='alert alert-warning'>$langUpgTooOld</div>
                         <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
                     echo '</div></body></html>';
                     exit;

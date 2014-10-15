@@ -131,7 +131,7 @@ function email_profs($course_id, $content, $from_name, $from_address) {
             $to_name = $prof->givenname . ' ' . $prof->surname;
             $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
             if (!send_mail($from_name, $from_address, $to_name, $prof->email, $subject, $message, $GLOBALS['charset'])) {
-                $ret .= "<p class='alert1'>$GLOBALS[langErrorSendingMessage]</p>\n";               
+                $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>\n";               
             }
         }
     }

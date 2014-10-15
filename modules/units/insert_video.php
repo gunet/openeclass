@@ -95,6 +95,6 @@ function list_videos() {
         $tool_content .= "<tr><th colspan='4'><div align='right'><input type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></th></tr></table></form>";
     }
     if (!$video_found) {
-        $tool_content .= "<p class='alert1'>$langNoVideo</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";
     }                     
 }

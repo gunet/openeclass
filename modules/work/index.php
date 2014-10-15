@@ -1154,7 +1154,7 @@ function show_student_assignment($id) {
         $tool_content .= "<p>$langUserOnly</p>";
         $submit_ok = FALSE;
     } elseif ($GLOBALS['status'] == 10) {
-        $tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
+        $tool_content .= "\n  <div class='alert alert-warning'>$m[noguest]</div>";
         $submit_ok = FALSE;;
     } else {
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
@@ -1654,7 +1654,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
-                      <p class='alert1'>$m[NoneWorkGroupNoSubmission]</p>";
+                      <div class='alert alert-warning'>$m[NoneWorkGroupNoSubmission]</div>";
         }
         
     } else {
@@ -1695,7 +1695,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
-                      <p class='alert1'>$m[NoneWorkUserNoSubmission]</p>";
+                      <div class='alert alert-warning'>$m[NoneWorkUserNoSubmission]</div>";
         }              
     } 
 }
@@ -1775,7 +1775,7 @@ function show_student_assignments() {
         $tool_content .= '
                                   </table></div>';
     } else {
-        $tool_content .= "<p class='alert1'>$langNoAssign</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
 }
 

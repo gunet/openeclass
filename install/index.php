@@ -431,7 +431,7 @@ elseif (isset($_REQUEST['install6'])) {
         $no = mysql_errno();
         $msg = mysql_error();
         $tool_content .= "[" . $no . "] - " . $msg . "
-		<div class='alert1'>$langErrorMysql</div>
+		<div class='alert alert-warning'>$langErrorMysql</div>
 		<ul class='installBullet'>
 		<li>$langdbhost: $dbHostForm</li>
 		<li>$langDBLogin: $dbUsernameForm</li>

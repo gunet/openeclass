@@ -338,10 +338,10 @@ if (isset($_POST['submit'])) {
                 'prof_names' => $_POST['titulary'],
                 'lang' => $session->language));
 
-            $tool_content .= "<p class='success'>$langModifDone</p>";
+            $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
 
             if ($noWeeklyMessage) {
-                $tool_content .= "<p class='alert1'>$langCourseWeeklyFormatNotice</p>";
+                $tool_content .= "<div class='alert alert-warning'>$langCourseWeeklyFormatNotice</div>";
             }
 
             $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>

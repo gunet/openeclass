@@ -299,7 +299,7 @@ if ($is_editor) {
     $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;
     if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
-        $tool_content .= sprintf("<p class='alert1'>$langGlossaryOverLimit</p>", "<b>$max_glossary_terms</b>");
+        $tool_content .= sprintf("<div class='alert alert-warning'>$langGlossaryOverLimit</div>", "<b>$max_glossary_terms</b>");
     }
 } else {
     // Show categories link for students if needed
@@ -415,7 +415,7 @@ if (count($sql) > 0) {
     }
     $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
 }
 
 draw($tool_content, 2, null, $head_content);

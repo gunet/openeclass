@@ -96,7 +96,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 $change_ok = true;
             }
         } elseif (count($error_messages)) {
-            $tool_content .= "<div class='alert1'><ul><li>" .
+            $tool_content .= "<div class='alert alert-warning'><ul><li>" .
                     implode("</li>\n<li>", $error_messages) .
                     "</li></ul></div>";
         }

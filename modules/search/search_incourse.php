@@ -435,7 +435,7 @@ if (empty($search_terms)) {
     }
     // else ... no results found
     if ($found == false) {
-        $tool_content .= "<p class='alert1'>$langNoResult</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     }
 } // end of search
 draw($tool_content, 2);

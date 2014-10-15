@@ -158,7 +158,7 @@ function printPolls() {
     if ($num_rows > 0)
         ++$poll_check;
     if (!$poll_check) {
-        $tool_content .= "\n    <p class='alert1'>" . $langPollNone . "</p><br>";
+        $tool_content .= "\n    <div class='alert alert-warning'>" . $langPollNone . "</div><br>";
     } else {
         // Print active polls
         $tool_content .= "

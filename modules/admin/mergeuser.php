@@ -69,7 +69,7 @@ if (isset($_REQUEST['u'])) {
                                               <td>" . q($status_names[$target['status']]) . "</td></tr>";
             if ($info['status'] == 1 and $target['status'] != 1) {
                 $target = false;
-                $target_field .= "<tr><td colspan='2' class='alert1'>$langUserMergeForbidden</td></tr>";
+                $target_field .= "<tr><td colspan='2' class='alert alert-warning'>$langUserMergeForbidden</td></tr>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
                     do_user_merge($info, $target);

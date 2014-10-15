@@ -114,7 +114,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q) {
-    $tool_content .= "<p class='alert1'>$langNoEBook</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'>

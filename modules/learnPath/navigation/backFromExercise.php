@@ -43,7 +43,7 @@ $TOCurl = "../viewer_toc.php?course=$course_code";
             <br /><br /><br />
             <?php
             if ($_GET['op'] == 'cancel') {
-                echo "<div class='alert1'>$langExerciseCancelled</div>";
+                echo "<div class='alert alert-warning'>$langExerciseCancelled</div>";
             } elseif ($_GET['op'] == 'finish') { // exercise done
                 echo "<div class='success'>$langExerciseDone</div>";
             }

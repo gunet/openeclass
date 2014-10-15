@@ -81,7 +81,7 @@ if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_p
 }
 
 if ($topic_locked == 1) {
-    $tool_content .= "<p class='alert1'>$langErrorTopicLocked</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }
@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
     $parent_post = $_POST['parent_post'];
     if (trim($message) == '') {
         $tool_content .= "
-                <p class='alert1'>$langEmptyMsg</p>
+                <div class='alert alert-warning'>$langEmptyMsg</div>
                 <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
         draw($tool_content, 2, null, $head_content);
         exit();

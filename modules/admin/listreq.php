@@ -276,7 +276,7 @@ $langEmail: $emailhelpdesk";
                 $d = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
                 $warning = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-			<div class='alert1'>$warning</div>
+			<div class='alert alert-warning'>$warning</div>
 			<table width='100%' class='tbl_border'>
 			<tr><th class='left'>$langName</th>
 			<td>" . q($d->givenname) . "</td></tr>

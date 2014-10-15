@@ -47,7 +47,7 @@ function list_exercises() {
             'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<p class='alert1'>$langNoExercises</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<table width='99%' class='tbl_alt'>" .

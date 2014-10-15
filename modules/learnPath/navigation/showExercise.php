@@ -170,7 +170,7 @@ if (!$is_editor) {
         $error = TRUE;
     }
     if ($error == TRUE) {
-        echo "<br/><td class='alert1'>$message</td>";
+        echo "<br/><td class='alert alert-warning'>$message</td>";
         exit();
     }
 }
