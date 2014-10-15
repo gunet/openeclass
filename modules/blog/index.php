@@ -83,7 +83,7 @@ if ($is_editor) {
 		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
-            $message = "<p class='success'>$langRegDone</p>";
+            $message = "<div class='alert alert-success'>$langRegDone</div>";
         }
         
         if (isset($message) && $message) {

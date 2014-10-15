@@ -84,7 +84,7 @@ if (isset($_POST['delete'])) {
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
         'link' => $r->url,
         'name_link' => $r->title));
-    $tool_content .= "<p class='success'>$langLinkDeleted</p>";
+    $tool_content .= "<div class='alert alert-success'>$langLinkDeleted</div>";
 }
 
 /**
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
     $sql = Database::get()->query("INSERT INTO link (course_id, url, title, category, description)
                             VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
     $id = $sql->lastInsertID;
-    $tool_content .= "<p class='success'>$langLinkAdded</p>";
+    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
         'link' => $link,
         'name_link' => $name_link));

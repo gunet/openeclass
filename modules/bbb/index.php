@@ -190,7 +190,7 @@ elseif(isset($_GET['choice']))
     bbb_session_details();
     if($_GET['choice']=='import_video')
     {
-        $tool_content .= "<div class='success'>$langBBBImportRecordingsΟΚ</div>";
+        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsΟΚ</div>";
     }
 } elseif(isset($_POST['new_bbb_session'])) {  
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
@@ -388,7 +388,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
         . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
     
-    $tool_content .= "<div class='success'>$langBBBAddSuccessful</div>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";
     $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 
     // if we have to notify users for new session
@@ -472,7 +472,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
     Database::get()->querySingle("UPDATE bbb_session SET title=?s,description=?s,"
             . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s,participants=?s,record=?s,sessionUsers=?d WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $r_group, $record, $sessionUsers, $session_id);
     
-    $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";
 
     // if we have to notify users for new session
     if($notifyUsers=="1")
@@ -849,7 +849,7 @@ function disable_bbb_session($id)
     global $langBBBUpdateSuccessful, $tool_content;
     
     Database::get()->querySingle("UPDATE bbb_session set active='0' WHERE id=?d",$id);
-    $tool_content .= "<div class='success'>$langBBBUpdateSuccessful</div>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBUpdateSuccessful</div>";
     
     return;    
 }
@@ -866,7 +866,7 @@ function enable_bbb_session($id)
     global $langBBBUpdateSuccessful, $tool_content;
     
     Database::get()->querySingle("UPDATE bbb_session SET active='1' WHERE id=?d",$id);
-    $tool_content .= "<div class='success'>$langBBBUpdateSuccessful</div>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBUpdateSuccessful</div>";
     
     return;
 }
@@ -881,7 +881,7 @@ function delete_bbb_session($id)
     global $langBBBDeleteSuccessful, $tool_content;
     
     Database::get()->querySingle("DELETE FROM bbb_session WHERE id=?d",$id);
-    $tool_content .= "<div class='success'>$langBBBDeleteSuccessful</div>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBDeleteSuccessful</div>";
     
     return;
 }

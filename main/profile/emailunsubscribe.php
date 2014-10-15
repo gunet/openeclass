@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         }
         $course_title = course_id_to_title($cid);
-        $tool_content .= "<div class='success'>" . q(sprintf($course_title, $langEmailUnsubSuccess)) . "</div>";
+        $tool_content .= "<div class='alert alert-success'>" . q(sprintf($course_title, $langEmailUnsubSuccess)) . "</div>";
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             if (@array_key_exists($course_code, $_POST['c_unsub'])) {
@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
                                 WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             }
         }
-        $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br /></div>" .
+        $tool_content .= "<div class='alert alert-success'>$langWikiEditionSucceed. <br /></div>" .
                 action_bar(array(
                     array('title' => $langBack,
                         'url' => "../profile/profile.php",

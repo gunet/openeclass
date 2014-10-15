@@ -282,7 +282,7 @@ if (isset($_POST['submit'])) {
     }
     
     // Display result message
-    $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
     
     // schedule indexing if necessary
     if ($scheduleIndexing) {

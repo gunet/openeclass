@@ -146,7 +146,7 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='success'>" .
+        $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
@@ -165,7 +165,7 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='success'>" .
+        $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "<br />$langMailVerificationSuccess
 			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";

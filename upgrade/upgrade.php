@@ -2292,10 +2292,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // update eclass version
         Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
-        echo "<hr><p class='success'>$langUpgradeSuccess
-        <br><b>$langUpgReady</b></p>
-        <p class='info'>$langUpgSucNotice</p>
-        <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
+        echo "<hr><div class='alert alert-success'>$langUpgradeSuccess
+        <br><b>$langUpgReady</b></div>
+        <div class='alert alert-info'>$langUpgSucNotice</div>
+        <p class='pull-right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
 
 
         echo '</div></body></html>';

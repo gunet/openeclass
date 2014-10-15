@@ -869,14 +869,14 @@ switch ($action) {
                  if ($wikiStore->pageExists($wikiId, $wiki_title)) {
                      $wikiPage->loadPage($wiki_title);
                      if ($wikiPage->delete()) {
-                         $message = "<p class='success'>$langWikiPageDeleted</p>";
-                         $tool_content .= $message . "<br/>";
+                         $message = "<div class='alert alert-success'>$langWikiPageDeleted</div>";
+                         $tool_content .= $message . "<br>";
                      } else {
-                         $message = "<p class='caution'>$langWikiDeletePageError</p>";
-                         $tool_content .= $message . "<br/>";
+                         $message = "<div class='alert alert-danger'>$langWikiDeletePageError</div>";
+                         $tool_content .= $message . "<br>";
                      }
                  } else {
-                     $message = "<p class='caution'>$langWikiPageNotFound</p>";
+                     $message = "<div class='alert alert-danger'>$langWikiPageNotFound</div>";
                      $tool_content .= $message . "<br/>";
                  }
              }

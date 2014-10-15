@@ -72,7 +72,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             'username' => $un,
             'name' => $n));
         unset($_SESSION['uid']);
-        $tool_content .= "<div class='success'><b>$langDelSuccess</b><br />";
+        $tool_content .= "<div class='alert alert-success'><b>$langDelSuccess</b><br />";
         $tool_content .= "$langThanks";
         $tool_content .= action_bar(array(
             array('title' => $langLogout,

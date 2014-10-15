@@ -109,7 +109,7 @@ if (isset($_POST['modify'])) {
                 Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
                                           VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
             }
-            $message .= "<p class='success'>$langGroupSettingsModified</p>";
+            $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
         }
     }
     initialize_group_info($group_id);

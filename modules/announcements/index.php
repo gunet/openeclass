@@ -326,7 +326,7 @@ if ($is_editor) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW(), start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
-            $message = "<p class='success'>$langAnnModify</p>";
+            $message = "<div class='alert alert-success'>$langAnnModify</div>";
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
@@ -393,10 +393,10 @@ if ($is_editor) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-            $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageInvalid</p>";
+            $message = "<div class='alert alert-success'>$langAnnAdd $langEmailSent<br />$messageInvalid</div>";
         } // if $emailOption==1
         else {
-            $message = "<p class='success'>$langAnnAdd</p>";
+            $message = "<div class='alert alert-success'>$langAnnAdd</div>";
         }
     } // end of if $submit
 

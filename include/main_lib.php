@@ -1907,7 +1907,7 @@ function handle_unit_info_edit() {
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
-    return "<p class='success'>$successmsg</p>";
+    return "<div class='alert alert-success'>$successmsg</div>";
 }
 
 function math_unescape($matches) {

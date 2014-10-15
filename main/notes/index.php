@@ -80,10 +80,10 @@ if (isset($_POST['submitNote'])) {
     if (!empty($_POST['id'])) { //existing note
         $id = intval($_POST['id']);
         Notes::update_note($id, $newTitle, $newContent, $refobjid);
-        $message = "<p class='success'>$langNoteModify</p>";
+        $message = "<div class='alert alert-success'>$langNoteModify</div>";
     } else { // new note
         $id = Notes::add_note($newTitle, $newContent, $refobjid);
-        $message = "<p class='success'>$langNoteAdd</p>";
+        $message = "<div class='alert alert-success'>$langNoteAdd</div>";
     }
 } // end of if $submit
 
@@ -91,7 +91,7 @@ if (isset($_POST['submitNote'])) {
 if (isset($_GET['delete'])) {
     $thisNoteId = intval($_GET['delete']);
     Notes::delete_note($thisNoteId);
-    $message = "<p class='success'>$langNoteDel</p>";
+    $message = "<div class='alert alert-success'>$langNoteDel</div>";
 }
 
 /* edit */

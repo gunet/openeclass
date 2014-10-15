@@ -160,11 +160,11 @@ function submit_work($uid, $group_id, $id, $file) {
                                 submission_ip, file_path, file_name, comments, group_id, grade_comments) 
                                 VALUES (?d, ?d, NOW(), '$_SERVER[REMOTE_ADDR]', ?s, ?s, ?s, ?d, ''", $uid, $id, $destination, $original_filename, $_POST['comments'], $group_id);
 
-        $tool_content .="<p class='success'>$langUploadSuccess
-			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
-			<a href='index.php?course=$course_code'>$langBack</a></p><br />";
+        $tool_content .="<div class='alert alert-success'>$langUploadSuccess
+			<br>$m[the_file] \"$original_filename\" $m[was_submitted]<br>
+			<a href='index.php?course=$course_code'>$langBack</a></div><br>";
     } else {
-        $tool_content .="<p class='caution'>$langUploadError<br />
-		<a href='index.php?course=$course_code'>$langBack</a></p><br />";
+        $tool_content .="<div class='alert alert-danger'>$langUploadError<br>
+		<a href='index.php?course=$course_code'>$langBack</a></div><br>";
     }
 }

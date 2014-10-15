@@ -59,11 +59,11 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($ok)) {
-        $tool_content .= "<p class='success'>$langUsersRegistered<br>";
+        $tool_content .= "<div class='alert alert-success'>$langUsersRegistered<br>";
         foreach ($ok as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</p>';
+        $tool_content .= '</div>';
     }
 
     if (count($existing)) {

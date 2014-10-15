@@ -284,7 +284,7 @@ if (!isset($_POST['submit'])) {
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg
-        $tool_content .= "<div class='success'><p>$user_msg</p></div>";
+        $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
 
         // footer msg
         if (!$vmail) {

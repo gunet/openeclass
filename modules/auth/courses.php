@@ -91,10 +91,10 @@ if (isset($_POST['submit'])) {
     }
 
     if ($errorExists) {
-        $tool_content .= "<p class='caution'>$langWrongPassCourse " .
-                q(join(', ', $restrictedCourses)) . "</p><br />";
+        $tool_content .= "<div class='alert alert-danger'>$langWrongPassCourse " .
+                q(join(', ', $restrictedCourses)) . "</div><br />";
     } else {
-        $tool_content .= "<p class='success'>$langRegDone</p>";
+        $tool_content .= "<div class='alert alert-success'>$langRegDone</div>";
     }
     $tool_content .= "<div><a href='../../index.php'>$langHome</a></div>";
 } else {

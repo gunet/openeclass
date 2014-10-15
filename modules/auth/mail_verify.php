@@ -121,7 +121,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     exit;
                 }
 
-                $tool_content = "<div class='success'>$langMailVerifySuccess </div>
+                $tool_content = "<div class='alert alert-success'>$langMailVerifySuccess </div>
 					<p>$user_msg<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a>
 					$langBackPage</p>";
             }

@@ -60,7 +60,7 @@ $default_guest_username = $langGuestUserName . $course_code;
 if (isset($_POST['submit'])) {
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
-    $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
+    $tool_content .= "<div class='alert alert-success'>$langGuestSuccess</div>" .
             action_bar(array(
             array('title' => $langBack,
                 'url' => "",

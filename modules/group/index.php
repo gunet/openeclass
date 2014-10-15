@@ -334,7 +334,7 @@ if ($is_editor) {
 
     // Show DB messages
     if (isset($message)) {
-        $tool_content .= "<p class='success'>$message</p><br />";
+        $tool_content .= "<div class='alert alert-success'>$message</div><br>";
     }
     
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);

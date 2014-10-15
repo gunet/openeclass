@@ -137,7 +137,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 			SET topic_time = '$topic_time_fixed'
 			WHERE id = $topic";
     }
-    $tool_content .= "<p class='success'>$langDeletedMessage</p>";
+    $tool_content .= "<div class='alert alert-success'>$langDeletedMessage</div>";
 }
 
 

@@ -229,7 +229,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             // OK Create the new node
             validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
             $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
-            $tool_content .= "<p class='success'>" . $langAddSuccess . "</p>";
+            $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
         }
     } else {
         // Display form for new node information
@@ -314,7 +314,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
         } else {
             // The node can be deleted
             $tree->deleteNode($id);
-            $tool_content .= "<p class='success'>$langNodeErase</p>";
+            $tool_content .= "<div class='alert alert-success'>$langNodeErase</div>";
         }
     }
 
@@ -357,7 +357,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             // OK Update the node
             validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
             $tree->updateNode($id, $name, intval($_POST['nodelft']), intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']), $code, $allow_course, $allow_user, $order_priority);
-            $tool_content .= "<p class='success'>$langEditNodeSuccess</p><br />";
+            $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
         }
     } else {
         // Get node information

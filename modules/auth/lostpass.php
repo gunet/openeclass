@@ -91,7 +91,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                                       WHERE id = ?d",
                     $hasher->HasPassword($_POST['newpass']), $userUID);
             if ($q1->affectedRows > 0) {
-                $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
+                $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";
                 $change_ok = true;
             }
@@ -171,7 +171,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                 <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
                                 $homelink";
             } elseif (!isset($auth)) {
-                $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>" .
+                $tool_content .= "<div class='alert alert-success'>$lang_pass_email_ok <strong>" .
                         q($email) . "</strong></div>$homelink";
             }
         }

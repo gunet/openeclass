@@ -209,10 +209,10 @@ if ($is_valid) {
         $email = mb_strtolower(trim($email));
     }
 
-    $tool_content .= $init_auth ? ("<p class='success'>$langTheUser $ldapfound.</p>") : '';
+    $tool_content .= $init_auth ? ("<div class='alert alert-success'>$langTheUser $ldapfound.</div>") : '';
     if (@(!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1)) {
-        $tool_content .= "<p class='caution'>$langUserFree<br />
-                                <br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree<br />
+                                <br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
         draw($tool_content, 0, null, $head_content);
         exit();
     }
@@ -309,13 +309,13 @@ if ($is_valid) {
             $_SESSION['surname'] = $surname;
             $_SESSION['uname'] = canonicalize_whitespace($username);            
 
-            $tool_content .= "<div class='success'><p>$greeting,</p><p>";
+            $tool_content .= "<div class='alert alert-success'><p>$greeting,</p><p>";
             $tool_content .=!empty($email) ? $langPersonalSettings : $langPersonalSettingsLess;
             $tool_content .= "</p></div>
                                                 <br /><br />
                                                 <p>$langPersonalSettingsMore</p>";
         } else {
-            $tool_content .= "<div class='success'>" .
+            $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
                                                 <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
@@ -362,7 +362,7 @@ if ($is_valid) {
                 exit();
             }
 
-            $tool_content .= "<p class='success'>$greeting,<br />$success<br /></p><p>$infoprof</p><br />
+            $tool_content .= "<div class='alert alert-success'>$greeting,<br />$success<br /></div><p>$infoprof</p><br />
                           <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
         } else {
             // email needs verification -> mail user
@@ -377,7 +377,7 @@ if ($is_valid) {
                 exit();
             }
             // User Message
-            $tool_content .= "<div class='success'>" .
+            $tool_content .= "<div class='alert alert-success'>" .
                     ($prof ? $langDearProf : $langDearUser) .
                     "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
                                         <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer'

@@ -126,7 +126,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
                     break;
                 }
             }
-            $tool_content .= "<p class='success'>".sprintf($langDropboxFreeSpaceSuccess, $space_released/1024/1024)."</p>";
+            $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, $space_released/1024/1024)."</div>";
         } else { //provide option to free some space
             $tool_content .= "<div id='operations_container'>
                                 <ul id='opslist'>

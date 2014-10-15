@@ -145,9 +145,9 @@ if (isset($_POST['submitEvent'])) {
             $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility);
         }
         if ($resp['success']) {
-            $message = "<p class='success'>$langEventModify</p>";
+            $message = "<div class='alert alert-success'>$langEventModify</div>";
         } else {
-            $message = "<p class='caution'>{$resp['message']}</p>";
+            $message = "<div class='alert alert-danger'>{$resp['message']}</div>";
         }
     } else { // new event 
         $recursion = null;
@@ -158,9 +158,9 @@ if (isset($_POST['submitEvent'])) {
         }
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
         if ($resp['success']) {
-            $message = "<p class='success'>$langEventAdd</p>";
+            $message = "<div class='alert alert-success'>$langEventAdd</div>";
         } else {
-            $message = "<p class='caution'>{$resp['message']}</p>";
+            $message = "<div class='alert alert-danger'>{$resp['message']}</div>";
         }
     }
 } // end of if $submit
@@ -170,9 +170,9 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
     $thisEventId = intval($_GET['delete']);
     $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
     if ($resp['success']) {
-        $message = "<p class='success'>$langEventDel</p>";
+        $message = "<div class='alert alert-success'>$langEventDel</div>";
     } else {
-        $message = "<p class='caution'>{$resp['message']}</p>";
+        $message = "<div class='alert alert-danger'>{$resp['message']}</div>";
     }
 }
 

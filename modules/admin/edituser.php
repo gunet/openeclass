@@ -77,14 +77,14 @@ if ($u) {
     if (isset($_POST['submit_editauth'])) {
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
-        $tool_content .= "<p class='success'>$langQuotaSuccess.";
+        $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess.";
         if ($auth == 1 and $oldauth != 1) {
             $tool_content .= " <a href='password.php?userid=$u'>$langEditAuthSetPass</a>";
             $newpass = '.';
         } else {
             $newpass = $auth_ids[$auth];
         }
-        $tool_content .= "</p>";
+        $tool_content .= "</div>";
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
     }

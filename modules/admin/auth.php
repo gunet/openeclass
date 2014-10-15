@@ -89,13 +89,13 @@ if (empty($auth)) {
         $tool_content .= "<p class='caution'>$langErrActiv $langActFailure</p>";
     } else {
         if ($active == 'yes') {
-            $tool_content .= "<p class='success'>";
+            $tool_content .= "<div class='alert alert-success'>";
             $tool_content .= "$langActSuccess" . get_auth_info($auth);
-            $tool_content .= "</p>";
+            $tool_content .= "</div>";
         } else {
-            $tool_content .= "<p class='success'>";
+            $tool_content .= "<div class='alert alert-success'>";
             $tool_content .= "$langDeactSuccess" . get_auth_info($auth);
-            $tool_content .= "</p>";
+            $tool_content .= "</div>";
         }
     }
 }

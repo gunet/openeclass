@@ -130,8 +130,8 @@ if ($submit) {
     }
 
     // user message
-    $tool_content .= "<p class='success'>$profsuccess<br><br>
-                     <a href='../admin/listreq.php'>$langBackRequests</a></p>";
+    $tool_content .= "<div class='alert alert-success'>$profsuccess<br><br>
+                     <a href='../admin/listreq.php'>$langBackRequests</a></div>";
 } else {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request

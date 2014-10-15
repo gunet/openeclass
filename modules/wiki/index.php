@@ -354,7 +354,7 @@ switch ($action) {
             // if admin, display add new wiki link
 
             if (!empty($message)) {
-                $tool_content .= "<p class='success'>$message</p>";
+                $tool_content .= "<div class='alert alert-success'>$message</div>";
             }
 
             if ($is_allowedToAdmin) {

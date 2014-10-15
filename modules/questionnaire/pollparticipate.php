@@ -162,7 +162,7 @@ function submitPoll() {
 			VALUES (?d, ?d, ?d, ?s, ?d , ?t)", $pid, $pqid, $aid, $answer_text, $user_id, $CreationDate);
     }
     $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-    $tool_content .= "<p class='success'>".$langPollSubmitted."</p>";
+    $tool_content .= "<div class='alert alert-success'>".$langPollSubmitted."</div>";
     if (!empty($end_message)) {
         $tool_content .=  $end_message;
     }

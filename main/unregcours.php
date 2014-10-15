@@ -64,9 +64,9 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            $tool_content .= "<p class='success'>$langCoursDelSuccess</p>";
+            $tool_content .= "<div class='alert alert-success'>$langCoursDelSuccess</div>";
         } else {
-            $tool_content .= "<p class='caution_small'>$langCoursError</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
         }
     }
     $tool_content .= "<br><br><div align=right><a href='../index.php' class=mainpage>$langBack</a></div>";

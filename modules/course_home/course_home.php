@@ -271,7 +271,7 @@ if ($is_editor) {
         $urdx->removeByUnit($id, false);
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
         }else{
             $res_id = intval($_GET['del']);
             if ($id = check_admin_unit_resource($res_id)) {
@@ -279,7 +279,7 @@ if ($is_editor) {
                 $urdx->remove($res_id, false, false);
                 $cidx->store($course_id, true);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
-                $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+                $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
             }
         }
         

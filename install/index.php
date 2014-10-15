@@ -474,7 +474,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         fwrite($fd, $stringConfig);
         // message
         $tool_content .= "
-	<div class='success'>$langInstallSuccess</div>
+	<div class='alert alert-success'>$langInstallSuccess</div>
 
 	<br />
 	<div>$langProtect</div>

@@ -59,7 +59,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         if (!send_mail('', '', '', $to, $emailsubject, $emailbody, $charset)) {
             $tool_content .= "<div class='caution'>$langEmailNotSend " . q($to) . "!</div>";
         } else {
-            $tool_content .= "<div class='success'>$emailsuccess</div>";
+            $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
         }
         $tool_content .= "</td></tr><tbody></table><br />";
     } else {

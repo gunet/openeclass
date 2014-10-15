@@ -43,7 +43,7 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
         'right' => '+5'));
     if ($result) {
-        $tool_content .= "<p class='success'>$langTheU $langAdded</p>";
+        $tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and email_seems_valid($email)) {

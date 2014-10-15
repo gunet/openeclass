@@ -191,9 +191,9 @@ if ($can_upload) {
                 $realFileSize = 0;
                 $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
                 if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                    $action_message .= "<p class='caution'>$langNoSpace</p>";
+                    $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
                 } else {
-                    $action_message .= "<p class='success'>$langDownloadAndZipEnd</p><br />";
+                    $action_message .= "<div class='alert alert-success'>$langDownloadAndZipEnd</div><br />";
                 }
             } else {
                 $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
@@ -295,7 +295,7 @@ if ($can_upload) {
                 'filename' => $fileName,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
-            $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+            $action_message .= "<div class='alert alert-success'>$langDownloadEnd</div><br />";
         } elseif (isset($_POST['file_content'])) {
             $q = false;
             if (isset($_POST['editPath'])) {
@@ -354,7 +354,7 @@ if ($can_upload) {
                               'filepath' => $file_path,
                               'filename' => $fileName,
                               'title' => $_POST['file_title']));
-                $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                $action_message .= "<div class='alert alert-success'>$langDownloadEnd</div><br />";
                 $title = $_POST['file_title']? $_POST['file_title']: $fileName;
                 file_put_contents($basedir . $file_path,
                     '<!DOCTYPE html><head><meta charset="utf-8">' .
@@ -392,9 +392,9 @@ if ($can_upload) {
             } else {
                 update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
             }
-            $action_message = "<p class='success'>$langDirMv</p><br />";
+            $action_message = "<div class='alert alert-success'>$langDirMv</div><br>";
         } else {
-            $action_message = "<p class='caution'>$langImpossible</p><br />";
+            $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
             /*             * * return to step 1 ** */
             $move = $source;
             unset($moveTo);
@@ -441,9 +441,9 @@ if ($can_upload) {
                 update_db_info('document', 'delete', $delete, $r->filename);
             }
             if ($delete_ok) {
-                $action_message = "<p class='success'>$langDocDeleted</p><br />";
+                $action_message = "<div class='alert alert-success'>$langDocDeleted</div><br>";
             } else {
-                $action_message = "<p class='caution'>$langGeneralError</p><br />";
+                $action_message = "<div class='alert alert-danger'>$langGeneralError</div><br>";
             }
         }
     }
@@ -472,7 +472,7 @@ if ($can_upload) {
                 metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
             }
         }
-        $action_message = "<p class='success'>$langElRen</p><br />";
+        $action_message = "<div class='alert alert-success'>$langElRen</div><br>";
     }
 
     // Step 1: Show rename dialog box
@@ -505,11 +505,11 @@ if ($can_upload) {
             $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
             // $path_already_exists: global variable set by make_path()
             if ($path_already_exists) {
-                $action_message = "<p class='caution'>$langFileExists</p>";
+                $action_message = "<div class='alert alert-danger'>$langFileExists</div>";
             } else {
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
                 $didx->store($r->id);
-                $action_message = "<p class='success'>$langDirCr</p>";
+                $action_message = "<div class='alert alert-success'>$langDirCr</div>";
             }
         }
     }
@@ -563,7 +563,7 @@ if ($can_upload) {
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
-            $action_message = "<p class='success'>$langComMod</p>";
+            $action_message = "<div class='alert alert-success'>$langComMod</div>";
         }
     }
 
@@ -605,7 +605,7 @@ if ($can_upload) {
                     , ($_SESSION['givenname'] . " " . $_SESSION['surname']), $xml_date, $xml_date, $file_format, $_POST['meta_language']);
         }
 
-        $action_message = "<p class='success'>$langMetadataMod</p>";
+        $action_message = "<div class='alert alert-success'>$langMetadataMod</div>";
     }
 
     if (isset($_POST['replacePath']) and
@@ -649,7 +649,7 @@ if ($can_upload) {
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
-                    $action_message = "<p class='success'>$langReplaceOK</p>";
+                    $action_message = "<div class='alert alert-success'>$langReplaceOK</div>";
                 }
             }
         }
@@ -926,7 +926,7 @@ if ($can_upload) {
                                                 path = ?s", $newVisibilityStatus, $visibilityPath);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
         $didx->store($r->id);
-        $action_message = "<p class='success'>$langViMod</p>";
+        $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 
     // Public accessibility commands
@@ -938,7 +938,7 @@ if ($can_upload) {
                                                 path = ?s", $new_public_status, $path);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
         $didx->store($r->id);
-        $action_message = "<p class='success'>$langViMod</p>";
+        $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 } // teacher only
 // Common for teachers and students

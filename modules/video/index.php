@@ -142,7 +142,7 @@ hContent;
     if (isset($_GET['vis'])) {
             $table = select_table($_GET['table']);
             Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
-            $action_message = "<p class='success'>$langViMod</p>";
+            $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 
     // Public accessibility commands
@@ -150,7 +150,7 @@ hContent;
             $new_public_status = isset($_GET['public'])? 1: 0;
             $table = select_table($_GET['table']);
             Database::get()->query("UPDATE $table SET public = ?d WHERE id = ?d", $new_public_status, $_GET['vid']);
-            $action_message = "<p class='success'>$langViMod</p>";
+            $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 
     /**
@@ -226,7 +226,7 @@ hContent;
                                                                         'url' => canonicalize_url($_POST['url']),
                                                                         'title' => $_POST['title'],
                                                                         'description' => $txt_description));
-            $tool_content .= "<p class='success'>$langGlossaryUpdated</p><br />";
+            $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div><br>";
         }
     }
     if (isset($_POST['add_submit'])) {  // add
@@ -250,7 +250,7 @@ hContent;
                                                                             'url' => canonicalize_url($url),
                                                                             'title' => $title,
                                                                             'description' => $txt_description));
-                    $tool_content .= "<p class='success'>$langLinkAdded</p><br />";
+                    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div><br>";
                 }
             } else {  // add video
                     if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -280,8 +280,8 @@ hContent;
                         $safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
                         $iscopy = copy("$tmpfile", "$updir/$safe_filename");
                         if (!$iscopy) {
-                            $tool_content .= "<p class='success'>$langFileNot<br />
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
+                            $tool_content .= "<div class='alert alert-success'>$langFileNot<br>
+                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
                             draw($tool_content, $menuTypeID, null, $head_content);
                             exit;
                         }
@@ -300,7 +300,7 @@ hContent;
                                                                                 'url' => $_POST['url'],
                                                                                 'title' => $_POST['title'],
                                                                                 'description' => $txt_description));
-                    $tool_content .= "<p class='success'>$langFAdd</p><br />";
+                    $tool_content .= "<div class='alert alert-success'>$langFAdd</div><br>";
                 }
             }
         }	// end of add
@@ -319,7 +319,7 @@ hContent;
                     $table = select_table($_GET['table']);
                     delete_video($_GET['id'], $table);
                 }
-                $tool_content .= "<p class='success'>$langGlossaryDeleted</p><br />";
+                $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div><br>";
         } elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
             $tool_content .= "
                 <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">

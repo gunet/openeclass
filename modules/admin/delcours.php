@@ -71,7 +71,7 @@ $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 // Delete course
 if (isset($_GET['delete']) && $course_id) {
     delete_course($course_id);
-    $tool_content .= "<p class='success'>" . $langCourseDelSuccess . "</p>";
+    $tool_content .= "<div class='alert alert-success'>" . $langCourseDelSuccess . "</div>";
 }
 // Display confirmatiom message for course deletion
 else {

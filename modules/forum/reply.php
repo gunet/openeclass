@@ -163,7 +163,7 @@ if (isset($_POST['submit'])) {
     } else {
         $page = '';
     }
-    $_SESSION['message'] = "<p class='success'>$langStored</p>";
+    $_SESSION['message'] = "<div class='alert alert-success'>$langStored</div>";
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
     exit;
 } else {

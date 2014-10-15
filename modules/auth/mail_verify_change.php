@@ -71,7 +71,7 @@ if (!empty($_POST['submit'])) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
-            $tool_content .= "<div class='success'>$langMailVerificationSuccess4</div> ";
+            $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
         }
     }
     // email wrong or empty

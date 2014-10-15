@@ -140,7 +140,7 @@ if ($is_editor) {
                                            glossary_index = ?d WHERE id = ?d"
                 , $expand_glossary, (isset($_POST['index']) ? 1 : 0), $course_id);
         invalidate_glossary_cache();
-        $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
+        $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess</div>";
     }
 
     if (isset($_POST['submit'])) {
@@ -186,7 +186,7 @@ if ($is_editor) {
 
         if ($q and $q->affectedRows) {
             invalidate_glossary_cache();
-            $tool_content .= "<div class='success'>$success_message</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$success_message</div><br />";
         }
     }
 
@@ -198,7 +198,7 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
                                                                       'term' => $term));
         if ($q and $q->affectedRows) {
-            $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div><br />";
         }
         draw($tool_content, 2, null, $head_content);
         exit;

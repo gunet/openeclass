@@ -518,8 +518,8 @@ if (!isset($_POST['create_course'])) {
 
     $_SESSION['courses'][$code] = USER_TEACHER;
 
-    $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
-                        <span class='smaller'>$langEnterMetadata</span></p>";
+    $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($title) . "<br>
+                        <span class='smaller'>$langEnterMetadata</span></div>";
     $tool_content .= action_bar(array(
                 array('title' => $langEnter,
                     'url' => "../../courses/$code/index.php",

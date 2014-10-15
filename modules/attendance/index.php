@@ -170,7 +170,7 @@ if ($is_editor) {
         $attendance_users_limit = intval($_POST['usersLimit']);
         if($attendance_users_limit ==1 || $attendance_users_limit == 0){
             Database::get()->querySingle("UPDATE attendance SET `students_semester` = ?d WHERE id = ?d ", $attendance_users_limit, $attendance_id);
-            $message = "<p class='success'>$langAttendanceEdit</p>";
+            $message = "<div class='alert alert-success'>$langAttendanceEdit</div>";
             $tool_content .= $message . "<br/>";
         }
         //update value for the check box and the users query
@@ -314,13 +314,13 @@ if ($is_editor) {
             //update
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
-            $message = "<p class='success'>$langAttendanceEdit</p>";
+            $message = "<div class='alert alert-success'>$langAttendanceEdit</div>";
             $tool_content .= $message . "<br/>";
         }
         else{
             //insert
             $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s", $attendance_id, $actTitle, $actDate, $actDesc);            
-            $message = "<p class='success'>$langAttendanceSucInsert</p>";
+            $message = "<div class='alert alert-success'>$langAttendanceSucInsert</div>";
             $tool_content .= $message . "<br/>";
         }
         //show activities list
@@ -332,7 +332,7 @@ if ($is_editor) {
         $attendance_limit = intval($_POST['limit']);
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
-        $message = "<p class='success'>$langAttendanceLimit</p>";
+        $message = "<div class='alert alert-success'>$langAttendanceLimit</div>";
         $tool_content .= $message . "<br/>";
     }
 
@@ -438,7 +438,7 @@ if ($is_editor) {
                     }
                 }
                 
-                $message = "<p class='success'>$langAttendanceEdit</p>";
+                $message = "<div class='alert alert-success'>$langAttendanceEdit</div>";
                 $tool_content .= $message . "<br/>";
             }
         }

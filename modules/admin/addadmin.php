@@ -53,11 +53,11 @@ if (isset($_POST['submit']) and ! empty($username)) {
                 $affected = Database::get()->query("INSERT INTO admin VALUES(?d,?d)", $user_id, $privilege)->affectedRows;
             }
             if ($affected > 0) {
-                $tool_content .= "<p class='success'>
-                    $langTheUser " . q($username) . " $langWith id=" . q($user_id) . " $langDone</p>";
+                $tool_content .= "<div class='alert alert-success'>
+                    $langTheUser " . q($username) . " $langWith id=" . q($user_id) . " $langDone</div>";
             }
         } else {
-            $tool_content .= "<p class='caution'>$langError</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langError</div>";
         }
     } else {
         $tool_content .= "<p class='caution'>$langTheUser " . q($username) . " $langNotFound.</p>";
@@ -66,9 +66,9 @@ if (isset($_POST['submit']) and ! empty($username)) {
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
         if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
-            $tool_content .= "<p class='success'>$langNotAdmin</p>";
+            $tool_content .= "<div class='alert alert-success'>$langNotAdmin</div>";
         } else {
-            $tool_content .= "<p class='caution'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langDeleteAdmin" . q($aid) . " $langNotFeasible</p>";
         }
     } else {
         $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";

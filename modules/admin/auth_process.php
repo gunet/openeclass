@@ -195,7 +195,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             if ($is_valid) {
                 $auth_allow = 1;
                 $tool_content .= "<table width='100%'><tbody><tr>
-				<td class='success'>$langConnYes</td></tr></tbody></table><br /><br />";
+				<td class='alert alert-success'>$langConnYes</td></tr></tbody></table><br /><br />";
                 // Debugging CAS
                 if ($debugCAS) {
                     if (!empty($cas_ret['message']))

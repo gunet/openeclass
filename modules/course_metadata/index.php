@@ -329,7 +329,7 @@ function submitForm() {
 
     CourseXMLElement::save($course_id, $course_code, $xml);
 
-    return "<p class='success'>$langModifDone</p>";
+    return "<div class='alert alert-success'>$langModifDone</div>";
 }
 
 function isValidImage($type) {

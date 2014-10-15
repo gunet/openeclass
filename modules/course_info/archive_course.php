@@ -167,7 +167,7 @@ if (!$result) {
     draw($tool_content, 2);
     exit;
 } else {
-    $tool_content.="<br /><p class='success_small'>$langBackupSuccesfull</p>";
+    $tool_content.="<br /><div class='alert alert-success'>$langBackupSuccesfull</div>";
     $tool_content .= action_bar(array(
         array('title' => $langDownloadIt,
             'url' => "{$urlAppend}courses/archive/$course_code/$course_code-$backup_date_short.zip",

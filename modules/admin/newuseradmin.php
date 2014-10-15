@@ -141,7 +141,7 @@ if ($submit) {
             $type_message = '';
             // $langAsUser;
         }
-        $tool_content .= "<p class='success'>$message</p><br><br><p align='right'>";
+        $tool_content .= "<div class='alert alert-success'>$message</div><br><br><p align='pull-right'>";
         $tool_content .= action_bar(array(
             array('title' => $langBackRequests,
                 'url' => "../admin/listreq.php$reqtype",

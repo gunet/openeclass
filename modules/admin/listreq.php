@@ -148,7 +148,7 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) and $id > 0) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content = "<p class='success'>$langReintroductionApplication</p>";
+        $tool_content = "<div class='alert alert-success'>$langReintroductionApplication</div>";
     } else {
 
         $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
@@ -193,7 +193,7 @@ if (!empty($show) and $show == 'closed') {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         $tool_content = "
-		<p class='success'>$langReintroductionApplication</p>";
+		<div class='alert alert-success'>$langReintroductionApplication</div>";
     } else {
         $tool_content .= "<table id = 'requests_table' class='tbl_al' width='100%' align='left'>";
         $tool_content .= table_header(1, $langDateReject_small);
@@ -266,8 +266,8 @@ $langPhone: $telephone
 $langEmail: $emailhelpdesk";
                             send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
                         }
-                        $tool_content .= "<p class='success'>" . ($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject;
-                        $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></p>";
+                        $tool_content .= "<div class='alert alert-success'>" . ($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject;
+                        $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
                         $tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
                     }
                 }

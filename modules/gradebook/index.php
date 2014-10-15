@@ -150,7 +150,7 @@ if ($is_editor) {
         $gradebook_range = intval($_POST['degreerange']);
         if($gradebook_range == 10 || $gradebook_range == 100 || $gradebook_range == 5){
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
-            $message = "<p class='success'>$langGradebookEdit</p>";
+            $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             $tool_content .= $message . "<br/>";
         }
     }
@@ -162,7 +162,7 @@ if ($is_editor) {
         $gradebook_users_limit = intval($_POST['usersLimit']);
         if($gradebook_users_limit ==1 || $gradebook_users_limit == 0){
             Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
-            $message = "<p class='success'>$langGradebookEdit</p>";
+            $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             $tool_content .= $message . "<br/>";
             //update value for the check box and the users query
             $showSemesterParticipants = $gradebook_users_limit;
@@ -372,13 +372,13 @@ if ($is_editor) {
                 $id = intval($_POST['id']);
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
                 $langAnnDel = "$langGradebookEdit";
-                $message = "<p class='success'>$langAnnDel</p>";
+                $message = "<div class='alert alert-success'>$langAnnDel</div>";
                 $tool_content .= $message . "<br/>";
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type);
                 $langAnnDel = "$langGradebookSucInsert";
-                $message = "<p class='success'>$langAnnDel</p>";
+                $message = "<div class='alert alert-success'>$langAnnDel</div>";
                 $tool_content .= $message . "<br/>";
             }
         }
@@ -526,7 +526,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $announce->id, $attend, '');
                     }
                 }
-                $message = "<p class='success'>$langGradebookEdit</p>";
+                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
                 $tool_content .= $message . "<br/>";
             }
         }
