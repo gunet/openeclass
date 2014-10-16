@@ -42,7 +42,7 @@ if (setting_get($setting_id, $course_id) == 1) {
                 $response[0] = 'OK';
                 $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
                 $response[2] = $comment->getId();
-                $response[3] = '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
+                $response[3] = '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.display_user($comment->getAuthor(), false, false).':</div>';
                 $response[3] .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 $response[3] .= '<div class="comment_actions">';
                 $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
