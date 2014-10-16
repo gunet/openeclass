@@ -157,9 +157,9 @@ $tool_content .= "
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
-                    <div class='col-sm-3 text-center'>
-                            <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;margin:0 auto;' class='img-circle' alt='Circular Image'>
-                            <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
+                    <div class='col-sm-3'>
+                            <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle center-block' alt='Circular Image'>
+                            <h4 class='text-center'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
                     </div>
                     <div class='col-sm-9'>
                         <div class='stats'>".courseVisitsPlot()."</div>
