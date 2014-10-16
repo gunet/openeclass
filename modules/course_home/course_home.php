@@ -673,47 +673,7 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
-        </div>        
-    
-";
-
-
-$tool_content .= "
-<div id='content_course' style='display:none;'>
-<table width='100%'>
-<tr>
-<td valign='top'>$main_content</td>
-<td width='200' valign='top'>
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td  class='title1'>$langIdentity</td>
-  </tr>
-  <tr>
-    <td class='smaller'>$bar_content</td>
-  </tr>
-  </table>
-  <br />
-  $license_info_box
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td class='title1'>$langTools</td>
-    <td class='left'>";
-if ($status != USER_GUEST) {
-    if ($receive_mail) {
-        $tool_content .= icon('fa-envelope', $langContactProf, $urlAppend . "modules/contact/index.php?course=$course_code");
-    }
-}
-if (visible_module(MODULE_ID_ANNOUNCE)) {
-    $tool_content .= "<span class='feed'>" .
-        icon('fa-rss', $langRSSFeed, $urlServer . "modules/announcements/rss.php?c=$course_code") . "</span>";
-}
-$tool_content .= "</td>
-      </tr>
-      </table>
-      $emailnotification
-      <br />\n";
-
-$tool_content .= "</td></tr></table>";
+        </div>";
 
 if ($viewCourse == "weekly") {
     
@@ -761,7 +721,15 @@ $tool_content .= "</div></div></div>";
 
 draw($tool_content, 2, null, $head_content);
 
-
+/**
+ * @brief fetch course announcements
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langNoAnnounce
+ * @global type $urlAppend
+ * @global type $dateFormatLong
+ * @return string
+ */
 function course_announcements() {
     global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong;
 
