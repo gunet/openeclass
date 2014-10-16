@@ -34,71 +34,72 @@ require_once '../template/template.inc.php';
  * @global type $langInstallProgress
  * @param type $toolContent
  */
-function draw($toolContent){
+function draw($toolContent, $options=null) {
 	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
-	//display the left column (installation steps)
-	$toolArr = installerMenu();
-	$numOfToolGroups = count($toolArr);
+    if (!$options) {
+        $options = array();
+    }
 
 	$t = new Template();
-	$t->set_file('fh', 'theme.html');
+	$t->set_file('fh', '../template/bootstrap/theme.html');
 	$t->set_block('fh', 'mainBlock', 'main');
 
-        $t->set_var('SITE_NAME', 'Open eClass');
+    $t->set_var('SITE_NAME', 'Open eClass');
+    $t->set_block('mainBlock', 'sideBarBlock', 'delete');
+    $t->set_block('mainBlock', 'LoggedInBlock', 'delete');
+    $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+    $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
+    $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+    $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'delete');
+    $t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
+    $t->set_block('mainBlock', 'breadCrumbEndBlock', 'delete');
+    $t->set_block('mainBlock', 'modalWindowBlock', 'delete');
+    $t->set_var('template_base', '../template/bootstrap');
 
-	//	BEGIN constructing the installation wizard steps
-	//	----------------------------------------------------------------------
-	$t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
-	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
+    if (isset($options['no-menu'])) {
+        $t->set_block('mainBlock', 'leftNavBlock', 'delete');
+    } else {
+        //display the left column (installation steps)
+        $toolArr = installerMenu();
+        $numOfToolGroups = count($toolArr);
 
+        $t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
+        $t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
-	if (is_array($toolArr)) {
-		for($i=0; $i< $numOfToolGroups; $i++){
-			$numOfTools = count($toolArr[$i][1]);
-			for($j=0; $j< $numOfTools; $j++){
-				if ($toolArr[$i][1][$j] == true) $currentStep = "currentStep";
-				else $currentStep = "";
-				$t->set_var('CURRENT_STEP', $currentStep);
-				$t->set_var('TOOL_TEXT', $toolArr[$i][0][$j]);
+        if (is_array($toolArr)) {
+            for ($i = 0; $i < $numOfToolGroups; $i++) {
+                $t->set_var('ACTIVE_TOOLS', $langInstallProgress);
+                $t->set_var('TOOL_GROUP_ID', $i + 1);
+                $t->set_var('GROUP_CLASS', 'in');
+                $numOfTools = count($toolArr[$i][0]);
+                for ($j = 0; $j < $numOfTools; $j++) {
+                    $t->set_var('TOOL_TEXT', $toolArr[$i][0][$j]);
+                    $t->set_var('TOOL_CLASS', $toolArr[$i][1][$j]? 'active': '');
+                    $t->set_var('IMG_CLASS', $toolArr[$i][2][$j]);
+                    $t->set_var('TOOL_LINK', '#');
+                    $t->parse('leftNavLink', 'leftNavLinkBlock', true);
 
-				$t->set_var('IMG_FILE', $toolArr[$i][2][$j]);
-				$t->parse('leftNavLink', 'leftNavLinkBlock', true);
+                    // remember current step to use as title
+                }
 
-				//memorise current step to show it as title
-				if ($currentStep != '') {
-					$i_var = $i;
-					$j_var = $j;
-				}
-			}
+                $t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
+                $t->clear_var('leftNavLink'); //clear inner block
+            }
 
-			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
-			$t->clear_var('leftNavLink'); //clear inner block
-		}
+            $t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
+            $t->set_var('BREAD_TEXT',  $langStep);
+            $t->set_var('FOUR_BAR_TEXT', $langTitleInstall);
 
-		$t->set_var('CURRENT_STEP_TITLE', $toolArr[$i_var][0][$j_var]);
-                $t->set_var('URL_PATH',  empty($urlServer)? 'http://www.openeclass.org/': $urlServer);
-		$t->set_var('TOOL_CONTENT', $toolContent);
-		$t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
-		$t->set_var('BREAD_TEXT',  $langStep);
-		$t->set_var('FOUR_BAR_TEXT', $langTitleInstall);
-
-		$pageTitle = "$langTitleInstall - " . $langStepTitle . " (" . $langStep . ")";
-		$t->set_var('PAGE_TITLE',  $pageTitle);
-
-		if (isset($head_content)){
-			$t->set_var('HEAD_EXTRAS', $head_content);
-		}
-		if (isset($body_action)){
-			$t->set_var('BODY_ACTION', $body_action);
-		}
-		//		At this point all variables are set and we are ready to send the final output
-		//		back to the browser
-		//		-----------------------------------------------------------------------------
-		$t->parse('main', 'mainBlock', false);
-		$t->pparse('Output', 'fh');
-
-	}
+            $pageTitle = "$langTitleInstall - " . $langStepTitle . " (" . $langStep . ")";
+            $t->set_var('PAGE_TITLE',  $pageTitle);
+        }
+    }
+    $t->set_var('URL_PATH',  empty($urlServer)? '../': $urlServer);
+    $t->set_var('TOOL_CONTENT', $toolContent);
+    $t->parse('main', 'mainBlock', false);
+    $t->pparse('Output', 'fh');
+    exit;
 }
 
 /**
@@ -122,17 +123,17 @@ function installerMenu(){
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
 
-	for($i = 0; $i<7; $i++) {
-		if($i < $_SESSION['step']-1) {
+	for($i = 0; $i < 7; $i++) {
+		if ($i < $_SESSION['step'] - 1) {
 			$currentStep[$i] = false;
-			$stepImg[$i] = "tick_1.png";
+			$stepImg[$i] = "fa-check";
 		} else {
-			if ($i == $_SESSION['step']-1) {
+			if ($i == $_SESSION['step'] - 1) {
 				$currentStep[$i] = true;
 			} else {
 				$currentStep[$i] = false;
 			}
-			$stepImg[$i] = "arrow.png";
+            $stepImg[$i] = "fa-angle-double-right";
 		}
 	}
 
@@ -167,3 +168,89 @@ function installerMenu(){
 
 	return $sideMenuGroup;
 }
+
+
+/*
+ * check extension and  write  if exist  in a  <LI></LI>
+ * @params string       $extensionName  name  of  php extension to be checked
+ * @params boolean      $echoWhenOk     true => show ok when  extension exist
+ * @author Christophe Gesche
+ * @desc check extension and  write  if exist  in a  <LI></LI>
+ */
+
+function warnIfExtNotLoaded($extensionName) {
+
+    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+    if (extension_loaded($extensionName)) {
+        $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
+    } else {
+        $tool_content .= "
+                <li class='bg-danger'>" . icon('fa-times') . " $extensionName
+                <b>$langModuleNotInstalled</b>
+                (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
+                </li>";
+    }
+}
+
+/**
+ * @brief make directories
+ * @global type $errorContent
+ * @global boolean $configErrorExists
+ * @global type $langWarningInstall3
+ * @global type $langWarnInstallNotice1
+ * @global type $langWarnInstallNotice2
+ * @global type $install_info_file
+ * @global type $langHere
+ * @param type $dirname
+ */
+function mkdir_try($dirname) {
+    global $errorContent, $configErrorExists, $langWarningInstall3,
+        $langWarnInstallNotice1, $langWarnInstallNotice2,
+        $install_info_file, $langHere;
+    
+    if (!is_dir('../' . $dirname)) {
+        if (!@mkdir('../' . $dirname, 0775)) {
+            $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
+            $configErrorExists = true;
+        }
+    }
+}
+
+/**
+ * @brief create files
+ * @global type $errorContent
+ * @global boolean $configErrorExists
+ * @global type $langWarningInstall3
+ * @global type $langWarnInstallNotice1
+ * @global type $langWarnInstallNotice2
+ * @global type $install_info_file
+ * @global type $langHere
+ * @param type $filename
+ */
+function touch_try($filename) {
+    global $errorContent, $configErrorExists, $langWarningInstall3,
+        $langWarnInstallNotice1, $langWarnInstallNotice2,
+        $install_info_file, $langHere;
+    
+    if (@!touch('../' . $filename)) {
+        $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
+        $configErrorExists = true;
+    }
+}
+
+function form_entry($name, $input, $label) {
+    return "
+    <div class='form-group'>
+      <label for='$name' class='col-sm-2 control-label'>" . q($label) . "</label>
+      <div class='col-sm-10'>$input</div>
+    </div>";
+}
+
+function display_entry($input, $label) {
+    return "
+    <div class='form-group'>
+      <label class='col-sm-4 control-label'>" . q($label) . "</label>
+      <div class='col-sm-8'><p class='form-control-static'>$input</p></div>
+    </div>";
+}
+

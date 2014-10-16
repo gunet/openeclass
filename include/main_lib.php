@@ -881,28 +881,6 @@ function add_check_if_javascript_enabled_js() {
 }
 
 /*
- * check extension and  write  if exist  in a  <LI></LI>
- * @params string       $extensionName  name  of  php extension to be checked
- * @params boolean      $echoWhenOk     true => show ok when  extension exist
- * @author Christophe Gesche
- * @desc check extension and  write  if exist  in a  <LI></LI>
- */
-
-function warnIfExtNotLoaded($extensionName) {
-
-    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-    if (extension_loaded($extensionName)) {
-        $tool_content .= "<li><img src='../template/classic/img/tick_1.png' alt='tick' /> $extensionName <br /></li>";
-    } else {
-        $tool_content .= "
-                <li><img src='../template/classic/img/error.png' alt='error' /> $extensionName
-                <font color=\"#FF0000\"> - <b>$langModuleNotInstalled</b></font>
-                (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
-                <br /></li>";
-    }
-}
-
-/*
  * to create missing directory in a gived path
  *
  * @returns a resource identifier or false if the query was not executed correctly.

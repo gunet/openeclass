@@ -33,6 +33,7 @@ $t = new Template('template/bootstrap');
 $t->set_file('fh', 'theme.html');
 $t->set_block('fh', 'mainBlock', 'main');
 $t->set_block('mainBlock', 'leftNavBlock', 'delete');
+$t->set_block('mainBlock', 'sideBarBlock', 'delete');
 $t->set_block('mainBlock', 'LoggedInBlock', 'delete');
 $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
 $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
