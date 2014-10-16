@@ -35,6 +35,7 @@ load_js('tools.js');
 
 $nameTools = $langBlog;
 
+$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/blog/style.css">';
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 

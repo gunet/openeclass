@@ -73,7 +73,9 @@ Class Commenting {
      */
     public function put($courseCode, $isEditor, $uid) {
         global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer;
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content;
+        
+        $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/comments/style.css">';
         
         $commentsNum = $this->getCommentsNum();
         
