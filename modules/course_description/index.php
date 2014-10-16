@@ -115,7 +115,7 @@ if ($q && count($q) > 0) {
         $i++;
     }
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
 }
 
 add_units_navigation(true);
