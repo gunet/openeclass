@@ -43,7 +43,7 @@ $alt_auth_prof_reg = get_config('alt_auth_prof_reg');
 $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
 
 if (!$user_registration) {
-    $tool_content .= "<div class='info'>$langCannotRegister</div>";
+    $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }

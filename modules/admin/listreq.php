@@ -97,7 +97,7 @@ $show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['
 if (intval($id) > 0) {
     $req = Database::get()->querySingle("SELECT faculty_id FROM user_request WHERE id = ?d", $id);
     if (!$req)
-        exitWithError("<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>");
+        exitWithError("<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>");
     validateNode($req->faculty_id, isDepartmentAdmin());
 }
 
@@ -237,9 +237,9 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
             if ($list_status == 1) {
-                $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
+                $tool_content .= "<div class='alert alert-info'>$langProfessorRequestClosed</div>";
             } else {
-                $tool_content .= "<div class='info'$langRequestStudent</div>";
+                $tool_content .= "<div class='alert alert-info'$langRequestStudent</div>";
             }
             break;
         case '2':

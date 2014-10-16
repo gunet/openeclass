@@ -163,7 +163,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
                 $curday = 1;
             }
             if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-                $bgcolor = $ii < 5 ? "class='cautionk'" : "class='odd'";
+                $bgcolor = $ii < 5 ? "class='alert alert-danger'" : "class='odd'";
                 $dayheader = "$curday";
                 $class_style = "class=odd";
                 if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {

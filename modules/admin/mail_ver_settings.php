@@ -139,7 +139,7 @@ else {
     }
 }
 
-$tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
-$tool_content .= "<p class='info'>$langMailVerificationNoticeAdmin</p>";
+$tool_content .= "<p class='alert alert-warning'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
+$tool_content .= "<div class='alert alert-info'>$langMailVerificationNoticeAdmin</div>";
 
 draw($tool_content, 3);

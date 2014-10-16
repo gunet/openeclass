@@ -76,7 +76,7 @@ $user_registration = get_config('user_registration');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
 if (!$user_registration or $eclass_stud_reg != 2) {
-    $tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
+    $tool_content .= "<div class='alert alert-info'>$langStudentCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }

@@ -146,7 +146,7 @@ function printPolls() {
     global $tool_content, $course_id, $course_code, $langCreatePoll,
     $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $langEdit, $langDelete, $langActions,
+    $themeimg, $langEdit, $langDelete, $langActions, $langSurveyNotStarted,
     $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
     $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
@@ -162,6 +162,7 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "
+                    <div class='table-repsonsive'>
 		      <table class='table-default'>
 		      <tr>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
@@ -209,18 +210,20 @@ function printPolls() {
                 // check if user has participated
                 $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_answer_record
                                         WHERE user_id = ?d AND pid = ?d", $uid, $pid)->counter;
-                // check if poll has ended
-                if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
-                    $poll_ended = 0;
-                } else {
+                // check if poll has ended OR not strarted yet
+                $poll_ended = 0;
+                $poll_not_started = 0;
+                if($temp_CurrentDate < $temp_StartDate) {
+                    $poll_not_started = 1;
+                } else if ($temp_CurrentDate >= $temp_EndDate) {
                     $poll_ended = 1;
                 }
+                
                 if ($is_editor) {
                     $tool_content .= "
                         <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>".q($thepoll->name)."</a>";
                 } else {
                     $tool_content .= "
-                        <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                     if (($has_participated == 0) and $poll_ended == 0) {
                         $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
@@ -271,12 +274,14 @@ function printPolls() {
                         ))."</td></tr>";
                 } else {
                     $tool_content .= "
-                        <td class='center'>";
-                    if (($has_participated == 0) and ($poll_ended == 0)) {
+                        <td class='text-center'>";
+                    if ($has_participated == 0 && $poll_ended == 0 && $poll_not_started == 0) {
                         $tool_content .= "$langHasNotParticipated";
                     } else {
                         if ($poll_ended == 1) {
                             $tool_content .= $langPollHasEnded;
+                        } elseif($poll_not_started == 1) {
+                            $tool_content .= $langSurveyNotStarted;                           
                         } else {
                             $tool_content .= $langHasParticipated;
                         }
@@ -286,6 +291,6 @@ function printPolls() {
             }
             $index_aa ++;
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
 }

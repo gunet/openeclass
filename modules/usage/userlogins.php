@@ -144,7 +144,7 @@ foreach ($result as $row) {
 
 //Records exist?
 if (count($unknown_users) > 0) {
-    $tool_content .= "<p class='info'>$langAnonymousExplain</p>";
+    $tool_content .= "<div class='alert alert-info'>$langAnonymousExplain</div>";
 }
 
 if ($table_cont) {

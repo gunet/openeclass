@@ -79,7 +79,7 @@ if ($lcnt == 0) {
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $tool_content .= "<div class='info'>
+    $tool_content .= "<div class='alert alert-info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
                 2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
           </div>";

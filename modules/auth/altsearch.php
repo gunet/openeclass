@@ -43,7 +43,7 @@ $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via al
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
-    $tool_content .= "<div class='info'>$langCannotRegister</div>";
+    $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
@@ -121,7 +121,7 @@ if (!isset($_SESSION['was_validated']) or
         unset($_SESSION['was_validated']);
         if ($auth != 7 and $auth != 6 and
                 ($uname === '' or $passwd === '')) {
-            $tool_content .= "<p class='caution'>$ldapempty $errormessage</p>";
+            $tool_content .= "<div class='alert alert-danger'>$ldapempty $errormessage</div>";
             draw($tool_content, 0);
             exit();
         } else {
@@ -154,7 +154,7 @@ if (!isset($_SESSION['was_validated']) or
             $_SESSION['was_validated']['auth_user_info'] = $GLOBALS['auth_user_info'];
         }
     } else {
-        $tool_content .= "<p class='caution'>$langConnNo<br/>$langAuthNoValidUser</p>" .
+        $tool_content .= "<div class='alert alert-danger'>$langConnNo<br>$langAuthNoValidUser</div>" .
                 "<p>&laquo; <a href='$lastpage'>$langBack</a></p>";
     }
 } else {
@@ -192,7 +192,7 @@ if ($is_valid) {
     }
 
     if (!$ok and $submit) {
-        $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
     $depid = intval($department);
     if (isset($auth_user_info)) {
@@ -204,7 +204,7 @@ if ($is_valid) {
     }
     if (!empty($email) and !email_seems_valid($email)) {
         $ok = NULL;
-        $tool_content .= "<p class='caution'>$langEmailWrong</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
         $email = mb_strtolower(trim($email));
     }
@@ -330,7 +330,7 @@ if ($is_valid) {
 
         // check if mail address is valid
         if (!empty($email) and !email_seems_valid($email)) {
-            $tool_content .= "<p class='caution'>$langEmailWrong</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);
             exit();
@@ -384,7 +384,7 @@ if ($is_valid) {
                                         class='mainpage'>$langHere</a> $langBackPage</p>";
         }
     } elseif (!empty($_SESSION['uname_app_exists'])) {
-        $tool_content .= "<p class='caution'>$langUserFree3<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree3<br><br>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
     }
 }
 draw($tool_content, 0);

@@ -59,7 +59,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 
     // display number of users
     $tool_content .= "
-        <div class='info'>
+        <div class='alert alert-info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
                 2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
           </div>";

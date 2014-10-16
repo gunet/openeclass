@@ -195,7 +195,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     }
 } else {
     /*     * *** Email address entry form **** */
-    $tool_content .= "<div class='info'>$lang_pass_intro</div><br>";
+    $tool_content .= "<div class='alert alert-info'>$lang_pass_intro</div><br>";
     $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
           <legend>$langUserData</legend>

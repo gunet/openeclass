@@ -206,7 +206,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     }
                 }
             } else {
-                $tool_content .= "<table width='100%'><tbody><tr><td class='caution'>$langConnNo";
+                $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langConnNo";
                 if (isset($GLOBALS['auth_errors'])) {
                     $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
                 }
@@ -215,7 +215,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             }
         } else {
             $tool_content .= "<table width='100%'><tbody><tr>
-			                  <td class='caution'>$langWrongAuth</td></tr></tbody></table><br /><br />";
+			                  <td class='alert alert-danger'>$langWrongAuth</td></tr></tbody></table><br /><br />";
             $auth_allow = 0;
         }
 
@@ -288,7 +288,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
     }
     if ($auth != 6 && $auth != 7) {
-        $tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
+        $tool_content .= "<tr><td colspan='2'><div class='alert alert-info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'></td></tr>
 		<tr><th class='left'>$langPass: </th>

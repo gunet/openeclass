@@ -79,7 +79,7 @@ if (!empty($_POST['submit'])) {
         $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
 } elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
-    $tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
+    $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div> ";
 }
 
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {

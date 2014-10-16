@@ -694,7 +694,7 @@ if ($is_editor) {
         $tool_content .= "</table>";
 
         // display number of users
-        $tool_content .= "<div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
+        $tool_content .= "<div class='alert alert-info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
                         <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
                         2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
         </div>";
@@ -1046,7 +1046,7 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<fieldset><legend>$langAttendanceΑbsences</legend>";
-        $tool_content .= "<div class='info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceΑbsencesFrom . " ". $attendance_limit . " " . $langAttendanceΑbsencesFrom2. " </div><br>";
+        $tool_content .= "<div class='alert alert-info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceΑbsencesFrom . " ". $attendance_limit . " " . $langAttendanceΑbsencesFrom2. " </div><br>";
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <table width='100%' class='sortable' id='t2'>";
         $tool_content .= "<tr><th colspan='2'>$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceΑbsencesYesNo</th></tr>";

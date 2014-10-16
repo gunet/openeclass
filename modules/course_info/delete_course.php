@@ -42,7 +42,7 @@ if (isset($_POST['delete'])) {
     $tool_content .= "
     <table class='tbl'>
     <tr>
-    <td class='caution_NoBorder' height='60' colspan='3'>
+    <td class='alert alert-danger' height='60' colspan='3'>
             <p>$langByDel_A <b>" . q($title) . " ($course_code) </b>&nbsp;?  </p>
     </td>
     </tr>

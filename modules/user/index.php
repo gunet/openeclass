@@ -351,7 +351,7 @@ $tool_content .= "
 
 // display number of users
 $tool_content .= "
-<div class='info'><b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
+<div class='alert alert-info'><b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
        2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
   </div>";
 

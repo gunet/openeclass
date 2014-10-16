@@ -102,7 +102,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);
                     }
-                    $tool_content = "<div class='info'>$langMailVerifySuccess2 </div>
+                    $tool_content = "<div class='alert alert-info'>$langMailVerifySuccess2 </div>
 					<p>$user_msg<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a>
 						$langBackPage</p>";
                     draw($tool_content, 0);
@@ -114,7 +114,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);
                     }
-                    $tool_content = "<div class='info'>$langMailVerifySuccess2 </div>
+                    $tool_content = "<div class='alert alert-info'>$langMailVerifySuccess2 </div>
 					<p>$user_msg<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a>
 						$langBackPage</p>";
                     draw($tool_content, 0);

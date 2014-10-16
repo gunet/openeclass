@@ -152,7 +152,7 @@ function do_user_merge($source, $target) {
         fix_table('wiki_pages', 'owner_id', $source_id, $target_id);
         fix_table('wiki_pages_content', 'editor_id', $source_id, $target_id);
 
-        $tool_content = sprintf('<p class="success">' . $langUserMergeSuccess . '</p>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
+        $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
                 "\n<p><a href='search_user.php'>$langBack</p>\n";
 
         draw($tool_content, 3);

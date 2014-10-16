@@ -226,7 +226,7 @@ elseif (isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
     $langStep = $langStep3;
     $_SESSION['step'] = 3;
     $tool_content .= "
-	<div class='info'>$langWillWrite $langDBSettingIntro</div>
+	<div class='alert alert-info'>$langWillWrite $langDBSettingIntro</div>
 	<br />
         <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
@@ -336,7 +336,7 @@ elseif (isset($_REQUEST['install5'])) {
     
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-	<div class='info'>$langReviewSettings</div> <br />
+	<div class='alert alert-info'>$langReviewSettings</div> <br />
 		<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
@@ -466,9 +466,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     $fd = @fopen("../config/config.php", "w");
     if (!$fd) {
         $config_dir = dirname(__DIR__) . '/config';
-        $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
-                "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
-                "</p><pre class='config'>" . q($stringConfig) . "</pre>";
+        $tool_content .= "<div class='alert alert-warning'>$langErrorConfig</div>" .
+                "<div class='alert alert-info'>" . sprintf($langErrorConfigAlt, $config_dir) .
+                "</div><pre class='config'>" . q($stringConfig) . "</pre>";
     } else {
         // write to file
         fwrite($fd, $stringConfig);
@@ -546,7 +546,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
 	<li>$langInstallBullet1</li>
 	<li>$langInstallBullet3</li>
 	</ul>	
-	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
+	<div class='alert alert-info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
 	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
 	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
