@@ -584,6 +584,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $i++;
         }
         $tool_content .= "</tbody></table>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

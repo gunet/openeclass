@@ -206,7 +206,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     }
                 }
             } else {
-                $tool_content .= "<table width='100%'><tbody><tr><td class='caution'>$langConnNo";
+                $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langConnNo";
                 if (isset($GLOBALS['auth_errors'])) {
                     $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
                 }
@@ -215,7 +215,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             }
         } else {
             $tool_content .= "<table width='100%'><tbody><tr>
-			                  <td class='caution'>$langWrongAuth</td></tr></tbody></table><br /><br />";
+			                  <td class='alert alert-danger'>$langWrongAuth</td></tr></tbody></table><br /><br />";
             $auth_allow = 0;
         }
 

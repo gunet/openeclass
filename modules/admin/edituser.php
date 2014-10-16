@@ -313,11 +313,11 @@ if ($u) {
             }
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langNoStudentParticipation</div>";
             if ($u > 1) {
-                $tool_content .= "<p class='eclass_button'><a href='unreguser.php?u=$u'>$langDelete</a></p>";
+                $tool_content .= "<p class='btn btn-danger'><a href='unreguser.php?u=$u'>$langDelete</a></p>";
             } else {
-                $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
+                $tool_content .= "<div class='alert alert-danger'>$langCannotDeleteAdmin</div>";
             }
         }
     } else { // if the form was submitted then update user
@@ -347,14 +347,14 @@ if ($u) {
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username)) {
             $tool_content .= "<table width='99%'><tbody><tr>
-                                <td class='caution' height='60'><p>$langFieldsMissing</p>
+                                <td class='alert alert-danger' height='60'><p>$langFieldsMissing</p>
                                   <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>
                                 </td></tr></tbody></table><br><br>";
             draw($tool_content, 3, ' ', $head_content);
             exit();
         } elseif (isset($user_exist) and $user_exist == true) {
             $tool_content .= "<table width='100%'><tbody><tr>
-                                <td class='caution' height='60'><p>$langUserFree</p>
+                                <td class='alert alert-danger' height='60'><p>$langUserFree</p>
                                   <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>
                                 </td></tr></tbody></table><br><br>";
             draw($tool_content, 3, null, $head_content);

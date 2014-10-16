@@ -179,11 +179,11 @@ if ($can_upload) {
         // check for disk quotas
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-            $action_message .= "<p class='caution'>$langNoSpace</p>";
+            $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
         } else {
             if (unwanted_file($_FILES['userFile']['name'])) {
-                $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
-                        q($_FILES['userFile']['name']) . "</p>";
+                $action_message .= "<div class='alert alert-danger'>$langUnwantedFiletype: " .
+                        q($_FILES['userFile']['name']) . "</div>";
             } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
                 /* ** Unzipping stage ** */
                 $zipFile = new pclZip($userFile);
@@ -203,8 +203,8 @@ if ($can_upload) {
     } elseif (isset($_POST['fileURL']) and ( $fileURL = trim($_POST['fileURL']))) {
         $extra_path = canonicalize_url($fileURL);
         if (preg_match('/^javascript/', $extra_path)) {
-            $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
-                    q($extra_path) . "</p>";
+            $action_message .= "<div class='alert alert-danger'>$langUnwantedFiletype: " .
+                    q($extra_path) . "</div>";
         } else {
             $uploaded = true;
         }
@@ -214,7 +214,7 @@ if ($can_upload) {
         $extra_path = '';
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
-            $action_message .= "<p class='caution'>$langNoSpace</p>";
+            $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
         } else {
             if (isset($_POST['file_name'])) {
                 $fileName = $_POST['file_name'];
@@ -246,7 +246,7 @@ if ($can_upload) {
         }
     }
     if ($error) {
-        $action_message .= "<p class='caution'>$error</p><br />";
+        $action_message .= "<div class='alert alert-danger'>$error</div><br>";
     } elseif ($uploaded) {
         // No errors, so proceed with upload
         // File date is current date
@@ -625,10 +625,10 @@ if ($can_upload) {
             // check for disk quota
             $diskUsed = dir_total_space($basedir);
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
-                $action_message = "<p class='caution'>$langNoSpace</p>";
+                $action_message = "<div class='alert alert-danger'>$langNoSpace</div>";
             } elseif (unwanted_file($_FILES['newFile']['name'])) {
-                $action_message = "<p class='caution'>$langUnwantedFiletype: " .
-                        q($_FILES['newFile']['name']) . "</p>";
+                $action_message = "<div class='alert alert-danger'>$langUnwantedFiletype: " .
+                        q($_FILES['newFile']['name']) . "</div>";
             } else {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
@@ -638,7 +638,7 @@ if ($can_upload) {
                           WHERE $group_sql AND path = ?s"
                                 , $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or $affectedRows == 0) {
-                    $action_message = "<p class='caution'>$langGeneralError</p>";
+                    $action_message = "<div class='alert alert-danger'>$langGeneralError</div>";
                 } else {
                     if (hasMetaData($oldpath, $basedir, $group_sql)) {
                         rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
@@ -755,7 +755,7 @@ if ($can_upload) {
                         </form>
                         \n\n";
         } else {
-            $action_message = "<p class='caution'>$langFileNotFound</p>";
+            $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
         }
     }
 
@@ -886,7 +886,7 @@ if ($can_upload) {
                         </form>
                         \n\n";
         } else {
-            $action_message = "<p class='caution'>$langFileNotFound</p>";
+            $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
         }
     }
 
@@ -908,7 +908,7 @@ if ($can_upload) {
 
             $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
         } else {
-            $action_message = "<p class='caution'>$langFileNotFound</p>";
+            $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
         }
     }
 

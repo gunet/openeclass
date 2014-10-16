@@ -128,7 +128,8 @@ function printPollForm() {
             $tool_content .= "<input name='submit' type='submit' value='".q($langSubmit)."'></p></form>";
         }
     } else {
-        $tool_content .= $langPollInactive;
+        Session::Messages($langPollInactive);
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }	
 }
 

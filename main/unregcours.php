@@ -39,7 +39,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
           <table width='100%'>
           <tbody>
           <tr>
-            <td class='caution_NoBorder' height='60' colspan='2'>
+            <td class='alert alert-danger' height='60' colspan='2'>
               <p>$langConfirmUnregCours:</p><p> <em>" . q(course_id_to_title($cid)) . "</em>;&nbsp;</p>
               <ul class='listBullet'>
               <li>$langYes:
