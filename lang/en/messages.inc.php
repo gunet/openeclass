@@ -2221,9 +2221,9 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<p class="caution"><b>The page you tried to access requires a valid username and password.</b><br/>
+$langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
-by a mistyped URL or due to session timeout.</p>';
+by a mistyped URL or due to session timeout.';
 $langLoginRequired = '<b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).
 ';
 $langSessionIsLost = "<b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.";

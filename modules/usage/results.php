@@ -172,5 +172,5 @@ switch ($u_stats_value) {
         break;
 }
 
-$errorMsg = '<p class="alert1">' . $langNoStatistics . '</p>';
+$errorMsg = '<div class="alert alert-warning">' . $langNoStatistics . '</div>';
 $tool_content .= $chart->plot($errorMsg);

@@ -456,7 +456,7 @@ switch ($action) {
             }
             // wiki list empty
             else {
-                $tool_content .= '<p class="alert1">' . $langWikiNoWiki . '</p>' . "\n";
+                $tool_content .= '<div class="alert alert-warning">' . $langWikiNoWiki . '</div>' . "\n";
             }
 
             break;

@@ -44,7 +44,7 @@ $cas_obj->createTable();
     <link rel="stylesheet" type='text/css' href='example.css'/>
   </head>
 <body>
-<div class="success">
+<div class="alert alert-success">
 <?php
 echo 'Table <b>' . $db_table . '</b> successfully created in database <b>' . $db . '</b>';
 ?>

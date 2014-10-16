@@ -288,7 +288,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
     }
     if ($auth != 6 && $auth != 7) {
-        $tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
+        $tool_content .= "<tr><td colspan='2'><div class='alert alert-info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'></td></tr>
 		<tr><th class='left'>$langPass: </th>

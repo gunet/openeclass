@@ -27,7 +27,7 @@ $nameTools = $langSearch;
 
 // exit if search is disabled
 if (!get_config('enable_search')) {
-    $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+    $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
     draw($tool_content, 0);
     exit();
 }

@@ -811,7 +811,7 @@ if ($is_editor) {
 
         // display number of users
         $tool_content .= "
-    <div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
+    <div class='alert alert-info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
       <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id'>$langcsvenc2</a>
            2. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id&amp;enc=1253'>$langcsvenc1</a>
       </div>";
@@ -1301,7 +1301,7 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<fieldset><legend>$langGradebookGrades</legend>";
-        $tool_content .= "<div class='info'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
+        $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: " . userGradeTotal($gradebook_id, $userID) . " </div><br>";
 
         if(weightleft($gradebook_id, 0) != 0){
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";

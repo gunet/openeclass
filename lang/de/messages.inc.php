@@ -2035,7 +2035,7 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<p class="caution"><b> Die Seite, auf die Sie zugreifen möchten, benötigt Benutzername und Passwort.</b><br/> Das System hat Sie automatisch zur Startseite weitergeleitet, damit Sie sich einloggen. Möglicherweise ist Ihre Sitzung beendet.';
+$langNoAdminAccess = '<b> Die Seite, auf die Sie zugreifen möchten, benötigt Benutzername und Passwort.</b><br/> Das System hat Sie automatisch zur Startseite weitergeleitet, damit Sie sich einloggen. Möglicherweise ist Ihre Sitzung beendet.';
 $langLoginRequired = '<b> Sie sind in dem Kurs nicht registriert und deshalb können Sie das entsprechende Subsystem nicht verwenden.</b><br/> Das System hat Sie automatisch zur Startseite weitergeleitet, damit Sie sich registrieren (falls der Kurs offen für Registrierung ist).';
 $langSessionIsLost = "<b> Ihre Sitzung ist abgelaufen.</b><br/> Das System hat Sie automatisch zur Startseite weitergeleitet, damit Sie sich einloggen.";
 $langCheckProf = "<b> Ihre Aktion, die Sie ausführen möchten, erfordert $langsTeacher Zugriffsrechte.</b><br/> Das System hat Sie automatisch zur Startseite weitergeleitet. Falls Sie der $langsTeacher dieses Kurses sind, werden Sie Zugriff auf die Kurs Administrator Werkzeuge haben.";

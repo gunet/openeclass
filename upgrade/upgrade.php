@@ -155,7 +155,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     }
     // get old contact values
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>" .
-            "<div class='info'>" .
+            "<div class='alert alert-info'>" .
             "<p>$langConfigFound" .
             "<br>$langConfigMod</p></div>" .
             "<fieldset><legend>$langUpgContact</legend>" .
@@ -2269,7 +2269,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 if ($n > 100) {
                     set_config('enable_search', 0);
                     set_config('enable_indexing', 0);
-                    echo "<hr><p class='info'>$langUpgIndexingNotice</p>";
+                    echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
                 } else {
                     set_config('enable_indexing', 1);
                     require_once 'modules/search/indexer.class.php';

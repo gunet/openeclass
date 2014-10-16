@@ -237,9 +237,9 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
             if ($list_status == 1) {
-                $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
+                $tool_content .= "<div class='alert alert-info'>$langProfessorRequestClosed</div>";
             } else {
-                $tool_content .= "<div class='info'$langRequestStudent</div>";
+                $tool_content .= "<div class='alert alert-info'$langRequestStudent</div>";
             }
             break;
         case '2':

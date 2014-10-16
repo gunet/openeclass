@@ -73,10 +73,10 @@ if (isset($_POST['submit'])) {
     }
     if (!get_user_email_notification_from_courses($uid)) {
         $head_content .= '<script type="text/javascript">$(control_deactivate);</script>';
-        $tool_content .= "<div class='info'>$langEmailUnsubscribeWarning</div>
+        $tool_content .= "<div class='alert alert-info'>$langEmailUnsubscribeWarning</div>
                                   <input type='checkbox' id='unsub' name='unsub' value='1'>&nbsp;$langEmailFromCourses";
     }
-    $tool_content .= "<div class='info'>$langInfoUnsubscribe</div>
+    $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
     if (isset($_POST['cid'])) { // one course only
         $cid = intval($_POST['cid']);

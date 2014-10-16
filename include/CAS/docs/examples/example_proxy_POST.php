@@ -67,7 +67,7 @@ try {
     $service->setBody('favorite_color=blue');
     $service->send();
     if ($service->getResponseStatusCode() == 200) {
-        echo '<div class="success">';
+        echo '<div class="alert alert-success">';
         echo $service->getResponseBody();
         echo '</div>';
     } else {

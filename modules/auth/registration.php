@@ -60,7 +60,7 @@ if ($user_registration) {
         }
         $tool_content .= "</table>";
     } else {
-        $tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
+        $tool_content .= "<div class='alert alert-info'>$langStudentCannotRegister</div>";
     }
 
     // teacher registration
@@ -83,10 +83,10 @@ if ($user_registration) {
         }
         $tool_content .= "</table>";
     } else {
-        $tool_content .= "<div class='info'>$langTeacherCannotRegister</div>";
+        $tool_content .= "<div class='alert alert-info'>$langTeacherCannotRegister</div>";
     }
 } else { // disable registration
-    $tool_content .= "<div class='info'>$langCannotRegister</div>";
+    $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
 }
 
 draw($tool_content, 0);
