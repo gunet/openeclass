@@ -79,8 +79,8 @@ class ECLASS_OAIDC {
                                         $added_node = $this->oai_pmh->addChild($this->working_node, str_replace("dc_", "dc:", $rkey), $vvalue2);
                                         // numeric vkeys show simple multiplicity
                                         // string vkeys show multi-lang multiplicity requiring xml:lang attribute
-                                        if (!is_numeric($vkey)) {
-                                            $added_node->setAttribute('xml:lang', $vkey);
+                                        if (!is_numeric($vkey2)) {
+                                            $added_node->setAttribute('xml:lang', $vkey2);
                                         }
                                     }
                                 } else {
