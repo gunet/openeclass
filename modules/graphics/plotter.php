@@ -26,22 +26,16 @@ class Plotter {
     private $title;
     private $data;
     private static $instanceCounter = 0;
-    private static $MAX_WIDTH = 780;    
-    private static $MAX_HEIGHT = 780;
 
-    function __construct($width = 200, $height = 200) {
+    function __construct($width = "100%", $height = "300px") {
         $this->setDimension($width, $height);
         $this->data = array();
         self::$instanceCounter++;
     }
 
     public function setDimension($width, $height) {
-        $this->width = $width > Plotter::$MAX_WIDTH ? Plotter::$MAX_WIDTH : $width;
-        $this->height = $height > Plotter::$MAX_HEIGHT ? Plotter::$MAX_HEIGHT : $height;
-    }
-
-    public function modDimension($width, $height) {
-        $this->setDimension($this->width + $width, $this->height + $height);
+        $this->width = $width;
+        $this->height = $height;
     }
 
     public function setTitle($title) {
@@ -50,11 +44,6 @@ class Plotter {
 
     public function addPoint($name, $value) {
         $this->data[$name] = $value;
-    }
-
-    public function growWithPoint($name, $value) {
-        $this->modDimension(25, 0);
-        $this->addPoint($name, $value);
     }
 
     public function normalize() {
@@ -90,14 +79,14 @@ class Plotter {
 
             return '
                 
-<div class="flot-container" style="width: ' . $this->width . 'px; height: ' . $this->height . 'px;">
+<div class="flot-container" style="width: ' . $this->width . '; height: ' . $this->height . ';">
 <p class="flot-title">' . $this->title . '</p>
 <div class="flot-placeholder" id="placeholder' . self::$instanceCounter . '"></div>
 </div>
 
 <script type="text/javascript">
-    $(function() {
-        var data = ' . $dataset . ';
+
+    function doPlot(data) {
         $.plot("#placeholder' . self::$instanceCounter . '", [ data ], {
             series: {
                 bars: {
@@ -113,6 +102,14 @@ class Plotter {
                 tickLength: 0
             }
         });
+    }
+    
+    $(function() {
+        var data = ' . $dataset . ';
+        doPlot(data);
+         window.onresize = function(event) {
+            doPlot(data);
+         }
     });
 </script>';
         }

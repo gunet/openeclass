@@ -105,7 +105,7 @@ if (count($result) > 0) {
     //add points to chart
     foreach ($result as $row) {
         $mont = $langMonths[$row->month];
-        $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
+        $chart->addPoint($mont . " - " . $row->year, $row->visits);
     }
     $tool_content .= "<p>" . $langVisits . "</p>" . $chart->plot();
 } else {

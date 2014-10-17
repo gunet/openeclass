@@ -88,7 +88,7 @@ if ($u_user_id != -1) {
 $chart_error = "";
 switch ($u_stats_value) {
     case "visits":
-        $chart = new Plotter(400, 300);
+        $chart = new Plotter();
         $chart->setTitle($langFavourite);
         $result = Database::get()->queryArray("SELECT module_id, SUM(hits) AS cnt FROM actions_daily
                         WHERE $date_where AND
@@ -98,16 +98,16 @@ switch ($u_stats_value) {
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course units
-                $chart->growWithPoint($langCourseUnits, $row->cnt);
+                $chart->addPoint($langCourseUnits, $row->cnt);
             } else { // other modules
-                $chart->growWithPoint($modules[$mid]['title'], $row->cnt);
+                $chart->addPoint($modules[$mid]['title'], $row->cnt);
             }
         }
         $chart_error = $langNoStatistics;
         break;
 
     case "duration":
-        $chart = new Plotter(400, 300);
+        $chart = new Plotter();
         $chart->setTitle($langFavourite);
         $result = Database::get()->queryArray("SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
                         WHERE $date_where
@@ -117,9 +117,9 @@ switch ($u_stats_value) {
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course inits
-                $chart->growWithPoint($langCourseUnits, $row->tot_dur);
+                $chart->addPoint($langCourseUnits, $row->tot_dur);
             } else { // other modules
-                $chart->growWithPoint($modules[$mid]['title'], $row->tot_dur);
+                $chart->addPoint($modules[$mid]['title'], $row->tot_dur);
             }
         }
         $chart_error = $langDurationExpl;
