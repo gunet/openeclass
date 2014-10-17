@@ -24,7 +24,7 @@ function statistics_tools($course_code, $self_link = "", $relative_path = "") {
     $tool_content .= "<div id='operations_container'>" .
             action_bar(array(
                 array('title' => $langStat,
-                    'url' => $relative_path . "index.php?course=TMB3100",
+                    'url' => $relative_path . "index.php?course=$course_code",
                     'icon' => 'fa-bar-chart',
                     'show' => $self_link != "index",
                     'level' => 'primary-label'),
