@@ -37,6 +37,7 @@ function template_callback($template, $menuTypeID)
     global $uid, $session, $native_language_names_init, $course_id, $professor;
 
     if ($uid) {
+        $counter = 1;
         $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
         $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
         $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
@@ -47,6 +48,8 @@ function template_callback($template, $menuTypeID)
             ORDER BY reg_date DESC
             LIMIT 5", function ($c) use ($template) {
                 global $urlAppend;
+                global $counter;
+                $template->set_var('sideBarCollapseId', q($counter));
                 $template->set_var('sideBarCourseURL', $urlAppend . 'courses/' . $c->code . '/');
                 $template->set_var('sideBarCourseTitle', q($c->title));
                 $template->set_var('sideBarCourseCode', q($c->public_code));
@@ -61,6 +64,8 @@ function template_callback($template, $menuTypeID)
                     }
                 }
                 $template->parse('sideBarCourse', 'sideBarCourseBlock', true);
+                $counter++;
+
             }, $uid);
 
 
