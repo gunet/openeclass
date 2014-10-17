@@ -84,83 +84,94 @@ if (!$user_registration or $eclass_stud_reg != 2) {
 // display form
 if (!isset($_POST['submit'])) {
     if (get_config('email_required')) {
-        $email_message = "(*)";
+        $email_message = $langCompulsory;
     } else {
-        $email_message = $langEmailNotice;
+        $email_message = $langOptional;
     }
     if (get_config('am_required')) {
-        $am_message = "&nbsp;&nbsp;<small>(*)</small>";
+        $am_message = $langCompulsory;
     } else {
-        $am_message = '';
+        $am_message = $langOptional;
     }
-    @$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
-        <fieldset>
-          <legend>$langUserData</legend>
-          <table width='100%' class='tbl'>
-            <tr>
-              <th class='left' width='180'>$langName:</th>
-              <td colspan='2'><input type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langSurname:</th>
-              <td colspan='2'><input type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langUsername:</th>
-              <td colspan='2'><input type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30' class='FormData_InputText' autocomplete='off' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langPass:</th>
-              <td colspan='2'><input type='password' name='password1' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langConfirmation:</th>
-              <td colspan='2'><input type='password' name='password' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langEmail:</th>
-              <td valign='top'><input type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' class='FormData_InputText' /></td>
-              <td><small>$email_message</small></td>
-            </tr>
-            <tr>
-              <th class='left'>$langAm:</th>
-              <td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' class='FormData_InputText' />$am_message</td>
-            </tr>
-            <tr>
-              <th class='left'>$langPhone:</th>
-              <td colspan='2' valign='top'><input type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' class='FormData_InputText' /></td>
-            </tr>
-            <tr>
-              <th class='left'>$langFaculty:</th>
-              <td colspan='2'>";
-    list($js, $html) = $tree->buildUserNodePicker();
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "\n</td></tr>
-            <tr>
-              <th class='left'>$langLanguage:</th>
-              <td width='1'>";
-    $tool_content .= lang_select_options('localize');
-    $tool_content .= "</td>
-              <td><small>$langTipLang2</small></td>
-            </tr>";
-    if (get_config("display_captcha")) {
-        $tool_content .= "<tr>
-              <th class='left'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
-              <td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
-            </tr>";
-    }
-    $tool_content .= "<tr>
-              <th class='left'>&nbsp;</th>
-              <td colspan='2' class='right'>
-                <input type='submit' name='submit' value='" . q($langRegistration) . "' />
-              </td>
-            </tr>
-          </table>
+    @$tool_content .= "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
+            <fieldset>
+            <div class='form-group'>
+                <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+                <div class='col-sm-10'>
+                  <input type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' placeholder='$langName'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' placeholder='$langSurname'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
+                <div class='col-sm-10'>
+                    <input type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
+                </div>      
+            </div>
+            <div class='form-group'>
+              <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
+                <div class='col-sm-10'>
+                    <input type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' placeholder='$email_message'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' placeholder='$am_message'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' placeholder = '$langOptional'>
+                </div>
+            </div>
+            <div class='form-group'>
+              <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
+                <div class='col-sm-10'>";
+            list($js, $html) = $tree->buildUserNodePicker();
+            $head_content .= $js;
+            $tool_content .= $html;
+            $tool_content .= "</div>
+            </div>
+            <div class='form-group'>
+              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
+              <div class='col-sm-10'>";
+            $tool_content .= lang_select_options('localize');
+            $tool_content .= "</div>
+            </div>";
+            if (get_config("display_captcha")) {                
+                $tool_content .= "<div class='form-group'>                    
+                      <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
+                      <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
+                      <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
+                    </div>";
+            }
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
+                    </div>
         </fieldset>
       </form>
-      <div class='right smaller'>$langRequiredFields</div>
-";
+      </div>";
+      
 } else {
     if (get_config('email_required')) {
         $email_arr_value = true;

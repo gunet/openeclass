@@ -212,7 +212,7 @@ $tool_content .="
       <td><input type=text name='name' size=40 value='$tool_content_group_name' /></td>
     </tr>
     <tr>
-      <th class='left'>$langDescription $langUncompulsory:</th>
+      <th class='left'>$langDescription $langOptional:</th>
       <td><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></td>
     </tr>
     <tr>

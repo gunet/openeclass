@@ -251,7 +251,7 @@ if (!isset($_POST['create_course'])) {
         <td>" . lang_select_options('localize') . "</td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-                        @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langUncompulsory</span>
+                        @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langOptional</span>
                             <br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
          $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 

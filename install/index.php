@@ -240,7 +240,7 @@ elseif (isset($_POST['install3'])) {
            <div class='form-group'>
 	         <label for='dbMyAdmin' class='col-sm-2 control-label'>$langphpMyAdminURL</label>
              <div class='col-sm-8'>" . text_input('dbMyAdmin', 25) . "</div>
-             <div class='col-sm-2'>$langUncompulsory</div>
+             <div class='col-sm-2'>$langOptional</div>
            </div>
            <div class='form-group'>
              <input type='submit' class='btn btn-default' name='install2' value='&laquo; $langPreviousStep'>

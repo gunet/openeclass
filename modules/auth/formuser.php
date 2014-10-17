@@ -157,6 +157,7 @@ if ($all_set) {
         $subject = $langMailVerificationSubject;
         $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&rid=' . $request_id);
         $emailhelpdesk = get_config('email_helpdesk');
+        $emailAdministrator = get_config('email_sender');
         if (!send_mail($siteName, $emailAdministrator, '', $usermail, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
             $tool_content .= $mail_ver_error;
@@ -175,68 +176,95 @@ if ($all_set) {
 
 // first time we visit the form or on error
 } else {
-    // display the form
-    $phone_star = $prof ? '&nbsp;&nbsp;(*)' : '';
-    $tool_content .= "<p>" .
-            ($prof ? $langInfoProfReq : $langInfoStudReq) . "</p><br />
-        <form action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <input type='hidden' name='p' value='$prof'>
-         <fieldset>
-          <legend>$langUserData</legend>
-          <table class='tbl'>
-          <tr>
-            <th>$langName</th>
-            <td><input type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60'>&nbsp;&nbsp;(*)</td>
-          </tr>
-          <tr>
-            <th>$langSurname</th>
-            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60'>&nbsp;&nbsp;(*)</td>
-          </tr>
-          <tr>
-            <th>$langPhone</th>
-            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20'>$phone_star</td>
-          <tr>
-            <th>$langUsername</th>
-            <td><input type='text' name='username' size='30' maxlength='50' value='" . q($username) . "'>&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
-          </tr>
-          <tr>
-            <th>$langProfEmail</th>
-            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100'>&nbsp;&nbsp;(*)</td>
-          </tr>";
-    if (!$prof) {
-        $tool_content .= "<tr>
-                <th>$langAm</th>
-                <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20'>" .
-                ($am_required ? '&nbsp;&nbsp;(*)' : '') . "</td>
-                </tr>";
+    if ($am_required) {
+        $am_text = $langCompulsory;
+    } else {
+        $am_text = $langOptional;
     }
-    $tool_content .= "<tr>
-            <th>$langComments</th>
-            <td><textarea name='usercomment' cols='30' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
-            </tr>
-            <tr>
-            <th>$langFaculty&nbsp;</th>
-            <td>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</td></tr><tr><th>$langLanguage</th><td>";
-    $tool_content .= lang_select_options('localize');
-    $tool_content .= "</td></tr>";
-    if (get_config("display_captcha")) {
-        $tool_content .= "<tr>
-		<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
-		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
-		</tr>";
+    
+    if ($prof) {
+        $langUserData = $langInfoProfReq;
+        $phone_star = $langCompulsory;
+    } else {
+        $langUserData = $langInfoStudReq;
+        $phone_star = $langOptional;
     }
-    $tool_content .= "<tr>
-        <td>&nbsp;</td>
-        <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='" . q($langSubmitNew) . "' /></td>
-        </tr>
-        </table>
+        
+    $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <input type='hidden' name='p' value='$prof'>
+        <fieldset>          
+        <div class='form-group'>
+            <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'>                       
+                <input type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60' placeholder='$langName'></td>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10'>  
+                <input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60' placeholder='$langSurname'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' placeholder='$phone_star'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>            
+            <div class='col-sm-10'>
+                <input type='text' name='username' size='30' maxlength='50' value='" . q($username) . "' placeholder='$langUserNotice'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='ProfEmail' class='col-sm-2 control-label'>$langProfEmail:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' placeholder='$langCompulsory'>
+            </div>
+        </div>";
+    if (!$prof) {        
+        $tool_content .= "<div class='form-group'>
+                <label for='ProfEmail' class='col-sm-2 control-label'>$langAm:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
+                </div>
+            </div>";
+    }
+    $tool_content .= "<div class='form-group'>
+            <label for='ProfComments' class='col-sm-2 control-label'>$langComments:</label>
+                <div class='col-sm-10'>
+                    <textarea name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
+            <div class='col-sm-10'>";            
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= "</div></div>";
+        $tool_content .= "<div class='form-group'>
+              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
+              <div class='col-sm-10'>";
+        $tool_content .= lang_select_options('localize');
+        $tool_content .= "</div></div>";
+    if (get_config("display_captcha")) {        
+        $tool_content .= "<div class='form-group'>                    
+                      <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
+                      <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
+                      <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
+                    </div>";        
+    }
+    
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
+                    </div>
         </fieldset>
-        </form>
-        <div class='right smaller'>$langRequiredFields</div>";
+      </form>
+      </div>";
 }
 
 draw($tool_content, 0, null, $head_content);

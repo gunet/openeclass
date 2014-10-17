@@ -1663,7 +1663,7 @@ $langPrivate_3 = "ελεύθερη πρόσβαση (μόνο για ανάγν�
 $langGroupThisSpace = "Περιοχή για την ομάδα χρηστών";
 $langGroupName = "Όνομα ομάδας χρηστών";
 $langEditGroup = "Διόρθωση της ομάδας χρηστών";
-$langUncompulsory = "(προαιρετικό)";
+$langOptional = "(προαιρετικό)";
 $langNoGroupStudents = "Μη εγγεγραμμένοι " . $langsStudents . " ";
 $langGroupMembers = "Μέλη ομάδας χρηστών";
 $langGroupValidate = "Επικύρωση";
@@ -2576,7 +2576,7 @@ $langCanEnter = "Είσοδος στην ψηφιακή αίθουσα.";
 $langChoice = "Επιλογή";
 $langLessonName = "Όνομα μαθήματος";
 $langCaptchaWrong = "Ο κωδικός ασφαλείας που έχετε εισαγάγει είναι λάθος.";
-$langTipCaptcha = "Πληκτρολογήστε τον κωδικό ασφαλείας που εμφανίζεται";
+$langCaptcha = "Κωδικός ασφάλειας";
 $langUserAltAuth = "Το όνομα χρήστη με το οποίο προσπαθήσατε να συνδεθείτε χρησιμοποιεί διαφορετικό τρόπο πιστοποίησης. Παρακαλώ επικοινωνήστε με τους διαχειριστές της πλατφόρμας";
 
 // profile.php
@@ -2600,6 +2600,7 @@ $langProfileInfoUsers = 'εμφάνιση σε όλους';
 $langEmailSettings = 'Ρυθμίσεις ηλεκτρονικού ταχυδρομείου';
 
 // user.php
+$langCompulsory = "(υποχρεωτικό)";
 $langNewUser = "Εγγραφή Χρήστη";
 $langModRight = "Αλλαγή των δικαιωμάτων διαχειριστή του";
 $langNone = "κανένας";
@@ -2866,8 +2867,8 @@ $langHere = "εδώ";
 $langMailVerificationClick = "Παρακαλούμε πατήστε στη παρακάτω διεύθυνση:";
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
-$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την ηλεκτρονική σας διεύθυνση";
-$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε άμεσα το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης.
+$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την ηλεκτρονική σας διεύθυνση.";
+$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης.
                                 <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
                         με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
