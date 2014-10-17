@@ -108,7 +108,10 @@ $head_content .= "<script type='text/javascript'>
                             save_grade(this);
                             var countnotgraded = $('input.questionGradeBox').not(':disabled').length;
                             if (countnotgraded == 0) {
-                                $('a#submitButton').parent().hide();
+                                $('a#submitButton').hide();
+                                $('a#all').hide();
+                                $('a#ungraded').hide();
+                                $('table.graded').show('slow');
                             }                        
                         }
                     });
@@ -144,14 +147,21 @@ $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../cou
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 
+
+$tool_content .= "<div class='panel panel-primary'>
+  <div class='panel-heading'>
+    <h3 class='panel-title'>$exerciseTitle</h3>
+  </div>";
+if (!empty($exerciseDescription_temp)) {
+    $tool_content .= "<div class='panel-body'>
+        $exerciseDescription_temp
+      </div>";
+}
+$tool_content .= "</div>";
 $tool_content .= "
   <div class='row margin-bottom-fat'>
-    <div class='col-md-7'>
-    <b>" . q(stripslashes($exerciseTitle)) . "</b><br>
-    " . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
-    </div>
-    <div class='col-md-5'>
-    ".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ? "<div class='btn-group btn-group-sm' style='float:right;'><a class='btn btn-primary' id='all'>Όλες οι ερωτήσεις</a><a class='btn btn-default' id='ungraded'>Ερωτήσεις προς Βαθμολόγηση</a></div>" : "")."
+    <div class='col-md-5 col-md-offset-7'>
+        ".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ? "<div class='btn-group btn-group-sm' style='float:right;'><a class='btn btn-primary' id='all'>Όλες οι ερωτήσεις</a><a class='btn btn-default' id='ungraded'>Ερωτήσεις προς Βαθμολόγηση</a></div>" : "")."
     </div>    
   </div>";
 $i = 0;
