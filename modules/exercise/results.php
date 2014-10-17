@@ -63,15 +63,19 @@ $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
 $tool_content .= "
-    <table class='tbl_border' width='100%'>
+<div class='table-responsive'>
+    <table class='table-default'>
     <tr>
     <th>" . q($exerciseTitle) . "</th>
-    </tr>
-    <tr>
-    <td>" . standard_text_escape($exerciseDescription_temp) . "</td>
-    </tr>
-    </table>
-    <br/>";
+    </tr>";
+if($exerciseDescription_temp) {
+    $tool_content .= "
+        <tr>
+            <td>" . standard_text_escape($exerciseDescription_temp) . "</td>
+        </tr>";
+}
+$tool_content .= "</table>
+</div><br>";
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
 $tool_content .= "<select style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId' ".(($status == 0)? 'selected' : '').">--- $langCurrentStatus ---</option>
@@ -97,7 +101,7 @@ foreach ($result as $row) {
                 ELSE b.time_constraint*60-a.secs_remaining END AS time_duration, a.total_score, a.total_weighting, a.eurid, a.attempt_status
                 FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id $extra_sql", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
-        $tool_content .= "<table class='tbl_alt' width='100%'>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr><td colspan='4'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
@@ -111,28 +115,23 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr>
-                  <th width='150' class='center'>" . $langExerciseStart . "</td>
-                  <th width='150' class='center'>" . $langExerciseDuration . "</td>
-                  <th width='150' class='center'>" . $langYourTotalScore2 . "</td>
-                  <th class='center'>" . $langCurrentStatus. "</th>
+                  <th class='text-center'>" . $langExerciseStart . "</td>
+                  <th class='text-center'>" . $langExerciseDuration . "</td>
+                  <th class='text-center'>" . $langYourTotalScore2 . "</td>
+                  <th class='text-center'>" . $langCurrentStatus. "</th>
                 </tr>";
 
         $k = 0;
         foreach ($result2 as $row2) {
-            if ($k % 2 == 0) {
-                $class = 'even';
-            } else {
-                $class = 'odd';
-            }
-            if ($is_editor && $row2->attempt_status == ATTEMPT_PENDING) {
-                $class .= ' highlight_row'; 
-            }
-            $tool_content .= "<tr class='$class'>";
-            $tool_content .= "<td class='center'>" . q($row2->record_start_date) . "</td>";
+//            if ($is_editor && $row2->attempt_status == ATTEMPT_PENDING) {
+//                $class .= ' highlight_row'; 
+//            }
+            $tool_content .= "<tr>";
+            $tool_content .= "<td class='text-center'>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $tool_content .= "<td class='center'>$langNotRecorded</td>";
             } else {
-                $tool_content .= "<td class='center'>" . format_time_duration($row2->time_duration) . "</td>";
+                $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
@@ -143,7 +142,7 @@ foreach ($result as $row) {
                     $results_link = q($row2->total_score). "/" . q($row2->total_weighting);
                 }
             }
-            $tool_content .= "<td class='center'>$results_link</td>";
+            $tool_content .= "<td class='text-center'>$results_link</td>";
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 $status = $langAttemptCompleted;
             } elseif ($row2->attempt_status == ATTEMPT_PENDING) {
@@ -153,10 +152,10 @@ foreach ($result as $row) {
             } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $status = $langAttemptCanceled;
             }
-            $tool_content .= "<td class='center'>$status</td></tr>";            
+            $tool_content .= "<td class='text-center'>$status</td></tr>";            
             $k++;
         }
-        $tool_content .= "</table><br/>";
+        $tool_content .= "</table></div><br>";
     }
 }
 $head_content .= "
