@@ -144,14 +144,6 @@ $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../cou
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 
-//$tool_content .= "
-//  <table class='table-default'>
-//  <tr class='odd'>
-//    <td colspan='2'>".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ? "<div class='btn-group btn-group-sm' style='float:right;'><a class='btn btn-primary' id='all'>Όλες οι ερωτήσεις</a><a class='btn btn-default' id='ungraded'>Ερωτήσεις προς Βαθμολόγηση</a></div>" : "")."<b>" . q(stripslashes($exerciseTitle)) . "</b>
-//    <br/>" . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
-//    </td>  
-//  </tr>
-//  </table>";
 $tool_content .= "
   <div class='row margin-bottom-fat'>
     <div class='col-md-7'>
