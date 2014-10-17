@@ -306,7 +306,7 @@ class WikiPage {
                 . "c.`editor_id`, c.`content`, c.`mtime` AS `current_mtime`, c.`id` AS `current_version` "
                 . "FROM `wiki_pages` p, "
                 . "`wiki_pages_content` c "
-                . "WHERE c.`id` = ? "
+                . "WHERE c.`id` = ?d "
                 . "AND p.`id` = c.`pid`"
         ;
 
@@ -332,7 +332,7 @@ class WikiPage {
                 . "c.`editor_id`, c.`content` "
                 . "FROM `wiki_pages` p,"
                 . " `wiki_pages_content` c "
-                . "WHERE p.`id` = ? "
+                . "WHERE p.`id` = ?d "
                 . "AND c.`id` = p.`last_version`"
         ;
 

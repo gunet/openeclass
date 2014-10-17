@@ -84,7 +84,7 @@ require_once '../../include/baseTheme.php';
 
         buffer(implode('', file($fileChatName)), $tmpArchiveFile);
         if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
-            $alert_div = "<div class='info'>$langSaveMessage</div>";
+            $alert_div = "<div class='alert alert-info'>$langSaveMessage</div>";
             Database::get()->query("INSERT INTO document SET
                                 course_id = ?d,
                                 subsystem = ?d,

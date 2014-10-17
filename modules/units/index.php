@@ -60,7 +60,7 @@ $form = process_actions();
 $access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);
 if ($access) {
     if (!resource_access(1, $access->public)) {
-        $tool_content .= "<p class='caution'>$langForbidden</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
         draw($tool_content, 2, null, $head_content);
         exit;    
     }
@@ -195,7 +195,7 @@ if (isset($id) and $id !== false) {
 }
 if (!$info) {
     $nameTools = $langUnitUnknown;
-    $tool_content .= "<p class='caution'>$langUnknownResType</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {

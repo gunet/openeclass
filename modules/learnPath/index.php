@@ -354,7 +354,7 @@ if ($is_editor) {
 // check if there are learning paths available
 $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
 if ($l == 0) {
-    $tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }

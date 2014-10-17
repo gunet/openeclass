@@ -35,6 +35,7 @@ load_js('tools.js');
 
 $nameTools = $langBlog;
 
+$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/blog/style.css">';
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 
@@ -68,14 +69,13 @@ $num_chars_teaser_break = 500;//chars before teaser break
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
 if ($is_editor) {
-    if (isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost") {
-        $tool_content .= "
-            <div id='operations_container'>
-            <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
-            </ul>
-            </div>";
-    }    
+    $tool_content .= action_bar(array(
+                         array('title' => $langBack,
+                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
+                               'icon' => 'fa-reply',
+                               'level' => 'primary-label',
+                               'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
+    ));
     if ($action == "settings") {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
@@ -84,7 +84,7 @@ if ($is_editor) {
 		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
-            $message = "<p class='success'>$langRegDone</p>";
+            $message = "<div class='alert alert-success'>$langRegDone</div>";
         }
         
         if (isset($message) && $message) {
@@ -194,15 +194,15 @@ if ($action == "delPost") {
     if ($post->loadFromDB($pId)) {
         if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
             if($post->delete()) {
-                $message = "<p class='success'>$langBlogPostDelSucc</p>";
+                $message = "<div class='alert alert-success'>$langBlogPostDelSucc</div>";
             } else {
-                $message = "<p class='alert1'>$langBlogPostDelFail</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostDelFail</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedDel</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedDel</div>";
         }
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
     $action = "showBlog";
 }
@@ -234,7 +234,7 @@ if ($action == "createPost") {
         </fieldset>
         </form>";
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
     }
     
 }
@@ -269,10 +269,10 @@ if ($action == "editPost") {
     		</fieldset>
     		</form>";
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
         }
     } else {
-        $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
 
 }
@@ -284,27 +284,27 @@ if ($action == "savePost") {
         if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
             $post = new BlogPost();
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
-                $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+                $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
             } else {
-                $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
             if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
-                    $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+                    $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
                 } else {
-                    $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                    $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
                 }
             } else {
-                $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
+                $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
             }
         } else {
-            $message = "<p class='alert1'>$langBlogPostNotFound</p>";
+            $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
         }
     } 
     $action = "showBlog";
@@ -317,15 +317,13 @@ if (isset($message) && $message) {
 
 //show blog post
 if ($action == "showPost") {
-    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
-        $tool_content .= "
-            <div id='operations_container'>
-            <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog'>" . $langBack . "</a></li>
-            </ul>
-            </div>";
-    }
-    
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label',
+                    'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid))
+    ));
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         $post->incViews();
@@ -344,7 +342,7 @@ if ($action == "showPost") {
         $tool_content .= "</h2></div>";
         
         $tool_content .= "<div class='blog_post_content'>".standard_text_escape($post->getContent())."</div>";
-        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.q(uid_to_name($post->getAuthor()))."</div>";
+        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.display_user($post->getAuthor(), false, false)."</div>";
         $tool_content .= "</div>";
         
         if ($ratings_enabled == 1) {
@@ -364,28 +362,30 @@ if ($action == "showPost") {
         }
         
     } else {
-        $tool_content .= "<p class='alert1'>$langBlogPostNotFound</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
     }
 
 }
 
 //show all blog posts
 if ($action == "showBlog") {
-    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
-        $tool_content .= "
-        <div id='operations_container'>
-            <ul id='opslist'>
-                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>";
-        if ($is_editor) {
-        	$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings'>" . $langConfig . "</a></li>";
-        }
-        $tool_content .= "</ul>
-        </div>";
-    }
+    $tool_content .= action_bar(array(
+                        array('title' => $langBlogAddPost,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost",
+                              'icon' => 'fa-plus-circle',
+                              'level' => 'primary-label',
+                              'button-class' => 'btn-success',
+                              'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid)),
+                        array('title' => $langConfig,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
+                              'icon' => 'fa-gear',
+                              'level' => 'primary',
+                              'show' => $is_editor && $blog->permCreate($is_editor, $stud_allow_create, $uid))
+                     ));
     
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
-        $tool_content .= "<p class='alert1'>$langBlogEmpty</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
     } else {//show blog posts
         //if page num was changed at the url and exceeds pages number show the first page
         if ($page > ceil($num_posts/$posts_per_page)-1) {
@@ -412,7 +412,7 @@ if ($action == "showBlog") {
             $tool_content .= "</h2></div>";
             
             $tool_content .= "<div class='blog_post_content'>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</div>";
-            $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.q(uid_to_name($post->getAuthor()))."</div>";
+            $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.display_user($post->getAuthor(), false, false)."</div>";
             $tool_content .= "</div>";
             
             if ($ratings_enabled == 1) {

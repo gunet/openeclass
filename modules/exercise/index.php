@@ -140,7 +140,7 @@ $nbrExercises = count($result); //Getting number of limited (offset and limit) e
 if (count($paused_exercises) > 0) {
     foreach ($paused_exercises as $row) {       
         $paused_exercises_ids[] = $row->eid;        
-        $tool_content .="<div class='info'>$langTemporarySaveNotice " . q($row->title) . ". <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
+        $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
     }
 }
 if ($is_editor) {
@@ -148,7 +148,7 @@ if ($is_editor) {
             . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
         foreach ($pending_exercises as $row) {           
-            $tool_content .="<div class='info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
+            $tool_content .="<div class='alert alert-info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }
     $tool_content .= action_bar(array(
@@ -170,7 +170,7 @@ if ($is_editor) {
 }
 
 if (!$nbrExercises) {
-    $tool_content .= "<p class='alert1'>$langNoEx</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoEx</div>";
 } else {
     $maxpage = 1 + intval($num_of_ex / $limitExPage);
     if ($maxpage > 0) {
@@ -216,7 +216,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td>".icon('fa-angle-double-right')." <a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
+            $tool_content .= "<td><a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 

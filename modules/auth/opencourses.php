@@ -205,7 +205,7 @@ if (count($courses) > 0) {
 } else {
     $subTrees = $tree->buildSubtrees(array($fc));
     if (count($subTrees) <= 1) { // is leaf
-        $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
+        $tool_content .= "<div class='alert alert-warning'>" . $m['nolessons'] . "</div>";
     }
 }
 

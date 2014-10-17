@@ -1722,7 +1722,7 @@ function mkdir_or_error($dirname) {
     global $langErrorCreatingDirectory;
     if (!is_dir($dirname)) {
         if (!mkdir($dirname, 0775)) {
-            echo "<p class='caution'>$langErrorCreatingDirectory $dirname</p>";
+            echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
         }
     }
 }
@@ -1730,7 +1730,7 @@ function mkdir_or_error($dirname) {
 function touch_or_error($filename) {
     global $langErrorCreatingDirectory;
     if (@!touch($filename)) {
-        echo "<p class='caution'>$langErrorCreatingDirectory $filename</p>";
+        echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
     }
 }
 
@@ -1784,7 +1784,7 @@ function fix_multiple_usernames()  {
     $q1 = Database::get()->queryArray("SELECT username, COUNT(*) AS nb
                                        FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
     if ($q1) {
-        $tool_content .= "<div class='alert1'>";
+        $tool_content .= "<div class='alert alert-warning'>";
         $tool_content .= $langUpgradeMulUsernames;
         $tool_content .= "<p>&nbsp;</p>";
 

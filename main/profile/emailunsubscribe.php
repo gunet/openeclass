@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
         }
         $course_title = course_id_to_title($cid);
-        $tool_content .= "<div class='success'>" . q(sprintf($course_title, $langEmailUnsubSuccess)) . "</div>";
+        $tool_content .= "<div class='alert alert-success'>" . q(sprintf($course_title, $langEmailUnsubSuccess)) . "</div>";
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             if (@array_key_exists($course_code, $_POST['c_unsub'])) {
@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
                                 WHERE user_id = ?d AND course_id = " . course_code_to_id($course_code), $uid);
             }
         }
-        $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br /></div>" .
+        $tool_content .= "<div class='alert alert-success'>$langWikiEditionSucceed. <br /></div>" .
                 action_bar(array(
                     array('title' => $langBack,
                         'url' => "../profile/profile.php",
@@ -68,15 +68,15 @@ if (isset($_POST['submit'])) {
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
             $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $tool_content .= "<div class='alert1'>$langMailNotVerified $link</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         }
     }
     if (!get_user_email_notification_from_courses($uid)) {
         $head_content .= '<script type="text/javascript">$(control_deactivate);</script>';
-        $tool_content .= "<div class='info'>$langEmailUnsubscribeWarning</div>
+        $tool_content .= "<div class='alert alert-info'>$langEmailUnsubscribeWarning</div>
                                   <input type='checkbox' id='unsub' name='unsub' value='1'>&nbsp;$langEmailFromCourses";
     }
-    $tool_content .= "<div class='info'>$langInfoUnsubscribe</div>
+    $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
     if (isset($_POST['cid'])) { // one course only
         $cid = intval($_POST['cid']);

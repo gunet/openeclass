@@ -127,15 +127,15 @@ class Log {
                                 ORDER BY ts DESC");
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $tool_content .= "<div class='info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
+                $tool_content .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
-                    $tool_content .= "<div class='info'>$langModule: " . $langAdminUsers . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
-                    $tool_content .= "<div class='info'>$langModule: " . $langExternalLinks . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
                 } else {
-                    $tool_content .= "<div class='info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }            
             $tool_content .= "<table id = 'log_results_table' class='tbl'>";
@@ -187,7 +187,7 @@ class Log {
             $tool_content .= "</tbody>";
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<div class='alert1'>$langNoUsersLog</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
         return;
     }

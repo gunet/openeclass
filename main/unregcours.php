@@ -39,7 +39,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
           <table width='100%'>
           <tbody>
           <tr>
-            <td class='caution_NoBorder' height='60' colspan='2'>
+            <td class='alert alert-danger' height='60' colspan='2'>
               <p>$langConfirmUnregCours:</p><p> <em>" . q(course_id_to_title($cid)) . "</em>;&nbsp;</p>
               <ul class='listBullet'>
               <li>$langYes:
@@ -64,9 +64,9 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            $tool_content .= "<p class='success'>$langCoursDelSuccess</p>";
+            $tool_content .= "<div class='alert alert-success'>$langCoursDelSuccess</div>";
         } else {
-            $tool_content .= "<p class='caution_small'>$langCoursError</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
         }
     }
     $tool_content .= "<br><br><div align=right><a href='../index.php' class=mainpage>$langBack</a></div>";

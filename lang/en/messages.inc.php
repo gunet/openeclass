@@ -1676,6 +1676,7 @@ $langQPref = "What type of questionnaire do you prefer?";
 $langQPrefSurvey = "Learning Profile Survey";
 $langNamesSurvey = "Learning Profile Surveys";
 $langHasParticipated = "Already participated";
+$langSurveyNotStarted = "Hasn't opened yet";
 $langSurveyInfo = "You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
@@ -1774,7 +1775,6 @@ $langPollEdited = "Questionnaire edited succesfully.";
 $langPollCreator = "Creator";
 $langPollCreation = "Creation Date";
 $langPollCreateDate = "Questionnaire created on";
-$langPollCreationError = "Questionnaire creation error. Please try again.";
 $langPollDeleted = "Questionnaire deleted successfully.";
 $langPollResultsDeleted = "Questionnaire results deleted successfully.";
 $langPollResultsAccess = "You dont have access rights to Questionnaire results.";
@@ -1794,7 +1794,7 @@ $langCollectiveCharts = "Collective results";
 $langHasNotParticipated = "Have not participated";
 $langThereAreParticipants = "There are already participants. Editing is not allowed!";
 $langPollEmpty = "Please add more Questionnaire questions!";
-$langPollEmptyAnswers = "Error! There are no answers in question";
+
 $langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
 $langSee = "Preview";
@@ -2221,19 +2221,19 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<p class="caution"><b>The page you tried to access requires a valid username and password.</b><br/>
+$langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
-by a mistyped URL or due to session timeout.</p>';
-$langLoginRequired = '<p class="caution"><b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).</p>
+by a mistyped URL or due to session timeout.';
+$langLoginRequired = '<b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).
 ';
-$langSessionIsLost = "<p class='alert1'><b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.</p>";
-$langCheckProf = "<p class='caution'><b>Your action requires $langsTeacher privileges. </b><br/> The system has
+$langSessionIsLost = "<b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.";
+$langCheckProf = "<b>Your action requires $langsTeacher privileges. </b><br/> The system has
 automatically redirect you to the start page to login. If you are the lesson's $langsTeacher you will be
-allowed access to the course administration tools.</p>";
-$langLessonDoesNotExist = "<p class='caution'><b>The lesson you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform error.</p>";
-$langCheckAdmin = "<p class='caution'><b>Your action requires administrator privileges. </b><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.</p>";
-$langCheckGuest = "<p class='caution'><b>The action you attempted to execute is not possible with guest user privileges. </b><br/> For security reasons the system has automatically redirected you to the start page to login again.</p>";
-$langCheckPublicTools = "<p class='caution'><b>You tried to access an inactive module.</b><br/> For security reasons the system has automatically redirected you to the start page to login again.</p>";
+allowed access to the course administration tools.";
+$langLessonDoesNotExist = "<b>The lesson you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform error.";
+$langCheckAdmin = "<b>Your action requires administrator privileges. </b><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.";
+$langCheckGuest = "<b>The action you attempted to execute is not possible with guest user privileges. </b><br/> For security reasons the system has automatically redirected you to the start page to login again.";
+$langCheckPublicTools = "<b>You tried to access an inactive module.</b><br/> For security reasons the system has automatically redirected you to the start page to login again.";
 $langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
 $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
@@ -2760,6 +2760,11 @@ $langTrueFalse = "True / False";
 $langFreeText = "Free Text";
 $langFalse = "False";
 $langInvalidPicture = "Invalide picture type";
+$langQuestionVeryEasy = "Very easy";
+$langQuestionEasy = "Easy";
+$langQuestionModerate = "Moderate";
+$langQuestionDifficult = "Difficult";
+$langQuestionVeryDifficult = "Very difficult";
 $langImportExercise = "Import Exercise";
 $langAskExercise = "Locate the Exercise file";
 $langExerciseNoTitle = "The exercise has no title!";
@@ -3265,6 +3270,7 @@ $langCMeta['veterin'] = "Veterinary Science";
 $langCMeta['agribio'] = "Agricultural Biotechnology";
 $langCMeta['othereng'] = "Other Engineering and Technologies";
 $langCMeta['civil'] = "Civil Engineering";
+$langCMeta['architects'] = "Architectural Engineering";
 $langCMeta['eeeeie'] = "Electrical Engineering, Electronic Engineering, Information Engineering";
 $langCMeta['mechan'] = "Mechanical Engineering";
 $langCMeta['chemic'] = "Chemical Engineering";
@@ -3536,3 +3542,8 @@ $langOnlineUsers = 'Online Users';
  * ************************************************************ */
 $langTheField = 'The field';
 $langFormErrors = 'Form contains errors. Please correct and resubmit form.';
+/* * ***********************************************************
+ * Other
+ * ************************************************************ */
+$langMoreOptions = 'More options';
+$langLessOptions = 'Less options';

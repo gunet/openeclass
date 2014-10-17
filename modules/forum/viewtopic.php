@@ -75,7 +75,7 @@ if (isset($_GET['post_id'])) {//needed to find post page for anchors
 
 
 if (!$myrow) {
-    $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicSelect</div>";
     draw($tool_content, 2);
     exit();
 }
@@ -137,7 +137,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 			SET topic_time = '$topic_time_fixed'
 			WHERE id = $topic";
     }
-    $tool_content .= "<p class='success'>$langDeletedMessage</p>";
+    $tool_content .= "<div class='alert alert-success'>$langDeletedMessage</div>";
 }
 
 
@@ -164,16 +164,15 @@ if (isset($_SESSION['message'])) {
 }
 
 if ($topic_locked == 1) {
-    $tool_content .= "<p class='alert1'>$langErrorTopicLocked</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
 } else {
-    $tool_content .= "<div id='operations_container'>" .
+    $tool_content .= 
             action_bar(array(
                 array('title' => $langReply,
                     'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'))) .
-            "</div>";
+                    'button-class' => 'btn-success')));
 }
 
 if ($paging and $total > $posts_per_page) {

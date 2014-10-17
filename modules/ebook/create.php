@@ -36,11 +36,11 @@ if (!$is_editor) {
 } else {
     $title = trim(@$_POST['title']);
     if (empty($title) or ! isset($_FILES['file'])) {
-        $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
     if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
-        $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
-                q($_FILES['file']['name']) . "</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langUnwantedFiletype: " .
+                q($_FILES['file']['name']) . "</div>";
     }
 
     validateUploadedFile($_FILES['file']['name'], 2);
@@ -67,7 +67,7 @@ if (!$is_editor) {
 
     if (!mkdir($basedir, 0775, true)) {
         Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
-        $tool_content .= "<p class='caution'>$langImpossible</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langImpossible</div>";
         draw($tool_content, 2);
         exit;
     }

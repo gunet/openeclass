@@ -47,8 +47,8 @@ if (!isset($Institution)) {
     $Institution = '';
 }
 
-if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
-    date_default_timezone_set("Europe/Athens");
+if (function_exists('date_default_timezone_set')) { // only valid if PHP > 5.1
+    date_default_timezone_set('Europe/Athens');
 }
 
 // get installation language. Greek is the default language.
@@ -82,34 +82,16 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
-if (file_exists("../config/config.php")) {
+if (file_exists('../config/config.php')) {
+    // title = $langWelcomeWizard
     $tool_content .= "
-        <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-        <html xmlns='http://www.w3.org/1999/xhtml'>
-        <head>
-        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-        <title>$langWelcomeWizard</title>
-        <link href='./install.css' rel='stylesheet' type='text/css' />
-        </head>
-        <body>
-
-        <div class='install_container'>
-        <p><img src='../template/classic/img/logo_openeclass.png' alt='logo'></p>
-        <div class='alert' align='center'>$langWarnConfig3!</div>
-        <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
-        <tr>
-        <th><b>$langPossibleReasons</b></th>
-        <th><b>$langTroubleshooting</b></th>
-        </tr>
-        <tr>
-        <td>$langWarnConfig1</td>
-        <td>$langWarnConfig2</td>
-        </tr>
-        </table>
-        </div>
-        </body>
-        </html>";
-    exit($tool_content);
+        <div class='panel panel-info'>
+          <div class='panel-heading'>$langWarnConfig3!</div>
+          <div class='panel-body'>
+              $langWarnConfig1. $langWarnConfig2.
+          </div>
+        </div>";
+    draw($tool_content, array('no-menu' => true));
 }
 
 // Input fields that have already been included in the form, either as hidden or as normal inputs
@@ -201,68 +183,79 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm');
 
 // step 2 license
-if (isset($_REQUEST['install2']) OR isset($_REQUEST['back2'])) {
+if (isset($_POST['install2'])) {
     $langStepTitle = $langLicence;
     $langStep = $langStep2;
     $_SESSION['step'] = 2;
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-             <table width='100%' class='tbl'>
-                   <tr><td>$langInfoLicence</td></tr>
-                <tr><td><textarea cols='92' rows='15' class='FormData_InputText'>" .
-            file_get_contents('../info/license/gpl.txt') . "
-                        </textarea></td></tr>
-                <tr><td><img src='../template/classic/img/printer.png' alt='print'>
-                        <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td></tr>
-                <tr><td class='right'>
-                        <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
-                        <input type='submit' name='install3' value='$langAccept' /></td></tr>
-             </table>" . hidden_vars($all_vars) . "</form>";
+    $gpl_link = '../info/license/gpl_print.txt';
+    $tool_content .= "
+       <div class='alert alert-info'>$langInfoLicence</div>
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+         <fieldset>
+           <div class='form-group'>
+             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('../info/license/gpl.txt'))) . "</pre>
+           </div>
+           <div class='form-group'>
+             <div class='col-sm-12'>" . icon('fa-print') . " <a href='$gpl_link'>$langPrintVers</a></div>
+           </div>
+           <div class='form-group'>
+              <div class='col-sm-10 col-offset-2 text-left'>
+                <input type='submit' class='btn btn-default' name='install1' value='&laquo; $langPreviousStep'>
+                <input type='submit' class='btn btn-primary' name='install3' value='$langAccept'>
+              </div>
+           </div>
+         </fieldset>" . hidden_vars($all_vars) . "</form>";
+
     draw($tool_content);
 }
 
 // step 3 mysql database settings
-elseif (isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
+elseif (isset($_POST['install3'])) {
     $langStepTitle = $langDBSetting;
     $langStep = $langStep3;
     $_SESSION['step'] = 3;
     $tool_content .= "
-	<div class='info'>$langWillWrite $langDBSettingIntro</div>
-	<br />
-        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-	<table width='100%' class='tbl smaller'>
-	<tr>
-	  <th width='220' class='left'>$langdbhost</th>
-	  <td>" . text_input('dbHostForm', 25) . "&nbsp;&nbsp;$langEG localhost</td>
-	  </tr>
-	<tr>
-	<th class='left'>$langDBLogin</th>
-	<td>" . text_input('dbUsernameForm', 25) . "&nbsp;&nbsp;$langEG root </td>
-	</tr>
-	<tr>
-	<th class='left'>$langDBPassword</th>
-	<td>" . text_input('dbPassForm', 25) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langMainDB</th>
-	<td>" . text_input('dbNameForm', 25) . "&nbsp;&nbsp;($langNeedChangeDB)</td>
-	</tr>
-        <tr>
-	<th class='left'>$langphpMyAdminURL</th>
-	<td>" . text_input('dbMyAdmin', 25) . "&nbsp;&nbsp;$langUncompulsory</td>
-	</tr>
-	<td colspan='2' class='right'>
-		<input type='submit' name='back2' value='&laquo; $langPreviousStep' />
-		&nbsp;<input type='submit' name='install4' value='$langNextStep &raquo;' />
-	</td>
-	</tr>
-	</table>
-        <div class='right smaller'>(*) $langAllFieldsRequired</div>" .
-            hidden_vars($all_vars) . "</form>";
+       <div class='alert alert-info'>$langWillWrite $langDBSettingIntro</div>
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+         <fieldset>
+           <div class='form-group'>
+	         <label for='dbHostForm' class='col-sm-2 control-label'>$langdbhost</label>
+             <div class='col-sm-8'>" . text_input('dbHostForm', 25) . "</div>
+             <div class='col-sm-2'>$langEG localhost</div>
+           </div>
+           <div class='form-group'>
+	         <label for='dbUsernameForm' class='col-sm-2 control-label'>$langDBLogin</label>
+             <div class='col-sm-8'>" . text_input('dbUsernameForm', 25) . "</div>
+             <div class='col-sm-2'>$langEG root</div>
+           </div>
+           <div class='form-group'>
+	         <label for='dbPassForm' class='col-sm-2 control-label'>$langDBPassword</label>
+             <div class='col-sm-8'>" . text_input('dbPassForm', 25) . "</div>
+           </div>
+           <div class='form-group'>
+	         <label for='dbNameForm' class='col-sm-2 control-label'>$langMainDB</label>
+             <div class='col-sm-8'>" . text_input('dbNameForm', 25) . "</div>
+             <div class='col-sm-2'>$langNeedChangeDB</div>
+           </div>
+           <div class='form-group'>
+	         <label for='dbMyAdmin' class='col-sm-2 control-label'>$langphpMyAdminURL</label>
+             <div class='col-sm-8'>" . text_input('dbMyAdmin', 25) . "</div>
+             <div class='col-sm-2'>$langUncompulsory</div>
+           </div>
+           <div class='form-group'>
+             <input type='submit' class='btn btn-default' name='install2' value='&laquo; $langPreviousStep'>
+		     <input type='submit' class='btn btn-primary' name='install4' value='$langNextStep &raquo;'>
+           </div>
+           <div class='form-group'>
+             <div class='col-sm-12'>$langAllFieldsRequired</div>
+           </div>
+         </fieldset>" . hidden_vars($all_vars) . "</form>";
+
     draw($tool_content);
 }
 
 // step 4 basic config settings
-elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
+elseif (isset($_POST['install4'])) {
     $langStepTitle = $langBasicCfgSetting;
     $langStep = $langStep4;
     $_SESSION['step'] = 4;
@@ -270,52 +263,46 @@ elseif (isset($_REQUEST['install4']) OR isset($_REQUEST['back4'])) {
         $helpdeskmail = '';
     }    
     $tool_content .= "
-                <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-                <table width='100%' class='tbl smaller'>
-                <tr><th class='left' width='220'>$langSiteUrl</th>
-                    <td>" . text_input('urlForm', 40) . "&nbsp;&nbsp;(*)</td></tr>
-                <tr><th class='left'>$langAdminName</th>
-                    <td>" . text_input('nameForm', 40) . "</td></tr>
-                <tr><th class='left'>$langAdminEmail</th>
-                    <td>" . text_input('emailForm', 40) . "</td></tr>
-                <tr><th class='left'>$langAdminLogin</th>
-                    <td>" . text_input('loginForm', 40) . "</td></tr>
-                <tr><th class='left'>$langAdminPass</th>
-                    <td>" . text_input('passForm', 40) . "</td></tr>
-                <tr><th class='left'>$langCampusName</th>
-                    <td>" . text_input('campusForm', 40) . "</td></tr>
-                <tr><th class='left'>$langHelpDeskPhone</th>
-                    <td>" . text_input('helpdeskForm', 40) . "</td></tr>
-                <tr><th class='left'>$langHelpDeskFax</th>
-                    <td>" . text_input('faxForm', 40) . "</td></tr>
-                <tr><th class='left'>$langHelpDeskEmail</th>
-                    <td>" . text_input('helpdeskmail', 40) . "&nbsp;&nbsp;(**)</td></tr>
-                <tr><th class='left'>$langInstituteShortName</th>
-                    <td>" . text_input('institutionForm', 40) . "</td></tr>
-                <tr><th class='left'>$langInstituteName</th>
-                    <td>" . text_input('institutionUrlForm', 40) . "</td></tr>
-                <tr><th class='left'>$langInstitutePostAddress</th>
-                    <td>" . textarea_input('postaddressForm', 3, 40) . "</td></tr>
-		<tr><th class='left'>$langUserAccount $langViaeClass</th>
-                        <td>" . selection_input(array('2' => $langDisableEclassStudRegType,
-                '1' => $langReqRegUser,
-                '0' => $langDisableEclassStudReg), 'eclass_stud_reg') . "</td></tr>
-		<tr><th class='left'>$langProfAccount $langViaeClass</th>
-			<td>" . selection_input(array('1' => $langReqRegProf,
-                '0' => $langDisableEclassProfReg), 'eclass_prof_reg') . "</td></tr>
-	<tr><td colspan='2' class='right'>
-	  <input type='submit' name='back3' value='&laquo; " . q($langPreviousStep) . "' />
-	  <input type='submit' name='install5' value='" . q($langNextStep) . " &raquo;' />
-	  <div class='smaller'>$langRequiredFields.</div>
-	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
-	</tr>
-        </table>" . hidden_vars($all_vars) . "</form>";
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+         <fieldset>" .
+           form_entry('urlForm', text_input('urlForm', 40), "$langSiteUrl (*)") .
+           form_entry('nameForm', text_input('nameForm', 40), "$langAdminName (*)") .
+           form_entry('emailForm', text_input('emailForm', 40), "$langAdminEmail (*)") .
+           form_entry('loginForm', text_input('loginForm', 40), "$langAdminLogin (*)") .
+           form_entry('passForm', text_input('passForm', 40), "$langAdminPass (*)") .
+           form_entry('campusForm', text_input('campusForm', 40), $langCampusName) .
+           form_entry('helpdeskForm', text_input('helpdeskForm', 40), $langHelpDeskPhone) .
+           form_entry('faxForm', text_input('faxForm', 40), $langHelpDeskFax) .
+           form_entry('helpdeskmail', text_input('helpdeskmail', 40), "$langHelpDeskEmail (**)") .
+           form_entry('institutionForm', text_input('institutionForm', 40), $langInstituteShortName) .
+           form_entry('institutionUrlForm', text_input('institutionUrlForm', 40), $langInstituteName) .
+           form_entry('postaddressForm', textarea_input('postaddressForm', 3, 40), $langInstitutePostAddress) .
+           form_entry('eclass_stud_reg',
+                      selection_input(array('2' => $langDisableEclassStudRegType,
+                                            '1' => $langReqRegUser,
+                                            '0' => $langDisableEclassStudReg),
+                                      'eclass_stud_reg'),
+                      "$langUserAccount $langViaeClass") .
+           form_entry('eclass_prof_reg',
+                      selection_input(array('1' => $langReqRegProf,
+                                            '0' => $langDisableEclassProfReg),
+                                      'eclass_prof_reg'), 
+                      "$langProfAccount $langViaeClass") . "
+           <div class='form-group'>
+             <input type='submit' class='btn btn-default' name='install3' value='&laquo; $langPreviousStep'>
+		     <input type='submit' class='btn btn-primary' name='install5' value='$langNextStep &raquo;'>
+           </div>
+           <div class='form-group'>
+             <div class='col-sm-12'>$langRequiredFields</div>
+	         <div class='col-sm-12'>(**) $langWarnHelpDesk</div></td>
+           </div>
+         </fieldset>" . hidden_vars($all_vars) . "</form>";
 
     draw($tool_content);
 }
 
 // step 5 last check before install
-elseif (isset($_REQUEST['install5'])) {
+elseif (isset($_POST['install5'])) {
     $langStepTitle = $langLastCheck;
     $langStep = $langStep5;
     $_SESSION['step'] = 5;
@@ -335,90 +322,37 @@ elseif (isset($_REQUEST['install5'])) {
     }
     
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-	<div class='info'>$langReviewSettings</div> <br />
-		<table width='100%' class='tbl smaller'>
-	<tr>
-	<th class='left'>$langdbhost:</th>
-	<td>" . q($dbHostForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langDBLogin:</th>
-	<td>" . q($dbUsernameForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langMainDB: </th>
-	<td>" . q($dbNameForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>PHPMyAdmin URL:</th>
-	<td>" . q($dbMyAdmin) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langSiteUrl:</th>
-	<td>" . q($urlForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminEmail:</th>
-	<td>" . q($emailForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminName:</th>
-	<td>" . q($nameForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminLogin:</th>
-	<td>" . q($loginForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminPass:</th>
-	<td>" . q($passForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langCampusName:</th>
-	<td>" . q($campusForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langHelpDeskPhone: </th>
-	<td>" . q($helpdeskForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langHelpDeskEmail:</th>
-	<td>" . q($helpdeskmail) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstituteShortName:</th>
-	<td>" . q($institutionForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstituteName:</th>
-	<td>" . q($institutionUrlForm) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langInstitutePostAddress:</th>
-	<td>" . nl2br(q($postaddressForm)) . "</td>
-	</tr>	
-	<tr>
-	<th class='left'>$langDisableEclassStudRegType</th>
-	<td>" . q($disable_eclass_stud_reg_info) . "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langDisableEclassProfRegType</th>
-	<td>" . q($disable_eclass_prof_reg_info) . "</td>
-	</tr>";
-    $tool_content .= "<tr><td class='right'>&nbsp;</td>
-	<td class='right'>
-		<input type='submit' name='back4' value='&laquo; $langPreviousStep' />
-		<input type='submit' name='install6' value='$langInstall &raquo;' />
-	</td>
-	</tr>
-	</table>" . hidden_vars($all_vars) . "</form>";
+       <div class='alert alert-info'>$langReviewSettings</div>
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+         <fieldset>" .
+           display_entry(q($dbHostForm), $langdbhost) .
+           display_entry(q($dbUsernameForm), $langDBLogin) .
+           display_entry(q($dbNameForm), $langMainDB) .
+           display_entry(q($dbMyAdmin), 'PHPMyAdmin URL') .
+           display_entry(q($urlForm), $langSiteUrl) .
+           display_entry(q($emailForm), $langAdminEmail) .
+           display_entry(q($nameForm), $langAdminName) .
+           display_entry(q($loginForm), $langAdminLogin) .
+           display_entry(q($passForm), $langAdminPass) .
+           display_entry(q($campusForm), $langCampusName) .
+           display_entry(q($helpdeskForm), $langHelpDeskPhone) .
+           display_entry(q($helpdeskmail), $langHelpDeskEmail) .
+           display_entry(q($institutionForm), $langInstituteShortName) .
+           display_entry(q($institutionUrlForm), $langInstituteName) .
+           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) .
+           display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
+           display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) . "
+           <div class='form-group'>
+             <input type='submit' class='btn btn-default' name='install4' value='&laquo; $langPreviousStep'>
+		     <input type='submit' class='btn btn-primary' name='install6' value='$langInstall &raquo;'>
+           </div>
+         </fieldset>" . hidden_vars($all_vars) . "</form>";
 
     draw($tool_content);
 }
 
 // step 6 installation successful
-elseif (isset($_REQUEST['install6'])) {
+elseif (isset($_POST['install6'])) {
     // database creation
     $langStepTitle = $langInstallEnd;
     $langStep = $langStep6;
@@ -431,14 +365,14 @@ elseif (isset($_REQUEST['install6'])) {
         $no = mysql_errno();
         $msg = mysql_error();
         $tool_content .= "[" . $no . "] - " . $msg . "
-		<div class='alert1'>$langErrorMysql</div>
+		<div class='alert alert-warning'>$langErrorMysql</div>
 		<ul class='installBullet'>
 		<li>$langdbhost: $dbHostForm</li>
 		<li>$langDBLogin: $dbUsernameForm</li>
 		<li>$langDBPassword: " . q($dbPassForm) . "</li>
 		</ul>
 		<p>$langBackStep3_2</p><br />
-		<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
+		<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 		<input type='submit' name='install3' value='&lt; $langBackStep3' />"
                 . hidden_vars($all_vars) .
                 "</form>";
@@ -474,7 +408,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         fwrite($fd, $stringConfig);
         // message
         $tool_content .= "
-	<div class='success'>$langInstallSuccess</div>
+	<div class='alert alert-success'>$langInstallSuccess</div>
 
 	<br />
 	<div>$langProtect</div>
@@ -485,13 +419,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 }
 
 // step 1 requirements
-elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
+elseif (isset($_POST['install1'])) {
     $langStepTitle = $langRequirements;
     $langStep = $langStep1;
     $_SESSION['step'] = 1;
     $configErrorExists = false;
-
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
 
     // create config, courses directories etc.
     mkdir_try('config');
@@ -508,31 +440,34 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
     touch_try('video/index.php');
 
     if ($configErrorExists) {
-        $tool_content .= implode("<br />", $errorContent);
-        $tool_content .= "</form>";
+        $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
+            "<div class='alert alert-warning'>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>";
         draw($tool_content);
         exit();
     }
 
-    $tool_content .= "
-	<p class='sub_title1'>$langCheckReq</p>
-	<ul class='installBullet'>
-        <li><b>Webserver</b> <br /> <em>$langFoundIt " . $_SERVER['SERVER_SOFTWARE'] . "</em>)
-        $langWithPHP (<em>$langFoundIt PHP " . phpversion() . "</em>).";
+    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
+	<h3>$langCheckReq</h3>
+	<ul class='list-unstyled'>
+        <li>" . icon('fa-check') . " <b>Webserver</b> ($langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>)
+        $langWithPHP ($langFoundIt <em>PHP " . phpversion() . "</em>).";
     $tool_content .= "</li></ul>";
-    $tool_content .= "<p class='sub_title1'>$langRequiredPHP</p>";
-    $tool_content .= "<ul class='installBullet'>";
+    $tool_content .= "<h3>$langRequiredPHP</h3>";
+    $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');
     warnIfExtNotLoaded('session');
-    warnIfExtNotLoaded('mysql');
+    warnIfExtNotLoaded('pdo');
+    warnIfExtNotLoaded('pdo_mysql');
     warnIfExtNotLoaded('gd');
     warnIfExtNotLoaded('mbstring');
+    warnIfExtNotLoaded('xml');
+    warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded("curl");
-    $tool_content .= "</ul><p class='sub_title1'>$langOptionalPHP</p>";
-    $tool_content .= "<ul class='installBullet'>";
-    warnIfExtNotLoaded("ldap");    
+    $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('ldap');    
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
@@ -548,7 +483,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
 	</ul>	
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
 	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
-	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>" .
+	<div class='right'><input type='submit' class='btn btn-primary' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
     draw($tool_content);
 } else {
@@ -556,86 +491,38 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1'])) {
         'el' => 'Ελληνικά (el)',
         'en' => 'English (en)');
 
-    $tool_content .= "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-	<html>
-	<head>
-        <title>$langWelcomeWizard</title>
-        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-        <link href='./install.css' rel='stylesheet' type='text/css' />
-	</head>
-	<body>
-	<div class='install_container' align='center'>
-        <table class='tbl_alt' width='400'>
-        <tr><th colspan='2' align='center' ><div class='welcomeImg'></div></th></tr>
-        <tr><td colspan='2'><div class='title'>$langWelcomeWizard</div>
-               <div class='sub_title'>$langThisWizard</div>
-               <ul class='installBullet'>
-                  <li>$langWizardHelp1</li>
-                  <li>$langWizardHelp2</li>
-                  <li>$langWizardHelp3</li>
-               </ul></td></tr>
-        <tr>
-          <th><div>$langChooseLang:</div> <form name='langform' action='$_SERVER[SCRIPT_NAME]' method='post' class='form_field'>" .
-            selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"') .
-            "</form></th>
-        </tr>
-        <tr>
-          <td colspan='2' align='right'><form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-            <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
-            <input type='hidden' name='lang' value='$lang' />
-            <input type='submit' name='install1' value='$langNextStep &raquo;' />
-          </form></td>
-          </tr>
-        </table>
-	</div>
-	</body>
-	</html>";
-    echo $tool_content;
+    // <title>$langWelcomeWizard</title>
+    $tool_content .= "
+    <div class='row'>
+      <div class='col-sm-12 text-center'>
+        <img src='welcome.png' alt=''>
+        <h1>$langWelcomeWizard</h1>
+        <div class='panel panel-info text-left'>
+          <div class='panel-heading'>$langThisWizard</div>
+          <div class='panel-body'>
+             <ul>
+                <li>$langWizardHelp1</li>
+                <li>$langWizardHelp2</li>
+                <li>$langWizardHelp3</li>
+             </ul>
+          </div>
+        </div>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
+          <fieldset>
+            <div class='form-group'>
+              <label for='lang' class='col-sm-2 control-label'>$langChooseLang:</label>
+              <div class='col-sm-10'>" . selection($langLanguages, 'lang', $lang, 'onChange=\"document.langform.submit();\"') . "</div>
+            </div>
+            <div class='form-group'>
+              <div class='col-sm-offset-2 col-sm-10 text-left'>
+                <input type='submit' class='btn btn-primary' name='install1' value='$langNextStep &raquo;'>
+                <input type='hidden' name='welcomeScreen' value='true'>
+              </div>
+            </div>
+          <fieldset>
+        </form>
+      </div>
+    </div>";
+    draw($tool_content, array('no-menu' => true));
 }
 
-
-/**
- * @brief make directories
- * @global type $errorContent
- * @global boolean $configErrorExists
- * @global type $langWarningInstall3
- * @global type $langWarnInstallNotice1
- * @global type $langWarnInstallNotice2
- * @global type $install_info_file
- * @global type $langHere
- * @param type $dirname
- */
-function mkdir_try($dirname) {
-    global $errorContent, $configErrorExists, $langWarningInstall3,
-        $langWarnInstallNotice1, $langWarnInstallNotice2,
-        $install_info_file, $langHere;
-    
-    if (!is_dir('../' . $dirname)) {
-        if (!mkdir('../' . $dirname, 0775)) {
-            $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $dirname);
-            $configErrorExists = true;
-        }
-    }
-}
-
-/**
- * @brief create files
- * @global type $errorContent
- * @global boolean $configErrorExists
- * @global type $langWarningInstall3
- * @global type $langWarnInstallNotice1
- * @global type $langWarnInstallNotice2
- * @global type $install_info_file
- * @global type $langHere
- * @param type $filename
- */
-function touch_try($filename) {
-    global $errorContent, $configErrorExists, $langWarningInstall3,
-        $langWarnInstallNotice1, $langWarnInstallNotice2,
-        $install_info_file, $langHere;
-    
-    if (@!touch('../' . $filename)) {
-        $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $filename);
-        $configErrorExists = true;
-    }
-}

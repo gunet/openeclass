@@ -41,7 +41,7 @@ function list_ebooks() {
     
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE course_id = ?d ORDER BY `order`", $course_id);
     if (count($result) == 0) {
-        $tool_content .= "<p class='alert1'>$langNoEBook</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .

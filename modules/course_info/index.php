@@ -181,7 +181,7 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['title'])) {
-        $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
+        $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
     } else {
         // update course settings
@@ -314,7 +314,7 @@ if (isset($_POST['submit'])) {
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if (!$deps_valid) {
-            $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
+            $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
                                       <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
             Database::get()->query("UPDATE course
@@ -338,10 +338,10 @@ if (isset($_POST['submit'])) {
                 'prof_names' => $_POST['titulary'],
                 'lang' => $session->language));
 
-            $tool_content .= "<p class='success'>$langModifDone</p>";
+            $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
 
             if ($noWeeklyMessage) {
-                $tool_content .= "<p class='alert1'>$langCourseWeeklyFormatNotice</p>";
+                $tool_content .= "<div class='alert alert-warning'>$langCourseWeeklyFormatNotice</div>";
             }
 
             $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>

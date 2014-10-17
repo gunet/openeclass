@@ -75,13 +75,13 @@ $tool_content .= "<form name='authchange' method='post' action='$_SERVER[SCRIPT_
 if ($submit && $auth && $auth_change) {
     if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s and user_id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
         $tool_content .= "
-				<td class='success'>$langAuthChangeYes</td></tr></tbody></table><br /><br />";
+				<td class='alert alert-success'>$langAuthChangeYes</td></tr></tbody></table><br /><br />";
         draw($tool_content, 3);
     }
 }
 
 if (count($auth_methods_active) == 0) {
-    $tool_content .= "<p class='alert1'>$langAuthChangeno</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langAuthChangeno</div>";
 } else {
     $tool_content .= "
 		<tr>

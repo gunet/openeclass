@@ -122,7 +122,7 @@ if (isset($_POST["selectedMonth"])) {
 		</tbody>
 		</table>';           // $details includes an html table with all details
     } else {
-        $tool_content .= '<div class="alert1">' . $langNoReport . ': ' . $msg_of_month . ' ' . $y . '</div>';
+        $tool_content .= '<div class="alert alert-warning">' . $langNoReport . ': ' . $msg_of_month . ' ' . $y . '</div>';
     }
 }
 load_js('tools.js');

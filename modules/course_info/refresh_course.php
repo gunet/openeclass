@@ -79,12 +79,12 @@ if (isset($_POST['submit'])) {
     }
 
     if (($count_events = count($output)) > 0) {
-        $tool_content .= "<p class='success_small'>$langRefreshSuccess
+        $tool_content .= "<div class='alert alert-success'>$langRefreshSuccess
 		<ul class='listBullet'>";
         for ($i = 0; $i < $count_events; $i++) {
             $tool_content .= "<li>$output[$i]</li>";
         }
-        $tool_content .= "</ul></p><br />";
+        $tool_content .= "</ul></div><br>";
     }
     $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
 } else {        

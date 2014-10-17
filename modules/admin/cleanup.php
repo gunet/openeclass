@@ -27,12 +27,12 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 if (isset($_POST['submit'])) {
     foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
-        $tool_content .= sprintf("<p class='success'>$langCleaningUp</p>", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
+        $tool_content .= sprintf("<div class='alert alert-success'>$langCleaningUp</div>", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
         cleanup("$webDir/courses/$dir", $days);
     }
 } else {
     $tool_content .= "
-<div class='caution'>$langCleanupInfo</div>
+<div class='alert alert-danger'>$langCleanupInfo</div>
 <div class='center'>
 	     <form method='post' action='$_SERVER[SCRIPT_NAME]'>
 		 <input type='submit' name='submit' value='$langCleanup'>

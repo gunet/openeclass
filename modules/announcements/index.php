@@ -294,13 +294,17 @@ if ($is_editor) {
         if ($announce) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
-            $titleToModify = q($announce->title);
-            $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
-            $startdate = $startDate_obj->format('d-m-Y');
-            $showFrom = q($startdate);
-            $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
-            $enddate = $endDate_obj->format('d-m-Y');            
-            $showUntil = q($enddate);
+            $titleToModify = q($announce->title);            
+            if ($announce->start_display != '0000-00-00') {                
+                $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
+                $startdate = $startDate_obj->format('d-m-Y');
+                $showFrom = q($startdate);
+            }
+            if ($announce->stop_display != '0000-00-00') {
+                $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
+                $enddate = $endDate_obj->format('d-m-Y');            
+                $showUntil = q($enddate);            
+            }
         }
     }
 
@@ -314,19 +318,19 @@ if ($is_editor) {
             $startDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['startdate']);
             $start_display = $startDate_obj->format('Y-m-d');
         } else {
-            $start_display = "2094-12-31";
+            $start_display = "0000-00-00";
         }
         if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
             $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
             $stop_display = $endDate_obj->format('Y-m-d');            
         } else {
-            $stop_display = "2094-12-31";
+            $stop_display = "0000-00-00";
         }
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW(), start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
+            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
-            $message = "<p class='success'>$langAnnModify</p>";
+            $message = "<div class='alert alert-success'>$langAnnModify</div>";
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
@@ -334,7 +338,7 @@ if ($is_editor) {
             // insert
             $id = Database::get()->query("INSERT INTO announcement
                                          SET content = ?s,
-                                             title = ?s, `date` = NOW(),
+                                             title = ?s, `date` = " . DBHelper::timeAfter() . ",
                                              course_id = ?d, `order` = ?d,
                                              visible = 1,
                                              start_display = ?t,
@@ -344,17 +348,17 @@ if ($is_editor) {
         $aidx->store($id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
         Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
-                                                               'email' => $send_mail,
-                                                               'title' => $_POST['antitle'],
-                                                               'content' => $txt_content));
+                                                                     'email' => $send_mail,
+                                                                     'title' => $_POST['antitle'],
+                                                                     'content' => $txt_content));
 
         // send email
-        if ($send_mail) {
+        if ($send_mail) {            
             $recipients_emaillist = "";
             foreach($_POST['recipients'] as $re){
                 $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
-            }
-            $emailContent = "$professorMessage: " . q($_SESSION[givenname]) . " " . q($_SESSION[surname]) . "<br>\n<br>\n" .
+            }            
+            $emailContent = "$professorMessage: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "<br>\n<br>\n" .
                     q($_POST['antitle']) .
                     "<br>\n<br>\n" .
                     q($_POST['newContent']);
@@ -367,10 +371,10 @@ if ($is_editor) {
             $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $emailContent .= $unsubscribe . $linkhere;
-            $general_to = 'Members of course ' . $course_code;
+            $general_to = 'Members of course ' . $course_code;            
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
-                                                   WHERE course_id = ?d AND user.email IN ($recipients_emaillist) AND 
+                                                   WHERE course_id = ?d AND user.id IN ($recipients_emaillist) AND 
                                                          course_user.user_id = user.id", function ($person)
                     use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
                 $countEmail++;
@@ -384,7 +388,7 @@ if ($is_editor) {
                     array_push($recipients, $emailTo);
                 }
                 // send mail message per 50 recipients
-                if (count($recipients) >= 50) {
+                if (count($recipients) >= 50) {                    
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
                     $recipients = array();
                 }
@@ -393,10 +397,10 @@ if ($is_editor) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-            $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageInvalid</p>";
+            $message = "<div class='alert alert-success'>$langAnnAdd $langEmailSent<br />$messageInvalid</div>";
         } // if $emailOption==1
         else {
-            $message = "<p class='success'>$langAnnAdd</p>";
+            $message = "<div class='alert alert-success'>$langAnnAdd</div>";
         }
     } // end of if $submit
 
@@ -407,7 +411,21 @@ if ($is_editor) {
         $displayForm = false; //do not show form
     }
     /* display form */
-    if ($displayForm && (isset($_GET['addAnnounce']) || isset($_GET['modify']))) {
+    if ($displayForm && (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
+        
+        if (isset($_GET['modify'])) {
+            $langAdd = $nameTools = $langModifAnn;
+        } else {
+            $nameTools = $langAddAnn;
+        }
+        $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
+        
+        if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
+        if (!isset($contentToModify)) $contentToModify = "";
+        if (!isset($titleToModify)) $titleToModify = "";
+        if (!isset($showFrom)) $showFrom = "";
+        if (!isset($showUntil)) $showUntil = "";        
+        
         load_js('bootstrap-datepicker');
         $head_content .= "
             <script type='text/javascript'>
@@ -425,62 +443,53 @@ if ($is_editor) {
             });"
         . "</script>";
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label'))) . "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
-  <table class='tbl' width='100%'>";
-        if (isset($_GET['modify'])) {
-            $langAdd = $nameTools = $langModifAnn;
-        } else {
-      $nameTools = $langAddAnn;
-        }
-  $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
-        if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
-        if (!isset($contentToModify)) $contentToModify = "";
-        if (!isset($titleToModify)) $titleToModify = "";
-        if (!isset($showFrom)) $showFrom = "";
-        if (!isset($showUntil)) $showUntil = "";
-        $tool_content .= "
-        <tr>
-          <th>$langAnnTitle:</th>
-        </tr>
-        <tr>
-          <td><input type='text' name='antitle' value='$titleToModify' size='50' /></td>
-  </tr>
-  <tr>
-          <th>$langAnnBody:</th>
-        </tr>
-        <tr>
-          <td>".rich_text_editor('newContent', 4, 20, $contentToModify)."</td>
-        </tr>
-  <tr>
-          <th><img src='$themeimg/email.png' title='email' /> $langEmailOption:</th>
-        </tr>
-        <tr>
-          <td>
-            <select name='recipients[]' multiple='true' class='form-control' id='select-recipients'>";
-            $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
-            foreach($course_users as $cu){
-               $tool_content .= "<option value='{" . q($cu->email) . "}'>{" . q($cu->name) . "} (" . q($cu->email) . ")</option>"; 
-            } 
-            $tool_content .= "</select>
-            <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
-          </td>
-  </tr>
-  <tr>
-          <th>$langAnnouncementActivePeriod:</th>
-        </tr>
-        <tr>
-          <td>$langFrom: <input type='text' name='startdate' id='startdate' value='$showFrom'>&nbsp;  $langUntil:<input type='text' name='enddate' id='enddate' value='$showUntil'></td>
-        </tr>
-        <tr>
-          <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
-  </tr>
-  </table>
-  <input type='hidden' name='id' value='$AnnouncementToModify'>
-  </form>";
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary')));
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
+        <fieldset>
+        <div class='form-group'>
+            <label for='AnnTitle' class='col-sm-2 control-label'>$langAnnTitle:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='antitle' value='$titleToModify' size='50' />
+            </div>
+        </div>
+        <div class='form-group'>
+          <label for='AnnBody' class='col-sm-2 control-label'>$langAnnBody:</label>
+            <div class='col-sm-10'>".rich_text_editor('newContent', 4, 20, $contentToModify)."</div>
+        </div>
+        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langEmailOption:</label></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
+                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
+                foreach($course_users as $cu){
+                   $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>"; 
+                } 
+                $tool_content .= "</select>
+                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+            </div>
+        </div>
+        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
+        
+        <div class='form-group'>
+            <label for='From' class='col-sm-2 control-label'>$langFrom:</label>
+            <div class='col-sm-10'><input type='text' name='startdate' id='startdate' value='$showFrom'></div>
+        </div>
+        <div class='form-group'>
+            <label for='From' class='col-sm-2 control-label'>$langUntil:</label>
+            <div class='col-sm-10'><input type='text' name='enddate' id='enddate' value='$showUntil'></div>
+        </div>
+        <div class='col-sm-offset-2 col-sm-10'>
+            <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='".q($langAdd)."' />
+            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+        </div>  
+        <input type='hidden' name='id' value='$AnnouncementToModify'>
+        </fieldset>
+        </form>
+        </div>";
     } else {
         if (isset($_GET['an_id'])) {
             $tool_content .= action_bar(array(
@@ -538,7 +547,5 @@ $head_content .= "<script type='text/javascript'>
             $('#select-recipients').val(stringVal).trigger('change');
         });         
     });
-
-    </script>
-";
+    </script>";
 draw($tool_content, 2, null, $head_content);

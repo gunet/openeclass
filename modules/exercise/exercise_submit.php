@@ -373,14 +373,7 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    $tool_content .= "
-          <table width='100%'>
-          <tr>
-            <td colspan='2'>
-              <p class='caution'>$langNoAnswer</p>
-            </td>
-          </tr>
-          </table>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
 } else {
     $tool_content .= "
         <br/>

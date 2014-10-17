@@ -271,7 +271,7 @@ if ($is_editor) {
         $urdx->removeByUnit($id, false);
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        $main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
+        $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
         }else{
             $res_id = intval($_GET['del']);
             if ($id = check_admin_unit_resource($res_id)) {
@@ -279,7 +279,7 @@ if ($is_editor) {
                 $urdx->remove($res_id, false, false);
                 $cidx->store($course_id, true);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
-                $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+                $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
             }
         }
         
@@ -513,7 +513,7 @@ if (isset($level) && !empty($level)) {
 
 $emailnotification = '';
 if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $course_id)) {
-    $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
+    $emailnotification = "<div class='alert alert-warning'>$langNoUserEmailNotification
         (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course
@@ -673,47 +673,7 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
-        </div>        
-    
-";
-
-
-$tool_content .= "
-<div id='content_course' style='display:none;'>
-<table width='100%'>
-<tr>
-<td valign='top'>$main_content</td>
-<td width='200' valign='top'>
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td  class='title1'>$langIdentity</td>
-  </tr>
-  <tr>
-    <td class='smaller'>$bar_content</td>
-  </tr>
-  </table>
-  <br />
-  $license_info_box
-  <table class='tbl_courseid' width='200'>
-  <tr class='title1'>
-    <td class='title1'>$langTools</td>
-    <td class='left'>";
-if ($status != USER_GUEST) {
-    if ($receive_mail) {
-        $tool_content .= icon('fa-envelope', $langContactProf, $urlAppend . "modules/contact/index.php?course=$course_code");
-    }
-}
-if (visible_module(MODULE_ID_ANNOUNCE)) {
-    $tool_content .= "<span class='feed'>" .
-        icon('fa-rss', $langRSSFeed, $urlServer . "modules/announcements/rss.php?c=$course_code") . "</span>";
-}
-$tool_content .= "</td>
-      </tr>
-      </table>
-      $emailnotification
-      <br />\n";
-
-$tool_content .= "</td></tr></table>";
+        </div>";
 
 if ($viewCourse == "weekly") {
     
@@ -761,7 +721,15 @@ $tool_content .= "</div></div></div>";
 
 draw($tool_content, 2, null, $head_content);
 
-
+/**
+ * @brief fetch course announcements
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langNoAnnounce
+ * @global type $urlAppend
+ * @global type $dateFormatLong
+ * @return string
+ */
 function course_announcements() {
     global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong;
 

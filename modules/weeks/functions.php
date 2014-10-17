@@ -48,7 +48,7 @@ function process_actions() {
             $cidx->store($course_id, true);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
-        $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
+        $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if ($id = check_admin_unit_resource($res_id)) {
@@ -56,7 +56,7 @@ function process_actions() {
             $urdx->remove($res_id, false, false);
             $cidx->store($course_id, true);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+            $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);

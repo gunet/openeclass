@@ -65,7 +65,7 @@ if (isset($_POST['modify'])) {
     $student_members = $member_count - count($tutors);
     if ($maxStudent != 0 and $student_members > $maxStudent) {
         $maxStudent = $student_members;
-        $message .= "<p class='alert1'>$langGroupMembersUnchanged</p>";
+        $message .= "<div class='alert alert-warning'>$langGroupMembersUnchanged</div>";
     }
     Database::get()->query("UPDATE `group`
                                     SET name = ?s,
@@ -98,7 +98,7 @@ if (isset($_POST['modify'])) {
         // Insert new list of members
         if ($maxStudent < $numberMembers and $maxStudent != 0) {
             // More members than max allowed
-            $message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
+            $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
         } else {
             // Delete all members of this group
             Database::get()->query("DELETE FROM group_members
@@ -109,7 +109,7 @@ if (isset($_POST['modify'])) {
                 Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
                                           VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
             }
-            $message .= "<p class='success'>$langGroupSettingsModified</p>";
+            $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
         }
     }
     initialize_group_info($group_id);

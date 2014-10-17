@@ -413,7 +413,7 @@ if (isset($_GET['modifyAnswers'])) {
         if (!empty($msgErr)) {
             $tool_content .= "
                             <tr>
-                              <td colspan='5'><div class='caution'>$msgErr</div></td>
+                              <td colspan='5'><div class='alert alert-danger'>$msgErr</div></td>
                             </tr>";
         }
         $tool_content .= "
@@ -517,7 +517,7 @@ if (isset($_GET['modifyAnswers'])) {
             if (!empty($msgErr)) {
                 $tool_content .= "
                                     <table border='0' cellpadding='3' align='center' width='400'>
-                                    <tr><td class='caution'>$msgErr</td></tr>
+                                    <tr><td class='alert alert-danger'>$msgErr</td></tr>
                                     </table>";
             } else {
                 $tool_content .= "
@@ -646,7 +646,7 @@ if (isset($_GET['modifyAnswers'])) {
                     <fieldset>";
         // if there is an error message
         if (!empty($msgErr)) {
-            $tool_content .= "<div class='caution'>$msgErr</div>";
+            $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
         }
         $tool_content .= "
                     <table class='table'>

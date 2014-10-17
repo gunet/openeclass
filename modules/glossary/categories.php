@@ -104,7 +104,7 @@ if ($is_editor) {
         }
         if ($q and $q->affectedRows) {
             $categories[$category_id] = $_POST['name'];
-            $tool_content .= "<div class='success'>$success_message</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$success_message</div><br />";
         }
     }
 
@@ -117,7 +117,7 @@ if ($is_editor) {
             Database::get()->query("UPDATE glossary SET category_id = NULL
                                                   WHERE course_id = ?d AND
                                                         category_id = ?d", $course_id, $cat_id);
-            $tool_content .= "<div class='success'>$langCategoryDeletedGlossary</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$langCategoryDeletedGlossary</div><br />";
         }        
     }
 
@@ -198,7 +198,7 @@ if ($q and count($q)) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
 }
 
 draw($tool_content, 2, null, $head_content);

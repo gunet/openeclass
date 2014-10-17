@@ -66,7 +66,7 @@ if (isset($_GET['delete'])) {
     if (!empty($ebook_title) and $info->title != $ebook_title) {
         Database::get()->query("UPDATE `ebook` SET title = ?s WHERE id = ?d", $ebook_title, $info->id);
     }
-    $tool_content .= "<p class='success'>$langEBookTitleModified</p>";
+    $tool_content .= "<div class='alert alert-success'>$langEBookTitleModified</div>";
 } elseif (isset($_POST['submit'])) {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
     list($paths, $files, $file_ids, $id_map) = find_html_files();

@@ -77,7 +77,7 @@ if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $tool_content .= "
-<div class='info'>
+<div class='alert alert-info'>
     <b>$langDumpUserDurationToFile:</b><br>
     <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
        <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>

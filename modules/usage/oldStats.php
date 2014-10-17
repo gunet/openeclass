@@ -144,14 +144,14 @@ switch ($u_stats_value) {
             $mont = $langMonths[$row->month];
             $chart->addPoint($mont . " - " . $row->year, $row->tot_dur);
         }
-        $tool_content .= "<p class='info'>$langDurationExpl</p>";
+        $tool_content .= "<div class='alert alert-info'>$langDurationExpl</div>";
         break;
 }
 
 $chart_path = 'courses/' . $course_code . '/temp/chart_' . md5(serialize($chart)) . '.png';
 
 if (!$chart->isEmpty()) {
-    $tool_content .= "<p class='info'>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</p>";
+    $tool_content .= "<div class='alert alert-info'>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</div>";
     $tool_content .= $chart->plot($langNoStatistics);
 }
 

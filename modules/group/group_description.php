@@ -34,16 +34,16 @@ if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ''
 		WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='success'>$langBlockDeleted<br /><br />";
+        $tool_content .= "<div class='alert alert-success'>$langBlockDeleted<br /><br />";
     }
     $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else if (isset($_POST['submit'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ?s
 			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='success'>$langRegDone<br /><br />";
+        $tool_content .= "<div class='alert alert-success'>$langRegDone<br /><br />";
     } else {
-        $tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
+        $tool_content .= "<div class='alert alert-danger'>$langNoChanges<br /><br />";
     }
     $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else { // display form

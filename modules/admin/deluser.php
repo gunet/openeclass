@@ -37,7 +37,7 @@ $t = 0;
 if (!$doit) {
     if ($u_account) {
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
-            <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em><br/>
+            <div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em><br/>
             $langConfirmDeleteQuestion3
             </div>
             <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;doit=yes'>$langDelete</a></p>";

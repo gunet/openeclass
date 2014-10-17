@@ -441,10 +441,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_var('TOOL_PATH', $urlAppend);
 
-        if (isset($head_content)) {
-            $t->set_var('HEAD_EXTRAS', $head_content);
-        }
-
         if (isset($body_action)) {
             $t->set_var('BODY_ACTION', $body_action);
         }
@@ -468,12 +464,21 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if ($require_help == true) {
             if (isset($require_current_course) and !$is_editor) {
                 $helpTopic .= '_student';
-            }
+            } 
+            $head_content .= "
+            <script>
+            $(function() {
+                $('#help-btn').click(function(e) {
+                    e.preventDefault();
+                    $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+                });
+            });
+            </script>
+            ";
+                    
             $help_link_icon = "
 
-            <a href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
-            onClick=\"window.open('" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
-            return false;\">
+            <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
                 <i class='fa fa-question-circle tiny-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
             </a>";
 
@@ -483,6 +488,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->set_var('HELP_LINK_ICON', '');
             $t->set_var('LANG_HELP', '');
         }
+        
+        if (isset($head_content)) {
+            $t->set_var('HEAD_EXTRAS', $head_content);
+        }
+        
         if (defined('RSS')) {
             $t->set_var('RSS_LINK_ICON', "
 

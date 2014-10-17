@@ -47,7 +47,7 @@ function list_polls() {
             'active' => $row->active);
     }
     if (count($pollinfo) == 0) {
-        $tool_content .= "<p class='alert1'>$langPollNone</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .

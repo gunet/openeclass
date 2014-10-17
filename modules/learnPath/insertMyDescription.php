@@ -105,7 +105,7 @@ if (!$thisDocumentModule) {
 			VALUES (?d, ?d, ?d, 'OPEN', 1, '')", $_SESSION['path_id'], $thisDocumentModule->module_id, $order);
     }
 }
-$tool_content = "<table width='100%' class='tbl'><tr><td class='success'>";
+$tool_content = "<table width='100%' class='tbl'><tr><td class='alert alert-success'>";
 
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";

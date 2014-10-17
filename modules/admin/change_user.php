@@ -56,7 +56,7 @@ if (isset($_REQUEST['username'])) {
         $_SESSION['langswitch'] = $myrow->lang;
         redirect_to_home_page();
     } else {
-        $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
+        $tool_content = "<div class='alert alert-danger'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
     }
 }
 

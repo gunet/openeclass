@@ -43,7 +43,7 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
         'right' => '+5'));
     if ($result) {
-        $tool_content .= "<p class='success'>$langTheU $langAdded</p>";
+        $tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and email_seems_valid($email)) {
@@ -52,7 +52,7 @@ if (isset($_GET['add'])) {
             send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
     } else {
-        $tool_content .= "<p class='alert1'>$langAddError</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
     }
     $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
 } else {
@@ -151,7 +151,7 @@ if (isset($_GET['add'])) {
             }
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<p class='caution'>$langNoUsersFound</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langNoUsersFound</div>";
         }
         Database::get()->query("DROP TABLE lala");
     }

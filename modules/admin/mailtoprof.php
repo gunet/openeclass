@@ -92,7 +92,7 @@ $langEmail: " . get_config('email_helpdesk') . "
         send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
     }
     // Display result and close table correctly
-    $tool_content .= "<p class='success'>$emailsuccess</p>";
+    $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
 } else {
     // Display form to administrator
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>

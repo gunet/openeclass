@@ -72,7 +72,7 @@ $fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!isset($_POST['submit2']) and ! $command_line) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
-        $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
+        $tool_content .= "<div class='alert alert-warning'>$langUpgAdminError</div>
             <center><a href='index.php'>$langBack</a></center>";
         draw($tool_content, 0);
         exit;
@@ -80,7 +80,7 @@ if (!isset($_POST['submit2']) and ! $command_line) {
 }
 
 if (!DBHelper::tableExists('config')) {
-    $tool_content .= "<p class='alert1'>$langUpgTooOld</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langUpgTooOld</div>";
     draw($tool_content, 0);
     exit;
 }
@@ -148,14 +148,14 @@ $default_teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h
 
 if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['is_admin'] == true) and ! $command_line) {
     if (ini_get('register_globals')) { // check if register globals is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall1</div>";
     }
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
     // get old contact values
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>" .
-            "<div class='info'>" .
+            "<div class='alert alert-info'>" .
             "<p>$langConfigFound" .
             "<br>$langConfigMod</p></div>" .
             "<fieldset><legend>$langUpgContact</legend>" .
@@ -304,7 +304,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_teacher_owndep', '0')");
 
                 if (version_compare($oldversion, '2.1.3', '<') or (!isset($oldversion))) {                    
-                    echo "<hr><p class='alert1'>$langUpgTooOld</p>
+                    echo "<hr><div class='alert alert-warning'>$langUpgTooOld</div>
                         <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
                     echo '</div></body></html>';
                     exit;
@@ -1459,7 +1459,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `description` TEXT,
                             `weight` FLOAT(11,2) DEFAULT NULL,
                             `q_position` INT(11) DEFAULT 1,
-                            `type` INT(11) DEFAULT 1 )
+                            `type` INT(11) DEFAULT 1,
+                            `difficulty` INT(1) DEFAULT 3)
                             $charset_spec");
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                             `id` INT(11) NOT NULL DEFAULT '0',
@@ -2268,7 +2269,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 if ($n > 100) {
                     set_config('enable_search', 0);
                     set_config('enable_indexing', 0);
-                    echo "<hr><p class='info'>$langUpgIndexingNotice</p>";
+                    echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
                 } else {
                     set_config('enable_indexing', 1);
                     require_once 'modules/search/indexer.class.php';
@@ -2291,10 +2292,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // update eclass version
         Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
-        echo "<hr><p class='success'>$langUpgradeSuccess
-        <br><b>$langUpgReady</b></p>
-        <p class='info'>$langUpgSucNotice</p>
-        <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
+        echo "<hr><div class='alert alert-success'>$langUpgradeSuccess
+        <br><b>$langUpgReady</b></div>
+        <div class='alert alert-info'>$langUpgSucNotice</div>
+        <p class='pull-right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
 
 
         echo '</div></body></html>';

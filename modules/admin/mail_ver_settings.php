@@ -55,16 +55,16 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
         $count = Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND user_id!=1", $new_mail_ver, $old_mail_ver)->affectedRows;
         if ($count > 0) {
             $user = ($count == 1) ? $langOfUser : $langUsersS;
-            $tool_content .= "<p class='success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</p>";
+            $tool_content .= "<div class='alert alert-success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</div>";
         }
         // user is admin or no user selected
         else {
-            $tool_content .= "<p class='caution'>$langMailVerificationChangedNoAdmin</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langMailVerificationChangedNoAdmin</div>";
         }
     }
     // no change selected
     else {
-        $tool_content .= "<p class='info'>$langMailVerificationChangedNo</p>";
+        $tool_content .= "<div class='alert alert-info'>$langMailVerificationChangedNo</div>";
     }
 }
 
@@ -139,7 +139,7 @@ else {
     }
 }
 
-$tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
-$tool_content .= "<p class='info'>$langMailVerificationNoticeAdmin</p>";
+$tool_content .= "<p class='alert alert-warning'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
+$tool_content .= "<div class='alert alert-info'>$langMailVerificationNoticeAdmin</div>";
 
 draw($tool_content, 3);

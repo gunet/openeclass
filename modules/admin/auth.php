@@ -86,16 +86,16 @@ if (empty($auth)) {
     }
 } else {
     if (empty($settings)) {
-        $tool_content .= "<p class='caution'>$langErrActiv $langActFailure</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langErrActiv $langActFailure</div>";
     } else {
         if ($active == 'yes') {
-            $tool_content .= "<p class='success'>";
+            $tool_content .= "<div class='alert alert-success'>";
             $tool_content .= "$langActSuccess" . get_auth_info($auth);
-            $tool_content .= "</p>";
+            $tool_content .= "</div>";
         } else {
-            $tool_content .= "<p class='success'>";
+            $tool_content .= "<div class='alert alert-success'>";
             $tool_content .= "$langDeactSuccess" . get_auth_info($auth);
-            $tool_content .= "</p>";
+            $tool_content .= "</div>";
         }
     }
 }

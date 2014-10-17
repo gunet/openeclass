@@ -38,13 +38,6 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
 }
-if (isset($_POST['cancelPoll']) || isset($_POST['cancelAnswers'])) {
-    if(isset($_GET['pid'])) {
-        redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$_GET[pid]");          
-    } else {
-        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");       
-    }
-}
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
     $pid = intval($_GET['pid']);
@@ -250,7 +243,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group'>
               <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage : </label>
               <div class='col-sm-10'>
-                ".rich_text_editor('PollEndMessage', 4, 52, $PollDescription)."
+                ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
             </div>                
             <div class='form-group'>
@@ -591,6 +584,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $i++;
         }
         $tool_content .= "</tbody></table>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

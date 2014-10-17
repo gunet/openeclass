@@ -75,7 +75,7 @@ if (count($q) > 0) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<p class='caution_small'>$langNoGroup</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langNoGroup</div>";
 }
 
 draw($tool_content, 2, null, $head_content);

@@ -50,7 +50,7 @@ function list_lps() {
             'rank' => $row->rank);
     }
     if (count($lpinfo) == 0) {
-        $tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .

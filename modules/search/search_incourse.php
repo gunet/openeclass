@@ -47,7 +47,7 @@ require_once 'unitresourceindexer.class.php';
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
-    $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+    $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
     draw($tool_content, 2);
     exit;
 }
@@ -435,7 +435,7 @@ if (empty($search_terms)) {
     }
     // else ... no results found
     if ($found == false) {
-        $tool_content .= "<p class='alert1'>$langNoResult</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     }
 } // end of search
 draw($tool_content, 2);

@@ -68,7 +68,7 @@ if ($submit) {
     // check if user name exists
     $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);    
     if ($username_check) {
-        $tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div><br><br><p align='pull-right'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
         draw($tool_content, 3);
         exit();
@@ -122,7 +122,7 @@ if ($submit) {
 
     if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset)) {
         $tool_content .= "<table width='99%'><tbody><tr>
-	    <td class='caution' height='60'>
+	    <td class='alert alert-danger' height='60'>
 	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
 	    </td></tr></tbody></table>";
         draw($tool_content, 3);
@@ -130,8 +130,8 @@ if ($submit) {
     }
 
     // user message
-    $tool_content .= "<p class='success'>$profsuccess<br><br>
-                     <a href='../admin/listreq.php'>$langBackRequests</a></p>";
+    $tool_content .= "<div class='alert alert-success'>$profsuccess<br><br>
+                     <a href='../admin/listreq.php'>$langBackRequests</a></div>";
 } else {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request

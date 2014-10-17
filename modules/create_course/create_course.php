@@ -215,8 +215,8 @@ foreach ($departments as $dep) {
 // Check if the teacher is allowed to create in the departments he chose
 if (!$deps_valid) {
     $nameTools = "";
-    $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
-                    <p class='eclass_button'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
+                    <p class='pull-right'><a class='btn btn-default' href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
     draw($tool_content, 1, null, $head_content);
     exit();
 }
@@ -518,8 +518,8 @@ if (!isset($_POST['create_course'])) {
 
     $_SESSION['courses'][$code] = USER_TEACHER;
 
-    $tool_content .= "<p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
-                        <span class='smaller'>$langEnterMetadata</span></p>";
+    $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($title) . "<br>
+                        <span class='smaller'>$langEnterMetadata</span></div>";
     $tool_content .= action_bar(array(
                 array('title' => $langEnter,
                     'url' => "../../courses/$code/index.php",

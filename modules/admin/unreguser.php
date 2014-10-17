@@ -48,7 +48,7 @@ $u_status = $userdata->status;
 if (!$doit) {
     if ($u_account && $c) {
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
-        <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
+        <div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
     	$langConfirmDeleteQuestion2 <em>" . q(course_id_to_title($c)) . "</em>
         </div>
         <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>";

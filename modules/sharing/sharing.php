@@ -26,26 +26,28 @@
  * @return string html list with social sharing icons
  */
 function print_sharing_links ($url, $text) {
-    global $langShare, $themeimg;
+    global $langShare, $themeimg, $head_content, $urlServer;
+    
+    $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/sharing/style.css">';
     
     $out = "<div class='sharingcontainer'>$langShare: ";
     $out .= "<ul class='sharinglist'>";
 
     //facebook
     $sharer = "https://www.facebook.com/sharer/sharer.php?u=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$themeimg."/sharing/facebook.png' alt='Facebook' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/facebook.png' alt='Facebook' /></a></li>";
     //twitter
     $sharer = "https://twitter.com/intent/tweet?url=".urlencode($url)."&amp;text=".urlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$themeimg."/sharing/twitter.png' alt='Twitter' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/twitter.png' alt='Twitter' /></a></li>";
     //google+
     $sharer = "https://plus.google.com/share?url=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$themeimg."/sharing/google+.png' alt='Google+' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/google+.png' alt='Google+' /></a></li>";
     //linkedin
     $sharer = "http://www.linkedin.com/shareArticle?mini=true&amp;url=".urlencode($url)."&amp;title=".urlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$themeimg."/sharing/linkedin.png' alt='LinkedIn' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/linkedin.png' alt='LinkedIn' /></a></li>";
     //email
     $sharer = "mailto:?subject=".urlencode($text)."&amp;body=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$themeimg."/sharing/mail.png' alt='Email' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/mail.png' alt='Email' /></a></li>";
     
     $out .= "</ul>";
     $out .= "</div>";

@@ -147,12 +147,12 @@ class CourseXMLConfig {
 
         $valArr = array(
             'course_title_' . $clang => $courseinfo,
-            'course_language' => $courseinfo,
+            'course_language_' . $clang => $courseinfo,
             'course_keywords_' . $clang => $courseinfo,
             'course_unit_title_' . $clang => $coursehome,
             'course_unit_description_' . $clang => $coursehome,
             'course_numberOfUnits' => $coursehome,
-            'course_license' => $courseinfo,
+            'course_license_' . $clang => $courseinfo,
             'course_contents_' . $clang => $coursedesc,
             'course_objectives_' . $clang => $coursedesc,
             'course_literature_' . $clang => $coursedesc,
@@ -160,7 +160,7 @@ class CourseXMLConfig {
             'course_assessmentMethod_' . $clang => $coursedesc,
             'course_prerequisites_' . $clang => $coursedesc,
             'course_featuredBooks_' . $clang => $coursedesc,
-            'course_targetGroup_el' . $clang => $coursedesc
+            'course_targetGroup_' . $clang => $coursedesc
         );
 
         if (isset($valArr[$key])) {

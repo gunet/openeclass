@@ -72,8 +72,8 @@ if ($is_editor or $is_tutor) {
         }
         // aldo send email to professor
         send_mail($sender_name, $sender_email, '', $sender_email, $emailsubject, $emailbody, $charset);
-        $tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
-        $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></p>";
+        $tool_content .= "<div class='alert alert-success'>$langEmailSuccess<br>";
+        $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
     } else {
         $tool_content .= "
                 <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>

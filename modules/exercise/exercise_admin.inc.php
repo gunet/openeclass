@@ -27,40 +27,42 @@ require_once 'modules/search/exerciseindexer.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
-    
-    $exerciseTitle = trim($exerciseTitle);
-    $exerciseDescription = purify($exerciseDescription);
-    $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
-
-    // no title given
-    if (empty($exerciseTitle)) {
-        $msgErr = $langGiveExerciseName;
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['exerciseTitle']);
+    $v->rule('numeric', ['exerciseTimeConstraint', 'exerciseAttemptsAllowed']);
+    $v->labels(array(
+        'exerciseTitle' => "$langTheField $langExerciseName",
+        'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
+        'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed"
+    ));
+    if($v->validate()) {
+        $exerciseTitle = trim($exerciseTitle);
+        $exerciseDescription = purify($exerciseDescription);
+        $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
+        $objExercise->updateTitle($exerciseTitle);
+        $objExercise->updateDescription($exerciseDescription);
+        $objExercise->updateType($exerciseType);
+        $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate);
+        $objExercise->updateStartDate($startDateTime_obj->format('Y-m-d H:i:s'));
+        $endDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate);
+        $objExercise->updateEndDate($endDateTime_obj->format('Y-m-d H:i:s'));
+        $objExercise->updateTempSave($exerciseTempSave);
+        $objExercise->updateTimeConstraint($exerciseTimeConstraint);
+        $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
+        $objExercise->setRandom($randomQuestions);
+        $objExercise->updateResults($dispresults);
+        $objExercise->updateScore($dispscore);
+        $objExercise->save();
+        // reads the exercise ID (only useful for a new exercise)
+        $exerciseId = $objExercise->selectId();
+        $eidx = new ExerciseIndexer();
+        $eidx->store($exerciseId);
+        redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
     } else {
-        if ((!is_numeric($exerciseTimeConstraint)) or (!is_numeric($exerciseAttemptsAllowed))) {
-            $msgErr = $langGiveExerciseInts;
-        } else {
-            
-            $objExercise->updateTitle($exerciseTitle);
-            $objExercise->updateDescription($exerciseDescription);
-            $objExercise->updateType($exerciseType);
-            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate);
-            $objExercise->updateStartDate($startDateTime_obj->format('Y-m-d H:i:s'));
-            $endDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate);
-            $objExercise->updateEndDate($endDateTime_obj->format('Y-m-d H:i:s'));
-            $objExercise->updateTempSave($exerciseTempSave);
-            $objExercise->updateTimeConstraint($exerciseTimeConstraint);
-            $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-            $objExercise->setRandom($randomQuestions);
-            $objExercise->updateResults($dispresults);
-            $objExercise->updateScore($dispscore);
-            $objExercise->save();
-            // reads the exercise ID (only useful for a new exercise)
-            $exerciseId = $objExercise->selectId();
-            $eidx = new ExerciseIndexer();
-            $eidx->store($exerciseId);
-            redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);
-        }
-    }
+        $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.$new_or_modify);
+    }    
 } else {
     $exerciseId = $objExercise->selectId();
     $exerciseTitle = $objExercise->selectTitle();
@@ -176,18 +178,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 <div class='form-group'>
+                 <div class='form-group ".(Session::getError('exerciseTimeConstraint') ? "has-error" : "")."'>
                    <label for='exerciseTimeConstraint' class='col-sm-2 control-label'>$langExerciseConstrain:</label>
                    <div class='col-sm-10'>
                      <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
-                     <span class='help-block'>$langExerciseConstrainUnit ($langExerciseConstrainExplanation)</span>
+                     <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ($langExerciseConstrainExplanation)")."</span>
                    </div>
                  </div>
-                 <div class='form-group'>
+                 <div class='form-group ".(Session::getError('exerciseAttemptsAllowed') ? "has-error" : "")."'>
                    <label for='exerciseAttemptsAllowed' class='col-sm-2 control-label'>$langExerciseAttemptsAllowed:</label>
                    <div class='col-sm-10'>
                      <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
-                     <span class='help-block'>$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)</span>
+                     <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                    </div>
                  </div>            
                  <div class='form-group'>

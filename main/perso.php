@@ -177,7 +177,7 @@ function getUserLessonInfo($uid) {
         }
         $lesson_content .= "</table>";
     } else { // if we are not registered to courses
-        $lesson_content .= "<p class='alert1'>$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
+        $lesson_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons !</div><div><u>$langWelcomeSelect</u>:</div>";
         $lesson_content .= "<table width='100%'>";
         $lesson_content .= "<tr>";
         $lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";
@@ -286,7 +286,7 @@ function getUserAgenda($lesson_id) {
     }    
     $course_ids = implode(",", $course_ids);
     if (empty($course_ids)) {// in case there aren't any enabled agenda modules
-        return "<p class='alert1'>$langNoEventsExist</p>";
+        return "<div class='alert alert-warning'>$langNoEventsExist</div>";
     }
                
     $result = Database::get()->queryArray("SELECT agenda.title, agenda.content, agenda.start,
@@ -321,7 +321,7 @@ function getUserAgenda($lesson_id) {
     if ($found) {
         return $agenda_content;
     } else {
-        return "<p class='alert1'>$langNoEventsExist</p>";
+        return "<div class='alert alert-warning'>$langNoEventsExist</div>";
     }
 }
 
@@ -379,7 +379,7 @@ function getUserForumPosts($lesson_id) {
     if ($found) {
         return $forum_content;
     } else {
-        return "<p class='alert1'>$langNoPosts</p>";
+        return "<div class='alert alert-warning'>$langNoPosts</div>";
     }
 }
 
@@ -433,7 +433,7 @@ function getUserDocuments($lesson_id) {
     if ($found) {
         return $doc_content;
     } else {
-        return "<p class='alert1'>$langNoDocsExist</p>";
+        return "<div class='alert alert-warning'>$langNoDocsExist</div>";
     }
 }
 
@@ -490,7 +490,7 @@ function getUserAssignments($lesson_id) {
     if ($found) {
         return $assign_content;
     } else {
-        return "<p class='alert1'>$langNoAssignmentsExist</p>";
+        return "<div class='alert alert-warning'>$langNoAssignmentsExist</div>";
     }
 }
 

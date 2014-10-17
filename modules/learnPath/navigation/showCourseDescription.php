@@ -69,7 +69,7 @@ $nameTools = $langCourseProgram;
                     echo "</tr></table><br />\n";
                 }
             } else {
-                echo "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+                echo "   <div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
             }
             ?></div></body></html>
 

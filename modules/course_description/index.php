@@ -115,7 +115,7 @@ if ($q && count($q) > 0) {
         $i++;
     }
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
 }
 
 add_units_navigation(true);
@@ -155,7 +155,7 @@ function processActions() {
         $res_id = intval($_REQUEST['del']);
         Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
+        $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
         $res_id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);

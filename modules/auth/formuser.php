@@ -38,18 +38,18 @@ $eclass_prof_reg = get_config('eclass_prof_reg');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 // security check
 if (!$user_registration) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
 if ($prof and !$eclass_prof_reg) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
 
 if (!$prof and $eclass_stud_reg != 1) {
-    $tool_content .= "<div class='caution'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
     exit;
 }
@@ -104,7 +104,7 @@ if (get_config("display_captcha")) {
 
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
-        $tool_content .= "<p class='alert1'>$message</p>";
+        $tool_content .= "<div class='alert alert-warning'>$message</div>";
     }
 }
 
@@ -142,11 +142,11 @@ if ($all_set) {
                 "$contactphone: $userphone\n\n\n$logo\n\n";
 
         if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
-            $tool_content .= "<p class='alert1'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>";
+            $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
         }
 
         // User Message
-        $tool_content .= "<div class='success'>" .
+        $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
@@ -158,14 +158,14 @@ if ($all_set) {
         $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&rid=' . $request_id);
         $emailhelpdesk = get_config('email_helpdesk');
         if (!send_mail($siteName, $emailAdministrator, '', $usermail, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
-            $mail_ver_error = sprintf("<p class='alert1'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
+            $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);
             exit;
         }
 
         // User Message
-        $tool_content .= "<div class='success'>" .
+        $tool_content .= "<div class='alert alert-success'>" .
                 ($prof ? $langDearProf : $langDearUser) .
                 "<br />$langMailVerificationSuccess
 			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";

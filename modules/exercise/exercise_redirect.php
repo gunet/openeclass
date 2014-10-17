@@ -54,7 +54,7 @@ if (isset($_GET['error'])) {
 $tool_content_extra = "<br/>
 	<table width='99%' class='Question'>
 		<thead>
-			<td class='alert1'>".q($error)."</td>
+			<td class='alert alert-warning'>".q($error)."</td>
 		</tr><tr>
 			<td><br/><br/><br/>
 				<div align='center'><a href='index.php?course=$course_code'>$langBack</a></div>

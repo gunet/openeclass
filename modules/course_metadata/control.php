@@ -106,16 +106,16 @@ if (isset($_POST['submit'])) {
     $is_certified = 1;
     $level = CourseXMLElement::NO_LEVEL;
     if ($_POST['course_confirmAPlusLevel'] == 'true') {
-        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
+        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
         $level = CourseXMLElement::A_PLUS_LEVEL;
     } else if ($_POST['course_confirmALevel'] == 'true') {
-        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
+        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
         $level = CourseXMLElement::A_LEVEL;
     } else if ($_POST['course_confirmAMinusLevel'] == 'true') {
-        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
+        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
         $level = CourseXMLElement::A_MINUS_LEVEL;
     } else {
-        $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langOpenCoursesWasNotSet</div>";
         $is_certified = 0;
     }
 
@@ -139,9 +139,9 @@ if (isset($_POST['submit'])) {
 $checkedAMinusLevel = ($xmlData['course_confirmAMinusLevel'] == 'true') ? "checked='checked'" : '';
 $checkedALevel = ($xmlData['course_confirmALevel'] == 'true') ? "checked='checked'" : '';
 $checkedAPlusLevel = ($xmlData['course_confirmAPlusLevel'] == 'true') ? "checked='checked'" : '';
-$disabledAMinusLevel = (!$looksAMinus) ? "disabled='disabled'" : '';
-$disabledALevel = (!$looksA) ? "disabled='disabled'" : '';
-$disabledAPlusLevel = (!$looksAPlus) ? "disabled='disabled'" : '';
+$disabledAMinusLevel = (!$looksAMinus && !$checkedAMinusLevel) ? "disabled='disabled'" : '';
+$disabledALevel = (!$looksA && !$checkedALevel) ? "disabled='disabled'" : '';
+$disabledAPlusLevel = (!$looksAPlus && !$checkedAPlusLevel) ? "disabled='disabled'" : '';
 
 // images
 $openAccessImg = ($hasOpenAccess) ? 'tick' : 'delete';

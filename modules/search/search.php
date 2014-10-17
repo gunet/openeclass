@@ -27,7 +27,7 @@ $nameTools = $langSearch;
 
 // exit if search is disabled
 if (!get_config('enable_search')) {
-    $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+    $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
     draw($tool_content, 0);
     exit();
 }
@@ -78,7 +78,7 @@ if (isset($uid) and $uid) {
  
 // exit if not results
 if (count($hits) <= 0) {
-    $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     draw($tool_content, 0);
     exit();
 }

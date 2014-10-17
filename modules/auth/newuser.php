@@ -76,7 +76,7 @@ $user_registration = get_config('user_registration');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
 if (!$user_registration or $eclass_stud_reg != 2) {
-    $tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
+    $tool_content .= "<div class='alert alert-info'>$langStudentCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
@@ -284,7 +284,7 @@ if (!isset($_POST['submit'])) {
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg
-        $tool_content .= "<div class='success'><p>$user_msg</p></div>";
+        $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
 
         // footer msg
         if (!$vmail) {
@@ -297,11 +297,11 @@ if (!isset($_POST['submit'])) {
         }
     } else {
         // errors exist - registration failed
-        $tool_content .= "<p class='caution'>";
+        $tool_content .= "<div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
             $tool_content .= " $error";
         }
-        $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?" .
+        $tool_content .= "</div><p><a href='$_SERVER[SCRIPT_NAME]?" .
                 'givenname_form=' . urlencode($givenname_form) .
                 '&amp;surname_form=' . urlencode($surname_form) .
                 '&amp;uname=' . urlencode($uname) .

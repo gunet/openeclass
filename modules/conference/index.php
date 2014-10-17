@@ -40,7 +40,7 @@ $nameTools = $langConference;
 
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<p class='caution'>$langNoGuest</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
     draw($tool_content, 2, 'conference');
 }
 

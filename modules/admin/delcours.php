@@ -71,7 +71,7 @@ $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 // Delete course
 if (isset($_GET['delete']) && $course_id) {
     delete_course($course_id);
-    $tool_content .= "<p class='success'>" . $langCourseDelSuccess . "</p>";
+    $tool_content .= "<div class='alert alert-success'>" . $langCourseDelSuccess . "</div>";
 }
 // Display confirmatiom message for course deletion
 else {
@@ -85,7 +85,7 @@ else {
 	<legend>" . $langCourseDelConfirm . "</legend>
 	<table class='tbl' width='100%'>";
     $tool_content .= "<tr><td>
-		<div class='caution'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
+		<div class='alert alert-danger'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
 		<br /><br /><i>" . $langNoticeDel . "</i><br />
 		</div></td></tr>";
     $tool_content .= "<tr>

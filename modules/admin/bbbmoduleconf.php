@@ -135,9 +135,9 @@ else if (isset($_GET['delete_server']))
     $id = $_GET['delete_server'] ;
     Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d",$id);
     // Display result message
-    $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
     // Display link to go back to index.php
-    $tool_content .= "<p class='right'><a href='bbbmoduleconf.php'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-success'><a href='bbbmoduleconf.php'>$langBack</a></div>";
 }
 // Save new config.php
 else if (isset($_POST['submit'])) {
@@ -176,9 +176,9 @@ else if (isset($_POST['submit'])) {
     //$_SESSION['theme'] = $theme = $available_themes[$theme];
 
     // Display result message
-    $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
     // Display link to go back to index.php
-    $tool_content .= "<p class='right'><a href='bbbmoduleconf.php'>$langBack</a></p>";
+    $tool_content .= "<p class='pull-right'><a href='bbbmoduleconf.php'>$langBack</a></p>";
 } // end of if($submit)
 // Display config.php edit form
 else {

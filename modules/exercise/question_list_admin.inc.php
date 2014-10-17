@@ -146,5 +146,5 @@ $tool_content .= "
 </div>    
 ";
 if (!isset($i)) {
-    $tool_content .= "<p class='alert1'>$langNoQuestion</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
 }

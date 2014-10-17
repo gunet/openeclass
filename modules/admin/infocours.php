@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
     $course->refresh($cId, $departments);
 
-    $tool_content .= "<p class='success'>$langModifDone</p>
+    $tool_content .= "<div class='alert alert-success'>$langModifDone</div>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
 }
 // Display edit form for course basic information

@@ -66,7 +66,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 
 if (!does_exists($forum_id, "forum")) {
-    $tool_content .= "<div class='caution'>$langErrorPost</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langErrorPost</div>";
     draw($tool_content, 2);
     exit;
 }
@@ -162,7 +162,7 @@ if (isset($_POST['submit'])) {
     }
     // end of notification
 
-    $tool_content .= "<p class='success'>$langStored</p>";
+    $tool_content .= "<div class='alert alert-success'>$langStored</div>";
 } else {
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>

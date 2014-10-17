@@ -154,8 +154,8 @@ if (!empty($u)) {
 
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<p class='caution'>$langNoUserSelected</p>
-                <p align='right'><a href='index.php'>$langBack</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langNoUserSelected</div>
+                <p align='pull-right'><a href='index.php'>$langBack</p>";
     draw($tool_content, 3);
     exit();
 }

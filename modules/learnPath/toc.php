@@ -68,7 +68,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
 $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
-    echo "<p class='alert1'>$langNoModule</p>";
+    echo "<div class='alert alert-warning'>$langNoModule</div>";
     exit();
 }
 

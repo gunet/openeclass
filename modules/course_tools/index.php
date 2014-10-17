@@ -84,7 +84,7 @@ if (isset($_POST['delete'])) {
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
         'link' => $r->url,
         'name_link' => $r->title));
-    $tool_content .= "<p class='success'>$langLinkDeleted</p>";
+    $tool_content .= "<div class='alert alert-success'>$langLinkDeleted</div>";
 }
 
 /**
@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
-        $tool_content .= "<p class='caution'>$langInvalidLink</p>" .
+        $tool_content .= "<div class='alert alert-danger'>$langInvalidLink</div>" .
                 action_bar(array(
                     array('title' => $langBack,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2",
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
     $sql = Database::get()->query("INSERT INTO link (course_id, url, title, category, description)
                             VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
     $id = $sql->lastInsertID;
-    $tool_content .= "<p class='success'>$langLinkAdded</p>";
+    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
         'link' => $link,
         'name_link' => $name_link));

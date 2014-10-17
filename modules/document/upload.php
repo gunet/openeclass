@@ -65,7 +65,6 @@ if ($can_upload) {
     $tool_content .= "
         <div class='row margin-top-fat'>
           <div class='col-md-12'>
-        <h5 class='content-title'>$langUpload</h5>
         <div class='panel padding-fat focused'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      

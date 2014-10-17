@@ -36,6 +36,7 @@ if (!class_exists('Question')):
         var $weighting;
         var $position;
         var $type;
+        var $difficulty;
         var $exerciseList;  // array with the list of exercises which this question is in
 
         /**
@@ -51,6 +52,7 @@ if (!class_exists('Question')):
             $this->weighting = 0;
             $this->position = 1;
             $this->type = 1;
+            $this->difficulty = 3;
             $this->exerciseList = array();
         }
 
@@ -64,7 +66,7 @@ if (!class_exists('Question')):
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, q_position, type
+            $object = Database::get()->querySingle("SELECT question, description, weight, q_position, type, difficulty 
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -74,6 +76,7 @@ if (!class_exists('Question')):
                 $this->weighting = $object->weight;
                 $this->position = $object->q_position;
                 $this->type = $object->type;
+                $this->difficulty = $object->difficulty;
 
                 $result = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $id);
                 // fills the array with the exercises which this question is in
@@ -146,7 +149,13 @@ if (!class_exists('Question')):
          */
         function selectType() {
             return $this->type;
-        }
+        }      
+        /**
+         * returns the question difficulty
+         */
+        function selectDifficulty() {
+            return $this->difficulty;
+        }                
         /**
          * returns the relative verbal answer type
          */
@@ -199,7 +208,6 @@ if (!class_exists('Question')):
         function updateTitle($title) {
             $this->question = $title;
         }
-
         /**
          * changes the question description
          *
@@ -209,7 +217,6 @@ if (!class_exists('Question')):
         function updateDescription($description) {
             $this->description = $description;
         }
-
         /**
          * changes the question weighting
          *
@@ -249,7 +256,13 @@ if (!class_exists('Question')):
                 $this->type = $type;
             }
         }
-
+        
+        /**
+         * changes the question difficulty
+         */
+        function updateDifficulty($difficulty) {
+            $this->difficulty = $difficulty;
+        }
         /**
          * adds a picture to the question
          *
@@ -340,17 +353,18 @@ if (!class_exists('Question')):
             $weighting = $this->weighting;
             $position = $this->position;
             $type = $this->type;
+            $difficulty = $this->difficulty;
 
             // question already exists
             if ($id) {
                 Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s,
-					weight = ?f, q_position = ?d, type = ?d
-					WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $position, $type);
+					weight = ?f, q_position = ?d, type = ?d, difficulty = ?d
+					WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $position, $type, $difficulty);
             }
             // creates a new question
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type)
-				VALUES (?d, ?s, ?s, ?f, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty)
+				VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty)->lastInsertID;
             }
 
             // if the question is created in an exercise
@@ -467,9 +481,10 @@ if (!class_exists('Question')):
             $weighting = $this->weighting;
             $position = $this->position;
             $type = $this->type;
+            $difficulty = $this->difficulty;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type)
-						VALUES (?d, ?s, ?s, ?f, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty)
+						VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $position, $type, $difficulty)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);

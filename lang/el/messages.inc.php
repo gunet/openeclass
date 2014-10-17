@@ -993,7 +993,7 @@ $langAttendanceActList = "Δραστηριότητες του παρουσιολ
 $langAttendanceActToAdd = "Δραστηριότητες προς εισαγωγή στο παρουσιολόγιο";
 $langAttendanceActToAddAss = "Εργασίες προς εισαγωγή στο παρουσιολόγιο";
 $langAttendanceActToAddExe = "Ασκήσεις προς εισαγωγή στο παρουσιολόγιο";
-$langAttendanceLimitTitle = "Υποχρεωτικές παρουσιές";
+$langAttendanceLimitTitle = "Υποχρεωτικές παρουσίες";
 $langAttendanceLimitNumber = "Αριθμός υποχρεωτικών παρουσιών";
 $langAttendanceStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση παρουσιών";
 $langAttendanceMEANS = "Τιμές";
@@ -1025,7 +1025,7 @@ $langGradebookNoActMessage2 = "εδώ";
 $langGradebookNoActMessage3 = "ή να εισάγετε από τις προτεινόμενες.";
 $langGradebookNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη βαθμολόγηση";
 $langGradebookNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη βαθμολόγηση";
-$langGradebookNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη βαθμολόγηση";
+$langGradebookNoActMessageExe4 = "Δεν υπάρχουν γραμμές μάθησης για αυτόματη βαθμολόγηση";
 $langGradebookNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο βαθμολόγιο";
 $langGradebookActCour = "Δραστηριότητα μαθήματος";
 $langGradebookInsAut = "αυτόματη καταχώρηση βαθμού";
@@ -1041,7 +1041,7 @@ $langGradebookStudentFailure = "Δεν έχει γίνει ακόμη καταχ
 $langGradebookStats = "Στατιστικά";
 $langGradebookMEANS = "Τιμές";
 $langGradebookActiveUsers = "Χρήστες βαθμολογίου";
-$langGradebookActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
+$langGradebookActiveUsersSemester = "$langStudents μόνο τελευταίου εξαμήνου";
 $langGradebookRange = "Κλίμακα βαθμολογίου";
 $langGradebookWeightAlert = "Προσοχή έχετε δηλώσει βαρύτητα στη δραστηριότητα μεγαλύτερη από το επιτρεπτό";
 $langGradeNoBookAlert = "Δεν μπορείτε να εισάγετε βαθμολογία. Βαρύτητα που δεν έχετε δηλώσει σε δραστηριότητα";
@@ -1074,6 +1074,12 @@ $langGradeTotal = "Συνολικό Βαθμολόγιο";
 $langMeanValue = "Μέσος όρος";
 $langMinValue = "Ελάχιστη";
 $langMaxValue = "Μέγιστη";
+$langRefreshList = "Ανανέωση της λίστας";
+$langStudLastSemester = "$langStudents μόνο τελευταίου τριμήνου";
+$langAllRegStudents = "Όλοι οι εγγεγραμμένοι";
+$langNoStudents = "Δεν υπάρχουν χρήστες στο διάστημα που επιλέξατε";
+$langNoStudentsInAttendance = "Δεν υπάρχουν $langsStudents στο παρουσιολόγιο";
+$langUsersGradebook = "$langStudents βαθμολογίου";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
@@ -1450,6 +1456,11 @@ $langDeletePicture = "Διαγραφή της εικόνας";
 $langQuestionDescription = "Προαιρετικό σχόλιο";
 $langGiveQuestion = "Δώστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
+$langQuestionVeryEasy = "Πολύ εύκολη";
+$langQuestionEasy = "Eύκολη";
+$langQuestionModerate = "Μέτρια";
+$langQuestionDifficult = "Δύσκολη";
+$langQuestionVeryDifficult = "Πολύ δύσκολη";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
@@ -2176,7 +2187,7 @@ $langLinkDeleted = "Ο σύνδεσμος διαγράφηκε";
 $langLinkName = "Όνομα συνδέσμου";
 $langLinkAdd = "Προσθήκη συνδέσμου";
 $langLinkAdded = "Ο σύνδεσμος προστέθηκε";
-$langLinkNotPermitted = "Ο σύνδεσμος δεν επιτρέπεται";
+$langLinkNotPermitted = "Άκυρη μορφή συνδέσμου";
 $langLinkDelconfirm = "Θέλετε να διαγράψετε τον σύνδεσμο;";
 $langCategoryName = "Όνομα κατηγορίας";
 $langCategoryAdd = "Προσθήκη κατηγορίας";
@@ -2472,6 +2483,7 @@ $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μ�
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
+$langSurveyNotStarted = "Δεν έχει ανοίξει ακόμα";
 $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
@@ -2501,7 +2513,6 @@ $langPollEdited = "Το Ερωτηματολόγιο τροποποιήθηκε 
 $langPollCreator = "Δημιουργός";
 $langPollCreation = "Ημ/νία Δημιουργίας";
 $langPollCreateDate = "Το Ερωτηματολόγιο δημιουργήθηκε την";
-$langPollCreationError = "<p class='caution'>Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.</p>";
 $langPollDeleted = "Το Ερωτηματολόγιο διαγράφηκε με επιτυχία.";
 $langPollResultsDeleted = "Τα αποτελέσματα του Ερωτηματολογίου διαγράφηκαν με επιτυχία.";
 $langPollResultsAccess = "Δεν έχετε δικαίωμα πρόσβασης στα αποτελέσματα του Ερωτηματολογίου.";
@@ -2511,7 +2522,7 @@ $langPollActivated = "Το Ερωτηματολόγιο ενεργοποιήθη
 $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
 $langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
-$langPollInactive = "<p class='caution'>Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.</p>";
+$langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
@@ -2520,8 +2531,7 @@ $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
 $langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!";
-$langPollEmpty = "<p class='caution'>Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!</p>";
-$langPollEmptyAnswers = "<p class='caution'>Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση</p>";
+$langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!";
 $langPollPercentResults = 'Ποσοστιαία αποτελέσματα';
 $langPollFullResults = 'Αναλυτικά αποτελέσματα';
 
@@ -4056,6 +4066,7 @@ $langCMeta['veterin'] = "Κτηνιατρική";
 $langCMeta['agribio'] = "Γεωργική Βιοτεχνολογία";
 $langCMeta['othereng'] = "Άλλες Επιστήμες Μηχανικού & Τεχνολογίας";
 $langCMeta['civil'] = "Επιστήμες Πολιτικού Μηχανικού";
+$langCMeta['architects'] = "Επιστήμες Αρχιτέκτονα Μηχανικού";
 $langCMeta['eeeeie'] = "Επιστήμες Ηλεκτρολόγου Μηχανικού, Ηλεκτρονικού Μηχανικού & Μηχανικού Η/Υ";
 $langCMeta['mechan'] = "Επιστήμες Μηχανολόγου Μηχανικού";
 $langCMeta['chemic'] = "Επιστήμες Χημικού Μηχανικού";
@@ -4247,3 +4258,9 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
  * ************************************************************ */
 $langTheField = 'Το πεδίο';
 $langFormErrors = 'Η φόρμα περιέχει λάθη. Παρακαλώ διορθώστε τα και επανυποβάλετε την φόρμα.';
+
+/* * ***********************************************************
+ * Other
+ * ************************************************************ */
+$langMoreOptions = 'Περισσότερες επιλογές';
+$langLessOptions = 'Λιγότερες επιλογές';

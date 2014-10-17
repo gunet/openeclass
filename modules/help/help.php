@@ -57,7 +57,5 @@ $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
     <body>
         <h3><?php echo $title; ?></h3>
         <?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
-        <div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
-        <br />
     </body>
 </html>

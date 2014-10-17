@@ -133,7 +133,12 @@ a
 }
 
 
-
+#header_section, #footer_section{
+    padding: 0 15px;
+}
+#header_section > div, #footer_section > div{
+    padding: 0px;
+}
 
 
 /* Styles for headings, hr and titles --------------------------------------------------*/
@@ -1630,23 +1635,27 @@ ul.expandable{
     }
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
-.row-wrapper {
-  display: table; }
 
-.col-modified {
-  float: none;
-  display: table-cell;
-  vertical-align: top;
-  padding-bottom: 0px; }
-
-.row-main{
-    padding-bottom: 77px;
+.row
+{
+    position: relative !important;
 }
-
-.row-footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0px; }
+#leftnav
+{
+    top: -70px;
+}
+.row-main{
+    padding-bottom: 2em;
+    padding-top: 2em;
+}
+#background-cheat
+{
+    position: absolute;
+    background-color: #fafafa;
+    height: 100%;
+    right: 0px;
+    padding: 0px;
+}
 
 /*# sourceMappingURL=inventory.css.map */
 
@@ -1654,11 +1663,16 @@ td.option-btn-cell{
    width: 5px;
     padding: 0px !important;
 }
+.container{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 
-
-
-
-
+#Frame
+{
+    padding: 0 0;
+    margin: 0 0;
+}
 
 
 

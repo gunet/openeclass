@@ -224,7 +224,10 @@ function load_js($file, $init='') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-datepicker/css/datepicker3.css'>";
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datepicker/js/bootstrap-datepicker.js'></script>\n";
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
-        }         
+        } elseif ($file == 'bootstrap-slider') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>";
+            $file = "bootstrap-slider/js/bootstrap-slider.js";
+        }               
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         if ($file == 'jquery-1.10.2.min.js') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
@@ -878,28 +881,6 @@ function add_check_if_javascript_enabled_js() {
 }
 
 /*
- * check extension and  write  if exist  in a  <LI></LI>
- * @params string       $extensionName  name  of  php extension to be checked
- * @params boolean      $echoWhenOk     true => show ok when  extension exist
- * @author Christophe Gesche
- * @desc check extension and  write  if exist  in a  <LI></LI>
- */
-
-function warnIfExtNotLoaded($extensionName) {
-
-    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-    if (extension_loaded($extensionName)) {
-        $tool_content .= "<li><img src='../template/classic/img/tick_1.png' alt='tick' /> $extensionName <br /></li>";
-    } else {
-        $tool_content .= "
-                <li><img src='../template/classic/img/error.png' alt='error' /> $extensionName
-                <font color=\"#FF0000\"> - <b>$langModuleNotInstalled</b></font>
-                (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
-                <br /></li>";
-    }
-}
-
-/*
  * to create missing directory in a gived path
  *
  * @returns a resource identifier or false if the query was not executed correctly.
@@ -1449,6 +1430,8 @@ function delete_course($cid) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
     $idx->removeAllByCourse($cid);
+    
+    Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }
 
 /**
@@ -1902,7 +1885,7 @@ function handle_unit_info_edit() {
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
-    return "<p class='success'>$successmsg</p>";
+    return "<div class='alert alert-success'>$successmsg</div>";
 }
 
 function math_unescape($matches) {

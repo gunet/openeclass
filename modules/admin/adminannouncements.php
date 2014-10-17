@@ -139,7 +139,7 @@ if (isset($_GET['delete'])) {
 
 // action message
 if (isset($message) && !empty($message)) {
-    $tool_content .= "<p class='success'>$message</p><br/>";
+    $tool_content .= "<div class='alert alert-success'>$message</div><br/>";
     $displayAnnouncementList = true;
     $displayForm = false; //do not show form
 }

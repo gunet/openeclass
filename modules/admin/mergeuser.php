@@ -38,7 +38,7 @@ if (isset($_REQUEST['u'])) {
     $u = intval($_REQUEST['u']);
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
-        $tool_content = "<p class='caution'>$langUserMergeAdminForbidden</p>";
+        $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
         draw($tool_content, 3);
         exit;
     }
@@ -69,7 +69,7 @@ if (isset($_REQUEST['u'])) {
                                               <td>" . q($status_names[$target['status']]) . "</td></tr>";
             if ($info['status'] == 1 and $target['status'] != 1) {
                 $target = false;
-                $target_field .= "<tr><td colspan='2' class='alert1'>$langUserMergeForbidden</td></tr>";
+                $target_field .= "<tr><td colspan='2' class='alert alert-warning'>$langUserMergeForbidden</td></tr>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
                     do_user_merge($info, $target);
@@ -152,7 +152,7 @@ function do_user_merge($source, $target) {
         fix_table('wiki_pages', 'owner_id', $source_id, $target_id);
         fix_table('wiki_pages_content', 'editor_id', $source_id, $target_id);
 
-        $tool_content = sprintf('<p class="success">' . $langUserMergeSuccess . '</p>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
+        $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
                 "\n<p><a href='search_user.php'>$langBack</p>\n";
 
         draw($tool_content, 3);

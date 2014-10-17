@@ -183,10 +183,10 @@ Add an optional comment. This comment won't be seen by the student till the mome
 Give a weighting to the answer. The weighting can be any positive or negative integer, or zero<br>
 Click on 'Create' to save your answers.</p>
 <hr>
-<p>You can import questions from another exercise through the 'Get Existing Question' link. Select the question you want to reuse and click on the <img src='$themeimg/enroll.png' width=16 height=16> icon.</p>
-<p>Click on <img src='$themeimg/edit.png' width=16 height=16> icon in order to modify an exercise. 
-Click on <img src='$themeimg/delete.png' width=16 height=16> icon in order to delete an exercise.
-Click on <img src='$themeimg/visible.png' width=16 height=16> icon to make an exercise visible or invisible to students.
+<p>You can import questions from another exercise through the 'Get Existing Question' link. Select the question you want to reuse and click on the <i class='fa fa-plus-square'></i> icon.</p>
+<p>Click on <i class='fa fa-edit'></i> icon in order to modify an exercise. 
+Click on <i class='fa fa-times'></i> icon in order to delete an exercise.
+Click on <i class='fa fa-eye'></i> icon to make an exercise visible or invisible to students.
 Click on 'Question Pool' to list all questions (from all exercises).
 Finally, you can see the results for each exercise in HTML or CSV format by clicking on the corresponding link.
 </p>";

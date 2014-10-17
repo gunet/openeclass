@@ -48,7 +48,7 @@ if ($shibsettings != 'shibboleth' and $shibsettings != '') {
 } else {
     $checkedshib = $shibseparator = '';
 }
-$tool_content .= sprintf("<tr><td colspan='2'><div class='info'>$langExplainShib</div></td></tr>", $webDir);
+$tool_content .= sprintf("<tr><td colspan='2'><div class='alert alert-info'>$langExplainShib</div></td></tr>", $webDir);
 $tool_content .= "
   <tr>
     <th class='left'>$langShibEmail:</th>

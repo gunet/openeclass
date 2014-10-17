@@ -170,7 +170,7 @@ if (!$is_editor) {
         $error = TRUE;
     }
     if ($error == TRUE) {
-        echo "<br/><td class='alert1'>$message</td>";
+        echo "<br/><td class='alert alert-warning'>$message</td>";
         exit();
     }
 }
@@ -282,7 +282,7 @@ if (!$questionList) {
       <table width=\"100%\">
       <tr>
         <td colspan='2'>
-          <p class='caution'>$langNoAnswer</p>
+          <div class='alert alert-danger'>$langNoAnswer</div>
         </td>
       </tr>
       </table>");
@@ -459,7 +459,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     } // end for()
 
     if (!$nbrAnswers) {
-        echo "<tr><td colspan='2'><p class='caution'>$langNoAnswer</td></tr>";
+        echo "<tr><td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td></tr>";
     }
     // destruction of the Answer object
     unset($objAnswerTmp);

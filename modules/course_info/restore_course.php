@@ -65,7 +65,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $pathToArchive = $_POST['pathToArchive'];
     validateUploadedFile(basename($pathToArchive), 3);
     if (get_file_extension($pathToArchive) !== 'zip') {
-        $tool_content .= "<p class='caution'>" . $langErrorFileMustBeZip . "</p>";
+        $tool_content .= "<div class='alert alert-danger'>" . $langErrorFileMustBeZip . "</div>";
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
@@ -73,7 +73,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
-        $tool_content .= "<p class='caution'>$langFileNotFound</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langFileNotFound</div>";
     }
 } elseif (isset($_POST['create_restored_course'])) {
     register_posted_variables(array('restoreThis' => true,
@@ -103,7 +103,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $r = $restoreThis . '/html';
         list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title, $departments, $course_vis, $course_prof);
         if (!$new_course_code) {
-            $tool_content = "<p class='alert1'>" . $GLOBALS['langError'] . "</p>";
+            $tool_content = "<div class='alert alert-warning'>" . $GLOBALS['langError'] . "</div>";
             draw($tool_content, 3);
             exit;
         }
@@ -482,7 +482,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 } elseif (isset($_POST['do_restore'])) {
     $base = $_POST['restoreThis'];
     if (!file_exists($base . '/config_vars')) {
-        $tool_content .= "<p class='alert1'>$langInvalidArchive</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langInvalidArchive</div>";
         draw($tool_content, 3);
         exit;
     }

@@ -140,7 +140,7 @@ if ($is_editor) {
                                            glossary_index = ?d WHERE id = ?d"
                 , $expand_glossary, (isset($_POST['index']) ? 1 : 0), $course_id);
         invalidate_glossary_cache();
-        $tool_content .= "<div class='success'>$langQuotaSuccess</div>";
+        $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess</div>";
     }
 
     if (isset($_POST['submit'])) {
@@ -186,7 +186,7 @@ if ($is_editor) {
 
         if ($q and $q->affectedRows) {
             invalidate_glossary_cache();
-            $tool_content .= "<div class='success'>$success_message</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$success_message</div><br />";
         }
     }
 
@@ -198,7 +198,7 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
                                                                       'term' => $term));
         if ($q and $q->affectedRows) {
-            $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";
+            $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div><br />";
         }
         draw($tool_content, 2, null, $head_content);
         exit;
@@ -299,7 +299,7 @@ if ($is_editor) {
     $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;
     if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
-        $tool_content .= sprintf("<p class='alert1'>$langGlossaryOverLimit</p>", "<b>$max_glossary_terms</b>");
+        $tool_content .= sprintf("<div class='alert alert-warning'>$langGlossaryOverLimit</div>", "<b>$max_glossary_terms</b>");
     }
 } else {
     // Show categories link for students if needed
@@ -415,7 +415,7 @@ if (count($sql) > 0) {
     }
     $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
 }
 
 draw($tool_content, 2, null, $head_content);
