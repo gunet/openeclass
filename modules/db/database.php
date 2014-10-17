@@ -120,6 +120,7 @@ final class Database {
             }
             $this->dbh = new PDO($dsn, $user, $password, $params);
         } catch (PDOException $e) {
+            Debug::message("Error while initialize database: " . $e->getMessage(), Debug::CRITICAL);
             throw new Exception($e->getMessage());
         }
     }
