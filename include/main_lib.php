@@ -2605,7 +2605,7 @@ function forbidden($path) {
 function action_bar($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
-
+    $i=0;
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
@@ -2656,6 +2656,7 @@ function action_bar($options) {
                     " title='$title'>" .
                     "<i class='fa $option[icon]'></i></a>$form_end</li>");
         }
+        $i++;
     }
     $out = "<ul class='list-inline'>";
     if (count($out_primary)) {
@@ -2668,7 +2669,7 @@ function action_bar($options) {
     if (count($out_secondary)) {
         $out .= "<ul class='list-inline expandable' style=\"float:right\">" . implode('', $out_secondary) . "</ul>";
     }
-    if ($out) {
+    if ($out && $i!=0) {
         return "<div class='row'>" .
              "<div class='col-sm-12 clearfix'>" .
              "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
