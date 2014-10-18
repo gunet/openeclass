@@ -13,12 +13,6 @@ $(document).ready( function () {
 
     //menuheight();
 
-    // Sidebar switcher - custom CSS
-    $('.toggle-sidebar').on('click',function(e){
-      $('body').toggleClass('sidebar-opened');
-      $('#header .sidebutton').toggleClass('displaynone');
-    });
-
     // Btn-toggle
     $('.btn-toggle').on('click',function(){
         $(this).toggleClass('btn-toggle-on');
@@ -83,6 +77,51 @@ $(document).ready( function () {
         $("#Frame").css({"min-height": initialHeight});
         //leftnavHeight = $("#Frame").height();
         //$("#leftnav").css({"min-height": leftnavHeight});
+
+                // Sidebar switcher
+//        $('#toggle-sidebar').click(function () {
+//            var sideBarHeight = $("#sidebar").height();
+//            var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
+//            $("#sidebar-container").height(sideBarHeight);
+//            $("#sidebar").animate(
+//                    {"right": inOut}, {duration: 150, easing: "linear",
+//                start: function () {
+//                    if (!$("#sidebar").hasClass("in"))
+//                    {
+//                        $("#sidebar-container").height(sideBarHeight);
+//                    }
+//                },
+//                complete: function () {
+//                    $("#toggle-sidebar").toggleClass("toggle-active");
+//                    if ($("#sidebar").hasClass("in"))
+//                    {
+//                        $("#sidebar-container").height(0);
+//                    }
+//                    $("#sidebar").toggleClass("in");
+//                }
+//            });
+//        });
+        
+        $('#toggle-sidebar').click(function () {
+            var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
+            $("#sidebar").animate(
+                    {"right": inOut}, {duration: 150, easing: "linear",
+                start: function () {
+                    if (!$("#sidebar").hasClass("in"))
+                    {
+                        $("#sidebar-container").css({"display":"block"});
+                    }
+                },
+                complete: function () {
+                    $("#toggle-sidebar").toggleClass("toggle-active");
+                    if ($("#sidebar").hasClass("in"))
+                    {
+                        $("#sidebar-container").css({"display":"none"});
+                    }
+                    $("#sidebar").toggleClass("in");
+                }
+            });
+        });
 
     });
     

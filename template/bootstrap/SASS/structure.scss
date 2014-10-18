@@ -157,7 +157,7 @@ body > .container{
 /* MAIN-CONTENT -------------------------------------------------------*/
 #main-content
 {
-  background: $color-main-content;
+  background-color: $color-main-content;
   overflow: hidden;
 }
 
@@ -165,7 +165,7 @@ body > .container{
     margin-bottom: 0px;
     padding: 0;
     border: 0;
-    background: $color-header;
+    background-color: $color-header;
     border-bottom: 1px solid #DBDBDB;
 
 
@@ -217,13 +217,6 @@ body > .container{
 
 
 
-
-
-
-
-
-
-
 /* FOOTER --------------------------------------------------------------------------------------*/
 footer.footer
 {
@@ -243,117 +236,91 @@ footer.footer
 
 /* SIDEBAR ------------------------------------------------------------------------------------ */
 
-body.sidebar-opened
+
+
+a.toggle-active{
+    background-color: #e3e4e6 !important;
+}
+
+#sidebar-container
 {
-  #sidebar
-  {
+    display: none;
+    position: absolute;
+    width: 18.5em;
     right: 0px;
-    border-left: 1px solid rgba(0,0,0,.05);
-    opacity: 1;
-    //@include box-shadow(-7px 0px 15px -8px rgba(0,0,0,.3));
-  }
-}
+    overflow: hidden;
+    border-left: #c9c9c9;
+    border-bottom: #c9c9c9;
 
-body.sidebar-opened .toggle-sidebar
-{
-  background: #e3e4e6;
-}
+    #sidebar
+    {
+        position: relative;
+        width: 18.5em;
+        right: -18.5em;
+        padding: 1.6em 0;
+        background-color: $color-sidebar;
+        word-wrap:break-word;
+        @include user-select(none);
 
+        .panel-group.outerpanel
+        {
+            padding: 0px;
+            margin: 0px;
+
+            .panel
+            {
+                border: none;
+                margin: 0px;
+            }
+
+            .panel-heading
+            {
+                background-image: none;
+                border: none;
+            }
+        }
+        h1,h2,h3,h4,h5,h6{
+            color: #686868;
+            font-weight: 600;
+        }
+        ul,li{
+            list-style-type: none;
+            padding: 0em;
+            margin: 0em;
+        }
+    }
+
+    .innerpanel .panel-heading
+    {
+        padding: 0px;
+
+        h4{
+            margin: 0px;
+        }
+    }
+}
 #sidebar
 {
-  position: absolute;
-
-  height: 100%;
-  width: 18.5em;
-
-  right: -19em; /* just a bit more than width to ensure zero visibility */
-
-  top:3.6em; /*not to overlap the header*/
-  padding-bottom: 3.6em; /* same amount as TOP. To avoid losing content */
-
-  z-index:10001;
-
-  background: $color-sidebar;
-
-  word-wrap:break-word;
-
-  @include user-select(none);
-
-  @include transition(all $transition-time linear);
-
-  &:hover{
-    //@include box-shadow(-8px 0px 17px -8px rgba(0,0,0,.3));
-  }
-
-
-  h1,h2,h3,h4,h5,h6{
-    color: #686868;
-    font-weight: 600;
-    margin-bottom: 0.6em;
-    margin-top: 0.3em;
-  }
-
-  .toggle-sidebar{
-    text-align: center;
-    width: 3em;
-    padding: 0.3em 0em;
-    margin: 0.5em;
-
-    float: right;
-    color: #8B8B8B;
-    display: inline-block;
-    position: relative;
-    border: 1px solid #CFCFCF;
-    cursor: default;
-
-    &:hover{
-      background: $color-hover;
-      border-color: $color-hover;
-      color: white;
-    }
-  }
-
-  ul,li{
-    list-style-type: none;
-    padding: 0em;
-    margin: 0em;
-  }
-
   .side-list{
-    
     padding-bottom: 1em;
 
     .lesson-title{
       background: #344458;
-
       font-size: 0.85em;
-
       margin:0px;
-
       padding: 10px 15px;
-
       cursor: pointer;
-
       position: relative;
-
       outline: none;
-
       color: rgba(255,255,255,0.5);
-
       font-weight: 600;      
-
       margin: 0 16px;
-
       border: 1px solid #48586D;
       border-top-width: 0px;
-
       @include transition(all $transition-time linear);
-
       //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
-
       &:first-of-type{
         border-top-width: 1px;
-
         @include border-radius(4px 4px 0px 0px);
       }
 
@@ -461,7 +428,7 @@ body.sidebar-opened .toggle-sidebar
 
 }
 
-#sidebar .blocks
+#sidebar .outerpanel
 {
 
   .sidebar-title
@@ -483,26 +450,18 @@ body.sidebar-opened .toggle-sidebar
     padding: 2em 0em!important;
     font-weight: 700;
     font-size: 0.8em;
-
     text-align: center;
-
     overflow: hidden;
-
-    .txt
-    {
-      text-transform: uppercase;
-    }
+    text-transform: uppercase;
 
     i.fa
     {
       display: block;
-
       opacity:.9;
       font-size: 2.3em;
 
       margin-top: 0.4em;
     }
-
     .tricky
     {
 
@@ -565,7 +524,7 @@ body.sidebar-opened .toggle-sidebar
 
   }
 
-  li.block{
+  li.outerpanel{
     border-bottom: 1px solid rgba(0,0,0,.05);
 
     > .ui-accordion-content,

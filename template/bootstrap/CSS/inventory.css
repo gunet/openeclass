@@ -1393,6 +1393,10 @@ ul.expandable {
     display: block; }
 
 /* Datatables ---------------------------------------------------------*/
+.not_visible {
+  color: rgba(3, 3, 3, 0.3);
+  font-style: italic; }
+
 tr.not_visible td:not(:last-child) {
   color: rgba(3, 3, 3, 0.3);
   font-style: italic; }
@@ -1462,5 +1466,3 @@ span[data-cal-date] {
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none; }
-
-/*# sourceMappingURL=inventory.css.map */

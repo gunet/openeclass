@@ -148,14 +148,14 @@ body > .container {
 
 /* MAIN-CONTENT -------------------------------------------------------*/
 #main-content {
-  background: #FAFAFA;
+  background-color: #FAFAFA;
   overflow: hidden; }
 
 #header.navbar {
   margin-bottom: 0px;
   padding: 0;
   border: 0;
-  background: #EEEEEE;
+  background-color: #EEEEEE;
   border-bottom: 1px solid #DBDBDB; }
   #header.navbar .navbar-nav {
     margin: 0;
@@ -196,151 +196,140 @@ footer.footer {
   border-radius: 0 0 4px 4px; }
 
 /* SIDEBAR ------------------------------------------------------------------------------------ */
-body.sidebar-opened #sidebar {
-  right: 0px;
-  border-left: 1px solid rgba(0, 0, 0, 0.05);
-  opacity: 1; }
+a.toggle-active {
+  background-color: #e3e4e6 !important; }
 
-body.sidebar-opened .toggle-sidebar {
-  background: #e3e4e6; }
-
-#sidebar {
+#sidebar-container {
+  display: none;
   position: absolute;
-  height: 100%;
   width: 18.5em;
-  right: -19em;
-  /* just a bit more than width to ensure zero visibility */
-  top: 3.6em;
-  /*not to overlap the header*/
-  padding-bottom: 3.6em;
-  /* same amount as TOP. To avoid losing content */
-  z-index: 10001;
-  background: #DEE0E2;
-  word-wrap: break-word;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear; }
-  #sidebar h1, #sidebar h2, #sidebar h3, #sidebar h4, #sidebar h5, #sidebar h6 {
-    color: #686868;
-    font-weight: 600;
-    margin-bottom: 0.6em;
-    margin-top: 0.3em; }
-  #sidebar .toggle-sidebar {
-    text-align: center;
-    width: 3em;
-    padding: 0.3em 0em;
-    margin: 0.5em;
-    float: right;
-    color: #8B8B8B;
-    display: inline-block;
+  right: 0px;
+  overflow: hidden;
+  border-left: #c9c9c9;
+  border-bottom: #c9c9c9; }
+  #sidebar-container #sidebar {
     position: relative;
-    border: 1px solid #CFCFCF;
-    cursor: default; }
-    #sidebar .toggle-sidebar:hover {
-      background: #4da1e4;
-      border-color: #4da1e4;
-      color: white; }
-  #sidebar ul, #sidebar li {
-    list-style-type: none;
-    padding: 0em;
-    margin: 0em; }
-  #sidebar .side-list {
-    padding-bottom: 1em; }
-    #sidebar .side-list .lesson-title {
-      background: #344458;
-      font-size: 0.85em;
-      margin: 0px;
-      padding: 10px 15px;
-      cursor: pointer;
-      position: relative;
-      outline: none;
-      color: rgba(255, 255, 255, 0.5);
-      font-weight: 600;
-      margin: 0 16px;
-      border: 1px solid #48586D;
-      border-top-width: 0px;
-      -webkit-transition: all 120ms linear;
-      -moz-transition: all 120ms linear;
-      -o-transition: all 120ms linear;
-      -ms-transition: all 120ms linear;
-      transition: all 120ms linear; }
-      #sidebar .side-list .lesson-title:first-of-type {
-        border-top-width: 1px;
-        border-radius: 4px 4px 0px 0px;
-        -webkit-border-radius: 4px 4px 0px 0px;
-        -moz-border-radius: 4px 4px 0px 0px; }
-      #sidebar .side-list .lesson-title:last-of-type {
-        border-radius: 0px 0px 4px 4px;
-        -webkit-border-radius: 0px 0px 4px 4px;
-        -moz-border-radius: 0px 0px 4px 4px; }
-      #sidebar .side-list .lesson-title:hover {
-        background: #48586D;
-        color: rgba(255, 255, 255, 0.85); }
-        #sidebar .side-list .lesson-title:hover:after {
-          color: rgba(255, 255, 255, 0.6); }
-      #sidebar .side-list .lesson-title.ui-accordion-header-active {
-        border-bottom: none;
-        color: white;
-        background: #425164; }
-        #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
-          border-radius: 0px;
-          -webkit-border-radius: 0px;
-          -moz-border-radius: 0px; }
-        #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
-          color: #4da1e4; }
-    #sidebar .side-list > div {
-      background: #253447;
-      border-top: none;
-      color: rgba(255, 255, 255, 0.9);
-      margin: 0 16px; }
-      #sidebar .side-list > div:last-of-type {
-        border-radius: 0px 0px 4px 4px;
-        -webkit-border-radius: 0px 0px 4px 4px;
-        -moz-border-radius: 0px 0px 4px 4px; }
-    #sidebar .side-list ul {
-      padding: 0em 2em 1em 1.35em;
-      font-size: 0.75em; }
-      #sidebar .side-list ul > li {
-        padding: 5px 0em; }
-    #sidebar .side-list .lesson-id {
-      opacity: 0.5;
-      font-size: 0.85em;
-      font-weight: 700; }
-    #sidebar .side-list .lesson-professor {
-      font-weight: 600;
-      padding-top: 0px; }
-    #sidebar .side-list .lesson-notifications {
-      margin-top: 1em; }
-      #sidebar .side-list .lesson-notifications .item {
-        margin-right: 1.5em;
-        position: relative; }
-        #sidebar .side-list .lesson-notifications .item .count {
-          position: absolute;
-          left: 0.8em;
-          bottom: 0.8em;
-          display: inline-block;
-          text-align: center;
-          background: #CE6B6B;
-          color: white;
-          width: 1.5em;
-          height: 1.5em;
-          font-size: 0.75em;
-          font-weight: 600;
-          border-radius: 0.75em;
-          -webkit-border-radius: 0.75em;
-          -moz-border-radius: 0.75em; }
-        #sidebar .side-list .lesson-notifications .item .fa {
-          font-size: 1.2em;
-          color: rgba(255, 255, 255, 0.8); }
+    width: 18.5em;
+    right: -18.5em;
+    padding: 1.6em 0;
+    background-color: #DEE0E2;
+    word-wrap: break-word;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none; }
+    #sidebar-container #sidebar .panel-group.outerpanel {
+      padding: 0px;
+      margin: 0px; }
+      #sidebar-container #sidebar .panel-group.outerpanel .panel {
+        border: none;
+        margin: 0px; }
+      #sidebar-container #sidebar .panel-group.outerpanel .panel-heading {
+        background-image: none;
+        border: none; }
+    #sidebar-container #sidebar h1, #sidebar-container #sidebar h2, #sidebar-container #sidebar h3, #sidebar-container #sidebar h4, #sidebar-container #sidebar h5, #sidebar-container #sidebar h6 {
+      color: #686868;
+      font-weight: 600; }
+    #sidebar-container #sidebar ul, #sidebar-container #sidebar li {
+      list-style-type: none;
+      padding: 0em;
+      margin: 0em; }
+  #sidebar-container .innerpanel .panel-heading {
+    padding: 0px; }
+    #sidebar-container .innerpanel .panel-heading h4 {
+      margin: 0px; }
 
-#sidebar .blocks .sidebar-title {
+#sidebar .side-list {
+  padding-bottom: 1em; }
+  #sidebar .side-list .lesson-title {
+    background: #344458;
+    font-size: 0.85em;
+    margin: 0px;
+    padding: 10px 15px;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+    margin: 0 16px;
+    border: 1px solid #48586D;
+    border-top-width: 0px;
+    -webkit-transition: all 120ms linear;
+    -moz-transition: all 120ms linear;
+    -o-transition: all 120ms linear;
+    -ms-transition: all 120ms linear;
+    transition: all 120ms linear; }
+    #sidebar .side-list .lesson-title:first-of-type {
+      border-top-width: 1px;
+      border-radius: 4px 4px 0px 0px;
+      -webkit-border-radius: 4px 4px 0px 0px;
+      -moz-border-radius: 4px 4px 0px 0px; }
+    #sidebar .side-list .lesson-title:last-of-type {
+      border-radius: 0px 0px 4px 4px;
+      -webkit-border-radius: 0px 0px 4px 4px;
+      -moz-border-radius: 0px 0px 4px 4px; }
+    #sidebar .side-list .lesson-title:hover {
+      background: #48586D;
+      color: rgba(255, 255, 255, 0.85); }
+      #sidebar .side-list .lesson-title:hover:after {
+        color: rgba(255, 255, 255, 0.6); }
+    #sidebar .side-list .lesson-title.ui-accordion-header-active {
+      border-bottom: none;
+      color: white;
+      background: #425164; }
+      #sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px; }
+      #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
+        color: #4da1e4; }
+  #sidebar .side-list > div {
+    background: #253447;
+    border-top: none;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 16px; }
+    #sidebar .side-list > div:last-of-type {
+      border-radius: 0px 0px 4px 4px;
+      -webkit-border-radius: 0px 0px 4px 4px;
+      -moz-border-radius: 0px 0px 4px 4px; }
+  #sidebar .side-list ul {
+    padding: 0em 2em 1em 1.35em;
+    font-size: 0.75em; }
+    #sidebar .side-list ul > li {
+      padding: 5px 0em; }
+  #sidebar .side-list .lesson-id {
+    opacity: 0.5;
+    font-size: 0.85em;
+    font-weight: 700; }
+  #sidebar .side-list .lesson-professor {
+    font-weight: 600;
+    padding-top: 0px; }
+  #sidebar .side-list .lesson-notifications {
+    margin-top: 1em; }
+    #sidebar .side-list .lesson-notifications .item {
+      margin-right: 1.5em;
+      position: relative; }
+      #sidebar .side-list .lesson-notifications .item .count {
+        position: absolute;
+        left: 0.8em;
+        bottom: 0.8em;
+        display: inline-block;
+        text-align: center;
+        background: #CE6B6B;
+        color: white;
+        width: 1.5em;
+        height: 1.5em;
+        font-size: 0.75em;
+        font-weight: 600;
+        border-radius: 0.75em;
+        -webkit-border-radius: 0.75em;
+        -moz-border-radius: 0.75em; }
+      #sidebar .side-list .lesson-notifications .item .fa {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.8); }
+
+#sidebar .outerpanel .sidebar-title {
   margin: 0;
   font-weight: 600;
   padding-left: 13px;
@@ -348,21 +337,20 @@ body.sidebar-opened .toggle-sidebar {
   text-transform: uppercase;
   padding: 1.8em;
   background: #e3e4e6; }
-#sidebar .blocks .title {
+#sidebar .outerpanel .title {
   margin: 0;
   padding: 2em 0em !important;
   font-weight: 700;
   font-size: 0.8em;
   text-align: center;
-  overflow: hidden; }
-  #sidebar .blocks .title .txt {
-    text-transform: uppercase; }
-  #sidebar .blocks .title i.fa {
+  overflow: hidden;
+  text-transform: uppercase; }
+  #sidebar .outerpanel .title i.fa {
     display: block;
     opacity: .9;
     font-size: 2.3em;
     margin-top: 0.4em; }
-  #sidebar .blocks .title .tricky {
+  #sidebar .outerpanel .title .tricky {
     margin-left: -100%;
     width: 200%;
     position: relative;
@@ -372,7 +360,7 @@ body.sidebar-opened .toggle-sidebar {
     -o-transition: margin-left 120ms linear;
     -ms-transition: margin-left 120ms linear;
     transition: margin-left 120ms linear; }
-    #sidebar .blocks .title .tricky > div {
+    #sidebar .outerpanel .title .tricky > div {
       display: inline-block;
       width: 49%;
       height: 100%;
@@ -385,51 +373,51 @@ body.sidebar-opened .toggle-sidebar {
       -o-transition: opacity 60ms linear;
       -ms-transition: opacity 60ms linear;
       transition: opacity 60ms linear; }
-    #sidebar .blocks .title .tricky .icon {
+    #sidebar .outerpanel .title .tricky .icon {
       opacity: 1; }
-    #sidebar .blocks .title .tricky .description {
+    #sidebar .outerpanel .title .tricky .description {
       font-weight: 400;
       padding: 0.5em 1em;
       opacity: 0; }
-  #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky {
+  #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky {
     margin-left: 0%; }
-    #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .description {
+    #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .description {
       opacity: .55; }
-    #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .tricky .icon {
+    #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .icon {
       opacity: 0; }
-  #sidebar .blocks .title:hover:not(.ui-accordion-header-active) .txt {
+  #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .txt {
     color: #4da1e4; }
-  #sidebar .blocks .title.ui-accordion-header-active .tricky {
+  #sidebar .outerpanel .title.ui-accordion-header-active .tricky {
     margin-left: 0%; }
-    #sidebar .blocks .title.ui-accordion-header-active .tricky .description {
+    #sidebar .outerpanel .title.ui-accordion-header-active .tricky .description {
       opacity: .55; }
-#sidebar .blocks li.block {
+#sidebar .outerpanel li.outerpanel {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
-  #sidebar .blocks li.block > .ui-accordion-content,
-  #sidebar .blocks li.block > .ui-accordion-header-active {
+  #sidebar .outerpanel li.outerpanel > .ui-accordion-content,
+  #sidebar .outerpanel li.outerpanel > .ui-accordion-header-active {
     background: rgba(255, 255, 255, 0.3); }
-  #sidebar .blocks li.block > .ui-accordion-content {
+  #sidebar .outerpanel li.outerpanel > .ui-accordion-content {
     padding: 1em 0em; }
-  #sidebar .blocks li.block textarea, #sidebar .blocks li.block input {
+  #sidebar .outerpanel li.outerpanel textarea, #sidebar .outerpanel li.outerpanel input {
     width: 90%;
     margin: 0em auto 1em auto;
     display: block; }
-  #sidebar .blocks li.block textarea {
+  #sidebar .outerpanel li.outerpanel textarea {
     min-height: 12em; }
-  #sidebar .blocks li.block button {
+  #sidebar .outerpanel li.outerpanel button {
     margin: 1.1em;
     margin-top: 0em;
     font-size: 0.8em; }
-  #sidebar .blocks li.block .goto {
+  #sidebar .outerpanel li.outerpanel .goto {
     float: right;
     color: #7E7E7E;
     padding: 0.5em;
     margin-right: 0.5em; }
-  #sidebar .blocks li.block .input-parent {
+  #sidebar .outerpanel li.outerpanel .input-parent {
     position: relative; }
-    #sidebar .blocks li.block .input-parent textarea, #sidebar .blocks li.block .input-parent input {
+    #sidebar .outerpanel li.outerpanel .input-parent textarea, #sidebar .outerpanel li.outerpanel .input-parent input {
       padding-left: 2em; }
-    #sidebar .blocks li.block .input-parent .fa {
+    #sidebar .outerpanel li.outerpanel .input-parent .fa {
       position: absolute;
       top: 0.7em;
       left: 1.5em;
@@ -658,5 +646,3 @@ form.login-form {
     border-radius: 0px !important; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
   /* Medium screen, retina, stuff to override above media query */ }
-
-/*# sourceMappingURL=structure.css.map */
