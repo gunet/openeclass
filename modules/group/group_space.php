@@ -86,7 +86,7 @@ $q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor, has_icon,
                       FROM group_members, user
                       WHERE group_id = $group_id AND
                             group_members.user_id = user.user_id
-                      ORDER BY nom, prenom");
+                      ORDER BY nom, prenom, am");
 while ($user = mysql_fetch_array($q)) {
         if ($user['is_tutor']) {
                 $tutors[] = display_user($user, true);
@@ -127,43 +127,46 @@ $tool_content .= "
       <td>
         <table width='100%' align='center' class=\"tbl_alt\">
         <tr>
-          <th class='left'>$langNameSurname</th>
+          <th class='center' width='" . IMAGESIZE_SMALL . "'>&nbsp;</th>
+          <th class='center'>$langName</th>
+          <th class='center'>$langSurname</th>
           <th class='center' width='120'>$langAm</th>
           <th class='center' width='150'>$langEmail</th>
         </tr>";
 
 if ($members) {
-$myIndex = 0;
-	foreach ($members as $member){
-		$user_group_description = $member['description'];
-                if ($myIndex % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-
-		$tool_content .= "<td>" . display_user($member);  
-		if ($user_group_description) {
-			$tool_content .= "<br />".q($user_group_description);
-		}
-                $tool_content .= "</td><td class='center'>";
-		if (!empty($member['am'])) {
-			$tool_content .=  q($member['am']);
-		} else {
-			$tool_content .= '-';
-		}
-                $tool_content .= "</td><td class='center'>";
-                $email = q(trim($member['email']));
-                if (!empty($email)) {
-                        $tool_content .= "<a href='mailto:$email'>$email</a>";
-                } else {
-                        $tool_content .= '-';
-                }
-                $tool_content .= "</td></tr>";
+    $myIndex = 0;
+    foreach ($members as $member){
+        $user_group_description = $member['description'];
+        if ($myIndex % 2 == 0) {
+            $tool_content .= "<tr class='even'>";
+        } else {
+            $tool_content .= "<tr class='odd'>";
+        }
+        $tool_content .= "<td>" .
+            profile_image($member['user_id'], IMAGESIZE_SMALL, !$member['has_icon']) .
+            '</td><td>' . q($member['prenom']) . '</td><td>' . q($member['nom']);
+        if ($user_group_description) {
+            $tool_content .= "<br />".q($user_group_description);
+        }
+        $tool_content .= "</td><td class='center'>";
+        if (!empty($member['am'])) {
+            $tool_content .=  q($member['am']);
+        } else {
+            $tool_content .= '-';
+        }
+        $tool_content .= "</td><td class='center'>";
+        $email = q(trim($member['email']));
+        if (!empty($email)) {
+            $tool_content .= "<a href='mailto:$email'>$email</a>";
+        } else {
+            $tool_content .= '-';
+        }
+        $tool_content .= "</td></tr>";
         $myIndex++;
-	}
+    }
 } else {
-	$tool_content .= "
+    $tool_content .= "
         <tr>
           <td colspan='3'>$langGroupNoneMasc</td>
         </tr>";
