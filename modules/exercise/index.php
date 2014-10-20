@@ -311,8 +311,14 @@ if (!$nbrExercises) {
 add_units_navigation(TRUE);
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function(){
-        $('.paused_exercise').click(function(){
-            return confirm('$langTemporarySaveNotice2');
+        $('.paused_exercise').click(function(e){
+            e.preventDefault();
+            var link = $(this).attr('href');
+            bootbox.confirm('$langTemporarySaveNotice2', function(result) {
+                if(result) {
+                    document.location.href = link;
+                }
+            });             
         });
     });
 </script>";

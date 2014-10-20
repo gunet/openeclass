@@ -168,17 +168,7 @@ if ($is_editor) {
         echo json_encode($data);
         exit;      
     } elseif (isset($_POST['new_assign'])) {
-        if($_POST['title']) {
-            if(add_assignment()) {
-                Session::Messages($langNewAssignSuccess,'alert-success');
-                show_assignments();
-            }
-        } else {
-            Session::Messages($m['WorkTitleValidation'],'alert-danger');
-            $nameTools = $langNewAssign;
-            $navigation[] = $works_url;
-            new_assignment();
-        }
+        add_assignment();
     } elseif (isset($_GET['as_id'])) {
         $as_id = intval($_GET['as_id']);
         $id = intval($_GET['id']);
@@ -247,16 +237,7 @@ if ($is_editor) {
                 $nameTools = $langWorks;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
-                edit_assignment($id);
-//                if($_POST['title']){
-//                    if (edit_assignment($id)) {
-//                        Session::Messages($langEditSuccess,'alert-success');
-//                    }
-//                    redirect_to_home_page('modules/work/index.php?course='.$course_code);
-//                } else {
-//                    Session::Messages($m['WorkTitleValidation'],'alert-danger');
-//                    redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
-//                }         
+                edit_assignment($id);       
             } elseif ($choice == 'add') {
                 $nameTools = $langAddGrade;
                 $navigation[] = $works_url;
@@ -308,76 +289,87 @@ draw($tool_content, 2, null, $head_content);
 
 // insert the assignment into the database
 function add_assignment() {
-    global $tool_content, $workPath, $course_id, $uid;
-      
-    $title = $_POST['title'];
-    $desc = $_POST['desc'];
-    $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
-    $late_submission = ((isset($_POST['late_submission']) &&  trim($_POST['WorkEnd']!=FALSE)) ? 1 : 0);
-    $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
-    $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
-    $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
-    $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
-    $secret = uniqid('');
+    global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, 
+    $course_code, $langFormErrors;
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['title', 'max_grade']);
+    $v->rule('numeric', ['max_grade']);
+    $v->labels(array(
+        'title' => "$langTheField $m[title]",
+        'max_grade' => "$langTheField $m[max_grade]"
+    ));
+    if($v->validate()) {      
+        $title = $_POST['title'];
+        $desc = $_POST['desc'];
+        $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
+        $late_submission = ((isset($_POST['late_submission']) &&  trim($_POST['WorkEnd']!=FALSE)) ? 1 : 0);
+        $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
+        $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
+        $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
+        $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+        $secret = uniqid('');
 
-    if ($assign_to_specific == 1 && empty($assigned_to)) {
-        $assign_to_specific = 0;
-    }
-    if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
-        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
-                . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
-        $secret = work_secret($id);
-        if ($id) {
-            $local_name = uid_to_name($uid);
-            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
-            if (!empty($am)) {
-                $local_name .= $am;
-            }
-            $local_name = greek_to_latin($local_name);
-            $local_name = replace_dangerous_char($local_name);            
-            if (!isset($_FILES) || !$_FILES['userfile']['size']) {
-                $_FILES['userfile']['name'] = '';
-                $_FILES['userfile']['tmp_name'] = '';
-            } else {
-                validateUploadedFile($_FILES['userfile']['name'], 2);
-                if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                    $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                    $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-                    return;
+        if ($assign_to_specific == 1 && empty($assigned_to)) {
+            $assign_to_specific = 0;
+        }
+        if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
+            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
+                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+            $secret = work_secret($id);
+            if ($id) {
+                $local_name = uid_to_name($uid);
+                $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+                if (!empty($am)) {
+                    $local_name .= $am;
                 }
-                $ext = get_file_extension($_FILES['userfile']['name']);
-                $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-                if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
-                    @chmod("$workPath/admin_files/$filename", 0644);
-                    $file_name = $_FILES['userfile']['name'];
-                    Database::get()->query("UPDATE assignment SET file_path = ?s, file_name = ?s WHERE id = ?d", $filename, $file_name, $id);
-                }                
-            }                    
-            if ($assign_to_specific && !empty($assigned_to)) {
-                if ($group_submissions == 1) {
-                    $column = 'group_id';
-                    $other_column = 'user_id';
+                $local_name = greek_to_latin($local_name);
+                $local_name = replace_dangerous_char($local_name);            
+                if (!isset($_FILES) || !$_FILES['userfile']['size']) {
+                    $_FILES['userfile']['name'] = '';
+                    $_FILES['userfile']['tmp_name'] = '';
                 } else {
-                    $column = 'user_id';
-                    $other_column = 'group_id';
-                }
-                foreach ($assigned_to as $assignee_id) {
-                    Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
-                }
-            }    
-            Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
-                'title' => $title,
-                'description' => $desc,
-                'deadline' => $deadline,
-                'secret' => $secret,
-                'group' => $group_submissions));
-            return true;
-        } else {
-            @rmdir("$workPath/$secret");
-            return false;
+                    validateUploadedFile($_FILES['userfile']['name'], 2);
+                    if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                        $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                        $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                        return;
+                    }
+                    $ext = get_file_extension($_FILES['userfile']['name']);
+                    $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+                    if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+                        @chmod("$workPath/admin_files/$filename", 0644);
+                        $file_name = $_FILES['userfile']['name'];
+                        Database::get()->query("UPDATE assignment SET file_path = ?s, file_name = ?s WHERE id = ?d", $filename, $file_name, $id);
+                    }                
+                }                    
+                if ($assign_to_specific && !empty($assigned_to)) {
+                    if ($group_submissions == 1) {
+                        $column = 'group_id';
+                        $other_column = 'user_id';
+                    } else {
+                        $column = 'user_id';
+                        $other_column = 'group_id';
+                    }
+                    foreach ($assigned_to as $assignee_id) {
+                        Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+                    }
+                }    
+                Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
+                    'title' => $title,
+                    'description' => $desc,
+                    'deadline' => $deadline,
+                    'secret' => $secret,
+                    'group' => $group_submissions));               
+                Session::Messages($langNewAssignSuccess,'alert-success');
+                redirect_to_home_page("modules/work/index.php?course=$course_code");
+            } else {
+                @rmdir("$workPath/$secret");
+                die('Error creating directories');
+            }
         }
     } else {
-       return false;
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
     }
 }
 
@@ -555,15 +547,17 @@ function new_assignment() {
               'level' => 'primary',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
               'icon' => 'fa-reply')));
-    
+    $title_error = Session::getError('title');
+    $max_grade_error = Session::getError('max_grade');
     $tool_content .= "
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-            <div class='form-group'>
+            <div class='form-group ".($title_error ? "has-error" : "")."'>
                 <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
                 <div class='col-sm-10'>
                   <input name='title' type='text' class='form-control' id='title' placeholder='$m[title]'>
+                  <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='form-group'>
@@ -575,17 +569,18 @@ function new_assignment() {
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            <div class='collapse' id='hidden-opt'>
+            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>    
                       <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group ".($max_grade_error ? "has-error" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
                     <div class='col-sm-10'>
                       <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'>
+                      <span class='help-block'>$max_grade_error</span>    
                     </div>
                 </div>
                 <div class='form-group'>
@@ -772,12 +767,13 @@ function show_edit_assignment($id) {
     $comments = trim($row->comments);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary',
+              'level' => 'primary-label',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
               'icon' => 'fa-reply')));
     
-    //Get possible errors
-    $title_error = Session::getError('title');    
+    //Get possible validation errors
+    $title_error = Session::getError('title');
+    $max_grade_error = Session::getError('max_grade');  
     
     $tool_content .= "
     <div class='form-wrapper'>
@@ -820,10 +816,11 @@ function show_edit_assignment($id) {
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group ".($max_grade_error ? "has-error" : "")."'>
                     <label for='max_grade' class='col-sm-2 control-label'>$m[max_grade]:</label>
                     <div class='col-sm-10'>
-                      <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
+                        <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
+                        <span class='help-block'>$max_grade_error</span>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -935,9 +932,11 @@ function edit_assignment($id) {
     $langEditError, $course_code, $works_url, $course_id, $uid, $workPath, $langFormErrors;
     
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['title']);
+    $v->rule('required', ['title', 'max_grade']);
+    $v->rule('numeric', ['max_grade']);
     $v->labels(array(
-        'title' => "$langTheField $m[title]"
+        'title' => "$langTheField $m[title]",
+        'max_grade' => "$langTheField $m[max_grade]"
     ));
     if($v->validate()) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
