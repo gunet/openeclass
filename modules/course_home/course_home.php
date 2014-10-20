@@ -143,8 +143,8 @@ foreach ($res as $row) {
             q($row->title) .
             "</a></div>";
 }
-$main_extra .= "</div>";
 $tool_content .= "</div>";
+$main_extra .= "</div>";
 
 if ($is_editor) {
     $edit_link = "
@@ -717,7 +717,7 @@ if($viewCourse == "units"){
    </tr></table>";
 }
 
-$tool_content .= "</div></div></div>";
+$tool_content .= "</div></div>";
 
 draw($tool_content, 2, null, $head_content);
 
