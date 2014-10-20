@@ -64,9 +64,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $search_sql='';
     }
     if (!empty($_GET['iSortCol_0'])){
-        $order_sql = 'ORDER BY ';
-        $order_sql .= ($_GET['iSortCol_0']==1)?'user.prenom ':'cours_user.reg_date ';
-        $order_sql .= $_GET['sSortDir_0'];
+        $order_sql = 'ORDER BY ' .
+            (($_GET['iSortCol_0'] == 1)? 'user.nom': 'cours_user.reg_date') .
+            (($_GET['sSortDir_0'] == 'desc')? ' DESC': '');
     } else {
         $order_sql='';
     }
