@@ -672,8 +672,19 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <h5 class='content-title'>$langAnnouncements</h5>
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
-            </div>
-        </div>";
+            </div>";
+            if($viewCourse == "units"){
+                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+                                    <table width='100%' class='tbl'>
+                                        <tr>
+                                            <td>$cunits_content</td>
+                                        </tr>
+                                    </table>
+                                </div>";
+            }
+$tool_content .= "</div>";
+            
+       
 
 if ($viewCourse == "weekly") {
     
@@ -709,12 +720,6 @@ if ($viewCourse == "weekly") {
         $tool_content .= "</fieldset>";
         
     }
-}
-
-
-if($viewCourse == "units"){
-    $tool_content .= "<table width='100%' class='tbl'><tr><td>$cunits_content</td>
-   </tr></table>";
 }
 
 $tool_content .= "</div></div>";
