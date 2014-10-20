@@ -539,14 +539,14 @@ $tool_content .= "
         <div class='toolbox pull-right'>
 
             <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
-                <span class='txt' rel='tooltip' data-toggle='tooltip' data-placement='top'>Πληροφορίες Μαθήματος</span>
-                <span class='fa fa-caret-down'></span>
+                <a class='txt' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
+                
 
                 <ul class='dropdown-menu'>
-                    <li><a class='md-trigger' data-modal='syllabus-prof' href='#''>Επιλογή 1</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-toc' href='#''>Επιλογή 2</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-books' href='#''>Επιλογή 3</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#''>Επιλογή 4</a></li>
+                    <li><a class='md-trigger' data-modal='syllabus-prof' href='#'>Επιλογή 1</a></li>
+                    <li><a class='md-trigger' data-modal='syllabus-toc' href='#'>Επιλογή 2</a></li>
+                    <li><a class='md-trigger' data-modal='syllabus-books' href='#'>Επιλογή 3</a></li>
+                    <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#'>Επιλογή 4</a></li>
                 </ul>
             </div>
     ";
@@ -674,13 +674,13 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 </ul>
             </div>";
             if($viewCourse == "units"){
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
-                                    <table width='100%' class='tbl'>
-                                        <tr>
-                                            <td>$cunits_content</td>
-                                        </tr>
-                                    </table>
-                                </div>";
+                $tool_content .=    "<div class='col-md-$cunits_sidebar_subcolumns'>
+                                        <table width='100%' class='tbl'>
+                                            <tr>
+                                                <td>$cunits_content</td>
+                                            </tr>
+                                        </table>
+                                    </div>";
             }
 $tool_content .= "</div>";
             
