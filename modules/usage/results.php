@@ -78,7 +78,7 @@ switch ($u_interval) {
 }
 
 
-$chart = new Plotter();
+$chart = new Plotter(300, 300);
 
 switch ($u_stats_value) {
     case "visits":        
@@ -91,27 +91,27 @@ switch ($u_stats_value) {
         switch ($u_interval) {
             case "summary":
                 foreach ($result as $row) {
-                    $chart->addPoint($langSummary, $row->cnt);
+                    $chart->growWithPoint($langSummary, $row->cnt);
                 }
                 break;
             case "daily":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->date, $row->cnt);
+                    $chart->growWithPoint($row->date, $row->cnt);
                 }
                 break;
             case "weekly":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
                 }
                 break;
             case "monthly":
                 foreach ($result as $row) {
-                    $chart->addPoint($langMonths[$row->month], $row->cnt);
+                    $chart->growWithPoint($langMonths[$row->month], $row->cnt);
                 }
                 break;
             case "yearly":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->year, $row->cnt);
+                    $chart->growWithPoint($row->year, $row->cnt);
                 }
                 break;
         }
@@ -137,31 +137,31 @@ switch ($u_stats_value) {
             case "summary":
                 foreach ($result as $row) {
                     $row->tot_dur = round($row->tot_dur / 60);
-                    $chart->addPoint($langSummary, $row->tot_dur);
+                    $chart->growWithPoint($langSummary, $row->tot_dur);
                 }
                 break;
             case "daily":
                 foreach ($result as $row) {
                     $row->tot_dur = round($row->tot_dur / 60);
-                    $chart->addPoint($row->date, $row->tot_dur);
+                    $chart->growWithPoint($row->date, $row->tot_dur);
                 }
                 break;
             case "weekly":
                 foreach ($result as $row) {
                     $row->tot_dur = round($row->tot_dur / 60);
-                    $chart->addPoint($row->week_start . ' - ' . $row->week_end, $row->tot_dur);
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->tot_dur);
                 }
                 break;
             case "monthly":
                 foreach ($result as $row) {
                     $row->tot_dur = round($row->tot_dur / 60);
-                    $chart->addPoint($langMonths[$row->month], $row->tot_dur);
+                    $chart->growWithPoint($langMonths[$row->month], $row->tot_dur);
                 }
                 break;
             case "yearly":
                 foreach ($result as $row) {
                     $row->tot_dur = round($row->tot_dur / 60);
-                    $chart->addPoint($row->year, $row->tot_dur);
+                    $chart->growWithPoint($row->year, $row->tot_dur);
                 }
                 break;
         }

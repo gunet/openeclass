@@ -45,9 +45,9 @@ if (count($result) > 0) {  // found courses ?
     foreach ($result as $row) {
         $course_codes[] = $row->code;
         $course_names[$row->code] = $row->title;
-    }
-    foreach ($course_codes as $code) {
-        $cid = course_code_to_id($code);
+    }  
+    foreach ($course_codes as $code) {                        
+        $cid = course_code_to_id($code);                
         $row = Database::get()->querySingle("SELECT SUM(hits) AS cnt FROM actions_daily
                                 WHERE user_id = ?d
                                 AND course_id =?d", $uid, $cid);
@@ -59,14 +59,15 @@ if (count($result) > 0) {  // found courses ?
                                         WHERE user_id = ?d
                                         AND course_id = ?d", $uid, $cid);
         $duration[$code] = $result->duration;
-        $totalDuration += $duration[$code];
+        $totalDuration += $duration[$code];        
     }
 
-    $chart = new Plotter();
+    $chart = new Plotter(600, 300);
     $chart->setTitle($langCourseVisits);
     foreach ($hits as $code => $count) {
         if ($count > 0) {
             $chart->addPoint($course_names[$code], $count);
+            $chart->modDimension(7, 0);
         }
     }
     $tool_content .= $chart->plot();
@@ -99,7 +100,7 @@ if (count($result) > 0) {  // found courses ?
         } else {
             $tool_content .= "<tr class='odd'>";
         }
-        $i++;
+        $i++;        
         $tool_content .= "
                 <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
                 <td>" . q(course_code_to_title($code)) . "</td>

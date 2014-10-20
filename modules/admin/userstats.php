@@ -119,10 +119,10 @@ if (!empty($u)) {
         }
     }
     $tool_content .= "<b>$totalHits</b></p>";
-    $chart = new Plotter();
+    $chart = new Plotter(220, 200);
     $chart->setTitle($langCourseVisits);
     foreach ($hits as $code => $count) {
-        $chart->addPoint(q($course_names[$code]), $count);
+        $chart->growWithPoint(q($course_names[$code]), $count);
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
