@@ -599,18 +599,15 @@ $tool_content .= "
 <div class='row'>";
 if (!$alter_layout) {
     $tool_content .= "
-    <div class='col-md-8'>
+    <div class='col-md-8 course-units'>
         <div class='row'>
-            <div class='col-md-6'>
-
+            <div class='col-md-6 no-gutters' style='padding-top:24px;'>
                 <h5 class='content-title'>$langCourseUnits</h5>
             </div>
-
             ".
         (($is_editor)? "
-            
             <div class='col-md-6 no-gutters'>
-                <div class='toolbox margin-bottom-thin margin-top-thin pull-right'>
+                <div class='toolbox margin-bottom-thin pull-right'>
                     <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
@@ -618,7 +615,6 @@ if (!$alter_layout) {
                 </div>
             </div>                         
             " : "")."
-
         </div>
         <div class='row'>            
             $cunits_content
