@@ -69,7 +69,7 @@ if ($is_editor) {
                                  subsystem = " . EBOOK . " AND
                                  subsystem_id = ?d AND
                                  course_id = ?d", $id, $course_id);
-            $tool_content .= "<p class='alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
+            $tool_content .= "<div class='alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
         }
     } elseif (isset($_GET['create'])) {
         $tool_content .= "
