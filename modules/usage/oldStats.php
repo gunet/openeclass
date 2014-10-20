@@ -112,7 +112,7 @@ if ($u_module_id != -1) {
     $mod_where = " (1) ";
 }
 
-$chart = new Plotter();
+$chart = new Plotter(600, 300);
 $chart->setTitle("$langOldStats");
 switch ($u_stats_value) {
     case "visits":
@@ -127,7 +127,7 @@ switch ($u_stats_value) {
 
         foreach ($result as $row) {
             $mont = $langMonths[$row->month];
-            $chart->addPoint($mont . " - " . $row->year, $row->visits);
+            $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
         }
         break;
 
@@ -142,7 +142,7 @@ switch ($u_stats_value) {
 
         foreach ($result as $row) {
             $mont = $langMonths[$row->month];
-            $chart->addPoint($mont . " - " . $row->year, $row->tot_dur);
+            $chart->growWithPoint($mont . " - " . $row->year, $row->tot_dur);
         }
         $tool_content .= "<p class='info'>$langDurationExpl</p>";
         break;

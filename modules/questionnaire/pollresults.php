@@ -139,7 +139,7 @@ foreach ($questions as $theQuestion) {
                             $answer_text[$theAnswer->aid] = $theAnswer->answer;
                     }
             }
-            $chart = new Plotter();
+            $chart = new Plotter(500, 300);
             $answers_table = "
                 <table class='tbl_border' width='100%'>
                     <tr>

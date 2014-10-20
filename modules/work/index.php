@@ -1539,7 +1539,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $chart->setTitle("$langGraphResults");
                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
                     $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
-                    $chart->addPoint("$gradeValue ($percentage%)", $percentage);
+                    $chart->growWithPoint("$gradeValue ($percentage%)", $percentage);
                 }
                 $tool_content .= $chart->plot();
             }

@@ -95,32 +95,32 @@ if ($u_user_id != -1) {
 switch ($u_stats_type) {
     case "visits":
         $result = Database::get()->queryArray("SELECT " . $date_what . " COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC");
-        $chart = new Plotter();
+        $chart = new Plotter(220, 200);
         $chart->setTitle($langVisits);
         switch ($u_interval) {
             case "summary":
                 foreach ($result as $row) {
-                    $chart->addPoint($langSummary, $row->cnt);
+                    $chart->growWithPoint($langSummary, $row->cnt);
                 }
                 break;
             case "daily":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->date, $row->cnt);
+                    $chart->growWithPoint($row->date, $row->cnt);
                 }
                 break;
             case "weekly":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
+                    $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
                 }
                 break;
             case "monthly":
                 foreach ($result as $row) {
-                    $chart->addPoint($langMonths[$row->month], $row->cnt);
+                    $chart->growWithPoint($langMonths[$row->month], $row->cnt);
                 }
                 break;
             case "yearly":
                 foreach ($result as $row) {
-                    $chart->addPoint($row->year, $row->cnt);
+                    $chart->growWithPoint($row->year, $row->cnt);
                 }
                 break;
         }

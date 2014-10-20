@@ -198,7 +198,7 @@ if ($u_course_id == -1) {
     $chart->setTitle($langVisits);
     //add points to chart
     while ($newp = current($point)) {
-        $chart->addPoint(key($point), $newp);
+        $chart->growWithPoint(key($point), $newp);
         next($point);
     }
 } else {    //show chart for a specific course
@@ -213,27 +213,27 @@ if ($u_course_id == -1) {
     switch ($u_interval) {
         case "summary":
             foreach ($result as $$row) {
-                $chart->addPoint($langSummary, $row->cnt);
+                $chart->growWithPoint($langSummary, $row->cnt);
             }
             break;
         case "daily":
             foreach ($result as $$row) {
-                $chart->addPoint($row->date, $row->cnt);
+                $chart->growWithPoint($row->date, $row->cnt);
             }
             break;
         case "weekly":
             foreach ($result as $$row) {
-                $chart->addPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
+                $chart->growWithPoint($row->week_start . ' - ' . $row->week_end, $row->cnt);
             }
             break;
         case "monthly":
             foreach ($result as $$row) {
-                $chart->addPoint($langMonths[$row->month], $row->cnt);
+                $chart->growWithPoint($langMonths[$row->month], $row->cnt);
             }
             break;
         case "yearly":
             foreach ($result as $$row) {
-                $chart->addPoint($row->year, $row->cnt);
+                $chart->growWithPoint($row->year, $row->cnt);
             }
             break;
     }
