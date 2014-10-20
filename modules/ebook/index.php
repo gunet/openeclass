@@ -42,7 +42,6 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'button-class' => 'btn-success',
                   'level' => 'primary-label')
             ));        
     } else {
@@ -74,21 +73,28 @@ if ($is_editor) {
         }
     } elseif (isset($_GET['create'])) {
         $tool_content .= "
-        <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>          
-          <table width='100%' class='tbl'>
-          <tr>
-            <th>$langTitle:</th>
-            <td><input type='text' name='title' size='53' /></td></tr>
-          <tr>
-            <th>$langZipFile:</th>
-            <td><input type='file' name='file' size='53' /></td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
-          </tr>
-          </table>          
-        </form>";
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>     
+                <div class='form-group'>
+                    <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
+                    <div class='col-sm-10'>
+                        <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>                    
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
+                    <div class='col-sm-10'>                    
+                      <input type='file' name='file' id='fileUpload'> 
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-sm-10 col-sm-offset-2 '>
+                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />
+                        <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>      
+                    </div>
+                </div>                         
+            </form>
+        </div>";
     } elseif (isset($_GET['down'])) {
         move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
     } elseif (isset($_GET['up'])) {
