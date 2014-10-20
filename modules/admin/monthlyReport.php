@@ -38,15 +38,8 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
-      <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
-      <li><a href='visitsCourseStats.php?first='>$langVisitsCourseStats</a></li>
-      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
-    </ul>
-  </div>";
+require_once 'admin_statistics_tools_bar.php';
+admin_statistics_tools("monthlyReport");
 
 $months = "";
 for ($i = 0; $i < 12; $i++) {
@@ -69,13 +62,13 @@ if (isset($_POST["selectedMonth"])) {
     $coursNum = '';
     $row = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
                        FROM monthly_summary WHERE `month` = ?s", $month);
-    if ($row) {        
+    if ($row) {
         $profesNum = $row->profesNum;
         $studNum = $row->studNum;
         $visitorsNum = $row->visitorsNum;
-        $coursNum = $row->coursNum;        
+        $coursNum = $row->coursNum;
         $logins = $row->logins;
-        $details = $row->details;        
+        $details = $row->details;
     }
 
     if (isset($localize) and $localize == 'greek') {

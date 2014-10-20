@@ -35,13 +35,9 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 /* * ***************************************************************************
   general statistics
  * **************************************************************************** */
-$tool_content .= "<div id='operations_container'>
-<ul id='opslist'>
-<li><a href='platformStats.php?first='>" . $langVisitsStats . "</a></li>
-<li><a href='visitsCourseStats.php?first='>" . $langVisitsCourseStats . "</a></li>
-<li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
-<li><a href='monthlyReport.php'>" . $langMonthlyReport . "</a></li>
-</ul></div>";
+
+require_once 'admin_statistics_tools_bar.php';
+admin_statistics_tools("stateclass");
 
 // Actions
 $tool_content .= "<table class='tbl_alt' width='100%'>
@@ -242,7 +238,7 @@ if (isset($_GET['stats'])) {
                 $cu_key = q("$row->title ($row->code) -- $row->prof_names");
                 foreach (Database::get()->queryArray("SELECT user.id, course_user.status FROM course_user, user, course
                                                         WHERE course.id = ?d AND course_user.course_id = ?d
-                                                        AND course_user.user_id = user.id", $row->id, $row->id) as $numrows) {                    
+                                                        AND course_user.user_id = user.id", $row->id, $row->id) as $numrows) {
                     switch ($numrows->status) {
                         case USER_TEACHER: $teachers++;
                             break;
@@ -320,7 +316,11 @@ if (isset($_GET['stats'])) {
             break;
     }
 }
-$tool_content .= "<br /><p class='right'><a href='index.php' class=mainpage>$langBackAdmin</a></p>";
+$tool_content .= action_bar(array(
+    array('title' => $langBackAdmin,
+        'url' => "",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 /**
  * output a <table> with an array

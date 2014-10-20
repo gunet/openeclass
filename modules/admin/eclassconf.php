@@ -208,7 +208,7 @@ if (isset($_POST['submit'])) {
         'dropbox_allow_personal_messages' => true,
         'block_username_change' => true,
         'display_captcha' => true,
-        'insert_xml_metadata' => true,        
+        'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
         'doc_quota' => true,
         'group_quota' => true,
@@ -249,7 +249,7 @@ if (isset($_POST['submit'])) {
     if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
     }
-    
+
     if ($GLOBALS['enable_search'] == 1) {
         $GLOBALS['enable_indexing'] = 1;
     }
@@ -258,7 +258,7 @@ if (isset($_POST['submit'])) {
     if ($GLOBALS['restrict_owndep'] == 0) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
     }
-    
+
     $scheduleIndexing = false;
     // indexing was previously off, but now set to on, need to schedule re-indexing
     if (!get_config('enable_indexing') && $enable_indexing) {
@@ -268,7 +268,7 @@ if (isset($_POST['submit'])) {
             Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
         });
     }
-    
+
     // indexing was previously on, but now set to off, need to empty it
     if (get_config('enable_indexing') && !$enable_indexing) {
         require_once 'modules/search/indexer.class.php';
@@ -280,10 +280,10 @@ if (isset($_POST['submit'])) {
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
     }
-    
+
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
-    
+
     // schedule indexing if necessary
     if ($scheduleIndexing) {
         $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
@@ -319,9 +319,6 @@ $(document).ready(function() {
 </script>
 EOF;
     }
-    
-    // Display link to go back to index.php
-    $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 } // end of if($submit)
 // Display config.php edit form
 else {
@@ -509,7 +506,7 @@ else {
     $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
-    $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';    
+    $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
     $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
@@ -650,13 +647,11 @@ else {
           </fieldset>
 	    <input type='submit' name='submit' value='$langModify'>
         </form>";
-    // Display link to index.php
-    $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
-    
+
     // Modal dialogs
     $tool_content .= modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmIndexCancel', 'confirmIndexOk');
     $tool_content .= modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', $langConfirmEnableMobileAPITitle, $langConfirmEnableMobileAPI, 'confirmMobileAPICancel', 'confirmMobileAPIOk');
-    
+
     // After restored values have been inserted into form then bring back
     // values from original config.php, so the rest of the page can be displayed correctly
     if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
@@ -664,6 +659,12 @@ else {
     }
 }
 
+// Display link to index.php
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
 
 function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {

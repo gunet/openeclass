@@ -47,15 +47,8 @@ $head_content .= "<script type='text/javascript'>
 $nameTools = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='stateclass.php'>" . $langPlatformGenStats . "</a></li>
-      <li><a href='platformStats.php?first='>" . $langVisitsStats . "</a></li>
-      <li><a href='visitsCourseStats.php?first='>" . $langVisitsCourseStats . "</a></li>
-      <li><a href='monthlyReport.php'>" . $langMonthlyReport . "</a></li>
-    </ul>
-  </div>";
+require_once 'admin_statistics_tools_bar.php';
+admin_statistics_tools("oldStats");
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
 $query = "SELECT MIN(`when`) AS min_when FROM loginout";

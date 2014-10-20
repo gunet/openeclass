@@ -45,15 +45,8 @@ $head_content .= "<script type='text/javascript'>
 $nameTools = $langVisitsCourseStats;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$tool_content .= "
-  <div id='operations_container'>
-    <ul id='opslist'>
-      <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
-      <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
-      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
-      <li><a href='monthlyReport.php'>$langMonthlyReport</a></li>
-    </ul>
-  </div>";
+require_once 'admin_statistics_tools_bar.php';
+admin_statistics_tools("visitsCourseStats");
 
 /* * ******************************************
   start making the chart
