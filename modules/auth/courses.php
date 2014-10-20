@@ -203,7 +203,7 @@ function getdepnumcourses($fac) {
 function expanded_faculte($fac_name, $facid, $uid) {
 	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
                $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-               $langpres, $langposts, $langothers, $themeimg, $courses_list;
+               $langpres, $langposts, $langothers, $themeimg, $courses_list, $urlAppend;
 
 	$retString = "";
 
@@ -329,8 +329,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $vis_class = ($mycours['visible'] == 0)? 'class="reg_closed"': '';
 
                         if (isset($myCourses[$cid])) {
+                                $codelink = "<a href='$urlAppend/courses/$mycours[k]/'>$course_title</a>";
                                 if ($myCourses[$cid]['statut'] != 1) { // display registered courses
-                                        $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                                         // password needed
                                         if (!empty($password)) {
                                                 $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='".
