@@ -304,22 +304,20 @@ if (isset($_POST['formSent'])) {
 
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
+$tool_content .= "<div class='panel panel-primary'>
+  <div class='panel-heading'>
+    <h3 class='panel-title'>$exerciseTitle ".(isset($timeleft) && $timeleft>0 ? "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>" : "" )."</h3>
+  </div>";
+if (!empty($exerciseDescription_temp)) {
+    $tool_content .= "<div class='panel-body'>
+        $exerciseDescription_temp
+      </div>";
+}
+$tool_content .= "</div><br>";
+
+  
 $tool_content .= "
- <table width='100%' class='tbl_border'>
-  <tr class='odd'>
-    <th colspan='2'>";
-        if (isset($timeleft) && $timeleft>0) {
-            $tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
-        }
-        $tool_content .= q($exerciseTitle). "</th></tr>
-  <tr class='even'>
-    <td colspan='2'>$exerciseDescription_temp</td>
-  </tr>
-  </table>
-
-  <br />
-
-  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId' class='exercise' >
+  <form class='form-horizontal exercise' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$exerciseId'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />";
         
@@ -345,26 +343,10 @@ foreach ($questionList as $questionId) {
     // shows the question and its answers
     $question = new Question();
     $question->read($questionId);
-    $questionWeight = $question->selectWeighting();
-    $message = $langInfoGrades;
-    if (intval($questionWeight) == $questionWeight) {
-        $questionWeight = intval($questionWeight);
-    }
-    if ($questionWeight == 1) {
-        $message = $langInfoGrade;
-    }
-    $tool_content .= "<table width='100%' class='tbl'>
-                <tr class='sub_title1'>
-                <td colspan='2'>" . $langQuestion . ": " . $i . "&nbsp;($questionWeight $message)";
+ 
+    showQuestion($question, $exerciseResult);
 
-    if ($exerciseType == 2) {
-        $tool_content .= "/" . $nbrQuestions;
-    }
-    $tool_content .= "</td></tr>";
-    unset($question);
-    showQuestion($questionId, false, $exerciseResult);
-
-    $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr></table>";
+    $tool_content .= "<br>";
     // for sequential exercises
     if ($exerciseType == 2) {
         // quits the loop
@@ -376,10 +358,8 @@ if (!$questionList) {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
 } else {
     $tool_content .= "
-        <br/>
-        <table width='100%' class='tbl'>
-        <tr>
-        <td><div class='right'><input type='submit' value='";
+        <br>
+        <div class='pull-right'><input type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         $tool_content .= "$langCont' />";
     } else {
@@ -388,13 +368,7 @@ if (!$questionList) {
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
         $tool_content .= "&nbsp;<input type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
-    $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
-        </td>
-        </tr>
-        <tr>
-        <td colspan='2'>&nbsp;</td>
-        </tr>
-        </table>";
+    $tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>";
 }
 $tool_content .= "</form>";
 if ($questionList) {

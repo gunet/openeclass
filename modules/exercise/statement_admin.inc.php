@@ -129,7 +129,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         
     } else {
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
-        $link_back = "admin.php?course=TMAPOST111".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
+        $link_back = "admin.php?course=$course_code".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
     }  
     $tool_content .= action_bar(array(
         array('title' => $langBack,
