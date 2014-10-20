@@ -86,7 +86,9 @@ if (isset($_POST['submit'])) {
                 if (preg_match('/^_/', $r)) {
                     $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
                     foreach ($sql_res as $ar) {
-                        $recipients[] = $ar->user_id;
+                        if ($ar->user_id != $uid) {
+                            $recipients[] = $ar->user_id;
+                        }
                     }
                 } else {
                     $recipients[] = $r;
