@@ -58,7 +58,7 @@ for ($i = 0; $i < 12; $i++) {
 $tool_content .= '
 <form method="post">
 <div><select name="selectedMonth">' . $months . '</select>
-<input type="submit" name="btnUsage" value="' . $langSubmit . '">
+<input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
 </div>
 </form>';
 
