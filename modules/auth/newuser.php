@@ -19,19 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-/* ===========================================================================
-  newuser.php
- * @version $Id$
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-
-  Purpose: The file displays the form that that the candidate user must fill
-  in with all the basic information.
-
-  ==============================================================================
+/**
+ * @file newuser.php
+ * @brief user registration process
  */
 
 require_once '../../include/baseTheme.php';

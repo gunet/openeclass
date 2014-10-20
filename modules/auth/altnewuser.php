@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,19 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* ===========================================================================
- * @version $Id$
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Introductory file that displays a form, requesting
-  from the user/prof to enter the account settings and authenticate
-  him/her against the predefined method of the platform
-
-
-  ==============================================================================
+/**
+ * @brief display form for authenticating user via alternate methods
+ * @file altnewuser.php
  */
+
 
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
@@ -84,9 +76,9 @@ if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
     draw($tool_content, 0);
     exit;
 }
-$tool_content .= "<form method='post' action='altsearch.php'>";
-$tool_content .= "<fieldset><legend>" . q($settings['auth_instructions']) . "</legend>
-<table class='tbl' width='100%'>";
+$tool_content .= "<div class='form-wrapper'>";
+$tool_content .= "<form class='form-horizontal' role='form' method='post' action='altsearch.php'>";
+$tool_content .= "<fieldset>" . q($settings['auth_instructions']) . "";
 
 if (isset($_SESSION['prof']) and $_SESSION['prof']) {
     $tool_content .= "<input type='hidden' name='p' value='1'>";
@@ -94,24 +86,31 @@ if (isset($_SESSION['prof']) and $_SESSION['prof']) {
 
 if (($auth != 7) and ($auth != 6)) {
     $set_uname = isset($_GET['uname']) ? (" value='" . q(canonicalize_whitespace($_GET['uname'])) . "'") : '';
-    $tool_content .= "
-                <tr><th width='180'>$langAuthUserName</th>
-                    <td><input type='text' size='30' maxlength='30' name='uname' autocomplete='off' $set_uname></td></tr>
-                <tr><th>$langAuthPassword</th>
-                    <td><input type='password' size='30' maxlength='30' name='passwd' autocomplete='off'></td></tr>";
+    $tool_content .= "<div class='form-group'>
+                        <label for='UserName' class='col-sm-2 control-label'>$langUsername</label>
+                        <div class='col-sm-10'>
+                            <input type='text' size='30' maxlength='30' name='uname' autocomplete='off' $set_uname placeholder='$langUserNotice'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='Pass' class='col-sm-2 control-label'>$langPass</label>
+                        <div class='col-sm-10'>
+                            <input type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='$langPass'>
+                        </div>
+                    </div>";
 }
 
-$tool_content .= "<tr>
-     <td>&nbsp;</td>
-     <td class='right'>
-<input type='hidden' name='auth' value='$auth'>";
+$tool_content .= "<input type='hidden' name='auth' value='$auth'>";
+
+$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
 
 if (($auth != 7) and ($auth != 6)) {
-    $tool_content .= "<input type='submit' name='is_submit' value='" . q($langSubmit) . "'>";
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='is_submit' value='" . q($langSubmit) . "'>";
 } else {
-    $tool_content .= "<input type='submit' name='is_submit' value='" . q($langCheck) . "'>";
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='is_submit' value='" . q($langCheck) . "'>";
 }
 
-$tool_content .= "</td></tr></table></fieldset></form>";
+$tool_content .= "</div>";
+$tool_content .= "</fieldset></form></div>";
 
 draw($tool_content, 0);
