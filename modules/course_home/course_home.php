@@ -535,13 +535,9 @@ if (!empty($rec_mail)) {
 $tool_content .= "
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
-
         <div class='toolbox pull-right'>
-
-            <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
-                <a class='txt' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
-                
-
+            <div class='dropdown'>
+                <a class='txt btn btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
                 <ul class='dropdown-menu'>
                     <li><a class='md-trigger' data-modal='syllabus-prof' href='#'>Επιλογή 1</a></li>
                     <li><a class='md-trigger' data-modal='syllabus-toc' href='#'>Επιλογή 2</a></li>
@@ -550,7 +546,6 @@ $tool_content .= "
                 </ul>
             </div>
     ";
-
             // Button: toggle student view
             $tool_content .= "
         </div>
@@ -604,18 +599,15 @@ $tool_content .= "
 <div class='row'>";
 if (!$alter_layout) {
     $tool_content .= "
-    <div class='col-md-8'>
+    <div class='col-md-8 course-units'>
         <div class='row'>
-            <div class='col-md-6'>
-
+            <div class='col-md-6 no-gutters' style='padding-top:24px;'>
                 <h5 class='content-title'>$langCourseUnits</h5>
             </div>
-
             ".
         (($is_editor)? "
-            
             <div class='col-md-6 no-gutters'>
-                <div class='toolbox margin-bottom-thin margin-top-thin pull-right'>
+                <div class='toolbox margin-bottom-thin pull-right'>
                     <a href='{$urlServer}modules/units/info.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langAddUnit' class='btn btn-default-eclass place-at-toolbox size-s'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langAddUnit
@@ -623,7 +615,6 @@ if (!$alter_layout) {
                 </div>
             </div>                         
             " : "")."
-
         </div>
         <div class='row'>            
             $cunits_content
