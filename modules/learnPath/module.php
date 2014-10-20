@@ -365,7 +365,7 @@ if ($module->contentType != CTLABEL_) { //
     if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
         $tool_content .= '' . "\n"
                 . '        <form action="./viewer.php?course=' . $course_code . '" method="post">' . "\n"
-                . '        <input type="submit" value="' . $langStartModule . '" />' . "\n"
+                . '        <input class="btn btn-primary" type="submit" value="' . $langStartModule . '" />' . "\n"
                 . '        </form>' . "\n";
     } else {
         $tool_content .= '        <p><center>' . $langNoStartAsset . '</center></p>' . "\n";

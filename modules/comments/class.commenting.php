@@ -112,7 +112,7 @@ Class Commenting {
         if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
             $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
             $out .= '<textarea name="textarea" id="textarea-'.$this->rid.'" cols="40" rows="5"></textarea><br/>';
-            $out .= '<input name="send_button" type="submit" value="'.$langSubmit.'" />';
+            $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
             $out .= '</form>';
         }
         

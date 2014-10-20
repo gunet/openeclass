@@ -71,7 +71,7 @@ if (isset($learningPath_module->lock) && $learningPath_module->lock == 'CLOSE' &
             . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
             . '<input type="text" value="' . htmlspecialchars($learningPath_module->raw_to_pass) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
             . '<input type="hidden" name="cmd" value="raw" />' . "\n"
-            . '<input type="submit" value="' . $langOk . '" />' . "\n"
+            . '<input class="btn btn-primary" type="submit" value="' . $langOk . '" />' . "\n"
             . '</form>' . "\n\n";
 }
 

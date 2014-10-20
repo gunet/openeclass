@@ -110,7 +110,7 @@ if (isset($_GET['add_server']))
     $tool_content .= '<tr><th class="left" width="100"><b>'.$langBBBServerOrder.':</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="weight" /></td></tr>';
     
-    $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
+    $tool_content .= '</table><div align="right"><input class="btn btn-primary" type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
     $tool_content .= '</fieldset></form>';
     
@@ -267,7 +267,7 @@ if (isset($_GET['edit_server'])) {
             $tool_content .= '<tr><th class="left" width="100"><b>'.$langBBBServerOrder.':</b></th>
             <td class="smaller"><input class="FormData_InputText" type="text" name="weight" value="'.$server->weight.'" /></td></tr>';
             
-            $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
+            $tool_content .= '</table><div align="right"><input class="btn btn-primary" type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
             $tool_content .= '</fieldset></form>';    
             $tool_content .='<script language="javaScript" type="text/javascript">

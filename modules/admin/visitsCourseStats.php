@@ -324,7 +324,7 @@ $tool_content .= "<div class='input-append date form-group' id='u_date_end' data
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
-      <td><input type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
+      <td><input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
     </tr>
     </tbody>
     </table>

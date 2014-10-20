@@ -143,7 +143,7 @@ $tool_content .= '</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td class="right"><input type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
+  <td class="right"><input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
 </tr>
 </table>
 </form>';

@@ -66,6 +66,6 @@ if (isset($learningPath_module->lock) && $learningPath_module->lock == 'CLOSE' &
             . '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n"
             . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
             . '<input type="text" value="' . htmlspecialchars($learningPath_module->raw_to_pass) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
-            . '<input type="submit" value="' . $langOk . '" />' . "\n"
+            . '<input class="btn btn-primary" type="submit" value="' . $langOk . '" />' . "\n"
             . '</form>' . "\n\n";
 }

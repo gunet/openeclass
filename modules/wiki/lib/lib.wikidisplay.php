@@ -108,12 +108,12 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             . '" />' . "\n"
     ;
 
-    $out .= '<input type="submit" name="action[preview]" value="'
+    $out .= '<input class="btn btn-primary" type="submit" name="action[preview]" value="'
             . $langPreview . '" />' . "\n"
     ;
 
     if (!$forcePreview) {
-        $out .= '<input type="submit" name="action[save]" value="'
+        $out .= '<input class="btn btn-primary" type="submit" name="action[save]" value="'
                 . $langSave . '" />' . "\n"
         ;
     }
@@ -200,10 +200,10 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
             . '" />' . "\n"
     ;
 
-    $out .= '<input type="submit" name="action[save]" value="'
+    $out .= '<input class="btn btn-primary" type="submit" name="action[save]" value="'
             . $langSave . '" />' . "\n"
     ;
-    $out .= '<input type="submit" name="action[edit]" value="'
+    $out .= '<input class="btn btn-primary" type="submit" name="action[edit]" value="'
             . $langEdit . '"/>' . "\n"
     ;
 
@@ -373,7 +373,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $form .= '</td></tr><tr><th>&nbsp;</th><td>';
 
-    $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />';
+    $form .= '<input class="btn btn-primary" type="submit" name="action[exEdit]" value="' . $langSave . '" />';
 
     $form .= '</td></tr></table></fieldset></form>';
 

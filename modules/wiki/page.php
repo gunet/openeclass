@@ -1012,7 +1012,7 @@ switch ($action) {
                 . '<input type="hidden" name="course" value="' . $course_code . '" />' . "\n"
                 . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
                 . '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n"
-                . '<input type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" />' . "\n"
+                . '<input class="btn btn-primary" type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" />' . "\n"
                 . '</div>' . "\n"
         ;
 
@@ -1125,7 +1125,7 @@ switch ($action) {
             . $langSearch
             . '</label><br />'."\n"
             . '<input type="text" id="searchPattern" name="searchPattern" />'."\n"
-            . '<input type="submit" value="'.$langSubmit.'" />'."\n"
+            . '<input class="btn btn-primary" type="submit" value="'.$langSubmit.'" />'."\n"
             . disp_button(
                 htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code), $langCancel)
             . '</form>'."\n";

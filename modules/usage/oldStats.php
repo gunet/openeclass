@@ -195,7 +195,7 @@ $tool_content .= '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?co
 	 </tr>
 	 <tr>
 	   <th>&nbsp;</th>
-	   <td><input type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
+	   <td><input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
 	 </tr>
 	 </table>
        </fieldset>
