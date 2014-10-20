@@ -535,13 +535,9 @@ if (!empty($rec_mail)) {
 $tool_content .= "
 <div class='row margin-top-thin'>
     <div class ='col-md-12'>
-
         <div class='toolbox pull-right'>
-
-            <div type='button' class='btn-default-eclass place-at-toolbox dropdown open-on-hover'>
-                <a class='txt' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
-                
-
+            <div class='dropdown'>
+                <a class='txt btn btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
                 <ul class='dropdown-menu'>
                     <li><a class='md-trigger' data-modal='syllabus-prof' href='#'>Επιλογή 1</a></li>
                     <li><a class='md-trigger' data-modal='syllabus-toc' href='#'>Επιλογή 2</a></li>
@@ -550,7 +546,6 @@ $tool_content .= "
                 </ul>
             </div>
     ";
-
             // Button: toggle student view
             $tool_content .= "
         </div>
