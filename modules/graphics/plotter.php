@@ -25,14 +25,15 @@ class Plotter {
     private $height;
     private $title;
     private $data;
+    private $instanceID;
     private static $instanceCounter = 0;
-    private static $MAX_WIDTH = 780;    
+    private static $MAX_WIDTH = 780;
     private static $MAX_HEIGHT = 780;
 
     function __construct($width = 200, $height = 200) {
         $this->setDimension($width, $height);
         $this->data = array();
-        self::$instanceCounter++;
+        $this->instanceID = self::$instanceCounter++;
     }
 
     public function setDimension($width, $height) {
@@ -90,29 +91,36 @@ class Plotter {
 
             return '
                 
-<div class="flot-container" style="width: ' . $this->width . 'px; height: ' . $this->height . 'px;">
+<div class="flot-container" style="max-width: ' . $this->width . 'px; height: ' . $this->height . 'px;">
 <p class="flot-title">' . $this->title . '</p>
-<div class="flot-placeholder" id="placeholder' . self::$instanceCounter . '"></div>
+<div class="flot-placeholder" style="width:100%" id="placeholder' . $this->instanceID . '"></div>
 </div>
 
 <script type="text/javascript">
-    $(function() {
-        var data = ' . $dataset . ';
-        $.plot("#placeholder' . self::$instanceCounter . '", [ data ], {
+
+    function doPlot' . $this->instanceID . '(data) {
+        $.plot("#placeholder' . $this->instanceID . '", [ data ], {
             series: {
                 bars: {
                     show: true,
                     barWidth: 0.8,
                     align: "center"
                 }
-            }
-            ,
+            } ,
             xaxis: {
                 mode: "categories",
                 labelAngle: -45,
                 tickLength: 0
             }
         });
+    }
+    
+    $(function() {
+        var data = ' . $dataset . ';
+        doPlot' . $this->instanceID . '(data);
+        window.onresize = function(event) {
+            doPlot' . $this->instanceID . '(data);
+        }
     });
 </script>';
         }
