@@ -754,6 +754,7 @@ ul.tablelist {
   cursor: default; }
   ul.tablelist li.list-item {
     position: relative;
+    padding: 1em;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -776,7 +777,6 @@ ul.tablelist {
       max-width: 95%; }
     ul.tablelist li.list-item .item-right-cols > span,
     ul.tablelist li.list-item .item-title {
-      padding: 1em;
       display: inline-block; }
     ul.tablelist li.list-item .item-wholeline {
       padding: 1em;
