@@ -452,33 +452,37 @@ if (isset($_POST['submit'])) {
 		<div class='col-sm-10'>
                     <input type='text' name='course_keywords' value='$course_keywords' size='60' />
                 </div>
-	    </div>	    
-         </fieldset>                    
-         <fieldset>
-	    <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langMore</label></div>
+	    </div>
+            
+        <div class='form-wrapper'>
+	    <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langCourseFormat</label></div>
             <div class='form-group'>
-                <label for='CourseFormat' class='col-sm-2 control-label'>$langCourseFormat</label>
-                <div class='col-sm-10'>
+            <label for='simple' class='col-sm-3'>$langCourseSimpleFormat</label>
+                <div class='col-sm-9'>
                     <input type='radio' name='view_type' value='simple' ";
         if ($c->view_type == "simple") {
             $tool_content .= " checked ";
         }
-        $tool_content .= "id='simple'></div>
-                    <label for='simple' class='col-sm-2 control-label'>$langCourseSimpleFormat</label>
-                    <div class='col-sm-10'>
-                        <input type='radio' name='view_type' value='units'";
+        $tool_content .= "id='simple'></div></div>
+            <div class='form-group'>
+            <label for='units' class='col-sm-3'>$langWithCourseUnits</label>
+            <div class='col-sm-9'>
+            
+                <input type='radio' name='view_type' value='units'";
         if ($c->view_type == "units") {
             $tool_content .= " checked ";
         }
-        $tool_content .= "id='units'><div>
-                <label for='units' class='col-sm-2 control-label'>$langWithCourseUnits</label>
-                <div class='col-sm-10'>
+        $tool_content .= "id='units'></div></div>
+            <div class='form-group'>
+            <label for='weekly' class='col-sm-3'>$langCourseWeeklyFormat</label>
+                <div class='col-sm-9'>
                     <input type='radio' name='view_type' value='weekly' ";
         if ($c->view_type == "weekly") {
             $tool_content .= " checked ";
         }
         $tool_content .= "id='weekly'></div>
-                    <label for='weekly' class='col-sm-2 control-label'>$langCourseWeeklyFormat</label>
+            </div>
+            <div class='form-group'>
                 <div class='col-sm-10' id='weeklyDates'>
                         $langStartDate 
                         <input class='dateInForm' type='text' name='start_date' value='";
@@ -493,31 +497,32 @@ if (isset($_POST['submit'])) {
     }
     $tool_content .= "' readonly='true'>
                     </div>
-                    </div>";
+                </div>
+            </div>";
 
     if ($isOpenCourseCertified) {
         $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
     }
     $tool_content .= "<div class='form-wrapper'>        
             <div class='form-group'>
-                <label for='License' class='col-sm-12'>$langOpenCoursesLicense</label>
+                <label for='License' class='col-sm-offset-4 col-sm-8'>$langOpenCoursesLicense</label>
             </div>
             <div class='form-group'>
-                <div class='col-sm-10'>                
-                    <input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
-                {$license[0]['title']}
+            <label for='simple' class='col-sm-3'>{$license[0]['title']}</label>
+                <div class='col-sm-9'>
+                    <input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>                
                 </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-10'>
-                    <input type='radio' name='l_radio' value='10'$license_checked[10]$disabledVisibility>
-                {$license[10]['title']}
+            <label for='simple' class='col-sm-3'>{$license[10]['title']}</label>
+                <div class='col-sm-9'>
+                    <input type='radio' name='l_radio' value='10'$license_checked[10]$disabledVisibility>                
                 </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-10'>
-                    <input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>
-                    $langCMeta[course_license]
+            <label for='simple' class='col-sm-3'>$langCMeta[course_license]</label>
+                <div class='col-sm-9'>
+                    <input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>                    
                 </div>
             </div>
             <div class='form-group'>
@@ -526,29 +531,30 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
+        
         <div class='form-wrapper'>
 	<div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langConfidentiality</label></div>
 	    <div class='form-group'>
-		<label for='Pass' class='col-sm-2 control-label'>$langOptPassword</label>
-                <div class='col-sm-10'>
+		<label for='Pass' class='col-sm-3 control-label'>$langOptPassword</label>
+                <div class='col-sm-9'>
                     <input id='coursepassword' type='text' name='password' value='$password' autocomplete='off' />
                 </div>
 	    </div>
 	    <div class='form-group'>
-            <label for='Public' class='col-sm-2 control-label'>$langOpenCourse</label>
-                    <div class='col-sm-10'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /><label class='radio'>$langPublic</label></div>
+            <label for='Public' class='col-sm-3 control-label'>$langOpenCourse</label>
+                    <div class='col-sm-9'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /><label class='radio'>$langPublic</label></div>
 	    </div>
 	    <div class='form-group'>
-            <label for='PrivateOpen' class='col-sm-2 control-label'>$langRegCourse</label>	
-                    <div class='col-sm-10'><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /><label class='radio'>$langPrivOpen</label></div>
+            <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>	
+                    <div class='col-sm-9'><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /><label class='radio'>$langPrivOpen</label></div>
             </div>
 	    <div class='form-group'>
-            <label for='PrivateClosed' class='col-sm-2 control-label'>$langClosedCourse</label>
-		<div class='col-sm-10'><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /><label class='radio'>$langClosedCourseShort</label></div>
+            <label for='PrivateClosed' class='col-sm-3 control-label'>$langClosedCourse</label>
+		<div class='col-sm-9'><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /><label class='radio'>$langClosedCourseShort</label></div>
 	   </div>
             <div class='form-group'>
-            <label for='Inactive' class='col-sm-2 control-label'>$langInactiveCourse</label>
-		<div class='col-sm-10'><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility /><label class='radio'>$langCourseInactiveShort</label></div>
+            <label for='Inactive' class='col-sm-3 control-label'>$langInactiveCourse</label>
+		<div class='col-sm-9'><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility /><label class='radio'>$langCourseInactiveShort</label></div>
 	    </div>
 	</div>
 
@@ -588,14 +594,14 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='form-wrapper'>
                 <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langSharing</label></div>
                 <div class='form-group'>
-                    <label for='sharing_en' class='col-sm-2'>$langSharingEn</label>
-                    <div class='col-sm-10'>
+                    <label for='sharing_en' class='col-sm-3'>$langSharingEn</label>
+                    <div class='col-sm-9'>
                         <input type='radio' value='1' name='s_radio' $checkEn $radio_dis>
                     </div>
                 </div>
                 <div class='form-group'>
-                    <label for='sharing_dis' class='col-sm-2'>$langSharingDis</label>
-                    <div class='col-sm-10'>
+                    <label for='sharing_dis' class='col-sm-3'>$langSharingDis</label>
+                    <div class='col-sm-9'>
                     <input type='radio' value='0' name='s_radio' $checkDis $radio_dis>
                     </div>
                 </div>
@@ -613,12 +619,12 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='form-wrapper'>
                 <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langRating</label></div>
                 <div class='form-group'>                
-                    <label for='rating_en' class='col-sm-2'>$langRatingEn</label>
-                        <div class='col-sm-10'><input type='radio' value='1' name='r_radio' $checkEn /></div>                
+                    <label for='rating_en' class='col-sm-3'>$langRatingEn</label>
+                        <div class='col-sm-9'><input type='radio' value='1' name='r_radio' $checkEn /></div>                
                 </div>
                 <div class='form-group'>                
-                    <label for='rating_dis' class='col-sm-2'>$langRatingDis</label>
-                    <div class='col-sm-10'><input type='radio' value='0' name='r_radio' $checkDis /></div>                
+                    <label for='rating_dis' class='col-sm-3'>$langRatingDis</label>
+                    <div class='col-sm-9'><input type='radio' value='0' name='r_radio' $checkDis /></div>                
                 </div>
             </div>";
 
@@ -638,15 +644,17 @@ if (isset($_POST['submit'])) {
         $checkEn = "";
     }
     
-    $tool_content .= "<div class='form-wrapper'><div class='form-group'><label class='col-sm-12'>$rating_dis_label</label></div>
+    $tool_content .= "<div class='form-wrapper'><div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langAnonymousRating</label></div>
             <div class='form-group'>
-            <label for='rating_anon_en' class='col-sm-4'>$langRatingAnonEn</label>
-            <div class='col-sm-8'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis/></div>
+            <label for='rating_anon_en' class='col-sm-3'>$langRatingAnonEn</label>
+            <div class='col-sm-9'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis/></div>
             </div>
             <div class='form-group'>
-                <label for='rating_anon_dis' class='col-sm-4'>$langRatingAnonDis</label>
-            <div class='col-sm-8'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis/></div>
-        </div></div>";
+                <label for='rating_anon_dis' class='col-sm-3'>$langRatingAnonDis</label>
+            <div class='col-sm-9'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis/></div>
+        </div>
+<div class='form-group'><label class='col-sm-12'>$rating_dis_label</label></div>        
+</div>";
 
     $tool_content .= "</fieldset>";
 
@@ -659,12 +667,12 @@ if (isset($_POST['submit'])) {
     }
     $tool_content .= "<div class='form-wrapper'><div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langCommenting</label></div>
             <div class='form-group'>
-            <label for='comments-_en' class='col-sm-2'>$langCommentsEn</label>
-            <div class='col-sm-10'><input type='radio' value='1' name='c_radio' $checkEn /></div>
+            <label for='comments-_en' class='col-sm-3'>$langCommentsEn</label>
+            <div class='col-sm-9'><input type='radio' value='1' name='c_radio' $checkEn /></div>
             </div>
             <div class='form-group'>
-            <label for='comments_dis' class='col-sm-2'>$langCommentsDis</label>
-            <div class='col-sm-10'><input type='radio' value='0' name='c_radio' $checkDis /></div>
+            <label for='comments_dis' class='col-sm-3'>$langCommentsDis</label>
+            <div class='col-sm-9'><input type='radio' value='0' name='c_radio' $checkDis /></div>
         </div></div>";
     
     $tool_content .= "<p class='pull-right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></p>";
