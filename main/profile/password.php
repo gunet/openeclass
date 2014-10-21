@@ -108,8 +108,8 @@ $tool_content .= action_bar(array(
 
 if (!isset($_POST['changePass'])) {
     $tool_content .= "<div class='form-wrapper'>
-<form class='form-horizontal' role='form' method='post' action='$passUrl'>
-  <fieldset>
+    <form class='form-horizontal' role='form' method='post' action='$passUrl'>
+    <fieldset>
     <div class='form-group'>
       <label for='old_pass' class='col-sm-2 control-label'>$langOldPass: </label>
       <div class='col-sm-8'>
@@ -138,7 +138,7 @@ if (!isset($_POST['changePass'])) {
       </div>
     </div>
   </fieldset>
-</form>";
+</form></div>";
 }
 
 draw($tool_content, 1, null, $head_content);
