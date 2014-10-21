@@ -34,7 +34,7 @@ function showAnswer($text) {
 
 function showQuestion($questionId, $onlyAnswers = false) {
 	
-    global $tool_content, $picturePath;
+    global $tool_content, $picturePath, $urlAppend;
     global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
     // construction of the Question object
@@ -91,14 +91,6 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 		$answer = $objAnswerTmp->selectAnswer($answerId);
 		$answerCorrect = $objAnswerTmp->isCorrect($answerId);
-		if($answerType == FILL_IN_BLANKS) {
-			// splits text and weightings that are joined with the character '::'
-			list($answer) = explode('::',$answer);
-			// replaces [blank] by an input field
-                        $answer = preg_replace('/\[[^]]+\]/',
-					       '<input type="text" name="choice['.$questionId.'][]" size="10" />',
-					       showAnswer($answer));
-		}
 		// unique answer
 		if($answerType == UNIQUE_ANSWER) {
 			$tool_content .= "
@@ -121,6 +113,20 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
+			// splits text and weightings that are joined with the character '::'
+			list($answer) = explode('::',$answer);
+
+            // replaces [blank] by an input field
+            $replace_callback = function () use ($questionId) {
+                    static $id = -1;
+                    $id++;
+                    return "<input type='text' name='choice[$questionId][$id]'>";
+            };
+
+            $answer = make_clickable(preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', q($answer)));
+            $answer = mathfilter($answer, 12, "{$urlAppend}/courses/mathimg/");
+            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, $answer);
+
 			$tool_content .= "
 			<tr class='even'>
 			  <td colspan='2'>". $answer ."</td>
