@@ -210,23 +210,34 @@ if ($is_editor) {
         $nameTools = $langConfig;
         $checked_expand = $expand_glossary ? ' checked="1"' : '';
         $checked_index = $glossary_index ? ' checked="1"' : '';
-        $tool_content .= "
-              <form action='$base_url' method='post'>               
-                 <table class='tbl' width='100%'>
-                 <tr>
-                   <th>$langGlossaryIndex:
-                     <input type='checkbox' name='index' value='yes'$checked_index>
-                   </th>
-                   <td class='right' width='10'>&nbsp;</td>
-                 </tr>
-                 <tr>
-                   <th>$langGlossaryExpand:
-                     <input type='checkbox' name='expand' value='yes'$checked_expand>
-                   </th>
-                   <td class='right' width='10'><input class='btn btn-primary' type='submit' name='submit_config' value='$langSubmit'></td>
-                 </tr>
-                 </table>               
-              </form>";
+        $tool_content .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' action='$base_url' method='post'>
+                    <div class='form-group'>
+                        <div class='col-sm-12'>            
+                            <div class='checkbox'>
+                              <label>
+                                <input type='checkbox' name='index' value='yes'$checked_index>$langGlossaryIndex                               
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-12'>            
+                            <div class='checkbox'>
+                              <label>
+                                <input type='checkbox' name='expand' value='yes'$checked_expand>$langGlossaryExpand                               
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-12'>
+                            <input class='btn btn-primary' type='submit' name='submit_config' value='$langSubmit'>
+                            <a class='btn btn-default' href='$base_url'>$langCancel</a>
+                        </div>
+                    </div>                   
+                </form>
+              </div>";
     }
 
     // display form for adding or editing a glossary term
@@ -254,47 +265,54 @@ if ($is_editor) {
         if ($categories) {
             $categories['none'] = '-';
             $category_selection = "
-                         <tr>
-                           <th valign='top'>$langCategory:</th>
-                           <td valign='top'>" . selection($categories, 'category_id', $category_id) . "
-                           </td>
-                         </tr>";
+                        <div class='form-group'>
+                             <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
+                             <div class='col-sm-10'>
+                                 " . selection($categories, 'category_id', $category_id) . "
+                             </div>
+                        </div>";
             unset($categories['none']);
         } else {
             $category_selection = '';
         }
 
         $tool_content .= "
-             <form action='$edit_url' method='post'>
-               $html_id               
-                 <table class='tbl' width='100%'>
-                 <tr>
-                   <th width='90'>$langGlossaryTerm:</th>
-                   <td>
-                     <input type='text' name='term' size='60'$html_term>
-                   </td>
-                 </tr>
-                 <tr>
-                   <th valign='top'>$langGlossaryDefinition:</th>
-                   <td valign='top'>" . @text_area('definition', 4, 60, $data->definition) . "
-                   </td>
-                 </tr>
-                 <tr>
-                   <th>$langGlossaryUrl:</th>
-                   <td><input type='text' name='url' size='50'$html_url></td>
-                 </tr>
-                 <tr>
-                   <th valign='top'>$langCategoryNotes:</th>
-                   <td valign='top'>" . @rich_text_editor('notes', 4, 60, $data->notes) . "
-                   </td>
-                 </tr>
-                 $category_selection
-                 <tr>
-                   <th>&nbsp;</th>
-                   <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$submit_value'></td>
-                 </tr>
-                 </table>               
-             </form>";
+            <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' action='$edit_url' method='post'>
+                  $html_id
+                   <div class='form-group'>
+                        <label for='term' class='col-sm-2 control-label'>$langGlossaryTerm: </label>
+                        <div class='col-sm-10'>
+                            <input type='text' class='form-control' id='term' name='term' placeholder='$langGlossaryTerm'$html_term>
+                        </div>
+                   </div>
+                   <div class='form-group'>
+                        <label for='term' class='col-sm-2 control-label'>$langGlossaryDefinition: </label>
+                        <div class='col-sm-10'>
+                            " . @text_area('definition', 4, 60, $data->definition) . "
+                        </div>
+                   </div>
+                   <div class='form-group'>
+                        <label for='url' class='col-sm-2 control-label'>$langGlossaryUrl: </label>
+                        <div class='col-sm-10'>
+                            <input type='text' class='form-control' id='url' name='url' placeholder='$langGlossaryUrl'$html_url>
+                        </div>
+                   </div>
+                   <div class='form-group'>
+                        <label for='notes' class='col-sm-2 control-label'>$langCategoryNotes: </label>
+                        <div class='col-sm-10'>
+                            " . @rich_text_editor('notes', 4, 60, $data->notes) . "
+                        </div>
+                   </div>
+                   $category_selection
+                   <div class='form-group'>    
+                        <div class='col-sm-10 col-sm-offset-2'>
+                             <input class='btn btn-primary' type='submit' name='submit' value='$submit_value'>
+                             <a href='$base_url' class='btn btn-default'>$langCancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>";
     }
     $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;

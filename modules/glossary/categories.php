@@ -140,26 +140,28 @@ if ($is_editor) {
             }
             $submit_value = $langModify;
         }
-        $tool_content .= "<form action='$cat_url' method='post'>
-            $html_id            
-              <table class='tbl' width='100%'>
-              <tr>
-                <th>$langCategoryName:</th>
-                <td>
-                  <input name='name' size='60'$html_name>
-                </td>
-              </tr>
-              <tr>
-                <th valign='top'>$langDescription:</th>
-                <td valign='top'>" . rich_text_editor('description', 4, 60, $description) . "
-                </td>
-              </tr>
-              <tr>
-                <th>&nbsp;</th>
-                <td class='right'><input class='btn btn-primary' type='submit' name='submit_category' value='$submit_value'></td>
-              </tr>
-              </table>            
-          </form>";                       
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$cat_url' method='post'>
+                    $html_id
+                    <div class='form-group'>
+                         <label for='name' class='col-sm-2 control-label'>$langCategoryName: </label>
+                         <div class='col-sm-10'>
+                             <input type='text' class='form-control' id='term' name='name' placeholder='$langCategoryName'$html_name>
+                         </div>
+                    </div>
+                    <div class='form-group'>
+                         <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
+                         <div class='col-sm-10'>
+                             " . rich_text_editor('description', 4, 60, $description) . "
+                         </div>
+                    </div>
+                   <div class='form-group'>    
+                        <div class='col-sm-10 col-sm-offset-2'>
+                             <input class='btn btn-primary' type='submit' name='submit_category' value='$submit_value'>
+                             <a href='$base_url' class='btn btn-default'>$langCancel</a>
+                        </div>
+                    </div>                            
+                </form>
+            </div>";                       
     }
 }
 
