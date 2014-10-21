@@ -167,8 +167,7 @@ body > .container{
     border: 0;
     background-color: $color-header;
     border-bottom: 1px solid #DBDBDB;
-
-
+    
 		.navbar-nav{
 			margin: 0;
 			float:right;
@@ -181,6 +180,7 @@ body > .container{
 				a {
 					padding-top: 15px;
 					padding-bottom: 15px;
+                                        line-height: 22px;
 
           @include transition(all $transition-time linear);
 
