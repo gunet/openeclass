@@ -44,34 +44,27 @@ $tool_content .= "
 set_time_limit(0);
 $tool_content .= "<p>&nbsp;</p><p>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>. $langUpgRead <a href='$upgrade_info_file' target=_blank>$langUpgMan</a>
    $langUpgLastStep</p>
-<p>$langUpgradeCont</p></div>
-<form method='post' action='upgrade.php'>
-<fieldset>
-<legend><b>$langUpgDetails</b></legend>
-<table class='tbl' width='100%'>
-<tr>
-<th width='200'>$langUsername:</th>
-<td><input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20' autocomplete='off' ></td>
-</tr>
-<tr>
-<th width='200'>$langPass:</th>
-<td><input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20' autocomplete='off' ></td>
-</tr>
-<tr>
-  <td class='right' colspan='2'><input class='btn btn-primary' type='submit' name='submit_upgrade2' value='$langUpgrade' /></td>
-  </tr>
-</table>
-</fieldset>";
+<p>$langUpgradeCont</p></div>";
+$tool_content .= "<div class = 'form-wrapper'>
+    <form class='form-horizontal' role='form' method='post' action='upgrade.php'>
+    <fieldset>
+    <div class='form-group'><label for='Details' class='col-sm-2 control-label'>$langUpgDetails</label></div>
+    <div class='form-group'>
+        <label for='username' class='col-sm-2 control-label'>$langUsername</label>
+        <div class='col-sm-10'>
+            <input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20' autocomplete='off' >
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='pass' class='col-sm-2 control-label'>$langPass:</label>
+        <div class='col-sm-10'>
+            <input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20' autocomplete='off' >
+        </div>
+    </div>
+    <p class='pull-right'>
+      <input class='btn btn-primary' type='submit' name='submit_upgrade2' value='$langUpgrade' />
+     </p>";
+ 
+$tool_content .= "</fieldset></form></div>";
 
-if (isset($from_admin)) {
-    $tool_content .= "<input type='hidden' name='from_admin' value='" . q($from_admin) . "'>";
-}
-
-$tool_content .= "</form>";
-
-if (isset($from_admin)) {
-    $tool_content .= "<p align=right><a href='../modules/admin/index.php' class=mainpage>$langBackAdmin</a></p>";
-} else {
-    $tool_content .= "&nbsp;";
-}
 draw($tool_content, 0);

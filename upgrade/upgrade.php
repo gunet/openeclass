@@ -152,44 +152,48 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     }
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
-    }
+    }    
+    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>";
     // get old contact values
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>" .
-            "<div class='alert alert-info'>" .
-            "<p>$langConfigFound" .
-            "<br>$langConfigMod</p></div>" .
-            "<fieldset><legend>$langUpgContact</legend>" .
-            "<table width='100%' class='tbl'><tr><th width='220'>$langInstituteShortName:</th>" .
-            "<td><input class=auth_input_admin type='text' size='40' name='Institution' value='" . @$Institution . "'></td></tr>" .
-            "<tr><th>$langUpgAddress</th>" .
-            "<td><textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>" . @$postaddress . "</textarea></td></tr>" .
-            "<tr><th>$langUpgTel</th>" .
-            "<td><input class=auth_input_admin type='text' name='telephone' value='" . @$telephone . "'></td></tr>" .
-            "<tr><th>Fax:</th>" .
-            "<td><input class=auth_input_admin type='text' name='fax' value='" . @$fax . "'></td></tr></table></fieldset>
-                <fieldset><legend>$langUploadWhitelist</legend>
-                <table class='tbl' width='100%'>
-                <tr>
-                <th class='left'>$langStudentUploadWhitelist</th>
-                <td><textarea rows='6' cols='60' name='student_upload_whitelist'>$default_student_upload_whitelist</textarea></td>
-                </tr>
-                <tr>
-                <th class='left'>$langTeacherUploadWhitelist</th>
-                <td><textarea rows='6' cols='60' name='teacher_upload_whitelist'>$default_teacher_upload_whitelist</textarea></td>
-                </tr>
-                </table>
-                </fieldset>
-                <div class='right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></div>
-                </form>";
+    $tool_content .= "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>            
+            <fieldset>
+            <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langUpgContact</label></div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langInstituteShortName:</label>
+                <div class='col-sm-10'>
+                    <input class=auth_input_admin type='text' size='40' name='Institution' value='" . @$Institution . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langUpgAddress</label>
+                <div class='col-sm-10'>
+                    <textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>" . @$postaddress . "</textarea>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langUpgTel</label>
+                <div class='col-sm-10'>
+                    <input class=auth_input_admin type='text' name='telephone' value='" . @$telephone . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>Fax:</label>
+                <div class='col-sm-10'>
+                    <input class=auth_input_admin type='text' name='fax' value='" . @$fax . "'>
+                </div>
+            </div>        
+            </fieldset>
+            <p class='pull-right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></p>
+            </form>
+            </div>";
 } else {
     // Main part of upgrade starts here
     if ($command_line) {
         $_POST['Institution'] = @$Institution;
         $_POST['postaddress'] = @$postaddress;
         $_POST['telephone'] = @$telephone;
-        $_POST['fax'] = @$fax;
-        $_POST['student_upload_whitelist'] = $default_student_upload_whitelist;
-        $_POST['teacher_upload_whitelist'] = $default_teacher_upload_whitelist;
+        $_POST['fax'] = @$fax;        
     } else {
 
         // Main part of upgrade starts here
@@ -594,7 +598,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                     Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', ?s),
-                            ('teacher_upload_whitelist', ?s)", $_POST['student_upload_whitelist'], $_POST['teacher_upload_whitelist']);
+                            ('teacher_upload_whitelist', ?s)", $default_student_upload_whitelist, $teacher_upload_whitelist);
                     if (!DBHelper::fieldExists('user', 'last_passreminder')) {
                         Database::get()->query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
                     }
@@ -1421,16 +1425,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `public` TINYINT(4) NOT NULL DEFAULT 1,
                             `results` TINYINT(1) NOT NULL DEFAULT 1,
                             `score` TINYINT(1) NOT NULL DEFAULT 1)
-                            $charset_spec");
-                    Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `course_id` INT(11) NOT NULL,
-                            `question` TEXT,
-                            `description` TEXT,
-                            `weight` FLOAT(11,2) DEFAULT NULL,
-                            `q_position` INT(11) DEFAULT 1,
-                            `type` INT(11) DEFAULT 1) 
-                            $charset_spec");
+                            $charset_spec");                    
                     Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
