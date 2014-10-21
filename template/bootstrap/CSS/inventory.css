@@ -205,7 +205,8 @@ h1 {
 h1.page-title {
   margin: 0em;
   font-weight: 400 !important;
-  color: #333; }
+  color: #333;
+  font-size: 24px; }
 
 #main h1 {
   color: #444; }
@@ -242,7 +243,7 @@ img {
 
 .page-subtitle {
   color: #555555;
-  font-size: 22px; }
+  font-size: 18px; }
   .page-subtitle a {
     text-decoration: none; }
 
