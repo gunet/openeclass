@@ -31,7 +31,7 @@ Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
-define('ECLASS_VERSION', '2.11.1');
+define('ECLASS_VERSION', '2.11.2');
 
 // course status
 define('COURSE_OPEN', 2);
