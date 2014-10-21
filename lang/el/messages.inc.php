@@ -230,9 +230,10 @@ $langAsInactive = "ως μη ενεργοί";
 $langChanges = "αλλαγές";
 
 // listcours
-$langOpenCourse = "Ανοιχτό";
-$langClosedCourse = "Κλειστό";
-$langRegCourse = "Απαιτείται Εγγραφή";
+$langOpenCourse = "Ανοικτό μάθημα";
+$langClosedCourse = "Κλειστό μάθημα";
+$langRegCourse = "Απαιτείται εγγραφή";
+$langInactiveCourse = "Ανενεργό μάθημα";
 
 // quotacours
 $langQuotaAdmin = "Διαχείριση Αποθηκευτικού Χώρου Μαθήματος";
@@ -1119,9 +1120,8 @@ $langCourseCategory = "Η κατηγορία στην οποία ανήκει τ
 $langProfessorsInfo = "Ονοματεπώνυμα $langsOfTeachers του μαθήματος χωρισμένα με κόμματα (π.χ.<i>Νίκος Τζικόπουλος, Κώστας Αδαμόπουλος</i>)";
 $langPublic = "Ελεύθερη Πρόσβαση (χωρίς εγγραφή) από τη αρχική σελίδα χωρίς σύνδεση";
 $langPublicShort = "Ελεύθερη (χωρίς εγγραφή)";
-$langPrivate = "Πρόσβαση στο μάθημα (για εγγραφή) έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του μαθήματος";
-$langCourseInactive = "Πρόσβαση στο μάθημα έχουν μόνο οι $langsTeachers του μαθήματος";
-$langCourseInactiveShort = "Ανενεργό μάθημα";
+$langClosedCourseShort = "Πρόσβαση στο μάθημα έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του μαθήματος";
+$langCourseInactiveShort = "Πρόσβαση στο μάθημα έχουν μόνο οι $langsTeachers του μαθήματος";
 $langsCourseInactiveShort = "Ανενεργά μαθήματα";
 $langPrivateShort = "Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!";
@@ -2302,10 +2302,7 @@ $m['description'] = 'Περιγραφή';
 $m['max_grade'] = 'Μέγιστη βαθμολογία';
 $m['professor'] = $langTeacher;
 $m['legend'] = 'Υπόμνημα';
-$m['legopen'] = 'Ανοικτό Μάθημα';
 $m['legrestricted'] = 'Απαιτείται εγγραφή';
-$m['legclosed'] = 'Κλειστό μάθημα';
-$m['linactive'] = 'Ανενεργό μάθημα';
 $m['nolessons'] = 'Δεν υπάρχουν διαθέσιμα μαθήματα!';
 $m['name'] = "Μάθημα";
 $m['code'] = "Συνθηματικό μαθήματος";

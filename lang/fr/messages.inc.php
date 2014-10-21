@@ -643,7 +643,7 @@ $langCourseCategory = "La catégorie à laquelle appartient ce cours";
 $langProfessorsInfo = "Noms et prénoms $langsOfTeachers du cours, séparés par des virgules (par ex.<i>Jean Martin, Marie Dubois</i>)"
 ;
 $langPublic = "Accès libre (sans inscription), pas de mot de passe requis";
-$langPrivate = "Accès réservé aux personnes inscrites au cours";
+$langClosedCourseShort = "Accès réservé aux personnes inscrites au cours";
 $langPrivate_1 = "Accès aux forums des groupes d'utilisateurs";
 $langPrivate_2 = "réservé aux membres du groupe";
 $langPrivate_3 = "accès libre (en lecture seule)";

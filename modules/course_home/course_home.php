@@ -445,7 +445,7 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-            $lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
+            $lessonStatus = "<span title='$langClosedCourseShort'>$langPrivateShort</span>";
             break;
         }
     case COURSE_REGISTRATION: {
@@ -457,7 +457,7 @@ switch ($visible) {
             break;
         }
     case COURSE_INACTIVE: {
-            $lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
+            $lessonStatus = "<span class='invisible' title='$langCourseInactiveShort'>$langCourseInactive</span>";
             break;
         }
 }

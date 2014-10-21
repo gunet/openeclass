@@ -153,12 +153,12 @@ if (isset($_POST['submit'])) {
 	  <tr class='smaller'>
 	    <th valign='top'><img src='$themeimg/lock_closed.png' title='" . $m['legclosed'] . "' alt='" . $m['legclosed'] . "' width=\"16\" height=\"16\" /> " . $m['legclosed'] . "</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
-	    <td>$langPrivate</td>
+	    <td>$langClosedCourseShort</td>
 	  </tr>
           <tr class='smaller'>
 	    <th valign='top'><img src='$themeimg/lock_inactive.png' title='" . $m['linactive'] . "' alt='" . $m['linactive'] . "' width='16' height='16' /> " . $m['linactive'] . "</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
-	    <td>$langCourseInactive</td>
+	    <td>$langCourseInactiveShort</td>
 	  </tr>
 	  </table>      
 	  <br />

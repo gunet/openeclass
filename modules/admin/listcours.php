@@ -139,7 +139,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 break;
             case COURSE_INACTIVE:
                 $icon = 'lock_inactive';
-                $title = $langCourseInactiveShort;
+                $title = $langInactiveCourse;
                 break;
         }
 

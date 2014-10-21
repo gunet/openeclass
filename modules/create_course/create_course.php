@@ -300,7 +300,7 @@ if (!isset($_POST['create_course'])) {
             <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off' /></td>
         </tr>
         <tr>
-            <th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
+            <th width='170'><img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16' height='16' />&nbsp;$langOpenCourse:</th>
             <td width='1'><input id='courseopen' type='radio' name='formvisible' value='2'checked='checked' /></td>
             <td class='smaller'>$langPublic</td>
         </tr>
@@ -310,14 +310,14 @@ if (!isset($_POST['create_course'])) {
             <td class='smaller'>$langPrivOpen</td>
         </tr>
         <tr>
-            <th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
+            <th><img src='$themeimg/lock_closed.png' alt='$langClosedCourse' title='$langClosedCourse' width='16' height='16' />&nbsp;$langClosedCourse:</th>
             <td><input id='courseclose' type='radio' name='formvisible' value='0' /></td>
-            <td class='smaller'>$langPrivate</td>
+            <td class='smaller'>$langClosedCourseShort</td>
         </tr>
          <tr>
-            <th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
+            <th><img src='$themeimg/lock_inactive.png' alt='$langInactiveCourse' title='$langInactiveCourse' width='16' height='16' />&nbsp;$langInactiveCourse:</th>
             <td><input id='courseinactive' type='radio' name='formvisible' value='3' /></td>
-            <td class='smaller'>$langCourseInactive</td>
+            <td class='smaller'>$langCourseInactiveShort</td>
         </tr>
         </table>";
         $tool_content .= "</td>
