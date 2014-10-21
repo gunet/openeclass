@@ -29,28 +29,35 @@ $next = isset($_GET['next']) ?
         ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
         '';
 
-$tool_content .= "<form action='$urlSecure' method='post'>
+$tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
   $next
-  <table class='tbl' width='300' align='center'>
-  <tr>
-  <th colspan='2' class='LoginHead' align='center'><b>$langUserLogin </b></th>
-  </tr>
-  <tr>
-  <td class='LoginData'><img src='$themeimg/login.png'></td>
-    <td class='LoginData'>
-        $langUsername <br />
-        <input class='Login' name='uname' size='20' autocomplete='off' /><br />
-        $langPass <br />
-        <input class='btn btn-primary' name='pass' type='password' size='20' autocomplete='off' /><br /><br />
-        <input class='btn btn-primary' name='submit' type='submit' size='20' value='$langEnter' />
-	$warning</td></tr>
-	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />
-	   </td>
-	 </tr>";
-if (!empty($shibboleth_link) or !empty($cas_link)) {
-    $tool_content .= "<tr><th colspan='2' class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
-}
-$tool_content .= "<tr><td colspan='2' class='LoginData'>$shibboleth_link
-                      $cas_link</td></tr></table></form>";
+  <div class='form-group'>
+    <label class='col-sm-offset-2 col-sm-10'>$langUserLogin</label>
+  </div> 
+    <div class='form-group'>       
+        <label class='col-sm-2 control-label'>$langUsername</label>
+        <div class='col-sm-10'>
+            <input class='Login' name='uname' size='20' placeholder='$langUsername'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langPass</label>
+        <div class='col-sm-10'>
+            <input name='pass' type='password' size='20' placeholder='$langPass'>
+        </div>
+    </div>
+    <p class='pull-right'>
+    <input class='btn btn-primary' name='submit' type='submit' size='20' value='$langEnter' />
+    $warning</p>
+    <p class='smaller'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br>";
+    if (!empty($shibboleth_link) or !empty($cas_link)) {
+     $tool_content .= "<div class='link-pull-right'>                
+             <label>$langAlternateLogin</label>
+             <label>$shibboleth_link</label>
+             <label>$cas_link</label>
+          </div";
+    }
+$tool_content .= "</form></div>";
 
 draw($tool_content, 0);
