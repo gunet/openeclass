@@ -46,7 +46,7 @@ if (!$is_editor or !$r) {
                                    <tr><th>$langZipFile:</th>
                                        <td><input type='file' name='file' size='53' /></td></tr>
                                    <tr><th>&nbsp;</th>
-                                       <td><input type='submit' name='submit' value='$langSend' /></td></tr>
+                                       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSend' /></td></tr>
                                 </table></fieldset></form>";
 }
 

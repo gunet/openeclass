@@ -200,7 +200,7 @@ function showlinks() {
         <th colspan='3'>
                 <div align='right'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
-                <input type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+                <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
                 </div></th>
         </tr>
         </tbody>

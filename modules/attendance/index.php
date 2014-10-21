@@ -238,7 +238,7 @@ if ($is_editor) {
         }    
         $tool_content .= "
                 <tr>
-                  <td class='right'><input type='submit' name='submitAttendanceActivity' value='$langAdd' /></td>
+                  <td class='right'><input class='btn btn-primary' type='submit' name='submitAttendanceActivity' value='$langAdd' /></td>
                 </tr>
             </table>
             <input type='hidden' name='id' value='$attendanceActivityToModify' />
@@ -546,7 +546,7 @@ if ($is_editor) {
                     $k++;
                 } // end of while
             }
-            $tool_content .= "<tr><td colspan=6 class='right'><input type='submit' name='bookUser' value='$langAttendanceBooking' /></td></tr></table></form></fieldset>";
+            $tool_content .= "<tr><td colspan=6 class='right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking' /></td></tr></table></form></fieldset>";
         }
         
         //======================
@@ -765,7 +765,7 @@ if ($is_editor) {
                 <option value='2'>$langStudLastSemester</option>
                 <option value='3'>$langAllRegStudents</option>
             </select>
-            <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
+            <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
             </fieldset>
         </form>";
         
@@ -805,7 +805,7 @@ if ($is_editor) {
                 </tbody>
             </table>";
 
-            $tool_content .= "<input type='Submit' name='deleteSelectedUsers' value='$langDelete'>";
+            $tool_content .= "<input class='btn btn-primary' type='submit' name='deleteSelectedUsers' value='$langDelete'>";
 
             $tool_content .= "</form>";
         }else{
@@ -999,7 +999,7 @@ if ($is_editor) {
                   <th>$langAttendanceLimitNumber:</th><td><input type='text' name='limit' value='$attendance_limit' size='5' /></td>
                 </tr>
                 <tr>
-                  <td class='left'><input type='submit' name='submitAttendanceLimit' value='$langAttendanceUpdate' /></td>
+                  <td class='left'><input class='btn btn-primary' type='submit' name='submitAttendanceLimit' value='$langAttendanceUpdate' /></td>
                 </tr>
             </table>
             </fieldset>
@@ -1022,7 +1022,7 @@ if ($is_editor) {
                $tool_content .= " /></td>
                 </tr>
                 <tr>
-                  <td class='left'><input type='submit' name='submitAttendanceActiveUsers' value='$langAttendanceUpdate' /></td>
+                  <td class='left'><input class='btn btn-primary' type='submit' name='submitAttendanceActiveUsers' value='$langAttendanceUpdate' /></td>
                 </tr>
             </table>
             </fieldset>

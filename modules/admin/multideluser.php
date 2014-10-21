@@ -213,7 +213,7 @@ if (isset($_POST['submit'])) {
         </tr>
         <tr>
             <th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' /></td>
+            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' /></td>
         </tr>
         </table>
         </fieldset>

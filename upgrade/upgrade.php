@@ -179,7 +179,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                 </tr>
                 </table>
                 </fieldset>
-                <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
+                <div class='right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></div>
                 </form>";
 } else {
     // Main part of upgrade starts here

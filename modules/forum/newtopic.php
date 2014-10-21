@@ -180,7 +180,7 @@ if (isset($_POST['submit'])) {
 	  <tr>
             <th>&nbsp;</th>
 	    <td class='right'>
-	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;	       
+	       <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />&nbsp;	       
 	    </td>
           </tr>
 	  </table>

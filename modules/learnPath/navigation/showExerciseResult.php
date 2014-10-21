@@ -351,7 +351,7 @@ if ($displayScore == 1) {
 }
 echo ("
   <br/>
-  <div align='center'><input type='submit' value='$langFinish' /></div>
+  <div align='center'><input class='btn btn-primary' type='submit' value='$langFinish' /></div>
   <br />
   </form><br />");
 

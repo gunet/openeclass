@@ -181,7 +181,7 @@ if (isset($_POST['submit'])) {
                 $langMultiRegSendMail</td>
         </tr>
         <tr><th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='$langSubmit' /></td>
+            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></td>
         </tr>
         </table>
         </fieldset>

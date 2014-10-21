@@ -112,7 +112,7 @@ $langEmail: " . get_config('email_helpdesk') . "
 	      </select>	    </td>
 	  </tr>
 	<tr>
-	  <td class='right'><input type='submit' name='submit' value='" . q($langSend) . "' /></td>
+	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' /></td>
 	  </tr>
 	</table>
         </fieldset>

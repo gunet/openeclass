@@ -50,7 +50,7 @@ if (isset($_POST['delete'])) {
     <th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
     <td width='52' align='center'>
     <form method='post' action='delete_course.php?course=$course_code'>
-    <input type='submit' name='delete' value='$langDelete' /></form></td>
+    <input class='btn btn-primary' type='submit' name='delete' value='$langDelete' /></form></td>
     <td><small>$langByDel</small></td>
     </tr>
     </table>";

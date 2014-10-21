@@ -138,7 +138,7 @@ if (!$info) {
          <input type='text' name='ebook_title' size='53' value='" . q($info->title) . "' />
         </td>
         <td width='75' class='center'>
-         <input name='title_submit' type='submit' value='$langModify' />
+         <input class='btn btn-primary' name='title_submit' type='submit' value='$langModify' />
         </td>
       </tr>
       </table>    
@@ -176,7 +176,7 @@ if (!$info) {
                     "<input type='text size='3' name='new_section_id' value='$qsid' />";
             $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
             $section_editing = true;
-            $section_tools = "<input type='submit' name='new_section_submit' value='$langModify' />";
+            $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
         } else {
             $section_id = $qsid;
             $section_title = $qstitle;
@@ -205,7 +205,7 @@ if (!$info) {
         <tr>
           <td><input type='text' size='2' name='new_section_id' /></td>
           <td><input type='text' size='35' name='new_section_title' /></td>
-          <td class='center'><input type='submit' name='new_section_submit' value='$langAdd' /></td>
+          <td class='center'><input class='btn btn-primary' type='submit' name='new_section_submit' value='$langAdd' /></td>
         </tr>";
     }
     $tool_content .= "
@@ -270,7 +270,7 @@ if (!$info) {
     $tool_content .= "
      <tr>
        <td colspan='4'>&nbsp;</td>
-       <td><input type='submit' name='submit' value='$langSubmit' /></td>
+       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></td>
      </table>
      </fieldset>
      </form>";

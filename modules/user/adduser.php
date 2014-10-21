@@ -105,7 +105,7 @@ if (isset($_GET['add'])) {
         <tr><th class='left'>$langAm:</th>
             <td><input type='text' name='search_am' value='" . q($search_am) . "' /></td></tr>
         <tr><th class='left'>&nbsp;</th>
-            <td class='right'><input type='submit' name='search' value='$langSearch' /></td></tr>
+            <td class='right'><input class='btn btn-primary' type='submit' name='search' value='$langSearch' /></td></tr>
         </table>
         </fieldset>
         </form>";

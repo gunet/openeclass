@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
         <th>&nbsp;</th>
         <td class='right'>&nbsp;</td>
         <td class='right'>
-          <input type='submit' name='submit' value='$submit_label' />
+          <input class='btn btn-primary' type='submit' name='submit' value='$submit_label' />
         </td>
         </tr>
         </table>

@@ -164,7 +164,7 @@ function printform($message) {
         <tr><td><input type='radio' name='adminrights' value='managedepartment'>&nbsp;$langManageDepartment&nbsp;
             <span class='smaller'>($langHelpManageDepartment)</span></td></tr>
         <tr>
-            <td colspan='2' class='right'><input type='submit' name='submit' value='$langAdd'></td>
+            <td colspan='2' class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langAdd'></td>
         </tr>
         </table>
         </fieldset>

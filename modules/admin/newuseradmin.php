@@ -266,7 +266,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
     }
     $tool_content .= "
         <tr><th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='$langRegistration' />
+            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration' />
                </td></tr>
         </table>
       </fieldset><div class='right smaller'>$langRequiredFields</div>

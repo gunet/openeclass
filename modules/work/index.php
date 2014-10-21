@@ -1266,7 +1266,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         </div>
                         $extra
                         <div class='col-sm-10 col-sm-offset-2'>
-                            <input type='submit' value='$langSubmit' name='work_submit' />
+                            <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit' />
                         </div>
                         </fieldset>
                      </form>
@@ -1583,7 +1583,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "</table>
                         <p class='smaller right'><img src='$themeimg/email.png' alt='' >
                                 $m[email_users]: <input type='checkbox' value='1' name='email'></p>
-                        <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
+                        <p><input class='btn btn-primary' type='submit' name='submit_grades' value='$langGradeOk'></p>
                         </form>";
         } else {
         // display pie chart with grades results

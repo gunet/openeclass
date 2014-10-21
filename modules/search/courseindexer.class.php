@@ -197,7 +197,7 @@ class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterf
                 </tr>
                 <tr>
                   <td>&nbsp;</td>
-                  <td colspan=2 class='right'><input type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
+                  <td colspan=2 class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
                 </tr>
             </table>
         </fieldset>

@@ -127,7 +127,7 @@ $tool_content .= $html;
 $tool_content .= "</td></tr>";
 
 $tool_content .= "<tr><th>&nbsp;</th>
-        <td class='right'><input type='submit' name='search_submit' value='$langSearch'></td>
+        <td class='right'><input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'></td>
       </tr>";
 $tool_content .= "</table></fieldset></form>";
 

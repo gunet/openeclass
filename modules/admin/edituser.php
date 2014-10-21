@@ -111,7 +111,7 @@ if ($u) {
                           <th>&nbsp;</th>
                           <td class='right'>
                             <input type='hidden' name='u' value='$u'>
-                            <input type='submit' name='submit_editauth' value='$langModify'>
+                            <input class='btn btn-primary' type='submit' name='submit_editauth' value='$langModify'>
                           </td>
                         </tr>
                         </table>
@@ -255,7 +255,7 @@ if ($u) {
 	    <input type='hidden' name='u' value='$u' />
 	    <input type='hidden' name='u_submitted' value='1' />
 	    <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
-	    <input type='submit' name='submit_edituser' value='$langModify' />
+	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
        </td>
      </tr>
      </table>

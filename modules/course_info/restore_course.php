@@ -536,7 +536,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
           <br /><br />
           <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>
             <input type='file' name='archiveZipped' />
-            <input type='submit' name='send_archive' value='" . $langSend . "' />
+            <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "' />
             </form>
             <div class='right smaller'>$langMaxFileSize " .
             ini_get('upload_max_filesize') . "</div>
@@ -553,7 +553,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
           <br /><br />
           <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <input type='text' name='pathToArchive' />
-            <input type='submit' name='send_path' value='" . $langSend . "' />
+            <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "' />
           </form>
           </td>
         </tr>

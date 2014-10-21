@@ -186,7 +186,7 @@ $tool_content .= $html . "
   <tr>
     <th>&nbsp;</th>
     <td colspan='2' class='right'>
-      <input type='submit' value='$langSearch'>
+      <input class='btn btn-primary' type='submit' value='$langSearch'>
     </td>
   </tr>
   </table>

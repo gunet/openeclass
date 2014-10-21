@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<input type='hidden' name='post_id' value='$post_id'>";
     $tool_content .= "<input type='hidden' name='topic' value='$topic_id'>";
     $tool_content .= "<input type='hidden' name='forum' value='$forum_id'>";
-    $tool_content .= "<input class='Login' type='submit' name='submit' value='$langSubmit' />
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />
         </td></tr>
         </table>
         </fieldset></form>";

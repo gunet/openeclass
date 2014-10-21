@@ -69,7 +69,7 @@ $tool_content .= "
       <td>" . rich_text_editor('weekdescr', 4, 20, $weekdescr) . "</td>
     </tr>
     <tr>
-      <td class='right'><input type='submit' name='edit_submitW' value='$langSubmit'></td>
+      <td class='right'><input class='btn btn-primary' type='submit' name='edit_submitW' value='$langSubmit'></td>
     </tr>
     </table>
     </fieldset>

@@ -131,7 +131,7 @@ if (isset($_POST['submit'])) {
             </tr>
             <tr>
               <th>&nbsp;</th>
-              <td><input type='submit' name='submit' value='$langAdd'></td>
+              <td><input class='btn btn-primary' type='submit' name='submit' value='$langAdd'></td>
               <td>&nbsp;</td>
             </tr>
             </table>

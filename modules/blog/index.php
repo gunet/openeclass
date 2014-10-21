@@ -227,7 +227,7 @@ if ($action == "createPost") {
         <tr>
         <td>".rich_text_editor('newContent', 4, 20, '')."</td>
         </tr>
-        <tr><td class='right'><input type='submit' name='submitBlogPost' value='$langAdd' /></td>
+        <tr><td class='right'><input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd' /></td>
         </tr>
         </table>
         <input type='hidden' name='action' value='savePost' />
@@ -261,7 +261,7 @@ if ($action == "editPost") {
             <tr>
             <td>".rich_text_editor('newContent', 4, 20, $post->getContent())."</td>
     		</tr>
-    		<tr><td class='right'><input type='submit' name='submitBlogPost' value='$langModifBlogPost' /></td>
+    		<tr><td class='right'><input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langModifBlogPost' /></td>
     		</tr>
     		</table>
     		<input type='hidden' name='action' value='savePost' />

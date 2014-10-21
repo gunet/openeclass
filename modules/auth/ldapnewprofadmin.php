@@ -216,7 +216,7 @@ if ($submit) {
 	<td>" . @q($pdate) . "&nbsp;</td>
 	</tr>
 	<tr><th>&nbsp;</th>
-	<td><input type='submit' name='submit' value='" . $langSubmit . "' >
+	<td><input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' >
 	<input type='hidden' name='auth' value='$auth' >
 	</td></tr>
 	</table>

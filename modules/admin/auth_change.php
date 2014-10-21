@@ -89,7 +89,7 @@ if (count($auth_methods_active) == 0) {
 			<td>";
     $tool_content .= selection($auth_methods_active, 'auth_change');
     $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th>&nbsp;</th><td class='left'><input type='submit' name='submit' value='$langModify'></td></tr>";
+    $tool_content .= "<tr><th>&nbsp;</th><td class='left'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>";
 }
 $tool_content .= "</table></fieldset></form>";
 

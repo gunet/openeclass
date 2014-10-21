@@ -95,7 +95,7 @@ else {
                 <tr><td>$langLegend <b>$langDropBox</b>:</td>
                     <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td></tr>
                 <tr><td>&nbsp;</td>
-                    <td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>
+                    <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>
             </table>
 	</fieldset></form>\n";
 }

@@ -324,7 +324,7 @@ if (!isset($_POST['create_course'])) {
         </tr>
         <tr>
           <td class='right'>&nbsp;
-            <input type='submit' name='create_course' value='".q($langCourseCreate)."' />
+            <input class='btn btn-primary' type='submit' name='create_course' value='".q($langCourseCreate)."' />
           </td>
         </tr>
         </table>";

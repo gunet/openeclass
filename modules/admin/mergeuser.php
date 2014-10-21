@@ -97,7 +97,7 @@ if (isset($_REQUEST['u'])) {
                      <tr><th>&nbsp;</th>
                          <td class='right'>
                            <input type='hidden' name='u' value='$u'>
-                           <input type='submit' name='submit' value='$submit_button'></td></tr>
+                           <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'></td></tr>
                    </table>
                  </fieldset>
                  $target_user_input

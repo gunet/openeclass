@@ -297,7 +297,7 @@ $langEmail: $emailhelpdesk";
 			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
 			</td></tr>
 			<tr><th class='left'>&nbsp;</th>
-			<td><input type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
+			<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
 			</tr></table>
 			</form>";
             }

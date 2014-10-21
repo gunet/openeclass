@@ -119,7 +119,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 
     $output .= "<tr>
 	    <th>&nbsp;</th>
-	    <td class='right'><input type='submit' value='$langOkComment' /></td>
+	    <td class='right'><input class='btn btn-primary' type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
 	    <th>&nbsp;</th>

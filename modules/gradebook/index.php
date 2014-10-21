@@ -266,7 +266,7 @@ if ($is_editor) {
         }
         $tool_content .= "
                 <tr>
-                  <td class='right'><input type='submit' name='submitGradebookActivity' value='$langAdd' /></td>
+                  <td class='right'><input class='btn btn-primary' type='submit' name='submitGradebookActivity' value='$langAdd' /></td>
                 </tr>
             </table>
             <input type='hidden' name='id' value='$gradebookActivityToModify' />
@@ -629,7 +629,7 @@ if ($is_editor) {
                         $k++;
                     } // end of while
                 }
-                $tool_content .= "<tr><td colspan=7 class='right'><input type='submit' name='bookUser' value='$langGradebookBooking' /></td></tr>";
+                $tool_content .= "<tr><td colspan=7 class='right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking' /></td></tr>";
 
                 $tool_content .= "<tr><td colspan=7 >". $langGradebookGrade . ":" . userGradeTotal($gradebook_id, $userID);
 
@@ -881,7 +881,7 @@ if ($is_editor) {
                 <option value='2'>$langStudLastSemester</option>
                 <option value='3'>$langAllRegStudents</option>
             </select>
-            <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
+            <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
             </fieldset>
         </form>";
 
@@ -921,7 +921,7 @@ if ($is_editor) {
                 </tbody>
             </table>";
 
-            $tool_content .= "<input type='Submit' name='deleteSelectedUsers' value='$langDelete'>";
+            $tool_content .= "<input class='btn btn-primary' type='submit' name='deleteSelectedUsers' value='$langDelete'>";
 
             $tool_content .= "</form>";
         } else {
@@ -1242,7 +1242,7 @@ if ($is_editor) {
         $tool_content .= " /></td>
                 </tr>
                 <tr>
-                  <td class='left'><input type='submit' name='submitGradebookActiveUsers' value='$langGradebookUpdate' /></td>
+                  <td class='left'><input class='btn btn-primary' type='submit' name='submitGradebookActiveUsers' value='$langGradebookUpdate' /></td>
                 </tr>
             </table>
             </fieldset>
@@ -1275,7 +1275,7 @@ if ($is_editor) {
         $tool_content .= "</td>
                 </tr>
                 <tr>
-                  <td class='left'><input type='submit' name='submitGradebookRange' value='$langGradebookUpdate' /></td>
+                  <td class='left'><input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate' /></td>
                 </tr>
             </table>
             </fieldset>

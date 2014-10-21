@@ -95,7 +95,7 @@ if ($is_editor or $is_tutor) {
                   <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
                 </tr>
                 <tr>
-                  <td><input type='submit' name='submit' value='$langSend'></input></td>
+                  <td><input class='btn btn-primary' type='submit' name='submit' value='$langSend'></input></td>
                 </tr>
                 </thead>
                 </table>

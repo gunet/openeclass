@@ -263,7 +263,7 @@ if ($is_editor) {
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
-                        <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
+                        <td><input type='hidden' name='cmd' value='create'><input class='btn btn-primary' type='submit' value='$langCreate'></input></td>
                         </tr>
                         </table>
                         </fieldset>

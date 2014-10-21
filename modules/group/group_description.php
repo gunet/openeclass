@@ -63,7 +63,7 @@ if (isset($_GET['delete'])) {
 	  <tr>
 	    <th>&nbsp;</th>
 	    <input type='hidden' name='group_id' value='$group_id'>
-	<td><input type='submit' name='submit' value='" . q($langAddModify) . "' /></td>
+	<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langAddModify) . "' /></td>
 	  </tr>
 	  </tbody>
 	  </table>

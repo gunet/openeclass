@@ -1256,7 +1256,7 @@ function edit_res($resource_id) {
     $tool_content .= "<tr><th>$message:</th>
                               <td>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</td></tr>
                           <tr><th>&nbsp;</th>
-                              <td><input type='submit' name='edit_res_submit' value='$langModify'></td></tr>
+                              <td><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></td></tr>
                         </table>
                       </fieldset>
                     </form>";

@@ -120,7 +120,7 @@ if ($type == 'duration') {
             <tr><th class='left'>$langEndDate:</th>
                 <td><input type='text' name='u_date_end' id='u_date_end' value='$u_date_end'></td></tr>                
             <tr><th class='left'>&nbsp;</th>
-                <td><input type='submit' name='submit' value='$langSubmit'></td></tr>
+                <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td></tr>
         </table>
       </form>";
 } elseif ($type == 'lp') {

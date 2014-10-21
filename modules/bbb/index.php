@@ -327,7 +327,7 @@ function new_bbb_session() {
         </tr>        
         <tr>
           <th>&nbsp;</th>
-          <th colspan='2' class='right'><input type='submit' name='new_bbb_session' value='$langAdd' /></th>
+          <th colspan='2' class='right'><input class='btn btn-primary' type='submit' name='new_bbb_session' value='$langAdd' /></th>
         </tr>
         </table>
         </fieldset>
@@ -680,7 +680,7 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                       <th>&nbsp;</th>
-                      <td class='right'><input type='submit' name='update_bbb_session' value='$langAdd' /></td>
+                      <td class='right'><input class='btn btn-primary' type='submit' name='update_bbb_session' value='$langAdd' /></td>
                     </tr>
                     </table>
                     </fieldset>

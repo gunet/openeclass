@@ -92,7 +92,7 @@ function list_videos() {
                 }
             }
         }
-        $tool_content .= "<tr><th colspan='4'><div align='right'><input type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></th></tr></table></form>";
+        $tool_content .= "<tr><th colspan='4'><div align='right'><input class='btn btn-primary' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></th></tr></table></form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";

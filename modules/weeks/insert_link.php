@@ -99,7 +99,7 @@ function list_links() {
         }
         $tool_content .= "<tr>" .
                 "<th colspan='3'><div align='right'>" .
-                "<input type='submit' name='submit_link' value='$langAddModulesButton' /></div></th>" .
+                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div></th>" .
                 "</tr></table></form>";
     }
 }

@@ -83,15 +83,15 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
 			<td class='center'><b>" .
             Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt .
-            "</b></td><td class='right'><input type='submit' name='submit1' value='{$m['edit']}'></td></tr>
+            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit1' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
 			<td class='center'><b>" .
             Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt .
-            "</b></td><td class='right'><input type='submit' name='submit2' value='{$m['edit']}'></td></tr>
+            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit2' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
 			<td class='center'><b>" .
             Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt .
-            "</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
+            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
     if (!get_config('email_required')) {
         $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
                                 <td class='center'><b>" .
@@ -131,7 +131,7 @@ else {
 
         $tool_content .= "</td>
 		</tr>
-		<tr><th>&nbsp;</th><td class='left'><input type='submit' name='submit' value='{$m['edit']}'></td></tr>
+		<tr><th>&nbsp;</th><td class='left'><input class='btn btn-primary' type='submit' name='submit' value='{$m['edit']}'></td></tr>
 		<tr><th colspan='2'><input type='hidden' name='old_mail_ver' value='$sub' /></th></tr>
 		</table>
 		</fieldset>

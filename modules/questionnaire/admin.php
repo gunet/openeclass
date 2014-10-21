@@ -419,7 +419,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
                         <label for='questionName' class='col-xs-3 control-label'>$langPollAddAnswer:</label>
                         <div class='col-xs-9'>
-                          <input type='submit' name='MoreAnswers' value='+'>
+                          <input class='btn btn-primary' type='submit' name='MoreAnswers' value='+'>
                         </div>
                     </div><hr><br>";
         if (count($answers) > 0) {

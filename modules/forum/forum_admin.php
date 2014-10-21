@@ -103,7 +103,7 @@ if (isset($_GET['forumgo'])) {
                 </tr>
                 <tr>
                 <th>&nbsp;</th>
-                <td class='right'><input type='submit' value='$langAdd'></td>
+                <td class='right'><input class='btn btn-primary' type='submit' value='$langAdd'></td>
                 </tr>
                 </table>
         </fieldset>
@@ -158,7 +158,7 @@ elseif (isset($_GET['forumgoedit'])) {
     }
     $tool_content .= "
         <tr><th>&nbsp;</th>
-        <td class='right'><input type='submit' value='$langModify'></td>
+        <td class='right'><input class='btn btn-primary' type='submit' value='$langModify'></td>
         </tr></table>
         </fieldset>
         </form>";
@@ -185,7 +185,7 @@ elseif (isset($_GET['forumcatedit'])) {
         </tr>
         <tr>
         <th>&nbsp;</th>
-        <td class='right'><input type='submit' value='$langModify'></td>
+        <td class='right'><input class='btn btn-primary' type='submit' value='$langModify'></td>
         </tr>
         </table>
         </fieldset>
@@ -363,7 +363,7 @@ elseif (isset($_GET['forumgodel'])) {
        }
        $tool_content .= "</select></td></tr>
        <tr><th>&nbsp;</th>
-       <td class='right'><input type='submit' value='$langModify'></td>
+       <td class='right'><input class='btn btn-primary' type='submit' value='$langModify'></td>
        </tr></table>
        </fieldset>
        </form>";

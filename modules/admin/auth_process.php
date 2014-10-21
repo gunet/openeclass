@@ -294,7 +294,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
 		<tr><th class='left'>$langPass: </th>
 		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='" . q($test_password) . "' autocomplete='off'></td></tr>";
     }
-    $tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
+    $tool_content .= "<tr><th>&nbsp;</th><td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>";
     $tool_content .= "</table></fieldset></form>";
 }
 

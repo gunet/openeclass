@@ -404,7 +404,7 @@ $tool_content .= "<tr>
       </tr>
       <tr>
         <td>&nbsp;</td>
-        <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
+        <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify' /></td>
       </tr>
       </table>
       </fieldset>

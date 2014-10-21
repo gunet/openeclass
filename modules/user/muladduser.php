@@ -91,7 +91,7 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
                </tr>
                <tr>
                    <th class='right'>
-                       <input type='submit' name='submit' value='$langAdd'>
+                       <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
                    </th>
                </tr>
            </table>

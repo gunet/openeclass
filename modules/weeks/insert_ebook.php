@@ -109,7 +109,7 @@ function list_ebooks() {
         }
         $tool_content .= "<tr>" .
                 "<th colspan='2'><div align='right'>" .
-                "<input type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></th>" .
+                "<input class='btn btn-primary' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></th>" .
                 "</tr></table></form>";
     }
 }

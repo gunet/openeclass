@@ -391,7 +391,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     
 	$tool_content .= "<tr>
 	  <th>&nbsp;</th>
-	  <td class='left'><input type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
+	  <td class='left'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
 	  $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
 	</tr>
         </table>

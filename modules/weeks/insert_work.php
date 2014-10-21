@@ -76,7 +76,7 @@ function list_assignments() {
         }
         $tool_content .= "<tr>" .
                 "<th colspan='4'><div align='right'>" .
-                "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
+                "<input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' />" .
                 "</div></th>" .
                 "</tr>" .
                 "</table>" .

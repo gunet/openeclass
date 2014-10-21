@@ -115,7 +115,7 @@ else {
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td class='right'><input type='submit' name='submit' value='$langModify'></td>
+	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
 	</tr>
 	</tbody>
 	</table>

@@ -645,7 +645,7 @@ else {
           </tr>
           </table>
           </fieldset>
-	    <input type='submit' name='submit' value='$langModify'>
+	    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
         </form>";
 
     // Modal dialogs

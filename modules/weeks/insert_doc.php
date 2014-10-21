@@ -202,7 +202,7 @@ function list_docs() {
             }
         }
         $tool_content .= "<tr><th colspan=$colspan><div align='right'>";
-        $tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
         $tool_content .= "</tr></table>$dir_html</form>\n";
     }
 }

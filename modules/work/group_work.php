@@ -128,7 +128,7 @@ function show_assignments() {
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td><input type='submit' name='submit' value='$langSubmit'></td>
+	  <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
 	</tr>
 	</table>
 	</form>";

@@ -288,13 +288,13 @@ if (!$questionList) {
       </table>");
 } else {
     echo "<br/><table width='100%' class='tbl'><tr>
-               <td><div class='right'><input type='submit' value=\"";
+               <td><div class='right'><input class='btn btn-primary' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langCont\" />&nbsp;";
     } else {
         echo $langNext . " &gt;" . "\" />";
     }
-    echo "<input type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
+    echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
               <tr>
                 <td colspan=\"2\">&nbsp;</td>
               </tr>

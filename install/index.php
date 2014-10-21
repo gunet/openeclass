@@ -373,7 +373,7 @@ elseif (isset($_POST['install6'])) {
 		</ul>
 		<p>$langBackStep3_2</p><br />
 		<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-		<input type='submit' name='install3' value='&lt; $langBackStep3' />"
+		<input class='btn btn-primary' type='submit' name='install3' value='&lt; $langBackStep3' />"
                 . hidden_vars($all_vars) .
                 "</form>";
         draw($tool_content);
@@ -413,7 +413,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	<br />
 	<div>$langProtect</div>
 	<br /><br />
-	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
+	<form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
     draw($tool_content);
 }

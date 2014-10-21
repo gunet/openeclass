@@ -60,7 +60,7 @@ function unpack_zip_show_files($zipfile) {
                         <b>$course</b> ($file)</li>\n";
         $checked = '';
     }
-    $retString .= "</ol><br /><input type='submit' name='do_restore' value='$langRestore' /></form>";
+    $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' /></form>";
     chdir($webDir);
     return $retString;
 }
@@ -249,7 +249,7 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                        <td><input type='checkbox' name='create_users' value='1' id='create_users'></td></tr>
                    <tr><td>&nbsp;</td></tr>
                    <tr><td colspan='2'>
-                      <input type='submit' name='create_restored_course' value='$langOk' />
+                      <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' /></td></tr>
                 </tbody></table>
                 </form>";

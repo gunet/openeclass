@@ -414,7 +414,7 @@ foreach ($_REQUEST as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 
-$tool_content .= "<input type='submit' name='dellall_submit' value='$langDelList'></form></div>";
+$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'></form></div>";
 //$tool_content .= "<p align='center'><a href='search_user.php?$pagination_link'>$langBack</a></p>";
 $tool_content .= action_bar(array(
     array('title' => $langBack,

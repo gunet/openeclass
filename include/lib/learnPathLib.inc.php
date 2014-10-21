@@ -136,7 +136,7 @@ function commentBox($type, $mode) {
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 " . rich_text_editor('insertCommentBox', 1, 50, $oldComment) . "
                 <input type='hidden' name='cmd' value='update$col_name' />
-                <input type='submit' value=$langSubmit /></form>";
+                <input class='btn btn-primary' type='submit' value=$langSubmit /></form>";
         }
     }
 

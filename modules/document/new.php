@@ -80,7 +80,7 @@ if ($can_upload) {
     </tr>
 	<tr>
       <td class='right' colspan=2>
-        <input type='submit' value='" . $langSubmit . "'>
+        <input class='btn btn-primary' type='submit' value='" . $langSubmit . "'>
       </td>
     </tr>
   </table>

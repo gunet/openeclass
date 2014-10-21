@@ -254,7 +254,7 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\" /></td>
+      <td><input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\" /></td>
     </tr>
     </table>
     </fieldset>

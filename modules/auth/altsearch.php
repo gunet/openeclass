@@ -511,7 +511,7 @@ function user_info_form() {
            </tr>
            <tr>
              <th class='left'>&nbsp;</th>
-             <td colspan='2'><input type='submit' name='submit' value='" . q($langRegistration) . "' />
+             <td colspan='2'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
                  <input type='hidden' name='p' value='$prof'>";
     if (isset($_SESSION['shib_uname'])) {
         $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['shib_uname']) . "' />";

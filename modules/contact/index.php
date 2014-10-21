@@ -87,7 +87,7 @@ function form() {
 	  <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
 	</tr>
 	<tr>
-	  <td class='right'><input type='submit' name='submit' value='$langSendMessage' /></td>
+	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSendMessage' /></td>
 	</tr>
 	</tbody>
 	</table>

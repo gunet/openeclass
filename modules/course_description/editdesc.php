@@ -70,7 +70,7 @@ $tool_content = "
    <legend>$langDescription</legend>
          " . rich_text_editor('edContentBloc', 4, 20, $description) . "
    <br />
-   <div class='right'><input type='submit' name='submit' value='$langSubmit' /></div>
+   <div class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></div>
    </fieldset>
  </form>\n";
 

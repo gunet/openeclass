@@ -311,7 +311,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
     $tool_content .= "
         </tr>";
     $tool_content .= "</table>
-            <input type='submit' name='submitEvent' value='$langAdd' />
+            <input class='btn btn-primary' type='submit' name='submitEvent' value='$langAdd' />
             </form> 
             <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
                 <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>

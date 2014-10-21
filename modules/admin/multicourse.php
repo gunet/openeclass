@@ -265,7 +265,7 @@ if (isset($_POST['submit'])) {
         <tr>
             <th>&nbsp;</th>
             <td class='right'>
-            <input type='submit' name='submit' value='" . q($langSubmit) . "'></td>
+            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'></td>
         </tr>
         </table>
         </fieldset>

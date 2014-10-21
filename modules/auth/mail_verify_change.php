@@ -94,7 +94,7 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
                 </tr>
                 <tr>
                         <th class='left'>&nbsp;</th>
-                        <td colspan='2'><input type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
+                        <td colspan='2'><input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
                 </tr>
                 </table>               
         </fieldset>

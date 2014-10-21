@@ -159,7 +159,7 @@ if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
             . "</td>
     </tr>
     <tr>
-      <td class='right'><input type='submit' name='submitNote' value='$langAdd' /></td>
+      <td class='right'><input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'></td>
     </tr>
     </table>
     <input type='hidden' name='id' value='$noteToModify' />

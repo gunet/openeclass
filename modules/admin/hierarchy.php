@@ -275,7 +275,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
       </tr>
       <tr>
         <th>&nbsp;</th>
-        <td class='right'><input type='submit' name='add' value='" . $langAdd . "' /></td>
+        <td class='right'><input class='btn btn-primary' type='submit' name='add' value='" . $langAdd . "' /></td>
       </tr>
     </table>
     </fieldset>
@@ -426,7 +426,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
            <input type='hidden' name='parentLft' value='" . $parentLft->lft . "'/>
            <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
            <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
-           <input type='submit' name='edit' value='$langAcceptChanges' />
+           <input class='btn btn-primary' type='submit' name='edit' value='$langAcceptChanges' />
            </td>
        </tr>
        </table>

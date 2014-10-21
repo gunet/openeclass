@@ -125,7 +125,7 @@ function printPollForm() {
         if ($is_editor) {
             $tool_content .= "<p><a href='index.php?course=$course_code'>".q($langBack)."</a></p>";
         } else {
-            $tool_content .= "<input name='submit' type='submit' value='".q($langSubmit)."'></p></form>";
+            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'></p></form>";
         }
     } else {
         Session::Messages($langPollInactive);

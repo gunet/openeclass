@@ -223,7 +223,7 @@ if ($is_editor) {
                    <th>$langGlossaryExpand:
                      <input type='checkbox' name='expand' value='yes'$checked_expand>
                    </th>
-                   <td class='right' width='10'><input type='submit' name='submit_config' value='$langSubmit'></td>
+                   <td class='right' width='10'><input class='btn btn-primary' type='submit' name='submit_config' value='$langSubmit'></td>
                  </tr>
                  </table>               
               </form>";
@@ -291,7 +291,7 @@ if ($is_editor) {
                  $category_selection
                  <tr>
                    <th>&nbsp;</th>
-                   <td class='right'><input type='submit' name='submit' value='$submit_value'></td>
+                   <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$submit_value'></td>
                  </tr>
                  </table>               
              </form>";

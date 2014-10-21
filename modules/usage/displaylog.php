@@ -210,7 +210,7 @@ $tool_content .= "</td></tr>
         </tr>
         <tr>
         <td>&nbsp;</td>
-        <td><input type='submit' name='submit' value='$langSubmit'>
+        <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
         </td>
         </tr>
         </table>

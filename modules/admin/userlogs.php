@@ -199,7 +199,7 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
         <tr class='course'><th class='left'>$langLogModules:</th>
             <td>" . selection($module_names, 'u_module_id', $m) . "</td></tr>
         <tr><th class='left'>&nbsp;</th>
-            <td><input type='submit' name='submit' value='$langSubmit'></td></tr>
+            <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td></tr>
       </table>
     </fieldset>
     <input type='hidden' name='u' value='$u'>

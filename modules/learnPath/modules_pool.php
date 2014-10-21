@@ -180,7 +180,7 @@ switch ($cmd) {
                     <input type='hidden' name='cmd' value='exComment'>
                     <input type='hidden' name='module_id' value='$module_id'>
                     </td></tr>
-                    <tr><td><input type='submit' value='$langImport'>
+                    <tr><td><input class='btn btn-primary' type='submit' value='$langImport'>
                     </td></tr></table>
                     </form><br />";
             } else {
@@ -190,7 +190,7 @@ switch ($cmd) {
                         . "</td></tr></table>\n"
                         . "<input type='hidden' name='cmd' value='exComment'>\n"
                         . "<input type='hidden' name='module_id' value='$module_id'>\n"
-                        . "<input type='submit' value='$langOk'>\n"
+                        . "<input class='btn btn-primary' type='submit' value='$langOk'>\n"
                         . "<br /><br />\n"
                         . "</form>\n";
             }

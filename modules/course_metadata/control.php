@@ -219,7 +219,7 @@ $tool_content .= <<<EOF
     </tr>
     </tbody></table>
     <br/>
-    <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
+    <p class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></p>
     </form>
     <br/><br/>
     $lastSubmission

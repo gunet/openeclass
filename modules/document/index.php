@@ -490,7 +490,7 @@ if ($can_upload) {
                     <tr>
                       <td><b>" . q($fileName) . "</b> $langIn:
                         <input type='text' name='renameTo' value='" . q($fileName) . "' size='50' /></td>
-                      <td class='right'><input type='submit' value='$langRename' /></td>
+                      <td class='right'><input class='btn btn-primary' type='submit' value='$langRename' /></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -741,7 +741,7 @@ if ($can_upload) {
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
-                        <td class='right'><input type='submit' value='$langOkComment' /></td>
+                        <td class='right'><input class='btn btn-primary' type='submit' value='$langOkComment' /></td>
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
@@ -777,7 +777,7 @@ if ($can_upload) {
                                         <tr>
                                                 <td>$replacemessage</td>
                                                 <td><input type='file' name='newFile' size='35' /></td>
-                                                <td><input type='submit' value='$langReplace' /></td>
+                                                <td><input class='btn btn-primary' type='submit' value='$langReplace' /></td>
                                         </tr>
                                         </table>
                                 </fieldset>
@@ -872,7 +872,7 @@ if ($can_upload) {
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
-                        <td class='right'><input type='submit' value='$langOkComment' /></td>
+                        <td class='right'><input class='btn btn-primary' type='submit' value='$langOkComment' /></td>
                         </tr>
                         <tr>
                         <th>&nbsp;</th>

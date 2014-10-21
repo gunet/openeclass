@@ -28,7 +28,7 @@ function display_text_form() {
         <fieldset>
         <legend>$langContent:</legend>" . rich_text_editor('comments', 4, 20, '') . "
 	<br />
-        <input type='submit' name='submit_text' value='$langAdd'>
+        <input class='btn btn-primary' type='submit' name='submit_text' value='$langAdd'>
 	</fieldset>
 	</form>";
 }

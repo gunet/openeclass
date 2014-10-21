@@ -1214,7 +1214,7 @@ EOF;
 
         $tool_content .= "\n  <tr class='nobrd'>";
         $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'><input type='submit' value='" . $langImport . "'></td>";
+        $tool_content .= "\n    <td colspan='3' class='right'><input class='btn btn-primary' type='submit' value='" . $langImport . "'></td>";
         $tool_content .= "\n  </tr>";
     }
 

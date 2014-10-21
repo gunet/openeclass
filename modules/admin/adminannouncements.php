@@ -216,7 +216,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             <span class='smaller'><input type='checkbox' name='end_date_active' " .
             "$end_checkbox onClick=\"toggle(2,this,'end_date')\">&nbsp;" .
             "$langActivate</span></td></tr>
-        <tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit'></td></tr>
+        <tr><td class='right'><input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'></td></tr>
     </table></fieldset></form>";
 }
 

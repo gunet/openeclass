@@ -90,7 +90,7 @@ else {
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td colspan='2' class='right'><input type='submit' name='submit' value='$langModify'></td>
+	<td colspan='2' class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
 	</tr>
 	</table></fieldset>
 	</form>";

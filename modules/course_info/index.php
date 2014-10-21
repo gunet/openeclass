@@ -646,7 +646,7 @@ if (isset($_POST['submit'])) {
             </table>
     </fieldset>";
 
-    $tool_content .= "<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+    $tool_content .= "<p class='pull-right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
 
