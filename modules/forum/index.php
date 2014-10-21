@@ -94,7 +94,7 @@ $total_categories = count($categories);
 if ($total_categories > 0) {
     $forum_row = Database::get()->queryArray("SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
 		FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
-                AND f.course_id = ?d
+                WHERE f.course_id = ?d
 		ORDER BY f.cat_id, f.id", $course_id);
 
     foreach ($categories as $cat_row) {
