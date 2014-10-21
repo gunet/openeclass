@@ -379,10 +379,8 @@ if(isset($_GET['modifyAnswers'])) {
 				list($reponse,$weighting)=explode('::',$reponse);
 				$weighting=explode(',',$weighting);
 				// keys of the array go from 1 to N and not from 0 to N-1
-				array_unshift($weighting, 0);
-			}
-			elseif(!isset($_POST['modifyIn']))
-			{
+				//array_unshift($weighting, 0);
+			} else {
 				$weighting = explode(',', $_POST['str_weighting']);
 			}
 		}
