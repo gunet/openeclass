@@ -265,7 +265,7 @@ if ($is_editor) {
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
             </div>
-            <div class='input-append bootstrap-timepicker' id='durationcal'>
+            <div class='input-append bootstrap-timepicker form-group' id='durationcal'>
                 <label for='Duration' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
                 <div class='col-xs-10 col-sm-9'>
                     <input name='duration' id='duration' type='text' class='input-small' value='" . $duration . "'>
