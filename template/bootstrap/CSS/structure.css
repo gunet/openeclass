@@ -211,7 +211,6 @@ a.toggle-active {
     position: relative;
     width: 18.5em;
     right: -18.5em;
-    padding: 1.6em 0;
     background-color: #DEE0E2;
     word-wrap: break-word;
     -webkit-user-select: none;
@@ -222,26 +221,141 @@ a.toggle-active {
     #sidebar-container #sidebar .panel-group.outerpanel {
       padding: 0px;
       margin: 0px; }
+      #sidebar-container #sidebar .panel-group.outerpanel .sidebar-title {
+        margin: 0;
+        font-weight: 600;
+        padding-left: 13px;
+        font-size: 0.75em;
+        text-transform: uppercase;
+        padding: 1.8em;
+        background: #e3e4e6; }
+      #sidebar-container #sidebar .panel-group.outerpanel .title {
+        margin: 0;
+        padding: 2em 0em !important;
+        font-weight: 700;
+        font-size: 0.8em;
+        text-align: center;
+        overflow: hidden;
+        text-transform: uppercase; }
+        #sidebar-container #sidebar .panel-group.outerpanel .title i.fa {
+          display: block;
+          opacity: .9;
+          font-size: 2.3em;
+          margin-top: 0.4em; }
+        #sidebar-container #sidebar .panel-group.outerpanel .title .tricky {
+          margin-left: -100%;
+          width: 200%;
+          position: relative;
+          height: 45px;
+          -webkit-transition: margin-left 120ms linear;
+          -moz-transition: margin-left 120ms linear;
+          -o-transition: margin-left 120ms linear;
+          -ms-transition: margin-left 120ms linear;
+          transition: margin-left 120ms linear; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title .tricky > div {
+            display: inline-block;
+            width: 49%;
+            height: 100%;
+            position: relative;
+            top: 0px;
+            vertical-align: middle;
+            padding: 0.5em 0em;
+            -webkit-transition: opacity 60ms linear;
+            -moz-transition: opacity 60ms linear;
+            -o-transition: opacity 60ms linear;
+            -ms-transition: opacity 60ms linear;
+            transition: opacity 60ms linear; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title .tricky .icon {
+            opacity: 1; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title .tricky .description {
+            font-weight: 400;
+            padding: 0.5em 1em;
+            opacity: 0; }
+        #sidebar-container #sidebar .panel-group.outerpanel .title:hover:not(.ui-accordion-header-active) .tricky {
+          margin-left: 0%; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .description {
+            opacity: .55; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .icon {
+            opacity: 0; }
+        #sidebar-container #sidebar .panel-group.outerpanel .title:hover:not(.ui-accordion-header-active) .txt {
+          color: #4da1e4; }
+        #sidebar-container #sidebar .panel-group.outerpanel .title.ui-accordion-header-active .tricky {
+          margin-left: 0%; }
+          #sidebar-container #sidebar .panel-group.outerpanel .title.ui-accordion-header-active .tricky .description {
+            opacity: .55; }
+      #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-content,
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-header-active {
+          background: rgba(255, 255, 255, 0.3); }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-content {
+          padding: 1em 0em; }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel textarea, #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel input {
+          width: 90%;
+          margin: 0em auto 1em auto;
+          display: block; }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel textarea {
+          min-height: 12em; }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel button {
+          margin: 1.1em;
+          margin-top: 0em;
+          font-size: 0.8em; }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel .goto {
+          float: right;
+          color: #7E7E7E;
+          padding: 0.5em;
+          margin-right: 0.5em; }
+        #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel .input-parent {
+          position: relative; }
+          #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel .input-parent textarea, #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel .input-parent input {
+            padding-left: 2em; }
+          #sidebar-container #sidebar .panel-group.outerpanel li.outerpanel .input-parent .fa {
+            position: absolute;
+            top: 0.7em;
+            left: 1.5em;
+            z-index: 9;
+            opacity: 0.2; }
       #sidebar-container #sidebar .panel-group.outerpanel .panel {
         border: none;
-        margin: 0px; }
+        margin: 0px;
+        background-color: #dddddd; }
       #sidebar-container #sidebar .panel-group.outerpanel .panel-heading {
         background-image: none;
-        border: none; }
-    #sidebar-container #sidebar h1, #sidebar-container #sidebar h2, #sidebar-container #sidebar h3, #sidebar-container #sidebar h4, #sidebar-container #sidebar h5, #sidebar-container #sidebar h6 {
-      color: #686868;
-      font-weight: 600; }
-    #sidebar-container #sidebar ul, #sidebar-container #sidebar li {
-      list-style-type: none;
-      padding: 0em;
-      margin: 0em; }
-  #sidebar-container .innerpanel .panel-heading {
-    padding: 0px; }
-    #sidebar-container .innerpanel .panel-heading h4 {
-      margin: 0px; }
+        border: none;
+        background-color: #DEE0E2; }
+        #sidebar-container #sidebar .panel-group.outerpanel .panel-heading h4 {
+          cursor: pointer; }
+      #sidebar-container #sidebar .panel-group.outerpanel .innerpanel {
+        margin-bottom: 0px; }
+        #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-body {
+          background: #253447;
+          border-top: none;
+          color: rgba(255, 255, 255, 0.9); }
+        #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading {
+          margin: 0px;
+          padding: 0px; }
+          #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading h4 {
+            margin-left: 0px;
+            margin-right: 0px;
+            border: none;
+            border-radius: 0px; }
+  #sidebar-container h1, #sidebar-container h2, #sidebar-container h3, #sidebar-container h4, #sidebar-container h5, #sidebar-container h6 {
+    color: #686868;
+    font-weight: 600; }
+  #sidebar-container ul, #sidebar-container li {
+    list-style-type: none;
+    padding: 0em;
+    margin: 0em; }
 
 #sidebar .side-list {
-  padding-bottom: 1em; }
+  background: #253447;
+  border-top: none;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 16px; }
+  #sidebar .side-list:last-of-type {
+    border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0px 0px 4px 4px;
+    -moz-border-radius: 0px 0px 4px 4px; }
   #sidebar .side-list .lesson-title {
     background: #344458;
     font-size: 0.85em;
@@ -284,17 +398,7 @@ a.toggle-active {
         -moz-border-radius: 0px; }
       #sidebar .side-list .lesson-title.ui-accordion-header-active:after {
         color: #4da1e4; }
-  #sidebar .side-list > div {
-    background: #253447;
-    border-top: none;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 16px; }
-    #sidebar .side-list > div:last-of-type {
-      border-radius: 0px 0px 4px 4px;
-      -webkit-border-radius: 0px 0px 4px 4px;
-      -moz-border-radius: 0px 0px 4px 4px; }
   #sidebar .side-list ul {
-    padding: 0em 2em 1em 1.35em;
     font-size: 0.75em; }
     #sidebar .side-list ul > li {
       padding: 5px 0em; }
@@ -328,101 +432,6 @@ a.toggle-active {
       #sidebar .side-list .lesson-notifications .item .fa {
         font-size: 1.2em;
         color: rgba(255, 255, 255, 0.8); }
-
-#sidebar .outerpanel .sidebar-title {
-  margin: 0;
-  font-weight: 600;
-  padding-left: 13px;
-  font-size: 0.75em;
-  text-transform: uppercase;
-  padding: 1.8em;
-  background: #e3e4e6; }
-#sidebar .outerpanel .title {
-  margin: 0;
-  padding: 2em 0em !important;
-  font-weight: 700;
-  font-size: 0.8em;
-  text-align: center;
-  overflow: hidden;
-  text-transform: uppercase; }
-  #sidebar .outerpanel .title i.fa {
-    display: block;
-    opacity: .9;
-    font-size: 2.3em;
-    margin-top: 0.4em; }
-  #sidebar .outerpanel .title .tricky {
-    margin-left: -100%;
-    width: 200%;
-    position: relative;
-    height: 45px;
-    -webkit-transition: margin-left 120ms linear;
-    -moz-transition: margin-left 120ms linear;
-    -o-transition: margin-left 120ms linear;
-    -ms-transition: margin-left 120ms linear;
-    transition: margin-left 120ms linear; }
-    #sidebar .outerpanel .title .tricky > div {
-      display: inline-block;
-      width: 49%;
-      height: 100%;
-      position: relative;
-      top: 0px;
-      vertical-align: middle;
-      padding: 0.5em 0em;
-      -webkit-transition: opacity 60ms linear;
-      -moz-transition: opacity 60ms linear;
-      -o-transition: opacity 60ms linear;
-      -ms-transition: opacity 60ms linear;
-      transition: opacity 60ms linear; }
-    #sidebar .outerpanel .title .tricky .icon {
-      opacity: 1; }
-    #sidebar .outerpanel .title .tricky .description {
-      font-weight: 400;
-      padding: 0.5em 1em;
-      opacity: 0; }
-  #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky {
-    margin-left: 0%; }
-    #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .description {
-      opacity: .55; }
-    #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .tricky .icon {
-      opacity: 0; }
-  #sidebar .outerpanel .title:hover:not(.ui-accordion-header-active) .txt {
-    color: #4da1e4; }
-  #sidebar .outerpanel .title.ui-accordion-header-active .tricky {
-    margin-left: 0%; }
-    #sidebar .outerpanel .title.ui-accordion-header-active .tricky .description {
-      opacity: .55; }
-#sidebar .outerpanel li.outerpanel {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
-  #sidebar .outerpanel li.outerpanel > .ui-accordion-content,
-  #sidebar .outerpanel li.outerpanel > .ui-accordion-header-active {
-    background: rgba(255, 255, 255, 0.3); }
-  #sidebar .outerpanel li.outerpanel > .ui-accordion-content {
-    padding: 1em 0em; }
-  #sidebar .outerpanel li.outerpanel textarea, #sidebar .outerpanel li.outerpanel input {
-    width: 90%;
-    margin: 0em auto 1em auto;
-    display: block; }
-  #sidebar .outerpanel li.outerpanel textarea {
-    min-height: 12em; }
-  #sidebar .outerpanel li.outerpanel button {
-    margin: 1.1em;
-    margin-top: 0em;
-    font-size: 0.8em; }
-  #sidebar .outerpanel li.outerpanel .goto {
-    float: right;
-    color: #7E7E7E;
-    padding: 0.5em;
-    margin-right: 0.5em; }
-  #sidebar .outerpanel li.outerpanel .input-parent {
-    position: relative; }
-    #sidebar .outerpanel li.outerpanel .input-parent textarea, #sidebar .outerpanel li.outerpanel .input-parent input {
-      padding-left: 2em; }
-    #sidebar .outerpanel li.outerpanel .input-parent .fa {
-      position: absolute;
-      top: 0.7em;
-      left: 1.5em;
-      z-index: 9;
-      opacity: 0.2; }
 
 /* ACCORDIONS --------------------------------------------------------------------*/
 .accordion {
