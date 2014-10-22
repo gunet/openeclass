@@ -52,7 +52,7 @@ if (!class_exists('Question')):
             $this->weighting = 0;
             $this->position = 1;
             $this->type = 1;
-            $this->difficulty = 3;
+            $this->difficulty = 0;
             $this->exerciseList = array();
         }
 

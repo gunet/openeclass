@@ -23,12 +23,31 @@ load_js('bootstrap-slider');
 $head_content .= " 
 <script>
 $(function() {
-    var diffArray = ['$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
+    var diffArray = ['Δεν έχει ορισθεί','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
+        tooltip: 'hide',
 	formatter: function(value) {
-		return diffArray[value-1]+' ('+value+')';
+            $('#questionDifficultyValue').text(diffArray[value]);
+            removeLabel();
+            addLabel(value);
 	}    
     });
+    $('#questionDifficulty').on('slide', function(slideEvt) {
+        $('#questionDifficultyValue').text(diffArray[slideEvt.value]);
+        removeLabel();
+        addLabel(slideEvt.value);
+    });
+    function removeLabel() {
+        $('#questionDifficultyValue').removeClass(function (index, css) {
+            return (css.match (/\blabel-\S+/g) || []).join(' ');
+        });
+    }
+    function addLabel(value) {
+        if (value == 0) $('#questionDifficultyValue').addClass('label-default');        
+        else if(value>0  && value < 3) $('#questionDifficultyValue').addClass('label-success');
+        else if (value == 3) $('#questionDifficultyValue').addClass('label-warning');
+        else if (value > 3 && value <= 5) $('#questionDifficultyValue').addClass('label-danger');
+    }    
     $('input[name=answerType]').click(hideGrade);
     $('input#free_text_selector').click(showGrade);
     function hideGrade(){
@@ -157,7 +176,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             <div class='form-group'>
                 <label for='questionDifficulty' class='col-sm-2 control-label'>Βαθμός δυσκολίας:</label>
                 <div class='col-sm-10'>
-                    <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
+                    <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>                      
+                </div>
+                <div class='col-sm-1'>
+                <span id='questionDifficultyValue' class='label label-default'></span>  
                 </div>
             </div>            
             <div class='form-group'>

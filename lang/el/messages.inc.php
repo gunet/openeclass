@@ -1456,6 +1456,7 @@ $langDeletePicture = "Διαγραφή της εικόνας";
 $langQuestionDescription = "Προαιρετικό σχόλιο";
 $langGiveQuestion = "Δώστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
+$langQuestionNotDefined = "Δεν έχει ορισθεί";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Eύκολη";
 $langQuestionModerate = "Μέτρια";

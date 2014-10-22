@@ -886,7 +886,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `weight` FLOAT(11,2) DEFAULT NULL,
                 `q_position` INT(11) DEFAULT 1,
                 `type` INT(11) DEFAULT 1,
-                `difficulty` INT(1) DEFAULT 3) $charset_spec");
+                `difficulty` INT(1) DEFAULT 0) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `question_id` INT(11) NOT NULL DEFAULT 0,

@@ -2760,6 +2760,7 @@ $langTrueFalse = "True / False";
 $langFreeText = "Free Text";
 $langFalse = "False";
 $langInvalidPicture = "Invalide picture type";
+$langQuestionVeryEasy = "Not defined";
 $langQuestionVeryEasy = "Very easy";
 $langQuestionEasy = "Easy";
 $langQuestionModerate = "Moderate";
