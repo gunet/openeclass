@@ -255,9 +255,9 @@ if (isset($_GET['down'])) {
     move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
 }
 
-$resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
+$countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
 
-if (count($resultcategories) > 0) {   
+if ($countlinks > 0) {
     $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND (category = 0 OR category IS NULL)", $course_id));
     // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
     // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
@@ -333,7 +333,7 @@ if (count($resultcategories) > 0) {
         $i++;
     }
     $tool_content .= "</table>";
-} else {   // no category   
+} else {   // no links
     $tool_content .= "<div class='alert alert-warning text-center'>$langNoLinksExist</div>";
 }
 add_units_navigation(true);
