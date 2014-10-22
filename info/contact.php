@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -27,19 +27,18 @@ $nameTools = $contactpoint;
 $postaddress = nl2br(q(get_config('postaddress')));
 $Institution = q(get_config('institution'));
 $phone = q(get_config('phone'));
-$phonemessage = empty($phone) ? '' : "<tr><th>$langPhone</th><td>$phone</td></tr>";
 $fax = q(get_config('fax'));
-$faxmessage = empty($fax) ? '' : "<tr><th>$langFax</th><td>$fax</td></tr>";
+$phonemessage = empty($phone) ? '' : "<label>$langPhone:&nbsp;</label>$phone<br>";
+$faxmessage = empty($fax) ? '' : "<label>$langFax</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
 
-$tool_content .= "
-<table class='tbl_1' width='100%'>
-<tr><th width='155'>$langPostMail</th><td> $Institution<br> $postaddress </td>
-</tr>
+$tool_content .= "<div class='alert alert-info col-sm-10 page-header'>
+<label>$langPostMail&nbsp;</label>$Institution<br> $postaddress 
+
 $phonemessage
 $faxmessage
-<tr><th><b>$langEmail:</b></th><td>" . mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk)) . "</td>
-</table>";
+<label>$langEmail:&nbsp;</label>" . mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk)) . "
+</div>";
 
 if (isset($uid) and $uid) {
     draw($tool_content, 1);
