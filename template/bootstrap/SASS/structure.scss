@@ -167,8 +167,7 @@ body > .container{
     border: 0;
     background-color: $color-header;
     border-bottom: 1px solid #DBDBDB;
-
-
+    
 		.navbar-nav{
 			margin: 0;
 			float:right;
@@ -181,6 +180,7 @@ body > .container{
 				a {
 					padding-top: 15px;
 					padding-bottom: 15px;
+                                        line-height: 22px;
 
           @include transition(all $transition-time linear);
 
@@ -235,15 +235,11 @@ footer.footer
 
 
 /* SIDEBAR ------------------------------------------------------------------------------------ */
-
-
-
 a.toggle-active{
     background-color: #e3e4e6 !important;
 }
 
-#sidebar-container
-{
+#sidebar-container{
     display: none;
     position: absolute;
     width: 18.5em;
@@ -252,335 +248,325 @@ a.toggle-active{
     border-left: #c9c9c9;
     border-bottom: #c9c9c9;
 
-    #sidebar
-    {
+    #sidebar{
         position: relative;
         width: 18.5em;
         right: -18.5em;
-        padding: 1.6em 0;
+        //padding: 1.6em 0;
         background-color: $color-sidebar;
         word-wrap:break-word;
         @include user-select(none);
 
-        .panel-group.outerpanel
-        {
+        .panel-group.outerpanel{
             padding: 0px;
             margin: 0px;
 
-            .panel
+            .sidebar-title
             {
+                margin: 0;
+                font-weight: 600;
+                padding-left: 13px;
+                font-size: 0.75em; 
+                text-transform: uppercase;
+                padding: 1.8em;
+
+                background: rgb(227, 228, 230);
+            }
+
+            .title
+            {
+
+                margin: 0;
+                padding: 2em 0em!important;
+                font-weight: 700;
+                font-size: 0.8em;
+                text-align: center;
+                overflow: hidden;
+                text-transform: uppercase;
+
+                i.fa
+                {
+                    display: block;
+                    opacity:.9;
+                    font-size: 2.3em;
+
+                    margin-top: 0.4em;
+                }
+                .tricky
+                {
+
+                    margin-left:-100%;
+                    width: 200%;
+                    position: relative;
+                    height: 45px;
+                    @include transition(margin-left $transition-time linear);
+
+                    > div{        
+                        display: inline-block;
+                        width: 49%;
+                        height: 100%;
+                        position: relative;
+                        top: 0px;
+                        vertical-align: middle;
+                        padding: 0.5em 0em;
+
+                        @include transition(opacity 60ms linear);  
+                    }
+
+                    .icon{
+                        opacity: 1;
+                    }
+
+                    .description{
+                        font-weight: 400;
+                        padding:0.5em 1em;
+                        opacity: 0;
+                    }
+                }
+
+                &:hover:not(.ui-accordion-header-active){
+                    .tricky{
+                        margin-left: 0%;
+
+                        .description{
+                            opacity: .55;
+                        }
+
+                        .icon{
+                            opacity:0;
+                        }
+
+                    }
+
+                    .txt{
+                        color:$color-hover;
+                    }
+                }
+
+                &.ui-accordion-header-active{
+                    .tricky{
+                        margin-left: 0%;
+                        .description{
+                            opacity: .55;
+                        }
+                    }
+                }
+
+            }
+
+            li.outerpanel{
+                border-bottom: 1px solid rgba(0,0,0,.05);
+
+                > .ui-accordion-content,
+                > .ui-accordion-header-active {
+                    background: rgba(255,255,255,.3);
+                }
+
+                > .ui-accordion-content{
+                    padding:1em 0em;
+                }
+
+                textarea,input{
+                    width: 90%;
+                    margin: 0em auto 1em auto;
+                    display: block;
+                }
+
+                textarea{ 
+                    min-height: 12em;
+                }
+
+                button{
+                    margin: 1.1em;
+                    margin-top: 0em;
+                    font-size: 0.8em;
+                }
+
+                .goto{
+                    float: right;
+                    color: #7E7E7E;
+                    padding: 0.5em;
+                    margin-right: 0.5em;
+                }
+
+                .input-parent{
+                    position: relative;
+
+                    textarea,input{
+                        padding-left:2em;
+                    }
+
+                    .fa{
+                        position: absolute;
+                        top: 0.7em;
+                        left: 1.5em;
+                        z-index: 9;
+                        opacity: 0.2;
+                    }
+                }
+            }
+
+            .panel{
                 border: none;
                 margin: 0px;
+                background-color: #dddddd;
             }
 
-            .panel-heading
-            {
+            .panel-heading{
                 background-image: none;
                 border: none;
+                background-color: #DEE0E2;
+
+                h4{
+                    cursor: pointer;
+                }
+            }
+
+            .innerpanel{
+                margin-bottom:0px;
+
+                .panel-body{
+                    background: #253447;
+                    border-top: none;
+                    color: rgba(255, 255, 255, 0.9);
+                }
+                .panel-heading{
+                    margin: 0px;
+                    padding: 0px;
+
+                    h4{
+                        margin-left: 0px;
+                        margin-right: 0px;
+                        border: none;
+                        border-radius: 0px;
+                    }
+                }
+
             }
         }
-        h1,h2,h3,h4,h5,h6{
-            color: #686868;
-            font-weight: 600;
-        }
-        ul,li{
-            list-style-type: none;
-            padding: 0em;
-            margin: 0em;
-        }
     }
-
-    .innerpanel .panel-heading
-    {
-        padding: 0px;
-
-        h4{
-            margin: 0px;
-        }
+    h1,h2,h3,h4,h5,h6{
+        color: #686868;
+        font-weight: 600;
+    }
+    ul,li{
+        list-style-type: none;
+        padding: 0em;
+        margin: 0em;
     }
 }
 #sidebar
 {
-  .side-list{
-    padding-bottom: 1em;
 
-    .lesson-title{
-      background: #344458;
-      font-size: 0.85em;
-      margin:0px;
-      padding: 10px 15px;
-      cursor: pointer;
-      position: relative;
-      outline: none;
-      color: rgba(255,255,255,0.5);
-      font-weight: 600;      
-      margin: 0 16px;
-      border: 1px solid #48586D;
-      border-top-width: 0px;
-      @include transition(all $transition-time linear);
-      //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
-      &:first-of-type{
-        border-top-width: 1px;
-        @include border-radius(4px 4px 0px 0px);
-      }
-
-      &:last-of-type{
-        @include border-radius(0px 0px 4px 4px);
-      }
-
-      &:hover{
-        background: #48586D;
-        color: rgba(255,255,255,0.85);
-
-        &:after{
-          color: rgba(255,255,255,.6);
-        }
-      }
-
-      &.ui-accordion-header-active{
-        border-bottom: none;
-        color: rgba(255,255,255,1);
-        background: #425164;
-
-      &:last-of-type{
-        @include border-radius(0px);
-      }
-
-        &:after{
-          color: $color-hover;
-        }
-      }
-    }
-
-    > div{
-
+    .side-list{
         background: #253447;
-        
         border-top: none;
-
         color: rgba(255,255,255,.9);
-
         margin: 0 16px;
 
         &:last-of-type{
-          @include border-radius(0px 0px 4px 4px);
-        }
-    }
-
-    ul{
-        padding:0em 2em 1em 1.35em;
-        font-size: 0.75em;
-
-        >li{
-          padding: 5px 0em;          
-        }
-    }
-
-    .lesson-id{
-      opacity: 0.5;
-      font-size:0.85em;
-      font-weight:700;
-    }
-
-    .lesson-professor{
-      font-weight: 600;
-      padding-top:0px;
-    }
-
-    .lesson-notifications{
-
-      margin-top:1em;
-
-      .item{
-        margin-right:1.5em;
-        position: relative;
-
-        .count{
-
-          position: absolute;
-          left: 0.8em;
-          bottom: 0.8em;
-
-          display: inline-block;
-          text-align: center;
-
-          background: $color-red;
-          color: white;
-
-          width: 1.5em;
-          height: 1.5em;
-
-          font-size:0.75em;
-          font-weight: 600;
-          //border: 2px solid #253447;
-
-          @include border-radius(0.75em);
+            @include border-radius(0px 0px 4px 4px);
         }
 
-        .fa{
-          font-size: 1.2em;
-          color: rgba(255,255,255,.8);
-        }    
-      }
+        .lesson-title{
+            background: #344458;
+            font-size: 0.85em;
+            margin:0px;
+            padding: 10px 15px;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;      
+            margin: 0 16px;
+            border: 1px solid #48586D;
+            border-top-width: 0px;
+            @include transition(all $transition-time linear);
+            //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
+            &:first-of-type{
+                border-top-width: 1px;
+                @include border-radius(4px 4px 0px 0px);
+            }
+
+            &:last-of-type{
+                @include border-radius(0px 0px 4px 4px);
+            }
+
+            &:hover{
+                background: #48586D;
+                color: rgba(255,255,255,0.85);
+
+                &:after{
+                    color: rgba(255,255,255,.6);
+                }
+            }
+
+            &.ui-accordion-header-active{
+                border-bottom: none;
+                color: rgba(255,255,255,1);
+                background: #425164;
+
+                &:last-of-type{
+                    @include border-radius(0px);
+                }
+
+                &:after{
+                    color: $color-hover;
+                }
+            }
+        }
+
+        ul{
+            font-size: 0.75em;
+
+            >li{
+                padding: 5px 0em;          
+            }
+        }
+
+        .lesson-id{
+            opacity: 0.5;
+            font-size:0.85em;
+            font-weight:700;
+        }
+
+        .lesson-professor{
+            font-weight: 600;
+            padding-top:0px;
+        }
+
+        .lesson-notifications{
+
+            margin-top:1em;
+
+            .item{
+                margin-right:1.5em;
+                position: relative;
+
+                .count{
+                    position: absolute;
+                    left: 0.8em;
+                    bottom: 0.8em;
+                    display: inline-block;
+                    text-align: center;
+                    background: $color-red;
+                    color: white;
+                    width: 1.5em;
+                    height: 1.5em;
+                    font-size:0.75em;
+                    font-weight: 600;
+                    //border: 2px solid #253447;
+                    @include border-radius(0.75em);
+                }
+
+                .fa{
+                    font-size: 1.2em;
+                    color: rgba(255,255,255,.8);
+                }    
+            }
+        }
     }
-
-  }
-
 }
-
-#sidebar .outerpanel
-{
-
-  .sidebar-title
-  {
-    margin: 0;
-    font-weight: 600;
-    padding-left: 13px;
-    font-size: 0.75em; 
-    text-transform: uppercase;
-    padding: 1.8em;
-
-    background: rgb(227, 228, 230);
-  }
-
-  .title
-  {
-
-    margin: 0;
-    padding: 2em 0em!important;
-    font-weight: 700;
-    font-size: 0.8em;
-    text-align: center;
-    overflow: hidden;
-    text-transform: uppercase;
-
-    i.fa
-    {
-      display: block;
-      opacity:.9;
-      font-size: 2.3em;
-
-      margin-top: 0.4em;
-    }
-    .tricky
-    {
-
-      margin-left:-100%;
-      width: 200%;
-      position: relative;
-      height: 45px;
-      @include transition(margin-left $transition-time linear);
-
-      > div{        
-        display: inline-block;
-        width: 49%;
-        height: 100%;
-        position: relative;
-        top: 0px;
-        vertical-align: middle;
-        padding: 0.5em 0em;
-
-        @include transition(opacity 60ms linear);  
-      }
-
-      .icon{
-        opacity: 1;
-      }
-
-      .description{
-        font-weight: 400;
-        padding:0.5em 1em;
-        opacity: 0;
-      }
-    }
-
-    &:hover:not(.ui-accordion-header-active){
-      .tricky{
-        margin-left: 0%;
-
-        .description{
-          opacity: .55;
-        }
-
-        .icon{
-          opacity:0;
-        }
-
-      }
-
-      .txt{
-        color:$color-hover;
-      }
-    }
-
-    &.ui-accordion-header-active{
-      .tricky{
-        margin-left: 0%;
-        .description{
-          opacity: .55;
-        }
-      }
-    }
-
-  }
-
-  li.outerpanel{
-    border-bottom: 1px solid rgba(0,0,0,.05);
-
-    > .ui-accordion-content,
-    > .ui-accordion-header-active {
-      background: rgba(255,255,255,.3);
-    }
-
-    > .ui-accordion-content{
-      padding:1em 0em;
-    }
-
-    textarea,input{
-      width: 90%;
-      margin: 0em auto 1em auto;
-      display: block;
-    }
-
-    textarea{ 
-      min-height: 12em;
-    }
-
-    button{
-      margin: 1.1em;
-      margin-top: 0em;
-      font-size: 0.8em;
-    }
-
-    .goto{
-      float: right;
-      color: #7E7E7E;
-      padding: 0.5em;
-      margin-right: 0.5em;
-    }
-
-    .input-parent{
-      position: relative;
-
-      textarea,input{
-        padding-left:2em;
-      }
-
-      .fa{
-        position: absolute;
-        top: 0.7em;
-        left: 1.5em;
-        z-index: 9;
-        opacity: 0.2;
-      }
-    }
-  }
-}
-
-
-
-
-
 
 /* ACCORDIONS --------------------------------------------------------------------*/
 .accordion{
