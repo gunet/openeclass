@@ -248,26 +248,37 @@ if ($is_editor) {
                     }
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-                    $nameTools = $langCreateNewLearningPath;
-                    $dialogBox = " <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                    $nameTools = $langCreateNewLearningPath;                  
+                    $dialogBox = action_bar(array(
+                        array('title' => $langBack,
+                            'url' => "index.php?course=$course_code",
+                            'icon' => 'fa-reply',
+                            'level' => 'primary-label'
+                        )
+                    ));
+                    $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <fieldset>
-                        <legend>$langLearningPathData</legend>
-                        <table width='100%' class='tbl'>
-                        <tr>
-                        <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
-                        <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
-                        </tr>
-                        <tr>
-                        <th><label for='newComment'>$langComment</label>:</th>
-                        <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
-                        </tr>
-                        <tr>
-                        <th>&nbsp;</th>
-                        <td><input type='hidden' name='cmd' value='create'><input class='btn btn-primary' type='submit' value='$langCreate'></input></td>
-                        </tr>
-                        </table>
+                        <div class='form-group'>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <div class='col-sm-10'>
+                              <input name='newPathName' type='text' class='form-control' id='newPathName' placeholder='$langLearningPathName'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='newComment' class='col-sm-2 control-label'>$langComment:</label>
+                            <div class='col-sm-10'>
+                              <input name='newComment' type='text' class='form-control' id='newComment' placeholder='$langComment'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-10 col-sm-offset-2'>
+                              <input type='hidden' name='cmd' value='create'>
+                              <input class='btn btn-primary' type='submit' value='$langCreate'>
+                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                            </div>
+                        </div>                        
                         </fieldset>
-                        </form>";
+                        </form></div>";
                 }
                 break;
             default:
