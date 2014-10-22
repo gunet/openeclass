@@ -166,7 +166,7 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
-    $nameTools = $langCatForumAdmin;
+    $nameTools = $langModCatName;
     
     $result = Database::get()->querySingle("SELECT id, cat_title FROM forum_category
                                 WHERE id = ?d
@@ -174,32 +174,33 @@ elseif (isset($_GET['forumcatedit'])) {
     $cat_id = $result->id;
     $cat_title = $result->cat_title;
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
-        <input type='hidden' name='cat_id' value='$cat_id'>
+        <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
+        <input type='hidden' name='cat_id' value='$cat_id'>           
         <fieldset>
-        <legend>$langModCatName</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-        <th>$langCat</th>
-        <td><input type='text' name='cat_title' size='55' value='$cat_title' /></td>
-        </tr>
-        <tr>
-        <th>&nbsp;</th>
-        <td class='right'><input class='btn btn-primary' type='submit' value='$langModify'></td>
-        </tr>
-        </table>
+        <div class='form-group'>
+            <label for='cat_title' class='col-sm-2 control-label'>$langCat:</label>
+            <div class='col-sm-10'>
+                <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCat' value='$cat_title'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' value='$langModify'>
+                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            </div>
+        </div>          
         </fieldset>
-        </form>";
+        </form></div>";
 }
 
 // Save forum category
 elseif (isset($_GET['forumcatsave'])) {
-    $nameTools = $langCatForumAdmin;
     
     Database::get()->query("UPDATE forum_category SET cat_title = ?s
                                         WHERE id = ?d AND course_id = ?d", $_POST['cat_title'], $cat_id, $course_id);
-    $tool_content .= "<div class='alert alert-success'>$langNameCatMod</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+    Session::Messages($langNameCatMod, 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
 // Save forum
 elseif (isset($_GET['forumgosave'])) {
@@ -215,14 +216,12 @@ elseif (isset($_GET['forumgosave'])) {
 }
 
 // Add category to forums
-elseif (isset($_GET['forumcatadd'])) {
-    $nameTools = $langCatForumAdmin;
-    
+elseif (isset($_GET['forumcatadd'])) {    
     Database::get()->query("INSERT INTO forum_category
                         SET cat_title = ?s,
                         course_id = ?d", $_POST['categories'], $course_id);
-    $tool_content .= "<div class='alert alert-success'>$langCatAdded</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+    Session::Messages($langCatAdded, 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");    
 }
 
 // forum go add
@@ -437,20 +436,25 @@ elseif (isset($_GET['forumgodel'])) {
         </fieldset>
         </form>";
 } else {
-    $nameTools = $langCatForumAdmin;
+    $nameTools = $langAddCategory;
     
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
+        <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">            
         <fieldset>
-        <legend>$langAddCategory</legend>
-        <table class='tbl' width='100%'>
-        <tr><th>$langCat</th><td><input type=text name=categories size=50></td></tr>
-        <tr>
-        <th>&nbsp;</th>
-        <td class='right'><input type=submit value='$langAdd'></td>
-        </tr>
-        </table>
+        <div class='form-group'>
+            <label for='categories' class='col-sm-2 control-label'>$langCat:</label>
+            <div class='col-sm-10'>
+              <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCat'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' value='$langAdd'>
+                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            </div>
+        </div>            
         </fieldset>
-        </form>";
+        </form></div>";
 }
 draw($tool_content, 2, null, $head_content);
