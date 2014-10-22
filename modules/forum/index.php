@@ -113,10 +113,10 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
             $icon = toggle_icon($action_notify);
         }
-        $tool_content .= "<table width='100%' class='tbl_alt' style='margin-bottom: 20px;'>";
+        $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$cat_title</b></th>
-		<th width='80' class='right'>";
+		<th class='opt-btn-cell text-center'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -138,11 +138,11 @@ if ($total_categories > 0) {
             'icon' => 'fa-envelope');
         $tool_content .= action_button($dyntools);
 
-        $tool_content .= "<tr class='sub_title1'>
-		<td colspan='2' width='150'>$langForums</td>
-		<td class='center'>$langSubjects</td>
-		<td class='center'>$langPosts</td>
-		<td class='center'>$langLastPost</td>
+        $tool_content .= "<tr>
+		<td colspan='2'>$langForums</td>
+		<td class='text-center'>$langSubjects</td>
+		<td class='text-center'>$langPosts</td>
+		<td class='text-center'>$langLastPost</td>
 		<td class='text-center'>" . icon('fa-gears') . "</td>
 		</tr>";
 
@@ -204,9 +204,9 @@ if ($total_categories > 0) {
                     }
                     $tool_content .= "<div class='smaller'>$desc</div>";
                     $tool_content .= "</td>";
-                    $tool_content .= "<td width='65' class='center'>$total_topics</td>";
-                    $tool_content .= "<td width='65' class='center'>$total_posts</td>";
-                    $tool_content .= "<td width='200' class='center'>";
+                    $tool_content .= "<td class='text-center'>$total_topics</td>";
+                    $tool_content .= "<td class='text-center'>$total_posts</td>";
+                    $tool_content .= "<td class='text-center'>";
                     if ($total_topics > 0 && $total_posts > 0) {
                         $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;
                                                 <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
@@ -230,7 +230,7 @@ if ($total_categories > 0) {
                         $forum_link_notify = toggle_link($forum_action_notify);
                         $forum_icon = toggle_icon($forum_action_notify);
                     }
-                    $tool_content .= "<td class='right'>";
+                    $tool_content .= "<td class='option-btn-cell'>";
 
                     $dyntools = (!$is_editor) ? array() : array(
                         array('title' => $langModify,
