@@ -52,6 +52,7 @@ $langCourses = "μαθήματα";
 $langCoursesHeader = "Μαθήματα";
 $langClosed = "κλειστά";
 $langOpen = "ανοικτά";
+$langOpenCourseWithRegistration = "Απαιτούν εγγραφή";
 $langSemiopen = "απαιτούν εγγραφή";
 $langUsers = "Χρήστες";
 $langUsersS = "χρήστες";
@@ -232,6 +233,7 @@ $langChanges = "αλλαγές";
 // listcours
 $langOpenCourse = "Ανοικτό μάθημα";
 $langClosedCourse = "Κλειστό μάθημα";
+$langClosedCourses = "Κλειστά μαθήματα";
 $langRegCourse = "Απαιτείται εγγραφή";
 $langInactiveCourse = "Ανενεργό μάθημα";
 
@@ -2296,7 +2298,6 @@ $m['lessoncode'] = 'Όνομα Μαθήματος (κωδικός)';
 $m['tomeis'] = 'Τομείς';
 $m['tomeas'] = 'Τομέας';
 $m['open'] = 'Ανοικτά μαθήματα (Ελεύθερη Πρόσβαση)';
-$m['restricted'] = 'Ανοικτά μαθήματα με εγγραφή (Απαιτείται λογαριασμός χρήστη)';
 $m['closed'] = 'Κλειστά μαθήματα';
 $m['title'] = 'Τίτλος';
 $m['description'] = 'Περιγραφή';
@@ -3818,7 +3819,7 @@ $langPwStrengthStrong = "Δυνατό";
   Messages for Course Metadata
  * ***************************************** */
 $langOpenCourses = "Ανοικτά Ακαδημαϊκά Μαθήματα";
-$langOpenCoursesShort = "Ανοικτά Μαθήματα";
+$langOpenCoursesShort = "Ανοικτά μαθήματα";
 $langCourseMetadata = "Μεταδεδομένα μαθήματος";
 $langOpenCoursesReviewer = "OpenCourses Reviewer";
 $langHelpOpenCoursesReviewer = "διαχειρίζεται μαθήματα, χρήστες και εγκρίνει ανοιχτά μαθήματα";
@@ -3843,7 +3844,6 @@ $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
 $langListOpenCourses = "Ευρετήριο Ανοικτών Ακαδημαϊκών Μαθημάτων";
 $langListOpenCoursesShort = "Ευρετήριο Μαθημάτων";
-$langOpenCoursesShort = "Ανοικτά Ακ. Μαθήματα";
 $langOpenCourseShort = "Ανοικτό Ακαδ. Μάθημα";
 $langNumOpenCourses = "ανοικτά μαθήματα";
 $langNumOpenCourse = "ανοικτό μάθημα";
