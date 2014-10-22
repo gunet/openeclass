@@ -28,31 +28,32 @@ define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
 $tool_content .= "
-  <div class='alert alert-info'>$langOnlineUsers: <b>" . getOnlineUsers() . "</b></div>
-  <br />
-  <br />
-  <fieldset>
-  <legend>$langPlatformIdentity</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='110'>Version:</th>
-      <td>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></td>
-    </tr>
-    <tr>
-      <th>IP Host:</th>
-      <td>$langHostName <b>$_SERVER[SERVER_NAME]</b></td>
-    </tr>
-    <tr>
-      <th>Web Server:</th>
-      <td>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></td>
-    </tr>
-    <tr>
-      <th>Data Base Server:</th>
-      <td>";
-$tool_content .= "$langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>";
-$tool_content .= "</td></tr>
-    </table></fieldset>
-  <br />";
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='alert alert-info'>$langOnlineUsers: <b>" . getOnlineUsers() . "</b></div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$langPlatformIdentity</h3>
+                </div>
+                <div class='panel-body'>
+                    <dl class='dl-horizontal'>
+                        <dt>Version:</dt>
+                        <dd>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></dd>
+                        <dt>IP Host:</dt>
+                        <dd>$langHostName <b>$_SERVER[SERVER_NAME]</b></dd>
+                        <dt>Web Server:</dt>
+                        <dd>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></dd>
+                        <dt>Data Base Server:</dt>
+                        <dd>";
+                            $tool_content .= "$langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>";
+                            $tool_content .= "</dd>
+                    </dl>
+                </div>
+            </div>";
 
 
 // Count prof requests with status = 1
@@ -98,37 +99,30 @@ if ($lastadminloginres && $lastadminloginres->when) {
 
 
 $tool_content .= "
-  <fieldset>
-  <legend>$langInfoAdmin</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='260'>$langOpenRequests:</th>
-      <td>" . $prof_request_msg . "</td>
-    </tr>
-    <tr>
-      <th>$langLastLesson</th>
-      <td>$last_course_info</td>
-    </tr>
-    <tr>
-      <th>$langLastProf</th>
-      <td>$last_prof_info</td>
-    </tr>
-    <tr>
-      <th>$langLastStud</th>
-      <td>$last_stud_info</td>
-    </tr>
-    <tr>
-      <th>$langAfterLastLoginInfo</th>
-      <td>$langAfterLastLogin
-        <ul class='custom_list'>
-          <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
-          <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
-        </ul>
-      </td>
-    </tr>
-    </table>
-  </fieldset>
-  <br />";
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$langInfoAdmin</h3>
+        </div>
+        <div class='panel-body'>
+            <dl class='dl-horizontal'>
+                <dt>$langOpenRequests:</dt>
+                <dd>$prof_request_msg</dd>
+                <dt>$langLastLesson</dt>
+                <dd>$last_course_info</dd>
+                <dt>$langLastProf</dt>
+                <dd>$last_prof_info</dd>
+                <dt>$langLastStud</dt>
+                <dd>$last_stud_info</dd>
+                <dt>$langAfterLastLoginInfo</dt>
+                <dd>$langAfterLastLogin
+                    <ul class='custom_list'>
+                      <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
+                      <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>";
 
 
 // INDEX RELATED
@@ -144,43 +138,28 @@ if (get_config('enable_indexing')) {
     $numDocs = $idx->getIndex()->numDocs();
     $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
 
+    
     $tool_content .= "
-      <fieldset>
-      <legend>$langIndexInfo</legend>
-        <table width='100%' class='tbl'>
-        <tr>
-          <th width='260'>$langIndexNumDocs:</th>
-          <td>" . $numDocs . "</td>
-        </tr>
-        <tr>
-          <th>$langIndexIsOptimized</th>
-          <td>" . $isOpt . "</td>
-        </tr>";
-
-    if ($idx->getIndex()->hasDeletions()) {
-        $tool_content .= "
-        <tr>
-          <th></th>
-          <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></td>
-        </tr>";
-    }
-
-    // Auto to koumpi kalytera na mhn emfanizetai se production,
-    // dioti eksartatai apo to php max exec time.
-    // Kalytera to indexing na ginetai mono transparently
-    // reindex everything
-    //if (isset($_GET['reindex']))
-    //    $idx->reindexAll();
-    //$tool_content .= "
-    //    <tr>
-    //      <th></th>
-    //      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
-    //    </tr>";
-
-    $tool_content .= "
-        </table>
-      </fieldset>
-      <br />";
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$langIndexInfo</h3>
+        </div>
+        <div class='panel-body'>
+            <dl class='dl-horizontal'>
+                <dt>$langIndexNumDocs:</dt>
+                <dd>$numDocs</dd>
+                <dt>$langIndexIsOptimized</dt>
+                <dd>$isOpt</dd>
+                ";
+                if ($idx->getIndex()->hasDeletions()) {
+                    $tool_content .= "
+                    <dt></dt>
+                    <dd><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></dd>";
+                }
+                $tool_content .="
+            </dl>
+        </div>
+    </div>";
 }
 
 // CRON RELATED
@@ -188,22 +167,23 @@ $tool_content .= "<img src='cron.php' width='2' height='1' alt=''/>";
 $res = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
 if (count($res) >= 1) {
     $tool_content .= "
-      <fieldset>
-      <legend>$langCronInfo</legend>
-        <table width='100%' class='tbl'>
-        <tr>
-          <th width='260'>$langCronName</th>
-          <td>$langCronLastRun</td>
-        </tr>";
-
-    foreach ($res as $row) {
-        $tool_content .= "<tr><th>" . $row->name . "</th><td>" . $row->last_run . "</td></tr>";
-    }
-
-    $tool_content .= "
-      </tbody>
-      </table>
-      <br />";
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$langCronInfo</h3>
+        </div>
+        <div class='panel-body'>
+            <dl class='dl-horizontal'>
+                <dt>$langCronName</dt>
+                <dd>$langCronLastRun</dd>";
+                foreach ($res as $row) {
+                    $tool_content .= "<dt>" . $row->name . "</dt><dd>" . $row->last_run . "</dd>";
+                }
+            $tool_content .= "
+            </dl>
+        </div>
+    </div>
+</div>
+</div>";
 }
 
 
