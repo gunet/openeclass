@@ -172,8 +172,15 @@ $tool_content .= "
 ";
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
 
+/**
+ * draws statistics graph
+ * @global type $uid
+ * @global type $langCourseVisits
+s * @return type
+ */
 function courseVisitsPlot() {
-    global $uid, $langCourseVisits;
+    global $uid, $langCourseVisits, $langNoStats;
+    
     $totalHits = 0;
     $totalDuration = 0;
 
@@ -215,6 +222,6 @@ function courseVisitsPlot() {
         }
         return $chart->plot();
     } else {
-        return "Δεν υπάρχουν διθέσιμα στατιστικά!";
+        return "$langNoStats";
     }
 }

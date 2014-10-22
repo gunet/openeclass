@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -60,20 +60,20 @@ if (!($fac = $fac[0])) {
 
 // use the following array for the legend icons
 $icons = array(
-    2 => "<img src='$themeimg/lock_open.png'         alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
-    1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
-    0 => "<img src='$themeimg/lock_closed.png'       alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
+    2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
+    1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
+    0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
 if (count($tree->buildRootsArray()) > 1) {
     $tool_content .= $tree->buildRootsSelectForm($fc);
 }
 
-$tool_content .= "<table width=100% class='tbl_border'>
+$tool_content .= "<table class='table table-striped table-bordered table-hover'>
                     <tr>
                     <th><a name='top'></a>$langFaculty:&nbsp;<b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b></th>
                     </tr>
-                  </table><br/>\n\n";
+                  </table>";
 
 $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback);
 
@@ -138,42 +138,29 @@ if ($runQuery) {
 }
 
 if (count($courses) > 0) {
-
-    $tool_content .= "
-        <table width='100%' class='tbl_border'>
-        <tr>
-            <th class='left' colspan='2'>" . q($m['lessoncode']) . "</th>";
+    $tool_content .= "<table class='table table-striped table-bordered table-hover'>        
+                <tr><th class='text-left'>" . q($m['lessoncode']) . "</th>";
 
     if ($isInOpenCoursesMode) {
-        $tool_content .= "
-                <th class='left' width='220'>" . q($m['professor']) . "</th>
-                <th width='30'>$langOpenCoursesLevel</th>";
+        $tool_content .= "<th class='text-left' width='220'>" . q($m['professor']) . "</th>
+                          <th width='30'>$langOpenCoursesLevel</th>";
     } else {
-        $tool_content .= "
-                <th class='left' width='200'>" . q($m['professor']) . "</th>
-                <th width='30'>$langType</th>";
+        $tool_content .= "<th class='left' width='200'>" . q($m['professor']) . "</th>
+                          <th width='30'>$langType</th>";
     }
 
     $tool_content .= "</tr>";
-
-    $k = 0;    
+    
     foreach ($courses as $mycours) {
-        if ($mycours->visible == 2) {
+        if ($mycours->visible == COURSE_OPEN) {
             $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
         } else {
             $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
         }
-
-        if ($k % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-
-        $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
+                
         $tool_content .= "<td>" . $codelink . "</td>";
         $tool_content .= "<td>" . q($mycours->t) . "</td>";
-        $tool_content .= "<td align='center'>";
+        $tool_content .= "<td class='text-center'>";
 
         if ($isInOpenCoursesMode) {
             // metadata are displayed in click-to-open modal dialogs
@@ -187,8 +174,7 @@ if (count($courses) > 0) {
                                     <h4 class="modal-title" id="treeModalLabel-' . $mycours->id . '">' . $langCourseMetadata . '</h4>
                                 </div>
                                 <div class="modal-body">' . $metadata->asDiv() . "</div></div></div></div>" . 
-                    "<a href='' data-toggle='modal' data-target='#modaldialog-" . $mycours->id . "'><img src='${themeimg}/lom.png'/></a>"
-                    ;
+                    "<a href='' data-toggle='modal' data-target='#modaldialog-" . $mycours->id . "'><img src='${themeimg}/lom.png'/></a>";
         } else {
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
@@ -198,14 +184,13 @@ if (count($courses) > 0) {
             }
         }
         $tool_content .= "</td>";
-        $tool_content .= "</tr>";
-        $k++;
+        $tool_content .= "</tr>";        
     }
     $tool_content .= "</table>";
 } else {
     $subTrees = $tree->buildSubtrees(array($fc));
     if (count($subTrees) <= 1) { // is leaf
-        $tool_content .= "<div class='alert alert-warning'>" . $m['nolessons'] . "</div>";
+        $tool_content .= "<div class='alert alert-warning'>" . $langNoCoursesAvailable . "</div>";
     }
 }
 

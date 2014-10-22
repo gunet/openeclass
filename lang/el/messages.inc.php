@@ -2539,7 +2539,7 @@ $langPollFullResults = 'Αναλυτικά αποτελέσματα';
 $langSee = "Προεπισκόπηση";
 $langNoSee = "Απαιτείται εγγραφή";
 $langCourseName = "Τίτλος Μαθήματος";
-$langNoCoursesAvailable = "Δεν υπάρχουν διαθέσιμα μαθήματα για εγγραφή";
+$langNoCoursesAvailable = "Δεν υπάρχουν διαθέσιμα μαθήματα";
 $langRegistration = "Εγγραφή";
 $langSurname = "Επώνυμο";
 $langUsername = "Όνομα χρήστη (username)";
@@ -3233,6 +3233,7 @@ $langNoStatistics = "Δεν έχουν γίνει επισκέψεις το συ
 $langStatAccueil = "Για το χρονικό διάστημα που ζητήθηκε, διατίθεται και η παρακάτω πληροφορία για το σύνολο των χρηστών του μαθήματος:";
 $langHost = "Υπολογιστής";
 $langGroupUsage = 'Στατιστικά ομάδων χρηστών';
+$langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά";
 
 #for platform Statistics
 $langUsersCourse = "Χρήστες ανά μάθημα";

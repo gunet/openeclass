@@ -1045,7 +1045,7 @@ jContent;
                          WHERE node.id IN (" . implode(', ', $nodes) . ")");
 
         if (count($res) > 0) {
-            $ret .= "<table width='100%' class='tbl_border'>";
+            $ret .= "<table class='table table-striped table-bordered table-hover'>";
             $nodenames = array();
             $nodecodes = array();
 
@@ -1077,8 +1077,7 @@ jContent;
 
                 $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
             }
-
-            $ret .= "</table><br />";
+            $ret .= "</table>";
         }
 
         return $ret;
@@ -1139,7 +1138,7 @@ jContent;
             }
             asort($nodenames);
 
-            $ret .= "<select $params>";
+            $ret .= "<select class='form-control' $params>";
             foreach ($nodenames as $id => $name) {
                 $selected = ($id == $parentId) ? "selected=''" : '';
                 $ret .= "<option value='" . intval($id) . "' $selected>" . q($name) . "</option>";
@@ -1159,12 +1158,11 @@ jContent;
     public function buildRootsSelectForm($currentNode) {
         global $langSelectFac;
 
-        $ret = "<form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>
-                 <div id='operations_container'><ul id='opslist'>
-                 <li>$langSelectFac:&nbsp;";
+        $ret = "<div class='form-wrapper'><form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
+        $ret .= "<div class='form-group'>";
+        $ret .= "<label>$langSelectFac:</label>";
         $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'");
-        $ret .= "</li></ul></div></form>";
-
+        $ret .= "</div></form></div>";
         return $ret;
     }
 

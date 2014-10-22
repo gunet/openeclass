@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -30,71 +30,70 @@ if (!in_array($language, array('el', 'en'))) {
     $addon = "($langOnlyInEnglish)";
 }
 
-$tool_content .= "<table width='100%' class='tbl_alt'>
+$tool_content .= "<table class='table table-striped table-bordered table-hover'>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langFinalDesc, 'detail_descr', $language) . "</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td> " . manlink($langShortDesc, 'short_descr', $language) . "</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langManT, 'mant', $language) . "</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td> " . manlink($langManS, 'mans', $language) . "</td>
   </tr>
 </table>";
 
-$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfTeacher $addon";
+$tool_content .= "<br><p class='tool_title'>$langTutorials $langOfTeacher $addon";
 
-$tool_content .= "</p><table width='100%' class='tbl_alt'>
+$tool_content .= "</p><table class='table table-striped table-bordered table-hover'>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langCreateAccount, 'create_account', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langCourseCreate, 'create_course', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langPersonalisedBriefcase, 'portfolio_management', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langAdministratorCourse, 'course_management', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langAdministratorForum, 'forum_management', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langAdministratorGroup, 'group_management', $language) . "</a></td>
   </tr>
 </table>";
 
 $tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent $addon</p>
-
-<table width='100%' class='tbl_alt'>
+<table class='table table-striped table-bordered table-hover'>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langRegCourses, 'register_course', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
    <td>" . manlink($langPersonalisedBriefcase, 'personal_portfolio', $language) . "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langIntroToCourse, 'ecourse', $language) . "</a>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <th width='16'>".icon('fa-globe')."</th>
     <td>" . manlink($langForumParticipation, 'forum', $language) . "</a>
   </tr>
 </table>";
@@ -106,10 +105,14 @@ if (isset($uid) and $uid) {
     draw($tool_content, 0);
 }
 
-// create link
+/**
+ * @brief create link to manuals
+ * @param type $desc
+ * @param type $link
+ * @param type $language
+ * @return type
+ */
 function manlink($desc, $link, $language) {
-    global $addon;
-
     $url = 'http://wiki.openeclass.org/3.0/doku.php';
     return "<a href='$url?id=$language:$link' target='_blank' class='mainpage'>$desc</a>";
 }

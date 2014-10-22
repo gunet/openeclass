@@ -152,42 +152,29 @@ function getUserLessonInfo($uid) {
 
     //getting user's lesson info
     if ($myCourses) {
-        $lesson_content .= "<table width='100%' id='portfolio_lessons' class='tbl_lesson'>
-            <thead>
-                <tr>
-                   <th></th>
-                   <th></th>
-               </tr>           
-            </thead>";
+        $lesson_content .= "<table class='table table-striped table-bordered table-hover'>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
-			  <td align='left'><ul class='custom_list'><li>
+			  <td class='text-left'>
 			  <b><a href='${urlServer}courses/$data->code/'>" . q($data->title) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
-			  <div class='smaller'>" . q($data->professor) . "</div></li></ul></td>";
+			  <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td align='center'>";
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= "<a href='${urlServer}main/unregcours.php?cid=" . $data->course_id . "&amp;uid=" . $uid . "'>
-				   <img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
+                $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench', $langAdm,
-                    "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code);
+                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code);
             }
             $lesson_content .= "</td></tr>";
         }
         $lesson_content .= "</table>";
     } else { // if we are not registered to courses
-        $lesson_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons !</div><div><u>$langWelcomeSelect</u>:</div>";
-        $lesson_content .= "<table width='100%'>";
-        $lesson_content .= "<tr>";
-        $lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";
+        $lesson_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons!</div>";
         if ($session->status == USER_TEACHER) {
-            $lesson_content .= "<td align='left'>$langWelcomeProfPerso</td>";
+            $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div>";
         } else {
-            $lesson_content .= "<td align='left'>$langWelcomeStudPerso</td>";
-        }
-        $lesson_content .= "</tr>";
-        $lesson_content .= "</table>";
+            $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div>";
+        }        
     }
     return $lesson_content;
 }
