@@ -152,7 +152,7 @@ function getUserLessonInfo($uid) {
 
     //getting user's lesson info
     if ($myCourses) {
-        $lesson_content .= "<table class='table table-striped table-bordered table-hover'>";
+        $lesson_content .= "<table  id='portfolio_lessons' class='table table-striped table-bordered table-hover'>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
