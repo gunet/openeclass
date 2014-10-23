@@ -150,18 +150,26 @@ if ($is_editor) {
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $exerciseId, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $exerciseId, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE);
+            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
+                            ", $course_id, $exerciseId, $fromExercise, $fromExercise)->total;                
         } else {
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
                             WHERE course_id = ?d AND question_id = id AND exercise_id = ?d
-                            ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE + 1);
+                            ORDER BY q_position LIMIT ?d, ?d", $course_id, $exerciseId, $from, QUESTIONS_PER_PAGE);
+            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_with_questions`, `exercise_question`
+                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d", $course_id, $exerciseId)->total;            
         }
     }
     // if we have selected the option 'Orphan questions' in the list-box 'Filter'
     elseif (isset($exerciseId) && $exerciseId == -1) {
         $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
 			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL ORDER BY question
-			LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);
+			LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE);
+        $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL", $course_id)->total;        
     }
     // if we have not selected any option in the list-box 'Filter'
     else {
@@ -169,23 +177,27 @@ if ($is_editor) {
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE + 1);
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $fromExercise, $fromExercise, $from, QUESTIONS_PER_PAGE);
+            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
+                            ", $course_id, $fromExercise, $fromExercise)->total;            
         } else {
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE + 1);            
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $course_id, $from, QUESTIONS_PER_PAGE);     
+            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d", $course_id)->total;            
         }
         // forces the value to 0
         $exerciseId = 0;
     }
     $nbrQuestions = count($result);
-
     $tool_content .= "
 	<tr>
 	  <th>$langQuesList</th>
           <th class='text-center'>".icon('fa-gears')."</th>
         </tr>";
-    $i = 1;
     foreach ($result as $row) {
         $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
         if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
@@ -227,11 +239,6 @@ if ($is_editor) {
                           'icon' => 'fa-plus-square',
                           'show' => isset($fromExercise))
                 ))."</td></tr>";       
-            // skips the last question,only used to know if we must create a link "Next page"
-            if ($i == QUESTIONS_PER_PAGE) {
-                break;
-            }
-            $i++;
         }
     }
     if (!$nbrQuestions) {
@@ -244,7 +251,7 @@ if ($is_editor) {
         $tool_content .= $langNoQuestion . "</td></tr>";
     }
     // questions pagination
-    $numpages = intval(($nbrQuestions-1) / QUESTIONS_PER_PAGE);
+    $numpages = intval(($total_questions-1) / QUESTIONS_PER_PAGE);
     if ($numpages > 0) {
         $tool_content .= "<tr>";
         if (isset($fromExercise)) {
