@@ -105,11 +105,12 @@ if ($is_editor) {
                 'level' => 'primary-label'
          );        
     } else {
-        $action_bar_options[] = array('title' => $langNewQu,
+        $action_bar_options = array(
+            array('title' => $langNewQu,
                 'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
-                'button-class' => 'btn-success'
+                'button-class' => 'btn-success')
          );          
     }
     $tool_content .= action_bar($action_bar_options);
@@ -243,7 +244,7 @@ if ($is_editor) {
         $tool_content .= $langNoQuestion . "</td></tr>";
     }
     // questions pagination
-    $numpages = intval($nbrQuestions / QUESTIONS_PER_PAGE);
+    $numpages = intval(($nbrQuestions-1) / QUESTIONS_PER_PAGE);
     if ($numpages > 0) {
         $tool_content .= "<tr>";
         if (isset($fromExercise)) {
