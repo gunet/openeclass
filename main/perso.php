@@ -88,6 +88,7 @@ $month = $today['mon'];
 $year = $today['year'];
 Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
+
 //END - Get personal calendar
 // ==  BEGIN create array with personalised content
 
@@ -104,8 +105,7 @@ $perso_tool_content = array(
  * @brief display user courses
  * @global type $session
  * @global array $lesson_ids
- * @global type $urlServer
- * @global type $themeimg
+ * @global type $urlServer 
  * @global type $langUnregCourse
  * @global type $langAdm
  * @global type $langNotEnrolledToLessons
@@ -116,7 +116,7 @@ $perso_tool_content = array(
  * @return string
  */
 function getUserLessonInfo($uid) {
-    global $session, $lesson_ids, $urlServer, $themeimg, $langUnregCourse, $langAdm;
+    global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
     $lesson_content = '';
@@ -152,14 +152,14 @@ function getUserLessonInfo($uid) {
 
     //getting user's lesson info
     if ($myCourses) {
-        $lesson_content .= "<table  id='portfolio_lessons' class='table table-striped table-bordered table-hover'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table tabletable-bordered table-hover'>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
 			  <td class='text-left'>
 			  <b><a href='${urlServer}courses/$data->code/'>" . q($data->title) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
-            $lesson_content .= "<td align='center'>";
+            $lesson_content .= "<td class='text-center'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
             } elseif ($data->status == USER_TEACHER) {
@@ -187,10 +187,10 @@ function getUserLessonInfo($uid) {
  * @global type $langNoAnnouncementsExist
  * @param type $param
  * @return string
- */
+ */ 
 function getUserAnnouncements($lesson_id) {
 
-    global $urlAppend, $langMore, $dateFormatLong;
+    global $urlAppend, $dateFormatLong;
 
     $ann_content = '';
     $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
@@ -216,7 +216,6 @@ function getUserAnnouncements($lesson_id) {
             $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
             $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
             $ann_content .= "
-
             <li class='list-item'>
                 <span class='item-wholeline'>
                     <a href='$ann_url'>

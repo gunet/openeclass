@@ -33,6 +33,9 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.php';
 
+check_uid();
+check_guest();
+
 $tree = new Hierarchy();
 $userObj = new User();
 
@@ -44,12 +47,9 @@ var lang = {
         confirmDelete: '" . js_escape($langConfirmDelete) . "'}; 
 $(profile_init);</script>";
 
-
-check_uid();
 $nameTools = $langModifyProfile;
-check_guest();
 
- $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
+$myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
                                             email_public, phone_public, am_public, password
                                         FROM user WHERE id = ?d", $uid);
@@ -75,10 +75,6 @@ if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
     $allow_name_change = true;
 }
 
-function redirect_to_message($id) {
-    header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?msg=' . $id);
-    exit();
-}
 
 // Handle AJAX profile image delete
 if (isset($_POST['delimage'])) {
@@ -213,7 +209,7 @@ if (isset($_POST['submit'])) {
 //Show message if exists
 if (isset($_GET['msg'])) {
     $urlText = '';
-    $type = 'caution';
+    $type = 'warning';
     switch ($_GET['msg']) {
         case 1: //profile information changed successfully
             $message = $langProfileReg;
@@ -241,7 +237,7 @@ if (isset($_GET['msg'])) {
         default:
             exit;
     }
-    $tool_content .= "<p class='$type'>$message$urlText</p><br/>";
+    $tool_content .= "<div class='alert alert-$type'>$message$urlText</div>";
 }
 
 $surname_form = q($myrow->surname);
@@ -280,70 +276,58 @@ $tool_content .= "
                 'level' => 'primary')
             )) .
         "</div>";
-$tool_content .= "
-   <form method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
-   <fieldset>
-     <legend>$langUserData</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-          <th>$langName:</th>";
+$tool_content .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>                
+            <fieldset>     
+            <div class='form-group'>
+            <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'>";
 
 if ($allow_name_change) {
-    $tool_content .= "
-          <td><input type='text' size='40' name='givenname_form' value='$givenname_form' /></td>";
+    $tool_content .= "<input type='text' size='40' name='givenname_form' value='$givenname_form' />";
 } else {
-    $tool_content .= "
-          <td><b>$givenname_form</b>
-            <input type='hidden' name='givenname_form' value='$givenname_form' />
-          </td>";
+    $tool_content .= "<label>$givenname_form</label>
+            <input type='hidden' name='givenname_form' value='$givenname_form' />";
 }
 
-$tool_content .= "</tr><tr><th>$langSurname:</th>";
+$tool_content .= "</div></div>";
+$tool_content .= "<div class='form-group'><label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>";
+$tool_content .= "<div class='col-sm-10'>";
 if ($allow_name_change) {
-    $tool_content .= "<td><input type='text' size='40' name='surname_form' value='$surname_form' /></td>";
+    $tool_content .= "<input type='text' size='40' name='surname_form' value='$surname_form' />";
 } else {
-    $tool_content .= "<td><b>" . $surname_form . "</b><input type='hidden' name='surname_form' value='$surname_form' /></td>";
+    $tool_content .= "<label>" . $surname_form . "</label><input type='hidden' name='surname_form' value='$surname_form' />";
 }
-$tool_content .= "</tr>";
-
+$tool_content .= "</div></div>";
+$tool_content .= "<div class='form-group'><label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>";
+$tool_content .= "<div class='col-sm-10'>";
 if ($allow_username_change) {
-    $tool_content .= "
-        <tr>
-          <th>$langUsername:</th>
-          <td><input type='text' size='40' name='username_form' value='$username_form' /></td>
-        </tr>";
+    $tool_content .= "<input type='text' size='40' name='username_form' value='$username_form' />";
 } else {
     // means that it is external auth method, so the user cannot change this password
-    $tool_content .= "
-        <tr>
-          <th class='left'>$langUsername:</th>
-          <td><b>$username_form</b> [$auth_text]
-            <input type='hidden' name='username_form' value='$username_form' />
-          </td>
-        </tr>";
+    $tool_content .= "<label>$username_form</label> [$auth_text]
+            <input type='hidden' name='username_form' value='$username_form' />";
 }
+$tool_content .= "</div></div>";
 
 $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-    ACCESS_PROFS => $langProfileInfoProfs,
-    ACCESS_USERS => $langProfileInfoUsers);
+                        ACCESS_PROFS => $langProfileInfoProfs,
+                        ACCESS_USERS => $langProfileInfoUsers);
 
-$tool_content .= "<tr><th>$langEmail:</th>";
+$tool_content .= "<div class='form-group'><label for='email' class='col-sm-2 control-label'>$langEmail:</label>";
+$tool_content .= "<div class='col-sm-10'>";
+$tool_content .= "<input type='text' size='40' name='email_form' value='$email_form' />";
 
-//if ($allow_name_change) {
-$tool_content .= "<td><input type='text' size='40' name='email_form' value='$email_form' />";
-//} else {
-//        $tool_content .= "
-//           <td><b>$email_form</b> [$auth_text]
-//               <input type='hidden' name='email_form' value='$email_form' /> ";
-//}
-$tool_content .= selection($access_options, 'email_public', $myrow->email_public) . "</td>
-        </tr>
-        <tr><th>$langAm</th>
-            <td><input type='text' size='40' name='am_form' value='$am_form' /> " .
-        selection($access_options, 'am_public', $myrow->am_public) . "</td></tr>
-        <tr><th>$langPhone</th>
-            <td><input type='text' size='40' name='phone_form' value='$phone_form' /> " .
-        selection($access_options, 'phone_public', $myrow->phone_public) . "</td></tr>";
+$tool_content .= selection($access_options, 'email_public', $myrow->email_public) . "</div></div>";
+$tool_content .= "<div class='form-group'>
+        <label for='email' class='col-sm-2 control-label'>$langAm:</label>
+            <div class='col-sm-10'><input type='text' size='40' name='am_form' value='$am_form' /> " .
+        selection($access_options, 'am_public', $myrow->am_public) . "</div></div>
+        <div class='form-group'><label for='phone' class='col-sm-2 control-label'>$langPhone</label>
+            <div class='col-sm-10'><input type='text' size='40' name='phone_form' value='$phone_form' /> " 
+                . selection($access_options, 'phone_public', $myrow->phone_public) . 
+            "</div>
+        </div>";
 
 if (get_user_email_notification_from_courses($uid)) {
     $selectedyes = 'checked';
@@ -352,10 +336,22 @@ if (get_user_email_notification_from_courses($uid)) {
     $selectedyes = '';
     $selectedno = 'checked';
 }
-$tool_content .= "<tr><th>$langEmailFromCourses:</th>
-                  <td><input type='radio' name='subscribe' value='yes' $selectedyes />$langYes&nbsp;
-                  <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
-                  </td></tr>";
+$tool_content .= "<div class='form-group'>
+                <label for='emailfromcourses' class='col-sm-2 control-label'>$langEmailFromCourses:</label>
+                  <div class='col-sm-10'>
+                  <div class='radio'>
+                    <label>
+                        <input type='radio' name='subscribe' value='yes' $selectedyes />$langYes
+                    </label>
+                   </div>
+                   <div class='radio'>
+                    <label>
+                        <input type='radio' name='subscribe' value='no' $selectedno />$langNo
+                    </label>
+                   </div>
+                  </div>
+                </div>";
+
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
     switch ($user_email_status) {
@@ -364,7 +360,7 @@ if (get_config('email_verification_required')) {
             $message = "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
             break;
         case EMAIL_VERIFIED:
-            $message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+            $message = icon('fa-check', $langMailVerificationYesU);
             break;
         case EMAIL_UNVERIFIED:
             $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
@@ -372,20 +368,23 @@ if (get_config('email_verification_required')) {
         default:
             break;
     }
-    $tool_content .= "<tr><th>$langVerifiedMail</th><td>$message</td>";
+    $tool_content .= "<div class='form-group'><label for='mailstatus' class='col-sm-2 control-label'>$langVerifiedMail</label>
+                        $message</div>";
 }
 
 if (!get_config('restrict_owndep')) {
-    $tool_content .= "<tr><th>$langFaculty:</th><td>";
+    $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
+    $tool_content .= "<div class='col-sm-10'>";
     list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
     $tool_content .= $html;
-    $tool_content .= "</td></tr>";
+    $tool_content .= "</div></div>";
 }
 
-$tool_content .= "<tr><th>$langLanguage:</th>
-          <td>" . lang_select_options('userLanguage') . "</td>
-        </tr>";
+$tool_content .= "<div class='form-group'><label for='language' class='col-sm-2 control-label'>$langLanguage:</label>
+                      <div class='col-sm-10'>" . lang_select_options('userLanguage') . "</div>
+                  </div>";
+
 if ($icon) {
     $message_pic = $langReplacePicture;
     $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
@@ -394,24 +393,29 @@ if ($icon) {
     $picture = $delete = '';
     $message_pic = $langAddPicture;
 }
-$tool_content .= "<tr>
-        <th>$message_pic</th>
-        <td><span>$picture$delete</span><input type='file' name='userimage' size='30'></td>
-      </tr>
-      <tr>
-        <th>$langDescription:</th>
-        <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
-      </tr>
-      <tr>
-        <td>&nbsp;</td>
-        <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify' /></td>
-      </tr>
-      </table>
+$tool_content .= "<div class='form-group'>
+        <label for='picture' class='col-sm-2 control-label'>$message_pic</label>
+            <div class='col-sm-10'><span>$picture$delete</span><input type='file' name='userimage' size='30'></div>
+        </div>
+        <div class='form-group'>      
+          <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>
+          <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
+        </div>
+        <div class='col-sm-offset-2 col-sm-10'>        
+          <input class='btn btn-primary' type='submit' name='submit' value='$langModify' />
+        </div>      
       </fieldset>
-      </form>";
+      </form>
+      </div>";
 
 draw($tool_content, 1, null, $head_content);
 
+
+/**
+ * 
+ * @param type $val
+ * @return int
+ */
 function valid_access($val) {
     $val = intval($val);
     if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
@@ -419,4 +423,13 @@ function valid_access($val) {
     } else {
         return 0;
     }
+}
+
+/**
+ * @brief display message
+ * @param type $id
+ */
+function redirect_to_message($id) {
+    header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?msg=' . $id);
+    exit();
 }

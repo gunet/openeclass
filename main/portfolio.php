@@ -133,8 +133,7 @@ $tool_content = "
                 <div class='panel padding'>
                         {%PERSONAL_CALENDAR_CONTENT%}
                 </div>
-        </div></div>
-        ";
+        </div></div>";
         if ($user_announcements) {
             $tool_content .= "
                 <div class='row'>
