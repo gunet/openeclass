@@ -134,8 +134,7 @@ if (isset($_GET['download'])) {
             $delete = false;
         } else {
             // External document - redirect to URL
-            header('Location: ' . $extra_path);
-            exit;
+            redirect($extra_path);
         }
     } else {
         $dload_filename = $basedir . $downloadDir;
@@ -251,17 +250,17 @@ if ($can_upload) {
         // No errors, so proceed with upload
         // File date is current date
         $file_date = date("Y\-m\-d G\:i\:s");
+        // Try to add an extension to files witout extension,
+        // change extension of PHP files
+        $fileName = php2phps(add_ext_on_mime($fileName));
+        // File name used in file system and path field
+        $safe_fileName = safe_filename(get_file_extension($fileName));
+        if ($uploadPath == '.') {
+            $file_path = '/' . $safe_fileName;
+        } else {
+            $file_path = $uploadPath . '/' . $safe_fileName;
+        }
         if ($extra_path or (isset($userFile) and @copy($userFile, $basedir . $file_path))) {
-            // Try to add an extension to files witout extension,
-            // change extension of PHP files
-            $fileName = php2phps(add_ext_on_mime($fileName));
-            // File name used in file system and path field
-            $safe_fileName = safe_filename(get_file_extension($fileName));
-            if ($uploadPath == '.') {
-                $file_path = '/' . $safe_fileName;
-            } else {
-                $file_path = $uploadPath . '/' . $safe_fileName;
-            }
             $vis = 1;
             $file_format = get_file_extension($fileName);
             $id = Database::get()->query("INSERT INTO document SET
@@ -295,7 +294,8 @@ if ($can_upload) {
                 'filename' => $fileName,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
-            $action_message .= "<div class='alert alert-success'>$langDownloadEnd</div><br />";
+            Session::Messages($langDownloadEnd, 'alert-success');
+            redirect($redirect_base_url);
         } elseif (isset($_POST['file_content'])) {
             $q = false;
             if (isset($_POST['editPath'])) {
@@ -415,11 +415,11 @@ if ($can_upload) {
     /*     * ************************************
       DELETE FILE OR DIRECTORY
      * ************************************ */
-    if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
-        $delete = str_replace('..', '', $_POST['filePath']);
+    if (isset($_GET['delete']) and isset($_GET['filePath']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+        $filePath = $_GET['filePath'];
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
-                                        WHERE $group_sql AND path = ?s", $delete);
+                                        WHERE $group_sql AND path = ?s", $filePath);
         $delete_ok = true;
         if ($r) {
             // remove from index if relevant (except non-main sysbsystems and metadata)
@@ -428,23 +428,24 @@ if ($can_upload) {
                 function ($r2) use($didx) {
                     $didx->remove($r2->id);
                 },
-                $delete . '%');
+                $filePath . '%');
 
             if (empty($r->extra_path)) {
-                if ($delete_ok = my_delete($basedir . $delete) && $delete_ok) {
-                    if (hasMetaData($delete, $basedir, $group_sql)) {
-                        $delete_ok = my_delete($basedir . $delete . ".xml") && $delete_ok;
+                if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
+                    if (hasMetaData($filePath, $basedir, $group_sql)) {
+                        $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
                     }
-                    update_db_info('document', 'delete', $delete, $r->filename);
+                    update_db_info('document', 'delete', $filePath, $r->filename);
                 }
             } else {
-                update_db_info('document', 'delete', $delete, $r->filename);
+                update_db_info('document', 'delete', $filePath, $r->filename);
             }
             if ($delete_ok) {
-                $action_message = "<div class='alert alert-success'>$langDocDeleted</div><br>";
+                Session::Messages($langDocDeleted, 'alert-success');
             } else {
-                $action_message = "<div class='alert alert-danger'>$langGeneralError</div><br>";
+                Session::Messages($langGeneralError, 'alert-danger');
             }
+            redirect($redirect_base_url);
         }
     }
 
@@ -1297,7 +1298,7 @@ if ($doc_count == 0) {
                                           'icon' => 'fa-lock',
                                           'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public']),
                                     array('title' => $langDelete,
-                                          'url' => "{$base_url}filePath=$cmdDirName",
+                                          'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => "$langConfirmDelete $entry[filename]")));

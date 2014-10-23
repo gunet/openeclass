@@ -113,14 +113,15 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$result = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date, view_type
-                  FROM course WHERE id = ?d", $course_id);
+$courseInfo = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+                                               view_type, start_date, finish_date
+                                          FROM course WHERE id = ?d", $course_id);
 
-$keywords = q(trim($result->keywords));
-$visible = $result->visible;
-$professor = $result->prof_names;
-$public_code = $result->public_code;
-$course_license = $result->course_license;
+$keywords = q(trim($courseInfo->keywords));
+$visible = $courseInfo->visible;
+$professor = $courseInfo->prof_names;
+$public_code = $courseInfo->public_code;
+$course_license = $courseInfo->course_license;
 $main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
@@ -292,7 +293,7 @@ if ($is_editor) {
         $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['access'])) {
-        if ($course_viewType == "weekly") {
+        if ($course_viewType == 'weekly') {
             $id = intval($_REQUEST['access']);
             $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
@@ -346,84 +347,112 @@ if ($is_editor) {
     
 }
 
-//Check the course view type
-$courseInfo = Database::get()->querySingle("SELECT view_type, start_date, finish_date FROM course WHERE id = ?d", $course_id);
-$viewCourse = $courseInfo->view_type;
-$start_date = $courseInfo->start_date;
-$finish_date = $courseInfo->finish_date;
-$course_viewType = $result->view_type;
-
-// add course units
-if ($is_editor) {
-    $last_id = Database::get()->querySingle("SELECT id FROM course_units
-                                                   WHERE course_id = ?d AND `order` >= 0
-                                                   ORDER BY `order` DESC LIMIT 1", $course_id);
-    if ($last_id) {
-        $last_id = $last_id->id;
+if ($course->view_type == 'weekly') {
+    if (!$is_editor){
+        $visibleFlag = ' AND visible = 1';
+    } else {
+        $visibleFlag = '';
     }
-    $query = "SELECT id, title, comments, visible, public
-		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
-                  ORDER BY `order`";
+    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/weeks/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";
+
+    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
+    foreach ($weeklyQuery as $week){
+        $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
+        $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
+        $icon_access = ($week->public == 1) ? 'access_public.png' : 'access_limited.png';
+        
+        $tool_content .= "<fieldset>
+                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
+                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - " . q($week->title) . "</h2>
+                            </a>
+                            <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
+                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
+                                <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
+                            </a>
+                            <a href='$_SERVER[SCRIPT_NAME]?access=$week->id'>
+                                <img src='$themeimg/$icon_access' title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' />
+                            </a>
+                            <div $class_vis>$week->comments</div>
+                            <hr>";
+                            show_resourcesWeeks($week->id);
+        $tool_content .= "</fieldset>";
+        
+    }
 } else {
-    $query = "SELECT id, title, comments, visible, public
-		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
-                  ORDER BY `order`";
-}
-
-$sql = Database::get()->queryArray($query);
-$total_cunits = count($sql);
-
-if ($total_cunits > 0) {
-    $count_index = 1;
-    $cunits_content .= "<div class='panel'><ul class='boxlist'>";
-    foreach ($sql as $cu) {
-        // access status
-        $access = $cu->public;
-        // Visibility icon
-        $vis = $cu->visible;
-        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';        
-        $class_vis = ($vis == 0) ? 'not_visible' : '';
-        $cunits_content .= "<li class='list-item contentbox'>
-                                <div class='item-content'>
-                                    <div class='item-header'>
-                                        <h4 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
-                                    </div>	    
-                                    <div class='item-body'>    
-                                        $cu->comments
-                                    </div>			      
-                                </div>";
-        if ($is_editor) {                                                
-            $cunits_content .= "<div class='item-side'>" .
-                action_button(array(
-                    array('title' => $langVisibility,
-                          'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
-                          'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
-                    array('title' => $langEdit,
-                          'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $langResourceAccess,
-                          'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
-                          'icon' => $access == 1? 'fa-unlock': 'fa-lock',
-                          'show' => $visible == COURSE_OPEN),
-                    array('title' => $langDown,
-                          'url' => "$_SERVER[SCRIPT_NAME]?down=$cu->id",
-                          'icon' => 'fa-arrow-down',
-                          'show' => $cu->id != $last_id),
-                    array('title' => $langUp,
-                          'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
-                          'icon' => 'fa-arrow-up',
-                          'show' => $count_index != 1),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langCourseUnitDeleteConfirm))) .
-                '</div>';
+    // add course units
+    if ($is_editor) {
+        $last_id = Database::get()->querySingle("SELECT id FROM course_units
+                                                       WHERE course_id = ?d AND `order` >= 0
+                                                       ORDER BY `order` DESC LIMIT 1", $course_id);
+        if ($last_id) {
+            $last_id = $last_id->id;
         }
-        $cunits_content .= "</li>";
-        $count_index++;
+        $query = "SELECT id, title, comments, visible, public
+              FROM course_units WHERE course_id = $course_id AND `order` >= 0
+                      ORDER BY `order`";
+    } else {
+        $query = "SELECT id, title, comments, visible, public
+              FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
+                      ORDER BY `order`";
     }
-    $cunits_content .= "</ul></div>"; 
+
+    $sql = Database::get()->queryArray($query);
+    $total_cunits = count($sql);
+
+    if ($total_cunits > 0) {
+        $count_index = 1;
+        $cunits_content .= "<div class='panel'><ul class='boxlist'>";
+        foreach ($sql as $cu) {
+            // access status
+            $access = $cu->public;
+            // Visibility icon
+            $vis = $cu->visible;
+            $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';        
+            $class_vis = ($vis == 0) ? 'not_visible' : '';
+            $cunits_content .= "<li class='list-item contentbox'>
+                                    <div class='item-content'>
+                                        <div class='item-header'>
+                                            <h4 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
+                                        </div>	    
+                                        <div class='item-body'>    
+                                            $cu->comments
+                                        </div>			      
+                                    </div>";
+            if ($is_editor) {                                                
+                $cunits_content .= "<div class='item-side'>" .
+                    action_button(array(
+                        array('title' => $langVisibility,
+                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
+                        array('title' => $langEdit,
+                              'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langResourceAccess,
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
+                              'icon' => $access == 1? 'fa-unlock': 'fa-lock',
+                              'show' => $visible == COURSE_OPEN),
+                        array('title' => $langDown,
+                              'url' => "$_SERVER[SCRIPT_NAME]?down=$cu->id",
+                              'icon' => 'fa-arrow-down',
+                              'show' => $cu->id != $last_id),
+                        array('title' => $langUp,
+                              'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
+                              'icon' => 'fa-arrow-up',
+                              'show' => $count_index != 1),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langCourseUnitDeleteConfirm))) .
+                    '</div>';
+            }
+            $cunits_content .= "</li>";
+            $count_index++;
+        }
+        $cunits_content .= "</ul></div>"; 
+    }
 }
 
 $bar_content .= "<b style='color:#999999; font-size:13px;'>" . $langCode . ":</b> " . q($public_code) . "" .
@@ -663,55 +692,12 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <h5 class='content-title'>$langAnnouncements</h5>
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
-            </div>";
-            if($viewCourse == "units"){
-                $tool_content .=    "<div class='col-md-$cunits_sidebar_subcolumns'>
-                                        <table width='100%' class='tbl'>
-                                            <tr>
-                                                <td>$cunits_content</td>
-                                            </tr>
-                                        </table>
-                                    </div>";
-            }
-$tool_content .= "</div>";
+            </div>
+        </div>";
             
        
 
-if ($viewCourse == "weekly") {
-    
-    if (!$is_editor){
-        $visibleFlag = " AND visible = 1";
-    } else {
-        $visibleFlag = "";
-    }
-    $tool_content .= "<p class='descr_title'>$langCourseWeeklyFormat: <a href='{$urlServer}modules/weeks/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>";
 
-    $weeklyQuery = Database::get()->queryArray("SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d $visibleFlag", $course_id);
-    foreach ($weeklyQuery as $week){
-        $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
-        $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
-        $icon_access = ($week->public == 1) ? 'access_public.png' : 'access_limited.png';
-        
-        $tool_content .= "<fieldset>
-                            <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
-                                <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - " . q($week->title) . "</h2>
-                            </a>
-                            <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
-                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
-                            </a>
-                            <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
-                                <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
-                            </a>
-                            <a href='$_SERVER[SCRIPT_NAME]?access=$week->id'>
-                                <img src='$themeimg/$icon_access' title='" . q($langResourceAccess) . "' alt='" . q($langResourceAccess) . "' />
-                            </a>
-                            <div $class_vis>$week->comments</div>
-                            <hr>";
-                            show_resourcesWeeks($week->id);
-        $tool_content .= "</fieldset>";
-        
-    }
-}
 
 $tool_content .= "</div></div>";
 

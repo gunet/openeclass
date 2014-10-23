@@ -503,6 +503,7 @@ if (isset($_POST['submit'])) {
     if ($isOpenCourseCertified) {
         $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
     }
+    $language = $c->lang;
     $tool_content .= "<div class='form-wrapper'>        
             <div class='form-group'>
                 <label for='License' class='col-sm-offset-4 col-sm-8'>$langOpenCoursesLicense</label>
@@ -542,36 +543,30 @@ if (isset($_POST['submit'])) {
 	    </div>
 	    <div class='form-group'>
             <label for='Public' class='col-sm-3 control-label'>$langOpenCourse</label>
-                    <div class='col-sm-9'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /><label class='radio'>$langPublic</label></div>
+            <div class='col-sm-9 radio'><label><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility> $langPublic</label></div>
 	    </div>
 	    <div class='form-group'>
             <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>	
-                    <div class='col-sm-9'><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /><label class='radio'>$langPrivOpen</label></div>
-            </div>
+            <div class='col-sm-9 radio'><label><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility> $langPrivOpen</label></div>
+        </div>
 	    <div class='form-group'>
             <label for='PrivateClosed' class='col-sm-3 control-label'>$langClosedCourse</label>
-		<div class='col-sm-9'><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /><label class='radio'>$langClosedCourseShort</label></div>
+            <div class='col-sm-9 radio'><label><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility> $langClosedCourseShort</label></div>
 	   </div>
-            <div class='form-group'>
+       <div class='form-group'>
             <label for='Inactive' class='col-sm-3 control-label'>$langInactiveCourse</label>
-		<div class='col-sm-9'><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility /><label class='radio'>$langCourseInactiveShort</label></div>
+            <div class='col-sm-9 radio'><label><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility> $langCourseInactiveShort</label></div>
 	    </div>
 	</div>
 
 	<div class='form-wrapper'>
-	    <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langLanguage</label></div>
 	    <div class='form-group'>
-            <label for='Options' class='col-sm-2 control-label'>$langOptions</label>
-            <div class='col-sm-10'>";
-            $language = $c->lang;
-            $tool_content .= lang_select_options('localize');
-            $tool_content .= "
-	        </div>	        
-	    </div>	
-	</div>";
+            <label for='Options' class='col-sm-3 control-label'>$langLanguage</label>
+            <div class='col-sm-9'>" . lang_select_options('localize') . "</div>	        
+	    </div>";
 
     if (!is_sharing_allowed($course_id)) {
-        $radio_dis = " disabled";
+        $radio_dis = ' disabled';
         if (!get_config('enable_social_sharing_links')) {
             $sharing_dis_label = $langSharingDisAdmin;
         }
@@ -579,79 +574,68 @@ if (isset($_POST['submit'])) {
             $sharing_dis_label = $langSharingDisCourse;
         }        
     } else {
-        $radio_dis = "";
-        $sharing_dis_label = "";
+        $radio_dis = '';
+        $sharing_dis_label = '';
     }
 
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
-        $checkDis = "";
-        $checkEn = "checked";
+        $checkSharingDis = '';
+        $checkSharingEn = 'checked';
     } else {
-        $checkDis = "checked";
-        $checkEn = "";
+        $checkSharingDis = 'checked';
+        $checkSharingEn = '';
     }
-
-    $tool_content .= "<div class='form-wrapper'>
-                <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langSharing</label></div>
-                <div class='form-group'>
-                    <label for='sharing_en' class='col-sm-3'>$langSharingEn</label>
-                    <div class='col-sm-9'>
-                        <input type='radio' value='1' name='s_radio' $checkEn $radio_dis>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label for='sharing_dis' class='col-sm-3'>$langSharingDis</label>
-                    <div class='col-sm-9'>
-                    <input type='radio' value='0' name='s_radio' $checkDis $radio_dis>
-                    </div>
-                </div>
-                <div class='form-group'><label for='legend_sharing' class='col-sm-12'>$sharing_dis_label</label></div>
-            </div>";
 
     if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
-        $checkDis = "";
-        $checkEn = "checked ";
+        $checkRatingDis = '';
+        $checkRatingEn = 'checked';
     } else {
-        $checkDis = "checked ";
-        $checkEn = "";
+        $checkRatingDis = 'checked';
+        $checkRatingEn = '';
     }
 
-    $tool_content .= "<div class='form-wrapper'>
-                <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langRating</label></div>
-                <div class='form-group'>                
-                    <label for='rating_en' class='col-sm-3'>$langRatingEn</label>
-                        <div class='col-sm-9'><input type='radio' value='1' name='r_radio' $checkEn /></div>                
+    $tool_content .= "
+                <div class='form-group'>
+                    <label class='col-sm-3'>$langSharing</label>
+                    <div class='col-sm-9 radio'>
+                        <label><input type='radio' value='1' name='s_radio' $checkSharingEn $radio_dis> $langSharingEn</label>
+                        <label><input type='radio' value='0' name='s_radio' $checkSharingDis $radio_dis> $langSharingDis</label>
+                        <label>$sharing_dis_label</label>
+                    </div>
                 </div>
-                <div class='form-group'>                
-                    <label for='rating_dis' class='col-sm-3'>$langRatingDis</label>
-                    <div class='col-sm-9'><input type='radio' value='0' name='r_radio' $checkDis /></div>                
+                <div class='form-group'>
+                    <label class='col-sm-3'>$langRating</label>
+                    <div class='col-sm-9 radio'>
+                        <label><input type='radio' value='1' name='r_radio' $checkRatingEn> $langRatingEn</label>
+                        <label><input type='radio' value='0' name='r_radio' $checkRatingDis> $langRatingDis</label>
+                    </div>
                 </div>
             </div>";
 
     if (course_status($course_id) != COURSE_OPEN) {
-        $radio_dis = " disabled";
+        $radio_dis = ' disabled';
         $rating_dis_label = $langRatingAnonDisCourse;
     } else {
-        $radio_dis = "";
-        $rating_dis_label = "";
+        $radio_dis = '';
+        $rating_dis_label = '';
     }
 
     if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
-        $checkDis = "";
-        $checkEn = "checked ";
+        $checkDis = '';
+        $checkEn = 'checked ';
     } else {
-        $checkDis = "checked ";
-        $checkEn = "";
+        $checkDis = 'checked ';
+        $checkEn = '';
     }
     
     $tool_content .= "<div class='form-wrapper'><div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langAnonymousRating</label></div>
             <div class='form-group'>
             <label for='rating_anon_en' class='col-sm-3'>$langRatingAnonEn</label>
-            <div class='col-sm-9'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis/></div>
+            <div class='col-sm-9'><input type='radio' value='1' name='ran_radio' $checkEn $radio_dis></div>
             </div>
             <div class='form-group'>
                 <label for='rating_anon_dis' class='col-sm-3'>$langRatingAnonDis</label>
-            <div class='col-sm-9'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis/></div>
+            <div class='col-sm-9'><input type='radio' value='0' name='ran_radio' $checkDis $radio_dis></div>
         </div>
 <div class='form-group'><label class='col-sm-12'>$rating_dis_label</label></div>        
 </div>";

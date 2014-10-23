@@ -2033,6 +2033,11 @@ function invalidate_glossary_cache() {
     unset($_SESSION['glossary']);
 }
 
+function redirect($path) {
+    header("Location: $path");
+    exit;
+}
+
 function redirect_to_home_page($path = '') {
     global $urlServer;
     
