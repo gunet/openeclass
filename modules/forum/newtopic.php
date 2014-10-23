@@ -71,24 +71,17 @@ if (!does_exists($forum_id, "forum")) {
     exit;
 }
 
-if (isset($_POST['submit']))
-    $dynbar = array(
-        array('title' => $langReturnMessages,
-            'url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'),
-        array('title' => $langReturnTopic,
-            'url' => "viewforum.php?course=$course_code&forum=$forum_id",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
-    );
-else
+if (!isset($_POST['submit'])) {
     $dynbar = array(
         array('title' => $langBack,
             'url' => "viewforum.php?course=$course_code&forum=$forum_id",
             'icon' => 'fa-reply',
-            'level' => 'primary-label'));
-$tool_content .= "<div id='operations_container'>" . action_bar($dynbar) . "</div>";
+            'level' => 'primary-label'
+             )
+    );
+
+    $tool_content .= action_bar($dynbar);
+}
 
 if (isset($_POST['submit'])) {
     $subject = trim($_POST['subject']);
@@ -162,6 +155,17 @@ if (isset($_POST['submit'])) {
     }
     // end of notification
 
+    $dynbar = array(
+            array('title' => $langReturnMessages,
+                    'url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'),
+            array('title' => $langReturnTopic,
+                    'url' => "viewforum.php?course=$course_code&forum=$forum_id",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+    );
+    $tool_content .= action_bar($dynbar);
     $tool_content .= "<div class='alert alert-success'>$langStored</div>";
 } else {
     $tool_content .= "
