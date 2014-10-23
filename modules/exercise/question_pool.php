@@ -121,7 +121,8 @@ if ($is_editor) {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
     }    
     //Start of filtering Component
-    $tool_content .= "<form class='form-horizontal' role='form' name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>
+    $tool_content .= "<form class='form-horizontal' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
+                        ".(isset($fromExercise)? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                         <div class='form-group'>
                             <label for='exerciseTitle' class='col-sm-2 control-label'>$langFilter:</label>
                             <div class='col-sm-4'>
@@ -261,27 +262,13 @@ if ($is_editor) {
         }
         if ($page > 0) {
             $prevpage = $page - 1;
-            if (isset($fromExercise)) {
-                $tool_content .= "<small>&lt;&lt; <a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId .
-                        "&amp;fromExercise=" . $fromExercise .
-                        "&amp;page=" . $prevpage . "\">" . $langPreviousPage . "</a>&nbsp;</small>";
-            } else {
-                $tool_content .= "<small>&lt;&lt;
-				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$prevpage'>$langPreviousPage</a></small>";
-            }
+            $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
+            $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";            
         }
         if ($page < $numpages) {
             $nextpage = $page + 1;
-            if (isset($fromExercise)) {
-                $tool_content .= "<small><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;exerciseId=" . $exerciseId .
-                        "&amp;fromExercise=" . $fromExercise .
-                        "&amp;page=" . $nextpage . "'>" . $langNextPage .
-                        "</a> &gt;&gt;</small>";
-            } else {
-                $tool_content .= "<small>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;
-				</small>";
-            }
+            $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
+            $tool_content .= "<small><a href='$query_string_url&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;</small>";
         }
     }
     $tool_content .= "</table>";

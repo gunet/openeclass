@@ -2728,3 +2728,14 @@ function action_button($options) {
         $out .
         '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>';
 }
+/**
+ * Removes spcific get variable from Query String
+ *
+ */
+function removeGetVar($url, $varname) {
+    list($urlpart, $qspart) = array_pad(explode('?', $url), 2, '');
+    parse_str($qspart, $qsvars);
+    unset($qsvars[$varname]);
+    $newqs = http_build_query($qsvars);
+    return $urlpart . '?' . $newqs;
+}
