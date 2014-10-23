@@ -16,7 +16,7 @@ $(document).ready( function () {
     // Initialisations
     animate_btn();
     $('[rel=tooltip]').tooltip();
-
+    
 
     // Teacher - Student Button
     $('.btn-toggle').on('click',function(){
@@ -35,21 +35,25 @@ $(document).ready( function () {
     
     
     // Actions needed to be done after full DOM elements downloaded
-    $(window).load(function ()
+    $(window).load(function()
     {
-        var initialHeigth;
+        var initialHeight;
         var windowHeight = $(window).height();
         var contentHeight = $("#Frame").height();
 
 
         // Initialisation of Main Content height
-        initialHeight = (windowHeight < contentHeight) ? initialHeight = contentHeight - 131 : initialHeight = windowHeight - 131;
+        var margin_offset = 131;
+        var initialHeight = ((contentHeight > windowHeight) ? contentHeight :  windowHeight ) - margin_offset;
         $("#Frame").css({"min-height": initialHeight});
-
+        $("#sidebar").css({"min-height": initialHeight + margin_offset});
+ 
 
         // Right Side toggle menu animation
         $('#toggle-sidebar').click(function () {
             var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
+            
+            
             $("#sidebar").animate(
                     {"right": inOut}, {duration: 150, easing: "linear",
                 start: function () {
