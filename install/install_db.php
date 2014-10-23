@@ -293,9 +293,9 @@ $db->query("CREATE TABLE course_review (
 
 $db->query("CREATE TABLE user (
       id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      surname VARCHAR(60) NOT NULL DEFAULT '',
-      givenname VARCHAR(60) NOT NULL DEFAULT '',
-      username VARCHAR(50) NOT NULL UNIQUE KEY COLLATE utf8_bin,
+      surname VARCHAR(100) NOT NULL DEFAULT '',
+      givenname VARCHAR(100) NOT NULL DEFAULT '',
+      username VARCHAR(100) NOT NULL UNIQUE KEY COLLATE utf8_bin,
       password VARCHAR(60) NOT NULL DEFAULT 'empty',
       email VARCHAR(100) NOT NULL DEFAULT '',
       parent_email VARCHAR(100) NOT NULL DEFAULT '',

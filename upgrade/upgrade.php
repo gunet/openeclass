@@ -100,9 +100,9 @@ if (!DBHelper::fieldExists('user', 'id')) {
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
     Database::get()->query("ALTER TABLE user
                         CHANGE user_id id INT(11) NOT NULL AUTO_INCREMENT,
-                        CHANGE nom surname VARCHAR(60) NOT NULL DEFAULT '',
-                        CHANGE prenom givenname VARCHAR(60) NOT NULL DEFAULT '',
-                        CHANGE username username VARCHAR(50) NOT NULL UNIQUE KEY COLLATE utf8_bin,
+                        CHANGE nom surname VARCHAR(100) NOT NULL DEFAULT '',
+                        CHANGE prenom givenname VARCHAR(100) NOT NULL DEFAULT '',
+                        CHANGE username username VARCHAR(100) NOT NULL UNIQUE KEY COLLATE utf8_bin,
                         CHANGE password password VARCHAR(60) NOT NULL DEFAULT 'empty',
                         CHANGE email email VARCHAR(100) NOT NULL DEFAULT '',
                         CHANGE statut status TINYINT(4) NOT NULL DEFAULT " . USER_STUDENT . ",
@@ -491,9 +491,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query("RENAME TABLE prof_request TO user_request");
                         Database::get()->query("ALTER TABLE user_request
                                     CHANGE rid id INT(11) NOT NULL auto_increment,
-                                    CHANGE profname name VARCHAR(255) NOT NULL DEFAULT '',
-                                    CHANGE profsurname surname VARCHAR(255) NOT NULL DEFAULT '',
-                                    CHANGE profuname uname VARCHAR(255) NOT NULL DEFAULT '',
+                                    CHANGE profname name VARCHAR(100) NOT NULL DEFAULT '',
+                                    CHANGE profsurname surname VARCHAR(100) NOT NULL DEFAULT '',
+                                    CHANGE profuname uname VARCHAR(100) NOT NULL DEFAULT '',
                                     CHANGE profpassword password VARCHAR(255) NOT NULL DEFAULT '',
                                     CHANGE profemail email varchar(255) NOT NULL DEFAULT '',
                                     CHANGE proftmima faculty_id INT(11) NOT NULL DEFAULT 0,
@@ -893,9 +893,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
                     if (!DBHelper::fieldExists('user_request', 'state')) {
                         Database::get()->query("ALTER TABLE `user_request`
-                    CHANGE `name` `givenname` VARCHAR(60) NOT NULL DEFAULT '',
-                    CHANGE `surname` `surname` VARCHAR(60) NOT NULL DEFAULT '',
-                    CHANGE `uname` `username` VARCHAR(50) NOT NULL DEFAULT '',
+                    CHANGE `name` `givenname` VARCHAR(100) NOT NULL DEFAULT '',
+                    CHANGE `surname` `surname` VARCHAR(100) NOT NULL DEFAULT '',
+                    CHANGE `uname` `username` VARCHAR(100) NOT NULL DEFAULT '',
                     CHANGE `email` `email` VARCHAR(100) NOT NULL DEFAULT '',
                     CHANGE `status` `state` INT(11) NOT NULL DEFAULT 0,
                     CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 1");
