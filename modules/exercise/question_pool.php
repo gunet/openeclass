@@ -239,7 +239,7 @@ if ($is_editor) {
             }
             $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
             $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d AND$difficultySql
+                            ON question_id = id WHERE course_id = ?d $difficultySql
                             GROUP BY id ORDER BY question LIMIT ?d, ?d", $result_query_vars);     
             $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d$difficultySql", $total_query_vars)->total;            
