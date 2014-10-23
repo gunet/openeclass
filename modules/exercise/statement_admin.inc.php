@@ -174,7 +174,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label for='questionDifficulty' class='col-sm-2 control-label'>Βαθμός δυσκολίας:</label>
+                <label for='questionDifficulty' class='col-sm-2 control-label'>$langQuestionDiffGrade:</label>
                 <div class='col-sm-10'>
                     <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>                      
                 </div>
