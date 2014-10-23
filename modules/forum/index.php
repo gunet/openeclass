@@ -116,7 +116,7 @@ if ($total_categories > 0) {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='odd'>
 		<th colspan='5'><b>$cat_title</b></th>
-		<th class='opt-btn-cell text-center'>";
+		<th class='option-btn-cell text-center'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -143,7 +143,7 @@ if ($total_categories > 0) {
 		<td class='text-center'>$langSubjects</td>
 		<td class='text-center'>$langPosts</td>
 		<td class='text-center'>$langLastPost</td>
-		<td class='text-center'>" . icon('fa-gears') . "</td>
+		<td class='text-center option-btn-cell'>" . icon('fa-gears') . "</td>
 		</tr>";
 
         // display forum topics
