@@ -70,14 +70,6 @@ if (count($lesson_ids) > 0) {
     $user_agenda = getUserAgenda($lesson_ids);
     // get user forum posts    
     $user_forumPosts = getUserForumPosts($lesson_ids);
-} else {
-    //show a "-" in all blocks if the user is not enrolled to any lessons
-    // (except of the lessons block which is handled before)
-    $user_assignments = "<p>-</p>";
-    $user_announcements = '';
-    $user_documents = "<p>-</p>";
-    $user_agenda = "<p>-</p>";
-    $user_forumPosts = "<p>-</p>";
 }
 
 // create array with content
@@ -152,7 +144,8 @@ function getUserLessonInfo($uid) {
 
     //getting user's lesson info
     if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table tabletable-bordered table-hover'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table-default'>";
+        $lesson_content .= "<thead style='display:none'><tr><th></th><th></th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
@@ -167,7 +160,7 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "</td></tr>";
         }
-        $lesson_content .= "</table>";
+        $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
         $lesson_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons!</div>";
         if ($session->status == USER_TEACHER) {
