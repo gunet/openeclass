@@ -190,12 +190,11 @@ if ($is_editor) {
     
     //DISPLAY: new (or edit) activity form to attendance module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
-
+        $nameTools= $langAttendanceActivity;
         $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>
-            <legend>$langAttendanceActivity</legend>
-            <table class='tbl' width='100%'>";
+            <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <fieldset>";
         
         if (isset($_GET['modify'])) { //edit an existed activity
             $id = intval($_GET['modify']);
@@ -214,36 +213,46 @@ if ($is_editor) {
             $attendanceActivityToModify = "";
             $titleToModify = '';
             $contentToModify = '';
+            $date = '';
         }
 
         $tool_content .= "
-            <tr><th>$langTitle:</th></tr>
-            <tr>
-              <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
-            </tr>
-            <tr><th>$langAttendanceActivityDate:</th></tr>
-            <tr>
-              <td><input type='text' name='date' id='date' value='$date'></td>
-            </tr>
-            <tr><th>$langDescription:</th></tr>
-            <tr>
-              <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
-            </tr>";
-        if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism            
-            $tool_content .= "<tr><td>$langAttendanceAutoBook: <input type='checkbox' value='1' name='auto' ";
-            if ($auto) {
-                $tool_content .= " checked";
-            }
-            $tool_content .= " /></td>";
+            <div class='form-group'>
+                <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='actTitle' id='actTitle' placeholder='$langTitle' value='$titleToModify' size='50'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='date' class='col-sm-2 control-label'>$langAttendanceActivityDate:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='date' id='date' placeholder='$langAttendanceActivityDate' value='$date'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='actDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                <div class='col-sm-10'>
+                    " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
+                </div>
+            </div>";
+        if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism     
+            $tool_content .= "<div class='form-group'>
+                <label for='auto' class='col-sm-2 control-label'>$langAttendanceAutoBook:</label>
+                <div class='col-sm-10'>
+                    <input type='checkbox' value='1' id='auto' name='auto' ".(($auto) ? "checked" : "").">
+                </div>
+            </div>";
         }    
         $tool_content .= "
-                <tr>
-                  <td class='right'><input class='btn btn-primary' type='submit' name='submitAttendanceActivity' value='$langAdd' /></td>
-                </tr>
-            </table>
             <input type='hidden' name='id' value='$attendanceActivityToModify' />
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='submitAttendanceActivity' value='$langAdd'>
+                    <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                </div>
+            </div>
             </fieldset>
-            </form>";
+            </form></div>";
         
         //do not show the activities list
         $showAttendanceActivities = 0;
