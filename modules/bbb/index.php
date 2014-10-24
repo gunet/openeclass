@@ -733,7 +733,7 @@ function bbb_session_details() {
 
     if (($result)) {
         if (!$is_editor) {
-            $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBNoteEnableJoin</p>";
+            $tool_content .= "<div class='alert alert-info'><label>$langNote</label>:<br>$langBBBNoteEnableJoin</div>";
         }    
         $tool_content .= "<div class='row'><div class='col-md-12'><div class='table-responsive'><table class='table-default'>
                           <tr>
@@ -817,7 +817,7 @@ function bbb_session_details() {
                             <td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>$langBBBSessionJoin</a></td>";
+                            $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
                         } else {
                             $tool_content .= "-</td>";
                         }

@@ -30,6 +30,13 @@ require_once 'include/log.php';
 $nameTools = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAdminUsers);
 
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "index.php?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'
+                 )));
+
 if (isset($_POST['submit'])) {
     $ok = array();
     $not_found = array();
@@ -67,37 +74,32 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($existing)) {
-        $tool_content .= "<p class='noteit'>$langUsersAlreadyRegistered<br>";
+        $tool_content .= "<div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
         foreach ($existing as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</p>';
+        $tool_content .= '</div>';
     }
 }
 
-$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <fieldset>
-           <legend>$langUsersData</legend>
-           <table width='100%' class='tbl'>
-               <tr>
-                   <td><input type='radio' name='type' value='uname' checked>&nbsp;$langUsername<br>
-                       <input type='radio' name='type' value='am'>&nbsp;$langAm
-                   </td>
-               </tr>
-               <tr>
-                   <td>
-                       <textarea class='auth_input' name='user_info' rows='10' cols='30'></textarea>
-                   </td>
-               </tr>
-               <tr>
-                   <th class='right'>
-                       <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-                   </th>
-               </tr>
-           </table>
+
+$tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
+        <div class='form-wrapper'>
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <fieldset>           
+            <div class='form-group'>
+               <div class='col-sm-12 radio'><label><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
+                <div class='col-sm-12 radio'><label><input type='radio' name='type' value='am'>$langAm</label></div>
+            </div>
+            <div class='form-group'>
+                <textarea class='auth_input' name='user_info' rows='10'></textarea>
+            </div>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
+            </div>                       
         </fieldset>
-    </form>
-    <p class='noteit'>$langAskManyUsers</p>";
+        </form>
+        </div";
 
 draw($tool_content, 2);
 

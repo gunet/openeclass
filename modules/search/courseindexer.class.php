@@ -165,43 +165,36 @@ class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterf
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
         $langNewSearch;
 
-        return "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <fieldset>
-         <legend>$langSearchCriteria:</legend>
-            <table class='tbl'>
-                <tr>
-                    <th width='120'>$langTitle:</th>
-                    <td><input name='search_terms_title' type='text' size='50' /></td>
-                    <td class='smaller'>$langTitle_Descr</td>
-                </tr>
-                <tr>
-                    <th>$langDescription:</th>
-                    <td><input name='search_terms_description' type='text' size='50' /></td>
-                    <td class='smaller'>$langDescription_Descr</small>
-                </tr>
-                <tr>
-                    <th>$langKeywords:</th>
-                    <td><input name='search_terms_keywords' type='text' size='50' /></td>
-                    <td class='smaller'>$langKeywords_Descr</td>
-                </tr>
-                <tr>
-                    <th>$langTeacher:</th>
-                    <td><input name='search_terms_instructor' type='text' size='50' /></td>
-                    <td class='smaller'>$langInstructor_Descr</td>
-                </tr>
-                <tr>
-                    <th>$langCourseCode:</th>
-                    <td><input name='search_terms_coursecode' type='text' size='50' /></td>
-                    <td class='smaller'>$langCourseCode_Descr</td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td colspan=2 class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch' />&nbsp;&nbsp;<input type='reset' name='reset' value='$langNewSearch' /></td>
-                </tr>
-            </table>
-        </fieldset>
-        </form>";
+        return "<div class='form-wrapper'>            
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>            
+        <fieldset>         
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+                <div class='col-sm-10'><input id='title' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
+            </div>
+            <div class='form-group'>
+                <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+                <div class='col-sm-10'><input id='description' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>                    
+            </div>
+            <div class='form-group'>
+                <label for='keywords' class='col-sm-2 control-label'>$langKeywords:</label>
+                <div class='col-sm-10'><input id='keywords' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>                
+            </div>
+            <div class='form-group'>
+                <label for='teacher' class='col-sm-2 control-label'>$langTeacher:</label>
+                <div class='col-sm-10'><input id='teacher' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>                
+            </div>
+            <div class='form-group'>
+                <label for='code' class='col-sm-2 control-label'>$langCourseCode:</label>
+                <div class='col-sm-10'><input id='code' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>                
+            </div>
+            <div class='col-sm-offset-2 col-sm-10'>              
+              <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
+                <input class='btn' type='reset' name='reset' value='$langNewSearch'>
+            </div>            
+            </fieldset>
+            </form>
+        </div>";
     }
 
     /**

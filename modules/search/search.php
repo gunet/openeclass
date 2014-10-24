@@ -78,30 +78,34 @@ if (isset($uid) and $uid) {
  
 // exit if not results
 if (count($hits) <= 0) {
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => "search.php",
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
     $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+    
     draw($tool_content, 0);
     exit();
 }
 
 //////// PRINT RESULTS ////////
-$tool_content .= "<div id='operations_container'>
-      <ul id='opslist'>
-         <li><a href='search.php'>$langNewSearch</a></li>
-      </ul>
-    </div>";
+$tool_content .= action_bar(array(
+                    array('title' => $langNewSearch,
+                          'url' => "search.php",
+                          'icon' => 'fa-plus-circle',
+                          'level' => 'primary-label',
+                          'button-class' => 'btn-success',)));
 
 $tool_content .= "
-    <p>$langDoSearch:&nbsp;<b>" . count($hits) . " $langResults</b></p>
-    <script type='text/javascript' src='../auth/sorttable.js'></script>
-    <table width='100%' class='sortable' id='t1' align='left'>
-    <tr>
-      <th width='1'>&nbsp;</th>
-      <th><div align='left'>" . $langCourse . " ($langCode)</div></th>
-      <th width='200'><div align='left'>$langTeacher</div></th>
-      <th width='150'><div align='left'>$langKeywords</div></th>
+    <div class='alert alert-info'>$langDoSearch:&nbsp;<label>" . count($hits) . " $langResults2</label></div>
+    <table class='table-default'>
+    <tr>      
+      <th class='text-left'>" . $langCourse . " ($langCode)</th>
+      <th class='text-left'>$langTeacher</th>
+      <th class='text-left'>$langKeywords</th>
     </tr>";
 
-$k = 0;
 foreach ($hits as $hit) {    
     $course = Database::get()->querySingle("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ?d", $hit->pkid);
 
@@ -110,15 +114,12 @@ foreach ($hits as $hit) {
     if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
         $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
     }
-
-    $class = ($k % 2) ? 'odd' : 'even';
-    $tool_content .= "<tr class='$class'>
-                      <td><img src='$themeimg/arrow.png' alt='' /></td><td>
+    
+    $tool_content .= "<tr><td>
                       <a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "
                       </a> (" . q($course->public_code) . ")</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td></tr>";
-    $k++;
 }
 $tool_content .= "</table>";
 draw($tool_content, 0);

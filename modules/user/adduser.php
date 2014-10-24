@@ -41,7 +41,7 @@ if (isset($_GET['add'])) {
                                     VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $uid_to_add, $course_id);
 
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
-        'right' => '+5'));
+                                                               'right' => '+5'));
     if ($result) {
         $tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
         // notify user via email
@@ -55,60 +55,45 @@ if (isset($_GET['add'])) {
         $tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
     }
     $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
-} else {
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
+} else {    
     register_posted_variables(array('search_surname' => true,
-        'search_givenname' => true,
-        'search_username' => true,
-        'search_am' => true), 'any');
+                                    'search_givenname' => true,
+                                    'search_username' => true,
+                                    'search_am' => true), 'any');
 
-    $tool_content .= "
-<div id='operations_container'>" .
-            action_bar(array(
-                array('title' => $langOneUser,
-                    'url' => "adduser.php?course=$course_code",
-                    'icon' => 'fa-plus-circle',
-                    'button-class' => 'btn-success',
-                    'level' => 'primary-label'),
-                array('title' => $langManyUsers,
-                    'url' => "muladduser.php?course=$course_code",
-                    'icon' => 'fa-plus-circle',
-                    'button-class' => 'btn-success',
-                    'level' => 'primary-label'),
-                array('title' => $langGUser,
-                    'url' => "guestuser.php?course=$course_code",
-                    'icon' => 'fa-plane',
-                    'level' => 'primary'),
-                array('title' => $langGroupUserManagement,
-                    'url' => "../group/index.php?course=$course_code",
-                    'icon' => 'fa-users',
-                    'level' => 'primary'),
-                array('title' => $langDelUsers,
-                    'url' => "../course_info/refresh_course.php?course=$course_code",
-                    'icon' => 'fa-times',
-                    'button-class' => 'btn-danger',
-                    'level' => 'primary'),
-            )) .
-            "</div>";
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "index.php?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'
+                 )));
 
-    $tool_content .= "
-        <fieldset>
-        <legend>$langUserData</legend>
-        <table class='tbl'>
-        <tr><td colspan='2'>$langAskUser<br /><br /></td></tr>
-        <tr><th class='left'>$langSurname:</th>
-            <td><input type='text' name='search_surname' value='" . q($search_surname) . "' /></td></tr>
-        <tr><th class='left'>$langName:</th>
-            <td><input type='text' name='search_givenname' value='" . q($search_givenname) . "' /></td></tr>
-        <tr><th class='left'>$langUsername:</th>
-            <td><input type='text' name='search_username' value='" . q($search_username) . "' /></td></tr>
-        <tr><th class='left'>$langAm:</th>
-            <td><input type='text' name='search_am' value='" . q($search_am) . "' /></td></tr>
-        <tr><th class='left'>&nbsp;</th>
-            <td class='right'><input class='btn btn-primary' type='submit' name='search' value='$langSearch' /></td></tr>
-        </table>
-        </fieldset>
-        </form>";
+    $tool_content .= "<div class='alert alert-info'>$langAskUser</div>
+                <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>                
+                <fieldset>
+                <div class='form-group'>
+                <label for='surname' class='col-sm-2 control-label'>$langSurname:</label>
+                    <div class='col-sm-10'><input id = 'surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
+                </div>
+                <div class='form-group'>
+                <label for='name' class='col-sm-2 control-label'>$langName:</label>
+                    <div class='col-sm-10'><input id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
+                </div>
+                <div class='form-group'>
+                <label for='username' class='col-sm-2 control-label'>$langUsername:</label>
+                    <div class='col-sm-10'><input id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
+                </div>
+                <div class='form-group'>
+                <label for='am' class='col-sm-2 control-label'>$langAm:</label>
+                    <div class='col-sm-10'><input id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
+                </div>
+                <div class='col-sm-offset-2 col-sm-10'>                        
+                    <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
+                </div>
+                </fieldset>
+                </form>
+                </div>";
 
     $search = array();
     $values = array();
@@ -127,26 +112,21 @@ if (isset($_GET['add'])) {
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
                                                 c.user_id IS NULL AND $query", $values);
         if ($result) {
-            $tool_content .= "<table width=100% class='tbl_alt'>
+            $tool_content .= "<table class='table-default'>
                                 <tr>
-                                  <th width='20'>$langID</th>
-                                  <th width='150'>$langName</th>
-                                  <th width='150'>$langSurname</th>
+                                  <th>$langID</th>
+                                  <th>$langName</th>
+                                  <th>$langSurname</th>
                                   <th>$langUsername</th>
-                                  <th width='150'>$langAm</th>
-                                  <th width='200'>$langActions</th>
+                                  <th>$langAm</th>
+                                  <th>$langActions</th>
                                 </tr>";
             $i = 1;
-            foreach ($result as $myrow) {
-                if ($i % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-                $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
+            foreach ($result as $myrow) {                
+                $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
-                        q($myrow->am) . "</td><td align='center'>" .
-                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow->id'>$langRegister</a></td></tr>";
+                        q($myrow->am) . "</td><td class='text-center'>" .
+                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow->id"). "</td></tr>";
                 $i++;
             }
             $tool_content .= "</table>";
