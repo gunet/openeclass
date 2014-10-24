@@ -1548,7 +1548,6 @@ $db->query('CREATE INDEX `eur_index1` ON exercise_user_record (eid)');
 $db->query('CREATE INDEX `eur_index2` ON exercise_user_record (uid)');
 $db->query('CREATE INDEX `ear_index1` ON exercise_answer_record (eurid)');
 $db->query('CREATE INDEX `ear_index2` ON exercise_answer_record (question_id)');
-$db->query('CREATE INDEX `ewq_index` ON exercise_with_questions (question_id, exercise_id)');
 $db->query('CREATE INDEX `eq_index` ON exercise_question (course_id)');
 $db->query('CREATE INDEX `ea_index` ON exercise_answer (question_id)');
 $db->query("CREATE INDEX `for_index` ON forum(course_id)");
@@ -1562,7 +1561,6 @@ $db->query("CREATE INDEX `grade_index` ON gradebook(course_id)");
 $db->query("CREATE INDEX `grade_act_index` ON gradebook_activities(gradebook_id)");
 $db->query("CREATE INDEX `grade_book_index` ON gradebook_book(gradebook_activity_id)");
 $db->query("CREATE INDEX `group_index` ON `group`(course_id)");
-$db->query("CREATE INDEX `gr_mem_index` ON group_members(group_id,user_id)");
 $db->query("CREATE INDEX `gr_prop_index` ON group_properties(course_id)");
 $db->query("CREATE INDEX `hier_index` ON hierarchy(code,name(20))");
 $db->query("CREATE INDEX `link_index` ON link(course_id)");
@@ -1596,3 +1594,59 @@ $db->query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start
 $db->query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
 $db->query('CREATE INDEX `deadline_dates` ON assignment (course_id, deadline)');
 $db->query('CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)');
+
+$db->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
+$db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');
+
+// The following tuples have been confirmed
+$db->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');
+$db->query('CREATE INDEX `actions_daily_hdi` ON `actions_daily` (hits, duration, id)');
+$db->query('CREATE INDEX `loginout_ia` ON `loginout` (id_user, action)');
+$db->query('CREATE INDEX `announcement_cvo` ON `announcement` (course_id, visible, order)');
+
+// Single indices from multiple tuples
+$db->query("CREATE INDEX `actions_summary_module_id` ON actions_summary(module_id)");
+$db->query("CREATE INDEX `actions_summary_course_id` ON actions_summary(course_id)");
+
+$db->query('CREATE INDEX `doc_course_id` ON document (course_id)');
+$db->query('CREATE INDEX `doc_subsystem` ON document (subsystem)');
+$db->query('CREATE INDEX `doc_path` ON document (path)');
+
+$db->query("CREATE INDEX `drop_index_recipient_id` ON dropbox_index(recipient_id)");
+$db->query("CREATE INDEX `drop_index_is_read` ON dropbox_index(is_read)");
+
+$db->query("CREATE INDEX `drop_msg_index_course_id` ON dropbox_msg(course_id)");
+$db->query("CREATE INDEX `drop_msg_index_author_id` ON dropbox_msg(author_id)");
+
+$db->query('CREATE INDEX `ewq_index_question_id` ON exercise_with_questions (question_id)');
+$db->query('CREATE INDEX `ewq_index_exercise_id` ON exercise_with_questions (exercise_id)');
+
+$db->query("CREATE INDEX `gr_mem_user_id` ON group_members(user_id)");
+$db->query("CREATE INDEX `gr_mem_group_id` ON group_members(group_id)");
+
+$db->query("CREATE INDEX `log_course_id` ON log (course_id)");
+$db->query("CREATE INDEX `log_module_id` ON log (module_id)");
+
+$db->query("CREATE INDEX `logins_id_user_id` ON logins(user_id)");
+$db->query("CREATE INDEX `logins_id_course_id` ON logins(course_id)");
+
+$db->query("CREATE INDEX `lp_rel_learnPath_id` ON lp_rel_learnPath_module(learnPath_id)");
+$db->query("CREATE INDEX `lp_rel_module_id` ON lp_rel_learnPath_module(module_id)");
+
+$db->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
+$db->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
+
+$db->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
+$db->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
+
+$db->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
+$db->query("CREATE INDEX `unit_res_visible` ON unit_resources (visible)");
+$db->query("CREATE INDEX `unit_res_res_id` ON unit_resources (res_id)");
+
+$db->query('CREATE INDEX `pcal_start` ON personal_calendar (start)');
+
+$db->query('CREATE INDEX `agenda_start` ON agenda (start)');
+
+$db->query('CREATE INDEX `assignment_deadline` ON assignment (deadline)');
+
+
