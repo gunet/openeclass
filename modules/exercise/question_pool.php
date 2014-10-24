@@ -162,37 +162,30 @@ if ($is_editor) {
 
     // if we have selected an exercise in the list-box 'Filter'
     if (isset($exerciseId) && $exerciseId > 0) {
+        //Building query vars and query
+        $total_query_vars = array($course_id, $exerciseId);
+        $difficultySql = "";
+        if(isset($difficultyId) && $difficultyId!=-1) {
+            $total_query_vars[] = $difficultyId;
+            $difficultySql = " AND difficulty = ?d";
+        }               
         if (isset($fromExercise)) {
-            $total_query_vars = array($course_id, $exerciseId);
-            $difficultySql = "";
-            if(isset($difficultyId) && $difficultyId!=-1) {
-                $total_query_vars[] = $difficultyId;
-                $difficultySql = " AND difficulty = ?d";
-            }
             $total_query_vars = array_merge($total_query_vars, array($fromExercise, $fromExercise));
             $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
-            
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $result_query_vars);
-            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d";
+            $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
-                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            ", $total_query_vars)->total;                
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";
         } else {
-            $total_query_vars = array($course_id, $exerciseId);
-            $difficultySql = "";
-            if(isset($difficultyId) && $difficultyId!=-1) {
-                $total_query_vars[] = $difficultyId;
-                $difficultySql = " AND difficulty = ?d";
-            }
-            $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));            
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
+            $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
+            $result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
                             WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$difficultySql
-                            ORDER BY q_position LIMIT ?d, ?d", $result_query_vars);
-            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_with_questions`, `exercise_question`
-                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$difficultySql", $total_query_vars)->total;            
+                            ORDER BY q_position LIMIT ?d, ?d";
+            $total_query = "SELECT COUNT(id) AS total FROM `exercise_with_questions`, `exercise_question`
+                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$difficultySql";
         }
     }
     // if we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -204,49 +197,44 @@ if ($is_editor) {
             $difficultySql = " AND difficulty = ?d";
         }
         $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
-
-        $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+        $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
 			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$difficultySql ORDER BY question
-			LIMIT ?d, ?d", $result_query_vars);
-        $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$difficultySql", $total_query_vars)->total;        
+			LIMIT ?d, ?d";
+        $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+			ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$difficultySql";     
     }
     // if we have not selected any option in the list-box 'Filter'
     else {
+        $total_query_vars[] = $course_id;
+        $difficultySql = "";
+        if(isset($difficultyId) && $difficultyId!=-1) {
+            $total_query_vars[] = $difficultyId;
+            $difficultySql = " AND difficulty = ?d";
+        }        
         if (isset($fromExercise)) {
-            $total_query_vars[] = $course_id;
-            $difficultySql = "";
-            if(isset($difficultyId) && $difficultyId!=-1) {
-                $total_query_vars[] = $difficultyId;
-                $difficultySql = " AND difficulty = ?d";
-            }
             $total_query_vars = array_merge($total_query_vars, array($fromExercise, $fromExercise));
-            $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));            
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
-                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $result_query_vars);
-            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
-                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                            ", $total_query_vars)->total;            
-        } else {
-            $total_query_vars[] = $course_id;
-            $difficultySql = "";
-            if(isset($difficultyId) && $difficultyId!=-1) {
-                $total_query_vars[] = $difficultyId;
-                $difficultySql = " AND difficulty = ?d";
-            }
             $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
-            $result = Database::get()->queryArray("SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+            $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d";
+            $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";           
+        } else {
+            $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
+            $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d $difficultySql
-                            GROUP BY id ORDER BY question LIMIT ?d, ?d", $result_query_vars);     
-            $total_questions = Database::get()->querySingle("SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d$difficultySql", $total_query_vars)->total;            
-        }
+                            GROUP BY id ORDER BY question LIMIT ?d, ?d";
+            $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
+                            ON question_id = id WHERE course_id = ?d$difficultySql";           
+        }         
         // forces the value to 0
         $exerciseId = 0;
     }
+    $result = Database::get()->queryArray($result_query, $result_query_vars);     
+    $total_questions = Database::get()->querySingle($total_query, $total_query_vars)->total;
+    
     $nbrQuestions = count($result);
     $tool_content .= "
 	<tr>
