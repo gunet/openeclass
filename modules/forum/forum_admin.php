@@ -84,31 +84,37 @@ $tool_content .= "<div id='operations_container'>".
 // forum go
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);
+    $nameTools = $langAddForCat;
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
+        <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
-                <legend>$langAddForCat</legend>
-                <table class='tbl' width='100%'>
-                <tr>
-                <th>$langCat:</th>
-                <td>$ctg</td>
-                </tr>
-                <tr>
-                <th>$langForName:</th>
-                <td><input type='text' name='forum_name' size='40'></td>
-                </tr>
-                <tr>
-                <th valign='top'>$langDescription:</th>
-                <td><textarea name='forum_desc' cols='37' rows='3'></textarea></td>
-                </tr>
-                <tr>
-                <th>&nbsp;</th>
-                <td class='right'><input class='btn btn-primary' type='submit' value='$langAdd'></td>
-                </tr>
-                </table>
+            <div class='form-group'>
+                <label for='cat_title' class='col-sm-2 control-label'>$langCat:</label>
+                <div class='col-sm-10'>
+                    <input type='text' class='form-control' id='cat_title' value='$ctg' disabled>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='forum_name' class='col-sm-2 control-label'>$langForName:</label>
+                <div class='col-sm-10'>
+                    <input type='text' class='form-control' name='forum_name' id='forum_name'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='forum_desc' class='col-sm-2 control-label'>$langDescription:</label>
+                <div class='col-sm-10'>
+                    <textarea name='forum_desc' id='forum_desc' cols='37' rows='3'></textarea>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' value='$langAdd'>
+                    <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
+                </div>
+            </div>
         </fieldset>
-        </form>
-        <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+        </form></div>";
 }
 // forum go edit
 elseif (isset($_GET['forumgoedit'])) {
