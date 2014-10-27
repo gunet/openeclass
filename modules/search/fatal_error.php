@@ -19,26 +19,34 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$tool_content = "
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
-  <head>
-    <title>Asynchronous eLearning Platform Open eClass</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link href='../../install/install.css' rel='stylesheet' type='text/css' />
-  </head>
-  <body>
-  <div class='install_container'>
-  <p align='center'><img src='../../template/classic/img/logo_openeclass.png' alt='logo' /></p>
-  <div class='alert' align='center'>
-  <p>The asynchronous eLearning Platform Open eClass is not operational.</p>
-  <p>This is caused by a possible permissions problem for the search engine indexing directory (courses/idx/).</p>
-  <p>Please inform the platform administrator.</p>
-  </div>
-  </div>
-  </body>
-</html>";
 
-echo $tool_content;
+require_once 'template/template.inc.php';
 
-exit();
+$t = new Template('template/bootstrap');
+
+$t->set_file('fh', 'theme.html');
+$t->set_block('fh', 'mainBlock', 'main');
+$t->set_block('mainBlock', 'leftNavBlock', 'delete');
+$t->set_block('mainBlock', 'sideBarBlock', 'delete');
+$t->set_block('mainBlock', 'LoggedInBlock', 'delete');
+$t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+$t->set_block('mainBlock', 'toolTitleBlock', 'delete');
+$t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'delete');
+$t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
+$t->set_block('mainBlock', 'breadCrumbEndBlock', 'delete');
+$t->set_block('mainBlock', 'modalWindowBlock', 'delete');
+$t->set_var('template_base', 'template/bootstrap');
+$t->set_var('PAGE_TITLE', "$langEclass");
+$t->set_var('TOOL_CONTENT', "
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='alert alert-warning'>
+        $langIdxErrorPermissions
+        </div>
+    <div>
+</div>");
+
+$t->parse('main', 'mainBlock', false);
+$t->pparse('Output', 'fh');
+exit;
