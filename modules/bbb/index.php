@@ -247,7 +247,7 @@ function new_bbb_session() {
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
             <div class='col-sm-10'>
-                <input type='text' name='title' id='title' value='$langTitle' size='50' />
+                <input type='text' name='title' id='title' placeholder='$langTitle' size='50' />
             </div>
         </div>
         <div class='form-group'>
@@ -255,7 +255,7 @@ function new_bbb_session() {
             <div class='col-sm-10'>
                 $textarea
             </div>
-        </div>    
+        </div>       
         <div class='form-group'>
             <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
             <div class='col-sm-10'>
@@ -281,13 +281,13 @@ function new_bbb_session() {
             <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='user_button' name='record' value='true'>
+                        <input type='radio' id='user_button' name='record' value='1'>
                         $langBBBRecordTrue
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='group_button' name='record' value='false' checked>
+                        <input type='radio' id='group_button' name='record' value='0' checked>
                        $langBBBRecordFalse
                       </label>
                     </div>
@@ -298,13 +298,13 @@ function new_bbb_session() {
             <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='public_button' name='type' value='0' checked>
+                        <input type='radio' id='public_button' name='type' value='1' checked>
                         $langNewBBBSessionPublic
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='private_button' name='type' value='1'>
+                        <input type='radio' id='private_button' name='type' value='0'>
                        $langNewBBBSessionPrivate
                       </label>
                     </div>
@@ -374,7 +374,6 @@ function new_bbb_session() {
             chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
             chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
         //]]></script>';
-    $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 /**
@@ -576,7 +575,7 @@ function edit_bbb_session($session_id) {
     global $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate;
     global $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive,$langBBBSessionAvailable,$langBBBMinutesBefore;    
     global $start_session;
-    global $langBack, $langTitle;
+    global $langBack, $langTitle, $langCancel;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
@@ -594,132 +593,136 @@ function edit_bbb_session($session_id) {
     $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
     $start = $startDate_obj->format('d-m-Y H:i');    
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
+    $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+    if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
     $tool_content .= "
-                    <form name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
                     <fieldset>
-                    <legend>$langNewBBBSessionInfo</legend>
-                    <table class='tbl' width='100%'>
-                    <tr>
-                      <th>$langTitle:</th>`
-                      <td><input type='text' name='title' size='55' value='".q($row->title)."'></td>
-                    </tr>
-                    <tr>
-                      <th>$langNewBBBSessionDesc:</th>
-                      <td>$textarea</td>
-                    </tr>
-                    <tr>
-                      <th>$langNewBBBSessionStart:</th>
-                      <td><input type='text' name='start_session' id='start_session' value='".q($start)."'></td>
-                    </tr>
-                    <tr>
-                    <th valign='top'>$langParticipants:</th>
-                    <td>
-                    <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
-                    //select all users from this course except yourself
-                    $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
-                    $res = Database::get()->queryArray($sql,$course_code);
-                    
-                    $tool_content .= "<option value=0 ";
-                    if(in_array(0,$r_group))
-                    {
-                        $tool_content.="selected ";
-                    }
-                    $tool_content .=">" . $langAllUsers . "</option>";
-                    foreach ($res as $r) {
-                        if($r->id){
-                                $tool_content .= "<option "; 
-                                if(in_array($r->id,$r_group))
-                                {
-                                    $tool_content.="selected ";
+                    <div class='form-group'>
+                        <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+                        <div class='col-sm-10'>
+                            <input type='text' name='title' id='title' value='".q($row->title)."'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
+                        <div class='col-sm-10'>
+                            $textarea
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
+                        <div class='col-sm-10'>
+                            <input type='text' name='start_session' id='start_session' value='".q($start)."'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
+                        <div class='col-sm-10'>
+                                    <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
+                        //select all users from this course except yourself
+                        $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
+                        $res = Database::get()->queryArray($sql,$course_code);
+                        $tool_content .= "<option value='0' ".((in_array(0,$r_group)) ? "selected" : "").">" . $langAllUsers . "</option>";
+                                foreach ($res as $r) {
+                                    if(isset($r->id)) {$tool_content .= "<option value='" . $r->id . "' ".(in_array($r->id,$r_group) ? "selected" : "").">" . q($r->name) . "</option>";}
                                 }
-                                $tool_content.="value=" . $r->id . ">" . q($r->name) . "</option>";
-                            }
-                    }
-                    $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td>";
-                    $tool_content .="</th>
-                    </tr>	
-                    <tr>
-                    <th valign='top'>$langBBBRecord:</th>
-                    <td><input type='radio' id='user_button' name='record' value='1' "; 
-                    if ($record==1) {
-                        $tool_content .= "checked";
-                    }
-                    $tool_content .= " /><label for='user_button'>$langBBBRecordTrue</label><br />
-                    <input type='radio' id='group_button' name='record' value='0' ";
-                    if ($record==0) {
-                        $tool_content .= "checked";
-                    }
-                    $tool_content .=" /><label for='group_button'>$langBBBRecordFalse</label></td>
-                    </td>
-                    </tr>
-                    <tr>
-                    <th valign='top'>$langNewBBBSessionType:</th>
-                    <td><input type='radio' id='user_button' name='type' value='1' "; 
-                    if ($type==1) {
-                        $tool_content .= "checked";
-                    }
-                    $tool_content .= " /><label for='user_button'>$langNewBBBSessionPublic</label><br />
-                    <input type='radio' id='group_button' name='type' value='0' ";
-                    if ($type==0) {
-                        $tool_content .= "checked";
-                    }
-                    $tool_content .=" /><label for='group_button'>$langNewBBBSessionPrivate</label></td>
-                    </td>
-                    </tr>
-                    <tr>
-                    <th valign='top'>$langNewBBBSessionStatus:</th>
-                        <td><input type='radio' id='user_button' name='status' value='1' ";
-                    if ($status==1) {
-                        $tool_content .= "checked";
-                    }                        
-                    $tool_content .=" /><label for='user_button'>$langNewBBBSessionActive</label><br />
-                    <input type='radio' id='group_button' name='status' value='0' ";
-                    if ($status==0) {
-                        $tool_content .= "checked ";
-                    }
-                     $tool_content .= " /><label for='group_button'>$langNewBBBSessionInActive</label></td>
-                    </td>
-                    </tr>
-                    <tr>
-                    <th>$langBBBSessionAvailable:</th>
-                    <td>
-                      <select name='minutes_before'>
-                          <option value='15''"; if($row->unlock_interval=='15') { $tool_content .="selected='selected'"; }
-                          $tool_content .=">15</option>
-                          <option value='30'"; if($row->unlock_interval=='30') { $tool_content .="selected='selected'"; }
-                          $tool_content .=">30</option>
-                          <option value='10'"; if($row->unlock_interval=='10') { $tool_content .="selected='selected'"; }
-                          $tool_content .=">10</option>
-                      </select> $langBBBMinutesBefore
-                      </td>
-                    </tr>                    
-                    <tr>
-                      <th>$langBBBSessionMaxUsers:</th>
-                      <td><input type='text' name='sessionUsers' size='5' value=".$row->sessionUsers."> $langBBBSessionSuggestedUsers:";
-        $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
-        if ($c>20) {$c = $c/2;} // If more than 20 course users, we suggest 50% of them
-        $tool_content .=" <strong>$c</strong> ($langBBBSessionSuggestedUsers2)</td></td>
-                    </tr>                    
-                    <tr>
-                        <th>
-                            $langBBBNotifyExternalUsers
-                        </th>
-                        <td>
-                            <input id='tags_1' name='external_users' type='text' class='tags' value='".trim($row->external_users)."' />
-                        </td>
-                    </tr>
-                    <tr>
-                    <th colspan='2' valign='top'>
-                        <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
-                    </th>
-                    </tr>
-                    <tr>
-                      <th>&nbsp;</th>
-                      <td class='right'><input class='btn btn-primary' type='submit' name='update_bbb_session' value='$langAdd' /></td>
-                    </tr>
-                    </table>
+                    $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
+                        <div class='col-sm-10'>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='user_button' name='record' value='1' ".(($record==1) ? "checked" : "").">
+                                    $langBBBRecordTrue
+                                  </label>
+                                </div>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='group_button' name='record' value='0' ".(($record==0) ? "checked" : "").">
+                                   $langBBBRecordFalse
+                                  </label>
+                                </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
+                        <div class='col-sm-10'>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='public_button' name='type' value='1' ".(($type==1) ? "checked" : "").">
+                                    $langNewBBBSessionPublic
+                                  </label>
+                                </div>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='private_button' name='type' value='0' ".(($type==0) ? "checked" : "").">
+                                   $langNewBBBSessionPrivate
+                                  </label>
+                                </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
+                        <div class='col-sm-10'>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='active_button' name='status' value='1' ".(($status==1) ? "checked" : "").">
+                                    $langNewBBBSessionActive
+                                  </label>
+                                </div>
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='inactive_button' name='status' value='0' ".(($status==0) ? "checked" : "").">
+                                   $langNewBBBSessionInActive
+                                  </label>
+                                </div>
+                        </div>
+                    </div>                    
+
+                    <div class='form-group'>
+                        <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
+                        <div class='col-sm-10'>
+                                <select name='minutes_before' id='minutes_before'>
+                                    <option value='15' ".(($row->unlock_interval=='15') ? "selected" : "").">15</option>
+                                    <option value='30' ".(($row->unlock_interval=='30') ? "selected" : "").">30</option>
+                                    <option value='10' ".(($row->unlock_interval=='10') ? "selected" : "").">10</option>
+                                </select> $langBBBMinutesBefore
+                        </div>
+                    </div>                    
+                    <div class='form-group'>
+                        <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
+                        <div class='col-sm-10'>
+                            <input type='text' name='sessionUsers' id='sessionUsers' size='5' value='".$row->sessionUsers."'> $langBBBSessionSuggestedUsers:
+                            <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
+                        </div>
+                    </div>                    
+                    <div class='form-group'>
+                        <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
+                        <div class='col-sm-10'>
+                            <input id='tags_1' name='external_users' type='text' class='tags' value='".trim($row->external_users)."'>
+                        </div>
+                    </div>                    
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                                 <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
+                                  </label>
+                                </div>
+                        </div>
+                    </div>                    
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input class='btn btn-primary' type='submit' name='update_bbb_session' value='$langAdd'>
+                            <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
+                        </div>
+                    </div>
                     </fieldset>
-                    </form>";
+                    </form></div>";
                 $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                     var chkValidator  = new Validator("sessionForm");
