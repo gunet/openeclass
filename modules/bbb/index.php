@@ -727,7 +727,6 @@ function edit_bbb_session($session_id) {
                     chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
                     chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
                     //]]></script>';
-                    $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
         }
 
 /**
