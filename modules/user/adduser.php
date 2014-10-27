@@ -88,7 +88,7 @@ if (isset($_GET['add'])) {
                 <label for='am' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-10'><input id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
-                <div class='col-sm-offset-2 col-sm-10'>                        
+                <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
                 </div>
                 </fieldset>

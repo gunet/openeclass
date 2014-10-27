@@ -48,6 +48,14 @@ $('#before_date').datepicker({
 $nameTools = $langRefreshCourse;
 
 if (isset($_POST['submit'])) {
+    
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "refresh_course?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'
+                 )));
+    
     $output = array();
     if (isset($_POST['delusers'])) {
         if (isset($_POST['before_date'])) {
@@ -84,61 +92,57 @@ if (isset($_POST['submit'])) {
         for ($i = 0; $i < $count_events; $i++) {
             $tool_content .= "<li>$output[$i]</li>";
         }
-        $tool_content .= "</ul></div><br>";
-    }
-    $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
-} else {        
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-	<table width='100%' class='FormData'>
-	<tbody>
-	<tr>
-	  <th width='220'>&nbsp;</th>
-	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
-	</tr>
-	<tr>
-	  <th class='left'><img src='$themeimg/groups_on.png' alt='' height='16' width='16'> $langUsers</th>
-	  <td width='1%'><input type='checkbox' name='delusers'></td>
-	  <td>$langUserDelCourse&nbsp;&nbsp;
-	  <input type='text' name='before_date' id='before_date' value='" .date("d-m-Y", time()) ."'></td>              
-	</tr>
-	<tr>
-	  <th class='left'><img src='$themeimg/announcements_on.png' alt='' height='16' width='16'> $langAnnouncements</th>
-	  <td><input type='checkbox' name='delannounces'></td>
-	  <td>$langAnnouncesDel</td>
-	</tr>
-	<tr>
-	  <th class='left'><img src='$themeimg/calendar_on.png' alt='' height='16' width='16'> $langAgenda</th>
-	  <td><input type='checkbox' name='delagenda'></td>
-	  <td>$langAgendaDel</td>
-	</tr>
-	<tr>
-	  <th class='left'><img src='$themeimg/assignments_on.png' alt='' height='16' width='16'> $langWorks</th>
-	  <td><input type='checkbox' name='hideworks'></td>
-	  <td>$langHideWork</td>
-	</tr>
-	<tr>
-	  <th class='left'>&nbsp</th>
-	  <td><input type='checkbox' name='delworkssubs'></td>
-	  <td>$langDelAllWorkSubs</td>
-	</tr>          
-        <tr>
-	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
-	  <td><input type='checkbox' name='purgeexercises'></td>
-	  <td>$langPurgeExerciseResults</td>
-	</tr>
-        <tr>
-	  <th class='left'><img src='$themeimg/usage_on.png' alt='' height='16' width='16'> $langStat</th>
-	  <td><input type='checkbox' name='clearstats'></td>
-	  <td>$langClearStats</td>
-	</tr>
-	<tr>
-	  <th>&nbsp;</th>
-	  <td colspan='2'><input class='btn btn-primary' type='submit' value='$langSubmitActions' name='submit'></td>
-	</tr>
-	</tbody>
-	</table>
-	</form>";
-    $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
+        $tool_content .= "</ul></div>";
+    }    
+} else {
+    
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "index.php?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'
+                 )));
+    
+    $tool_content .= "<div class='alert alert-info'>$langRefreshInfo $langRefreshInfo_A</div>
+            <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+             <fieldset>
+            <div class='form-group'>
+                <label for='delusers' class='col-sm-2 control-label'>$langUsers</label>
+                <div class='col-sm-10 checkbox'><input type='checkbox' name='delusers'>$langUserDelCourse
+                <input type='text' name='before_date' id='before_date' value='" .date("d-m-Y", time()) ."'></div>
+            </div>
+            <div class='form-group'>
+                <label for='delannounces' class='col-sm-2 control-label'>$langAnnouncements</label>
+                <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delannounces'>$langAnnouncesDel</label></div>
+            </div>
+            <div class='form-group'>
+              <label for-'delagenda' class='col-sm-2 control-label'>$langAgenda</label>
+              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delagenda'>$langAgendaDel</label></div>
+            </div>
+            <div class='form-group'>
+              <label for='hideworks' class='col-sm-2 control-label'>$langWorks</label>
+                <div class='col-sm-10 checkbox'>
+                    <label><input type='checkbox' name='hideworks'>$langHideWork</label>
+                  </div>
+                <div class='col-sm-offset-2 col-sm-10 checkbox'>
+                    <label><input type='checkbox' name='delworkssubs'>$langDelAllWorkSubs</label>
+                </div>
+            </div>
+            <div class='form-group'>
+              <label for='purgeexercises' class='col-sm-2 control-label'>$langExercises</label>
+              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='purgeexercises'>$langPurgeExerciseResults</label></div>
+            </div>
+            <div class='form-group'>
+              <label for='clearstats' class='col-sm-2 control-label'>$langStat</label>
+              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='clearstats'>$langClearStats</label></div>
+            </div>
+            <div class='col-sm-offset-2 col-sm-10'>
+            <input class='btn btn-primary' type='submit' value='$langSubmitActions' name='submit'>
+            </div>
+            </fieldset>
+            </form>
+            </div>";    
 }
 
 draw($tool_content, 2, null, $head_content);

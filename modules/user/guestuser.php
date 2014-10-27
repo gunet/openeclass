@@ -57,15 +57,17 @@ hContent;
 
 $default_guest_username = $langGuestUserName . $course_code;
 
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "index.php?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'
+                 )));
+
 if (isset($_POST['submit'])) {
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
-    $tool_content .= "<div class='alert alert-success'>$langGuestSuccess</div>" .
-            action_bar(array(
-            array('title' => $langBack,
-                'url' => "",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+    $tool_content .= "<div class='alert alert-success'>$langGuestSuccess</div>";            
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
@@ -78,44 +80,40 @@ if (isset($_POST['submit'])) {
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
     }
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <fieldset>
-        <legend>$langUserData</legend>
-        <table width='100%' class='tbl'>
-        <tr>
-        <th class='left'>$langName:</th>
-        <td>$guest_info->givenname</td>
-        <td>&nbsp;</td>
-        </tr>
-        <tr>
-        <th class='left'>$langSurname:</th>
-        <td>$guest_info->surname</td>
-        <td>&nbsp;</td>
-        </tr>
-        <tr>
-        <th class='left'>$langUsername:</th>
-        <td>$guest_info->username</td>
-        <td>&nbsp;</td>
-        </tr>
-        <tr>
-        <th class='left'>$langPass:</th>
-        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' id='password' autocomplete='off' /></td>
-        <td class='smaller'>$langAskGuest</td>
-        </tr>
-        <tr>
-        <th class='left'></th>
-        <td colspan='2'><span id='result'></span></td>
-        </tr>
-        <tr>
-        <th>&nbsp;</th>
-        <td class='right'>&nbsp;</td>
-        <td class='right'>
-          <input class='btn btn-primary' type='submit' name='submit' value='$submit_label' />
-        </td>
-        </tr>
-        </table>
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+        <fieldset>        
+        <div class='form-group'>
+            <div class='col-sm-10'>
+                <label class='col-sm-2 control-label'>$langName:</label>
+                $guest_info->givenname
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10'>
+                <label class='col-sm-2 control-label'>$langSurname:</label>
+                $guest_info->surname
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10'>
+                <label class='col-sm-2 control-label'>$langUsername:</label>
+                $guest_info->username
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='password' class='col-sm-2 control-label'>$langPass:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='$langAskGuest'>
+                <span id='result'></span>
+            </div>
+        </div>
+        <div class='col-sm-offset-2 col-sm-10'>
+          <input class='btn btn-primary' type='submit' name='submit' value='$submit_label'>
+        </div>
         </fieldset>
-        </form>";
+        </form>
+        </div>";
 }
 draw($tool_content, 2, null, $head_content);
 
