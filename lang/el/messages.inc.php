@@ -1426,6 +1426,16 @@ $langAttemptPending = "Προς Βαθμολόγηση";
 $langAttemptPaused = "Προσωρινά Αποθηκευμένη";
 $langAttemptCanceled = "Ακυρώθηκε";
 $langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
+$langQuestionCats = "Κατηγορίες ερωτήσεων";
+$langQuestionCat = "Κατηγορία ερωτήσης";
+$langQuestionWithoutCat = "Χωρίς Κατηγορία";
+$langNoQuestionCats = "Δεν έχουν ορισθεί κατηγορίες ερωτήσεων";
+$langQuestionCatDelConfirrm = "Είστε βέβαιως οτι θέλετε να διαγράψετε την συγκεκριμένη κατηγορία ερωτήσεων?";
+$langNewCat = "Νέα Κατηγορία";
+$langEditCat = "Επεξεργασία Κατηγορίας";
+$langNewCatSuccess = "Η κατηγορία δημιουργήθηκε με επιτυχία";
+$langEditCatSuccess = "Η κατηγορία τροποποιήθηκε με επιτυχία";
+$langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυχία";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";

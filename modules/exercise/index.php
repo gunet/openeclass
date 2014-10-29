@@ -158,6 +158,11 @@ if ($is_editor) {
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ),
+        array('title' => $langQuestionCats,
+            'url' => "question_categories.php?course=$course_code",
+            'icon' => 'fa-cubes',
+            'level' => 'primary'
+            ),        
         array('title' => $langQuestionPool,
             'url' => "question_pool.php?course=$course_code",
             'icon' => 'fa-university',

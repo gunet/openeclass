@@ -20,10 +20,13 @@
  * ======================================================================== */
 
 load_js('bootstrap-slider');
+load_js("select2");
+   
 $head_content .= " 
 <script>
 $(function() {
-    var diffArray = ['Δεν έχει ορισθεί','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
+    $('#questionCat').select2();
+    var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
         tooltip: 'hide',
 	formatter: function(value) {
@@ -55,7 +58,7 @@ $(function() {
     }
     function showGrade(){
         $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');    
-    }    
+    }   
  });
 </script>
  ";
@@ -80,6 +83,7 @@ if (isset($_POST['submitQuestion'])) {
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateType($answerType);
         $objQuestion->updateDifficulty($difficulty);
+        $objQuestion->updateCategory($category);
 
         //If grade field set (only in Free text questions)
         if (isset($questionGrade)) {
@@ -129,6 +133,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = $objQuestion->selectDescription();
         $answerType = $objQuestion->selectType();
         $difficulty = $objQuestion->selectDifficulty();
+        $category = $objQuestion->selectCategory();
         $questionWeight = $objQuestion->selectWeighting();
     }
 }
@@ -157,9 +162,23 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             'level' => 'primary-label'
         )
     ));
-    
-    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>";
+    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+  
+    $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
+    foreach ($q_cats as $q_cat) {
+        $options .= "<option value='$q_cat->question_cat_id' ". (($category == $q_cat->question_cat_id) ? "selected" : "") .">$q_cat->question_cat_name</option>\n";
+    }
     $tool_content .= "
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
+            <div class='form-group'>
+                <label for='questionCat' class='col-sm-2 control-label'>$langQuestionCat:</label>
+                <div class='col-sm-10'>
+                    <select name='category' id='questionCat' class='form-control'>
+                        $options
+                    </select>
+                </div>
+            </div>        
             <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
                 <div class='col-sm-10'>
