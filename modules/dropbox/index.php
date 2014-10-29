@@ -157,18 +157,18 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',                   
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+                   [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
                ],                    
                 'sPaginationType': 'full_numbers',              
                 'bSort': false,                
                 'oLanguage': {                       
-                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
-                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
+                       'sZeroRecords':  '".js_escape($langNoResult)."',
+                       'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
+                       'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
+                       'sSearch':       '".js_escape($langSearch)."',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
@@ -192,17 +192,17 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
                                 page_number--;
                             }
                         }
-                        $('#tool_title').after('<p class=\"success\">$dropbox_lang[fileDeleted]</p>');
+                        $('#tool_title').after('" . js_escape("<p class=\"success\">$dropbox_lang[fileDeleted]</p>") . "');
                         $('.success').delay(3000).fadeOut(1500);    
                         oTable.fnPageChange(page_number);
                     }, 'json');
                  }
             });            
         $('#select-recipients').multiselect({
-                selectedText: '$langJQSelectNum',
-                noneSelectedText: '$langJQNoneSelected',
-                checkAllText: '$langJQCheckAll',
-                uncheckAllText: '$langJQUncheckAll'
+                selectedText: '".js_escape($langJQSelectNum)."',
+                noneSelectedText: '".js_escape($langJQNoneSelected)."',
+                checkAllText: '".js_escape($langJQCheckAll)."',
+                uncheckAllText: '".js_escape($langJQUncheckAll)."'
         });
 });</script>
 <link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
