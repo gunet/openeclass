@@ -163,18 +163,8 @@ if (count($courses) > 0) {
         $tool_content .= "<td class='text-center'>";
 
         if ($isInOpenCoursesMode) {
-            // metadata are displayed in click-to-open modal dialogs
-            $metadata = CourseXMLElement::init($mycours->id, $mycours->k);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours->level) .
-                    '<div class="modal fade bs-example-modal-lg" id="modaldialog-' . $mycours->id . '" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel-' . $mycours->id . '" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
-                                    <h4 class="modal-title" id="treeModalLabel-' . $mycours->id . '">' . $langCourseMetadata . '</h4>
-                                </div>
-                                <div class="modal-body">' . $metadata->asDiv() . "</div></div></div></div>" . 
-                    "<a href='' data-toggle='modal' data-target='#modaldialog-" . $mycours->id . "'><img src='${themeimg}/lom.png'/></a>";
+            $tool_content .= CourseXMLElement::getLevel($mycours->level) . "&nbsp;";
+            $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='${themeimg}/lom.png'/></a>";
         } else {
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
@@ -196,18 +186,30 @@ if (count($courses) > 0) {
 
 if ($isInOpenCoursesMode) {
     $head_content .= <<<EOF
-<style type="text/css">
-.ui-widget {
-    font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
-    font-size: 13px;
-}
+<link rel="stylesheet" type="text/css" href="course_metadata.css">
+<style type="text/css"></style>
+<script type="text/javascript">
+/* <![CDATA[ */
 
-.ui-widget-content {
-    color: rgb(119, 119, 119);
-}
-</style>
+    var dialog;
+    
+    var showMetadata = function(course) {
+        $('.modal-body', dialog).load('anoninfo.php', {course: course}, function(response, status, xhr) {
+            if (status === "error") {
+                $('.modal-body', dialog).html("Sorry but there was an error, please try again");
+                //console.debug("jqxhr Request Failed, status: " + xhr.status + ", statusText: " + xhr.statusText);
+            }
+        });
+        dialog.modal('show');
+    };
+        
+    $(document).ready(function() {
+        dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{$langCancel}</span></button><h4 class="modal-title" id="modal-label">{$langCourseMetadata}</h4></div><div class="modal-body">body</div></div></div></div>');
+    });
+
+/* ]]> */
+</script>
 EOF;
 }
-
 
 draw($tool_content, (isset($uid) and $uid) ? 1 : 0, null, $head_content);
