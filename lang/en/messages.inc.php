@@ -3043,6 +3043,7 @@ $langAttemptCanceled = "Canceled";
 $langGradeTooBig = "The grade you submitted surpasses the maximum allowed grade if this question";
 $langQuestionCats = "Question Categories";
 $langQuestionCat = "Question Category";
+$langQuestionAllCats = "All Categories";
 $langQuestionWithoutCat = "Without Category";
 $langNoQuestionCats = "Currently there are no question categories";
 $langQuestionCatDelConfirrm = "Are you sure you want to delete this question category?";

@@ -1428,6 +1428,7 @@ $langAttemptCanceled = "Ακυρώθηκε";
 $langGradeTooBig = "Ο βαθμός που βάλατε ξεπερνάει τον μέγιστο επιτρεπτό βαθμό της ερώτησης";
 $langQuestionCats = "Κατηγορίες ερωτήσεων";
 $langQuestionCat = "Κατηγορία ερωτήσης";
+$langQuestionAllCats = "Όλες οι Κατηγορίες";
 $langQuestionWithoutCat = "Χωρίς Κατηγορία";
 $langNoQuestionCats = "Δεν έχουν ορισθεί κατηγορίες ερωτήσεων";
 $langQuestionCatDelConfirrm = "Είστε βέβαιως οτι θέλετε να διαγράψετε την συγκεκριμένη κατηγορία ερωτήσεων?";

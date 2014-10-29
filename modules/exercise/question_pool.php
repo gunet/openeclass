@@ -58,6 +58,9 @@ if (isset($_GET['exerciseId'])) {
 if (isset($_GET['difficultyId'])) {
     $difficultyId = intval($_GET['difficultyId']);
 }
+if (isset($_GET['categoryId'])) {
+    $categoryId = intval($_GET['categoryId']);
+}
 
 // maximum number of questions on a same page
 define('QUESTIONS_PER_PAGE', 15);
@@ -122,25 +125,32 @@ if ($is_editor) {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
-    }    
+    }
+    $exercise_options = "<option value = '0'>-- $langAllExercises --</option>\n
+                        <option value = '-1' ".(isset($exerciseId) && $exerciseId == -1 ? "selected='selected'": "").">-- $langOrphanQuestions --</option>\n";
+    foreach ($result as $row) {
+        $exercise_options .= "
+             <option value='" . $row->id . "' ".(isset($exerciseId) && $exerciseId == $row->id ? "selected='selected'":"").">$row->title</option>\n";
+    }
+    //Create exercise category options
+    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+    $q_cat_options = "<option value='-1' ".(isset($categoryId) && $categoryId == -1 ? "selected": "").">-- $langQuestionAllCats --</option>\m
+                      <option value='0' ".(isset($categoryId) && $categoryId == 0 ? "selected": "").">-- $langQuestionWithoutCat --</option>\n";
+    foreach ($q_cats as $q_cat) {
+        $q_cat_options .= "<option value='" . $q_cat->question_cat_id . "' ".(isset($categoryId) && $categoryId == $q_cat->question_cat_id ? "selected":"").">$q_cat->question_cat_name</option>\n";
+    }
     //Start of filtering Component
     $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                         ".(isset($fromExercise)? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                         <div class='form-group'>
-                                <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
-                                  <option value = '0'>-- $langAllExercises --</option>
-                                  <option value = '-1' ".(isset($exerciseId) && $exerciseId == -1 ? "selected='selected'": "").">-- $langOrphanQuestions --</option>";
-
-    foreach ($result as $row) {
-        $tool_content .= "
-             <option value='" . $row->id . "' ".(isset($exerciseId) && $exerciseId == $row->id ? "selected='selected'":"").">$row->title</option>\n";
-    }   
-    $tool_content .= "</select>
+                            <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>                               
+                                $exercise_options
+                            </select>
                     </div>
                     <div class='form-group'>
                         <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-control'>
                             <option value='-1' ".(isset($difficultyId) && $difficultyId == -1 ? "selected='selected'": "").">-- $langQuestionAllDiffs --</option>
-                            <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">$langQuestionNotDefined</option>
+                            <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">-- $langQuestionNotDefined --</option>
                             <option value='1' ".(isset($difficultyId) && $difficultyId == 1 ? "selected='selected'": "").">$langQuestionVeryEasy</option>
                             <option value='2' ".(isset($difficultyId) && $difficultyId == 2 ? "selected='selected'": "").">$langQuestionEasy</option>
                             <option value='3' ".(isset($difficultyId) && $difficultyId == 3 ? "selected='selected'": "").">$langQuestionModerate</option>
@@ -148,6 +158,11 @@ if ($is_editor) {
                             <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
                         </select>
                     </div>
+                    <div class='form-group'>
+                        <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-control'>
+                            $q_cat_options
+                        </select>
+                    </div>                    
                 </form>
             </div>";      
     //End of filtering Component
@@ -164,35 +179,43 @@ if ($is_editor) {
     if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
         //Building query vars and query
         $total_query_vars = array($course_id, $exerciseId);
-        $difficultySql = "";
+        $extraSql = "";
         if(isset($difficultyId) && $difficultyId!=-1) {
             $total_query_vars[] = $difficultyId;
-            $difficultySql = " AND difficulty = ?d";
-        }        
+            $extraSql .= " AND difficulty = ?d";
+        }
+        if(isset($categoryId) && $categoryId!=-1) {
+            $total_query_vars[] = $categoryId;
+            $extraSql .= " AND category = ?d";
+        }          
         $total_query_vars = isset($fromExercise) ? array_merge($total_query_vars, array($fromExercise, $fromExercise)) : $total_query_vars; 
         $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
         if (isset($fromExercise)) {            
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                             GROUP BY id ORDER BY question LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                            ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";
         } else {
             $result_query = "SELECT id, question, type FROM `exercise_with_questions`, `exercise_question`
-                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$difficultySql
+                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql
                             ORDER BY q_position LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_with_questions`, `exercise_question`
-                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$difficultySql";
+                            WHERE course_id = ?d AND question_id = id AND exercise_id = ?d$extraSql";
         }
     } else { // if user selected either Orphan Qustion or All Questions
         $total_query_vars[] = $course_id;
-        $difficultySql = "";
+        $extraSql = "";
         if(isset($difficultyId) && $difficultyId!=-1) {
             $total_query_vars[] = $difficultyId;
-            $difficultySql = " AND difficulty = ?d";
+            $extraSql .= " AND difficulty = ?d";
         }
+        if(isset($categoryId) && $categoryId!=-1) {
+            $total_query_vars[] = $categoryId;
+            $extraSql .= " AND category = ?d";
+        }          
         // If user selected All question and comes to question pool from an exercise
         if ((!isset($exerciseId) || $exerciseId == 0) && isset($fromExercise)) {
             $total_query_vars = array_merge($total_query_vars, array($fromExercise, $fromExercise));    
@@ -201,25 +224,25 @@ if ($is_editor) {
         //When user selected orphan questions
         if (isset($exerciseId) && $exerciseId == -1) {
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$difficultySql ORDER BY question
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question
                             LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$difficultySql";   
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql";   
         } else { // if user selected all questions
             if (isset($fromExercise)) { // if is coming to question pool from an exercise
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                                ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                                 question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                                 GROUP BY id ORDER BY question LIMIT ?d, ?d";
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$difficultySql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                                ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                                 question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";           
             } else {
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d $difficultySql
+                                ON question_id = id WHERE course_id = ?d$extraSql
                                 GROUP BY id ORDER BY question LIMIT ?d, ?d";
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$difficultySql";           
+                                ON question_id = id WHERE course_id = ?d$extraSql";           
             }                             
             // forces the value to 0
             $exerciseId = 0;            
