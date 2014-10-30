@@ -21,9 +21,162 @@
 /**
  * @file question_list_admin.inc.php
  */
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $action = $_POST['action'];
+    $exerciseId = $_GET['exerciseId'];
+    $category = $_POST['category'];
+    $difficulty = $_POST['difficulty'];
+    $query_vars = array($course_id);
+    $extraSql = '';
+    if ($difficulty > -1) {
+        $query_vars[] = $difficulty;
+        $extraSql .= " AND difficulty = ?d";
+    }
+    if ($category > -1) {
+        $query_vars[] = $category;
+        $extraSql .= " AND category = ?d";
+    }
+    $query_vars[] = $exerciseId;    
+    if ($action == 'add_questions') {
+        $qnum = $_POST['qnum'];
+        $query_vars[] = $qnum; 
+        if ($qnum>0) {
+            $q_ids = Database::get()->queryArray("SELECT id FROM exercise_question WHERE course_id = ?d$extraSql AND id NOT IN (SELECT question_id FROM exercise_with_questions WHERE exercise_id = ?d) ORDER BY RAND() LIMIT ?d", $query_vars);
+            $q_ids_count = count($q_ids);
+            $i=1;
+            foreach ($q_ids as $q_id) {
+                $values .= "(?d, ?d)";
+                if ($i!=$q_ids_count) $values .= ",";
+                $insert_query_vars[] = $q_id->id;
+                $insert_query_vars[] = $exerciseId;
+                $i++;
+            }
+            Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id) VALUES $values", $insert_query_vars);
+        }
+        $data = array('success' => true);     
+    } else {    
+
+        $results = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_question WHERE course_id = ?d$extraSql AND id NOT IN (SELECT question_id FROM exercise_with_questions WHERE exercise_id = ?d)", $query_vars)->count;
+
+        $data = array('results' => $results);
+    }
+    echo json_encode($data);
+    exit();
+}
+$q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+$total_questions = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_question WHERE course_id = ?d", $course_id)->count;
+$q_number_options = "<option value=\"0\">0 $langQuestions</option>";
+for($i=1;$i<=$total_questions;$i++){
+    $q_number_options .= "<option value=\"$i\">$i $langQuestions</option>";
+}
+$diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
+                . "<option value=\"0\">-- $langQuestionNotDefined --</option>"
+                . "<option value=\"1\">$langQuestionVeryEasy</option>"
+                . "<option value=\"2\">$langQuestionEasy</option>"
+                . "<option value=\"3\">$langQuestionModerate</option>"
+                . "<option value=\"4\">$langQuestionDifficult</option>"
+                . "<option value=\"5\">$langQuestionVeryDifficult</option>";
+$cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
+foreach ($q_cats as $qcat) {
+    $cat_options .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
+}
+
 $head_content .= "
 <script>
-  $(function() {
+  $(function() { 
+    function initAjaxSelect() {
+        $('select#diff, select#cat').bind('change', function () {
+            var name = $(this).attr('name');
+            if (name == 'difficulty') {              
+                var diffValue = $(this).val();
+                var catValue = $('select#cat').val();
+            } else {
+                var catValue = $(this).val();
+                var diffValue = $('select#diff').val();
+            }
+                    $.ajax({
+                      type: 'POST',
+                      url: '',
+                      datatype: 'json',
+                      data: {
+                         action: 'count_questions',
+                         category: catValue, 
+                         difficulty: diffValue
+                      },
+                      success: function(data){
+                        data = $.parseJSON(data);
+                        var options = '';
+                        if (data.results > 0) {
+                            for (var i = 1; i <= data.results; i++) {
+                                options += '<option value=\"'+i+'\">'+i+' ερωτήσεις</option>';
+                            }
+                        }
+                        
+                        $('select#q_num').find('option:not(:first)').remove().end().find('option:first').after(options);
+                      },
+                      error: function(xhr, textStatus, error){
+                          console.log(xhr.statusText);
+                          console.log(textStatus);
+                          console.log(error);
+                      }
+                    });              
+        });  
+    }     
+    $('.randomSelection').click( function(e){
+        e.preventDefault();
+        bootbox.dialog({
+            title: '$langSelection $langWithCriteria',
+            message: '<div class=\"row\">  ' +
+                        '<div class=\"col-md-12\"> ' +
+                            '<form> ' +
+                            '<h4>$langSelectionRule</h4>' +
+                            '<div id=\"rule\" class=\"form-inline well well-sm\">' +
+                            '<div class=\"form-group\"> ' +
+                            '<select name=\"category\" class=\"form-control\" id=\"cat\">$cat_options</select>' +
+                            '</div>' +
+                            '<div class=\"form-group\"> ' +
+                            '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
+                            '</div>' +
+                            '<div class=\"form-group\"> ' +
+                            '<select name=\"q_num\" class=\"form-control\" id=\"q_num\">$q_number_options</select>' +                                
+                            '</div></div>' +                            
+                            '</div>' +
+                            '</form> </div>  </div>',
+                        buttons: {
+                            success: {
+                                label: '$langSelection',
+                                className: 'btn-success',
+                                callback: function () {
+                                    var catValue = $('select#cat').val();
+                                    var diffValue = $('select#diff').val();
+                                    var qnumValue = $('select#q_num').val();
+                                    $.ajax({
+                                      type: 'POST',
+                                      url: '',
+                                      datatype: 'json',
+                                      data: {
+                                         action: 'add_questions',
+                                         category: catValue, 
+                                         difficulty: diffValue,
+                                         qnum: qnumValue
+                                      },
+                                      success: function(data){
+                                        window.location.href = '$_SERVER[REQUEST_URI]';
+                                      },
+                                      error: function(xhr, textStatus, error){
+                                          console.log(xhr.statusText);
+                                          console.log(textStatus);
+                                          console.log(error);
+                                      }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                ).find('div.modal-dialog').addClass('modal-lg');           
+                initAjaxSelect();
+           
+    });
     $('.warnLink').click( function(e){
           var modidyAllLink = $(this).attr('href');
           var modifyOneLink = modidyAllLink.concat('&clone=true');
@@ -71,13 +224,19 @@ if (isset($_GET['deleteQuestion'])) {
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ),
-        array('title' => $langGetExistingQuestion,
+        array('title' => $langSelection.' '.$langWithCriteria,
+            'class' => 'randomSelection',
+            'url' => "#",
+            'icon' => 'fa-random',
+            'level' => 'primary-label'
+        ),          
+        array('title' => $langSelection.' '.$langFrom2.' '.$langQuestionPool,
             'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
             'icon' => 'fa-bank',
             'level' => 'primary-label'
         )       
     ));  
-
+    
 if ($nbrQuestions) {
     $questionList = $objExercise->selectQuestionList();
     $i = 1;
@@ -145,6 +304,6 @@ $tool_content .= "
   </div>
 </div>    
 ";
-if (!isset($i)) {
+if ($nbrQuestions == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
 }

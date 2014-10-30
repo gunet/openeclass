@@ -1506,6 +1506,8 @@ $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
 // question_list_admin.php
 $langQuestionList = "Κατάλογος ερωτήσεων της άσκησης";
 $langGetExistingQuestion = "Ερώτηση από άλλη άσκηση";
+$langWithCriteria = 'με Κριτήρια';
+$langSelectionRule = 'Κανόνας Επιλογής';
 
 // question_pool.php
 $langQuestionPool = "Τράπεζα Ερωτήσεων";
