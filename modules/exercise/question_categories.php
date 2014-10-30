@@ -95,6 +95,7 @@ if (isset($_POST['submitCat'])) {
 } elseif (isset($_GET['deleteCat'])) {
     $q_cat_id = $_GET['deleteCat'];
     if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) { 
+        Database::get()->query("UPDATE exercise_question SET category = ?d WHERE category = ?d AND course_id = ?d", 0, $q_cat_id, $course_id);
         Session::Messages($langDelCatSuccess, 'alert-success');
     }
     redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
@@ -109,7 +110,13 @@ if (isset($_POST['submitCat'])) {
             'icon' => 'fa-plus-circle',
             'url' => "question_categories.php?course=$course_code&newCat=yes",
             'button-class' => 'btn-success'
-        )     
+        ),
+        array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => "index.php?course=$course_code"
+        ),          
     ));
 
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
