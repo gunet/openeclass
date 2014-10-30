@@ -444,6 +444,9 @@ $head_content .= "<script type=\"text/javascript\">"
         . "\nvar sImgPath = '$themeimg'"
         . "\n</script>\n"
 ;
+
+$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/wiki/style.css">';
+
 //navigation bar
 if (!add_units_navigation()) {
     $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;gid=' . $groupId, 'name' => $langWiki);
