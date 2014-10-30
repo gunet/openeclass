@@ -134,8 +134,7 @@ if (isset($_POST['submitEvent'])) {
         $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
         $visibility = null;
     }
-    $eventDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
-    $start = $eventDate_obj->format('Y-m-d H:i:s');
+    $start = $_POST['startdate'];
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
@@ -152,9 +151,7 @@ if (isset($_POST['submitEvent'])) {
     } else { // new event 
         $recursion = null;
         if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
-            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
-            $end = $endDate_obj->format('Y-m-d H:i:s');
-            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $end);
+            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
         }
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
         if ($resp['success']) {

@@ -35,6 +35,7 @@ require_once 'include/log.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/agendaindexer.class.php';
+require_once 'modules/agenda/course_calendar.inc.php';
 ModalBoxHelper::loadModalBox();
 
 $action = new action();
@@ -51,15 +52,65 @@ if (isset($_GET['id'])) {
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('bootstrap-timepicker');
+load_js('bootstrap-datepicker');
  
 $head_content .= "
 <script type='text/javascript'>
+var dialogUpdateOptions = {
+    title: '$langConfirmUpdate',
+    message: '$langConfirmUpdateRecursiveEvents',
+    buttons: {
+        cancel:{label: '$langCancel',
+        callback: function() {
+                      return false;
+                 }
+             },
+        yes:{
+            label: '$langYes',
+            className: 'btn-primary',
+             callback: function() {
+                           $('#rep').val('yes');
+                           $('#agendaform').submit();
+                      }
+            },
+        no:{
+            label: '$langNoJustThisOne',
+            className: 'btn-info',
+            callback: function() {
+                           $('#rep').val('no');
+                           $('#agendaform').submit();
+                      }
+            }
+    }};
+var dialogDeleteOptions = {
+    title: '$langConfirmDelete',
+    message: '$langConfirmDeleteRecursiveEvents',
+    buttons: {
+        cancel:{label: '$langCancel'},
+        yes:{
+            label: '$langYes',
+            className: 'btn-danger'},
+        no:{
+            label: '$langNoJustThisOne',
+            className: 'btn-warning'}}};
+
+$(document).ready(function(){
+    $('#submitbtn').on('click', 
+            function(e){
+                checkrequired($('#agendaform'));
+    });
+});
 $(function() {
-    $('#startdatecal, #enddatecal').datetimepicker({
+    $('#startdatecal').datetimepicker({
         format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
         language: '".$language."',
         autoclose: true
-    });    
+    });
+    $('#enddatecal').datepicker({
+        format: 'dd-mm-yyyy', pickerPosition: 'bottom-left', 
+        language: '".$language."',
+        autoclose: true
+    });
     $('#durationcal').timepicker({showMeridian: false, minuteStep: 1, defaultTime: false });
 });
 </script>";
@@ -69,25 +120,16 @@ if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
     //--if add event
     $head_content .= <<<hContent
 <script type="text/javascript">
-function checkrequired(which, entry) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if (tempobj.name == entry) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langEmptyAgendaTitle");
-		return false;
-	} else {
-		return true;
-	}
+function checkrequired(thisform) {
+    if ($('#event_title').val()=='' || $('#startdate').val()=='') {
+            bootbox.alert("$langTitleDateNotEmpty");
+            return false;
+    }
+    if($('#id').val()>0 && $('#rep').val() != ''){
+        bootbox.dialog(dialogUpdateOptions);
+    } else {
+        thisform.submit();
+    }
 }
 </script>
 hContent;
@@ -141,96 +183,41 @@ if ($is_editor) {
         Database::get()->query("UPDATE agenda SET visible = 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
     }
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['event_title'])) {
         register_posted_variables(array('startdate' => true, 'event_title' => true, 'content' => true, 'duration' => true));
         $content = purify($content);
-        $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
-        $startdate = $startDate_obj->format('Y-m-d H:i');
         if (isset($_POST['id']) and !empty($_POST['id'])) {  // update event
             $id = $_POST['id'];                        
-            Database::get()->query("UPDATE agenda SET title = ?s, content = ?s, start = ?t, duration = ?s
-                        WHERE course_id = ?d AND id = ?d", $event_title, $content, $startdate, $duration, $course_id, $id);            
-            $agdx->store($id);
-            $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
-            Log::record($course_id, MODULE_ID_AGENDA, LOG_MODIFY, array('id' => $id,
-                                                                   'date' => $startdate,
-                                                                   'duration' => $duration,
-                                                                   'title' => $event_title,
-                                                                   'content' => $txt_content));
-        } else {
-            $period = '';            
-            if(isset($_POST['frequencyperiod']) and isset($_POST['frequencynumber']) and isset($_POST['enddate'])) {
-                $period = 'P' . $_POST['frequencynumber'] . $_POST['frequencyperiod'];
-                if (!empty($_POST['enddate'])) {                    
-                    $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['enddate']);                    
-                    $enddate = $endDate_obj->format('Y-m-d H:i');
-                } else {
-                    $enddate = '0000-00-00 00:00';
-                }                
+            if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
+                $resp = update_recursive_event($id, $event_title, $startdate, $duration, $content);
+            } else {
+                $resp = update_event($id, $event_title, $startdate, $duration, $content);
             }
-            $id = Database::get()->query("INSERT INTO agenda "
-                        ."SET course_id = ?d, "
-                        ."title = ?s, "
-                        ."content = ?s, " 
-                        ."start = ?t, "                                             
-                        ."duration = ?t, "
-                        ."recursion_period = ?t, "
-                        ."recursion_end = ?t, " 
-                        ."visible = 1", $course_id, $event_title, $content, $startdate, $duration, $period, $enddate)->lastInsertID;
-            
-            if(isset($id) && !is_null($id)) {
+            $agdx->store($id);
+        } else {
+            $recursion = null;            
+            if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
+                $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
+            }
+            var_dump($recursion);
+            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);
+            foreach($ev as $id){
                 $agdx->store($id);
-                $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
-                Log::record($course_id, MODULE_ID_AGENDA, LOG_INSERT, array('id' => $id,
-                                                            'date' => $startdate,
-                                                            'duration' => $duration,
-                                                            'title' => $event_title,
-                                                            'content' => $txt_content));
-                Database::get()->query("UPDATE agenda SET source_event_id = id WHERE id = ?d",$id);
-                if(!empty($period) && !empty($enddate)) {                    
-                    $sourceevent = $id;
-                    $interval = new DateInterval($period);
-                    $startdatetime = new DateTime($startdate);                    
-                    $enddatetime = new DateTime($enddate);
-                    $newdate = date_add($startdatetime, $interval);
-                    while($newdate <= $enddatetime)
-                    {
-                        $neweventid = Database::get()->query("INSERT INTO agenda "
-                                . "SET course_id = ?d, content = ?s, title = ?s, start = ?t, duration = ?t, visible = 1,"
-                                . "recursion_period = ?s, recursion_end = ?t, "
-                                . "source_event_id = ?d", 
-                        $course_id, purify($content), $event_title, $newdate->format('Y-m-d H:i'), $duration, $period, $enddate, $sourceevent)->lastInsertID;
-                        $agdx->store($id);
-                        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
-                        Log::record($course_id, MODULE_ID_AGENDA, LOG_INSERT, array('id' => $neweventid,
-                                                                                    'date' => $newdate->format('Y-m-d H:i'),
-                                                                                    'duration' => $duration,
-                                                                                    'title' => $event_title,
-                                                                                    'content' => $txt_content));
-                        
-                        $newdate = date_add($startdatetime, $interval);
-                    }
-                }
             }
         }        
         $tool_content .= "<div class='alert alert-success text-center' role='alert'>$langStoredOK</div>";        
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-        $row = Database::get()->querySingle("SELECT title, content, start, duration
-                                        FROM agenda WHERE id = ?d", $id);
-        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row->content)), 50, '+');
-        Database::get()->query("DELETE FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        $resp = (isset($_GET['rep']) && $_GET['rep'] == 'yes')? delete_recursive_event($id):delete_event($id);
         $agdx->remove($id);
-        Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
-                                                                    'date' => $row->start,
-                                                                    'duration' => $row->duration,
-                                                                    'title' => $row->title,
-                                                                    'content' => $txt_content));
-        $tool_content .= "<div class='alert alert-success text-center' role='alert'>$langDeleteOK</div><br>";        
+        $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
+        $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
+        $tool_content .= "<div class='alert $alerttype text-center' role='alert'>$msgresp</div><br>";        
     }
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
         $nameTools = $langAddEvent;
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
+        $rep = '';
         if (isset($id) && $id) {
             $myrow = Database::get()->querySingle("SELECT id, title, content, start, duration FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
             if ($myrow) {
@@ -239,15 +226,17 @@ if ($is_editor) {
                 $content = $myrow->content;
                 $startdate = date('d-m-Y H:i', strtotime($myrow->start));
                 $duration = $myrow->duration;
+                $rep = (is_recursive($myrow->id))? 'no':''; 
             }
         } else {
             $id = $content = $duration = '';
             $startdate = date('d-m-Y H:i', strtotime('now'));
-            $enddate = date('d-m-Y H:i', strtotime('now +1 week'));
-        }    
+            $enddate = date('d-m-Y', strtotime('now +1 week'));
+        } 
         $tool_content .= "<div class='form-wrapper'>";
-        $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return checkrequired(this, \"event_title\");'>
-            <input type='hidden' name='id' value='$id'>";
+        $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <input type='hidden' id = 'id' name='id' value='$id'>"
+                . "<input type='hidden' name='rep' id='rep' value='$rep'>";
         @$tool_content .= "
             <div class='form-group'>
                 <label for='Title' class='col-sm-2 control-label'>$langTitle: </label>
@@ -311,7 +300,7 @@ if ($is_editor) {
                       </div>            
                       <div class='form-group'>
                         <div class='col-sm-offset-2 col-sm-10'>
-                            <input type='submit' class='btn btn-default' name='submit' value='$langAddModify'>
+                            <input type='button' class='btn btn-default' id='submitbtn' name='submitbtn' value='$langAddModify'>
                         </div>
                       </div>                
             </form></div>";
@@ -325,7 +314,7 @@ if (!isset($_GET['sens'])) {
     $sens = " ASC";
 }
 if ($is_editor) {
-    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
+    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end FROM agenda WHERE course_id = ?d
 		ORDER BY start " . $sens, $course_id);
 } else {
     $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
@@ -410,11 +399,17 @@ if (count($result) > 0) {
                     array('title' => $langModify,
                           'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
                           'icon' => 'fa-edit'),
+                    array('title' => $langConfirmDeleteRecursive,
+                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;rep=yes",
+                          'icon' => 'fa-times-circle-o',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDeleteRecursiveEvents,
+                          'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
                     array('title' => $langDelete,
                           'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
                           'icon' => 'fa-times',
                           'class' => 'delete',
-                          'confirm' => $langConfirmDelete),
+                          'confirm' => $langConfirmDeleteEvent),
                     array('title' => $langVisible,
                           'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
                           'icon' => $myrow->visible ? 'fa-eye' : 'fa-eye-slash')
