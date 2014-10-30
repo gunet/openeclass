@@ -117,7 +117,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $this->populate($data);
         }
         $out .= $this->populateDiv();
-        $out .= "</div></div>";
+        $out .= "<div class='panel-group'></div></div></div>";
         return $out;
     }
 
@@ -398,8 +398,8 @@ class CourseXMLElement extends SimpleXMLElement {
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body'>";
         }
-        $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield'>";
+        $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel cmetalabel-wd' : 'cmetalabelinaccordion cmetalabelinaccordion-wd';
+        $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield cmetafield-sh'>";
 
         $fieldEnd = "</span></div>";
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
@@ -1221,7 +1221,11 @@ class CourseXMLElement extends SimpleXMLElement {
         global $siteName, $Institution, $InstitutionUrl; // NOTICE: DO NOT remove these global vars, include of common.inc, etc, below requires them
         $data = array();
 
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
+        if (!$course) {
+            return array();
+        }
+        
         // course language
         $clang = $course->lang;
         $data['course_language'] = $clang;

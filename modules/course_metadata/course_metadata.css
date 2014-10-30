@@ -1,0 +1,109 @@
+/* ========================================================================
+ * Open eClass 
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2014  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== 
+ */
+
+.ui-widget {
+    font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+}
+
+.ui-widget-content {
+    color: rgb(119, 119, 119);
+}
+
+p.right {
+    margin-top: 60px;
+}
+
+div.right {
+    margin-top: 10px;
+}
+
+.form-control, input[type="text"], select, textarea {
+    width: auto;
+}
+
+.panel-group {
+    margin-top: 60px;
+}
+
+/* -- OpenCourses Metadata Form -- */
+
+.cmetarow {
+    clear: both;
+    padding: 4px;
+}
+
+.cmetalabel {
+    font-weight: bold;
+    float: left;
+    width: 232px;
+    border-right: 1px dashed #dfdfdf;
+    padding-bottom: 4px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.cmetalabelinaccordion {
+    font-weight: bold;
+    float: left;
+    width: 232px;
+    border-right: 1px dashed #dfdfdf;
+    padding-bottom: 4px;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.cmetalabel-wd, .cmetalabelinaccordion-wd {
+    width: 300px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+}
+
+.cmetafield {
+    float: left;
+    margin-bottom: 20px;
+    //padding-left: 4px;
+}
+
+.cmetafield-sh {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.cmetamandatory {
+    font-size: 11px;
+    color: red;
+    padding: 4px;
+    float: right;
+    margin-top: 6px;
+}
+
+.cmetaaccordion {
+    clear: both;
+}
+
+.cmetalabel a, .cmetalabelinaccordion a {
+    color: rgb(119, 119, 119) !important;
+    border-bottom: 1px dashed;
+}
+
+.cmetalabel a:hover, .cmetalabelinaccordion a:hover {
+    border-bottom: none;
+}
