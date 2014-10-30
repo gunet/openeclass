@@ -230,24 +230,24 @@ if ($paging and $total > $posts_per_page) {
 	</tr>
 	</table>";
 } else {
-    $tool_content .= "<table width='100%' class='tbl'>
-	<tr>
-	<td width='60%' align='left'>
-	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
-	<td align='right'>";
     if ($total > $posts_per_page) {
+        $tool_content .= "<table width='100%' class='tbl'>
+    	<tr>
+    	<td width='60%' align='left'>
+    	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
+    	<td align='right'>";
         $tool_content .= "<span class='pages'>
 		&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
 		</span>";
+        $tool_content .= "</td></tr></table>";
     }
-    $tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= "<table width='100%' class='tbl_alt'>
+$tool_content .= "<table width='100%' class='table-default'>
     <tr>
       <th width='220'>$langAuthor</th>
       <th>$langMessage</th>";
-if ($is_editor) {
+if ($is_editor || $topic_locked != 1) {
     $tool_content .= "<th width='60' class='text-center'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
@@ -302,9 +302,9 @@ foreach ($result as $myrow) {
 
     $anchor_link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->id#$myrow->id'>#$myrow->id</a><br/>";
     if ($myrow->parent_post_id == -1) {
-        $parent_post_link = "<br/><br/>$langForumPostParentDel";
+        $parent_post_link = "<br/>$langForumPostParentDel";
     } elseif ($myrow->parent_post_id != 0) {
-        $parent_post_link = "<br/><br/>$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a>";
+        $parent_post_link = "$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a><br/><br/>";
     } else {
         $parent_post_link = "";
     }
@@ -312,12 +312,9 @@ foreach ($result as $myrow) {
     $tool_content .= "<td>
 	  <div>
 	    <a name='".$myrow->id."'></a>".$anchor_link;
-    if ($topic_locked != 1) {
-	    $tool_content .= "<a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langForumPostReply</a><br/>";
-    }
 	$tool_content .= "<b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
 	  </div>
-	  <br />$message<br />" . $rate_str . $parent_post_link . "
+	  <br />$message<br />" . $parent_post_link . $rate_str . "
 	</td>";
 
     $dyntools = (!$is_editor) ? array() : array(
@@ -331,10 +328,14 @@ foreach ($result as $myrow) {
             'class' => 'delete',
             'confirm' => $langConfirmDelete)
     );
-    $dyntools[] = array('title' => $langForumPostReply,
-        'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
-        'icon' => 'fa-reply');
-    $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
+    if ($topic_locked != 1) {
+        $dyntools[] = array('title' => $langForumPostReply,
+            'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
+            'icon' => 'fa-reply');
+    }
+    if (!empty($dyntools)) {
+        $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
+    }
     $tool_content .= "</tr>";
     $count++;
 }
