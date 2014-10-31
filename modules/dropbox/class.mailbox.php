@@ -148,7 +148,7 @@ Class Mailbox {
                     AND `dropbox_msg`.`course_id` = ?d
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
                     AND `dropbox_index`.`deleted` = ?d $query_sql
-                    ORDER BY `timestamp` DESC $extra_sql";
+                    ORDER BY `timestamp` DESC $extra_sql";            
             $res = Database::get()->queryArray($sql, $this->uid, $this->courseId, 0, $args);
         }
         

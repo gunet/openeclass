@@ -172,7 +172,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
 	  <td>" . q(uid_to_name($uid)) . "</td>
 	</tr>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
-        //find user's courses
+        //find user's courses        
         $sql = "SELECT course.code code, course.title title
                 FROM course, course_user
                 WHERE course.id = course_user.course_id

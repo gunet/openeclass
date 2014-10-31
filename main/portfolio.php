@@ -21,8 +21,7 @@
 
 /**
  * @file portfolio.php
- * @brief This component creates the content of the start page when the user is logged in
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @brief This component creates the content of the start page when the user is logged in 
  */
 
 $require_login = true;
@@ -53,6 +52,7 @@ $head_content .= "
 jQuery(document).ready(function() {
   jQuery('#portfolio_lessons').dataTable({
     'bLengthChange': false,
+    'iDisplayLength': 5,
     'bSort' : false,
     'oLanguage': {
            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
@@ -120,10 +120,20 @@ require_once 'perso.php';
 $tool_content = "
 <div class='row margin-top-fat'>
         <div class='col-md-7'>
-                <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
-                <div class='panel'>
-                        {%LESSON_CONTENT%}                        
+            <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+            <div class='panel'>
+                    {%LESSON_CONTENT%}                        
+            </div>        
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h5 class='content-title'>$langMyPersoMessages</h5>
+                    <div class='panel'>
+                        <ul class='tablelist panel'>
+                        $user_messages
+                        </ul>
+                    </div>
                 </div>
+            </div>
         </div>
 
         <div class='col-md-5'>

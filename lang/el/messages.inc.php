@@ -2358,6 +2358,7 @@ $langMyPersoLessons = "Τα μαθήματα μου";
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 $langMyPersoDocs = "Τα τελευταία μου έγγραφα";
+$langMyPersoMessages = "Τα τελευταία μου μηνύματα";
 $langMyPersoAgenda = "Η ατζέντα μου";
 $langMyPersoForum = "Οι συζητήσεις μου (τελευταίες αποστολές)";
 $langAssignment = "Εργασία";

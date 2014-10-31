@@ -33,6 +33,8 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
+require_once 'modules/dropbox/class.mailbox.php';
+require_once 'modules/dropbox/class.msg.php';
 
 if ($_SESSION['status'] == USER_TEACHER) {
     $extra = "AND course.visible != " . COURSE_INACTIVE;
@@ -71,6 +73,9 @@ if (count($lesson_ids) > 0) {
     // get user forum posts    
     $user_forumPosts = getUserForumPosts($lesson_ids);
 }
+
+// get user latest personal messages
+$user_messages = getUserMessages($lesson_ids);
 
 // create array with content
 //BEGIN - Get user personal calendar
@@ -472,6 +477,42 @@ function getUserAssignments($lesson_id) {
         return "<div class='alert alert-warning'>$langNoAssignmentsExist</div>";
     }
 }
+
+/**
+ * @brief get user personal messages
+ * @global type $uid
+ * @global type $urlServer
+ * @global type $langFrom
+ * @global type $dateFormatLong
+ * @param type $lesson_id
+ * @return string
+ */
+function getUserMessages($lesson_id) {
+           
+    global $uid, $urlServer, $langFrom, $dateFormatLong;
+    
+    $message_content = '';
+            
+    foreach ($lesson_id as $course_id) {
+        $mbox = new Mailbox($uid, $course_id);    
+        $msgs = $mbox->getInboxMsgs();
+        foreach ($msgs as $message) {        
+            $course_title = q(ellipsize(course_id_to_title($message->course_id), 30));
+            $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
+            $message_content .= "<li class='list-item'>
+                                <span class='item-wholeline'>                                    
+                                    <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
+                                        <a href='{$urlServer}modules/dropbox/inbox.php?mid=$message->id'>" .q($message->subject)."</a>
+                                    </div>                                    
+                                    <div class='text-grey'>$course_title</div>
+                                    <div>$message_date</div>
+                                    </span>
+                                </li>";
+        }
+    }
+    return $message_content;
+}
+
 
 /**
  *

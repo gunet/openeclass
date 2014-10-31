@@ -95,7 +95,7 @@ if (isset($_GET['mid'])) {
                 if ($rec != $uid) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
-            }
+            }            
             $out .= "<fieldset>
                        <table width='100%' class='tbl'>
                          <caption><b>$langReply</b></caption>
@@ -192,7 +192,7 @@ if (isset($_GET['mid'])) {
                   <thead>
                     <tr>
                       <th>$langSubject</th>";
-    if ($course_id == 0) {
+    if ($course_id == 0) {        
         $out .= "    <th>$langCourse</th>";
     }
     $out .= "         <th>$langSender</th>
