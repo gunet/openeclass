@@ -118,11 +118,11 @@ jQuery(document).ready(function() {
 require_once 'perso.php';
 
 $tool_content = "
-<div class='row margin-top-fat'>
-        <div class='col-md-7'>
+    <div class='row margin-top-fat'>
+        <div id='my-courses' class='col-md-7'>
             <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
             <div class='panel'>
-                    {%LESSON_CONTENT%}                        
+                {%LESSON_CONTENT%}                        
             </div>        
             <div class='row'>
                 <div class='col-md-12'>
@@ -138,23 +138,24 @@ $tool_content = "
 
         <div class='col-md-5'>
         <div class='row'>
-        <div class='col-md-12'>
+            <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
                 <div class='panel padding'>
-                        {%PERSONAL_CALENDAR_CONTENT%}
+                    {%PERSONAL_CALENDAR_CONTENT%}
                 </div>
-        </div></div>";
+            </div>
+        </div>";
         if ($user_announcements) {
             $tool_content .= "
-                <div class='row'>
+        <div class='row'>
             <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
                 <div class='panel'>
-                        <ul class='tablelist panel'>
-                        $user_announcements 
-                        </ul>
+                    <ul class='tablelist panel'>
+                    $user_announcements 
+                    </ul>
                 </div>
-                </div>
+            </div>
         </div>";
 }
 $tool_content .= "</div>";
