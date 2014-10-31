@@ -1455,6 +1455,8 @@ $langEditCat = "Επεξεργασία Κατηγορίας";
 $langNewCatSuccess = "Η κατηγορία δημιουργήθηκε με επιτυχία";
 $langEditCatSuccess = "Η κατηγορία τροποποιήθηκε με επιτυχία";
 $langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυχία";
+$langImportQTI = "Εισαγωγή από IMS QTI";
+$langIMSQTIUploadFile = "Εντοπισμός θέσης του αρχείου IMS QTI μάθησης στον Η/Υ σας (τοπικά)";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";

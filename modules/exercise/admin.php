@@ -144,6 +144,13 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             );
         include('statement_admin.inc.php');
     }
+} elseif (isset($_GET['importIMSQTI'])) {
+	$nameTools = $langNewQu;
+	$navigation[] = array(
+	  'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
+	  'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+	);
+	include('imsqti.inc.php');
 } else {
     if (isset($_GET['NewExercise'])) {
         $nameTools = $langNewEx;

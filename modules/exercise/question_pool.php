@@ -116,6 +116,11 @@ if ($is_editor) {
                 'url' => "admin.php?course=$course_code&amp;newQuestion=yes",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+			array('title' => $langImportQTI,
+                'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
                 'button-class' => 'btn-success')
          );          
     }
