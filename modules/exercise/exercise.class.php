@@ -881,6 +881,38 @@ if (!class_exists('Exercise')):
                     . ")", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
+        /**
+         * Clone an Exercise
+         */
+        function duplicate() {
+            global $langCopy2, $course_id;
+            
+            $id = $this->id;
+            $exercise = $this->exercise." ($langCopy2)";
+            $description = standard_text_escape($this->description);
+            $type = $this->type;
+            $startDate = $this->startDate;
+            $endDate = $this->endDate;
+            $tempSave = $this->tempSave;
+            $timeConstraint = $this->timeConstraint;
+            $attemptsAllowed = $this->attemptsAllowed;
+            $random = $this->random;
+            $active = $this->active;
+            $public = $this->public;
+            $results = $this->results;
+            $score = $this->score;           
+            $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date, 
+                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
+                                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
+                                    $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
+                                    $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;
+            
+            Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
+                                        SELECT question_id, ?d
+                                          FROM `exercise_with_questions`
+                                         WHERE exercise_id = ?d", $clone_id, $id);            
+            
+        }        
 
     }
 

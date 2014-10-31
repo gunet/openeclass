@@ -120,6 +120,10 @@ if ($is_editor) {
                     $objExerciseTmp->save();
                     $eidx->store($exerciseId);
                     break;
+                case 'clone':  // make exercise limited
+                    $objExerciseTmp->duplicate();
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+                    break;                
             }
         }
         // destruction of Exercise
@@ -254,8 +258,14 @@ if (!$nbrExercises) {
                     array('title' => $langResourceAccess,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
                           'icon' => $row->public ? 'fa-unlock' : 'fa-lock',
-                          'show' => course_status($course_id) == COURSE_OPEN)
-                           ))."</td></tr>";
+                          'show' => course_status($course_id) == COURSE_OPEN),
+                    array('title' => $langExerciseStats,
+                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
+                          'icon' => 'fa-pie-chart'),
+                    array('title' => $langCreateDuplicate,
+                          'url' => "index.php?course=$course_code&amp;choice=clone&amp;exerciseId=$row->id",
+                          'icon' => 'fa-copy')                
+                    ))."</td></tr>";
             
         // student only
     } else {
