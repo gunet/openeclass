@@ -120,10 +120,14 @@ require_once 'perso.php';
 $tool_content = "
     <div class='row margin-top-fat'>
         <div id='my-courses' class='col-md-7'>
-            <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
-            <div class='panel'>
-                {%LESSON_CONTENT%}                        
-            </div>        
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+                    <div class='panel'>
+                        {%LESSON_CONTENT%}                        
+                    </div> 
+                </div>
+            </div>
             <div class='row'>
                 <div class='col-md-12'>
                     <h5 class='content-title'>$langMyPersoMessages</h5>
