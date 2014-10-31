@@ -102,7 +102,8 @@ class CourseXMLConfig {
                 'engineering' => $GLOBALS['langCMeta']['engineering'],
                 'social' => $GLOBALS['langCMeta']['social'],
                 'medical' => $GLOBALS['langCMeta']['medical'],
-                'humanities' => $GLOBALS['langCMeta']['humanities']),
+                'humanities' => $GLOBALS['langCMeta']['humanities'],
+                'independents' => $GLOBALS['langCMeta']['independents']),
             'course_subthematic' => array('othersubsubj' => $GLOBALS['langCMeta']['othersubsubj'])
         );
 
