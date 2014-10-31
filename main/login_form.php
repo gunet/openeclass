@@ -56,7 +56,7 @@ $tool_content .= "<div class='form-wrapper'>
              <label>$langAlternateLogin</label>
              <label>$shibboleth_link</label>
              <label>$cas_link</label>
-          </div";
+          </div>";
     }
 $tool_content .= "</form></div>";
 
