@@ -237,9 +237,9 @@ img {
   position: relative; }
 
 .content-title {
-  text-transform: uppercase;
   color: #888888;
-  font-weight: 400; }
+  font-weight: 500;
+  font-size: 16px; }
 
 .page-subtitle {
   color: #555555;
@@ -1467,3 +1467,5 @@ span[data-cal-date] {
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none; }
+
+/*# sourceMappingURL=inventory.css.map */
