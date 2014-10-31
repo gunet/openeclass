@@ -65,7 +65,7 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 
 ModalBoxHelper::loadModalBox();
 $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />    
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>$(document).ready(add_bookmark);</script>
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -73,7 +73,7 @@ $head_content .= "
                 dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
             });
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
-//Calendar stuff 
+//Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php",
@@ -85,7 +85,7 @@ $head_content .= "
                                 $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                                 }
         });
-        
+
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
@@ -98,8 +98,8 @@ $head_content .= "
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
-        });'           
-    
+        });'
+
     ."})
     </script>";
 
@@ -113,15 +113,15 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$courseInfo = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+$course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date
                                           FROM course WHERE id = ?d", $course_id);
 
-$keywords = q(trim($courseInfo->keywords));
-$visible = $courseInfo->visible;
-$professor = $courseInfo->prof_names;
-$public_code = $courseInfo->public_code;
-$course_license = $courseInfo->course_license;
+$keywords = q(trim($course_info->keywords));
+$visible = $course_info->visible;
+$professor = $course_info->prof_names;
+$public_code = $course_info->public_code;
+$course_license = $course_info->course_license;
 $main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
@@ -228,52 +228,51 @@ if ($is_editor) {
             $weekid = $_REQUEST['week_id'];
             Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
                                     WHERE id = ?d ", $title, $descr, $weekid);
-        } else { //new week
-            
-            //check if the final week is complete
+        } else { // new week
+
+            // check if the final week is complete
             $diffDate = Database::get()->querySingle("SELECT DATEDIFF(finish_week, start_week) AS diffDate, id FROM course_weekly_view WHERE course_id = ?d ORDER BY id DESC LIMIT 1", $course_id);
-            
+
             if ($diffDate->diffDate == 6) { //if there is a whole week add one
-                $endWeek = new DateTime($course_finishDate);
+                $endWeek = new DateTime($course_info->finish_date);
                 $endWeek->modify('+6 day');
                 $endWeekForDB = $endWeek->format("Y-m-d");
             } else {
                 $days2add = 6-$diffDate->diffDate;
-                $endWeek = new DateTime($course_finishDate);
+                $endWeek = new DateTime($course_info->finish_date);
                 $endWeek->modify('+'.$days2add.' day');
                 $endWeekForDB = $endWeek->format("Y-m-d");
-                
+
                 //fill the week
                 $q = Database::get()->query("UPDATE course_weekly_view SET finish_week = ?t WHERE id = ?d ", $endWeekForDB, $diffDate->id);
                 //add the final week
                 $endWeek->modify('+1 day');
                 $startWeekForDB = $endWeek->format("Y-m-d");
-                
+
                 $endWeek->modify('+6 day');
                 $endWeekForDB = $endWeek->format("Y-m-d");
                 $q = Database::get()->query("INSERT INTO course_weekly_view SET
                                   title = ?s, comments = ?s, visible = 1, start_week = ?t, finish_week = ?t,
                                   course_id = ?d", $title, $descr, $startWeekForDB, $endWeekForDB, $course_id);
             }
-            
-            //update the finish date at the course table
+
+            // update the finish date at the course table
             Database::get()->query("UPDATE course SET finish_date = ?t
                                     WHERE id = ?d ", $endWeekForDB, $course_id);
-            
+
         }
 
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
-        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
-        if($course_format == "units"){
-        Database::get()->query("DELETE FROM course_units WHERE id = ?d", $id);
-        Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $id);
-        $uidx->remove($id, false);
-        $urdx->removeByUnit($id, false);
-        $cidx->store($course_id, true);
-        CourseXMLElement::refreshCourse($course_id, $course_code);
-        $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
-        }else{
+        if ($course_info->view_type == 'units') {
+            Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
+            Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
+            $uidx->remove($id, false);
+            $urdx->removeByUnit($id, false);
+            $cidx->store($course_id, true);
+            CourseXMLElement::refreshCourse($course_id, $course_code);
+            $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
+        } else {
             $res_id = intval($_GET['del']);
             if ($id = check_admin_unit_resource($res_id)) {
                 Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
@@ -283,7 +282,6 @@ if ($is_editor) {
                 $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
             }
         }
-        
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
         $id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
@@ -306,8 +304,7 @@ if ($is_editor) {
         }
     } elseif (isset($_REQUEST['down'])) {
         $id = intval($_REQUEST['down']); // change order down
-        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type; 
-        if ($course_format == "units" or $course_format == "simple") {
+        if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
         } else {
             $res_id = intval($_REQUEST['down']);
@@ -315,18 +312,17 @@ if ($is_editor) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
             }
         }
-    } elseif (isset($_REQUEST['up'])) { // change order up        
+    } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval($_REQUEST['up']);
-        $course_format = Database::get()->querySingle("SELECT `view_type` FROM course WHERE id = ?d", $course_id)->view_type;        
-        if ($course_format == "units" or $course_format == "simple") {
+        if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
         } else {
             $res_id = intval($_REQUEST['up']);
             if ($id = check_admin_unit_resource($res_id)) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
             }
+        }
     }
-}
 
     if (isset($_REQUEST['visW'])) { // modify visibility of the Week
         $id = intval($_REQUEST['visW']);
@@ -334,7 +330,7 @@ if ($is_editor) {
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
     }
-    
+
     if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
         $title = $_REQUEST['weektitle'];
         $descr = $_REQUEST['weekdescr'];
@@ -342,12 +338,11 @@ if ($is_editor) {
         Database::get()->query("UPDATE course_weekly_view SET
                                         title = ?s,
                                         comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);        
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
     }
-    
 }
 
-if ($course->view_type == 'weekly') {
+if ($course_info->view_type == 'weekly') {
     if (!$is_editor){
         $visibleFlag = ' AND visible = 1';
     } else {
@@ -360,13 +355,13 @@ if ($course->view_type == 'weekly') {
         $icon_vis = ($week->visible == 1) ? 'visible.png' : 'invisible.png';
         $class_vis = ($week->visible == 0) ? 'class=invisible' : '';
         $icon_access = ($week->public == 1) ? 'access_public.png' : 'access_limited.png';
-        
+
         $tool_content .= "<fieldset>
                             <a href='../../modules/weeks/?course=$course_code&amp;id=$week->id'>
                                 <h2 $class_vis>$langWeek: ".nice_format($week->start_week)." - ".nice_format($week->finish_week)." - " . q($week->title) . "</h2>
                             </a>
                             <a href='../../modules/weeks/info.php?course=$course_code&amp;edit=$week->id'>
-                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'> 
+                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'>
                             </a>
                             <a href='$_SERVER[SCRIPT_NAME]?visW=$week->id'>
                                 <img src='$themeimg/$icon_vis' title='$langVisibility' alt='$langVisibility'>
@@ -378,7 +373,7 @@ if ($course->view_type == 'weekly') {
                             <hr>";
                             show_resourcesWeeks($week->id);
         $tool_content .= "</fieldset>";
-        
+
     }
 } else {
     // add course units
@@ -409,18 +404,18 @@ if ($course->view_type == 'weekly') {
             $access = $cu->public;
             // Visibility icon
             $vis = $cu->visible;
-            $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';        
+            $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
             $class_vis = ($vis == 0) ? 'not_visible' : '';
             $cunits_content .= "<li class='list-item contentbox'>
                                     <div class='item-content'>
                                         <div class='item-header'>
                                             <h4 class='item-title'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></h4>
-                                        </div>	    
-                                        <div class='item-body'>    
+                                        </div>	
+                                        <div class='item-body'>
                                             $cu->comments
-                                        </div>			      
+                                        </div>			
                                     </div>";
-            if ($is_editor) {                                                
+            if ($is_editor) {
                 $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
                         array('title' => $langVisibility,
@@ -451,7 +446,7 @@ if ($course->view_type == 'weekly') {
             $cunits_content .= "</li>";
             $count_index++;
         }
-        $cunits_content .= "</ul></div>"; 
+        $cunits_content .= "</ul></div>";
     }
 }
 
@@ -500,9 +495,7 @@ $bar_content_2 .= "<b style='color:#999999; font-size:13px;'> / $langUsers:</b> 
 
 // display course license
 if ($course_license) {
-    $license_info_box = "
-    
-        ${langOpenCoursesLicense}
+    $license_info_box = "${langOpenCoursesLicense}
         <small>" . copyright_info($course_id) . "</small>";
 } else {
     $license_info_box = '';
@@ -515,14 +508,14 @@ if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $opencourses_level = "
     <div class='row'>
-        <div class='col-md-4'>".icon('open_courses_logo_small', $langOpenCourses)."            
+        <div class='col-md-4'>".icon('open_courses_logo_small', $langOpenCourses)."
         </div>
         <div class='col-md-8 margin-top-thin'>
             ${langOpenCoursesLevel}: $level
             <br />
             <small><a href='$metadataUrl'>$langCourseMetadata " .
             icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</small>
-        </div>        
+        </div>
     </div>
 
 
@@ -596,14 +589,14 @@ $tool_content .= "
             </div>
 
             <div class='col-md-7 col-sm-7 col-xs-12'>
-                <div class=''>$main_content</div>             
+                <div class=''>$main_content</div>
             </div>
-            
+
             <div class ='col-md-12 col-sm-12 col-xs-12'>
                 <hr class='margin-top-thin margin-bottom-thin'/>
                 $bar_content
             </div>
-            <div class ='col-md-12 col-sm-12 col-xs-12'>                
+            <div class ='col-md-12 col-sm-12 col-xs-12'>
                 $bar_content_2
             </div>
 
@@ -617,11 +610,11 @@ $tool_content .= "
 // Contentbox: Announcements
 if ($total_cunits > 0 || $is_editor) {
     $alter_layout = FALSE;
-    $cunits_sidebar_columns = 4; 
+    $cunits_sidebar_columns = 4;
     $cunits_sidebar_subcolumns = 12;
 } else {
     $alter_layout = TRUE;
-    $cunits_sidebar_columns = 12; 
+    $cunits_sidebar_columns = 12;
     $cunits_sidebar_subcolumns = 4;
 }
 $tool_content .= "
@@ -642,10 +635,10 @@ if (!$alter_layout) {
                         $langAddUnit
                     </a>
                 </div>
-            </div>                         
+            </div>
             " : "")."
         </div>
-        <div class='row'>            
+        <div class='row'>
             $cunits_content
         </div>
     </div>";
@@ -667,12 +660,12 @@ if (isset($level) && !empty($level)) {
 
 $tool_content .= "
         <div class='row'>
-            <div class='col-md-$cunits_sidebar_subcolumns'>                
+            <div class='col-md-$cunits_sidebar_subcolumns'>
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
             </div>";
-            
+
 
 //BEGIN - Get user personal calendar
 $today = getdate();
@@ -682,7 +675,8 @@ $year = $today['year'];
 Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+
+$tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langCalendar</h5>
                     <div class='panel padding'>
                         $user_personal_calendar
@@ -693,13 +687,9 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
                 <ul class='tablelist panel'>" . course_announcements() . "
                 </ul>
             </div>
-        </div>";
-            
-       
-
-
-
-$tool_content .= "</div></div>";
+       </div>
+    </div>
+</div>";
 
 draw($tool_content, 2, null, $head_content);
 
