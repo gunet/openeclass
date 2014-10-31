@@ -55,7 +55,6 @@ $main_content = $cunits_content = $bar_content = "";
 add_units_navigation(TRUE);
 
 load_js('tools.js');
-load_js('slick');
 
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
@@ -64,14 +63,9 @@ load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
-<script type='text/javascript'>$(document).ready(add_bookmark);</script>
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
-    $(document).ready(function() {
-            $('.course_description').slick({
-                dots: false, slidesToShow: 4, slidesToScroll: 1, touchMove: false
-            });
+    $(document).ready(function() {            
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
@@ -122,30 +116,22 @@ $visible = $course_info->visible;
 $professor = $course_info->prof_names;
 $public_code = $course_info->public_code;
 $course_license = $course_info->course_license;
-$main_extra = $description = $addon = '';
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
-    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
-    WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
+                                    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
+                                    WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
-$main_extra .= "<div class = 'course_description' style='width: 520px;'>";
 $tool_content .= "<div style='display: none'>";
+$course_info_extra = '';
 foreach ($res as $row) {
-    $desctype = intval($row->type) - 1;
-    $descicon = (!empty($row->icon)) ? $row->icon : 'default.png';
-    $element_id = (isset($titreBloc[$desctype])) ? "class='course_info' id='{$titreBloc[$desctype]}'" : 'class="course_info other"';
-    $icon_url = "$themeimg/bloc/" . $descicon;
+    $desctype = intval($row->type) - 1;    
     $hidden_id = "hidden_" . $row->id;
     $tool_content .= "<div id='$hidden_id'><h1>" .
             q($row->title) . "</h1>" .
-            standard_text_escape($row->comments) . "</div>\n";
-    $main_extra .= "<div $element_id>" .
-            "<a href='#$hidden_id' class='inline' style='font-weight: bold; width: 100px; display: block; text-align: center; background: url($icon_url) center top no-repeat; padding-top: 80px;'>" .
-            q($row->title) .
-            "</a></div>";
+            standard_text_escape($row->comments) . "</div>";    
+    $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
 }
 $tool_content .= "</div>";
-$main_extra .= "</div>";
 
 if ($is_editor) {
     $edit_link = "
@@ -199,8 +185,6 @@ if (is_sharing_allowed($course_id)) {
         $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
     }
 }
-
-$main_content .= $main_extra;
 
 units_set_maxorder();
 
@@ -559,21 +543,16 @@ $tool_content .= "
     <div class ='col-md-12'>
         <div class='toolbox pull-right'>
             <div class='dropdown'>
-                <a class='txt btn btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='dropdown' data-placement='top'>Πληροφορίες Μαθήματος <i class='fa fa-caret-down'></i></a>
+                <a class='txt btn btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='dropdown' data-placement='top'>$langCourseDescription<i class='fa fa-caret-down'></i></a>
                 <ul class='dropdown-menu'>
-                    <li><a class='md-trigger' data-modal='syllabus-prof' href='#'>Επιλογή 1</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-toc' href='#'>Επιλογή 2</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-books' href='#'>Επιλογή 3</a></li>
-                    <li><a class='md-trigger' data-modal='syllabus-bibliography' href='#'>Επιλογή 4</a></li>
+                    $course_info_extra                  
                 </ul>
-            </div>
-    ";
+            </div>";
             // Button: toggle student view
             $tool_content .= "
         </div>
     </div>
-</div>
-";
+</div>";
 
 
 // Contentbox: Course main contentbox
