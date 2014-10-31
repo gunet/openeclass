@@ -42,16 +42,18 @@ $tool_content .= $displayHtml;
 
 $naturalKeys = array('othernatural', 'maths', 'cis', 'phys', 'chem', 'environ', 'biology');
 $naturalJSON = generateJSON($naturalKeys);
-$agriKeys = array('otheragri', 'agrifor', 'animal', 'veterin', 'agribio');
+$agriKeys = array('otheragri', 'agrifor', 'animal', 'agribio', 'rural');
 $agriJSON = generateJSON($agriKeys);
-$engKeys = array('othereng', 'architects', 'civil', 'eeeeie', 'mechan', 'chemic', 'mateng', 'medeng', 'enveng');
+$engKeys = array('othereng', 'civil', 'eeeeie', 'mcec', 'mechan', 'chemic', 'mateng', 'medeng', 'enveng', 'architects', 'engecon');
 $engJSON = generateJSON($engKeys);
-$socKeys = array('othersoc', 'psych', 'ecobi', 'edusoc', 'sociology', 'law', 'political', 'ecogeosoc', 'mediacomm');
+$socKeys = array('othersoc', 'psych', 'edusoc', 'sociology', 'law', 'political', 'ecobi', 'ecogeosoc', 'mediacomm', 'infoscie', 'anthro');
 $socJSON = generateJSON($socKeys);
-$medKeys = array('othermed', 'basicmed', 'clinicalmed', 'healthsci', 'medbio', 'physedu');
+$medKeys = array('othermed', 'basicmed', 'clinicalmed', 'healthsci', 'veterin', 'hcare', 'medbio', 'physedu', 'fnscie');
 $medJSON = generateJSON($medKeys);
 $humKeys = array('otherhum', 'hisarch', 'langlit', 'philosophy', 'arts', 'pedagogy');
 $humJSON = generateJSON($humKeys);
+$indepKeys = array('otherinddep', 'milit');
+$indepJSON = generateJSON($indepKeys);
 
 $instrFirst = $langCMeta['course_instructor_firstName'];
 $instrLast = $langCMeta['course_instructor_lastName'];
@@ -73,6 +75,7 @@ $head_content .= <<<EOF
         "social" : {$socJSON},
         "medical" : {$medJSON},
         "humanities" : {$humJSON},
+        "independents" : {$indepJSON}
     };
         
     var populateSubThematic = function(key) {
