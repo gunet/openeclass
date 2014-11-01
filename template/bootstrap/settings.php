@@ -1,5 +1,5 @@
 <?php
-
+require_once('main/notifications/notifications.inc.php');
 $theme_settings = array(
     'js_loaded' => array('jquery'),
     'classes' => array('tool_active' => 'active',
@@ -24,7 +24,7 @@ $theme_settings = array(
         'glossary' => 'fa-list',
         'wiki' => 'fa-globe',
         'course_info' => 'fa-cogs',
-        'users' => 'fa-cogs',
+        'users' => 'fa-user',
         'tooladmin' => 'fa-cogs',
         'usage' => 'fa-cogs',
         'attendance' => 'fa-check-square-o',
@@ -34,8 +34,7 @@ $theme_settings = array(
 
 function template_callback($template, $menuTypeID)
 {
-    global $uid, $session, $native_language_names_init, $course_id, $professor;
-
+    global $uid, $session, $native_language_names_init, $course_id, $professor, $modules, $admin_modules, $theme_settings;
     if ($uid) {
         $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
         $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
@@ -45,7 +44,7 @@ function template_callback($template, $menuTypeID)
             FROM course, course_user
             WHERE course.id = course_id AND user_id = ?d
             ORDER BY reg_date DESC
-            LIMIT 5", function ($c) use ($template) {
+            LIMIT 5", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
                 global $urlAppend;
                 static $counter = 1;
 
@@ -55,11 +54,13 @@ function template_callback($template, $menuTypeID)
                 $template->set_var('sideBarCourseCode', q($c->public_code));
                 $template->set_var('sideBarCourseProf', q($c->prof_names));
                 $template->set_var('sideBarCourseNotify', '');
-                foreach (array('fa-calendar', 'fa-file-text', 'fa-play', 'fa-bullhorn') as $icon) {
-                    // FIXME: random notifications placeholder
-                    if (rand(0, 1)) {
-                        $template->set_var('sideBarCourseNotifyIcon', $icon);
-                        $template->set_var('sideBarCourseNotifyCount', rand(1, 5));
+                $notifications = get_course_notifications($c->id);
+                
+                foreach ($notifications as $n) {
+                    $modules_array = (isset($modules[$n->module_id]))? $modules:$admin_modules;
+                    if(isset($modules_array[$n->module_id]) && isset($modules_array[$n->module_id]['image']) && isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])){
+                        $template->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
+                        $template->set_var('sideBarCourseNotifyCount', $n->notcount);
                         $template->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
                     }
                 }
