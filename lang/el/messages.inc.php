@@ -1094,6 +1094,7 @@ $langStudLastSemester = "$langStudents μόνο τελευταίου τριμή�
 $langAllRegStudents = "Όλοι οι εγγεγραμμένοι";
 $langNoStudents = "Δεν υπάρχουν χρήστες στο διάστημα που επιλέξατε";
 $langNoStudentsInAttendance = "Δεν υπάρχουν $langsStudents στο παρουσιολόγιο";
+$langNoStudentsInGradebook = "Δεν υπάρχουν $langsStudents στο βαθμολόγιο";
 $langUsersGradebook = "$langStudents βαθμολογίου";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
