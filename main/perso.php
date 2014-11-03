@@ -58,6 +58,8 @@ $_SESSION['courses'] = $courses;
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
+$user_assignments = $user_announcements = $user_documents = $user_agenda = $user_forumPosts = '';
+
 //  Get user's course info
 $user_lesson_info = getUserLessonInfo($uid);
 //if user is registered to at least one lesson
@@ -75,7 +77,7 @@ if (count($lesson_ids) > 0) {
 }
 
 // get user latest personal messages
-$user_messages = getUserMessages($lesson_ids);
+$user_messages = getUserMessages();
 
 // create array with content
 //BEGIN - Get user personal calendar
@@ -487,29 +489,31 @@ function getUserAssignments($lesson_id) {
  * @param type $lesson_id
  * @return string
  */
-function getUserMessages($lesson_id) {
+function getUserMessages() {
            
     global $uid, $urlServer, $langFrom, $dateFormatLong;
     
-    $message_content = '';
-            
-    foreach ($lesson_id as $course_id) {
-        $mbox = new Mailbox($uid, $course_id);    
-        $msgs = $mbox->getInboxMsgs();
-        foreach ($msgs as $message) {        
+    $message_content = '';    
+               
+    $mbox = new Mailbox($uid, 0);
+    $msgs = $mbox->getInboxMsgs('', 5);
+    foreach ($msgs as $message) {
+        if ($message->course_id > 0) {
             $course_title = q(ellipsize(course_id_to_title($message->course_id), 30));
-            $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
-            $message_content .= "<li class='list-item'>
-                                <span class='item-wholeline'>                                    
-                                    <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                        <a href='{$urlServer}modules/dropbox/inbox.php?mid=$message->id'>" .q($message->subject)."</a>
-                                    </div>                                    
-                                    <div class='text-grey'>$course_title</div>
-                                    <div>$message_date</div>
-                                    </span>
-                                </li>";
+        } else {
+            $course_title = '';
         }
-    }
+        $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
+        $message_content .= "<li class='list-item'>
+                            <span class='item-wholeline'>                                    
+                                <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
+                                    <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                </div>                                    
+                                <div class='text-grey'>$course_title</div>
+                                <div>$message_date</div>
+                                </span>
+                            </li>";
+    }    
     return $message_content;
 }
 

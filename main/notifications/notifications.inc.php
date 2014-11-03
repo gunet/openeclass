@@ -25,7 +25,7 @@ function get_user_notifications(){
     if(empty($uid)){
         return null;
     }
-    $q = "SELECT l.course_id, l.module_id, count(l.id) notification_count, ua.last_visit 
+    $q = "SELECT l.course_id, l.module_id, count(l.id) notcount notification_count, ua.last_visit 
             FROM log l 
             JOIN course_user cu ON l.course_id=cu.course_id
             LEFT JOIN 
@@ -34,8 +34,8 @@ function get_user_notifications(){
             WHERE cu.user_id = ?d 
             GROUP BY ad.course_id, ad.module_id) ua 
             ON l.course_id=ua.course_id AND l.module_id=ua.module_id
-            WHERE cu.user_id = ?d AND l.user_id <> ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
-            GROUP BY l.course_id, l.module_id;";
+            WHERE cu.user_id = ?d AND l.action_type=1 AND l.user_id <> ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
+            GROUP BY l.course_id, l.module_id";
     
     return Database::get()->queryArray($q,$uid,$uid,$uid);
 }
@@ -46,7 +46,7 @@ function get_course_notifications($course = NULL){
         return null;
     }
     $course = (is_null($course))? $course_id:$course;
-    $q = "SELECT l.course_id, l.module_id, count(l.id), ua.last_visit 
+    $q = "SELECT l.course_id, l.module_id, count(l.id) notcount, ua.last_visit 
             FROM log l 
             JOIN course_user cu ON l.course_id=cu.course_id
             LEFT JOIN 
@@ -55,8 +55,8 @@ function get_course_notifications($course = NULL){
             WHERE cu.user_id = ?d AND cu.course_id = ?d
             GROUP BY ad.course_id, ad.module_id) ua 
             ON l.course_id=ua.course_id AND l.module_id=ua.module_id
-            WHERE cu.user_id = ?d AND l.course_id = ?d AND l.user_id<>?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
-            GROUP BY l.course_id, l.module_id;";
+            WHERE cu.user_id = ?d AND l.course_id = ?d AND l.action_type=1 AND l.user_id<>?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
+            GROUP BY l.course_id, l.module_id";
     
     return Database::get()->queryArray($q,$uid,$course,$uid,$course,$uid);
 }
@@ -67,7 +67,7 @@ function get_course_module_notifications($course = NULL, $module = NULL){
         return null;
     }
     $course = (is_null($course))? $course_id:$course;
-    $q = "SELECT l.course_id, l.module_id, count(l.id), ua.last_visit 
+    $q = "SELECT l.course_id, l.module_id, count(l.id) notcount, ua.last_visit 
             FROM log l 
             JOIN course_user cu ON l.course_id=cu.course_id
             LEFT JOIN 
@@ -76,8 +76,8 @@ function get_course_module_notifications($course = NULL, $module = NULL){
             WHERE cu.user_id = ?d AND cu.course_id = ?d AND ad.module_id = ?d
             GROUP BY ad.course_id, ad.module_id) ua 
             ON l.course_id=ua.course_id AND l.module_id=ua.module_id
-            WHERE cu.user_id = ?d AND l.course_id = ?d AND l.user_id<>?d AND l.module_id = ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
-            GROUP BY l.course_id, l.module_id;";
+            WHERE cu.user_id = ?d AND l.course_id = ?d AND l.action_type=1 AND l.user_id<>?d AND l.module_id = ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
+            GROUP BY l.course_id, l.module_id";
     
     return Database::get()->queryArray($q,$uid,$course,$module, $uid,$course,$uid,$module);
 }
@@ -87,7 +87,7 @@ function get_module_notifications($module = NULL){
     if(empty($uid) || empty($module)){
         return null;
     }
-    $q = "SELECT l.course_id, l.module_id, count(l.id), ua.last_visit 
+    $q = "SELECT l.course_id, l.module_id, count(l.id) notcount, ua.last_visit 
             FROM log l 
             JOIN course_user cu ON l.course_id=cu.course_id
             LEFT JOIN 
@@ -96,8 +96,8 @@ function get_module_notifications($module = NULL){
             WHERE cu.user_id = ?d AND ad.module_id = ?d
             GROUP BY ad.course_id, ad.module_id) ua 
             ON l.course_id=ua.course_id AND l.module_id=ua.module_id
-            WHERE cu.user_id = ?d AND l.user_id<>?d AND l.module_id = ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
-            GROUP BY l.course_id, l.module_id;";
+            WHERE cu.user_id = ?d AND l.action_type=1 AND l.user_id<>?d AND l.module_id = ?d AND (l.ts>ua.last_visit OR ua.last_visit is null) 
+            GROUP BY l.course_id, l.module_id";
     
     return Database::get()->queryArray($q,$uid,$module, $uid,$uid,$module);
 }

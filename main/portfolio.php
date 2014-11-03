@@ -149,8 +149,8 @@ $tool_content = "
                 </div>
             </div>
         </div>";
-        if ($user_announcements) {
-            $tool_content .= "
+    if (!empty($user_announcements)) {
+        $tool_content .= "
         <div class='row'>
             <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
@@ -161,7 +161,7 @@ $tool_content = "
                 </div>
             </div>
         </div>";
-}
+    }
 $tool_content .= "</div>";
 
 $tool_content .= "
