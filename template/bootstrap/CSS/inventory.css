@@ -229,9 +229,10 @@ hr {
   float: right; }
 
 /* Font awesome icons seem to be looking better on specific sizes */
-.fa {
-  font-size: 1em !important; }
-
+/*.fa
+{
+  font-size:1em !important;
+}*/
 img {
   max-width: 100%;
   position: relative; }

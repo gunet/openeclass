@@ -260,6 +260,14 @@ a.toggle-active{
         .panel-group.outerpanel{
             padding: 0px;
             margin: 0px;
+            
+            .input-group-addon{
+                width: 39px;
+            }
+            
+            .input-group{
+                margin: 5px 0;
+            }
 
             .sidebar-title
             {
