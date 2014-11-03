@@ -42,19 +42,6 @@ require_once 'functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
-    $head_content .= '<script>
-                          function lock(topic_id,course_code) {
-                            $.getJSON("lock_topic.php?course="+course_code+"&topic="+topic_id,function(response){
-                              if (response) {
-                                if ($("#lock-"+topic_id).attr("src").indexOf("lock_closed.png") != -1) {
-                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_closed.png","lock_open.png"));
-                                } else if ($("#lock-"+topic_id).attr("src").indexOf("lock_open.png") != -1) {
-                                  $("#lock-"+topic_id).attr("src",$("#lock-"+topic_id).attr("src").replace("lock_open.png","lock_closed.png"));
-                                }
-                              }
-                            });
-                          }
-                      </script>';
 }
 
 $paging = true;
@@ -182,7 +169,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 // modify topic notification
 if (isset($_GET['topicnotify'])) {
     if (isset($_GET['topic_id'])) {
-        $topic_id = $_GET['topic_id'];
+        $topic_id = intval($_GET['topic_id']);
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
 		WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
@@ -193,6 +180,21 @@ if (isset($_GET['topicnotify'])) {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d,
 		topic_id = $topic_id, notify_sent = 1, course_id = ?d", $uid, $course_id);
     }
+}
+
+//lock and unlock topic
+if ($is_editor and isset($_GET['topiclock'])) {
+    if (isset($_GET['topic_id'])) {
+        $topic_id = intval($_GET['topic_id']);
+    }
+    Database::get()->query("UPDATE forum_topic SET locked = !locked WHERE id = ?d", $topic_id);
+    $locked = Database::get()->querySingle("SELECT locked FROM forum_topic WHERE id = ?d", $topic_id)->locked;
+    if ($locked == 0) {
+        $tool_content .= "<div class='alert alert-success'>$langUnlockedTopic</div>";
+    } else {
+        $tool_content .= "<div class='alert alert-success'>$langLockedTopic</div>";
+    }
+    
 }
 
 $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS poster_id
@@ -291,18 +293,26 @@ if (count($result) > 0) { // topics found
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete)
         );
+        
+        if ($is_editor) {
+            if ($topic_locked == 0) {
+                $dyntools[] = array('title' => $langLockTopic,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes",
+                    'icon' => 'fa-lock'
+                    );
+            } else {
+                $dyntools[] = array('title' => $langUnlockTopic,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topiclock=yes",
+                    'icon' => 'fa-unlock'
+                    );
+            }
+        }
+        
         $dyntools[] = array('title' => $langNotify,
             'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
             'icon' => 'fa-envelope');
         $tool_content .= action_button($dyntools);
 
-        if ($is_editor) {
-            if ($topic_locked == 0) {
-                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_open.png' title='$langLockTopic' alt='$langLockTopic' /></a>";
-            } else {
-                $tool_content .= "<a href='javascript:void(0)' onclick='lock($myrow->id,\"$course_code\")'><img id='lock-$myrow->id' src='$themeimg/lock_closed.png' title='$langUnlockTopic' alt='$langUnlockTopic' /></a>";
-            }
-        }
         $tool_content .= "</td></tr>";
         $i++;
     } // end of while
