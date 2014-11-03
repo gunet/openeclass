@@ -495,14 +495,14 @@ function getUserMessages($lesson_id) {
             
     foreach ($lesson_id as $course_id) {
         $mbox = new Mailbox($uid, $course_id);    
-        $msgs = $mbox->getInboxMsgs();
+        $msgs = $mbox->getInboxMsgs('', 5);
         foreach ($msgs as $message) {        
             $course_title = q(ellipsize(course_id_to_title($message->course_id), 30));
             $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
             $message_content .= "<li class='list-item'>
                                 <span class='item-wholeline'>                                    
                                     <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                        <a href='{$urlServer}modules/dropbox/inbox.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                     </div>                                    
                                     <div class='text-grey'>$course_title</div>
                                     <div>$message_date</div>
