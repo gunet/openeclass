@@ -395,7 +395,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;" . q($details[uname]) . "&raquo;&nbsp;$langPassword&nbsp;&laquo;" . q($details[pass]) . "&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details['uname']) . "&raquo;&nbsp;$langPassword&nbsp;&laquo;" . q($details['pass']) . "&raquo;";
 
         return $content;
     }
@@ -405,7 +405,7 @@ class Log {
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;" . q($details[username]) . "&raquo;&nbsp;$langName&nbsp;&laquo;" . q($details[name]) . "&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details['username']) . "&raquo;&nbsp;$langName&nbsp;&laquo;" . q($details['name']) . "&raquo;";
 
         return $content;
     }
