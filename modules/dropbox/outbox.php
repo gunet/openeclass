@@ -153,50 +153,59 @@ if (isset($_GET['mid'])) {
                     
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
-                        if (confirm('$langConfirmDelete')) {
-                            var rowContainer = $(this).parent().parent();
-                            var id = rowContainer.attr('id');
-                            var string = 'mid='+ id ;
-                            $.post('ajax_handler.php', string, function() {
+                        var rowContainer = $(this).parent().parent();
+                        var id = rowContainer.attr('id');
+                        var string = 'mid='+ id ;
+                        bootbox.confirm('$langConfirmDelete', function(result) {
+                            if (result) {
+                                $.ajax({
+                                  type: 'POST',
+                                  url: 'ajax_handler.php?course_id=$course_id',
+                                  data: string,
+                                  cache: false,
+                                  success: function(){
+                                    var num_page_records = oTable2.fnGetData().length;
+                                    var per_page = oTable2.fnPagingInfo().iLength;
+                                    var page_number = oTable2.fnPagingInfo().iPage;
+                                    if(num_page_records==1){
+                                        if(page_number!=0) {
+                                            page_number--;
+                                        }
+                                    }
+                                    $('#out_del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteSuccess</p>');
+                                    $('.alert-success').delay(3000).fadeOut(1500);
+                                    oTable2.fnPageChange(page_number);
+                                  }
+                               });
+                             }                            
+                         })
+                     });
+                     
+                    $('.delete_all_out').click(function() {
+                      bootbox.confirm('$langConfirmDeleteAllMsgs', function(result) {
+                          if(result) {
+                            var string = 'all_outbox=1';
+                            $.ajax({
+                              type: 'POST',
+                              url: 'ajax_handler.php?course_id=$course_id',
+                              data: string,
+                              cache: false,
+                              success: function(){
                                 var num_page_records = oTable2.fnGetData().length;
                                 var per_page = oTable2.fnPagingInfo().iLength;
                                 var page_number = oTable2.fnPagingInfo().iPage;
                                 if(num_page_records==1){
-                                    if(page_number!=0) {
-                                        page_number--;
-                                    }
-                                }
-                                $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteSuccess</p>');
-                                $('.success').delay(3000).fadeOut(1500);
+                                  if(page_number!=0) {
+                                    page_number--;
+                                  }
+                                }     
+                                $('#out_del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteAllSuccess</p>');
+                                $('.alert-success').delay(3000).fadeOut(1500);
                                 oTable2.fnPageChange(page_number);
-                            }, 'json');
-                         }
-                     });
-                     
-                    $('.delete_all_out').click(function() {
-                      if (confirm('$langConfirmDeleteAllMsgs')) {
-                        var string = 'all_outbox=1';
-                        $.ajax({
-                          type: 'POST',
-                          url: 'ajax_handler.php?course_id=$course_id',
-                          data: string,
-                          cache: false,
-                          success: function(){
-                            var num_page_records = oTable2.fnGetData().length;
-                            var per_page = oTable2.fnPagingInfo().iLength;
-                            var page_number = oTable2.fnPagingInfo().iPage;
-                            if(num_page_records==1){
-                              if(page_number!=0) {
-                                page_number--;
                               }
-                            }     
-                            $('#out_del_msg').html('<p class=\'success\'>$langMessageDeleteAllSuccess</p>');
-                            $('.success').delay(3000).fadeOut(1500);
-                            oTable2.fnPageChange(page_number);
-                          }
-                       });
-                       return false;
-                     }
+                           });
+                         }
+                     })
                    });
                
                });
