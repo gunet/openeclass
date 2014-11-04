@@ -198,11 +198,10 @@ if ($is_editor) {
             $recursion = null;            
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
-            }
-            var_dump($recursion);
-            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);
-            foreach($ev as $id){
-                $agdx->store($id);
+            }            
+            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);                                   
+            foreach($ev['event'] as $id) {
+                $agdx->store($id);                
             }
         }        
         $tool_content .= "<div class='alert alert-success text-center' role='alert'>$langStoredOK</div>";        

@@ -86,7 +86,7 @@ if (isset($_POST['submitCat'])) {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' name='submitCat' type='submit'>
+                        <input class='btn btn-primary' name='submitCat' type='submit' value='$langSubmit'>
                         <a href='question_categories.php?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>                

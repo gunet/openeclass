@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
                     if (get_user_email_notification($userid, $cid)) {
                         $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                         $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
-                        $body_dropbox_message = "$langSender: $_SESSION[givenname] $_SESSION[surname] <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
+                        $body_dropbox_message = "$langSender: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). " <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
                         if ($filesize > 0) {
                                 $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/dropbox_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a><br /><br />";
                         }

@@ -37,6 +37,7 @@ $t->set_block('mainBlock', 'sideBarBlock', 'delete');
 $t->set_block('mainBlock', 'LoggedInBlock', 'delete');
 $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
 $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
+$t->set_block('mainBlock', 'pageTitleBlock', 'delete');
 $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
@@ -52,7 +53,7 @@ $t->set_var('TOOL_CONTENT', "
             <p>Πιθανό πρόβλημα με την βάση δεδομένων ή με το αρχείο ρυθμίσεων της πλατφόρμας.</p>
             <p>Σε περίπτωση που χρησιμοποιείτε την πλατφόρμα για <b>πρώτη</b> φορά, επιλέξτε τον <a href='install'><b>Οδηγό Εγκατάστασης</b></a> για να ξεκινήσετε το πρόγραμμα εγκατάστασης.</p>
         </div>
-    <div>
+    </div>
 </div>");
 
 $t->parse('main', 'mainBlock', false);

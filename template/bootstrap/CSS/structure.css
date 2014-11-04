@@ -222,6 +222,10 @@ a.toggle-active {
     #sidebar-container #sidebar .panel-group.outerpanel {
       padding: 0px;
       margin: 0px; }
+      #sidebar-container #sidebar .panel-group.outerpanel .input-group-addon {
+        width: 39px; }
+      #sidebar-container #sidebar .panel-group.outerpanel .input-group {
+        margin: 5px 0; }
       #sidebar-container #sidebar .panel-group.outerpanel .sidebar-title {
         margin: 0;
         font-weight: 600;
@@ -656,3 +660,5 @@ form.login-form {
     border-radius: 0px !important; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
   /* Medium screen, retina, stuff to override above media query */ }
+
+/*# sourceMappingURL=structure.css.map */

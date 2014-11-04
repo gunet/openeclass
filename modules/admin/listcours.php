@@ -246,5 +246,6 @@ $tool_content .= action_bar(array(
         'url' => "searchcours.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
+$tool_content .= "</div>";
 
 draw($tool_content, 3, null, $head_content);
