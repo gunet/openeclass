@@ -290,7 +290,8 @@ draw($tool_content, 2, null, $head_content);
 // insert the assignment into the database
 function add_assignment() {
     global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, 
-    $course_code, $langFormErrors;
+           $course_code, $langFormErrors, $langNewAssignSuccess;
+    
     $v = new Valitron\Validator($_POST);
     $v->rule('required', ['title', 'max_grade']);
     $v->rule('numeric', ['max_grade']);
