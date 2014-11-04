@@ -294,8 +294,11 @@ if (isset($_POST['submit'])) {
                         //update the cntOLD records
                         $cntOld++;
                     } else {
-                        //create the weeks in DB
-                        Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week) VALUES (?d, ?t, ?t)", $course_id, $startWeekForDB, $endWeekForDB);
+                        $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
+                        if ($q) {
+                            $order =  max(0, $q->maxorder) + 1;                
+                            Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
+                        }                        
                     }
                     //update the counter
                     $cnt++;

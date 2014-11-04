@@ -190,6 +190,7 @@ $db->query("CREATE TABLE `course_weekly_view` (
   `finish_week` DATE NOT NULL default '0000-00-00',
   `visible` TINYINT(4) NOT NULL DEFAULT 1,
   `public` TINYINT(4) NOT NULL DEFAULT 1,
+  `order` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #

@@ -97,8 +97,7 @@ if ($is_editor) {
 } else {
     $visibility_check = "AND visible=1";
 }
-if (isset($id) and $id !== false) {
-    //$info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
+if (isset($id) and $id !== false) {    
     $info = Database::get()->querySingle("SELECT * FROM course_weekly_view WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
 }
 if (!$info) {
@@ -125,13 +124,23 @@ foreach (array('previous', 'next') as $i) {
         $arrow2 = ' »';
     }
     
+    if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+            $access_check = "";
+    } else {
+        $access_check = "AND public = 1";
+    }
+    
     $q = Database::get()->querySingle("SELECT id, start_week, finish_week FROM course_weekly_view
                        WHERE course_id = ?d
                              AND id <> ?d
+                             AND `order` $op $info->order
+                             AND `order` >= 0
                              $visibility_check
-                             
-                       ORDER BY start_week
+                             $access_check
+                       ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
+                             
+
     if ($q) {
         $q_id = $q->id;
         //$q_title = htmlspecialchars($q->title);
