@@ -1134,7 +1134,7 @@ if ($is_editor) {
         $k = 0;
         if ($checkForExer) {
             foreach ($checkForExer as $newExerToGradebook) {
-                $content = standard_text_escape($newExerToGradebook->description);
+
                 $content = ellipsize_html($newExerToGradebook->description, 50);
 
                 $d = strtotime($newExerToGradebook->end_date);
