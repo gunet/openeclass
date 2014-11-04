@@ -317,24 +317,24 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
 } else {
     /* display actions toolbar */
     $tool_content .= "
-    <div id='operations_container'>" .
-            action_bar(array(
-                array('title' => $langAddEvent,
-                    'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
-                    'icon' => 'fa-plus-circle',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success'),
-                array('title' => $langAddAdminEvent,
-                    'url' => "$_SERVER[SCRIPT_NAME]?addAdminEvent=1",
-                    'icon' => 'fa-plus-circle',
-                    'show' => $is_admin,
-                    'button-class' => 'btn-success',
-                    'level' => 'primary-label'),
-                array('title' => $langiCalExport,
-                    'url' => "icalendar.php",
-                    'icon' => 'fa-calendar',
-                    'level' => 'primary'),
-            )) .
+            <div id='operations_container'>" .
+                action_bar(array(
+                    array('title' => $langAddEvent,
+                        'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langAddAdminEvent,
+                        'url' => "$_SERVER[SCRIPT_NAME]?addAdminEvent=1",
+                        'icon' => 'fa-plus-circle',
+                        'show' => $is_admin,
+                        'button-class' => 'btn-success',
+                        'level' => 'primary-label'),
+                    array('title' => $langiCalExport,
+                        'url' => "icalendar.php",
+                        'icon' => 'fa-calendar',
+                        'level' => 'primary'),
+                )) .
             "</div>";
 }
 
@@ -349,8 +349,12 @@ if ($_SESSION['theme'] != 'bootstrap') {
     $tool_content .= '</div>';
 } else {
     $tool_content .= ''
-            . '<div class="row page-header">
-                    <div class="pull-right form-inline">
+            . '<div id="calendar_wrapper" class="row">
+                <div class="col-md-12">
+                    <div class="row calendar-header">
+                    <div class="col-md-12">
+                    <div id="calendar-header">
+                        <div class="pull-right form-inline">
                             <div class="btn-group">
                                     <button class="btn btn-primary btn-sm" data-calendar-nav="prev">&larr; ' . $langPrevious . '</button>
                                     <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
@@ -362,10 +366,13 @@ if ($_SESSION['theme'] != 'bootstrap') {
                                     <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
                                     <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
                             </div>
-                    </div>
-                    <h3></h3>
-            </div>'
-            . '<div class="row"><div id="bootstrapcalendar" class="col-xs-6 col-sm-7 col-md-6 add-gutter"></div></div>' .
+                        </div>
+                        <h4></h4>
+                        </div>
+                        </div>
+                    </div>'
+            . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
+            . '</div></div>' .
             "<script type='text/javascript'>" .
             '$(document).ready(function(){
 
@@ -375,7 +382,7 @@ if ($_SESSION['theme'] != 'bootstrap') {
                 events_source: "' . $urlAppend . 'main/calendar_data.php",
                 language: "el-GR",
                 onAfterViewLoad: function(view) {
-                            $(".page-header h3").text(this.getTitle());
+                            $(".calendar-header h4").text(this.getTitle());
                             $(".btn-group button").removeClass("active");
                             $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                             }

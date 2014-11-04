@@ -1680,7 +1680,28 @@ th.option-btn-cell, td.option-btn-cell{
     margin: 0 0;
 }
 
-
+#calendar_wrapper{
+    margin-bottom: 25px;
+    
+    .calendar-header{
+    margin-top: 20px;
+    margin-bottom: 15px;
+    
+    #calendar-header{
+        border-bottom: 1px #999 solid;
+    }
+    
+    h4{
+        margin: 0px;
+        padding: 0px;
+        line-height: 50px;
+    }
+    
+    .form-inline{
+        padding: 10px 0;
+    }
+}
+}
 
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
