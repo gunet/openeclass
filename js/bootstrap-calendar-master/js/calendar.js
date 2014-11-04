@@ -1088,7 +1088,7 @@ if(!String.prototype.formatNum) {
 		}
 		var self = this;
 		var activecell = 0;
-		var downbox = $(document.createElement('div')).attr('id', 'cal-day-tick').html('<i class="icon-chevron-down glyphicon glyphicon-chevron-down"></i>');
+		var downbox = $(document.createElement('div')).attr('id', 'cal-day-tick').html('<i class="fa fa-caret-down"></i>');
 
 		$('.cal-month-day, .cal-year-box .span3')
 			.on('mouseenter', function() {
