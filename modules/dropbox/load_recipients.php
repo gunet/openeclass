@@ -132,16 +132,17 @@ if (isset($_POST['course'])) {
             AND u.surname LIKE ?s
             ORDER BY UPPER(u.surname), UPPER(u.givenname)
             LIMIT 10";
-    $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['term']."%");
+    $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%");
     
-    $jsonarr = array();
+    $jsonarr["items"] = array();
     $i = 0;
     
     foreach ($res as $r) {
-        $jsonarr[$i]['value'] = $r->user_id;
-        $jsonarr[$i]['label'] = $r->name;
+        $jsonarr["items"][$i] = new stdClass();
+        $jsonarr["items"][$i]->id = $r->user_id;
+        $jsonarr["items"][$i]->text = $r->name;
         if (!empty($r->am)) {
-            $jsonarr[$i]['label'] .= " ($r->am)";
+            $jsonarr["items"][$i]->text .= " ($r->am)";
         }
         $i++;
     }

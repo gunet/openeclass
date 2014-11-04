@@ -330,62 +330,36 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td></tr>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
-        $head_content .= " <script type='text/javascript'>
-                             var selected = [];
-                             $(function() {
-                               function split( val ) {
-                                 return val.split( /,\s*/ );
-                                }
-                                function extractLast( term ) {
-                                  return split( term ).pop();
-                                }
-                                $(\"#recipients\" )
-                                // don't navigate away from the field on tab when selecting an item
-                                .bind( \"keydown\", function( event ) {
-                                  if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( \"ui-autocomplete\" ).menu.active ) {
-                                    event.preventDefault();
-                                  }
+        load_js('select2');
+        
+        $head_content .= "<script type='text/javascript'>
+                            $(document).ready(function () {
+                                $('#recipients').select2({
+                                    placeholder:'$langSearch',
+                                    multiple: true,
+                                    minimumInputLength: 3,
+                                    ajax: {
+                                        url: 'load_recipients.php?autocomplete=1',
+                                        dataType: 'json',
+                                        quietMillis: 250,
+                                        data: function (term, page) {
+                                            return {
+                                                q: term, // search term
+                                            };
+                                        },
+                                        results: function (data, page) { // parse the results into the format expected by Select2.
+                                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                                            return { results: data.items };
+                                        },
+                                        cache: true
+                                     },
                                 })
-                                .autocomplete({
-                                  source: function( request, response ) {
-                                    $.getJSON( \"load_recipients.php?autocomplete=1\", {
-                                      term: extractLast( request.term )
-                                    }, response );
-                                  },
-                                  search: function() {
-                                    // custom minLength
-                                    var term = extractLast( this.value );
-                                    if ( term.length < 3 ) {
-                                      return false;
-                                    }
-                                  },
-                                  focus: function() {
-                                    // prevent value inserted on focus
-                                    return false;
-                                  },
-                                  select: function( event, ui ) {
-                                    var terms = split( this.value );
-                                    // remove the current input
-                                    terms.pop();
-                                    // add the selected item
-                                    terms.push( ui.item.label );
-                                    // add placeholder to get the comma-and-space at the end
-                                    terms.push( \"\" );
-                                    this.value = terms.join( \", \" );
-                                    //do not add a recipient already selected
-                                    if ($.inArray(ui.item.value, selected) == -1) {
-                                      $('#newmsg').append('<input type=\'hidden\' name=\'recipients[]\' value=\''+ui.item.value+'\'/>');
-                                      selected.push(ui.item.value);
-                                    }
-                                    return false;
-                                  }
-                                });
-                              });
-                            </script>";
+                            })
+                           </script>";
         
         $tool_content .= "<tr>
     	                    <th>$langSendTo:</th>
-    	                    <td><input name='autocomplete' id='recipients' /><br/><em>$langSearchSurname</em></td>
+    	                    <td><input type='hidden' name=recipients id='recipients' /><br/><em>$langSearchSurname</em></td>
                           </tr>";        
     }
     

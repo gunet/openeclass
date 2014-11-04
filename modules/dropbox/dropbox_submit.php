@@ -82,6 +82,9 @@ if (isset($_POST['submit'])) {
             $real_filename = '';
             $filesize = 0;
             $recipients = array();
+            if (!is_array($_POST['recipients'])) { //in personal msg form select2 returns a comma delimited string instead of array
+                $_POST['recipients'] = explode(',', $_POST['recipients']);
+            }
             foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
                 if (preg_match('/^_/', $r)) {
                     $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
