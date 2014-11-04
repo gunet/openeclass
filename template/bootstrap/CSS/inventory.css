@@ -1429,7 +1429,7 @@ tr.not_visible td:not(:last-child) {
 
 /*# sourceMappingURL=inventory.css.map */
 th.option-btn-cell, td.option-btn-cell {
-  width: 5px;
+  width: 56px;
   padding: 0px !important; }
 
 .container {
