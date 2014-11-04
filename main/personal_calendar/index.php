@@ -352,15 +352,15 @@ if ($_SESSION['theme'] != 'bootstrap') {
             . '<div class="row page-header">
                     <div class="pull-right form-inline">
                             <div class="btn-group">
-                                    <button class="btn btn-primary" data-calendar-nav="prev">&larr; ' . $langPrevious . '</button>
-                                    <button class="btn" data-calendar-nav="today">' . $langToday . '</button>
-                                    <button class="btn btn-primary" data-calendar-nav="next">' . $langNext . ' &rarr;</button>
+                                    <button class="btn btn-primary btn-sm" data-calendar-nav="prev">&larr; ' . $langPrevious . '</button>
+                                    <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
+                                    <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . $langNext . ' &rarr;</button>
                             </div>
                             <div class="btn-group">
-                                    <button class="btn btn-warning" data-calendar-view="year">' . $langYear . '</button>
-                                    <button class="btn btn-warning active" data-calendar-view="month">' . $langMonth . '</button>
-                                    <button class="btn btn-warning" data-calendar-view="week">' . $langWeek . '</button>
-                                    <button class="btn btn-warning" data-calendar-view="day">' . $langDay . '</button>
+                                    <button class="btn btn-warning btn-sm" data-calendar-view="year">' . $langYear . '</button>
+                                    <button class="btn btn-warning btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
+                                    <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
+                                    <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
                             </div>
                     </div>
                     <h3></h3>
