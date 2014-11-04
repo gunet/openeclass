@@ -180,33 +180,35 @@ $head_content .= "<script type='text/javascript'>
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).closest('tr').attr('id');
-                bootbox.confirm('$langSureToDelAnnounce', function(result) {                       
-                    $.ajax({
-                      type: 'POST',
-                      url: '',
-                      datatype: 'json',
-                      data: {
-                         action: 'delete', 
-                         value: row_id
-                      },
-                      success: function(data){
-                        var num_page_records = oTable.fnGetData().length;
-                        var per_page = oTable.fnPagingInfo().iLength;
-                        var page_number = oTable.fnPagingInfo().iPage;
-                        if(num_page_records==1){
-                            if(page_number!=0) {
-                                page_number--;
+                bootbox.confirm('$langSureToDelAnnounce', function(result) {
+                    if(result) {                       
+                        $.ajax({
+                          type: 'POST',
+                          url: '',
+                          datatype: 'json',
+                          data: {
+                             action: 'delete', 
+                             value: row_id
+                          },
+                          success: function(data){
+                            var num_page_records = oTable.fnGetData().length;
+                            var per_page = oTable.fnPagingInfo().iLength;
+                            var page_number = oTable.fnPagingInfo().iPage;
+                            if(num_page_records==1){
+                                if(page_number!=0) {
+                                    page_number--;
+                                }
                             }
-                        }
-                        console.log(page_number);
-                        oTable.fnPageChange(page_number);
-                      },
-                      error: function(xhr, textStatus, error){
-                          console.log(xhr.statusText);
-                          console.log(textStatus);
-                          console.log(error);
-                      }
-                    });              
+                            console.log(page_number);
+                            oTable.fnPageChange(page_number);
+                          },
+                          error: function(xhr, textStatus, error){
+                              console.log(xhr.statusText);
+                              console.log(textStatus);
+                              console.log(error);
+                          }
+                        });
+                    }              
                 });                
             });
             $(document).on( 'click','.vis_btn', function (g) {
