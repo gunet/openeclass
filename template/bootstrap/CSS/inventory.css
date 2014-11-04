@@ -1415,7 +1415,7 @@ tr.not_visible td:not(:last-child) {
 
 .row-main {
   padding-bottom: 2em;
-  padding-top: 2em; }
+  padding-top: 1.5em; }
 
 #background-cheat {
   position: absolute;
