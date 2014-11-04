@@ -324,9 +324,9 @@ if (count($exercise_question_ids)>0){
                             } elseif (!$choice[$answerId]) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
-                                $choice[$answerId] = '<font color="red">
-                                                                <s>' . q($matching[$choice[$answerId]]) . '</s>
-                                                                </font>';
+                                $choice[$answerId] = "<span style='color:red;'>
+                                                                <del>" . $matching[$choice[$answerId]] . "</del>
+                                                                </span>";
                             }
                         } else {
                             $matching[$answerId] = $answer;
@@ -381,7 +381,7 @@ if (count($exercise_question_ids)>0){
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>" .q($choice[$answerId]) ." / <font color='green'><b>" . q($matching[$answerCorrect]) . "</b></font></td>
+                                                  <td>" .$choice[$answerId] ." / <font color='green'><b>" . q($matching[$answerCorrect]) . "</b></font></td>
                                                 </tr>";
                         }
                     }
