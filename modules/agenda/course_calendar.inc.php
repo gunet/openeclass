@@ -260,10 +260,11 @@ require_once 'include/lib/references.class.php';
     }
     /**
      * Update existing event and logs the action
-     * @param int $eventid id in table note
-     * @param string $title note title
-     * @param text $content note body
-     * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
+     * @param int $eventid id in table personal_calendar
+     * @param string $title event title
+     * @param string $start event datetime
+     * @param text $content event details
+     * @param boolean $recursivelly specifies if the update should be applied to all events of the group of recursive events or to the specific one
      */
     function update_event($eventid, $title, $start, $duration, $content, $recursivelly = false){
         global $uid, $langNotValidInput, $course_id;
@@ -304,6 +305,13 @@ require_once 'include/lib/references.class.php';
         return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
     
+    /**
+     * Update existing event and logs the action
+     * @param int $eventid id in table personal_calendar
+     * @param string $title event title
+     * @param string $start event datetime
+     * @param text $content event details
+     */
     function update_recursive_event($eventid, $title, $start, $duration, $content){
         global $langNotValidInput;
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM agenda WHERE id=?d',$eventid);

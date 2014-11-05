@@ -205,7 +205,7 @@ class Calendar_Events {
             $dc = str_replace('start','ag.start',$datecond);
             $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                     . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d "
+                    . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) "
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
 
@@ -222,15 +222,16 @@ class Calendar_Events {
 
         }
         if(Calendar_Events::$calsettings->show_deadline == 1){
-            //assignements
+            //assignments
             if(!empty($q)){
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ass.deadline',$datecond);
             $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
-                    . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d "
+                    . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
+                    . "WHERE cu.user_id =?d AND (ass_sp.user_id = ?d OR cu.status = 1)"
                     . $dc;
+            $q_args = array_merge($q_args, array($user_id));
             $q_args = array_merge($q_args, $q_args_templ);
 
             //exercises
@@ -240,7 +241,7 @@ class Calendar_Events {
             $dc = str_replace('start','ex.end_date',$datecond);
             $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d "
+                    . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1)"
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
         }
@@ -384,9 +385,11 @@ class Calendar_Events {
 
     /**
      * Update existing event and logs the action
-     * @param int $eventid id in table note
-     * @param string $title note title
-     * @param text $content note body
+     * @param int $eventid id in table personal_calendar
+     * @param string $title event title
+     * @param string $start event datetime
+     * @param text $content event details
+     * @param boolean $recursivelly specifies if the update should be applied to all events of the group of recursive events or to the specific one
      * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      */
     public static function update_event($eventid, $title, $start, $duration, $content, $recursivelly = false, $reference_obj_id = NULL){
@@ -420,6 +423,15 @@ class Calendar_Events {
         return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
     
+    /**
+     * Update existing group of recursive events and logs the action
+     * @param int $eventid id in table personal_calendar
+     * @param string $title event title
+     * @param string $start event datetime
+     * @param text $content event details
+     * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
+     */
+    
     public static function update_recursive_event($eventid, $title, $start, $duration, $content, $reference_obj_id = NULL){
         global $langNotValidInput;
         $rec_eventid = Database::get()->query('SELECT source_event_id FROM personal_calendar WHERE id=?d',$eventid);
@@ -429,6 +441,7 @@ class Calendar_Events {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
     }
+    
     /**
      * Update existing admin event and logs the action
      * @param int $eventid id in table note
@@ -466,7 +479,9 @@ class Calendar_Events {
 
     /**
      * Deletes an existing event and logs the action
-     * @param int $noteid id in table note
+     * @param int $eventid id in table personal_calendar
+     * @param string $eventtype type of the event: personal|admin|course|deadline
+     * @param boolean $recursivelly specifies if the update should be applied to all events of the group of recursive events or to the specific one
      */
     public static function delete_event($eventid, $eventtype, $recursivelly = false){
         global $uid, $is_admin, $langNotAllowed;
@@ -1351,9 +1366,9 @@ class Calendar_Events {
        global $langNext, $langPrevious;
        
        $calendar = '<div id="cal-header" class="btn-group btn-group-justified btn-group-sm">
-                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="prev">&larr; '.$langPrevious.'</button></div>
+                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="prev"><i class="fa fa-caret-left"></i> '.$langPrevious.'</button></div>
                             <div class="btn-group btn-group-sm"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
-                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="next">'.$langNext.' &rarr;</button></div>
+                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="next">'.$langNext.' <i class="fa fa-caret-right"></i></button></div>
                     </div>';
        
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
