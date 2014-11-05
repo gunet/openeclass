@@ -128,17 +128,15 @@ function createDom($groupsArr, $toolsArr) {
 
 function correctLink($value) {
     global $urlMobile, $urlAppend;
-    $ret = str_replace($urlAppend, '', $urlMobile) . $value;
+    $link = $urlMobile . substr($value, strlen($urlAppend));
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
-    $redirect = 'redirect=' . urlencode($ret);
-    $ret = $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
-    return $ret;
+    $redirect = 'redirect=' . urlencode($link);
+    return $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
 }
 
 function correctRedirect($value) {
     global $urlServer, $urlAppend;
-    $ret = str_replace($urlAppend, '', $urlServer) . $value;
-    return $ret;
+    return $urlServer . substr($value, strlen($urlAppend));
 }
 
 function getTypeFromImage($value) {
