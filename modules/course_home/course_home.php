@@ -207,20 +207,18 @@ if ($is_editor) {
     } elseif (isset($_REQUEST['edit_submitW'])){
         $title = $_REQUEST['weektitle'];
         $descr = $_REQUEST['weekdescr'];
-
         if (isset($_REQUEST['week_id'])) { //edit week
             $weekid = $_REQUEST['week_id'];
             Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
                                     WHERE id = ?d ", $title, $descr, $weekid);
-        } else { // new week
-
+        }/* else { // new week
             // check if the final week is complete
             $diffDate = Database::get()->querySingle("SELECT DATEDIFF(finish_week, start_week) AS diffDate, id FROM course_weekly_view WHERE course_id = ?d ORDER BY id DESC LIMIT 1", $course_id);
-
+                
             if ($diffDate->diffDate == 6) { //if there is a whole week add one
                 $endWeek = new DateTime($course_info->finish_date);
                 $endWeek->modify('+6 day');
-                $endWeekForDB = $endWeek->format("Y-m-d");
+                $endWeekForDB = $endWeek->format("Y-m-d");                
             } else {
                 $days2add = 6-$diffDate->diffDate;
                 $endWeek = new DateTime($course_info->finish_date);
@@ -235,16 +233,20 @@ if ($is_editor) {
 
                 $endWeek->modify('+6 day');
                 $endWeekForDB = $endWeek->format("Y-m-d");
-                $q = Database::get()->query("INSERT INTO course_weekly_view SET
-                                  title = ?s, comments = ?s, visible = 1, start_week = ?t, finish_week = ?t,
-                                  course_id = ?d", $title, $descr, $startWeekForDB, $endWeekForDB, $course_id);
+                $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");                
+                if ($q) {
+                    $order =  max(0, $q->maxorder) + 1;
+                    Database::get()->query("INSERT INTO course_weekly_view SET
+                                      title = ?s, comments = ?s, visible = 1, start_week = ?t, finish_week = ?t,
+                                      course_id = ?d, `order` = ?d", $title, $descr, $startWeekForDB, $endWeekForDB, $course_id, $order);
+                }
             }
 
             // update the finish date at the course table
             Database::get()->query("UPDATE course SET finish_date = ?t
                                     WHERE id = ?d ", $endWeekForDB, $course_id);
 
-        }
+        }*/
 
     } elseif (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
@@ -599,16 +601,11 @@ if (!$alter_layout) {
                 <h5 class='content-title'>$unititle</h5>
             </div>";
             
-        if ($is_editor) {
+        if ($is_editor and $course_info->view_type == 'units') {
             $tool_content .= "<div class='col-md-6 no-gutters'>
-                <div class='toolbox margin-bottom-thin pull-right'>";
-            if ($course_info->view_type == 'weekly') {
-                $link = "{$urlServer}modules/weeks/info.php?course=$course_code";
-                $linktitle = $langAddWeek;
-            } else {
-                $link = "{$urlServer}modules/units/info.php?course=$course_code";
-                $linktitle = $langAddUnit;
-            }
+                <div class='toolbox margin-bottom-thin pull-right'>";            
+            $link = "{$urlServer}modules/units/info.php?course=$course_code";
+            $linktitle = $langAddUnit;
             $tool_content .= "<a href='$link' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$linktitle' class='btn btn-default-eclass place-at-toolbox size-s'>";
             $tool_content .= "<i class='fa fa-plus space-after-icon'></i>
                 $linktitle
