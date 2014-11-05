@@ -2307,7 +2307,7 @@ $langFinalDesc = "Αναλυτική Περιγραφή $siteName";
 $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
-$langOr = "ή";
+$langOr = "η";
 $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το %sπρόγραμμα Acrobat Reader%s ή άλλα %sελεύθερα διαθέσιμα προγράμματα που θα βρείτε εδώ%s.";
 $langTutorials = "Οδηγοί";
@@ -3841,6 +3841,7 @@ $langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το 
 $langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
 $langUntil = "μέχρι";
 $langWeek = "Eβδομάδα";
+$langsWeek = "εβδομάδα";
 $langWeeks = "εβδομάδες";
 
 /* * ******************************************

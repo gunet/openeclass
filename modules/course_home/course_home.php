@@ -477,29 +477,29 @@ $tool_content .= "
 ";
 
 
-if ($is_editor) {        
-        $last_id = Database::get()->querySingle("SELECT id FROM course_units
-                                                       WHERE course_id = ?d AND `order` >= 0
-                                                       ORDER BY `order` DESC LIMIT 1", $course_id);
-        if ($last_id) {
-            $last_id = $last_id->id;
-        }
-        if ($course_info->view_type == 'weekly') {
-            $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
-        } else {        
-            $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
-        }
-    } else {
-        if ($course_info->view_type == 'weekly') {
-            $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
-        } else {
-            $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
-        }
+if ($is_editor) {
+    $last_id = Database::get()->querySingle("SELECT id FROM course_units
+                                                   WHERE course_id = ?d AND `order` >= 0
+                                                   ORDER BY `order` DESC LIMIT 1", $course_id);
+    if ($last_id) {
+        $last_id = $last_id->id;
     }
+    if ($course_info->view_type == 'weekly') {
+        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
+    } else {
+        $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
+    }
+} else {
+    if ($course_info->view_type == 'weekly') {
+        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
+    } else {
+        $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
+    }
+}
 
     $sql = Database::get()->queryArray($query, $course_id);
     $total_cunits = count($sql);    
-    if ($total_cunits > 0) {        
+    if ($total_cunits > 0) {
         $count_index = 1;
         $cunits_content .= "<div class='panel'><ul class='boxlist'>";
         foreach ($sql as $cu) {
@@ -511,7 +511,7 @@ if ($is_editor) {
             $class_vis = ($vis == 0) ? 'not_visible' : '';
             if ($course_info->view_type == 'weekly') {
                 $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id'>
-                        $langWeek: ".nice_format($cu->start_week)." - ".nice_format($cu->finish_week)."&nbsp;" . q($cu->title) . "</a>";
+                        $count_index$langOr $langsWeek: ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")&nbsp;" . q($cu->title) . "</a>";
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
@@ -577,7 +577,7 @@ if ($is_editor) {
 // Contentbox: Thematikes enotites
 // Contentbox: Calendar
 // Contentbox: Announcements
-if ($total_cunits > 0 || $is_editor) {
+if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {
     $alter_layout = FALSE;
     $cunits_sidebar_columns = 4;
     $cunits_sidebar_subcolumns = 12;
@@ -587,12 +587,14 @@ if ($total_cunits > 0 || $is_editor) {
     $cunits_sidebar_subcolumns = 4;
 }
 $tool_content .= "<div class='row'>";
+//if (!$alter_layout or $course_info->view_type != 'simple') {
 if (!$alter_layout) {
+    $unititle = ($course_info->view_type == 'weekly')? $langCourseWeeklyFormat : $langCourseUnits ;
     $tool_content .= "
     <div class='col-md-8 course-units'>
         <div class='row'>
             <div class='col-md-6 no-gutters' style='padding-top:24px;'>
-                <h5 class='content-title'>$langCourseUnits</h5>
+                <h5 class='content-title'>$unititle</h5>
             </div>";
             
         if ($is_editor) {
@@ -600,7 +602,7 @@ if (!$alter_layout) {
                 <div class='toolbox margin-bottom-thin pull-right'>";
             if ($course_info->view_type == 'weekly') {
                 $link = "{$urlServer}modules/weeks/info.php?course=$course_code";
-                $linktitle = $langCourseWeeklyFormat;
+                $linktitle = $langAddWeek;
             } else {
                 $link = "{$urlServer}modules/units/info.php?course=$course_code";
                 $linktitle = $langAddUnit;
@@ -613,11 +615,11 @@ if (!$alter_layout) {
             </div>";            
         }
             
-        $tool_content .= "</div>
-        <div class='row'>
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='row'>
             $cunits_content
-        </div>
-    </div>";
+        </div>";
+    $tool_content .= "</div>";
 }
 
 $tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
@@ -634,13 +636,15 @@ if (isset($level) && !empty($level)) {
     </div>";
 }
 
-$tool_content .= "
+if (!empty($license_info_box)) {
+    $tool_content .= "
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
             </div>";
+}
 
 
 //BEGIN - Get user personal calendar
