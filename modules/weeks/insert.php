@@ -192,9 +192,9 @@ function insert_docs($id) {
                                         `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                     $id, $title, $file->comment, $file->visible, $order, $file->id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -219,8 +219,8 @@ function insert_text($id) {
     $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='text', title='',
                         comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
     $uresId = $q->lastInsertID;
-    $urdx->store($uresId, false);
-    $cidx->store($course_id, true);
+    $urdx->store($uresId);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -246,9 +246,9 @@ function insert_lp($id) {
                                         visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                 $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -277,9 +277,9 @@ function insert_video($id) {
                                 SET course_weekly_view_id = ?d, type = '$table', title = ?s, comments = ?s, visible = 1, `order` = $order, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                             $id, $row->title, $row->description, $res_id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -317,9 +317,9 @@ function insert_work($id) {
                                 `date` = " . DBHelper::timeAfter() . ",
                                 res_id = ?d", $id, $work->title, $work->description, $visibility, $order, $work->id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -351,9 +351,9 @@ function insert_exercise($id) {
                             comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                     $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -393,9 +393,9 @@ function insert_forum($id) {
                                     $id, $forum->name, $forum->desc, $order, $forum->id);
         }
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -421,9 +421,9 @@ function insert_poll($id) {
                                         title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                     $id, $poll->name, $order, $poll->pid);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;       
@@ -449,9 +449,9 @@ function insert_wiki($id) {
                                         visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                     $id, $wiki->title, $wiki->description, $order, $wiki->id);
         $uresId = $q->lastInsertID;
-        $urdx->store($uresId, false);
+        $urdx->store($uresId);
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -479,7 +479,7 @@ function insert_link($id) {
                                         comments = ?s, visible = 1, `order` = ?d, `date` = ". DBHelper::timeAfter() . ", res_id = ?d", 
                                 $id, $linkcat->name, $linkcat->description, $order, $linkcat->id);
             $uresId = $q->lastInsertID;
-            $urdx->store($uresId, false);
+            $urdx->store($uresId);
         }
     }
 
@@ -491,10 +491,10 @@ function insert_link($id) {
                                             comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                 $id, $link->title, $link->description, $order, $link->id);
             $uresId = $q->lastInsertID;
-            $urdx->store($uresId, false);
+            $urdx->store($uresId);
         }
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
@@ -520,11 +520,11 @@ function insert_ebook($id) {
                                                 title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d", 
                                             $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 $uresId = $q->lastInsertID;
-                $urdx->store($uresId, false);
+                $urdx->store($uresId);
             }
         }
     }
-    $cidx->store($course_id, true);
+    $cidx->store($course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;

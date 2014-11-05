@@ -44,8 +44,8 @@ function process_actions() {
                                         title = ?s,
                                         comments = ?s
                                         WHERE course_weekly_view_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
-            $urdx->store($res_id, false);
-            $cidx->store($course_id, true);
+            $urdx->store($res_id);
+            $cidx->store($course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
         $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
@@ -54,7 +54,7 @@ function process_actions() {
         if ($id = check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);            
             $urdx->remove($res_id, false, false);
-            $cidx->store($course_id, true);
+            $cidx->store($course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
         }
@@ -64,8 +64,8 @@ function process_actions() {
             $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view_activities WHERE id = ?d", $res_id)->visible;            
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE course_weekly_view_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
-            $urdx->store($res_id, false);
-            $cidx->store($course_id, true);
+            $urdx->store($res_id);
+            $cidx->store($course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
     } elseif (isset($_REQUEST['down'])) { // change order down

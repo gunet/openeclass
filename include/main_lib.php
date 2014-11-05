@@ -1879,8 +1879,8 @@ function handle_unit_info_edit() {
     $idx = new Indexer();
     $cidx = new CourseIndexer($idx);
     $uidx = new UnitIndexer($idx);
-    $uidx->store($unit_id, false);
-    $cidx->store($course_id, true);
+    $uidx->store($unit_id);
+    $cidx->store($course_id);
     // refresh course metadata
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
