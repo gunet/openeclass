@@ -112,7 +112,7 @@ if (!$info) {
 } else {
     $nameTools = "$langWeek $cnt$langOr";
     if (!empty($info->title)) {
-        $nameTools .= ": ". htmlspecialchars($info->title);
+        $nameTools = htmlspecialchars($info->title);
     }
     $comments = trim($info->comments);
 }

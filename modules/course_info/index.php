@@ -493,7 +493,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= $c->start_date;
     }
     $tool_content .= "' readonly='true'>                        
-                        $langDuration
+                        $langEndDate
                         <input class='dateInForm' type='text' name='finish_date' value='";
     if ($c->finish_date != "0000-00-00") {
         $tool_content .= $c->finish_date;
