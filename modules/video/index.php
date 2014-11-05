@@ -57,7 +57,7 @@ $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'ti
 $menuTypeID = ($is_in_tinymce) ? 5: 2;
 list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
         ? select_proper_filters($_REQUEST['docsfilter'])
-        : array('', '', true);
+        : array('WHERE true', 'WHERE true', true);
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
@@ -480,8 +480,8 @@ hContent;
 
 ModalBoxHelper::loadModalBox(true);
 
-$count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video WHERE course_id = ?d $filterv ORDER BY title", $course_id)->count;
-$count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink WHERE course_id = ?d $filterl ORDER BY title", $course_id)->count;
+$count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d ORDER BY title", $course_id)->count;
+$count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d ORDER BY title", $course_id)->count;
 $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 
 $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
@@ -489,7 +489,7 @@ if ($count_video[0] > 0 or $count_video_links[0] > 0) {
     $tool_content .= "<div class='table-responsive'><table class='table-default'>
         <tr><th>$langVideoDirectory</th>
         <th class='text-center'>$langDate</th>
-        <th class='text-center'>" . icon('fa-gears') . "</th>";
+        <th class='text-center'>" . icon('fa-gears') . "</th>";        
     $tool_content .= "</tr>";
     //display uncategorized links
     showlinksofcategory();
@@ -561,8 +561,8 @@ function select_table($table)
 }
 
 function select_proper_filters($requestDocsFilter) {
-    $filterv = '';
-    $filterl = '';
+    $filterv = 'WHERE true';
+    $filterl = 'WHERE true';
     $compatiblePlugin = true;
 
     switch ($requestDocsFilter) {
@@ -571,12 +571,12 @@ function select_proper_filters($requestDocsFilter) {
             $first = true;
             foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
             {
-                if ($first)
-                {
+                if ($first) {
                     $ors .= "path LIKE '%$imgfmt%'";
                     $first = false;
-                } else
+                } else {
                     $ors .= " OR path LIKE '%$imgfmt%'";
+                }
             }
 
             $filterv = "WHERE ( $ors )";
@@ -685,7 +685,7 @@ function showlinksofcategory($cat_id = 0) {
     global $course_id, $is_in_tinymce, $themeimg, $tool_content, $is_editor, $course_code;
     global $langDelete, $langVisible, $langConfirmDelete;
     global $langPreview, $langSave, $langResourceAccess, $langResourceAccess, $langModify;
-    global $filterv, $filterl, $langcreator, $langpublisher;
+    global $filterv, $filterl, $compatiblePlugin, $langcreator, $langpublisher;
 
     if ($is_editor) {
         $vis_q = '';
@@ -693,11 +693,11 @@ function showlinksofcategory($cat_id = 0) {
         $vis_q = "AND visible = 1";
     }
     if ($cat_id > 0) {
-        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv WHERE course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
-        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl WHERE course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
     } else {
-        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv WHERE course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
-        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl WHERE course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
     }
 
     $i = 0;
@@ -708,8 +708,9 @@ function showlinksofcategory($cat_id = 0) {
                 switch($table) {
                     case 'video':
                         $vObj = MediaResourceFactory::initFromVideo($myrow);
-                        if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
+                        if ($is_in_tinymce && !$compatiblePlugin) { // use Access/DL URL for non-modable tinymce plugins
                             $vObj->setPlayURL($vObj->getAccessURL());
+                        }
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
                         $link_to_save = $vObj->getAccessURL();
                         break;
