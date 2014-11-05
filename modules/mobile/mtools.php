@@ -40,7 +40,7 @@ $groupsArr[] = $group;
 $tool = new stdClass();
 $tool->id = 0;
 $tool->name = $langCourseProgram;
-$tool->link = $urlMobile . 'courses/' . $currentCourse;
+$tool->link = $urlAppend . 'courses/' . $currentCourse;
 $tool->img = 'coursedescription';
 $tool->type = 'coursedescription';
 $tool->active = true;
@@ -57,7 +57,7 @@ if ($first_unit) {
 $tool = new stdClass();
 $tool->id = 1;
 $tool->name = $langCourseUnits;
-$tool->link = $urlMobile . 'modules/units/index.php?course=' . $currentCourse . '&id=' . $first_unit_id;
+$tool->link = $urlAppend . 'modules/units/index.php?course=' . $currentCourse . '&id=' . $first_unit_id;
 $tool->img = 'courseunits';
 $tool->type = 'courseunits';
 $tool->active = true;
