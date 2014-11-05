@@ -905,8 +905,7 @@ if (!class_exists('Exercise')):
                                     end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
                                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
                                     $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
-                                    $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;
-            
+                                    $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
             Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
                                         SELECT question_id, ?d
                                           FROM `exercise_with_questions`

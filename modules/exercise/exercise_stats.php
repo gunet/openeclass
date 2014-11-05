@@ -23,9 +23,12 @@ $require_current_course = TRUE;
 $require_editor = true;
 
 include '../../include/baseTheme.php';
-
+include('exercise.class.php');
+include('question.class.php');
 
 $exerciseId = $_GET['exerciseId'];
+$objExercise = new Exercise();
+$objExercise->read($exerciseId);
 
 $nameTools = $langExerciseStats;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -38,7 +41,7 @@ $tool_content .= action_bar(array(
         'url' => "index.php?course=$course_code"
     ),          
 ));
-
+ 
 $completedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED)->count;
 $pausedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_PAUSED)->count;
 $pendingAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_PENDING)->count;
@@ -127,5 +130,37 @@ $tool_content .= "
                 </tr>                
             </tbody>
         </table>
-    </div>";     
+    </div>";
+//Questions Table
+$questionList = $objExercise->selectQuestionList();
+$tool_content .= "
+    <h3>$langQuestions</h3>
+    <div class='table-responsive'>
+        <table class='table-default'>
+            <thead>
+                <tr>
+                    <th>$langTitle</th>
+                    <th>Ποσοστό Επιτυχίας</th>
+                </tr>
+            </thead>
+            <tbody>";
+foreach($questionList as $id){
+    $objQuestionTmp = new Question();
+    $objQuestionTmp->read($id);    
+    $tool_content .= "
+                <tr>
+                    <td>".$objQuestionTmp->selectTitle()."</th>
+                    <td>
+                        <div class='progress'>
+                            <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>
+                              ".$objQuestionTmp->successRate($exerciseId)."%
+                            </div>
+                        </div></td>                   
+                </tr>";         
+}
+               
+$tool_content .= "
+            </tbody>
+        </table>
+    </div>";    
 draw($tool_content, 2, null, $head_content);

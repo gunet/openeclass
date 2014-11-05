@@ -295,6 +295,7 @@ if (count($exercise_question_ids)>0){
                             }
                             $choice[$j] = trim(stripslashes($choice[$j]));
                             // if the word entered is the same as the one defined by the professor
+                                                       
                             if (strtolower(substr($temp, 0, $pos)) == strtolower($choice[$j])) {
                                 // gives the related weighting to the student
                                 $questionScore+=$answerWeighting[$j-1];
