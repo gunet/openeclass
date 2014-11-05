@@ -68,8 +68,8 @@ function list_exercises() {
                 }
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry[name]) . "</a></td>";
-            $tool_content .= "<td><div align='left'>" . q($entry[comment]) . "</div></td>";
+            $tool_content .= "<td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td><div align='left'>" . q($entry['comment']) . "</div></td>";
             $tool_content .= "<td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
             $i++;

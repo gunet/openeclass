@@ -44,6 +44,9 @@ $action->record(MODULE_ID_UNITS);
 if (isset($_REQUEST['id'])) {
     $id = intval($_REQUEST['id']);
 }
+if (isset($_GET['cnt'])) {
+    $cnt = intval($_REQUEST['cnt']);
+}
 
 $lang_editor = $language;
 load_js('tools.js');
@@ -97,16 +100,20 @@ if ($is_editor) {
 } else {
     $visibility_check = "AND visible=1";
 }
-if (isset($id) and $id !== false) {    
+if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_weekly_view WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
 }
+
 if (!$info) {
     $nameTools = $langUnitUnknown;
     $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $nameTools = htmlspecialchars($info->title);
+    $nameTools = "$langWeek $cnt$langOr";
+    if (!empty($info->title)) {
+        $nameTools .= ": ". htmlspecialchars($info->title);
+    }
     $comments = trim($info->comments);
 }
 
@@ -117,11 +124,13 @@ foreach (array('previous', 'next') as $i) {
         $dir = 'DESC';
         $arrow1 = '« ';
         $arrow2 = '';
+        $cnt--;
     } else {
         $op = '>=';
         $dir = '';
         $arrow1 = '';
         $arrow2 = ' »';
+        $cnt += 2;
     }
     
     if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
@@ -143,9 +152,8 @@ foreach (array('previous', 'next') as $i) {
 
     if ($q) {
         $q_id = $q->id;
-        //$q_title = htmlspecialchars($q->title);
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$q_title</a>$arrow2";
+        $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$q_title</a>$arrow2";
     } else {
         $link[$i] = '&nbsp;';
     }

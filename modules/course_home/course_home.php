@@ -491,7 +491,7 @@ if ($is_editor) {
     }
 } else {
     if ($course_info->view_type == 'weekly') {
-        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d";
+        $query = "SELECT id, start_week, finish_week, visible, title, comments, public FROM course_weekly_view WHERE course_id = ?d AND visible = 1";
     } else {
         $query = "SELECT id, title, comments, visible, public FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
     }
@@ -499,10 +499,13 @@ if ($is_editor) {
 
     $sql = Database::get()->queryArray($query, $course_id);
     $total_cunits = count($sql);    
-    if ($total_cunits > 0) {
-        $count_index = 1;
+    if ($total_cunits > 0) {        
         $cunits_content .= "<div class='panel'><ul class='boxlist'>";
+        $count_index = 0;
         foreach ($sql as $cu) {
+            if ($cu->visible == 1) {
+               $count_index++;
+            }
             // access status
             $access = $cu->public;
             // Visibility icon
@@ -510,7 +513,7 @@ if ($is_editor) {
             $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
             $class_vis = ($vis == 0) ? 'not_visible' : '';
             if ($course_info->view_type == 'weekly') {
-                $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id'>
+                $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>
                         $count_index$langOr $langsWeek: ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")&nbsp;" . q($cu->title) . "</a>";
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
@@ -568,8 +571,7 @@ if ($is_editor) {
                     '</div>';
                 }
             }
-            $cunits_content .= "</li>";
-            $count_index++;
+            $cunits_content .= "</li>";            
         }
         $cunits_content .= "</ul></div>";
     }
