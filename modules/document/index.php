@@ -51,19 +51,20 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/search/documentindexer.class.php';
 require_once 'include/log.php';
 
+if ($is_in_tinymce) {
+    $_SESSION['embedonce'] = true; // necessary for baseTheme
+    $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
+    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
+    load_js('jquery-2.1.1.min');
+    load_js('tinymce.popup.urlgrabber.min.js');
+}
+
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
-
-if ($is_in_tinymce) {
-    $_SESSION['embedonce'] = true; // necessary for baseTheme
-    $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
-    $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
-    load_js('tinymce.popup.urlgrabber.min.js');
-}
 
 // check for quotas
 $diskUsed = dir_total_space($basedir);

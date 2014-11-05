@@ -36,7 +36,6 @@ require_once 'include/log.php';
 require_once 'linkfunctions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-ModalBoxHelper::loadModalBox();
 
 require_once 'include/action.php';
 $action_stats = new action();
@@ -52,9 +51,11 @@ if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . $_REQUEST['docsfilter'] : '';
     $tinymce_params = '&amp;embedtype=tinymce' . $docsfilter;
+    load_js('jquery-2.1.1.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
+ModalBoxHelper::loadModalBox();
 $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
