@@ -527,38 +527,18 @@ if (!class_exists('Question')):
             if($type == UNIQUE_ANSWER || $type == MULTIPLE_ANSWER || $type == TRUE_FALSE){ //works wrong for MULTIPLE_ANSWER           
                 $q_correct_answers = Database::get()->queryArray("SELECT r_position, correct FROM exercise_answer WHERE question_id = ?d AND correct = 1", $id);
                 $q_correct_answers_cnt = count($q_correct_answers);
-                if ($q_correct_answers_cnt > 0) {
-                    $q_correct_answers_sql = '';
-                    $q_incorrect_answers_sql = '';
-                    $i=1;
-                    foreach ($q_correct_answers as $row) {
-                        $q_correct_answers_sql .= 'a.answer_id = '.$row->r_position;
-                        $q_correct_answers_sql .= ($i!=$q_correct_answers_cnt) ? ' OR ' : '';
-                        $q_incorrect_answers_sql .= 'a.answer_id != '.$row->r_position;
-                        $q_incorrect_answers_sql .= ($i!=$q_correct_answers_cnt) ? ' AND ' : '';                    
-                        $i++;
-                    }
-                    // As in multiple selection the number of answers can surpass the number of correct answers
-                    // we created the following query to cover all cases (UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE) 
-                    $correct_answer_attempts = Database::get()->querySingle("
-                        SELECT COUNT(*) AS counter FROM(
-                            SELECT a.eurid, 
-                            SUM($q_correct_answers_sql) as correct_answer_cnt,
-                            SUM($q_incorrect_answers_sql) as incorrect_answer_cnt
-                            FROM exercise_answer_record a, exercise_user_record b
-                            WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
-                            GROUP BY(a.eurid) HAVING correct_answer_cnt = $q_correct_answers_cnt AND incorrect_answer_cnt = 0
-                        )sub", $query_vars)->counter;
-                } else {
-                    $correct_answer_attempts = 0;
+                
+                $q_correct_answers_sql = '';
+                $q_incorrect_answers_sql = '';
+                $i=1;
+                foreach ($q_correct_answers as $row) {
+                    $q_correct_answers_sql .= 'a.answer_id = '.$row->r_position;
+                    $q_correct_answers_sql .= ($i!=$q_correct_answers_cnt) ? ' OR ' : '';
+                    $q_incorrect_answers_sql .= 'a.answer_id != '.$row->r_position;
+                    $q_incorrect_answers_sql .= ($i!=$q_correct_answers_cnt) ? ' AND ' : '';                    
+                    $i++;
                 }
-//                $correct_answer_attempts = Database::get()->querySingle("
-//                    SELECT COUNT(*) AS counter FROM(
-//                        SELECT COUNT(*) AS sub_counter
-//                        FROM exercise_answer_record a, exercise_user_record b
-//                        WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status=?d$extra_sql AND a.answer_id NOT IN ($q_incorrect_answers_sql) 
-//                        GROUP BY a.eurid
-//                    )sub", $query_vars)->counter;
+
             } elseif ($type == FILL_IN_BLANKS) { // Works Great               
                $objAnswersTmp = new Answer($id);
                $answer_field = $objAnswersTmp->selectAnswer(1);
@@ -566,30 +546,22 @@ if (!class_exists('Question')):
                list($answer, $answerWeighting) = explode('::', $answer_field);
                //getting all matched strings between [ and ] delimeters
                preg_match_all('#\[(.*?)\]#', $answer, $match);
-               $q_correct_answers_cnt = count($match[1]);
                $q_correct_answers_sql = '';
+               $q_incorrect_answers_sql = '';
                $i=1;
                foreach ($match[1] as $value){
-                   $query_vars[] = $value;
-                   $query_vars[] = $i;
-                   $q_correct_answers_sql .= ($i==1) ? ' AND (' : '';
-                   $q_correct_answers_sql .= "(a.answer = ?s  AND a.answer_id = ?d)";
-                   $q_correct_answers_sql .= ($i!=$q_correct_answers_cnt) ? ' OR ' : '';
-                   $q_correct_answers_sql .= ($i==$q_correct_answers_cnt) ? ')' : '';
+                   //$query_vars[] = $value;
+                   //$query_vars[] = $i;
+                   //$q_correct_answers_sql .= ($i==1) ? ' AND (' : '';
+                   $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
+                   $q_correct_answers_sql .= "(a.answer = '$value'  AND a.answer_id = $i)";
+                   $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';                     
+                   $q_incorrect_answers_sql .= "(a.answer != '$value'  AND a.answer_id = $i)";                
+                   //$q_correct_answers_sql .= ($i==$q_correct_answers_cnt) ? ')' : '';
                    $i++;
                }
-                $correct_answer_attempts = Database::get()->querySingle("
-                    SELECT COUNT(*) AS counter FROM(
-                        SELECT COUNT(*) AS sub_counter
-                        FROM exercise_answer_record a, exercise_user_record b
-                        WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status=?d$extra_sql$q_correct_answers_sql
-                        GROUP BY a.eurid HAVING sub_counter = $q_correct_answers_cnt
-                    )sub", $query_vars)->counter;              
-            } elseif ($type == FREE_TEXT) { //works great
-                // This query gets answers which where graded with queston maximum grade
-                $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
-                        FROM exercise_answer_record a, exercise_user_record b, exercise_question c
-                        WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;            
+                $q_correct_answers_cnt = $i-1;
+                            
             } elseif ($type == MATCHING) { // to be done
                     // construction of the Answer object
                     $objAnswerTmp = new Answer($id);
@@ -609,7 +581,19 @@ if (!class_exists('Question')):
                         }
                     }
                     $q_correct_answers_cnt = $i;
-                //  One query to rule them all (except free text maybe)
+           
+            }
+            if ($type == FREE_TEXT) {
+                // This query gets answers which where graded with queston maximum grade
+                $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
+                        FROM exercise_answer_record a, exercise_user_record b, exercise_question c
+                        WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;                           
+            } else {
+                // One Query to Rule Them All (except free text questions)
+                // This query groups attempts and counts correct and incorrect answers
+                // then counts attempts where correct answers equals to total anticipated correct attempts
+                // and incorrect equals zero (this control is necessary in cases of MULTIPLE ANSWER type)
+                if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM(
                             SELECT a.eurid, 
@@ -618,9 +602,11 @@ if (!class_exists('Question')):
                             FROM exercise_answer_record a, exercise_user_record b
                             WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status = ?d$extra_sql
                             GROUP BY(a.eurid) HAVING correct_answer_cnt = $q_correct_answers_cnt AND incorrect_answer_cnt = 0
-                        )sub", $query_vars)->counter;             
+                        )sub", $query_vars)->counter;
+                } else {
+                    $correct_answer_attempts = 0;
+                }
             }
-
             if ($total_answer_attempts>0) {
                 $successRate = round($correct_answer_attempts/$total_answer_attempts*100, 2);
             } else {
