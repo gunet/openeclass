@@ -607,10 +607,12 @@ if (!empty($license_info_box)) {
     $tool_content .= "
         <div class='row'>
             <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h5 class='content-title'>$langLicense</h5>
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
-            </div>";
+            </div>
+        </div>";
 }
 
 
@@ -623,20 +625,20 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>$langCalendar</h5>
+$tool_content .="<div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h5 class='content-title'>$langCalendar</h5>
                     <div class='panel padding'>
                         $user_personal_calendar
                     </div>
-            </div>
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>$langAnnouncements</h5>
-                <ul class='tablelist panel'>" . course_announcements() . "
-                </ul>
-            </div>
-       </div>
-    </div>
-</div>";
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h5 class='content-title'>$langAnnouncements</h5>
+                    <ul class='tablelist panel'>" . course_announcements() . "
+                    </ul>
+                </div>
+           </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);
 
@@ -663,9 +665,9 @@ function course_announcements() {
             foreach ($q as $ann) {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
-                $ann_content .= "<li class='list-item'>" .
-                    "<span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) .
-                    "</a><br>$ann_date</span></li>";
+                $ann_content .= "<li class='list-item'>
+                                    <span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a><br>$ann_date</span>
+                                </li>";
             }
             return $ann_content;
         }
