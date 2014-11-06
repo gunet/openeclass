@@ -1410,11 +1410,14 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM assignment WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise_question WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM exercise_question_cats WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid IN (SELECT a.eurid FROM exercise_user_record a, exercise b WHERE a.eid = b.id AND b.course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
