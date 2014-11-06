@@ -359,7 +359,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         
         $tool_content .= "<tr>
     	                    <th>$langSendTo:</th>
-    	                    <td><input type='hidden' name=recipients id='recipients' /><br/><em>$langSearchSurname</em></td>
+    	                    <td><input type='hidden' name=recipients id='recipients' style='width:100%;'/><br/><em>$langSearchSurname</em></td>
                           </tr>";        
     }
     
