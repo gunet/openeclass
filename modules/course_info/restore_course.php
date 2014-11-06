@@ -274,6 +274,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         // Video
         $videocat_map = restore_table($restoreThis, 'video_category', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $videocat_map[''] = '';
+        $videocat_map[0] = 0;
         $video_map = restore_table($restoreThis, 'video', array(
             'map' => array('category' => $videocat_map),
             'set' => array('course_id' => $course_id),
