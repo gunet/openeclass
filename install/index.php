@@ -184,7 +184,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
 
 // step 2 license
 if (isset($_POST['install2'])) {
-    $langStepTitle = $langLicence;
+    $langStepTitle = $langLicense;
     $langStep = $langStep2;
     $_SESSION['step'] = 2;
     $gpl_link = '../info/license/gpl_print.txt';

@@ -105,7 +105,7 @@ function draw($toolContent, $options=null) {
 /**
  * @brief installation right menu 
  * @global type $langRequirements
- * @global type $langLicence
+ * @global type $langLicense
  * @global type $langDBSetting
  * @global type $langBasicCfgSetting 
  * @global type $langLastCheck
@@ -113,7 +113,7 @@ function draw($toolContent, $options=null) {
  * @return array
  */
 function installerMenu(){
-	global $langRequirements, $langLicence, $langDBSetting;
+	global $langRequirements, $langLicense, $langDBSetting;
 	global $langBasicCfgSetting, $langLastCheck, $langInstallEnd;
 
 	$sideMenuGroup = array();
@@ -141,7 +141,7 @@ function installerMenu(){
 	array_push($sideMenuLink, $currentStep[0]);
 	array_push($sideMenuImg, $stepImg[0]);
 
-	array_push($sideMenuText, $langLicence);
+	array_push($sideMenuText, $langLicense);
 	array_push($sideMenuLink, $currentStep[1]);
 	array_push($sideMenuImg, $stepImg[1]);
 
