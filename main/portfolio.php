@@ -132,9 +132,13 @@ $tool_content = "
                 <div class='col-md-12'>
                     <h5 class='content-title'>$langMyPersoMessages</h5>
                     <div class='panel'>
-                        <ul class='tablelist panel'>
-                        $user_messages
-                        </ul>
+                        <ul class='tablelist panel'>";
+                        if(!empty($user_messages)){
+                            $tool_content.=$user_messages;
+                        }else{
+                            $tool_content.="<li class='list-item'>$langDropboxNoMessage</li>";
+                        }
+                        $tool_content.="</ul>
                     </div>
                 </div>
             </div>
