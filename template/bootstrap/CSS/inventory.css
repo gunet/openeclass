@@ -1801,38 +1801,43 @@ td.option-btn-cell {
   margin: 0 0;
 }
 
-/* line 1689, ../SASS/inventory.scss */
+/* line 1688, ../SASS/inventory.scss */
+.side_content {
+  padding-top: 24px;
+}
+
+/* line 1693, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1692, ../SASS/inventory.scss */
+/* line 1696, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1696, ../SASS/inventory.scss */
+/* line 1700, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1700, ../SASS/inventory.scss */
+/* line 1704, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1706, ../SASS/inventory.scss */
+/* line 1710, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1715, ../SASS/inventory.scss */
+/* line 1719, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1721, ../SASS/inventory.scss */
+/* line 1725, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1849,7 +1854,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1733, ../SASS/inventory.scss */
+/* line 1737, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1859,7 +1864,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1739, ../SASS/inventory.scss */
+/* line 1743, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

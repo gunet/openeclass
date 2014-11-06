@@ -589,7 +589,7 @@ if (!$alter_layout) {
     $tool_content .= "</div>";
 }
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
+$tool_content .= "<div class='col-md-$cunits_sidebar_columns side_content'>";
 // display open course level if exist
 if (isset($level) && !empty($level)) {
     $tool_content .= "
