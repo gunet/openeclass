@@ -309,7 +309,7 @@ h1.page-title {
   margin: 0em;
   font-weight: 400 !important;
   color: #333;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /* line 162, ../SASS/inventory.scss */
@@ -363,7 +363,7 @@ img {
 /* line 217, ../SASS/inventory.scss */
 .page-subtitle {
   color: #555555;
-  font-size: 18px;
+  font-size: 16px;
 }
 /* line 223, ../SASS/inventory.scss */
 .page-subtitle a {
