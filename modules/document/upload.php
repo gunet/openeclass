@@ -64,8 +64,8 @@ if ($can_upload) {
     }
     $tool_content .= "
         <div class='row margin-top-fat'>
-          <div class='col-md-12'>
-        <div class='panel padding-fat focused'>
+            <div class='col-md-12'>
+                <div class='panel padding-fat focused'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
           <input type='hidden' name='uploadPath' value='$uploadPath' />
@@ -194,7 +194,7 @@ if ($can_upload) {
       </div>
     </form>
 
-    </div>";
+    </div></div></div>";
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
