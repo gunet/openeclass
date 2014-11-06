@@ -637,7 +637,6 @@ $tool_content .="<div class='col-md-$cunits_sidebar_subcolumns'>
                     </ul>
                 </div>
            </div>
-        </div>
     </div>";
 
 draw($tool_content, 2, null, $head_content);
