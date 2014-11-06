@@ -65,7 +65,7 @@ if ($can_upload) {
     $tool_content .= "
         <div class='row margin-top-fat'>
             <div class='col-md-12'>
-                <div class='panel padding-fat focused'>
+                <div class='form-wrapper'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
           <input type='hidden' name='uploadPath' value='$uploadPath' />
