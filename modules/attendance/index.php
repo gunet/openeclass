@@ -75,26 +75,6 @@ $(function() {
                    }
     });
 });
-
-
-function showCCFields() {
-        $('.assignShow').show();
-}
-function hideCCFields() {
-        $('.assignShow').hide();
-}
-
-$(document).ready(function() {
-    $('.assignCheck').change(function () {
-        if ($('.assignCheck').is(':checked')) {
-            //showCCFields();
-        } else {
-            //hideCCFields();
-        }
-    }).change();
-    
-});
-
 </script>";
 
 
@@ -855,7 +835,7 @@ if ($is_editor) {
             $tool_content .= "<fieldset><legend>$langAttendanceActList</legend>";
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                               <table width='100%' class='sortable table-default' id='t2'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langDescription</th><th>$langType</th>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langType</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
             $tool_content .= "</tr>";
         }
@@ -865,7 +845,7 @@ if ($is_editor) {
         $k = 0;
         if ($result){
             foreach ($result as $announce) {               
-                $content = ellipsize_html($announce->description, 50);
+                //$content = ellipsize_html($announce->description, 50);
                 
                 $d = strtotime($announce->date);
                 
@@ -879,8 +859,7 @@ if ($is_editor) {
                     $tool_content .= q($announce->title);
                 }
                 $tool_content .= "</td>"
-                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
-                        . "<td>" . $content . "</td>";
+                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>";
 
                 if($announce->module_auto_id) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActCour";

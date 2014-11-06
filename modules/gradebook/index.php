@@ -111,36 +111,7 @@ if ($gradebook) {
 //==============================================
 if ($is_editor) {
 
-    // Top menu
-    $tool_content .= "<div id='operations_container'>" .
-            action_bar(array(
-                array('title' => $langGradebookManagement,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-sort-numeric-desc',
-                    'level' => 'primary',
-                    'show' => isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])),
-                array('title' => $langAdminUsers,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                    'icon' => 'fa-users',
-                    'level' => 'primary',
-                    'show' => !isset($_GET['editUsers'])),
-                array('title' => $langGradebookBook,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
-                    'icon' => 'fa-pencil',
-                    'level' => 'primary',
-                    'show' => !isset($_GET['gradebookBook']) && !isset($_GET['book'])),
-                array('title' => $langGradebookAddActivity,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                    'icon' => 'fa-plus-circle',
-                    'level' => 'primary',
-                    'show' => !isset($_GET['addActivity'])),
-                array('title' => $langGradebookStats,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsGradebook=1",
-                    'icon' => 'fa-area-chart',
-                    'level' => 'primary',
-                    'show' => !isset($_GET['statsGradebook']))
-            )) .
-            "</div>";
+    
 
     //FLAG: flag to show the activities
     $showGradebookActivities = 1;
@@ -155,33 +126,17 @@ if ($is_editor) {
         }
     }
 
-
-    /*
-    //UPDATE/INSERT DB: edit users display number
-    if (isset($_POST['submitGradebookActiveUsers'])) {
-        $gradebook_users_limit = intval($_POST['usersLimit']);
-        if($gradebook_users_limit ==1 || $gradebook_users_limit == 0){
-            Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
-            $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
-            $tool_content .= $message . "<br/>";
-            //update value for the check box and the users query
-            $showSemesterParticipants = $gradebook_users_limit;
-        }
-    }
-
-    //Number of students for this gradebook book and limit_date (depends on the limit of the last semester selection - if $showSemesterParticipants = 1 --> Users that have logged in to the course the last 6 months)
-    if ($showSemesterParticipants) {
-        //Six months limit
-        $limitDate = date('Y-m-d', strtotime(' -6 months'));
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) as count FROM actions_daily, user WHERE actions_daily.user_id = user.id AND user.status = ?d AND course_id = ?d AND actions_daily.day > ?t ", USER_STUDENT, $course_id, $limitDate)->count;
-    } else {
-        $limitDate = "0000-00-00";
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
-    }
-    */
-
     //FORM: new activity (or edit) form to gradebook module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
+
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
 
         $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -405,6 +360,15 @@ if ($is_editor) {
     //DISPLAY: stats -> means for all the activities
     elseif(isset($_GET['statsGradebook'])) {
 
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
+
         //get all the activities
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
         $actNumber = count($result);
@@ -503,6 +467,15 @@ if ($is_editor) {
 
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])){
+
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
 
         //record booking
         if(isset($_POST['bookUser'])){
@@ -696,128 +669,7 @@ if ($is_editor) {
 
         }
 
-        /*
-        $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
-
-        //Count only students base on their initial record (not the course)
-        $countUser = $participantsNumber;
-
-        $limit_sql = '';
-
-        // display navigation links if users > COURSE_USERS_PER_PAGE
-        if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
-            $limit_sql = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;
-            $search_params = "&course=".$course_code."&gradebookBook=".$gradebook_id;
-            $tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser, $_SERVER['SCRIPT_NAME'], $search_params, TRUE);
-        }
-
-        if (isset($_GET['all'])) {
-            $extra_link = '&amp;all=true';
-        } else {
-            $extra_link = '&amp;limit=' . $limit;
-        }
-
-
-        $tool_content .= "
-    <table width='100%' class='tbl_alt custom_list_order'>
-    <tr>
-      <th width='1'>$langID</th>
-      <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=s$extra_link'>$langSurnameName</a></div></th>
-      <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
-      <th class='center'>$langRole</th>
-      <th class='center'>$langGradebookGrade</th>
-      <th class='center'>$langActions</th>
-    </tr>";
-
-
-    // Numerating the items in the list to show: starts at 1 and not 0
-        $i = $limit + 1;
-        $ord = isset($_GET['ord']) ? $_GET['ord'] : '';
-
-        switch ($ord) {
-            case 's': $order_sql = 'ORDER BY surname';
-                break;
-            case 'rd': $order_sql = 'ORDER BY course_user.reg_date DESC';
-                break;
-            default: $order_sql = 'ORDER BY user.status, editor DESC, tutor DESC, surname, givenname';
-                break;
-        }
-
-        DataBase::get()->queryFunc("SELECT user.id as userID, user.surname , user.givenname, user.email,
-                               user.am, user.has_icon, course_user.status as courseUserStatus,
-                               course_user.tutor, course_user.editor, course_user.reviewer, course_user.reg_date
-
-                               FROM course_user, user, actions_daily
-                               WHERE `user`.id = `course_user`.`user_id`
-                               AND `user`.id = actions_daily.user_id
-                               AND actions_daily.day > ?t
-                               AND `course_user`.`course_id` = ?d
-                               AND user.status = ?d
-                               GROUP BY actions_daily.user_id
-                               $order_sql $limit_sql", function($myrow) use(&$tool_content, $course_id, &$i, $langAm,$course_code, $userGradeTotal, $gradebook_id, $langGradebookBook, $langGradebookGradeAlert, $gradebook_range, $langGradebookOutRange) {
-
-            // bi colored table
-            if ($i % 2 == 0) {
-                $tool_content .= "<tr class='odd'>";
-            } else {
-                $tool_content .= "<tr class='even'>";
-            }
-            // show public list of users
-            $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAm: " . q($myrow->am) . ")</div>");
-            $tool_content .= "
-                <td class='smaller right'>$i.</td>\n" .
-                    "<td class='smaller'>"
-                    . display_user($myrow->userID)
-                    . "&nbsp;&nbsp;(" . mailto($myrow->email) . ")  $am_message</td>\n";
-            $tool_content .= "\n" .
-                    "\n" .
-                    "<td class='smaller center'>";
-            if ($myrow->reg_date == '0000-00-00') {
-                $tool_content .= $langUnknownDate;
-            } else {
-                $tool_content .= nice_format($myrow->reg_date);
-            }
-            $tool_content .= "</td>";
-            $tool_content .= "<td class='center' width='30'>";
-
-            // tutor right
-            if ($myrow->tutor == '1') {
-                $tool_content .= "tutor - ";
-            }
-            // editor right
-            if ($myrow->editor == '1') {
-                $tool_content .= "editor";
-            }
-
-            $tool_content .= "</td>";
-
-            $tool_content .= "<td class='center'>";
-            if(weightleft($gradebook_id, 0) == 0){
-                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID);
-            }elseif(userGradeTotal($gradebook_id, $myrow->userID) != "-"){ //alert message only when grades have been submitted
-                $tool_content .= userGradeTotal($gradebook_id, $myrow->userID)."<div class='alert alert-warning'>".$langGradebookGradeAlert."</div>";
-            }
-            if(userGradeTotal($gradebook_id, $myrow->userID) > $gradebook_range){
-                $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
-            }
-
-            $tool_content .= "</td>";
-            $tool_content .= "<td class='center'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$myrow->userID'>$langGradebookBook</a></td>";
-
-            $i++;
-        }, $limitDate, $course_id, USER_STUDENT, $order_sql);
-
-        $tool_content .= "</table>";
-
-        // display number of users
-        $tool_content .= "
-    <div class='alert alert-info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langStudents &nbsp;</em></span><br />
-      <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id'>$langcsvenc2</a>
-           2. <a href='dumpuser.php?course=$course_code&gradebook=$gradebook_id&amp;enc=1253'>$langcsvenc1</a>
-      </div>";
-        //========================
-
-        */
+        
 
         //do not show activities list
         $showGradebookActivities = 0;
@@ -933,130 +785,17 @@ if ($is_editor) {
         $showGradebookActivities = 0;
     }
 
-    //DISPLAY: list of gradebook activities
-    if($showGradebookActivities == 1){
+    //DISPLAY: Add assignements to the attendance
+    if(isset($_GET['addActivityAs'])){
 
-        //check if there is spare weight
-        if(weightleft($gradebook_id, 0)){
-            $weightLeftMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
-        }
-        else{
-            $weightLeftMessage = "";
-        }
-
-        //get all the availiable activities
-        $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
-        $activityNumber = count($result);
-
-        if ($activityNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langGradebookActList</legend>";
-            $tool_content .= $weightLeftMessage;
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookDesc</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
-            $tool_content .= "<th width='60' class='center'>Ορατό</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
-            $tool_content .= "</tr>";
-        }
-        else{
-            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>\n";
-        }
-        $k = 0;
-        if ($result){
-            foreach ($result as $announce) {                
-                $content = ellipsize_html($announce->description, 50);
-                $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
-
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-
-                $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
-
-                if (empty($announce->title)) {
-                    $tool_content .= "$langGradebookNoTitle<br>";
-                    $tool_content .= "<div class='smaller'>";
-                    switch ($announce->activity_type) {
-                        case 1: $tool_content .= "($gradebook_oral)"; break;
-                        case 2: $tool_content .= "($gradebook_labs)"; break;
-                        case 3: $tool_content .= "($gradebook_progress)"; break;
-                        case 4: $tool_content .= "($gradebook_exams)"; break;
-                        case 5: $tool_content .= "($gradebook_other_type)"; break;
-                        default : $tool_content .= "";
-                    }
-                    $tool_content .= "</div>";
-                } else {
-                    $tool_content .= q($announce->title);
-                    $tool_content .= "<div class='smaller'>";
-                    switch ($announce->activity_type) {
-                        case 1: $tool_content .= "($gradebook_oral)"; break;
-                        case 2: $tool_content .= "($gradebook_labs)"; break;
-                        case 3: $tool_content .= "($gradebook_progress)"; break;
-                        case 4: $tool_content .= "($gradebook_exams)"; break;
-                        case 5: $tool_content .= "($gradebook_other_type)"; break;
-                        default : $tool_content .= "";
-                    }
-                    $tool_content .= "</div>";
-                }
-                $tool_content .= "</b>";
-                $tool_content .= "</td>"
-                        . "<td><div class='smaller'>" . nice_format($announce->date) . "</div></td>"
-                        . "<td>" . $content . "</td>";
-
-                if($announce->module_auto_id) {
-                    if($announce->module_auto_type == 1){
-                        $tool_content .= "<td class='smaller'>$langGradebookAss";
-                    }
-                    if($announce->module_auto_type == 2){
-                        $tool_content .= "<td class='smaller'>$langExercise ";
-                    }
-                    if($announce->module_auto_type == 3){
-                        $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
-                    }
-
-                    if($announce->auto){
-                        $tool_content .= "<br>($langGradebookInsAut)";
-                    }else{
-                        $tool_content .= "<br>($langGradebookInsMan)";
-                    }
-                    $tool_content .= "</td>";
-                } else {
-                    $tool_content .= "<td class='smaller'>$langGradebookActAttend</td>";
-                }
-
-                $tool_content .= "<td class='center'>" . $announce->weight . "%</td>";
-                $tool_content .= "<td width='' class='center'>";
-                    if ($announce->visible) {
-                        $tool_content .= $langYes;
-                    } else {
-                        $tool_content .= $langNo;
-                }
-                $tool_content .= "</td>";
-
-                $tool_content .= "<td width='70' class='right'>" .
-                        action_button(array(
-                            array('title' => $langModify,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id",
-                                'icon' => 'fa-edit'),
-                            array('title' => $langDelete,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
-                                'class' => 'delete',
-                                'confirm' => $langGradebookDeleteAlert,
-                                'icon' => 'fa-times')
-                        )) .
-                        "</td>";
-                $k++;
-            } // end of while
-        }
-        $tool_content .= "</table></fieldset>";
-
-        //==============================================
-        //Course activities available for the gradebook
-        //==============================================
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
 
         //Assignments
         $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1)", $course_id);
@@ -1115,6 +854,20 @@ if ($is_editor) {
         }
         $tool_content .= "</table>";
 
+        $showGradebookActivities = 0;
+    }
+
+    //DISPLAY: Add exersices to the attendance
+    if(isset($_GET['addActivityEx'])){
+
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
 
         //Exercises
         $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2)", $course_id);
@@ -1165,6 +918,20 @@ if ($is_editor) {
         }
         $tool_content .= "</table>";
 
+        $showGradebookActivities = 0;
+    }
+
+    //DISPLAY: Add learning paths
+    if(isset($_GET['addActivityLp'])){
+
+        //TOP MENU
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'))) .
+                "</div>";
 
         //Learning paths - SCORMS
         $checkForLp = Database::get()->queryArray("SELECT
@@ -1223,31 +990,176 @@ if ($is_editor) {
         }
         $tool_content .= "</table></fieldset>";
 
+        $showGradebookActivities = 0;
 
-        //==============================================
-        //show active users limit
-        //==============================================
-        /*
-        $tool_content .= "<br>
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-            <fieldset>
-            <legend>$langGradebookActiveUsers</legend>
-            <table class='tbl' width='40%'>
-                <tr>
-                  <th>$langGradebookActiveUsersSemester:</th><td><input type='checkbox' name='usersLimit' value=1";
-        if ($showSemesterParticipants) {
-            $tool_content .= " checked";
+    }
+
+    //DISPLAY: list of gradebook activities
+    if($showGradebookActivities == 1){
+
+        // Top menu
+        $tool_content .= "<div id='operations_container'>" .
+                action_bar(array(
+                    array('title' => $langGradebookManagement,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        'icon' => 'fa-sort-numeric-desc',
+                        'level' => 'primary',
+                        'show' => isset($_GET['editUsers']) || isset($_GET['addActivity']) || isset($_GET['gradebookBook']) || isset($_GET['modify']) || isset($_GET['book']) || isset($_GET['statsGradebook'])),
+                    array('title' => $langAdminUsers,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                        'icon' => 'fa-users',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['editUsers'])),
+                    array('title' => $langGradebookBook,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
+                        'icon' => 'fa-pencil',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['gradebookBook']) && !isset($_GET['book'])),
+                    array('title' => $langGradebookAddActivity,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['addActivity'])),
+                    array('title' => $langAttendanceAddActivityfromExersice,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['addActivityAs'])),
+                    array('title' => $langAttendanceAddActivityfromAssignment,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['addActivityEx'])),
+                    array('title' => $langLearningPath,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['addActivityEx'])),
+                    array('title' => $langGradebookStats,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;statsGradebook=1",
+                        'icon' => 'fa-area-chart',
+                        'level' => 'primary',
+                        'show' => !isset($_GET['statsGradebook']))
+                )) .
+                "</div>";
+
+        //check if there is spare weight
+        if(weightleft($gradebook_id, 0)){
+            $weightLeftMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
+        }
+        else{
+            $weightLeftMessage = "";
         }
 
-        $tool_content .= " /></td>
-                </tr>
-                <tr>
-                  <td class='left'><input class='btn btn-primary' type='submit' name='submitGradebookActiveUsers' value='$langGradebookUpdate' /></td>
-                </tr>
-            </table>
-            </fieldset>
-            </form>";
-        */
+        //get all the availiable activities
+        $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
+        $activityNumber = count($result);
+
+        if ($activityNumber > 0) {
+            $tool_content .= "<fieldset><legend>$langGradebookActList</legend>";
+            $tool_content .= $weightLeftMessage;
+            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+                              <table width='100%' class='sortable table-default' id='t2'>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<th width='60' class='center'>Ορατό</th>";
+            $tool_content .= "<th width='60' class='center'>$langActions</th>";
+            $tool_content .= "</tr>";
+        }
+        else{
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>\n";
+        }
+        $k = 0;
+        if ($result){
+            foreach ($result as $announce) {                
+                $content = ellipsize_html($announce->description, 50);
+                $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
+
+                if ($k % 2 == 0) {
+                    $tool_content .= "<tr class='even'>";
+                } else {
+                    $tool_content .= "<tr class='odd'>";
+                }
+
+                $tool_content .= "
+                        <td><b>";
+
+                if (empty($announce->title)) {
+                    $tool_content .= "$langGradebookNoTitle<br>";
+                    $tool_content .= "<div class='smaller'>";
+                    switch ($announce->activity_type) {
+                        case 1: $tool_content .= "($gradebook_oral)"; break;
+                        case 2: $tool_content .= "($gradebook_labs)"; break;
+                        case 3: $tool_content .= "($gradebook_progress)"; break;
+                        case 4: $tool_content .= "($gradebook_exams)"; break;
+                        case 5: $tool_content .= "($gradebook_other_type)"; break;
+                        default : $tool_content .= "";
+                    }
+                    $tool_content .= "</div>";
+                } else {
+                    $tool_content .= q($announce->title);
+                    $tool_content .= "<div class='smaller'>";
+                    switch ($announce->activity_type) {
+                        case 1: $tool_content .= "($gradebook_oral)"; break;
+                        case 2: $tool_content .= "($gradebook_labs)"; break;
+                        case 3: $tool_content .= "($gradebook_progress)"; break;
+                        case 4: $tool_content .= "($gradebook_exams)"; break;
+                        case 5: $tool_content .= "($gradebook_other_type)"; break;
+                        default : $tool_content .= "";
+                    }
+                    $tool_content .= "</div>";
+                }
+                $tool_content .= "</b>";
+                $tool_content .= "</td>"
+                        . "<td><div class='smaller'>" . nice_format($announce->date) . "</div></td>";
+
+                if($announce->module_auto_id) {
+                    if($announce->module_auto_type == 1){
+                        $tool_content .= "<td class='smaller'>$langGradebookAss";
+                    }
+                    if($announce->module_auto_type == 2){
+                        $tool_content .= "<td class='smaller'>$langExercise ";
+                    }
+                    if($announce->module_auto_type == 3){
+                        $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
+                    }
+
+                    if($announce->auto){
+                        $tool_content .= "<br>($langGradebookInsAut)";
+                    }else{
+                        $tool_content .= "<br>($langGradebookInsMan)";
+                    }
+                    $tool_content .= "</td>";
+                } else {
+                    $tool_content .= "<td class='smaller'>$langGradebookActAttend</td>";
+                }
+
+                $tool_content .= "<td class='center'>" . $announce->weight . "%</td>";
+                $tool_content .= "<td width='' class='center'>";
+                    if ($announce->visible) {
+                        $tool_content .= $langYes;
+                    } else {
+                        $tool_content .= $langNo;
+                }
+                $tool_content .= "</td>";
+
+                $tool_content .= "<td width='70' class='right'>" .
+                        action_button(array(
+                            array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id",
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                'class' => 'delete',
+                                'confirm' => $langGradebookDeleteAlert,
+                                'icon' => 'fa-times')
+                        )) .
+                        "</td>";
+                $k++;
+            } // end of while
+        }
+        $tool_content .= "</table></fieldset>";
+
+        
         //==============================================
         //show degree range
         //==============================================
