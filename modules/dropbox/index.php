@@ -157,20 +157,21 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             draw($tool_content, 1, null, $head_content);
             exit;
         }
-        $tool_content .= "<form id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
-        $tool_content .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
 	<fieldset>
-	<table width='100%' class='tbl'>
-        <tr>
-	  <th>$langSender:</th>
-	  <td>" . q(uid_to_name($uid)) . "</td>
-	</tr>";
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langSender:</label>
+                <div class='col-sm-10'>
+                  <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
+                </div>
+            </div>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
         //find user's courses        
         $sql = "SELECT course.code code, course.title title
@@ -205,41 +206,49 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             });
                           </script>";
         
-        $tool_content .= "<tr>
-            <th width='120'>".$langCourse.":</th>
-              <td>
-                <select id='courseselect' name='course'>
-                  <option value='-1'>&nbsp;</option>";
+        $tool_content .= "
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langCourse:</label>
+                <div class='col-sm-10'>
+                    <select id='courseselect' class='form-control' name='course'>
+                        <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {    
             $tool_content .="<option value='".$course->code."'>".q($course->title)."</option>";
         }
         $tool_content .="    </select>
-                           </td>
-                         </tr>";
+                           </div>
+                         </div>";
     }
-    $tool_content .= "<tr>
-        <th width='120'>" . $langTitle . ":</th>
-        <td><input type='text' name='message_title' size='50'/>	      
-        </td>
-        </tr>";
-    $tool_content .= "<tr>
-              <th>" . $langMessage . ":</th>
-              <td>".rich_text_editor('body', 4, 20, '')."
-              <small>&nbsp;&nbsp;$langMaxMessageSize</small></td>           
-            </tr>";
+    $tool_content .= "
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+            <div class='col-sm-10'>
+                <input type='text' class='form-control' name='message_title'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langMessage:</label>
+            <div class='col-sm-10'>
+                ".rich_text_editor('body', 4, 20, '')."
+                <span class='help-block'>$langMaxMessageSize</span>
+            </div>
+        </div>";        
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
-        $tool_content .= "<tr>
-	      <th width='120'>$langFileName:</th>
-	      <td><input type='file' name='file' size='35' />	     
-	      </td>
-	    </tr>";
+        $tool_content .= "
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langFileName:</label>
+            <div class='col-sm-10'>
+                <input type='file' name='file'>
+            </div>
+        </div>";
     }
     
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
-    	$tool_content .= "<tr>
-    	  <th>$langSendTo:</th>
-    	  <td>
-    	<select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
+    	$tool_content .= "
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
+            <div class='col-sm-10'>
+                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
     
         if ($course_id != 0) {//course messages
             
@@ -328,7 +337,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             }
         } 
     
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></td></tr>";
+        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+            </div>
+        </div>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
         load_js('select2');
         
@@ -357,22 +368,33 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             })
                            </script>";
         
-        $tool_content .= "<tr>
-    	                    <th>$langSendTo:</th>
-    	                    <td><input type='hidden' name=recipients id='recipients' style='width:100%;'/><br/><em>$langSearchSurname</em></td>
-                          </tr>";        
+        $tool_content .= "
+                            <div class='form-group'>
+                                <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
+                                <div class='col-sm-10'>
+                                    <input name=recipients id='recipients' class='form-control'><span class='help-block'>$langSearchSurname</span>
+                                </div>
+                            </div>";        
     }
     
-	$tool_content .= "<tr>
-	  <th>&nbsp;</th>
-	  <td class='left'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
-	  $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
-	</tr>
-        </table>
+	$tool_content .= "
+        <div class='form-group'>
+            <div class='col-xs-10 col-xs-offset-2'>             
+                <div class='checkbox'>
+                  <label>
+                    <input type='checkbox' name='mailing' value='1' checked />
+                    $langMailToUsers
+                  </label>
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-offset-2 col-sm-10'>
+            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+            <a href='$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")."' class='btn btn-default'>$langCancel</a>
+            <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>  
+        </div>          
         </fieldset>	
-        </form>
-	<p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
-    
+        </form></div>";
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
         load_js('select2');
         $head_content .= "<script type='text/javascript'>
