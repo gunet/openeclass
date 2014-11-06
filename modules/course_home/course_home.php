@@ -625,16 +625,20 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .="<div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h5 class='content-title'>$langCalendar</h5>
-                    <div class='panel padding'>
-                        $user_personal_calendar
+$tool_content .="<div class='row'>
+                    <div class='col-md-$cunits_sidebar_subcolumns'>
+                        <h5 class='content-title'>$langCalendar</h5>
+                        <div class='panel padding'>
+                            $user_personal_calendar
+                        </div>
                     </div>
                 </div>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h5 class='content-title'>$langAnnouncements</h5>
-                    <ul class='tablelist panel'>" . course_announcements() . "
-                    </ul>
+                <div class='row'>
+                    <div class='col-md-$cunits_sidebar_subcolumns'>
+                        <h5 class='content-title'>$langAnnouncements</h5>
+                        <ul class='tablelist panel'>" . course_announcements() . "
+                        </ul>
+                    </div>
                 </div>
            </div>
     </div>";
