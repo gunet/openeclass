@@ -1690,6 +1690,19 @@ td.option-btn-cell{
     padding-top: 24px;
 }
 
+table#portfolio-lessons tr
+{
+    padding: 5px 0;
+}
+
+table.dataTable tbody td.right-cell{
+    border-left: 1px solid #ddd;
+    line-height:56px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 40px;
+}
+
 #calendar_wrapper{
     margin-bottom: 25px;
 

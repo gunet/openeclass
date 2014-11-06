@@ -151,7 +151,7 @@ function getUserLessonInfo($uid) {
 
     //getting user's lesson info
     if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table-default'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
         $lesson_content .= "<thead style='display:none'><tr><th></th><th></th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
@@ -159,7 +159,7 @@ function getUserLessonInfo($uid) {
 			  <td class='text-left'>
 			  <b><a href='${urlServer}courses/$data->code/'>" . q($data->title) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
-            $lesson_content .= "<td class='text-center'>";
+            $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
             } elseif ($data->status == USER_TEACHER) {
