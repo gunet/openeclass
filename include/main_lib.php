@@ -1681,6 +1681,7 @@ tinymce.init({
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
+    image_advtab: true,
     link_class_list: [
         {title: 'None', value: ''},
         {title: '$langPopUp', value: 'colorbox'},
