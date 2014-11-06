@@ -256,10 +256,18 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
 }
 
 function restore_users($users, $cours_user, $departments, $restoreHelper) {
-    global $tool_content, $langRestoreUserExists, $langRestoreUserNew;
+    global $tool_content, $langRestoreUserExists, $langRestoreUserNew, $uid;
 
     $userid_map = array();
     if ($_POST['add_users'] == 'none') {
+        // find the 1st teacher (oldid)
+        foreach ($cours_user as $cudata) {
+            if (intval($cudata[$restoreHelper->getField('course_user', 'status')]) === USER_TEACHER) {
+                $old_id = $cudata['user_id'];
+                $userid_map[$old_id] = $uid;
+                break;
+            }
+        }
         return $userid_map;
     }
 
