@@ -811,7 +811,7 @@ ul.tablelist
   li.list-item
   {
     position:relative;
-    padding:1em;
+    padding: 1em;
     @include box-sizing(border-box);
     list-style-type: none;
     border-bottom:1px solid #eee;
@@ -1696,7 +1696,7 @@ td.option-btn-cell{
     &:before{
         position:absolute;
         font-family: FontAwesome;
-        top:7px;
+        top:6px;
         right:10px;
         content: "\f002";
         color: #999;
@@ -1712,6 +1712,12 @@ td.option-btn-cell{
 table#portfolio-lessons tr
 {
     padding: 5px 0;
+}
+
+.panel-footer .event
+{
+    display: inline-block;
+    margin-right: 10px;
 }
 
 table.dataTable tbody td.right-cell{

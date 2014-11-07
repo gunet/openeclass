@@ -488,7 +488,7 @@ if ($can_upload) {
                   <legend>$langRename:</legend>
                   <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                   $group_hidden_input
-                  <table class='tbl' width='100%'>
+                  <table class='table-default'>
                     <tr>
                       <td><b>" . q($fileName) . "</b> $langIn:
                         <input type='text' name='renameTo' value='" . q($fileName) . "' size='50' /></td>
@@ -520,21 +520,24 @@ if ($can_upload) {
     if (isset($_GET['createDir'])) {
         $createDir = q($_GET['createDir']);
         $dialogBox .= "
-        <div class='col-md-12'>
-        <h5 class='content-title'>$langCreateDir</h5>
-        <div class='panel padding-thin focused'>
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
-            $group_hidden_input
-            <input type='hidden' name='newDirPath' value='$createDir' />
-            <div class='form-group'>
-                <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
+<div class='row'>        
+    <div class='col-md-12'>
+            <h5 class='content-title'>$langCreateDir</h5>
+            <div class='panel padding-thin focused'>
+                <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
+                    $group_hidden_input
+                    <input type='hidden' name='newDirPath' value='$createDir' />
+                    <div class='form-group'>
+                        <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
+                    </div>
+                    <button type='submit' class='btn-default-eclass color-green'>
+                        <i class='fa fa-plus space-after-icon'></i>
+                        $langCreateDir
+                    </button>
+                </form>
             </div>
-            <button type='submit' class='btn-default-eclass color-green'>
-                <i class='fa fa-plus space-after-icon'></i>
-                $langCreateDir
-            </button>
-        </form>
-        </div></div>";
+        </div>
+    </div>";
     }
 
     // add/update/remove comment
@@ -689,7 +692,7 @@ if ($can_upload) {
                           <input type='hidden' name='commentPath' value='" . q($comment) . "' />
                           <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                           $group_hidden_input
-                          <table class='tbl' width='100%'>
+                          <table class='table-default'>
                           <tr>
                             <th>$langWorkFile:</th>
                             <td>$oldFilename</td>
@@ -775,7 +778,7 @@ if ($can_upload) {
                                 <fieldset>
                                 <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
                                 $group_hidden_input
-                                        <table class='tbl' width='100%'>
+                                        <table class='table-default'>
                                         <tr>
                                                 <td>$replacemessage</td>
                                                 <td><input type='file' name='newFile' size='35' /></td>
@@ -820,7 +823,7 @@ if ($can_upload) {
                           <input type='hidden' name='commentPath' value='" . q($comment) . "' />
                           <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                           $group_hidden_input
-                          <table class='tbl' width='100%'>
+                          <table class='table-default'>
                           <tr>
                             <th>$langWorkFile:</th>
                             <td>$oldFilename</td>
@@ -1115,7 +1118,7 @@ if ($doc_count == 0) {
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
-                <table width='100%' class='tbl'>";
+                <table class='table-default'>";
     if ($can_upload) {
         $cols = 4;
     } else {
@@ -1125,9 +1128,9 @@ if ($doc_count == 0) {
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
     $tool_content .= "<tr>
-        <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-            "&nbsp;$download_dir<br></div></td>
-        <td><div align='right'>";
+        <td colspan='$cols'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+            "&nbsp;$download_dir<br></td>
+        <td class='text-right'>";
 
 
     /*     * * go to parent directory ** */
@@ -1140,7 +1143,7 @@ if ($doc_count == 0) {
                           'level' => 'primary-label',
                           'button-class' => 'btn-success')));
     }
-    $tool_content .= "</div></td>
+    $tool_content .= "</td>
                     </tr>
                 </table>
             </div>
@@ -1307,8 +1310,8 @@ if ($doc_count == 0) {
                 } else { // student view
                     $tool_content .= "<td class='text-center'>" . icon('fa-save', $dload_msg, $download_url) . "</td>";
                 }
-                $tool_content .= "</tr>";
             }
+            $tool_content .= "</tr>";
         }
     }
     $tool_content .= "</table>

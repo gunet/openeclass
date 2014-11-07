@@ -337,8 +337,7 @@ $bar_content_2 .= "<b style='color:#999999; font-size:13px;'> / $langUsers:</b> 
 
 // display course license
 if ($course_license) {
-    $license_info_box = "${langOpenCoursesLicense}
-        <small>" . copyright_info($course_id) . "</small>";
+    $license_info_box = "<small>" . copyright_info($course_id) . "</small>";
 } else {
     $license_info_box = '';
 }

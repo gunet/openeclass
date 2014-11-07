@@ -130,22 +130,26 @@ $tool_content = "
             <div class='row'>
                 <div class='col-md-12'>
                     <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
-                    <div class='panel padding'>
-                        {%LESSON_CONTENT%}                        
-                    </div> 
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            {%LESSON_CONTENT%}                        
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class='row'>
                 <div class='col-md-12'>
                     <h5 class='content-title'>$langMyPersoMessages</h5>
                     <div class='panel'>
-                        <ul class='tablelist panel'>";
-                        if(!empty($user_messages)){
-                            $tool_content.=$user_messages;
-                        }else{
-                            $tool_content.="<li class='list-item'>$langDropboxNoMessage</li>";
-                        }
-                        $tool_content.="</ul>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>";
+                            if(!empty($user_messages)){
+                                $tool_content.=$user_messages;
+                            }else{
+                                $tool_content.="<li class='list-item' style='border-bottom:none;'>$langDropboxNoMessage</li>";
+                            }
+                            $tool_content.="</ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -155,8 +159,13 @@ $tool_content = "
         <div class='row'>
             <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
-                <div class='panel padding'>
-                    {%PERSONAL_CALENDAR_CONTENT%}
+                <div class='panel'>
+                    <div class='panel-body'>
+                        {%PERSONAL_CALENDAR_CONTENT%}
+                    </div>
+                    <div class='panel-footer'>
+                    <span class='event event-important'></span><span class='event event-info'></span><span class='event event-info'></span><span class='event event-warning'></span><span class='event event-inverse'></span><span class='event event-success'></span><span class='event event-special'></span>
+                    </div>
                 </div>
             </div>
         </div>";
@@ -166,9 +175,11 @@ $tool_content = "
             <div class='col-md-12'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
                 <div class='panel'>
-                    <ul class='tablelist panel'>
+                    <div class='panel-body'>
+                    <ul class='tablelist'>
                     $user_announcements 
                     </ul>
+                    </div>
                 </div>
             </div>
         </div>";
