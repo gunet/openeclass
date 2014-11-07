@@ -475,7 +475,7 @@ img {
 /* tiny-icons actions--------------------------------------------------------------------------- */
 /* line 346, ../SASS/inventory.scss */
 .tiny-icon {
-  color: #dddddd;
+  color: #999;
   font-size: 15px !important;
   text-decoration: none;
   -webkit-transition: all 120ms linear;
