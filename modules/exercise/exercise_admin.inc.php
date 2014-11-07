@@ -98,6 +98,25 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 language: '".$language."',
                 autoclose: true    
             });
+            $('.questionDrawnRadio').change(function() {
+                if($(this).val()==0){
+                    $('#questionDrawnInput').val(''); 
+                    $('#questionDrawnInput').prop('disabled', true);
+                    $('#questionDrawnInput').closest('div.form-group').addClass('hidden');
+                } else {
+                    $('#questionDrawnInput').prop('disabled', true);
+                    $('#questionDrawnInput').closest('div.form-group').removeClass('hidden');
+                }
+            });            
+            $('#randomDrawnSubset').change(function() {
+                if($(this).prop('checked')){                   
+                    $('#questionDrawnInput').prop('disabled', false);   
+                    $('.questionDrawnRadio').prop('disabled', true); 
+                } else {
+                    $('#questionDrawnInput').prop('disabled', true);
+                    $('.questionDrawnRadio').prop('disabled', false); 
+                }
+            });
         });
     </script>";
     $tool_content .= action_bar(array(
@@ -140,7 +159,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                            </label>
                          </div>
                      </div>
-                 </div>    
+                 </div>              
                  <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart :</label>
                      <div class='col-xs-10 col-sm-9'>        
@@ -191,14 +210,37 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
                      <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                    </div>
-                 </div>            
-                 <div class='form-group'>
-                   <label for='questionDrawn' class='col-sm-2 control-label'>$langRandomQuestions:</label>
-                   <div class='col-sm-10'>
-                     <input type='text' class='form-control' name='questionDrawn' id='questionDrawn' value='$randomQuestions' placeholder='$langRandomQuestions'>
-                     <span class='help-block'>$langFromRandomQuestions</span>
-                   </div>
                  </div>
+                 <div class='form-group'>
+                     <label for='exerciseDescription' class='col-sm-2 control-label'>$langRandomQuestions:</label>
+                     <div class='col-sm-10'>            
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='0' ".(($randomQuestions == 0)? 'checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
+                             $langDeactivate
+                           </label>
+                         </div>
+                         <div class='radio'>
+                           <label>
+                             <input type='radio' name='questionDrawn' class='questionDrawnRadio' value='32767'".(($randomQuestions > 0)? ' checked' : '').(($randomQuestions > 0 && $randomQuestions < 32767)? ' disabled' : '').">
+                             $langActivate
+                           </label>
+                         </div>
+                     </div>
+                 </div>                
+                 <div class='form-group ".(($randomQuestions > 0)? '' : 'hidden')."'>
+                    <div class='col-sm-5 col-sm-offset-2'>                 
+                        <input type='text' class='form-control' name='questionDrawn' id='questionDrawnInput' value='".(($randomQuestions < 32767) ? $randomQuestions : null)."'".(($randomQuestions > 0 && $randomQuestions < 32767)? '' : 'disabled').">
+                    </div>
+                    <div class='col-sm-5'>                 
+                        <div class='checkbox'>
+                          <label>
+                            <input id='randomDrawnSubset' value='1' type='checkbox' ".(($randomQuestions > 0 && $randomQuestions < 32767)? 'checked' : '').">
+                            $langFromRandomQuestions
+                          </label>
+                        </div> 
+                    </div>                   
+                 </div>                    
                  <div class='form-group'>
                      <label for='dispresults' class='col-sm-2 control-label'>$langAnswers:</label>
                      <div class='col-sm-10'>            
