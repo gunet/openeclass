@@ -54,6 +54,13 @@ jQuery(document).ready(function() {
     'bLengthChange': false,
     'iDisplayLength': 5,
     'bSort' : false,
+    'fnDrawCallback': function( oSettings ) {
+    
+      $('#portfolio_lessons_filter label input').attr({
+        class : 'form-control input-sm',
+        placeholder : '$langSearch...'
+      });
+    },
     'oLanguage': {
            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
            'sZeroRecords':  '".$langNoResult."',
@@ -61,7 +68,7 @@ jQuery(document).ready(function() {
            'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
            'sInfoFiltered': '',
            'sInfoPostFix':  '',
-           'sSearch':       '".$langSearch."',
+           'sSearch':       '',
            'sUrl':          '',
            'oPaginate': {
                'sFirst':    '&laquo;',
@@ -123,7 +130,7 @@ $tool_content = "
             <div class='row'>
                 <div class='col-md-12'>
                     <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
-                    <div class='panel'>
+                    <div class='panel padding'>
                         {%LESSON_CONTENT%}                        
                     </div> 
                 </div>

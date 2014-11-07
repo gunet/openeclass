@@ -1690,6 +1690,25 @@ td.option-btn-cell{
     padding-top: 24px;
 }
 
+#portfolio_lessons_filter
+{
+    position: relative;
+    &:before{
+        position:absolute;
+        font-family: FontAwesome;
+        top:7px;
+        right:10px;
+        content: "\f002";
+        color: #999;
+    }
+    label{
+        margin: 0 0 5px 0;
+    }
+    input{
+        margin: 0px;
+        padding-right: 25px;
+    }
+}
 table#portfolio-lessons tr
 {
     padding: 5px 0;
