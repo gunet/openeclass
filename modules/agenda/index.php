@@ -238,7 +238,7 @@ if ($is_editor) {
                 . "<input type='hidden' name='rep' id='rep' value='$rep'>";
         @$tool_content .= "
             <div class='form-group'>
-                <label for='Title' class='col-sm-2 control-label'>$langTitle :</label>
+                <label for='Title' class='col-sm-2 control-label'>$langTitle: </label>
                 <div class='col-sm-10'>
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                 </div>
@@ -253,10 +253,10 @@ if ($is_editor) {
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
             </div>
-            <div class='input-append bootstrap-timepicker form-group'>
+            <div class='input-append bootstrap-timepicker form-group' id='durationcal'>
                 <label for='Duration' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
                 <div class='col-xs-10 col-sm-9'>
-                    <input name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                    <input name='duration' id='duration' type='text' class='input-small' value='" . $duration . "'>
                 </div>
                 <div class='col-xs-2 col-sm-1'>
                     <span class='add-on'><i class='icon-time'></i></span>
