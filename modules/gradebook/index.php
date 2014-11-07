@@ -139,8 +139,7 @@ if ($is_editor) {
         $tool_content .= "
         <div class='form-wrapper'>    
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>      
-            <table class='tbl' width='100%'>";
+            <fieldset>";
 
         if (isset($_GET['modify'])) { //edit an existed activity
             $id = intval($_GET['modify']);
@@ -235,7 +234,6 @@ if ($is_editor) {
                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
                    </div>
                  </div>            
-            </table>
             <input type='hidden' name='id' value='$gradebookActivityToModify' />
             </fieldset>
             </form></div>";
