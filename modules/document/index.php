@@ -1118,7 +1118,7 @@ if ($doc_count == 0) {
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
-                <table class='table-default'>";
+                <div class='panel-body'>";
     if ($can_upload) {
         $cols = 4;
     } else {
@@ -1127,25 +1127,26 @@ if ($doc_count == 0) {
 
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
-    $tool_content .= "<tr>
-        <td colspan='$cols'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-            "&nbsp;$download_dir<br></td>
-        <td class='text-right'>";
+    $tool_content .= "
+        <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+            "&nbsp;$download_dir</div>
+        ";
 
 
     /*     * * go to parent directory ** */
     if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-        $tool_content .= action_bar(array(
-                    array('title' => $langUp,
-                          'url' => "$parentlink",
-                          'icon' => 'fa-caret-up',
-                          'level' => 'primary-label',
-                          'button-class' => 'btn-success')));
+        $tool_content.=" <div class='pull-right'>
+                            <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-caret-up'></i>$langUp</a>
+                        </div>";
+//        $tool_content .= action_bar(array(
+//                    array('title' => $langUp,
+//                          'url' => "$parentlink",
+//                          'icon' => 'fa-caret-up',
+//                          'level' => 'primary-label',
+//                          'button-class' => 'btn-success')));
     }
-    $tool_content .= "</td>
-                    </tr>
-                </table>
+    $tool_content .= "</div>
             </div>
         </div>
     </div>
