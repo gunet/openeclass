@@ -518,7 +518,8 @@ if (!class_exists('Question')):
             $objAnswerTmp = new Answer($id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();               
             $q_correct_answers_sql = '';
-            $q_incorrect_answers_sql = ''; 
+            $q_incorrect_answers_sql = '';
+            $extra_sql = '';
             $query_vars = array($id, ATTEMPT_COMPLETED);         
             if(isset($exerciseId)) {
                 $extra_sql = " AND b.eid = ?d";
