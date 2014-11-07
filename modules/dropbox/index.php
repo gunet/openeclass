@@ -392,7 +392,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
             <a href='$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")."' class='btn btn-default'>$langCancel</a>
             <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>  
-        </div>          
+        </div>
         </fieldset>	
         </form></div>";
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){

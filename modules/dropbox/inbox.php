@@ -118,8 +118,7 @@ if (isset($_GET['mid'])) {
                        <td><input type='file' name='file' size='35' />
                        </td>
                      </tr>";
-            }
-            
+            }            
             $out .= "<tr>
     	               <th>&nbsp;</th>
                        <td class='left'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
