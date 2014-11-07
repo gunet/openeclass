@@ -1141,7 +1141,7 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
     if ($q1 and $q2) { // if everything ok drop course db
         echo $langUpgradeCourseDone;
         // finally drop database
-        Database::get()->query("DROP DATABASE $code");
+        Database::get()->query("DROP DATABASE `$code`");
     }
 
     // NOTE: no code must occur after this statement or else course upgrade will be broken

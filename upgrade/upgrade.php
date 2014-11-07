@@ -2194,91 +2194,91 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)");
         
         DBHelper::indexExists('attendance_users', 'attendance_users_aid') or
-            $db->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
+            Database::get()->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
         DBHelper::indexExists('gradebook_users', 'gradebook_users_gid') or
-            $db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');
+            Database::get()->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');
 
         DBHelper::indexExists('actions_daily', 'actions_daily_mcd') or
-            $db->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');
+            Database::get()->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');
         DBHelper::indexExists('actions_daily', 'actions_daily_hdi') or
-            $db->query('CREATE INDEX `actions_daily_hdi` ON `actions_daily` (hits, duration, id)');
+            Database::get()->query('CREATE INDEX `actions_daily_hdi` ON `actions_daily` (hits, duration, id)');
         DBHelper::indexExists('loginout', 'loginout_ia') or
-            $db->query('CREATE INDEX `loginout_ia` ON `loginout` (id_user, action)');
+            Database::get()->query('CREATE INDEX `loginout_ia` ON `loginout` (id_user, action)');
         DBHelper::indexExists('announcement', 'announcement_cvo') or
-            $db->query('CREATE INDEX `announcement_cvo` ON `announcement` (course_id, visible, order)');
+            Database::get()->query('CREATE INDEX `announcement_cvo` ON `announcement` (course_id, visible, `order`)');
 
         DBHelper::indexExists('actions_summary', 'actions_summary_module_id') or
-            $db->query("CREATE INDEX `actions_summary_module_id` ON actions_summary(module_id)");
+            Database::get()->query("CREATE INDEX `actions_summary_module_id` ON actions_summary(module_id)");
         DBHelper::indexExists('actions_summary', 'actions_summary_course_id') or
-            $db->query("CREATE INDEX `actions_summary_course_id` ON actions_summary(course_id)");
+            Database::get()->query("CREATE INDEX `actions_summary_course_id` ON actions_summary(course_id)");
 
         DBHelper::indexExists('document', 'doc_course_id') or
-            $db->query('CREATE INDEX `doc_course_id` ON document (course_id)');
+            Database::get()->query('CREATE INDEX `doc_course_id` ON document (course_id)');
         DBHelper::indexExists('document', 'doc_subsystem') or
-            $db->query('CREATE INDEX `doc_subsystem` ON document (subsystem)');
+            Database::get()->query('CREATE INDEX `doc_subsystem` ON document (subsystem)');
         DBHelper::indexExists('document', 'doc_path') or
-            $db->query('CREATE INDEX `doc_path` ON document (path)');
+            Database::get()->query('CREATE INDEX `doc_path` ON document (path)');
 
         DBHelper::indexExists('dropbox_index', 'drop_index_recipient_id') or
-            $db->query("CREATE INDEX `drop_index_recipient_id` ON dropbox_index(recipient_id)");
+            Database::get()->query("CREATE INDEX `drop_index_recipient_id` ON dropbox_index(recipient_id)");
         DBHelper::indexExists('dropbox_index', 'drop_index_recipient_id') or
-            $db->query("CREATE INDEX `drop_index_is_read` ON dropbox_index(is_read)");
+            Database::get()->query("CREATE INDEX `drop_index_is_read` ON dropbox_index(is_read)");
 
         DBHelper::indexExists('dropbox_msg', 'drop_msg_index_course_id') or
-            $db->query("CREATE INDEX `drop_msg_index_course_id` ON dropbox_msg(course_id)");
+            Database::get()->query("CREATE INDEX `drop_msg_index_course_id` ON dropbox_msg(course_id)");
         DBHelper::indexExists('dropbox_msg', 'drop_msg_index_author_id') or
-            $db->query("CREATE INDEX `drop_msg_index_author_id` ON dropbox_msg(author_id)");
+            Database::get()->query("CREATE INDEX `drop_msg_index_author_id` ON dropbox_msg(author_id)");
 
         DBHelper::indexExists('exercise_with_questions', 'ewq_index_question_id') or
-            $db->query('CREATE INDEX `ewq_index_question_id` ON exercise_with_questions (question_id)');
+            Database::get()->query('CREATE INDEX `ewq_index_question_id` ON exercise_with_questions (question_id)');
         DBHelper::indexExists('exercise_with_questions', 'ewq_index_exercise_id') or
-            $db->query('CREATE INDEX `ewq_index_exercise_id` ON exercise_with_questions (exercise_id)');
+            Database::get()->query('CREATE INDEX `ewq_index_exercise_id` ON exercise_with_questions (exercise_id)');
 
         DBHelper::indexExists('group_members', 'gr_mem_user_id') or
-            $db->query("CREATE INDEX `gr_mem_user_id` ON group_members(user_id)");
+            Database::get()->query("CREATE INDEX `gr_mem_user_id` ON group_members(user_id)");
         DBHelper::indexExists('group_members', 'gr_mem_group_id') or
-            $db->query("CREATE INDEX `gr_mem_group_id` ON group_members(group_id)");
+            Database::get()->query("CREATE INDEX `gr_mem_group_id` ON group_members(group_id)");
 
         DBHelper::indexExists('log', 'log_course_id') or
-            $db->query("CREATE INDEX `log_course_id` ON log (course_id)");
+            Database::get()->query("CREATE INDEX `log_course_id` ON log (course_id)");
         DBHelper::indexExists('log', 'log_module_id') or
-            $db->query("CREATE INDEX `log_module_id` ON log (module_id)");
+            Database::get()->query("CREATE INDEX `log_module_id` ON log (module_id)");
 
         DBHelper::indexExists('logins', 'logins_id_user_id') or
-            $db->query("CREATE INDEX `logins_id_user_id` ON logins(user_id)");
+            Database::get()->query("CREATE INDEX `logins_id_user_id` ON logins(user_id)");
         DBHelper::indexExists('logins', 'logins_id_course_id') or
-            $db->query("CREATE INDEX `logins_id_course_id` ON logins(course_id)");
+            Database::get()->query("CREATE INDEX `logins_id_course_id` ON logins(course_id)");
 
         DBHelper::indexExists('lp_rel_learnPath_module', 'lp_rel_learnPath_id') or
-            $db->query("CREATE INDEX `lp_rel_learnPath_id` ON lp_rel_learnPath_module(learnPath_id)");
+            Database::get()->query("CREATE INDEX `lp_rel_learnPath_id` ON lp_rel_learnPath_module(learnPath_id)");
         DBHelper::indexExists('lp_rel_learnPath_module', 'lp_rel_learnPath_id') or
-            $db->query("CREATE INDEX `lp_rel_module_id` ON lp_rel_learnPath_module(module_id)");
+            Database::get()->query("CREATE INDEX `lp_rel_module_id` ON lp_rel_learnPath_module(module_id)");
 
         DBHelper::indexExists('lp_user_module_progress', 'lp_learnPath_module_id') or
-            $db->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
+            Database::get()->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
         DBHelper::indexExists('lp_user_module_progress', 'lp_user_id') or
-            $db->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
+            Database::get()->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
 
         DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            $db->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
+            Database::get()->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
         DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            $db->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
+            Database::get()->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
 
         DBHelper::indexExists('unit_resources', 'unit_res_unit_id') or
-            $db->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
+            Database::get()->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
         DBHelper::indexExists('unit_resources', 'unit_res_visible') or
-            $db->query("CREATE INDEX `unit_res_visible` ON unit_resources (visible)");
+            Database::get()->query("CREATE INDEX `unit_res_visible` ON unit_resources (visible)");
         DBHelper::indexExists('unit_resources', 'unit_res_res_id') or
-            $db->query("CREATE INDEX `unit_res_res_id` ON unit_resources (res_id)");
+            Database::get()->query("CREATE INDEX `unit_res_res_id` ON unit_resources (res_id)");
 
         DBHelper::indexExists('personal_calendar', 'pcal_start') or
-            $db->query('CREATE INDEX `pcal_start` ON personal_calendar (start)');
+            Database::get()->query('CREATE INDEX `pcal_start` ON personal_calendar (start)');
 
         DBHelper::indexExists('agenda', 'agenda_start') or
-            $db->query('CREATE INDEX `agenda_start` ON agenda (start)');
+            Database::get()->query('CREATE INDEX `agenda_start` ON agenda (start)');
 
         DBHelper::indexExists('assignment', 'assignment_deadline') or
-            $db->query('CREATE INDEX `assignment_deadline` ON assignment (deadline)');
+            Database::get()->query('CREATE INDEX `assignment_deadline` ON assignment (deadline)');
 
     // **********************************************
         // upgrade courses databases
