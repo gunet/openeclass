@@ -129,10 +129,10 @@ if (isset($_POST['course'])) {
             AND cu.user_id = u.id
             AND cu.status != ?d
             AND u.id != ?d
-            AND u.surname LIKE ?s
+            AND (u.surname LIKE ?s OR u.username LIKE ?s)
             ORDER BY UPPER(u.surname), UPPER(u.givenname)
             LIMIT 10";
-    $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%");
+    $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
     
     $jsonarr["items"] = array();
     $i = 0;
