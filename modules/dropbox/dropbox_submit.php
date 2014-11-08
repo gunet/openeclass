@@ -180,7 +180,7 @@ if (isset($_POST['submit'])) {
                     if (get_user_email_notification($userid)) {
                         $linkhere = "<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
                         //$unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
-                        $body_dropbox_message = "$langSender: $_SESSION[givenname] $_SESSION[surname] <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
+                        $body_dropbox_message = "$langSender: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). " <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
                         $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php'>$langHere</a>.<br />";
                         //$body_dropbox_message .= "$unsubscribe $linkhere";
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
