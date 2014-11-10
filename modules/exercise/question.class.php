@@ -546,7 +546,8 @@ if (!class_exists('Question')):
                     $i = 1;
                     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                         //must get answer id ONLY where correct value existS
-                        if ($objAnswerTmp->isCorrect($answerId)) {
+                        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                        if ($answerCorrect) {
                             $q_correct_answers_sql .= ($i!=1) ? " OR " : "";
                             $q_correct_answers_sql .= "(a.answer = $answerId AND a.answer_id = $answerCorrect)";
                             $q_incorrect_answers_sql .= ($i!=1) ? " OR " : "";
