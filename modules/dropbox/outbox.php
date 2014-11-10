@@ -101,7 +101,6 @@ if (isset($_GET['mid'])) {
 } else {
     
     $out = "<div id='out_del_msg'></div><div id='outbox'>";
-    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all_out\"/></p><br/>";
     $out .= "<table id=\"outbox_table\">
                <thead>
                  <tr>

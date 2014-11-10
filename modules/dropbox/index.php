@@ -84,8 +84,11 @@ if (!isset($_GET['showQuota'])) {
                                       'button-class' => 'btn-success'),
                                 array('title' => $langQuotaBar,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
-                                      'icon' => 'fa-pie-chart',
-                                      'level' => 'primary')
+                                      'icon' => 'fa-pie-chart'),
+                                array('title' => $langQuotaBar,
+                                      'url' => 'javascript:void(0)',
+                                      'class' => 'delete_all_in',
+                                      'icon' => 'fa-times')
                             ));
         } else {            
             $tool_content .= action_bar(array(
@@ -100,6 +103,10 @@ if (!isset($_GET['showQuota'])) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-success',
                                       'show' => $personal_msgs_allowed),
+                                array('title' => 'Remove all Messages',
+                                      'url' => 'javascript:void(0)',
+                                      'icon' => 'fa-times',
+                                      'class' => 'delete_all_in')
                             ));
         }
     }    

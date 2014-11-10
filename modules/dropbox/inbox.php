@@ -185,7 +185,6 @@ if (isset($_GET['mid'])) {
 } else {
     
     $out = "<div id='del_msg'></div><div id='inbox'>";
-    $out .= "<p>$langDeleteAllMsgs: <img src=\"".$themeimg.'/delete.png'."\" class=\"delete_all_in\"/></p><br/>";
     
     $out .= "<table id=\"inbox_table\">
                   <thead>
