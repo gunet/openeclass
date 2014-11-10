@@ -207,7 +207,7 @@ if (isset($_GET['mid'])) {
                  var oTable = $('#inbox_table').dataTable({
                    'bStateSave' : true,
                    'bProcessing': true,
-                   'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                   'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
                    'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',                   
                    'aLengthMenu': [
