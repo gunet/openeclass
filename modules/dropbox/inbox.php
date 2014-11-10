@@ -52,7 +52,7 @@ if (isset($_GET['mid'])) {
                                   'icon' => 'fa-reply',
                                   'level' => 'primary-label')
                         ));        
-        $out .= "<div id='del_msg'></div><div id='msg_area'><table>";
+        $out .= "<div id='del_msg'></div><div id='msg_area'><table >";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
@@ -97,7 +97,7 @@ if (isset($_GET['mid'])) {
                 }
             }            
             $out .= "<fieldset>
-                       <table width='100%' class='tbl'>
+                       <table width='100%' class='table table-bordered'>
                          <caption><b>$langReply</b></caption>
                          <tr>
                            <th>$langSender:</th>
@@ -186,7 +186,7 @@ if (isset($_GET['mid'])) {
     
     $out = "<div id='del_msg'></div><div id='inbox'>";
     
-    $out .= "<table id=\"inbox_table\">
+    $out .= "<table id='inbox_table' class='table table-bordered'>
                   <thead>
                     <tr>
                       <th>$langSubject</th>";

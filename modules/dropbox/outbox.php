@@ -46,7 +46,7 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = "<div style=\"float:right;\"><a href=\"outbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table>";
+        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table table-bordered'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
@@ -101,7 +101,7 @@ if (isset($_GET['mid'])) {
 } else {
     
     $out = "<div id='out_del_msg'></div><div id='outbox'>";
-    $out .= "<table id=\"outbox_table\">
+    $out .= "<table id='outbox_table' class='table table-bordered'>
                <thead>
                  <tr>
                     <th>$langSubject</th>";
