@@ -28,8 +28,8 @@ require_once 'modules/search/exerciseindexer.class.php';
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['exerciseTitle']);
-    $v->rule('numeric', ['exerciseTimeConstraint', 'exerciseAttemptsAllowed']);
+    $v->rule('required', array('exerciseTitle'));
+    $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
     $v->labels(array(
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",

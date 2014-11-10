@@ -26,7 +26,7 @@ include '../../include/baseTheme.php';
 
 if (isset($_POST['submitCat'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['questionCatName']);
+    $v->rule('required', array('questionCatName'));
     $v->labels(array(
         'questionCatName' => "$langTheField $langTitle"
     ));

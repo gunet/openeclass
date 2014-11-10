@@ -293,8 +293,8 @@ function add_assignment() {
            $course_code, $langFormErrors, $langNewAssignSuccess;
     
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['title', 'max_grade']);
-    $v->rule('numeric', ['max_grade']);
+    $v->rule('required', array('title', 'max_grade'));
+    $v->rule('numeric', array('max_grade'));
     $v->labels(array(
         'title' => "$langTheField $m[title]",
         'max_grade' => "$langTheField $m[max_grade]"
@@ -933,8 +933,8 @@ function edit_assignment($id) {
     $langEditError, $course_code, $works_url, $course_id, $uid, $workPath, $langFormErrors;
     
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', ['title', 'max_grade']);
-    $v->rule('numeric', ['max_grade']);
+    $v->rule('required', array('title', 'max_grade'));
+    $v->rule('numeric', array('max_grade'));
     $v->labels(array(
         'title' => "$langTheField $m[title]",
         'max_grade' => "$langTheField $m[max_grade]"
