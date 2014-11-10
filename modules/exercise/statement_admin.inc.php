@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 load_js('bootstrap-slider');
-load_js("select2");
+load_js('select2');
    
 $head_content .= " 
 <script>

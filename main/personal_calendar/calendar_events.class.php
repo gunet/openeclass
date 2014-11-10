@@ -849,7 +849,7 @@ class Calendar_Events {
      */
    public static function small_month_calendar($day, $month, $year) {
        global $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
-       if($_SESSION['theme'] == 'bootstrap'){
+       if ($_SESSION['theme'] == 'default') {
            return Calendar_Events::small_month_bootstrap_calendar();
        }
        $calendar_content = "";

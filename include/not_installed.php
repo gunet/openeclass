@@ -28,7 +28,7 @@
 
 require_once 'template/template.inc.php';
 
-$t = new Template('template/bootstrap');
+$t = new Template('template/default');
 
 $t->set_file('fh', 'theme.html');
 $t->set_block('fh', 'mainBlock', 'main');
@@ -43,7 +43,7 @@ $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbEndBlock', 'delete');
 $t->set_block('mainBlock', 'modalWindowBlock', 'delete');
-$t->set_var('template_base', 'template/bootstrap');
+$t->set_var('template_base', 'template/default');
 $t->set_var('PAGE_TITLE', 'Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass');
 $t->set_var('TOOL_CONTENT', "
 <div class='row'>
