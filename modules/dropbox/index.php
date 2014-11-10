@@ -85,7 +85,7 @@ if (!isset($_GET['showQuota'])) {
                                 array('title' => $langQuotaBar,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
                                       'icon' => 'fa-pie-chart'),
-                                array('title' => $langQuotaBar,
+                                array('title' => $langDropboxMassDelete,
                                       'url' => 'javascript:void(0)',
                                       'class' => 'delete_all_in',
                                       'icon' => 'fa-times')
@@ -103,7 +103,7 @@ if (!isset($_GET['showQuota'])) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-success',
                                       'show' => $personal_msgs_allowed),
-                                array('title' => 'Remove all Messages',
+                                array('title' => $langDropboxMassDelete,
                                       'url' => 'javascript:void(0)',
                                       'icon' => 'fa-times',
                                       'class' => 'delete_all_in')

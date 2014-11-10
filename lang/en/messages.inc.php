@@ -800,6 +800,7 @@ $langSearchSurname = "Search recipients by surname or username";
 $langDropboxFreeSpace = "Delete old attachments to free %s MB of space";
 $langDropboxFreeSpaceConfirm = "This action will delete attachments of older course messages in order to free %s MB of space! Users will not be able to download them any more!";
 $langDropboxFreeSpaceSuccess = "%s ΜΒ of space were successfully released!";
+$langDropboxMassDelete = 'Delete all messages';
 $langExercicesView = "Exercise View";
 $langExercicesResult = "Exercise Results";
 $langQuestion = "Question";
