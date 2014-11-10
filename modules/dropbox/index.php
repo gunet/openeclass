@@ -436,6 +436,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                 var contentID = $(e.target).attr('data-target');
                                 var contentURL = $(e.target).attr('href');
                                 $(contentID).load(contentURL);
+                                
+                                if(contentID == '#inbox') {
+                                    $('.delete_all_out').unbind('click');
+                                    $('.delete_all_out').addClass('delete_all_in').removeClass('delete_all_out');
+                                } else if (contentID == '#outbox') {
+                                    $('.delete_all_in').unbind('click');
+                                    $('.delete_all_in').addClass('delete_all_out').removeClass('delete_all_in');
+                                }
                             });
                             
                             // trap links to open inside tabs
