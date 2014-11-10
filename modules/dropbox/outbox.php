@@ -133,7 +133,7 @@ if (isset($_GET['mid'])) {
                     'bSort': false,
                     'bAutoWidth' : false,
                     'fnDrawCallback': function( oSettings ) {
-                        $('#inbox_table_filter label input').attr({
+                        $('#outbox_table_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
                         });
