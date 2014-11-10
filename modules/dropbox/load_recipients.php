@@ -140,7 +140,7 @@ if (isset($_POST['course'])) {
     foreach ($res as $r) {
         $jsonarr["items"][$i] = new stdClass();
         $jsonarr["items"][$i]->id = $r->user_id;
-        $jsonarr["items"][$i]->text = q($r->name)." (".q($r->username).")";;
+        $jsonarr["items"][$i]->text = q($r->name)." (".q($r->username).")";
         
         $i++;
     }
