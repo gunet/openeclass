@@ -42,7 +42,7 @@ function draw($toolContent, $options=null) {
     }
 
 	$t = new Template();
-	$t->set_file('fh', '../template/bootstrap/theme.html');
+	$t->set_file('fh', '../template/default/theme.html');
 	$t->set_block('fh', 'mainBlock', 'main');
 
     $t->set_var('SITE_NAME', 'Open eClass');
@@ -55,7 +55,7 @@ function draw($toolContent, $options=null) {
     $t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
     $t->set_block('mainBlock', 'breadCrumbEndBlock', 'delete');
     $t->set_block('mainBlock', 'modalWindowBlock', 'delete');
-    $t->set_var('template_base', '../template/bootstrap');
+    $t->set_var('template_base', '../template/default');
 
     if (isset($options['no-menu'])) {
         $t->set_block('mainBlock', 'leftNavBlock', 'delete');
