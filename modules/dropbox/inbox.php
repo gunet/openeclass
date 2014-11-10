@@ -217,6 +217,12 @@ if (isset($_GET['mid'])) {
                    'sPaginationType': 'full_numbers',
                    'bSort': false,
                    'bAutoWidth' : false,
+                   'fnDrawCallback': function( oSettings ) {
+                        $('#inbox_table_filter label input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+                    },
                    'oLanguage': {                       
                         'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                         'sZeroRecords':  '".$langNoResult."',
@@ -224,7 +230,7 @@ if (isset($_GET['mid'])) {
                         'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                         'sInfoFiltered': '',
                         'sInfoPostFix':  '',
-                        'sSearch':       '".$langSearch."',
+                        'sSearch':       '',
                         'sUrl':          '',
                         'oPaginate': {
                              'sFirst':    '&laquo;',

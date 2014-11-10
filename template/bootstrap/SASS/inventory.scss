@@ -1690,7 +1690,11 @@ td.option-btn-cell{
     padding-top: 24px;
 }
 
-#portfolio_lessons_filter
+#dropboxTabs .nav-tabs{
+    margin-bottom: 15px;
+}
+
+#portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter
 {
     position: relative;
     &:before{

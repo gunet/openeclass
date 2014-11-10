@@ -55,7 +55,6 @@ jQuery(document).ready(function() {
     'iDisplayLength': 5,
     'bSort' : false,
     'fnDrawCallback': function( oSettings ) {
-    
       $('#portfolio_lessons_filter label input').attr({
         class : 'form-control input-sm',
         placeholder : '$langSearch...'

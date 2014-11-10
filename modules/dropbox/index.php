@@ -459,13 +459,15 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     } else {
         $msg_id_param = '';
     }
-    $tool_content .= "<ul id='dropboxTabs' class='nav nav-tabs' role='tablist'>
-                        <li><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'>Inbox</a></li>
-                        <li><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'>Outbox</a></li>
-                      </ul>
-                      <div class='tab-content'>
-                        <div class='tab-pane fade' id='inbox'></div>
-                        <div class='tab-pane fade' id='outbox'></div>
+    $tool_content .= "<div id='dropboxTabs'>
+                        <ul class='nav nav-tabs' role='tablist'>
+                            <li role='presentation'><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'>Inbox</a></li>
+                            <li role='presentation'><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'>Outbox</a></li>
+                        </ul>
+                        <div class='tab-content'>
+                            <div role='tabpanel' class='tab-pane fade in active' id='inbox'></div>
+                            <div role='tabpanel' class='tab-pane fade' id='outbox'></div>
+                        </div>
                       </div>";
 }
 

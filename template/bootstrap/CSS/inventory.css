@@ -1807,11 +1807,16 @@ td.option-btn-cell {
 }
 
 /* line 1693, ../SASS/inventory.scss */
-#portfolio_lessons_filter {
+#dropboxTabs .nav-tabs {
+  margin-bottom: 15px;
+}
+
+/* line 1697, ../SASS/inventory.scss */
+#portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter {
   position: relative;
 }
-/* line 1696, ../SASS/inventory.scss */
-#portfolio_lessons_filter:before {
+/* line 1700, ../SASS/inventory.scss */
+#portfolio_lessons_filter:before, #inbox_table_filter:before, #outbox_table_filter:before {
   position: absolute;
   font-family: FontAwesome;
   top: 6px;
@@ -1819,28 +1824,28 @@ td.option-btn-cell {
   content: "\f002";
   color: #999;
 }
-/* line 1704, ../SASS/inventory.scss */
-#portfolio_lessons_filter label {
+/* line 1708, ../SASS/inventory.scss */
+#portfolio_lessons_filter label, #inbox_table_filter label, #outbox_table_filter label {
   margin: 0 0 10px 0;
 }
-/* line 1707, ../SASS/inventory.scss */
-#portfolio_lessons_filter input {
+/* line 1711, ../SASS/inventory.scss */
+#portfolio_lessons_filter input, #inbox_table_filter input, #outbox_table_filter input {
   margin: 0px;
   padding-right: 25px;
 }
 
-/* line 1712, ../SASS/inventory.scss */
+/* line 1716, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1717, ../SASS/inventory.scss */
+/* line 1721, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 10px;
 }
 
-/* line 1723, ../SASS/inventory.scss */
+/* line 1727, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1849,38 +1854,38 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1731, ../SASS/inventory.scss */
+/* line 1735, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1734, ../SASS/inventory.scss */
+/* line 1738, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1738, ../SASS/inventory.scss */
+/* line 1742, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1742, ../SASS/inventory.scss */
+/* line 1746, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1748, ../SASS/inventory.scss */
+/* line 1752, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1757, ../SASS/inventory.scss */
+/* line 1761, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1763, ../SASS/inventory.scss */
+/* line 1767, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1897,7 +1902,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1775, ../SASS/inventory.scss */
+/* line 1779, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1907,7 +1912,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1781, ../SASS/inventory.scss */
+/* line 1785, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;
