@@ -216,9 +216,13 @@ if ($uid AND !isset($_GET['logout'])) {
                     </div>
                 </div>
                 <div class='panel'>
-                    <div class='panel-body'>
-                        $ann_content
-                    </div>
+                    <div class='panel-body'>";
+                    if(!empty($ann_content)){
+                            $tool_content .= $ann_content;
+                        }else{
+                            $tool_content .= $langNoRecentAnnounce;
+                        }
+                    $tool_content.="</div>
                 </div>
             </div>
             
