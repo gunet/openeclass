@@ -186,9 +186,10 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
             $language = $res->lang;
             $pstatus = intval($res->status);
             $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
-
             // faculty id validation
-            validateNode($pt, isDepartmentAdmin());
+            if ($res->faculty_id) {            
+                validateNode($pt, isDepartmentAdmin());
+            }
         }
 
         // display actions toolbar
