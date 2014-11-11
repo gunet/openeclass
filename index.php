@@ -230,22 +230,26 @@ if ($uid AND !isset($_GET['logout'])) {
         $online_users = getOnlineUsers();
         $tool_content .= "
 
-                <div class='panel padding'>
-                    <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
+                    </div>
                 </div>
 
-                <div class='panel padding'>
-                    <a href='http://opencourses.gr'>
-                        <img src='$themeimg/open_courses_bnr.png'>
-                    </a>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <a href='http://opencourses.gr'>
+                            <img src='$themeimg/open_courses_bnr.png'>
+                        </a>
+                    </div>
                 </div>
-                <div class='panel padding'>
-                    <a href='http://www.openeclass.org/'>
-                        <img src='$themeimg/open_eclass_bnr.png'>
-                    </a>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <a href='http://www.openeclass.org/'>
+                            <img src='$themeimg/open_eclass_bnr.png'>
+                        </a>
+                    </div>
                 </div>
-
-
             </div>
         </div>";
 
