@@ -811,12 +811,17 @@ ul.tablelist
   li.list-item
   {
     position:relative;
-    padding: 1em;
+    //padding: 1em;
     @include box-sizing(border-box);
     list-style-type: none;
     border-bottom:1px solid #eee;
     background:white;
     overflow:hidden;
+    
+    &:last-child
+    {
+        border-bottom: none;
+    }
 
     .max-height
     {
@@ -851,7 +856,7 @@ ul.tablelist
 
     .item-wholeline
     {
-      padding:1em;
+      padding:0.7em 0;
       /*padding-right: 60px;*/
       display: inline-block;  
     }

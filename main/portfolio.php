@@ -137,7 +137,7 @@ $tool_content = "
                 </div>
             </div>
             <div class='row'>
-            <div class='col-md-12'>
+            <div class='col-md-12 my-announcement-list'>
                 <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
                 <div class='panel'>
                     <div class='panel-body'>
@@ -168,7 +168,7 @@ $tool_content = "
             </div>
         </div>
         <div class='row'>
-                <div class='col-md-12'>
+                <div class='col-md-12 my-messages-list'>
                     <h5 class='content-title'>$langMyPersoMessages</h5>
                     <div class='panel'>
                         <div class='panel-body'>
