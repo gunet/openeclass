@@ -149,6 +149,9 @@ $tool_content = "
                             }
                             $tool_content.="</ul>
                     </div>
+                    <div class='panel-footer'>
+                        <p class='link-to-more'><a href='#'>περισσότερα&hellip;</a></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -179,6 +182,9 @@ $tool_content = "
                                 $tool_content.="<li class='list-item' style='border-bottom:none;'>$langDropboxNoMessage</li>";
                             }
                             $tool_content.="</ul>
+                        </div>
+                        <div class='panel-footer'>
+                            <p class='link-to-more'><a href='#'>περισσότερα&hellip;</a></p>
                         </div>
                     </div>
                 </div>
