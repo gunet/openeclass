@@ -595,8 +595,10 @@ if (isset($level) && !empty($level)) {
     
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <h5 class='content-title'>$langOpenCourseShort</h5>
-            <div class='panel padding'>
+            <div class='panel'>
+                <div class='panle-body'>
                     $opencourses_level
+                </div>
             </div>
         </div>
     ";
@@ -607,8 +609,10 @@ if (!empty($license_info_box)) {
         
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langLicense</h5>
-                <div class='panel license_info_box padding'>
+                <div class='panel license_info_box'>
+                    <div class='panel-body'>
                         $license_info_box
+                    </div>
                 </div>
             </div>
         ";
@@ -627,16 +631,22 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
 $tool_content .="
                     <div class='col-md-$cunits_sidebar_subcolumns'>
                         <h5 class='content-title'>$langCalendar</h5>
-                        <div class='panel padding'>
-                            $user_personal_calendar
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                $user_personal_calendar
+                            </div>
                         </div>
                     </div>
                 
                 
                     <div class='col-md-$cunits_sidebar_subcolumns'>
                         <h5 class='content-title'>$langAnnouncements</h5>
-                        <ul class='tablelist panel'>" . course_announcements() . "
-                        </ul>
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                <ul class='tablelist'>" . course_announcements() . "
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 
            </div>
@@ -668,7 +678,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
-                                    <span class='item-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a><br>$ann_date</span>
+                                    <span class='item-wholeline'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a><br>$ann_date</span>
                                 </li>";
             }
             return $ann_content;
