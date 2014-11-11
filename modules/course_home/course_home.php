@@ -592,26 +592,26 @@ $tool_content .= "<div class='col-md-$cunits_sidebar_columns side_content'>";
 // display open course level if exist
 if (isset($level) && !empty($level)) {
     $tool_content .= "
-    <div class='row'>
+    
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <h5 class='content-title'>$langOpenCourseShort</h5>
             <div class='panel padding'>
                     $opencourses_level
             </div>
         </div>
-    </div>";
+    ";
 }
 
 if (!empty($license_info_box)) {
     $tool_content .= "
-        <div class='row'>
+        
             <div class='col-md-$cunits_sidebar_subcolumns'>
                 <h5 class='content-title'>$langLicense</h5>
                 <div class='panel license_info_box padding'>
                         $license_info_box
                 </div>
             </div>
-        </div>";
+        ";
 }
 
 
@@ -624,21 +624,21 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .="<div class='row'>
+$tool_content .="
                     <div class='col-md-$cunits_sidebar_subcolumns'>
                         <h5 class='content-title'>$langCalendar</h5>
                         <div class='panel padding'>
                             $user_personal_calendar
                         </div>
                     </div>
-                </div>
-                <div class='row'>
+                
+                
                     <div class='col-md-$cunits_sidebar_subcolumns'>
                         <h5 class='content-title'>$langAnnouncements</h5>
                         <ul class='tablelist panel'>" . course_announcements() . "
                         </ul>
                     </div>
-                </div>
+                
            </div>
     </div>";
 
