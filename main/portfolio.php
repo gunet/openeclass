@@ -188,7 +188,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
                             $tool_content.="</ul>
                         </div>
                         <div class='panel-footer'>
-                            <p class='link-to-more'><a href='#'>περισσότερα&hellip;</a></p>
+                            <p class='link-to-more'><a href='{$urlAppend}modules/dropbox/'>περισσότερα&hellip;</a></p>
                         </div>
                     </div>
                 </div>
