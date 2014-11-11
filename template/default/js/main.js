@@ -64,6 +64,7 @@ $(document).ready( function () {
                 },
                 complete: function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
+                    $("#toggle-sidebar i").toggleClass("fa-rotate-180");
                     if ($("#sidebar").hasClass("in"))
                     {
                         $("#sidebar-container").css({"display":"none"});
