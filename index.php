@@ -210,11 +210,15 @@ if ($uid AND !isset($_GET['logout'])) {
         <div class='row'>
 
             <div class='col-md-8'>
-                <div class='panel padding'>
-                    $langInfoAbout
+                <div class='panel'>
+                    <div class='panel-body'>
+                        $langInfoAbout
+                    </div>
                 </div>
-                <div class='panel padding'>
-                    $ann_content
+                <div class='panel'>
+                    <div class='panel-body'>
+                        $ann_content
+                    </div>
                 </div>
             </div>
             
