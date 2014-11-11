@@ -25,9 +25,7 @@
  */
 
 $require_login = true;
-
-$require_help = true;
-$helpTopic = 'Portfolio';
+define('HIDE_TOOL_TITLE', true);
 
 include '../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -123,7 +121,13 @@ jQuery(document).ready(function() {
 
 require_once 'perso.php';
 
-$tool_content = "
+$tool_content = ($_SESSION['status'] == USER_TEACHER?
+    action_bar(array(
+        array('title' => $langCourseCreate,
+              'url' => $urlAppend . 'modules/create_course/create_course.php',
+              'icon' => 'fa-plus-circle',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success'))): '') . "
     <div class='row margin-top-fat'>
         <div id='my-courses' class='col-md-7'>
             <div class='row'>

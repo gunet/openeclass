@@ -333,7 +333,7 @@ if ($u) {
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';        
         $expires_at = isset($_POST['expires_at']) ? $_POST['expires_at'] : '';          
-        $user_expires_at = DateTime::createFromFormat("d-m-Y H:i", $expires_at);
+        $user_expires_at = DateTime::createFromFormat("Y-m-d H:i:s", $expires_at);
         $date_expires_at = $user_expires_at->format("Y-m-d H:i:s");        
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
         $user_exist = FALSE;
