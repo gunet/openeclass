@@ -167,16 +167,41 @@ foreach ($questions as $theQuestion) {
             $tool_content .= $chart->plot();
             $tool_content .= $answers_table;
         } elseif ($theQuestion->qtype == QTYPE_SCALE) {
-            $chart = new Plotter(500, 300);
+            $chart = new Plotter(600, 300);
+            $chart->addPoint(1, 0);
+            $chart->addPoint(2, 0);
+            $chart->addPoint(3, 0);
+            $chart->addPoint(4, 0);
+            $chart->addPoint(5, 0);
+            
             $answers = Database::get()->queryArray("SELECT answer_text, count(answer_text) as count FROM poll_answer_record WHERE qid= ?d GROUP BY answer_text", $theQuestion->pqid);
             $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
+            $answers_table = "
+                <table class='table-default' width='100%'>
+                    <tr>
+                        <th width='30%'>$langAnswer</th>
+                        <th width='30%'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";             
             foreach ($answers as $answer) {
                 $percentage = round(100 * ($answer->count / $answer_total),2);
                 $chart->addPoint(q($answer->answer_text), $percentage);
+                if ($thePoll->anonymized != 1) {
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.answer_text = ?s AND a.user_id = b.id", $answer->answer_text);
+                    foreach($names as $name) {
+                      $names_array[] = $name->fullname;
+                    }
+                    $names_str = implode(', ', $names_array);  
+                    $ellipsized_names_str = q(ellipsize($names_str, 60));
+                }
+                $answers_table .= "
+                    <tr>
+                            <td>".q($answer->answer_text)."</th>
+                            <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
+                unset($names_array);                
             }
+            $answers_table .= "</table><br>";
             $chart->normalize();
             $tool_content .= $chart->plot();            
-            
+            $tool_content .= $answers_table;
         } elseif ($theQuestion->qtype == QTYPE_FILL) {
             $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
                                 WHERE qid = ?d", $theQuestion->pqid);
