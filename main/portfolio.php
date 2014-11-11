@@ -187,18 +187,18 @@ $tool_content = "
 
 $tool_content .= "
 </div>
-<div class='row'>
+<div id='profile_box' class='row'>
     <div class='col-md-12'>
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
                     <div class='col-sm-3'>
-                            <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:150px;' class='img-circle center-block' alt='Circular Image'>
-                            <h4 class='text-center'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
+                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:100px;' class='img-circle center-block img-responsive' alt='Circular Image'>
+                        <h4 class='text-center'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
                     </div>
-                    <div class='col-sm-9'>
+                    <!--<div class='col-sm-9'>
                         <div class='stats'>".courseVisitsPlot()."</div>
-                    </div> 
+                    </div>--> 
                 </div>
             </div>
         </div>
