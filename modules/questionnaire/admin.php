@@ -43,15 +43,15 @@ if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
     $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
     if(!$poll){
+        die('test');
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
-    $position = Database::get()->querySingle("SELECT q_position FROM `poll_question`
-				  WHERE pid = ?d AND pqid = ?d", $pid, $pqid)->q_position;
+    $position = $poll->q_position;
     $new_position = isset($_GET['moveUp']) ? $position - 1 : $position + 1;
     $trade_position_pqid = Database::get()->querySingle("SELECT pqid FROM `poll_question`
-				  WHERE pid = ?d AND q_position = ?d", $pid, $new_position)->pqid;
+				  WHERE pid = ?d AND q_position = ?d", $pid, $new_position)->pqid;  
     Database::get()->query("UPDATE poll_question SET q_position = ?d WHERE pid = ?d AND pqid= ?d", $new_position, $pid, $pqid);
-    Database::get()->query("UPDATE poll_question SET q_position = ?d WHERE pqid = ?d AND pid = ?d", $position, $pid, $trade_position_pqid);
+    Database::get()->query("UPDATE poll_question SET q_position = ?d WHERE pid = ?d AND pqid = ?d", $position, $pid, $trade_position_pqid);
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 
@@ -93,34 +93,62 @@ if (isset($_POST['submitPoll'])) {
     } 
 }
 if (isset($_POST['submitQuestion'])) {
-    $question_text = $_POST['questionName'];
-    $qtype = $_POST['answerType'];    
-    $pid = intval($_GET['pid']);  
-    if(isset($_GET['modifyQuestion'])) {
-        $pqid = intval($_GET['modifyQuestion']);
-        $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-        if(!$poll){
-            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
-        }
-        Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
-		WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
-    } else {
-        $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
-        $pqid = Database::get()->query("INSERT INTO poll_question
-                    (pid, question_text, qtype, q_position)
-                    VALUES (?d, ?s, ?d, ?d)", $pid, $question_text, $qtype, $max_position + 1)->lastInsertID;
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('questionName'));
+    if (isset($_POST['questionScale'])) {
+        $v->rule('required', array('questionScale'));
     }
-    if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL) {
-        redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
+    $v->rule('numeric', array('questionScale'));
+    $v->rule('min', array('questionScale'), 1);
+    $v->labels(array(
+        'questionName' => "$langTheField $langQuestion",
+        'questionScale' => "$langTheField $langScale"
+    ));
+    if($v->validate()) {    
+        $question_text = $_POST['questionName'];
+        $qtype = $_POST['answerType'];    
+        $pid = intval($_GET['pid']);  
+        if(isset($_GET['modifyQuestion'])) {
+            $pqid = intval($_GET['modifyQuestion']);
+            $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+            if(!$poll){
+                redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+            }
+            Database::get()->query("UPDATE poll_question SET question_text = ?s, qtype = ?d
+                    WHERE pqid = ?d AND pid = ?d", $question_text, $qtype, $pqid, $pid);
+        } else {           
+            $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
+            $query_columns = "pid, question_text, qtype, q_position";
+            $query_values = "?d, ?s, ?d, ?d";
+            $query_vars = array($pid, $question_text, $qtype, $max_position + 1);
+            if(isset($_POST['questionScale'])){
+                $query_columns .= ", q_scale";
+                $query_values .=", ?d";
+                $query_vars[] = $_POST['questionScale'];
+            }
+            $pqid = Database::get()->query("INSERT INTO poll_question
+                        ($query_columns)
+                        VALUES ($query_values)", $query_vars)->lastInsertID;
+        }
+        if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE) {
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
+        } else {
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyAnswers=$pqid");
+        }
     } else {
-        redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyAnswers=$pqid");
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        if(isset($_GET['modifyQuestion'])) {
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyQuestion=$pqid");
+        } else {
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&newQuestion=yes");
+        }
     }
 }
 if (isset($_POST['submitAnswers'])) {
     $pqid = intval($_GET['modifyAnswers']); 
     $pid = intval($_GET['pid']);
-    $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-    if(!$poll){
+    $question = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
+    if(!$question){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $answers = $_POST['answers'];
@@ -162,7 +190,7 @@ if (isset($_GET['pid'])) {
     }
 }
 //question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     load_js('bootstrap-datetimepicker');
@@ -194,7 +222,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary',
+              'level' => 'primary-label',
               'url' => $link_back,
               'icon' => 'fa-reply'))); 
     $tool_content .= " 
@@ -271,7 +299,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary',
+            'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "admin.php?course=$course_code&amp;pid=$pid"
         )
@@ -286,7 +314,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <h4>$question->question_text<br><small>".$aType[$question->qtype - 1]."</small></h4>
       </div>
     </div>";     
-    if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL) {
+    if ($question->qtype != QTYPE_LABEL && $question->qtype != QTYPE_FILL && $question->qtype != QTYPE_SCALE) {
         $tool_content .= "
         <div class='panel panel-info'>
                   <div class='panel-heading'>
@@ -327,45 +355,82 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary',
+            'level' => 'primary-label',
             'url' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : ""),
             'icon' => 'fa-reply'
         )
     ));
+    $questionName = Session::has('questionName') ? Session::get('questionName') : (isset($question) ? $question->question_text : '');
+    $questionNameError = Session::getError('questionName');
+    $questionNameErrorClass = ($questionNameError) ? "has-error" : "";
+    
+    $answerType = Session::has('answerType') ? Session::get('answerType') : (isset($question) ? $question->qtype : '');
+    
+    $questionScale = Session::has('questionScale') ? Session::get('questionScale') : (isset($question) ? $question->q_scale : 5);
+    $questionScaleError = Session::getError('questionScale');
+    $questionScaleErrorClass = ($questionScaleError) ? " has-error" : "";
+    $questionScaleShowHide = $answerType == QTYPE_SCALE ? "" : " hidden";
     
     $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$action_url' method='post'>
 	<fieldset>
-            <div class='form-group'>
+            <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-2 control-label'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
                 <div class='col-sm-10'>
-                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, isset($question)? $question->question_text : '') :"<input type='text' id='questionName' name='questionName' size='50' value='".(isset($question)? q($question->question_text) : '')."'>")."
+                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' id='questionName' name='questionName' size='50' value='".q($questionName)."'>")."
+                  <span class='help-block'>$questionNameError</span>    
                 </div>
             </div>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
         $tool_content .= "<input type='hidden' name='answerType' value='".QTYPE_LABEL."'>";
     } else {
+        $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('.answerType').change(function() {
+                if($(this).val()==5){
+                    $('#questionScale').prop('disabled', false);
+                    $('#questionScale').closest('div.form-group').removeClass('hidden');
+                } else {
+                    $('#questionScale').prop('disabled', true);
+                    $('#questionScale').closest('div.form-group').addClass('hidden');
+                }
+            });        
+        });
+        </script>";
         $tool_content .= "
             <div class='form-group'>
                 <label for='answerType' class='col-sm-2 control-label'>$langExerciseType:</label>
                 <div class='col-sm-10'>            
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='answerType' id='answerType' value='1' value='".QTYPE_SINGLE."' ".((isset($question) && $question->qtype == QTYPE_SINGLE) || !isset($question) ? 'checked' : '').">
+                        <input type='radio' name='answerType' class='answerType' value='1' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
                         ". $aType[QTYPE_SINGLE - 1] . "
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='answerType' id='answerType' value='".QTYPE_MULTIPLE."' ".(isset($question) && $question->qtype == QTYPE_MULTIPLE ? 'checked' : '').">
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
                         ". $aType[QTYPE_MULTIPLE - 1] . "
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='answerType' id='answerType' value='".QTYPE_FILL."' ".(isset($question) && $question->qtype == QTYPE_FILL ? 'checked="checked"' : '').">
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
                         ". $aType[QTYPE_FILL - 1] . "
                       </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($answerType == QTYPE_SCALE ? 'checked' : '').">
+                        ". $aType[QTYPE_SCALE - 1] . "
+                      </label>
                     </div>                    
+                </div>              
+            </div>
+            <div class='form-group$questionScaleErrorClass$questionScaleShowHide'>
+                <label for='questionName' class='col-sm-2 control-label'>$langMax $langScale (1-..):</label>
+                <div class='col-sm-10 col-md-3'>
+                    <input type='text' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+                    <span class='help-block'>$questionScaleError</span>                    
                 </div>
             </div>";
     }
@@ -390,7 +455,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
 					WHERE pqid = ?d ORDER BY pqaid", $question->pqid);    
-    if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL) {
+    if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
     $nameTools = $langAnswers;
@@ -454,7 +519,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>";
         }                                        
         $tool_content .= "
-                    <div class='row'>
+                    <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>                          
                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
                             <a class='btn btn-default' href='admin.php?course=TMAPOST106&pid=$pid&editQuestion=$question_id'>$langCancel</a>

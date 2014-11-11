@@ -33,6 +33,8 @@ $helpTopic = 'Questionnaire';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
+load_js('bootstrap-slider');
+
 $nameTools = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 
@@ -56,13 +58,21 @@ switch ($_REQUEST['UseCase']) {
         printPollForm();
 }
 
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 
 function printPollForm() {
     global $course_id, $course_code, $tool_content, $langPollStart,
     $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
-    $langPollAlreadyParticipated, $is_editor, $langBack;
-
+    $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
+    $langCancel, $head_content;
+    
+    $head_content .= " 
+    <script>
+        $(function() {
+            $('.grade_bar').slider();    
+        });
+    </script>";
+    
     $pid = $_REQUEST['pid'];
     
     // check if user has participated
@@ -83,50 +93,114 @@ function printPollForm() {
     $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-
+    
     if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+        $tool_content .= action_bar(array(
+            array(
+                'title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ));
         $tool_content .= "
-	<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
-	<input type='hidden' value='2' name='UseCase' />
-	<input type='hidden' value='$pid' name='pid' />
-
-        <p class=\"title1\">" . q($thePoll->name) . "</p>\n";
+            <div class='panel panel-primary'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$thePoll->name</h3>
+                </div>";
         if ($thePoll->description) {
-        $tool_content .= $thePoll->description.'<br>';
-        }        
+            $tool_content .= "
+                <div class='panel-body'>
+                    <p>$thePoll->description</p>
+                </div>";
+        }
+        $tool_content .= "
+            </div>
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
+            <input type='hidden' value='2' name='UseCase'>
+            <input type='hidden' value='$pid' name='pid'>";     
 
         //*****************************************************************************
         //		Get answers + questions
         //******************************************************************************/
         $questions = Database::get()->queryArray("SELECT * FROM poll_question
-			WHERE pid = ?d ORDER BY pqid", $pid);
+			WHERE pid = ?d ORDER BY q_position ASC", $pid);
+        $i=1;
         foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
-            $tool_content .= "
-            <div class='".(($qtype==QTYPE_LABEL)? 'q_comments' : 'sub_title1')."'><b>".(($qtype==QTYPE_LABEL)? ($theQuestion->question_text) : q($theQuestion->question_text))."</b></div>
-            <p><input type='hidden' name='question[$pqid]' value='$qtype' />";
-            if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
-                $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
-                $type_attr = ($qtype == QTYPE_SINGLE)? "type='radio'": "type='checkbox'";
-                $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer 
-                            WHERE pqid = ?d ORDER BY pqaid", $pqid);
-                foreach ($answers as $theAnswer) {
-                    $tool_content .= "<label><input $type_attr name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' />".q($theAnswer->answer_text)." </label><br />\n";
-                }
-                if ($qtype == QTYPE_SINGLE) {
-                    $tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
-                }
-            } elseif ($qtype == QTYPE_FILL) {
-                $tool_content .= "<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
+            if($qtype==QTYPE_LABEL) {
+                $tool_content .= "    
+                    <div class='alert alert-info' role='alert'>
+                        $theQuestion->question_text
+                    </div>";                
+            } else {
+                $tool_content .= "
+                    <div class='panel panel-success'>
+                        <div class='panel-heading'>
+                            $langQuestion $i
+                        </div>
+                        <div class='panel-body'>
+                            <h4>".q($theQuestion->question_text)."</h4>
+                            <input type='hidden' name='question[$pqid]' value='$qtype'>";
+                if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+                    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+                    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer 
+                                WHERE pqid = ?d ORDER BY pqaid", $pqid);
+                    foreach ($answers as $theAnswer) {
+                        $tool_content .= "
+                        <div class='form-group'>
+                            <div class='col-sm-offset-1 col-sm-11'>
+                                <div class='$type_attr'>
+                                    <label>
+                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>".q($theAnswer->answer_text)." 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                    if ($qtype == QTYPE_SINGLE) {
+                        $tool_content .= "
+                        <div class='form-group'>
+                            <div class='col-sm-offset-1 col-sm-11'>                            
+                                <div class='$type_attr'>
+                                    <label>
+                                        <input type='$type_attr' name='answer[$pqid]' value='-1' checked>$langPollUnknown
+                                    </label>
+                                </div>
+                            </div>
+                        </div>";
+                               
+                    }
+                } elseif ($qtype == QTYPE_SCALE) {
+                        $tool_content .= "
+                        <div class='form-group'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                            </div>
+                            
+                        </div>";
+                } elseif ($qtype == QTYPE_FILL) {
+                    $tool_content .= "
+                        <div class='form-group margin-bottom-fat'>                           
+                            <div class='col-sm-12 margin-top-thin'>
+                                <textarea name='answer[$pqid]'></textarea>
+                            </div>
+                        </div>";
+                }                
+                $tool_content .= "
+                        </div>
+                    </div>
+                ";               
             }
-            $tool_content .= "<br /><br />";
+            $i++;
         }
-        if ($is_editor) {
-            $tool_content .= "<p><a href='index.php?course=$course_code'>".q($langBack)."</a></p>";
-        } else {
-            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'></p></form>";
+        $tool_content .= "<div class='text-center'>";
+        if (!$is_editor) {
+            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'> ";
         }
+        $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>".(($is_editor) ? q($langBack) : q($langCancel) )."</a></div></form>";
     } else {
         Session::Messages($langPollInactive);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -150,6 +224,9 @@ function submitPoll() {
                     VALUES (?d, ?d, ?d, '', ?d , NOW())", $pid, $pqid, $aid, $user_id);
             }
             continue;
+        } elseif ($qtype == QTYPE_SCALE) {
+            $aid = 0;
+            $answer_text = $answer[$pqid];         
         } elseif ($qtype == QTYPE_SINGLE) {
             $aid = intval($answer[$pqid]);
             $answer_text = '';
@@ -167,5 +244,5 @@ function submitPoll() {
     if (!empty($end_message)) {
         $tool_content .=  $end_message;
     }
-    $tool_content .= "<br /><p class=\"right\"><a href=\"index.php?course=$course_code\">".$langBack."</a></p>";
+    $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a></div>";
 }

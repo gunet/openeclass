@@ -1489,6 +1489,7 @@ $langFillBlanks = "Συμπλήρωμα Κενών";
 $langMatching = "Ταίριασμα";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
+$langScale = "Κλίμακας";
 $langFalse = "Λάθος";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";

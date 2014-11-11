@@ -2770,6 +2770,7 @@ $langReplaceOK = "File replaced successfully";
 $langDownloadDir = "Download directory";
 $langTrueFalse = "True / False";
 $langFreeText = "Free Text";
+$langScale = "Scale";
 $langFalse = "False";
 $langInvalidPicture = "Invalide picture type";
 $langQuestionDiffGrade = "Difficulty Grade";

@@ -85,8 +85,8 @@ $tool_content .= "
        <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
 </div>
 
-<p class='sub_title1'>$langSurvey</p>
-<table class='tbl_border'>
+<h4>$langSurvey</h4>
+<table class='table-default'>
 <tr>
         <th width='150'>$langTitle:</th>
         <td>" . q($thePoll->name) . "</td>
@@ -104,8 +104,8 @@ $tool_content .= "
         <td>" . nice_format(date("Y-m-d H:i", strtotime($thePoll->end_date)), true) . "</td>
 </tr>
 </table>
-<p class='sub_title1'>$langAnswers</p>";
-$tool_content .= "<table class='tbl' width='100%'>";
+<h4>$langAnswers</h4>";
+$tool_content .= "<table class='table-default'>";
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
 $j=1;
@@ -120,7 +120,7 @@ foreach ($questions as $theQuestion) {
         <td colspan='2'>";
         $j++;
     } else {
-       $tool_content .= "<tr><td colspan='2'><br><div class='q_comments'>".$theQuestion->question_text."</div><br><hr></td></tr>"; 
+       $tool_content .= "<tr><td colspan='2'><br>".$theQuestion->question_text."<br><hr></td></tr>"; 
     }
         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
             $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
@@ -166,6 +166,17 @@ foreach ($questions as $theQuestion) {
             $chart->normalize();
             $tool_content .= $chart->plot();
             $tool_content .= $answers_table;
+        } elseif ($theQuestion->qtype == QTYPE_SCALE) {
+            $chart = new Plotter(500, 300);
+            $answers = Database::get()->queryArray("SELECT answer_text, count(answer_text) as count FROM poll_answer_record WHERE qid= ?d GROUP BY answer_text", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
+            foreach ($answers as $answer) {
+                $percentage = round(100 * ($answer->count / $answer_total),2);
+                $chart->addPoint(q($answer->answer_text), $percentage);
+            }
+            $chart->normalize();
+            $tool_content .= $chart->plot();            
+            
         } elseif ($theQuestion->qtype == QTYPE_FILL) {
             $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
                                 WHERE qid = ?d", $theQuestion->pqid);

@@ -225,7 +225,7 @@ function load_js($file, $init='') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datepicker/js/bootstrap-datepicker.js'></script>\n";
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
         } elseif ($file == 'bootstrap-slider') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>\n";
             $file = "bootstrap-slider/js/bootstrap-slider.js";
         }               
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";

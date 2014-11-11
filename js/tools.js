@@ -340,9 +340,8 @@ function poll_init() {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.after(last_form_group.clone()).next().find('input').removeAttr('value');
-        delete_init();
-        
+        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input type='text' name='answers[]' value=''></div><div class='col-xs-1'><a href='#' style='cursor: pointer;'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
+        delete_init();        
     });
 }
 function delete_init(){
