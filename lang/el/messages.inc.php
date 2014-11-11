@@ -631,6 +631,7 @@ $langEmailOption = "Αποστολή (με email) της ανακοίνωσης 
 $langUp = "Επάνω";
 $langDown = "Κάτω";
 $langNoAnnounce = "Δεν υπάρχουν ανακοινώσεις";
+$langNoRecentAnnounce = "Δεν υπάρχουν πρόσφατες ανακοινώσεις";
 $langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανακοίνωση";
 $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ανακοινώσεις";
 $langAnn = "Ανακοινώθηκε την";

@@ -137,6 +137,37 @@ $tool_content = "
                 </div>
             </div>
             <div class='row'>
+            <div class='col-md-12'>
+                <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <ul class='tablelist'>";
+                            if(!empty($user_announcements)){
+                                $tool_content.=$user_announcements;
+                            }else{
+                                $tool_content.="<li class='list-item' style='border-bottom:none;'>$langNoRecentAnnounce</li>";
+                            }
+                            $tool_content.="</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-5'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        {%PERSONAL_CALENDAR_CONTENT%}
+                    </div>
+                    <div class='panel-footer'>
+                    <span class='event event-important'></span><span class='event event-info'></span><span class='event event-info'></span><span class='event event-warning'></span><span class='event event-inverse'></span><span class='event event-success'></span><span class='event event-special'></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
                 <div class='col-md-12'>
                     <h5 class='content-title'>$langMyPersoMessages</h5>
                     <div class='panel'>
@@ -152,38 +183,7 @@ $tool_content = "
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class='col-md-5'>
-        <div class='row'>
-            <div class='col-md-12'>
-                <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        {%PERSONAL_CALENDAR_CONTENT%}
-                    </div>
-                    <div class='panel-footer'>
-                    <span class='event event-important'></span><span class='event event-info'></span><span class='event event-info'></span><span class='event event-warning'></span><span class='event event-inverse'></span><span class='event event-success'></span><span class='event event-special'></span>
-                    </div>
-                </div>
-            </div>
-        </div>";
-    if (!empty($user_announcements)) {
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-md-12'>
-                <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
-                <div class='panel'>
-                    <div class='panel-body'>
-                    <ul class='tablelist'>
-                    $user_announcements 
-                    </ul>
-                    </div>
-                </div>
-            </div>
-        </div>";
-    }
-$tool_content .= "</div>";
+    </div>";
 
 $tool_content .= "
 </div>
