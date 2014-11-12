@@ -1609,7 +1609,7 @@ $db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_i
 $db->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');
 $db->query('CREATE INDEX `actions_daily_hdi` ON `actions_daily` (hits, duration, id)');
 $db->query('CREATE INDEX `loginout_ia` ON `loginout` (id_user, action)');
-$db->query('CREATE INDEX `announcement_cvo` ON `announcement` (course_id, visible, order)');
+$db->query('CREATE INDEX `announcement_cvo` ON `announcement` (course_id, visible, `order`)');
 
 // Single indices from multiple tuples
 $db->query("CREATE INDEX `actions_summary_module_id` ON actions_summary(module_id)");
