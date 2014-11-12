@@ -175,8 +175,11 @@ body > .container{
 			>li{
 				border-left: 1px solid rgb(231, 231, 231);
 				float: left;
-        cursor: pointer;
-
+                                cursor: pointer;
+                                ul li a{
+                                    padding-top: 3px;
+                                    padding-bottom: 3px;
+                                }
 				a {
 					padding-top: 15px;
 					padding-bottom: 15px;
