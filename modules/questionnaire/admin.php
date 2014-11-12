@@ -31,13 +31,6 @@ require_once 'functions.php';
 load_js('tools.js');
 global $themeimg;
 
-if (isset($_GET['pid'])) {
-    $pid = intval($_GET['pid']);
-    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-    if(!$poll){     
-        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
-    }
-}
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
     $pid = intval($_GET['pid']);
@@ -184,6 +177,11 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $nameTools = $poll->name;
+    $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;  
+    if ($attempt_counter>0) {
+        Session::Messages($langThereAreParticipants);
+        redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    }         
 } else {
     if (!isset($_GET['newPoll'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -194,11 +192,6 @@ $aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
-        $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;
-        if ($attempt_counter) {
-            Session::Messages($langThereAreParticipants);
-            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
-        }
         $nameTools = $langInfoPoll;
         $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
@@ -290,7 +283,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </form>
     </div>";
 } elseif (isset($_GET['editQuestion'])) {
-    if (isset($_GET['editQuestion'])) {
+    if (isset($_GET['editQuestion'])) {   
         $question_id = $_GET['editQuestion'];
         $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
         if(!$question) {
