@@ -150,7 +150,7 @@ function printPolls() {
     $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
     $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
-    $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate ;
+    $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate;
 
     $poll_check = 0;
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d", $course_id);
@@ -179,6 +179,7 @@ function printPolls() {
         $index_aa = 1;
         $k = 0;
         foreach ($result as $thepoll) {
+            $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $thepoll->pid)->total;
             $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
@@ -221,7 +222,7 @@ function printPolls() {
                 
                 if ($is_editor) {
                     $tool_content .= "
-                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>".q($thepoll->name)."</a>";
+                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
                 } else {
                     $tool_content .= "
                         <td>";
@@ -252,7 +253,8 @@ function printPolls() {
                                 'title' => $langPurgeExercises,
                                 'icon' => 'fa-eraser',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
-                                'confirm' => $langConfirmPurgeExercises                               
+                                'confirm' => $langConfirmPurgeExercises,
+                                'show' => $total_participants > 0
                             ),
                             array(
                                 'title' => $langDelete,
@@ -266,6 +268,12 @@ function printPolls() {
                                 'icon' => $visibility_gif,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
                             ),
+                            array(
+                                'title' => $langParticipate,
+                                'icon' => 'fa-pie-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'show' => $total_participants > 0
+                            ),                                        
                             array(
                                 'title' => $langCreateDuplicate,
                                 'icon' => 'fa-copy',

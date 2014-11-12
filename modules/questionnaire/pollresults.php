@@ -75,6 +75,9 @@ if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $pid)->total;
+if(!$total_participants) {
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 $tool_content .= "
 <div class='alert alert-info'>
     <b>$langDumpUserDurationToFile:</b><br>
