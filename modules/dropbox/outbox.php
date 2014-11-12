@@ -48,7 +48,7 @@ if (isset($_GET['mid'])) {
         $out = "<div style=\"float:right;\"><a href=\"outbox.php".$urlstr."\">$langBack</a></div>";
         $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table table-bordered'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
-        $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
+        $out .= "<tr id='$msg->id'><td>$langDelete:</td><td class='delete'><i class='class='fa fa-times'></i></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
             $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
@@ -110,7 +110,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "      <th>$langRecipients</th>
                    <th>$langDate</th>
-                   <th>$langDelete</th>
+                   <th class='option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
                  </tr>
                </thead>
                <tbody>
@@ -120,6 +120,7 @@ if (isset($_GET['mid'])) {
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
                  var oTable2 = $('#outbox_table').dataTable({
+                    'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
                     'bStateSave' : true,
                     'bProcessing': true,
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',

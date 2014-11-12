@@ -114,9 +114,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $i = 0;
         
         if ($mbox_type == 'inbox') {
-            $td[$i++] = "<img src='$themeimg/message.png' title='".q($msg->subject)."' /> $bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename.$bold_end;
+            $td[$i++] = "<i class='fa fa-envelope' title='".q($msg->subject)."' /></i> $bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename.$bold_end;
         } else {
-            $td[$i++] = "<img src='$themeimg/message.png' title='".q($msg->subject)."' /> <a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
+            $td[$i++] = "<i class='fa fa-envelope' title='".q($msg->subject)."' /></i> <a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
         }
         
         if ($course_id == 0) {
@@ -140,9 +140,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         $td[$i++] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
         if ($mbox_type == 'inbox') {
-            $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete_in\"/>";
+            $td[$i++] = "<i class='fa fa-times delete_in'></i>";
         } else {
-            $td[$i++] = "<img src=\"".$themeimg.'/delete.png'."\" class=\"delete_out\"/>";
+            $td[$i++] = "<i class='fa fa-times delete_out'></i>";
         }
         
         if ($course_id == 0) {
