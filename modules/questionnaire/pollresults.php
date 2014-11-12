@@ -78,7 +78,14 @@ $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_i
 if(!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
-$tool_content .= "
+$tool_content .= action_bar(array(
+            array(
+                'title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ))."
 <div class='alert alert-info'>
     <b>$langDumpUserDurationToFile:</b><br>
     <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
@@ -134,7 +141,7 @@ $tool_content .= "
     </div>
 </div>";
 
-$questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
+$questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
 $j=1;
 foreach ($questions as $theQuestion) {
     if ($theQuestion->qtype == QTYPE_LABEL) {

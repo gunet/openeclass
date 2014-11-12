@@ -193,7 +193,21 @@ if (isset($_GET['pid'])) {
 $aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
-    load_js('bootstrap-datetimepicker');
+    if (isset($_GET['modifyPoll'])) {
+        $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;
+        if ($attempt_counter) {
+            Session::Messages($langThereAreParticipants);
+            redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+        }
+        $nameTools = $langInfoPoll;
+        $navigation[] = array(
+            'url' => "admin.php?course=$course_code&amp;pid=$pid", 
+            'name' => $poll->name
+        );            
+    } else {
+        $nameTools = $langCreatePoll;
+    }    
+    load_js('bootstrap-datetimepicker');   
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#startdatepicker, #enddatepicker').datetimepicker({
@@ -204,15 +218,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             });
         });
     </script>";    
-    if (isset($_GET['modifyPoll'])) {
-        $nameTools = $langInfoPoll;
-        $navigation[] = array(
-            'url' => "admin.php?course=$course_code&amp;pid=$pid", 
-            'name' => $poll->name
-        );            
-    } else {
-        $nameTools = $langCreatePoll;
-    }
+
     $PollName = Session::has('PollName') ? Session::get('PollName') : (isset($poll) ? $poll->name : '');
     $PollDescription = Session::has('PollDescription') ? Session::get('PollDescription') : (isset($poll) ? $poll->description : '');
     $PollEndMessage = Session::has('PollEndMessage') ? Session::get('PollEndMessage') : (isset($poll) ? $poll->end_message : '');
@@ -534,7 +540,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary',
+              'level' => 'primary-label',
               'url' => "index.php?course=$course_code",
               'icon' => 'fa-reply')));    
     $tool_content .= "

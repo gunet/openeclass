@@ -192,9 +192,9 @@ function printPollForm() {
                 $tool_content .= "
                         </div>
                     </div>
-                ";               
-            }
-            $i++;
+                ";
+                $i++;
+            }           
         }
         $tool_content .= "<div class='text-center'>";
         if (!$is_editor) {
