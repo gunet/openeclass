@@ -179,7 +179,7 @@ $tool_content .= $html . "
       <select name='search_type'>
         <option value='exact'>$langSearchExact</option>
         <option value='begin'>$langSearchStartsWith</option>
-        <option value='substring' selected>$langSearchSubstring</option>
+        <option value='contains' selected>$langSearchSubstring</option>
       </select>
     </td>
   </tr>
