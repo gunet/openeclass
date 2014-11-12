@@ -132,7 +132,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
-                    <h5 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h5>
+                    <h3 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h3>
                     <div class='panel'>
                         <div class='panel-body'>
                             {%LESSON_CONTENT%}                        
@@ -142,7 +142,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
             </div>
             <div class='row'>
             <div class='col-md-12 my-announcement-list'>
-                <h5 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h5>
+                <h3 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h3>
                 <div class='panel'>
                     <div class='panel-body'>
                         <ul class='tablelist'>";
@@ -163,7 +163,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
-                <h5 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h5>
+                <h3 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h3>
                 <div class='panel'>
                     <div class='panel-body'>
                         {%PERSONAL_CALENDAR_CONTENT%}
@@ -176,7 +176,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
         </div>
         <div class='row'>
                 <div class='col-md-12 my-messages-list'>
-                    <h5 class='content-title'>$langMyPersoMessages</h5>
+                    <h3 class='content-title'>$langMyPersoMessages</h3>
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>";

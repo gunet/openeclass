@@ -565,7 +565,7 @@ if (!$alter_layout) {
     <div class='col-md-8 course-units'>
         <div class='row'>
             <div class='col-md-6 no-gutters' style='padding-top:24px;'>
-                <h5 class='content-title'>$unititle</h5>
+                <h3 class='content-title'>$unititle</h3>
             </div>";
             
         if ($is_editor and $course_info->view_type == 'units') {
@@ -594,7 +594,7 @@ if (isset($level) && !empty($level)) {
     $tool_content .= "
     
         <div class='col-md-$cunits_sidebar_subcolumns'>
-            <h5 class='content-title'>$langOpenCourseShort</h5>
+            <h3 class='content-title'>$langOpenCourseShort</h3>
             <div class='panel'>
                 <div class='panle-body'>
                     $opencourses_level
@@ -608,7 +608,7 @@ if (!empty($license_info_box)) {
     $tool_content .= "
         
             <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h5 class='content-title'>$langLicense</h5>
+                <h3 class='content-title'>$langLicense</h3>
                 <div class='panel license_info_box'>
                     <div class='panel-body'>
                         $license_info_box
@@ -630,7 +630,7 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
 
 $tool_content .="
                     <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h5 class='content-title'>$langCalendar</h5>
+                        <h3 class='content-title'>$langCalendar</h3>
                         <div class='panel'>
                             <div class='panel-body'>
                                 $user_personal_calendar
@@ -640,7 +640,7 @@ $tool_content .="
                 
                 
                     <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h5 class='content-title'>$langAnnouncements</h5>
+                        <h3 class='content-title'>$langAnnouncements</h3>
                         <div class='panel'>
                             <div class='panel-body'>
                                 <ul class='tablelist'>" . course_announcements() . "
