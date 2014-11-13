@@ -1089,27 +1089,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       UPLOAD FORM
       -------------------------------------- */
     
+    // Action_bar section
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>";
+            $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                            'url' => "index.php?course=$course_code",
+                            'icon' => 'fa-reply',
+                            'level' => 'primary-label'
+                        )
+                    ));
+            $tool_content .= "</div>
+        </div>
+    ";
+    // Upload Form section
     $tool_content .="
-        <div class='form-wrapper'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <fieldset>
-                    <legend>$langImport</legend>
-                    <div class='form-group'>
-                        <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
-                        <div class='col-sm-10'>
-                            <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
-                            <input id='uploadedPackage' class='form-control' type='file' name='uploadedPackage'>
-                            <span class='smaller'>$langLearningPathUploadFile</span>
-                            <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                            <input class='btn btn-primary' type='submit' value='$langImport' >
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                        <fieldset>
+                            <legend>$langImport</legend>
+                            <div class='form-group'>
+                                <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
+                                <div class='col-sm-10'>
+                                    <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
+                                    <input id='uploadedPackage' class='form-control' type='file' name='uploadedPackage'>
+                                    <span class='smaller'>$langLearningPathUploadFile</span>
+                                    <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' value='$langImport' >
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
     ";
 
