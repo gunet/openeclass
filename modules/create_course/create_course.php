@@ -41,13 +41,12 @@ $user = new User();
 
 $nameTools = $langCourseCreate;
 
-load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
 
 //Datepicker
 load_js('tools.js');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datepicker');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -112,43 +111,42 @@ $head_content .= <<<hContent
     $(document).ready(function() {
 
         $('input[name=start_date]').datepicker({
-            dateFormat: 'yy-mm-dd',
-            onSelect: function (date) {
-                var date2 = $('input[name=start_date]').datepicker('getDate');
-                if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                    date2.setDate(date2.getDate() + 7);
-                    $('input[name=finish_date]').datepicker('setDate', date2);
-                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
-                }else{
-                    $('input[name=finish_date]').datepicker('option', 'minDate', date2);
-                }
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        }).on('changeDate', function(e){
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                date2.setDate(date2.getDate() + 7);
+                $('input[name=finish_date]').datepicker('setDate', date2);
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
+            }else{
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
             }
         });
 
         $('input[name=finish_date]').datepicker({
-            dateFormat: 'yy-mm-dd',
-            onClose: function () {
-                var dt1 = $('input[name=start_date]').datepicker('getDate');
-                var dt2 = $('input[name=finish_date]').datepicker('getDate');
-                if (dt2 <= dt1) {
-                    var minDate = $('input[name=finish_date]').datepicker('option', 'minDate');
-                    $('input[name=finish_date]').datepicker('setDate', minDate);
-            }
-        }
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        }).on('changeDate', function(e){
+            var dt1 = $('input[name=start_date]').datepicker('getDate');
+            var dt2 = $('input[name=finish_date]').datepicker('getDate');
+            if (dt2 <= dt1) {
+                var minDate = $('input[name=finish_date]').datepicker('startDate');
+                $('input[name=finish_date]').datepicker('setDate', minDate);
+            }            
         });
-        
-        if($('input[name=start_date]').datepicker("getDate") === null){
-            $('input[name=start_date]').datepicker("setDate", new Date());
+        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
+            $('input[name=start_date]').datepicker('setDate', new Date());
             var date2 = $('input[name=start_date]').datepicker('getDate');
             date2.setDate(date2.getDate() + 7);
             $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
         }else{
             var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('option', 'minDate', date2);
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
         }
         
-        if($('input[name=finish_date]').datepicker("getDate") === null){
+        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=finish_date]').datepicker("setDate", 7);
         }
         
@@ -160,8 +158,7 @@ $head_content .= <<<hContent
             } else {
                 $('#weeklyDates').hide();
             }
-        }).change();
-        
+        }).change();    
         
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
@@ -289,10 +286,10 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='form-group' id='weeklyDates'>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langStartDate <input class='dateInForm' type='text' name='start_date' value=''>
+                      $langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly>
                 </div>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langDuration <input class='dateInForm' type='text' name='finish_date' value=''>
+                      $langDuration <input class='dateInForm' type='text' name='finish_date' value='' readonly>
                 </div>                
             </div>
             <div class='form-group'>
