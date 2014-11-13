@@ -349,15 +349,15 @@ if ($is_editor) {
                     array('title' => $langimportLearningPath,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
-                        'level' => 'primary',),
+                        'level' => 'secondary',),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
                         'icon' => 'fa-line-chart',
-                        'level' => 'primary'),
+                        'level' => 'secondary'),
                     array('title' => $langLearningObjectsInUse_sort,
                         'url' => "modules_pool.php?course=$course_code",
                         'icon' => 'fa-book',
-                        'level' => 'primary'))) .
+                        'level' => 'secondary'))) .
                 "</div>";
     }
 }
