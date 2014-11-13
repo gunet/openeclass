@@ -184,9 +184,11 @@ hContent;
                             <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'><textarea rows='5' cols='50' name='description'>$form_description</textarea></div>
                         </div>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                            <input class='btn btn-primary' type='submit' name='submitCategory' value='" . q($form_legend) . "'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                        <div class='form-group'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <input class='btn btn-primary' type='submit' name='submitCategory' value='" . q($form_legend) . "'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                            </div>
                         </div>
                         </fieldset></form>
                     </div>";
@@ -374,7 +376,7 @@ hContent;
                 </div>
                 <div class='form-group'>
                     <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
-                <div class='col-sm-10'>
+                    <div class='col-sm-10'>
                 <select class='form-control' name='selectcategory'>
                 <option value='0'>--</option>";
                 $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
@@ -386,15 +388,15 @@ hContent;
                     </div>
                 </div>";
                 if ($_GET['form_input'] == 'file') {
-                    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>                
+                    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>                
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langUpload) . "'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                    </div>";
+                    </div></div>";
                 } else {
-                    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langAdd) . "'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                    </div>";
+                    </div></div>";
                 }
                 $tool_content .= "</fieldset>";
                 if ($_GET['form_input'] == 'file') {
@@ -465,11 +467,13 @@ hContent;
                 }
                 $tool_content .= "</select></div>
                 </div>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langModify) . "'>
-                    <input type='hidden' name='id' value='$id'>
-                    <input type='hidden' name='table' value='$table_edit'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                <div class='form-group'>
+                    <div class='col-sm-offset-2 col-sm-10'>
+                        <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langModify) . "'>
+                        <input type='hidden' name='id' value='$id'>
+                        <input type='hidden' name='table' value='$table_edit'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                    </div>
                 </div>
                 </fieldset>
                 </form>
