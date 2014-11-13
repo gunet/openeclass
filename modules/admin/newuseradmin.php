@@ -79,41 +79,55 @@ $all_set = register_posted_variables(array(
     'submit' => true));
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 
-
+if (isset($_GET['id'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "../admin/index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'),
+        array('title' => $langBackRequests,
+              'url' => "../admin/listreq.php$reqtype",
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
+        array('title' => $langRejectRequest,
+              'url' => "listreq.php?id=$_GET[id]&amp;close=2",
+              'icon' => 'fa-ban',
+              'level' => 'primary'),
+        array('title' => $langClose,
+              'url' => "listreq.php?id=$_GET[id]&amp;close=1",
+              'icon' => 'fa-close',
+              'level' => 'primary')));
+} else {
+    $backlink = $_SERVER['SCRIPT_NAME'] . isset($rid) ? ('?id=' . intval($rid)) : '';
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "../admin/index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'),
+        array('title' => $langBackRequests,
+            'url' => "../admin/listreq.php$reqtype",
+            'icon' => 'fa-reply',
+            'level' => 'primary',
+            'show' => (isset($submit) and $success))));
+}
+    
 if ($submit) {
     // register user
     $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
     $proflanguage = $session->validate_language_code(@$_POST['language']);
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : 2;
 
-    $backlink = $_SERVER['SCRIPT_NAME'] .
-            isset($rid) ? ('?id=' . intval($rid)) : '';
-
+    
     // check if user name exists
     $user_exist = Database::get()->querySingle("SELECT username FROM user WHERE username=?s", $uname);
 
     // check if there are empty fields
     if (!$all_set) {
-        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</p>";
-        $tool_content .= action_bar(array(
-            array('title' => $langAgain,
-                'url' => "$backlink",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br /><a href='$backlink'>$langAgain</a></div>";        
     } elseif ($user_exist) {
-        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div>";
-        $tool_content .= action_bar(array(
-            array('title' => $langAgain,
-                'url' => "$backlink",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree <br /><a href='$backlink'>$langAgain</a></div>";
     } elseif (!email_seems_valid($email_form)) {
-        $tool_content .= "<div class='alert alert-danger'>$langEmailWrong.</div>";
-        $tool_content .= action_bar(array(
-            array('title' => $langAgain,
-                'url' => "$backlink",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+        $tool_content .= "<div class='alert alert-danger'>$langEmailWrong <br /><a href='$backlink'>$langAgain</a></div>";        
     } else {
         validateNode(intval($depid), isDepartmentAdmin());
         $hasher = new PasswordHash(8, false);
@@ -141,13 +155,8 @@ if ($submit) {
             $type_message = '';
             // $langAsUser;
         }
+        $success = TRUE;
         $tool_content .= "<div class='alert alert-success'>$message</div><br><br><p align='pull-right'>";
-        $tool_content .= action_bar(array(
-            array('title' => $langBackRequests,
-                'url' => "../admin/listreq.php$reqtype",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
-
         // send email
         $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName $type_message";
@@ -192,13 +201,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
             }
         }
 
-        // display actions toolbar
-        $tool_content .= "<div id='operations_container'>
-                <ul id='opslist'>
-                <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-                <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
-                <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
-                </ul></div>";
+        // display actions toolbar        
     } elseif (@$_GET['type'] == 'user') {
         $pstatus = 5;
     } else {
@@ -213,78 +216,99 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         $title = $langNewProf;
     }
 
-    $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
-        <legend>$title</legend>
-        <table width='100%' align='left' class='tbl'>
-          <tr><th class='left' width='180'><b>$langName:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='givenname_form' value='" . q($pn) . "' />&nbsp;(*)</td></tr>
-          <tr><th class='left'><b>$langSurname:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='surname_form' value='" . q($ps) . "' />&nbsp;(*)</td></tr>
-          <tr><th class='left'><b>$langUsername:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' />&nbsp;(*)</td></tr>
-          <tr><th class='left'><b>$langPass:</b></th>
-              <td><input class='FormData_InputText' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  />&nbsp;<span id='result'></span></td></tr>
-          <tr><th class='left'><b>$langEmail:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='" . q($pe) . "' />&nbsp;(*)</td></tr>
-          <tr><th class='left'><b>$langEmailVerified:</b></th>
-             <td>";
-    $verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
-    if (isset($pv)) {
-        $tool_content .= selection($verified_mail_data, "verified_mail_form", $pv);
-    } else {
-        $tool_content .= selection($verified_mail_data, "verified_mail_form");
-    }
-    $tool_content .= "</td></tr>
-        <tr><th class='left'><b>$langPhone:</b></th>
-            <td class='smaller'><input class='FormData_InputText' type='text' name='phone' value='" . q($pphone) . "' /></td></tr>
-        <tr><th class='left'><b>$langFaculty:</b></th>
-            <td>";
-    $depid = (isset($pt)) ? $pt : null;
-    if (isDepartmentAdmin()) {
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
-    } else {
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
-    }
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</td></tr>
-        <tr><th class='left'><b>$langAm:</b></th>
-            <td><input class='FormData_InputText' type='text' name='am' value='" . q($pam) . "' />&nbsp;</td></tr>
-        <tr><th class='left'>$langLanguage:</th>
-            <td>";
-    $tool_content .= lang_select_options('language', '', $language);
-    $tool_content .= "</td></tr>";
-    if (isset($_GET['id'])) {
-        $tool_content .="<tr><th class='left'><b>$langComments</b></th>
-                                     <td>" . q($pcom) . "&nbsp;</td></tr>
-                                 <tr><th class='left'><b>$langDate</b></th>
-                                     <td>" . q($pdate) . "&nbsp;</td></tr>";
-        $id_html = "<input type='hidden' name='rid' value='$id' />";
-    } else {
-        $id_html = '';
-    }
-    $tool_content .= "
-        <tr><th>&nbsp;</th>
-            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration' />
-               </td></tr>
-        </table>
-      </fieldset><div class='right smaller'>$langRequiredFields</div>
-        $id_html
+        <div class='form-group'>
+        <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'>
+              <input id = 'Name' type='text' name='givenname_form' value='" . q($pn) . "' placeholder='$langName'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='Sur' class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10'>
+              <input id='Sur' type='text' name='surname_form' value='" . q($ps) . "' placeholder='$langSurname'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='Username' class='col-sm-2 control-label'>$langUsername:</label>
+            <div class='col-sm-10'>
+                <input id = 'Username' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' placeholder='$langUsername'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='passsword' class='col-sm-2 control-label'>$langPass:</label>
+            <div class='col-sm-10'>
+              <input type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  placeholder='$langPass'/><span id='result'></span>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
+            <div class='col-sm-10'>
+              <input id='email' type='text' name='email_form' value='" . q($pe) . "' palceholder='$langEmail'>
+            </div>
+        </div>
+        <div class='form-group'>
+          <label for='emailverified' class='col-sm-2 control-label'>$langEmailVerified:</label>
+            <div class='col-sm-10'>";
+        $verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
+        if (isset($pv)) {
+            $tool_content .= selection($verified_mail_data, "verified_mail_form", $pv);
+        } else {
+            $tool_content .= selection($verified_mail_data, "verified_mail_form");
+        }
+        $tool_content .= "</div></div>
+        <div class='form-group'>
+        <label for='phone' class='col-sm-2 control-label'>$langPhone:</label>
+            <div class='col-sm-10'>            
+                <input id='phone' type='text' name='phone' value='" . q($pphone) . "' placeholder='$langPhone'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
+            <div class='col-sm-10'>";
+        $depid = (isset($pt)) ? $pt : null;
+        if (isDepartmentAdmin()) {
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+        } else {
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        }
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= "</div></div>
+        <div class='form-group'>
+        <label for='am' class='col-sm-2 control-label'>$langAm:</label>
+           <div class='col-sm-10'>
+               <input id='am' type='text' name='am' value='" . q($pam) . "' placeholder='$langOptional'>
+           </div>
+        </div>
+        <div class='form-group'>
+        <label for='lang' class='col-sm-2 control-label'>$langLanguage:</label>
+        <div class='col-sm-10'>";
+        $tool_content .= lang_select_options('language', '', $language);
+        $tool_content .= "</div></div>";
+        if (isset($_GET['id'])) {
+            @$tool_content .= "<div class='form-group'><label for='comments' class='col-sm-2 control-label'>$langComments</label>
+                                <div class='col-sm-10'>" . q($pcom) . "</div>
+                            </div>
+                            <div class='form-group'><label for='date' class='col-sm-2 control-label'>$langDate</label>
+                                <div class='col-sm-10'>" . q($pdate) . "</div></div>";            
+            $tool_content .= "<input type='hidden' name='rid' value='$id' />";
+        }
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>                   
+                            <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
+                        </div>              
         <input type='hidden' name='pstatus' value='$pstatus' />
         <input type='hidden' name='auth' value='1' />
-        </form>";
+        </fieldset>
+        </form>
+        </div>";
     if ($pstatus == 5) {
         $reqtype = '?type=user';
     } else {
         $reqtype = '';
-    }
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "../admin/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    }    
 }
 
 draw($tool_content, 3, null, $head_content);
