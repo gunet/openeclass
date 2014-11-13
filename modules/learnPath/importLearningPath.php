@@ -1059,7 +1059,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /* --------------------------------------
       status messages
       -------------------------------------- */
-    $tool_content .= "\n<p><!-- Messages -->\n";
+    $tool_content .= "\n<!-- Messages -->\n";
     foreach ($okMsgs as $msg) {
         $tool_content .= "\n<span class=\"correct\">$langSuccessOk</span>" . $msg . "<br />";
     }
@@ -1088,32 +1088,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /* --------------------------------------
       UPLOAD FORM
       -------------------------------------- */
-    $tool_content .= "
-    <form enctype=\"multipart/form-data\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">
-    <fieldset>
-    <legend>$langImport</legend>
-    <table width=\"100%\" class=\"tbl\">
-    <tr>
-      <th width=\"120\">$langFileName:</th>
-      <td>
-          <input type=\"hidden\" name=\"claroFormId\" value=\"" . uniqid('') . "\" >
-          <input type=\"file\" name=\"uploadedPackage\">
-          <br />
-          <span class='smaller'>$langLearningPathUploadFile</span>
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td class='right'><input type=\"submit\" value=\"" . $langImport . "\"></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>
-    <p>";
+    
+    $tool_content .="
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                <fieldset>
+                    <legend>$langImport</legend>
+                    <div class='form-group'>
+                        <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
+                        <div class='col-sm-10'>
+                            <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
+                            <input id='uploadedPackage' class='form-control' type='file' name='uploadedPackage'>
+                            <span class='smaller'>$langLearningPathUploadFile</span>
+                            <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-offset-2 col-sm-10'>
+                            <input class='btn btn-primary' type='submit' value='$langImport' >
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    ";
 
 
     /*     * ***************************************
@@ -1224,7 +1222,7 @@ EOF;
     $tool_content .= "\n</form>";
     $tool_content .= "\n</div>";
 
-    $tool_content .= "</p><p class='right smaller'>$langNote:<br/>$langScormIntroTextForDummies</p>";
+    $tool_content .= "<p class='right smaller'>$langNote:<br/>$langScormIntroTextForDummies</p>";
 } // else if method == 'post'
 
 chdir($pwd);
