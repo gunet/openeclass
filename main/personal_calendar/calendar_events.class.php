@@ -849,7 +849,7 @@ class Calendar_Events {
      */
    public static function small_month_calendar($day, $month, $year) {
        global $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
-       if ($_SESSION['theme'] == 'default') {
+       if ($_SESSION['theme'] == 'default') {           
            return Calendar_Events::small_month_bootstrap_calendar();
        }
        $calendar_content = "";
@@ -858,9 +858,9 @@ class Calendar_Events {
         if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
             $numberofdays[2] = 29;
         }
-
+        
         $eventlist = Calendar_Events::get_calendar_events("month", "$year-$month-$day");
-
+              
         $events = array();
         if ($eventlist) {
             foreach($eventlist as $event){
@@ -1338,14 +1338,16 @@ class Calendar_Events {
    
    public static function bootstrap_events($from, $to){
        global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $course_id;
+       
        $fromdatetime = date("Y-m-d H:i:s",$from/1000);
        $todatetime = date("Y-m-d H:i:s",$to/1000);
        /* The type of calendar here defines how detailed the events are going to be. Default:month  */
-       //if(true || !isset($course_id) || empty($course_id) || is_null($course_id)){
-       $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
-       //} else {
-       //$eventlist = Calendar_events::get_current_course_events("month", $fromdatetime, $todatetime);
-       //}
+       if (isset($course_id)) {
+            $eventlist = Calendar_events::get_current_course_events("month", $fromdatetime, $todatetime);
+       } else {
+            $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
+       }
+       
        $events = array();
        foreach($eventlist as $event){
            $startdatetime = new DateTime($event->start);
