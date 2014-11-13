@@ -425,6 +425,58 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 Database::get()->query("UPDATE `lp_asset` SET path = ?s WHERE asset_id = ?d", $exercise_map[$row->path], intval($row->asset_id));
             }
         }
+        
+        // Attendance
+        $attendance_map = restore_table($restoreThis, 'attendance', array(
+            'set' => array('course_id' => $course_id), 
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        $attendance_activities_map = restore_table($restoreThis, 'attendance_activities', array(
+            'map' => array('attendance_id' => $attendance_map),
+            'map_function' => 'attendance_gradebook_activities_map_function',
+            'map_function_data' => array($assignments_map, $exercise_map),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'attendance_book', array(
+            'map' => array(
+                'attendance_activity_id' => $attendance_activities_map,
+                'uid' => $userid_map
+            ), 
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'attendance_users', array(
+            'map' => array(
+                'attendance_id' => $attendance_map,
+                'uid' => $userid_map
+            ), 
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Gradebook
+        $gradebook_map = restore_table($restoreThis, 'gradebook', array(
+            'set' => array('course_id' => $course_id), 
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        $gradebook_activities_map = restore_table($restoreThis, 'gradebook_activities', array(
+            'map' => array('gradebook_id' => $gradebook_map),
+            'map_function' => 'attendance_gradebook_activities_map_function',
+            'map_function_data' => array($assignments_map, $exercise_map),
+            'return_mapping' => 'id'
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'gradebook_book', array(
+            'map' => array(
+                'gradebook_activity_id' => $gradebook_activities_map,
+                'uid' => $userid_map
+            ), 
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'gradebook_users', array(
+            'map' => array(
+                'gradebook_id' => $gradebook_map,
+                'uid' => $userid_map
+            ), 
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Units
         $unit_map = restore_table($restoreThis, 'course_units', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
