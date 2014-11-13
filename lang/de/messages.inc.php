@@ -569,7 +569,6 @@ $langEnterMetadata = "(Anmerkung) Sie können verschiedene Einstellungen des Kur
 $langCreateCourse = "'Erzeuge neuen Kurs'Assistent ";
 $langCreateCourseStep = "Schritt";
 $langCreateCourseStep2 = "von";
-$langCreateCourseStep1Title = "Grundlegende Informationen über den Kurs";
 $langCreateCourseStep2Title = "Zusätzliche Informationen über den Kurs";
 $langCreateCourseStep3Title = "Module und Art des Zugangs";
 $langcourse_objectives = "Kursziele";

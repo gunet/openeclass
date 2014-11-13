@@ -55,12 +55,12 @@ $head_content .= <<<hContent
 
 function deactivate_input_password () {
         $('#coursepassword').attr('disabled', 'disabled');
-        $('#coursepassword').addClass('invisible');
+        $('#coursepassword').closest('div.form-group').addClass('invisible');
 }
 
 function activate_input_password () {
         $('#coursepassword').removeAttr('disabled', 'disabled');
-        $('#coursepassword').removeClass('invisible');
+        $('#coursepassword').closest('div.form-group').removeClass('invisible');
 }
 
 function displayCoursePassword() {
@@ -201,8 +201,6 @@ if (empty($prof_names)) {
     $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
 }
 
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
-
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
@@ -224,113 +222,156 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        $tool_content .= "
-        <fieldset>
-          <legend>$langCreateCourseStep1Title</legend>
-            <table class='tbl' width='100%'>
-            <tr>
-              <th>$langTitle:</th>
-              <td><input type='text' name='title' size='60' value='" . $title . "' /></td>
-            </tr>
-            <tr>
-              <th>$langFaculty:</th>
-              <td>";
         $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => $allow_only_defaults));
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => $allow_only_defaults));        
         $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "</td></tr>";
-
-        $tool_content .= "
-        <tr>
-        <th>$langTeachers:</th>
-        <td><input type='text' name='prof_names' size='60' value='" . q($prof_names) . "' /></td>
-        </tr>
-        <tr>
-        <th class='left'>$langLanguage:</th>
-        <td>" . lang_select_options('localize') . "</td>
-        </tr>";
-        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-                        @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langOptional</span>
-                            <br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
-         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-
-
-        $tool_content .= "
-        <tr><td class='sub_title1' colspan='2'>$langCourseFormat</td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='simple' id='simple'><label for='simple'>&nbsp;$langCourseSimpleFormat</label></td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='units' checked id='units'><label for='units'>&nbsp;$langWithCourseUnits</label></td></tr>
-        <tr><td colspan='2'><input type='radio' name='view_type' value='weekly' id='weekly'><label for='weekly'>&nbsp;$langCourseWeeklyFormat</label></td></tr>
-        
-        
-        <tr id='weeklyDates'>
-            <td colspan=4>$langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly='true'>
-            $langDuration <input class='dateInForm' type='text' name='finish_date' value='' readonly='true'></td>
-        </tr>";
-        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
-        }
-
-        $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
-        <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
-            {$license[0]['title']}
-        </td>
-        </tr>
-        <tr><td colspan='2'><input type='radio' name='l_radio' value='10'>
-            {$license[10]['title']}
-        </td>
-        </tr>
-        <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='cc'/>
-            $langCMeta[course_license]
-        </td>
-        </tr>
-        <tr id = 'cc'><td>&nbsp;</td><td>" . selection($cc_license, 'cc_use') . "</td></tr>";
-
-        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-        $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
-        <tr>
-        <td colspan='2'>
-        <table class='sub_title1' width='100%'>
-         <tr>
-        <th width='170'>$langOptPassword</th>
-            <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off' /></td>
-        </tr>
-        <tr>
-            <th width='170'><img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16' height='16' />&nbsp;$langOpenCourse:</th>
-            <td width='1'><input id='courseopen' type='radio' name='formvisible' value='2'checked='checked' /></td>
-            <td class='smaller'>$langPublic</td>
-        </tr>
-        <tr>
-            <th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-            <td><input id='coursewithregistration' type='radio' name='formvisible' value='1' /></td>
-            <td class='smaller'>$langPrivOpen</td>
-        </tr>
-        <tr>
-            <th><img src='$themeimg/lock_closed.png' alt='$langClosedCourse' title='$langClosedCourse' width='16' height='16' />&nbsp;$langClosedCourse:</th>
-            <td><input id='courseclose' type='radio' name='formvisible' value='0' /></td>
-            <td class='smaller'>$langClosedCourseShort</td>
-        </tr>
-         <tr>
-            <th><img src='$themeimg/lock_inactive.png' alt='$langInactiveCourse' title='$langInactiveCourse' width='16' height='16' />&nbsp;$langInactiveCourse:</th>
-            <td><input id='courseinactive' type='radio' name='formvisible' value='3' /></td>
-            <td class='smaller'>$langCourseInactiveShort</td>
-        </tr>
-        </table>";
-        $tool_content .= "</td>
-        </tr>
-        <tr>
-          <td class='right'>&nbsp;
-            <input class='btn btn-primary' type='submit' name='create_course' value='".q($langCourseCreate)."' />
-          </td>
-        </tr>
-        </table>";
-        $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
-        $tool_content .= "</fieldset>";
-        $tool_content .= "</form>";
+        }       
+        $tool_content .= "
+<div class='form-wrapper'>
+    <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">
+        <fieldset>
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+                <div class='col-sm-10'>
+                  <input name='title' id='title' type='text' class='form-control' id='exerciseTitle' value='" . q($title) . "' placeholder='$langTitle'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='dialog-set-value' class='col-sm-2 control-label'>$langFaculty:</label>
+                <div class='col-sm-10'>
+                  $html
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='prof_names' class='col-sm-2 control-label'>$langTeachers:</label>
+                <div class='col-sm-10'>
+                      <input type='text' name='prof_names' id='prof_names' value='" . q($prof_names) . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
+                <div class='col-sm-10'>
+                      " . lang_select_options('localize') . "
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='description' class='col-sm-2 control-label'>$langDescrInfo <small>$langOptional</small>:</label>
+                <div class='col-sm-10'>
+                      ".  rich_text_editor('description', 4, 20, @$description)."
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langCourseFormat:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='simple' id='simple'>
+                        $langCourseSimpleFormat
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='units' id='units' checked>
+                        $langWithCourseUnits
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='weekly' id='weekly'>
+                        $langCourseWeeklyFormat
+                      </label>
+                    </div>                         
+                </div>
+            </div>
+            <div class='form-group' id='weeklyDates'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                      $langStartDate <input class='dateInForm' type='text' name='start_date' value=''>
+                </div>
+                <div class='col-sm-10 col-sm-offset-2'>
+                      $langDuration <input class='dateInForm' type='text' name='finish_date' value=''>
+                </div>                
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='l_radio' value='0' checked>
+                        {$license[0]['title']}
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='l_radio' value='10'>
+                        {$license[10]['title']}
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input id='cc_license' type='radio' name='l_radio' value='cc'>
+                        $langCMeta[course_license]
+                      </label>
+                    </div>                         
+                </div>
+            </div>
+            <div class='form-group' id='cc'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                      " . selection($cc_license, 'cc_use') . "
+                </div>              
+            </div>
+            <div class='form-group'>
+                <label for='localize' class='col-sm-2 control-label'>$langAvailableTypes:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input id='courseopen' type='radio' name='formvisible' value='2' checked>
+                        <img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
+                        <span class='help-block'><small>$langPublic</small></span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input id='coursewithregistration' type='radio' name='formvisible' value='1'>
+                        <img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16'>&nbsp;$m[legrestricted]
+                        <span class='help-block'><small>$langPrivOpen</small></span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input id='courseclose' type='radio' name='formvisible' value='0'>
+                        <img src='$themeimg/lock_closed.png' alt='$langClosedCourse' title='$langClosedCourse' width='16'>&nbsp;$langClosedCourse
+                        <span class='help-block'><small>$langClosedCourseShort</small></span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input id='courseinactive' type='radio' name='formvisible' value='3'>
+                        <img src='$themeimg/lock_inactive.png' alt='$langInactiveCourse' title='$langInactiveCourse' width='16'>&nbsp;$langInactiveCourse
+                        <span class='help-block'><small>$langCourseInactiveShort</small></span>
+                      </label>
+                    </div>                   
+                </div>
+                <div class='form-group'>
+                    <label for='description' class='col-sm-2 control-label'>$langOptPassword:</label>
+                    <div class='col-sm-10'>
+                          <input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                          <input class='btn btn-primary' type='submit' name='create_course' value='".q($langCourseCreate)."'>
+                          <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
+                    </div>
+                </div>                 
+            </div>
+            <div class='text-right'><small>$langFieldsOptionalNote</small></div>
+        </fieldset>
+    </form>
+</div>";
 
 } else  { // create the course and the course database
     // validation in case it skipped JS validation

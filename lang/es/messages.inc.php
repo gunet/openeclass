@@ -596,7 +596,6 @@ $langEnterMetadata = "Puedes entrar información adicional sobre tu curso usando
 $langCreateCourse = "Crear un nuevo tutorial del curso";
 $langCreateCourseStep = "Paso";
 $langCreateCourseStep2 = "de";
-$langCreateCourseStep1Title = "Información básica sobre el curso";
 $langCreateCourseStep2Title = "Información adicional sobre el curso";
 $langCreateCourseStep3Title = "Opciones del curso";
 $langcourse_objectives = "Objetivos del curso";

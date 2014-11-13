@@ -624,7 +624,6 @@ $langEnterMetadata = "You can enter additional information about your course fro
 $langCreateCourse = "Create new course wizard";
 $langCreateCourseStep = "Step";
 $langCreateCourseStep2 = "of";
-$langCreateCourseStep1Title = "Basic information about the course";
 $langCreateCourseStep2Title = "Additional information about the course";
 $langCreateCourseStep3Title = "Course Options";
 $langcourse_objectives = "Course objectives";

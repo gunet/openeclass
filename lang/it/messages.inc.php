@@ -582,7 +582,6 @@ $langEnterMetadata = "(Nota) puoi modificare varie impostazioni del corso attrav
 $langCreateCourse = "Creazione guidata di corso";
 $langCreateCourseStep = "Passo";
 $langCreateCourseStep2 = "da";
-$langCreateCourseStep1Title = "Informazioni fondamentali sul corso";
 $langCreateCourseStep2Title = "Informazioni supplementari sul corso";
 $langCreateCourseStep3Title = "Moduli e il tipo di accesso";
 $langcourse_objectives = "Obiettivi del corso";

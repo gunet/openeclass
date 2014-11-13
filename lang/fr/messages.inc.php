@@ -631,7 +631,6 @@ $langEnterMetadata = "N.B. vous pouvez modifier de differents paramètres du c
 $langCreateCourse = "Assistant de création de cours";
 $langCreateCourseStep = "Étape";
 $langCreateCourseStep2 = "de";
-$langCreateCourseStep1Title = "Informations générales sur le cours";
 $langCreateCourseStep2Title = "Informations supplémentaires sur le cours";
 $langCreateCourseStep3Title = "Sous-systèmes et type d'accès";
 $langcourse_objectives = "Objectifs du cours";
