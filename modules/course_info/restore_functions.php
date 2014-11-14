@@ -581,6 +581,17 @@ function comments_map_function(&$data, $maps) {
     return true;
 }
 
+function attendance_gradebook_activities_map_function(&$data, $maps) {
+    list($assignments_map, $exercise_map) = $maps;
+    $type = intval($data['module_auto_type']);
+    if ($type === 1) {
+        $data['module_auto_id'] = $assignments_map[$data['module_auto_id']];
+    } else if ($type === 2) {
+        $data['module_auto_id'] = $exercise_map[$data['module_auto_id']];
+    }
+    return true;
+}
+
 function get_tabledata_from_parsed($table, $backupData, $restoreHelper, $set = array()) {
     $backup = array();
     foreach ($backupData['query'] as $tableData) {

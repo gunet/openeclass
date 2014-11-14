@@ -339,6 +339,8 @@ if ($is_editor) {
         exit;
     } else {
         $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
                 <div id='operations_container'>" .
                 action_bar(array(
                     array('title' => $langCreate,
@@ -358,7 +360,9 @@ if ($is_editor) {
                         'url' => "modules_pool.php?course=$course_code",
                         'icon' => 'fa-book',
                         'level' => 'secondary'))) .
-                "</div>";
+                "</div>
+            </div>
+        </div>";
     }
 }
 
@@ -374,7 +378,7 @@ $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
     <tr>
-      <th colspan='2'><div align='left'>$langLearningPaths</div></th>\n";
+      <th><div align='left'>$langLearningPaths</div></th>\n";
 
 if ($is_editor) {
     // Titles for teachers
@@ -473,7 +477,6 @@ foreach ($result as $list) { // while ... learning path list
         }
 
         $tool_content .= "
-      <td width='20'>$play_button</td>
       <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
