@@ -1758,7 +1758,7 @@ tr.not_visible td:not(:last-child) a {
 }
 
 /* line 1652, ../SASS/inventory.scss */
-#leftnav {
+#leftnav .no-embed {
   top: -70px;
 }
 

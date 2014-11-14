@@ -111,8 +111,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
     }
 
-    $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
-    $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
+    $pageTitle = '';
+    $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
+    $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
 
     //get the left side menu from tools.php
@@ -123,14 +124,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $head_content .= $GLOBALS['head_content'];
     $t = new Template('template/' . $theme);
 
-    if ($is_mobile)
-        $t->set_file('fh', 'mtheme.html');
-    elseif ($is_embedonce)
-        //$t->set_file('fh', 'dtheme.html');
-        $t->set_file('fh', 'theme.html');
-    else
-        $t->set_file('fh', 'theme.html');
-
+    $t->set_file('fh', 'theme.html');
     $t->set_block('fh', 'mainBlock', 'main');
 
     // template_callback() can be defined in theme settings.php
@@ -139,6 +133,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
+
+    if ($is_embedonce) {
+        $t->set_block('mainBlock', 'breadCrumbs', 'delete');
+        $t->set_block('mainBlock', 'footerBlock', 'delete');
+        $t->set_block('mainBlock', 'headerBlock', 'delete');
+        $t->set_block('mainBlock', 'logoBlock', 'delete');
+        $t->set_block('mainBlock', 'titleRowBlock', 'delete');
+    } else {
+        $t->set_var('leftNavClass', 'no-embed');
+    }
 
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------
@@ -152,26 +156,25 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('img_base', $themeimg);
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    if(!$is_mobile) {
+    if (!$is_mobile and !$hideLeftNav) {
         if (is_array($toolArr)) {
             $group_opened = false;
             for ($i = 0; $i < $numOfToolGroups; $i ++) {
-                $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
-                $t->set_var('TOOL_GROUP_ID', $i);
-                if ($toolArr [$i] [0] ['type'] == 'none') {
-                    $t->set_var('ACTIVE_TOOLS', '&nbsp;');
-                    $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
-                    $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
-                } elseif ($toolArr [$i] [0] ['type'] == 'split') {
-                    $t->set_var('ACTIVE_TOOLS', '&nbsp;');
-                    $t->set_var('NAV_CSS_CAT_CLASS', 'split');
-                    $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
-                } elseif ($toolArr [$i] [0] ['type'] == 'text') {
-                    $t->set_var('ACTIVE_TOOLS', $toolArr [$i] [0] ['text']);
-                    $t->set_var('NAV_CSS_CAT_CLASS', 'category');
+                if (!$is_embedonce) {
+                    $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
+                    $t->set_var('TOOL_GROUP_ID', $i);
+                    if ($toolArr [$i] [0] ['type'] == 'none') {
+                        $t->set_var('ACTIVE_TOOLS', '&nbsp;');
+                        $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
+                    } elseif ($toolArr [$i] [0] ['type'] == 'split') {
+                        $t->set_var('ACTIVE_TOOLS', '&nbsp;');
+                        $t->set_var('NAV_CSS_CAT_CLASS', 'split');
+                    } elseif ($toolArr [$i] [0] ['type'] == 'text') {
+                        $t->set_var('ACTIVE_TOOLS', $toolArr [$i] [0] ['text']);
+                        $t->set_var('NAV_CSS_CAT_CLASS', 'category');
+                    }
                     $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
                 }
-
                 $t->set_var('GROUP_CLASS', '');
                 $numOfTools = count($toolArr[$i][1]);
                 for ($j = 0; $j < $numOfTools; $j++) {
@@ -213,126 +216,118 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             }
             $t->parse('leftNav', 'leftNavBlock', true);
         }
-        if (isset($hideLeftNav)) {
-            $t->clear_var('leftNav');
-            $t->set_var('CONTENT_MAIN_CSS', 'content_main_no_nav');
-        } elseif ($homePage && !isset($_SESSION['uid'])) {
-            $t->set_var('CONTENT_MAIN_CSS', 'content_main_first');
+    }
+
+    $t->set_var('URL_PATH', $urlAppend);
+    $t->set_var('SITE_NAME', $siteName);
+
+    //If there is a message to display, show it (ex. Session timeout)
+    if ($messages = Session::getMessages()) {
+        $t->set_var('EXTRA_MSG', $messages);
+    }
+
+    $t->set_var('TOOL_CONTENT', $toolContent);
+
+    // If we are on the login page we can define two optional variables
+    // in common.inc.php (to allow internationalizing messages)
+    // for extra content on the left and right bar.
+
+    if ($homePage && !isset($_SESSION['uid'])) {
+        $t->set_var('ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft);
+        $t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight);
+    }
+
+    if (isset($GLOBALS['leftNavExtras']))
+        $t->set_var('ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras']);
+
+    //if user is logged in display the logout option
+    if (isset($_SESSION['uid'])) {
+        $t->set_var('LANG_USER', $langUserHeader);
+        $t->set_var('USER_NAME', q($_SESSION['givenname']));
+        $t->set_var('USER_SURNAME', q($_SESSION['surname']));
+        $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
+        $t->set_var('USERNAME', q($_SESSION['uname']));
+        $t->set_var('LANG_LOGOUT', $langLogout);
+        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
+    $t->set_var('LOGGED_IN', 'true');
+    } else {
+        if (!get_config('dont_display_login_form')) {
+            $t->set_var('LANG_LOGOUT', $langLogin);
+            $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
         } else {
-            $t->set_var('CONTENT_MAIN_CSS', 'content_main');
+            $t->set_var('LOGOUT_LINK', '#');
         }
+    $t->set_var('LOGGED_IN', 'false');
+    }
+    // set the text and icon on the third bar (header)
+    if ($menuTypeID == 2) {
+        $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>');
+    } elseif ($menuTypeID == 3) {
+        $t->set_var('SECTION_TITLE', $langAdmin);
+    } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
+        $t->set_var('SECTION_TITLE', $langUserBriefcase);
+    } elseif ($menuTypeID > 0) {
+        $t->set_var('SECTION_TITLE', $langPersonalisedBriefcase);
+    } else {
+        $t->set_var('SECTION_TITLE', $langEclass);
+    }
 
-        $t->set_var('URL_PATH', $urlAppend);
-        $t->set_var('SITE_NAME', $siteName);
+    //set the appropriate search action for the searchBox form
+    if ($menuTypeID == 2) {
+        $searchAction = "search_incourse.php?all=true";
+        $searchAdvancedURL = $searchAction;
+    } elseif ($menuTypeID == 1 || $menuTypeID == 3) {
+        $searchAction = "search.php";
+        $searchAdvancedURL = $searchAction;
+    } else { //$menuType == 0
+        $searchAction = "search.php";
+        $searchAdvancedURL = $searchAction;
+    }
+    $mod_activation = '';
+    if ($is_editor and isset($course_code)) {
+        // link for activating / deactivating module
+        $module_id = current_module_id();
+        if (display_activation_link($module_id)) {
+            if (visible_module($module_id)) {
+                $message = $langDeactivate;
+                $mod_activation = "
 
-
-        //If there is a message to display, show it (ex. Session timeout)
-        if ($messages = Session::getMessages()) {
-            $t->set_var('EXTRA_MSG', $messages);
-        }
-
-        $t->set_var('TOOL_CONTENT', $toolContent);
-
-        // If we are on the login page we can define two optional variables
-        // in common.inc.php (to allow internationalizing messages)
-        // for extra content on the left and right bar.
-
-        if ($homePage && !isset($_SESSION['uid'])) {
-            $t->set_var('ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft);
-            $t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight);
-        }
-
-        if (isset($GLOBALS['leftNavExtras']))
-            $t->set_var('ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras']);
-
-        //if user is logged in display the logout option
-        if (isset($_SESSION['uid'])) {
-            $t->set_var('LANG_USER', $langUserHeader);
-            $t->set_var('USER_NAME', q($_SESSION['givenname']));
-            $t->set_var('USER_SURNAME', q($_SESSION['surname']));
-            $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
-            $t->set_var('USERNAME', q($_SESSION['uname']));
-            $t->set_var('LANG_LOGOUT', $langLogout);
-            $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
-	    $t->set_var('LOGGED_IN', 'true');
-        } else {
-            if (!get_config('dont_display_login_form')) {
-                $t->set_var('LANG_LOGOUT', $langLogin);
-                $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
+                <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
+                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
+                </a>";
             } else {
-                $t->set_var('LOGOUT_LINK', '#');
+                $message = $langActivate;
+                $mod_activation = "
+
+                <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
+                    <i class='fa fa-check-square tiny-icon tiny-icon-green' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
+                </a>";
             }
-	    $t->set_var('LOGGED_IN', 'false');
         }
-        // set the text and icon on the third bar (header)
-        if ($menuTypeID == 2) {
-            $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>');
-        } elseif ($menuTypeID == 3) {
-            $t->set_var('SECTION_TITLE', $langAdmin);
-        } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
-            $t->set_var('SECTION_TITLE', $langUserBriefcase);
-        } elseif ($menuTypeID > 0) {
-            $t->set_var('SECTION_TITLE', $langPersonalisedBriefcase);
+    }
+
+    $t->set_var('SEARCH_ACTION', $searchAction);
+    $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
+    $t->set_var('SEARCH_TITLE', $langSearch);
+    $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
+
+    $t->set_var('TOOL_NAME', $nameTools);
+
+    if ($is_editor) {
+        $t->set_var('ACTIVATE_MODULE', $mod_activation);
+    }
+
+    if (!$t->get_var('LANG_SELECT')) {
+        if ($menuTypeID != 2) {
+            $t->set_var('LANG_SELECT', lang_selections());
+            $t->set_var('LANG_SELECT_TITLE', "title='$langChooseLang'");
         } else {
-            $t->set_var('SECTION_TITLE', $langEclass);
+            $t->set_var('LANG_SELECT', '');
         }
+    }
 
-        //set the appropriate search action for the searchBox form
-        if ($menuTypeID == 2) {
-            $searchAction = "search_incourse.php?all=true";
-            $searchAdvancedURL = $searchAction;
-        } elseif ($menuTypeID == 1 || $menuTypeID == 3) {
-            $searchAction = "search.php";
-            $searchAdvancedURL = $searchAction;
-        } else { //$menuType == 0
-            $searchAction = "search.php";
-            $searchAdvancedURL = $searchAction;
-        }
-        $mod_activation = '';
-        if ($is_editor and isset($course_code)) {
-            // link for activating / deactivating module
-            $module_id = current_module_id();
-            if (display_activation_link($module_id)) {
-                if (visible_module($module_id)) {
-                    $message = $langDeactivate;
-                    $mod_activation = "
-
-                    <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                        <i class='fa fa-minus-square tiny-icon tiny-icon-red' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                    </a>";
-                } else {
-                    $message = $langActivate;
-                    $mod_activation = "
-
-                    <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                        <i class='fa fa-check-square tiny-icon tiny-icon-green' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                    </a>";
-                }
-            }
-        }
-
-        $t->set_var('SEARCH_ACTION', $searchAction);
-        $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
-        $t->set_var('SEARCH_TITLE', $langSearch);
-        $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
-
-        $t->set_var('TOOL_NAME', $nameTools);
-
-        if ($is_editor) {
-            $t->set_var('ACTIVATE_MODULE', $mod_activation);
-        }
-
-        if (!$t->get_var('LANG_SELECT')) {
-            if ($menuTypeID != 2) {
-                $t->set_var('LANG_SELECT', lang_selections());
-                $t->set_var('LANG_SELECT_TITLE', "title='$langChooseLang'");
-            } else {
-                $t->set_var('LANG_SELECT', '');
-            }
-        }
-
-        //START breadcrumb AND page title
-
+    // breadcrumb and page title
+    if (!$is_embedonce and !$is_mobile) {
         if (!$page_navi)
             $page_navi = $navigation;
         if (!$page_name)
@@ -420,124 +415,125 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
             $t->parse('breadCrumbEnd', 'breadCrumbEndBlock', true);
         }
-
-        //END breadcrumb --------------------------------
-
-
-        $t->set_var('PAGE_TITLE', q($pageTitle));
-
-        // Add the optional mobile-specific css if necessarry
-        if ($is_mobile) {
-            $t->set_var('EXTRA_CSS', "<link href=\"{$urlAppend}template/${theme}${tool_css}/theme_mobile.css\" rel=\"stylesheet\" type=\"text/css\" >");
-        }
-
-        // Add the optional embed-specific css if necessarry
-        if ($is_embedonce) {
-            $t->set_var('EXTRA_CSS', "<link href=\"{$urlAppend}template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
-        }
-
-        // Add the optional tool-specific css of the tool, if it's set
-        if (isset($tool_css)) {
-            $t->set_var('TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >");
-        }
-
-        $t->set_var('TOOL_PATH', $urlAppend);
-
-        if (isset($body_action)) {
-            $t->set_var('BODY_ACTION', $body_action);
-        }
-
-        $t->set_var('LANG_SEARCH', $langSearch);
-
-        // display role switch button if needed
-        if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
-            if ($is_editor) {
-                $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewEnable);
-            } else {
-                $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewDisable);
-                $t->set_var('STUDENT_VIEW_CLASS', 'btn-toggle-on');
-            }
-            $t->set_var('STUDENT_VIEW_URL', $urlAppend . 'main/student_view.php?course=' . $course_code);
-        } else {
-            $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-        }
-
-        // if $require_help is true (set by each tool) display the help link
-        if ($require_help == true) {
-            if (isset($require_current_course) and !$is_editor) {
-                $helpTopic .= '_student';
-            } 
-            $head_content .= "
-            <script>
-            $(function() {
-                $('#help-btn').click(function(e) {
-                    e.preventDefault();
-                    $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
-                });
-            });
-            </script>
-            ";
-                    
-            $help_link_icon = "
-
-            <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
-                <i class='fa fa-question-circle tiny-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
-            </a>";
-
-            $t->set_var('HELP_LINK_ICON', $help_link_icon);
-            $t->set_var('LANG_HELP', $langHelp);
-        } else {
-            $t->set_var('HELP_LINK_ICON', '');
-            $t->set_var('LANG_HELP', '');
-        }
-        
-        if (isset($head_content)) {
-            $t->set_var('HEAD_EXTRAS', $head_content);
-        }
-        
-        if (defined('RSS')) {
-            $t->set_var('RSS_LINK_ICON', "
-
-                <a href='$urlAppend" . RSS . "'>
-                    <i class='fa fa-rss-square tiny-icon tiny-icon-rss' rel='tooltip' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
-                </a>
-
-
-            ");
-        }
-
-        if ($perso_tool_content) {
-            $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
-            $t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
-            $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
-            $t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
-            $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
-            $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
-            $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-            
-            $t->set_var('LESSON_CONTENT', $lesson_content);
-            $t->set_var('ASSIGN_CONTENT', $assigns_content);
-            $t->set_var('DOCS_CONTENT', $docs_content);
-            $t->set_var('AGENDA_CONTENT', $agenda_content);
-            $t->set_var('FORUM_CONTENT', $forum_content);
-            $t->set_var('URL_PATH', $urlAppend);
-            $t->set_var('TOOL_PATH', $urlAppend);
-            $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
-        }
-
-        $t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
-
-        // Remove tool title block from selected pages
-        if (defined('HIDE_TOOL_TITLE')) {
-            $t->set_block('mainBlock', 'toolTitleBlock', 'toolTitleBlockVar');
-            $t->set_var('toolTitleBlockVar', '');
-        }
-
-        //	At this point all variables are set and we are ready to send the final output
-        //	back to the browser
-        $t->parse('main', 'mainBlock', false);
-        $t->pparse('Output', 'fh');
+    } else {
+        $t->set_block('mainBlock', 'breadCrumbs', 'delete');
     }
+
+    //END breadcrumb --------------------------------
+
+    $t->set_var('PAGE_TITLE', q($pageTitle));
+
+    if ($is_mobile) {
+        $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
+    } else {
+        $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
+    }
+    // Add the optional embed-specific css if necessarry
+    if ($is_embedonce) {
+        $t->set_var('EXTRA_CSS', "<link href=\"{$urlAppend}template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
+    }
+
+    // Add the optional tool-specific css of the tool, if it's set
+    if (isset($tool_css)) {
+        $t->set_var('TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >");
+    }
+
+    $t->set_var('TOOL_PATH', $urlAppend);
+
+    if (isset($body_action)) {
+        $t->set_var('BODY_ACTION', $body_action);
+    }
+
+    $t->set_var('LANG_SEARCH', $langSearch);
+
+    // display role switch button if needed
+    if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
+        if ($is_editor) {
+            $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewEnable);
+        } else {
+            $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewDisable);
+            $t->set_var('STUDENT_VIEW_CLASS', 'btn-toggle-on');
+        }
+        $t->set_var('STUDENT_VIEW_URL', $urlAppend . 'main/student_view.php?course=' . $course_code);
+    } else {
+        $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+    }
+
+    // if $require_help is true (set by each tool) display the help link
+    if ($require_help == true) {
+        if (isset($require_current_course) and !$is_editor) {
+            $helpTopic .= '_student';
+        } 
+        $head_content .= "
+        <script>
+        $(function() {
+            $('#help-btn').click(function(e) {
+                e.preventDefault();
+                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+            });
+        });
+        </script>
+        ";
+                
+        $help_link_icon = "
+
+        <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
+            <i class='fa fa-question-circle tiny-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
+        </a>";
+
+        $t->set_var('HELP_LINK_ICON', $help_link_icon);
+        $t->set_var('LANG_HELP', $langHelp);
+    } else {
+        $t->set_var('HELP_LINK_ICON', '');
+        $t->set_var('LANG_HELP', '');
+    }
+    
+    if (isset($head_content)) {
+        $t->set_var('HEAD_EXTRAS', $head_content);
+    }
+    
+    if (defined('RSS')) {
+        $t->set_var('RSS_LINK_ICON', "
+
+            <a href='$urlAppend" . RSS . "'>
+                <i class='fa fa-rss-square tiny-icon tiny-icon-rss' rel='tooltip' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
+            </a>
+
+
+        ");
+    }
+
+    if ($perso_tool_content) {
+        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
+        $t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
+        $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
+        $t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
+        $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
+        $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
+        $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
+        
+        $t->set_var('LESSON_CONTENT', $lesson_content);
+        $t->set_var('ASSIGN_CONTENT', $assigns_content);
+        $t->set_var('DOCS_CONTENT', $docs_content);
+        $t->set_var('AGENDA_CONTENT', $agenda_content);
+        $t->set_var('FORUM_CONTENT', $forum_content);
+        $t->set_var('URL_PATH', $urlAppend);
+        $t->set_var('TOOL_PATH', $urlAppend);
+        $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
+    }
+
+    $t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
+
+    // Remove tool title block from selected pages
+    if (defined('HIDE_TOOL_TITLE')) {
+        $t->set_block('mainBlock', 'toolTitleBlock', 'toolTitleBlockVar');
+        $t->set_var('toolTitleBlockVar', '');
+    }
+
+    //	At this point all variables are set and we are ready to send the final output
+    //	back to the browser
+    $t->parse('main', 'mainBlock', false);
+    $t->pparse('Output', 'fh');
 }
 
 /**
