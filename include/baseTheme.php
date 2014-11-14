@@ -126,7 +126,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if ($is_mobile)
         $t->set_file('fh', 'mtheme.html');
     elseif ($is_embedonce)
-        $t->set_file('fh', 'dtheme.html');
+        //$t->set_file('fh', 'dtheme.html');
+        $t->set_file('fh', 'theme.html');
     else
         $t->set_file('fh', 'theme.html');
 
@@ -151,66 +152,67 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('img_base', $themeimg);
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    if (is_array($toolArr)) {
-        $group_opened = false;
-        for ($i = 0; $i < $numOfToolGroups; $i ++) {
-            $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
-            $t->set_var('TOOL_GROUP_ID', $i);
-            if ($toolArr [$i] [0] ['type'] == 'none') {
-                $t->set_var('ACTIVE_TOOLS', '&nbsp;');
-                $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
-                $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
-            } elseif ($toolArr [$i] [0] ['type'] == 'split') {
-                $t->set_var('ACTIVE_TOOLS', '&nbsp;');
-                $t->set_var('NAV_CSS_CAT_CLASS', 'split');
-                $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
-            } elseif ($toolArr [$i] [0] ['type'] == 'text') {
-                $t->set_var('ACTIVE_TOOLS', $toolArr [$i] [0] ['text']);
-                $t->set_var('NAV_CSS_CAT_CLASS', 'category');
-                $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
-            }
-
-            $t->set_var('GROUP_CLASS', '');
-            $numOfTools = count($toolArr[$i][1]);
-            for ($j = 0; $j < $numOfTools; $j++) {
-                $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
-                $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
-                if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
-                        strpos($toolArr[$i][3][$j], 'external_link') === 0) {
-                    $t->set_var('TOOL_ATTR', ' target="_blank"');
-                } else {
-                    $t->set_var('TOOL_ATTR', '');
+    if(!$is_mobile) {
+        if (is_array($toolArr)) {
+            $group_opened = false;
+            for ($i = 0; $i < $numOfToolGroups; $i ++) {
+                $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
+                $t->set_var('TOOL_GROUP_ID', $i);
+                if ($toolArr [$i] [0] ['type'] == 'none') {
+                    $t->set_var('ACTIVE_TOOLS', '&nbsp;');
+                    $t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
+                    $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
+                } elseif ($toolArr [$i] [0] ['type'] == 'split') {
+                    $t->set_var('ACTIVE_TOOLS', '&nbsp;');
+                    $t->set_var('NAV_CSS_CAT_CLASS', 'split');
+                    $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
+                } elseif ($toolArr [$i] [0] ['type'] == 'text') {
+                    $t->set_var('ACTIVE_TOOLS', $toolArr [$i] [0] ['text']);
+                    $t->set_var('NAV_CSS_CAT_CLASS', 'category');
+                    $t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock', false);
                 }
 
-                $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
-                $img_class = basename($toolArr [$i] [3] [$j], ".png");
-                $img_class = preg_replace('/_(on|off)$/', '', $img_class);
-                if (isset($theme_settings['icon_map'][$img_class])) {
-                    $img_class = $theme_settings['icon_map'][$img_class];
+                $t->set_var('GROUP_CLASS', '');
+                $numOfTools = count($toolArr[$i][1]);
+                for ($j = 0; $j < $numOfTools; $j++) {
+                    $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
+                    $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
+                    if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
+                            strpos($toolArr[$i][3][$j], 'external_link') === 0) {
+                        $t->set_var('TOOL_ATTR', ' target="_blank"');
+                    } else {
+                        $t->set_var('TOOL_ATTR', '');
+                    }
+
+                    $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
+                    $img_class = basename($toolArr [$i] [3] [$j], ".png");
+                    $img_class = preg_replace('/_(on|off)$/', '', $img_class);
+                    if (isset($theme_settings['icon_map'][$img_class])) {
+                        $img_class = $theme_settings['icon_map'][$img_class];
+                    }
+                    $t->set_var('IMG_CLASS', $img_class);
+                    $module_dir = module_path($toolArr[$i][2][$j]);
+                    if ($module_dir == $current_module_dir) {
+                        $t->set_var('TOOL_CLASS', get_theme_class('tool_active'));
+                        $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
+                        $group_opened = true;
+                    } else {
+                        $t->set_var('TOOL_CLASS', '');
+                    }
+                    $t->parse('leftNavLink', 'leftNavLinkBlock', true);
                 }
-                $t->set_var('IMG_CLASS', $img_class);
-                $module_dir = module_path($toolArr[$i][2][$j]);
-                if ($module_dir == $current_module_dir) {
-                    $t->set_var('TOOL_CLASS', get_theme_class('tool_active'));
+                if (!$group_opened and
+                    ($current_module_dir == '/' or
+                     $current_module_dir == 'course_home' or
+                     $current_module_dir == 'main/portfolio.php')) {
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                     $group_opened = true;
-                } else {
-                    $t->set_var('TOOL_CLASS', '');
                 }
-                $t->parse('leftNavLink', 'leftNavLinkBlock', true);
+                $t->parse('leftNavCategory', 'leftNavCategoryBlock', true);
+                $t->clear_var('leftNavLink'); //clear inner block
             }
-            if (!$group_opened and
-                ($current_module_dir == '/' or
-                 $current_module_dir == 'course_home' or
-                 $current_module_dir == 'main/portfolio.php')) {
-                $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
-                $group_opened = true;
-            }
-            $t->parse('leftNavCategory', 'leftNavCategoryBlock', true);
-            $t->clear_var('leftNavLink'); //clear inner block
+            $t->parse('leftNav', 'leftNavBlock', true);
         }
-        $t->parse('leftNav', 'leftNavBlock', true);
-
         if (isset($hideLeftNav)) {
             $t->clear_var('leftNav');
             $t->set_var('CONTENT_MAIN_CSS', 'content_main_no_nav');
