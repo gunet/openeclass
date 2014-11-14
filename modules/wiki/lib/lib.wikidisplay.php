@@ -266,24 +266,23 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'icon' => 'fa-reply',
               'level' => 'primary-label',)
     ));
-    
-    $form .= '   <form method="POST" id="wikiProperties" action="' . $script . '">' . "\n"
-            . '   <fieldset>' . "\n"
-            . '      <legend>' . $langWikiDescriptionForm . '</legend>' . "\n"
-            . '      <table width="99%" class="tbl">' . "\n"
-            . '      <tr>' . "\n"
-            . '        <th>' . $langWikiTitle . ' :</th>' . "\n"
-            . '        <td>' . "\n"
-            . '        <input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
-            . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
-            . '        <input type="hidden" name="gid" value="' . $groupId . '" />' . "\n"
-            . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . q($title) . '" />' . "\n"
-            . '        </td>' . "\n"
-            . '      </tr>' . "\n"
-            . '      <tr>' . "\n"
-            . '        <th>' . $langWikiDescription . ' :</th>' . "\n"
-            . '        <td>' . "\n"
-            . '        <textarea id="wikiDesc" name="desc" cols="50" rows="5">' . q($desc) . '</textarea>' . "\n";
+                
+    $form .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
+                    <fieldset>
+                        <input type='hidden' name='wikiId' value='$wikiId'>
+                        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->
+                        <input type='hidden' name='gid' value='$groupId'>                             
+                        <div class='form-group'>
+                            <label for='title' class='col-sm-2 control-label'>$langWikiTitle:</label>
+                            <div class='col-sm-10'>
+                                <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='wikiDesc' class='col-sm-2 control-label'>".$langWikiDescription.":</label>
+                            <div class='col-sm-10'>
+                                <textarea id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
 
 
     /*
@@ -350,32 +349,40 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 // atkyritsis
 // hardwiring
     if ($groupId == 0) {
-        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[course_edit]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[course_create]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_read]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+        $form .= "
+                <input type='hidden' name='acl[course_read]' value='on'>
+                <input type='hidden' name='acl[course_edit]' value='on'>
+                <input type='hidden' name='acl[course_create]' value='on'>
+                <input type='hidden' name='acl[other_read]' value='on'>
+                <input type='hidden' name='acl[other_edit]' value='off'>
+                <input type='hidden' name='acl[other_create]' value='off'>";
     } else {//default values for group wikis
-        $form .= '<input type="hidden" name="acl[group_read]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[group_edit]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[group_create]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
-        $form .= '<input type="hidden" name="acl[course_edit]" value="off" />' . "\n";
-        $form .= '<input type="hidden" name="acl[course_create]" value="off" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_read]" value="off" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
-        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+        $form .= "
+                <input type='hidden' name='acl[group_read]' value='on'>
+                <input type='hidden' name='acl[group_edit]' value='on'>
+                <input type='hidden' name='acl[group_create]' value='on'>
+                <input type='hidden' name='acl[course_read]' value='on'>
+                <input type='hidden' name='acl[course_edit]' value='off'>
+                <input type='hidden' name='acl[course_create]' value='off'>
+                <input type='hidden' name='acl[other_read]' value='off'>
+                <input type='hidden' name='acl[other_edit]' value='off'>
+                <input type='hidden' name='acl[other_create]' value='off'>";
     }
 
 // hardwiring over
     //$form .= '<div style="padding: 10px">' . "\n" ;
 
-    $form .= '</td></tr><tr><th>&nbsp;</th><td>';
-
-    $form .= '<input class="btn btn-primary" type="submit" name="action[exEdit]" value="' . $langSave . '" />';
-
-    $form .= '</td></tr></table></fieldset></form>';
+    $form .= "                  </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                    <input class='btn btn-primary' type='submit' name='action[exEdit]' value='$langSave'>
+                                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>";
 
     return $form;
 }

@@ -196,28 +196,14 @@ switch ($action) {
         break;
     }
     // execute delete
-    case "exDelete": {
+    case "exDelete":
             if ($wikiStore->wikiIdExists($wikiId)) {
                 $wiki = $wikiStore->deleteWiki($wikiId);
+                Session::Messages($langWikiDeletionSucceed, 'alert-success');
             } else {
-                $message = $langWikiInvalidWikiId;
-                $action = "error";
-                $style = "caution";
-            }
-
-            if ($groupId === 0) {
-                $wikiList = $wikiStore->getCourseWikiList();
-            } else {
-                $wikiList = $wikiStore->getWikiListByGroup($groupId);
-            }
-
-            $message = $langWikiDeletionSucceed;
-            $style = "success";
-
-            $action = 'list';
-
-            break;
-        }
+                Session::Messages($langWikiInvalidWikiId);
+            }            
+            redirect_to_home_page("modules/wiki/index.php?course=$course_code");        
     // request edit
     case "rqEdit": {
             if ($wikiId == 0) {
@@ -368,6 +354,7 @@ switch ($action) {
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId &amp;action=rqEdit",
                               'icon' => 'fa-plus-circle',
                               'level' => 'primary-label',
+                              'button-class' => 'btn-success',
                               'show' => !isset($_GET['action']))
                         ));
             }
