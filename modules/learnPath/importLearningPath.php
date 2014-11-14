@@ -845,8 +845,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     // finally : insert in learning path
                     // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                     $insertedLPMid[$item['itemIdentifier']]['LPMid'] = Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
-                            (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`)
-                            VALUES (?d, ?d, ?d, ?d, ?d)", $tempPathId, $insertedModule_id[$i], $rank, $visibility, $parent)->lastInsertID;
+                            (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`, `specificComment`)
+                            VALUES (?d, ?d, ?d, ?d, ?d, '')", $tempPathId, $insertedModule_id[$i], $rank, $visibility, $parent)->lastInsertID;
                     $insertedLPMid[$item['itemIdentifier']]['rank'] = 1;
 
                     if (!$insertedLPMid[$item['itemIdentifier']]['LPMid']) {
@@ -1108,14 +1108,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         <div class='row'>
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <fieldset>
                             <legend>$langImport</legend>
                             <div class='form-group'>
                                 <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
                                 <div class='col-sm-10'>
                                     <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
-                                    <input id='uploadedPackage' class='form-control' type='file' name='uploadedPackage'>
+                                    <input id='uploadedPackage' type='file' name='uploadedPackage'>
                                     <span class='smaller'>$langLearningPathUploadFile</span>
                                     <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
                                 </div>
