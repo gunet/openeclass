@@ -202,8 +202,13 @@ switch ($action) {
                 Session::Messages($langWikiDeletionSucceed, 'alert-success');
             } else {
                 Session::Messages($langWikiInvalidWikiId);
-            }            
-            redirect_to_home_page("modules/wiki/index.php?course=$course_code");        
+            }
+
+            if ($groupId === 0) {
+                redirect_to_home_page("modules/wiki/index.php?course=$course_code");
+            } else {
+                redirect_to_home_page("modules/wiki/index.php?course=$course_code&gid=$groupId");
+            }			
     // request edit
     case "rqEdit": {
             if ($wikiId == 0) {
