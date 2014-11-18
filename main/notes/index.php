@@ -117,11 +117,6 @@ if (isset($message) && $message) {
 
 /* display form */
 if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
-    $tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
-    <fieldset>
-    <legend>$langNote</legend>
-    <table class='tbl' width='100%'>";
     if (isset($_GET['modify'])) {
         $langAdd = $nameTools = $langModifNote;
     } else {
@@ -141,30 +136,38 @@ if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
     if (!isset($type_selected))
         $type_selected = null;
     if (!isset($object_selected))
-        $object_selected = null;
-
+        $object_selected = null;    
     $tool_content .= "
-    <tr><th>$langNoteTitle:</th></tr>
-    <tr>
-      <td><input type='text' name='newTitle' value='$titleToModify' size='50' /></td>
-    </tr>
-    <tr><th>$langNoteBody:</th></tr>
-    <tr>
-      <td>" . rich_text_editor('newContent', 4, 20, $contentToModify) . "</td>
-    </tr>
-    <tr><th>$langReferencedObject:</th></tr>
-    <tr>
-      <td>" .
-            References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
-            . "</td>
-    </tr>
-    <tr>
-      <td class='right'><input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'></td>
-    </tr>
-    </table>
+    <div class='form-wrapper'>
+    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
+    <fieldset>
+    <div class='form-group'>
+      <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
+      <div class='col-sm-10'>
+        <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . q($titleToModify) . "' placeholder='$langNoteTitle'>
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='newContent' class='col-sm-2 control-label'>$langNoteBody:</label>
+      <div class='col-sm-10'>
+        " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='refobjgentype' class='col-sm-2 control-label'>$langReferencedObject:</label>
+      <div class='col-sm-10'>
+        ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
+      </div>
+    </div>
+    <div class='form-group'>
+      <div class='col-sm-10 col-sm-offset-2'>
+        <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
+        <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+      </div>
+    </div>      
     <input type='hidden' name='id' value='$noteToModify' />
     </fieldset>
-    </form>";
+    </form></div>";
 } else {
     /* display actions toolbar */
     $tool_content .= "
@@ -198,33 +201,26 @@ $bottomNote = $noteNumber = count($notelist);
 
 $tool_content .= "
         <script type='text/javascript' src='../../modules/auth/sorttable.js'></script>
-        <table width='100%' class='sortable' id='t1'>";
+        <div class='table-responsive'>
+            <table class='table-default'>";
 if ($noteNumber > 0) {
-    $tool_content .= "<tr><th colspan='2'>$langNotes</th>";
-    $tool_content .= "<th width='60' class='text'>$langActions</th>";
+    $tool_content .= "<tr><th>$langNotes</th>";
+    $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
     $tool_content .= "</tr>";
 }
-$k = 0;
 if ($notelist)
     foreach ($notelist as $note) {
         $content = standard_text_escape($note->content);
         $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
-        if ($k % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $tool_content .= "<td width='16' valign='top'>
-			<img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-			<td><b>";
+        $tool_content .= "<tr><td><b>";
         if (empty($note->title)) {
             $tool_content .= $langNoteNoTitle;
         } else {
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'>" . q($note->title) . "</a>";
         }
-        $tool_content .= "</b><div class='smaller'>" . nice_format($note->date_time) . "</div>";
+        $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
         if (!is_null($note->reference_obj_type)) {
-            $tool_content .= "<div class='smaller'>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</div>";
+            $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
         if (isset($_GET['nid'])) {
             $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
@@ -235,7 +231,7 @@ if ($notelist)
         }
         $tool_content .= "</td>";
 
-        $tool_content .= "<td width='3' class='right'>" .
+        $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
                     array('title' => $langModify,
                         'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
@@ -244,7 +240,7 @@ if ($notelist)
                         'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
                         'confirm' => $langSureToDelNote,
                         'class' => 'delete',
-                        'icon' => 'fa-gear'),
+                        'icon' => 'fa-times'),
                     array('title' => $langMove . " " . $langUp,
                         'url' => "$_SERVER[SCRIPT_NAME]?up=$note->id",
                         'show' => $iterator != 1,
@@ -258,9 +254,8 @@ if ($notelist)
 
         $tool_content .= "</tr>";
         $iterator ++;
-        $k++;
     } // end of while
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 if ($noteNumber < 1) {
     $no_content = true;
