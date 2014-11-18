@@ -73,9 +73,6 @@ if (!isset($_REQUEST['wikiId'])) {
     exit();
 }
 
-// set admin mode
-$is_allowedToAdmin = $is_editor;
-
 // Wiki specific classes and libraries
 require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
@@ -156,24 +153,24 @@ $is_allowedToCreate = false;
 if ($groupId != 0 && $is_groupAllowed) {
     // group_context
     if (is_array($accessControlList)) {
-        $is_allowedToRead = $is_allowedToAdmin || ( $is_groupMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
-        $is_allowedToEdit = $is_allowedToAdmin || ( $is_groupMember && WikiAccessControl::isAllowedToEditPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToEditPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToEditPage($accessControlList, 'other');
-        $is_allowedToCreate = $is_allowedToAdmin || ( $is_groupMember && WikiAccessControl::isAllowedToCreatePage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToCreatePage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'other');
+        $is_allowedToRead = $is_editor || ( $is_groupMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
+        $is_allowedToEdit = $is_editor || ( $is_groupMember && WikiAccessControl::isAllowedToEditPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToEditPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToEditPage($accessControlList, 'other');
+        $is_allowedToCreate = $is_editor || ( $is_groupMember && WikiAccessControl::isAllowedToCreatePage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToCreatePage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'other');
     }
 } else {
     // course context
     if (is_array($accessControlList)) {
         // course member
         if ($is_courseMember) {
-            $is_allowedToRead = $is_allowedToAdmin || WikiAccessControl::isAllowedToReadPage($accessControlList, 'course');
-            $is_allowedToEdit = $is_allowedToAdmin || WikiAccessControl::isAllowedToEditPage($accessControlList, 'course');
-            $is_allowedToCreate = $is_allowedToAdmin || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'course');
+            $is_allowedToRead = $is_editor || WikiAccessControl::isAllowedToReadPage($accessControlList, 'course');
+            $is_allowedToEdit = $is_editor || WikiAccessControl::isAllowedToEditPage($accessControlList, 'course');
+            $is_allowedToCreate = $is_editor || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'course');
         }
         // not a course member
         else {
-            $is_allowedToRead = $is_allowedToAdmin || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
-            $is_allowedToEdit = $is_allowedToAdmin || WikiAccessControl::isAllowedToEditPage($accessControlList, 'other');
-            $is_allowedToCreate = $is_allowedToAdmin || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'other');
+            $is_allowedToRead = $is_editor || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
+            $is_allowedToEdit = $is_editor || WikiAccessControl::isAllowedToEditPage($accessControlList, 'other');
+            $is_allowedToCreate = $is_editor || WikiAccessControl::isAllowedToCreatePage($accessControlList, 'other');
         }
     }
 }

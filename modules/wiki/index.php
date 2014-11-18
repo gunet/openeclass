@@ -55,8 +55,7 @@ $_gid = isset($_REQUEST['gid']) ? $_REQUEST['gid'] : null;
 
 //check if groups are enabled for this course
 //if not user will be shown the course wiki page
-$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?d";
-$result = Database::get()->querySingle($sql, $course_id);
+$result = Database::get()->querySingle("SELECT `wiki` FROM `group_properties` WHERE course_id = ?d", $course_id);
 if (is_object($result) && $result->wiki == 1) {
     $is_groupAllowed = true;
 } else {
@@ -69,7 +68,6 @@ $nameTools = $langWiki;
 // display mode
 // check and set user access level for the tool
 // set admin mode and groupId
-$is_allowedToAdmin = $is_editor;
 
 if ($_gid && $_gid != 0 && $is_groupAllowed) {
     // group context
@@ -99,7 +97,7 @@ require_once 'lib/lib.wikidisplay.php';
 
 // filter request variables
 // filter allowed actions using user status
-if ($is_allowedToAdmin) {
+if ($is_editor) {
     $valid_actions = array('list', 'rqEdit', 'exEdit', 'exDelete', 'exExport');
 } else {
     $valid_actions = array('list');
@@ -348,7 +346,7 @@ switch ($action) {
                 $tool_content .= "<div class='alert alert-success'>$message</div>";
             }
 
-            if ($is_allowedToAdmin) {
+            if ($is_editor) {
                 $tool_content .= action_bar(array(
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
@@ -370,24 +368,24 @@ switch ($action) {
                 $tool_content .= '<div class="row"><div class="col-md-12"><div class="table-responsive"><table class="table-default">' . "\n";
 
                 // if admin, display title, edit and delete
-                if ($is_allowedToAdmin) {
-                    $tool_content .= '' . "\n"
-                            . '        <tr>' . "\n"
-                            . '          <th class = "text-center">' . $langTitle . '</th>' . "\n"
-                            . '          <th class = "text-center">' . $langDescription . '</th>' . "\n"
-                            . '          <th class = "text-center">' . $langPages . '</th>' . "\n"
-                            . '          <th class = "text-center">' .icon('fa-gears'). '</th>'
-                            . '        </tr>' . "\n";
+                if ($is_editor) {
+                    $tool_content .= "
+                                    <tr>
+                                        <th class='text-left'>$langTitle</th>
+                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langPages</th>
+                                        <th class='text-center'>" .icon('fa-gears'). "</th>
+                                    </tr>";
                 }
                 // else display title only
                 else {
-                    $tool_content .= '' . "\n"
-                            . '        <tr>' . "\n"
-                            . '          <th class = "text-center">' . $langTitle . '</th>' . "\n"
-                            . '          <th class = "text-center">' . $langDescription . '</th>' . "\n"
-                            . '          <th class = "text-center">' . $langWikiNumberOfPages . '</th>' . "\n"
-                            . '          <th class = "text-center">' . $langWikiRecentChanges . '</th>'
-                            . '        </tr>' . "\n";
+                    $tool_content .= "
+                                    <tr>
+                                        <th class='text-left'>$langTitle</th>
+                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langWikiNumberOfPages</th>
+                                        <th class = 'text-center'>$langWikiRecentChanges</th>
+                                    </tr>";
                 }
                 $k = 0;
                 foreach ($wikiList as $entry) {
@@ -408,15 +406,15 @@ switch ($action) {
                                 . $entry->description . ''
                         ;
                     }
-                    $tool_content .= '</td>' . "\n";
-                    $tool_content .= '<td>';
-                    $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId=' . $entry->id . '&amp;action=all">';
-                    $tool_content .= $wikiStore->getNumberOfPagesInWiki($entry->id);
-                    $tool_content .= '</a>';
-                    $tool_content .= '</td>' . "\n";
+                    $tool_content .= "  </td>
+                                        <td>
+                                            <a href='page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=all'>
+                                                " . $wikiStore->getNumberOfPagesInWiki($entry->id) . "
+                                            </a>
+                                        </td>";
 
 
-                    if ($is_allowedToAdmin) {
+                    if ($is_editor) {
                         $tool_content.= "<td class='option-btn-cell'>";
                         $tool_content .=
                                  action_button(array(
