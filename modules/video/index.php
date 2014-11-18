@@ -119,7 +119,7 @@ hContent;
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary')));
+                      'level' => 'primary-label')));
         }
     }
         
@@ -351,28 +351,28 @@ hContent;
                         $tool_content .= "<div class='form-group'>
                         <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
                           <input type='hidden' name='id' value=''>
-                          <div class='col-sm-10'><input type='text' name='URL'></div>
+                          <div class='col-sm-10'><input class='form-control' type='text' name='URL'></div>
                       </div>";
                 }
                 $tool_content .= "<div class='form-group'>
                     <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
-                    <div class='col-sm-10'><input type='text' name='title' size='55'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='title' size='55'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Desc' class='col-sm-2 control-label'>$langDescr:</label>
-                    <div class='col-sm-10'><textarea rows='3' name='description' cols='52'></textarea></div>
+                    <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'></textarea></div>
                 </div>
                 <div class='form-group'>
                     <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
-                    <div class='col-sm-10'><input type='text' name='creator' value='$nick'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='creator' value='$nick'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Publisher' class='col-sm-2 control-label'>$langpublisher:</label>
-                    <div class='col-sm-10'><input type='text' name='publisher' value='$nick'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='publisher' value='$nick'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Date' class='col-sm-2 control-label'>$langDate:</label>
-                    <div class='col-sm-10'><input type='text' name='date' value='" . date('Y-m-d G:i') . "'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='date' value='" . date('Y-m-d G:i') . "'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
@@ -438,19 +438,19 @@ hContent;
             }            
             $tool_content .= "<div class='form-group'>                
                   <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
-                  <div class='col-sm-10'><input type='text' name='title' value= '" . q($title) . "'></div>
+                  <div class='col-sm-10'><input class='form-control' type='text' name='title' value= '" . q($title) . "'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Description' class='col-sm-2 control-label'>$langDescr:</label>
-                    <div class='col-sm-10'><textarea rows='3' name='description' cols='52'>" . q($description) . "</textarea></div>
+                    <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'>" . q($description) . "</textarea></div>
                 </div>
                 <div class='form-group'>
                     <label for='Creator' class='col-sm-2 control-label'>$langcreator:</label>
-                    <div class='col-sm-10'><input type='text' name='creator' value='" . q($creator). "'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='creator' value='" . q($creator). "'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Publisher' class='col-sm-2 control-label'>$langpublisher:</label>
-                    <div class='col-sm-10'><input type='text' name='publisher' value='"  . q($publisher) . "'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='publisher' value='"  . q($publisher) . "'></div>
                 </div>
                 <div class='form-group'>
                     <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
