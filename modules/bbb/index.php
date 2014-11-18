@@ -247,7 +247,7 @@ function new_bbb_session() {
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
             <div class='col-sm-10'>
-                <input type='text' name='title' id='title' placeholder='$langTitle' size='50' />
+                <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
             </div>
         </div>
         <div class='form-group'>
@@ -259,7 +259,7 @@ function new_bbb_session() {
         <div class='form-group'>
             <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
             <div class='col-sm-10'>
-                <input type='text' name='start_session' id='start_session' value='$start_session'>
+                <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
         </div>    
         <div class='form-group'>
@@ -330,7 +330,7 @@ function new_bbb_session() {
         <div class='form-group'>
             <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
             <div class='col-sm-10'>
-                    <select name='minutes_before' id='minutes_before'>
+                    <select class='form-control' name='minutes_before' id='minutes_before'>
                         <option value='15'' selected='selected'>15</option>
                         <option value='30'>30</option>
                         <option value='10'>10</option>
@@ -340,14 +340,14 @@ function new_bbb_session() {
         <div class='form-group'>
             <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
             <div class='col-sm-10'>
-                <input type='text' name='sessionUsers' id='sessionUsers' size='5' value='$c'> $langBBBSessionSuggestedUsers:
+                <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' value='$c'> $langBBBSessionSuggestedUsers:
                 <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
             </div>
         </div>
         <div class='form-group'>
             <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
             <div class='col-sm-10'>
-                <input id='tags_1' name='external_users' type='text' class='tags' value=''>
+                <input class='form-control' id='tags_1' name='external_users' type='text' class='tags' value=''>
             </div>
         </div>
         <div class='form-group'>

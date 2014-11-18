@@ -211,28 +211,30 @@ if ($action == "delPost") {
 if ($action == "createPost") {
     if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
         $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+        <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
         <fieldset>
-        <legend>$langBlogPost</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-        <th>$langBlogPostTitle:</th>
-        </tr>
-        <tr>
-        <td><input type='text' name='blogPostTitle' size='50' /></td>
-        </tr>
-        <tr>
-        <th>$langBlogPostBody:</th>
-        </tr>
-        <tr>
-        <td>".rich_text_editor('newContent', 4, 20, '')."</td>
-        </tr>
-        <tr><td class='right'><input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd' /></td>
-        </tr>
-        </table>
+        <div class='form-group'>
+            <label for='blogPostTitle' class='col-sm-2 control-label'>$langBlogPostTitle:</label>
+            <div class='col-sm-10'>
+                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='newContent' class='col-sm-2 control-label'>$langBlogPostBody:</label>
+            <div class='col-sm-10'>
+                ".rich_text_editor('newContent', 4, 20, '')."
+            </div>
+        </div> 
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd'>
+                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
+            </div>
+        </div>          
         <input type='hidden' name='action' value='savePost' />
         </fieldset>
-        </form>";
+        </form></div>";
     } else {
         $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
     }
