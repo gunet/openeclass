@@ -282,7 +282,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                         <div class='form-group'>
                             <label for='wikiDesc' class='col-sm-2 control-label'>".$langWikiDescription.":</label>
                             <div class='col-sm-10'>
-                                <textarea id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
+                                <textarea class='form-control' id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
 
 
     /*

@@ -1180,7 +1180,7 @@ if ($is_editor) {
             <table class='tbl' width='40%'>
                 <tr>
                   <th>
-                  <select name='degreerange'><option value=10";
+                  <select class='form-control' name='degreerange'><option value=10";
         if (isset($gradebook_range) and $gradebook_range == 10) {
             $tool_content .= " selected ";
         }

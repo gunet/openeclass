@@ -902,7 +902,7 @@ if ($is_editor) {
             
             <label class='col-xs-4 col-sm-4'>$langAttendanceLimitNumber:</label>
             <div class='col-xs-1 col-sm-1'>
-                <input type='text' name='limit' value='$attendance_limit' size='5' />
+                <input class='form-control' type='text' name='limit' value='$attendance_limit' size='5' />
             </div>
             </fieldset>
             </form>";
