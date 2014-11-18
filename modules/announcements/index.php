@@ -455,7 +455,7 @@ if ($is_editor) {
         <div class='form-group'>
             <label for='AnnTitle' class='col-sm-2 control-label'>$langAnnTitle:</label>
             <div class='col-sm-10'>
-                <input type='text' name='antitle' value='$titleToModify' size='50' />
+                <input class='form-control' type='text' name='antitle' value='$titleToModify' size='50' />
             </div>
         </div>
         <div class='form-group'>
@@ -478,11 +478,11 @@ if ($is_editor) {
         
         <div class='form-group'>
             <label for='From' class='col-sm-2 control-label'>$langFrom:</label>
-            <div class='col-sm-10'><input type='text' name='startdate' id='startdate' value='$showFrom'></div>
+            <div class='col-sm-10'><input class='form-control' type='text' name='startdate' id='startdate' value='$showFrom'></div>
         </div>
         <div class='form-group'>
             <label for='From' class='col-sm-2 control-label'>$langUntil:</label>
-            <div class='col-sm-10'><input type='text' name='enddate' id='enddate' value='$showUntil'></div>
+            <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
         </div>
         <div class='col-sm-offset-2 col-sm-10'>
             <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='".q($langAdd)."' />
