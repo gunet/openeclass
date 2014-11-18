@@ -133,7 +133,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
-
+    
     if ($is_embedonce) {
         $t->set_block('mainBlock', 'breadCrumbs', 'delete');
         $t->set_block('mainBlock', 'footerBlock', 'delete');
@@ -143,7 +143,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     } else {
         $t->set_var('leftNavClass', 'no-embed');
     }
-
+    //Remove search if not enabled
+    if (!get_config('enable_search')) {
+        $t->set_block('mainBlock', 'LoggedInBlock');
+        $t->set_block('LoggedInBlock', 'searchBlock', 'delete');
+    }
+    
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------
     $t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
@@ -310,7 +315,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
-
+        
     $t->set_var('TOOL_NAME', $nameTools);
 
     if ($is_editor) {
