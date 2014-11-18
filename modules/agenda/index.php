@@ -238,13 +238,13 @@ if ($is_editor) {
                 . "<input type='hidden' name='rep' id='rep' value='$rep'>";
         @$tool_content .= "
             <div class='form-group'>
-                <label for='Title' class='col-sm-2 control-label'>$langTitle :</label>
+                <label for='event_title' class='col-sm-2 control-label'>$langTitle :</label>
                 <div class='col-sm-10'>
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                 </div>
             </div>
             <div class='input-append date form-group' id='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='DateStart' class='col-sm-2 control-label'>$langDate :</label>
+                <label for='startdate' class='col-sm-2 control-label'>$langDate :</label>
                 <div class='col-xs-10 col-sm-9'>        
                     <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                 </div>
@@ -254,9 +254,9 @@ if ($is_editor) {
                 </div>
             </div>
             <div class='input-append bootstrap-timepicker form-group'>
-                <label for='Duration' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
+                <label for='durationcal' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
                 <div class='col-xs-10 col-sm-9'>
-                    <input name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                    <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                 </div>
                 <div class='col-xs-2 col-sm-1'>
                     <span class='add-on'><i class='icon-time'></i></span>
