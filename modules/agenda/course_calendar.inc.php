@@ -206,7 +206,7 @@ require_once 'include/lib/references.class.php';
         if($is_editor || $is_admin){
             $eventid = Database::get()->query("INSERT INTO agenda "
                 . "SET content = ?s, title = ?s, course_id = ?d, start = ?t, duration = ?t, "
-                . "recursion_period = ?s, recursion_end = ?t",
+                . "recursion_period = ?s, recursion_end = ?t, visible = 1",
                 purify($content), $title, $course_id, $startdate, $duration, $period, $enddate)->lastInsertID;
 
             if(isset($eventid) && !is_null($eventid)){
