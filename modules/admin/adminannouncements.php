@@ -197,7 +197,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         <tr><td><b>$langStartDate:</b><br />
         <div class='input-append date form-group' id='id_start_date' data-date='$start_date' data-date-format='dd-mm-yyyy'>
             <div class='col-xs-11'>        
-                <input name='start_date' type='text' value='$start_date'>
+                <input class='form-control' name='start_date' type='text' value='$start_date'>
             </div>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
@@ -208,7 +208,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<tr><td><b>$langEndDate:</b><br />
             <div class='input-append date form-group' id='id_end_date' data-date='$end_date' data-date-format='dd-mm-yyyy'>
             <div class='col-xs-11'>        
-                <input name='end_date' type='text' value='$end_date'>
+                <input class='form-control' name='end_date' type='text' value='$end_date'>
             </div>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>

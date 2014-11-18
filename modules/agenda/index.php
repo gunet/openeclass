@@ -246,7 +246,7 @@ if ($is_editor) {
             <div class='input-append date form-group' id='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='DateStart' class='col-sm-2 control-label'>$langDate :</label>
                 <div class='col-xs-10 col-sm-9'>        
-                    <input name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                 </div>
                 <div class='col-xs-2 col-sm-1'>  
                     <span class='add-on'><i class='fa fa-times'></i></span>
@@ -284,7 +284,7 @@ if ($is_editor) {
             $tool_content .= "<div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='Enddate' class='col-sm-2 control-label'>$langUntil :</label>
                     <div class='col-xs-10 col-sm-9'>
-                        <input name='enddate' id='enddate' type='text' value = '" . $enddate . "'>
+                        <input class='form-control' name='enddate' id='enddate' type='text' value = '" . $enddate . "'>
                     </div>
                     <div class='col-xs-2 col-sm-1'>  
                         <span class='add-on'><i class='fa fa-times'></i></span>

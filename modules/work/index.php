@@ -603,7 +603,7 @@ function new_assignment() {
                 </div>
                 <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
                     <div class='col-xs-8 col-xs-offset-2'>        
-                        <input name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
                     </div>
                     <div class='col-xs-2'>  
                         <span class='add-on'><i class='fa fa-times'></i></span>
@@ -843,7 +843,7 @@ function show_edit_assignment($id) {
                 </div>
                 <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
                     <div class='col-xs-8 col-xs-offset-2'>        
-                        <input name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
                     </div>
                     <div class='col-xs-2'>  
                         <span class='add-on'><i class='fa fa-times'></i></span>

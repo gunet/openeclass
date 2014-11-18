@@ -235,7 +235,7 @@ if ($u) {
          <td>
          <div class='input-append date form-group' id='id_expires_at' data-date='" . $info->expires_at . "' data-date-format='dd-mm-yyyy'>
         <div class='col-xs-11'>        
-            <input name='expires_at' type='text' value='$info->expires_at'>
+            <input class='form-control' name='expires_at' type='text' value='$info->expires_at'>
         </div>
         <span class='add-on'><i class='fa fa-times'></i></span>
         <span class='add-on'><i class='fa fa-calendar'></i></span>

@@ -2,13 +2,6 @@
 @import "variables";
 @import "bootstrap";
 
-//Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
-.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
-    @extend .table, .table-striped;  
-}
-input[type="text"], select, textarea {
-  @extend .form-control;
-}
 input[type="file"] {
     padding-top: 7px;
 }

@@ -88,110 +88,120 @@ $tool_content .= "<div id='operations_container'>" .
         ))
         . "</div>";
 
-// display the search form
-$tool_content .= "
-<form action='listusers.php' method='get' name='user_search'>
-<fieldset>
-  <legend>$langUserData</legend>
-  <table class='tbl' width='100%'>
-  <tr>
-    <th class='left'>$langName:</th>
-    <td><input type='text' name='fname' size='40' value='" . q($fname) . "'></td>
-  </tr>
-  <tr>
-    <th class='left' width='180'>$langSurname:</th>
-    <td><input type='text' name='lname' size='40' value='" . q($lname) . "'></td>
-  </tr>
-  <tr>
-    <th class='left'>$langAm:</th>
-    <td><input type='text' name='am' size='30' value='" . q($am) . "'></td>
-  </tr>
-  <tr>
-    <th class='left'>$langUserType:</th>
-    <td>";
-
+//Preparing form data
 $usertype_data = array(
     0 => $langAllUsers,
     USER_TEACHER => $langTeacher,
     USER_STUDENT => $langStudent,
     USER_GUEST => $langGuest);
-
-$tool_content .= selection($usertype_data, 'user_type', 0) . "
-    </td>
-  </tr>
-  <tr>
-    <th class='left'>$langAuthMethod:</th>
-    <td>";
-
-$authtype_data = $auth_ids;
-$authtype_data[0] = $langAllAuthTypes;
-$tool_content .= selection($authtype_data, 'auth_type', 0) . "
-    </td>
-    <tr>
-    <th class='left'>$langRegistrationDate:</th>
-    <td>";
-
-$tool_content .= selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag);
-
-$tool_content .= "<div class='input-append date form-group' id='id_user_registered_at' data-date='$user_registered_at' data-date-format='dd-mm-yyyy'>";
-$tool_content .= "<div class='col-xs-11'>        
-            <input name='user_registered_at' type='text' value='$user_registered_at'>
-        </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-    </div>";
-
-$tool_content .= "</td></tr>";
-$tool_content .= "<tr><th class='left'>$langEmailVerified:</th><td>";
-
 $verified_mail_data = array(
     EMAIL_VERIFICATION_REQUIRED => $m['pending'],
     EMAIL_VERIFIED => $m['yes'],
     EMAIL_UNVERIFIED => $m['no'],
     3 => $langAllUsers);
-$tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail) . "
-    </td>
-  </tr>
-  <tr>
-    <th class='left'>$langEmail:</th>
-    <td><input type='text' name='email' size='40' value='" . q($email) . "'></td>
-  </tr>
-  <tr>
-    <th class='left'>$langUsername:</th>
-    <td><input type='text' name='uname' size='40' value='" . q($uname) . "'></td>
-  </tr>
-  <tr>
-    <th class='left'>$langInactiveUsers:</th>
-    <td><input type='checkbox' name='search' value='inactive'$inactive_checked></td>
-  </tr>
-  <tr>
-    <th>$langFaculty:</th>
-    <td>";
+$authtype_data = $auth_ids;
+$authtype_data[0] = $langAllAuthTypes;
+
 $tree = new Hierarchy();
 list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
-$tool_content .= $html . "
-    </td>
-  </tr>
-  <tr>
-    <th class='left'>$langSearchFor:</th>
-    <td>
-      <select name='search_type'>
-        <option value='exact'>$langSearchExact</option>
-        <option value='begin'>$langSearchStartsWith</option>
-        <option value='contains' selected>$langSearchSubstring</option>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td colspan='2' class='right'>
-      <input class='btn btn-primary' type='submit' value='$langSearch'>
-    </td>
-  </tr>
-  </table>
+
+// display the search form
+$tool_content .= "
+<div class='form-wrapper'>
+<form class='form-horizontal' role='form' action='listusers.php' method='get' name='user_search'>
+<fieldset>
+    <div class='form-group'>
+        <label for='fname' class='col-sm-2 control-label'>$langName:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='fname' id='fname' value='" . q($fname) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='lname' class='col-sm-2 control-label'>$langSurname:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='lname' id='lname' value='" . q($lname) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='am' class='col-sm-2 control-label'>$langAm:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='am' id='am' value='" . q($am) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langUserType:</label>
+        <div class='col-sm-10'>
+            " . selection($usertype_data, 'user_type', 0, 'class="form-control"') . "
+        </div>
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langAuthMethod:</label>
+        <div class='col-sm-10'>
+            " . selection($authtype_data, 'auth_type', 0, 'class="form-control"') . "
+        </div>
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
+        <div class='col-sm-5'>
+            " . selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag, 'class="form-control"') . "
+        </div>
+        <div class='col-sm-5'>       
+            <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='$user_registered_at' data-date-format='dd-mm-yyyy' placeholder='$langRegistrationDate'>
+        </div>   
+    </div>
+    <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langEmailVerified:</label>
+        <div class='col-sm-10'>
+            " . selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-control"') . "
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='email' id='email' value='" . q($email) . "'>
+        </div>
+    </div>  
+    <div class='form-group'>
+        <label for='uname' class='col-sm-2 control-label'>$langUsername:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='uname' id='uname' value='" . q($uname) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='dialog-set-value' class='col-sm-2 control-label'>$langFaculty:</label>
+        <div class='col-sm-10'>
+            $html
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='search_type' class='col-sm-2 control-label'>$langSearchFor:</label>
+        <div class='col-sm-10'>
+            <select class='form-control' name='search_type' id='search_type'>
+              <option value='exact'>$langSearchExact</option>
+              <option value='begin'>$langSearchStartsWith</option>
+              <option value='contains' selected>$langSearchSubstring</option>
+            </select>
+        </div>
+    </div>
+    <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>
+            <div class='checkbox'>
+              <label>
+                <input type='checkbox' name='search' value='inactive'$inactive_checked>
+                $langInactiveUsers
+              </label>
+            </div> 
+        </div>
+    </div>    
+    <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>
+            <input class='btn btn-primary' type='submit' value='$langSearch'>
+            <a class='btn btn-default' href='index.php'>$langCancel</a>
+        </div>
+    </div>
 </fieldset>
-</form>";
+</form></div>";
 // end form
 
 $tool_content .= action_bar(array(

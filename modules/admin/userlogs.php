@@ -172,7 +172,7 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
         <td>
             <div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
                 <div class='col-xs-11'>
-                    <input name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+                    <input class='form-control' name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
                 </div>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
@@ -183,7 +183,7 @@ $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
             <td>
             <div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
                 <div class='col-xs-11'>
-                    <input name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
+                    <input class='form-control' name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
                 </div>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>

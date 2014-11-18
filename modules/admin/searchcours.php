@@ -108,7 +108,7 @@ $tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
 $tool_content .= "<div class='input-append date form-group' id='id_date' data-date='$date' data-date-format='dd-mm-yyyy'>";
 $tool_content .= "<div class='col-xs-11'>        
-            <input name='date' type='text' value='$date'>
+            <input class='form-control' name='date' type='text' value='$date'>
         </div>
         <span class='add-on'><i class='fa fa-times'></i></span>
         <span class='add-on'><i class='fa fa-calendar'></i></span>

@@ -163,7 +163,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart :</label>
                      <div class='col-xs-10 col-sm-9'>        
-                         <input name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
+                         <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
                          <span class='add-on'><i class='fa fa-times'></i></span>
@@ -173,7 +173,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd :</label>
                      <div class='col-xs-10 col-sm-9'>        
-                         <input name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
+                         <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
                          <span class='add-on'><i class='fa fa-times'></i></span>
