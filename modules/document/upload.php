@@ -90,7 +90,7 @@ if ($can_upload) {
       <div class='form-group'>
         <label for='inputFileCategory' class='col-sm-2 control-label'>$langCategory</label>
         <div class='col-sm-10'>
-          <select name='file_category'>
+          <select class='form-control' name='file_category'>
             <option selected='selected' value='0'>$langCategoryOther</option>
             <option value='1'>$langCategoryExcercise</option>
             <option value='2'>$langCategoryLecture</option>
@@ -132,7 +132,7 @@ if ($can_upload) {
 
         <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage</label>
         <div class='col-sm-10'>
-          <select name='file_language'>
+          <select class='form-control' name='file_language'>
                 <option value='en'>$langEnglish</option>
                 <option value='fr'>$langFrench</option>
                 <option value='de'>$langGerman</option>
@@ -155,7 +155,7 @@ if ($can_upload) {
                 '5' => $langCreativeCommonsCCBYND,
                 '6' => $langCreativeCommonsCCBYNC,
                 '7' => $langCreativeCommonsCCBYNCSA,
-                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted') . "
+                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted', '', 'class="form-control"') . "
         </div>
       </div>";
 
