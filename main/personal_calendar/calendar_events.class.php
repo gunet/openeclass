@@ -788,7 +788,7 @@ class Calendar_Events {
         $calendar_content .= '<td width="250" class="right"><a href="#" onclick="show_month(1,'.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
         $calendar_content .= "</tr>";
         $calendar_content .= "</table><br />";
-        $calendar_content .= "<table width=100% class='tbl_1'><tr>";
+        $calendar_content .= "<table class='table-default'><tr>";
         for ($ii = 1; $ii < 8; $ii++) {
             $calendar_content .= "<th class='center'>" . $langDay_of_weekNames['long'][$ii % 7] . "</th>";
         }
@@ -967,7 +967,7 @@ class Calendar_Events {
                 '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
 
-        $calendar_content .= "<table width='100%' class='title1'>";
+        $calendar_content .= "<table class='table-default'>";
         $calendar_content .= "<tr>";
         $calendar_content .= '<td width="25"><a href="#" onclick="show_week('.$backward['day'].','.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
         $calendar_content .= "<td class='center'><b>$weekdescription</b></td>";
@@ -1068,7 +1068,7 @@ class Calendar_Events {
                 '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
 
-        $calendar_content .= "<table width='100%' class='title1'>";
+        $calendar_content .= "<table class='table-default'>";
         $calendar_content .= "<tr>";
         $calendar_content .= '<td width="25"><a href="#" onclick="show_day('.$backward['day'].','.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
         $calendar_content .= "<td class='center'><b>$daydescription</b></td>";
