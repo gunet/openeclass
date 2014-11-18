@@ -1721,7 +1721,7 @@ function text_area($name, $rows, $cols, $text, $extra = '') {
 
     $text = str_replace(array('<m>', '</m>', '<M>', '</M>'), array('[m]', '[/m]', '[m]', '[/m]'), $text);
     if (strpos($extra, 'class=') === false) {
-        $extra .= ' class="mceNoEditor"';
+        $extra .= ' class="form-control mceNoEditor"';
     }
     return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
             q(str_replace('{', '&#123;', $text)) .

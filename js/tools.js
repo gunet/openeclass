@@ -340,12 +340,12 @@ function poll_init() {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input type='text' name='answers[]' value=''></div><div class='col-xs-1'><a href='#' style='cursor: pointer;'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input class='form-control' type='text' name='answers[]' value=''></div><div class='col-xs-1'><a href='#' style='cursor: pointer;' id='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();        
     });
 }
 function delete_init(){
-    $('.form-group a').css('cursor', 'pointer').on('click', function (e) {
+    $('.form-group a#del_btn').css('cursor', 'pointer').on('click', function (e) {
         e.preventDefault();
         $(this).closest('.form-group').remove();
     });

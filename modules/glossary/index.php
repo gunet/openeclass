@@ -268,7 +268,7 @@ if ($is_editor) {
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($categories, 'category_id', $category_id) . "
+                                 " . selection($categories, 'category_id', $category_id, 'class="form-control"') . "
                              </div>
                         </div>";
             unset($categories['none']);

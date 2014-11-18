@@ -375,7 +375,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-2 control-label'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
                 <div class='col-sm-10'>
-                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' id='questionName' name='questionName' size='50' value='".q($questionName)."'>")."
+                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
                   <span class='help-block'>$questionNameError</span>    
                 </div>
             </div>";
@@ -428,7 +428,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group$questionScaleErrorClass$questionScaleShowHide'>
                 <label for='questionName' class='col-sm-2 control-label'>$langMax $langScale (1-..):</label>
                 <div class='col-sm-10 col-md-3'>
-                    <input type='text' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+                    <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
                     <span class='help-block'>$questionScaleError</span>                    
                 </div>
             </div>";
@@ -491,10 +491,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               $tool_content .="      
                   <div class='form-group'>
                         <div class='col-xs-11'>
-                            <input type='text' name='answers[]' value='$answer->answer_text'>                        
+                            <input type='text' class='form-control' name='answers[]' value='$answer->answer_text'>                        
                         </div>
                         <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#') . "
+                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
                         </div>
                     </div>";
               }
@@ -502,18 +502,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               $tool_content .="      
                   <div class='form-group'>
                         <div class='col-xs-11'>
-                            <input type='text' name='answers[]' value=''>                        
+                            <input class='form-control' type='text' name='answers[]' value=''>                        
                         </div>
                         <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#') . "
+                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
                         </div>
                     </div>
                   <div class='form-group'>
                         <div class='col-xs-11'>
-                            <input type='text' name='answers[]' value=''>                        
+                            <input class='form-control' type='text' name='answers[]' value=''>                        
                         </div>
                         <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#') . "
+                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
                         </div>
                     </div>";
         }                                        
@@ -521,7 +521,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>                          
                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
-                            <a class='btn btn-default' href='admin.php?course=TMAPOST106&pid=$pid&editQuestion=$question_id'>$langCancel</a>
+                            <a class='btn btn-default' href='admin.php?course=$course_code&pid=$pid&editQuestion=$question_id'>$langCancel</a>
                         </div>
                     </div>
                     </fieldset>
