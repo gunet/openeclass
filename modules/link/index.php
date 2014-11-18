@@ -171,25 +171,25 @@ if ($is_editor) {
         $tool_content .= "
         <fieldset>
         <div class='form-group'>
-            <label for='Url' class='col-sm-2 control-label'>URL:</label>
+            <label for='urllink' class='col-sm-2 control-label'>URL:</label>
             <div class='col-sm-10'>
-                <input type='text' name='urllink' size='53'$form_url />
+                <input class='form-control' type='text' id='urllink' name='urllink' $form_url >
             </div>
         </div>
         <div class='form-group'>
-            <label for='LinkName' class='col-sm-2 control-label'>$langLinkName:</label>
+            <label for='title' class='col-sm-2 control-label'>$langLinkName:</label>
             <div class='col-sm-10'>
-                <input type='text' name='title' size='53'$form_title />
+                <input class='form-control' type='text' id='title' name='title'$form_title >
             </div>
          </div>
         <div class='form-group'>
-            <label for='Desc' class='col-sm-2 control-label'>$langDescription:</label>
+            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
             <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
         </div>
         <div class='form-group'>
-            <label for='CatName' class='col-sm-2 control-label'>$langCategory:</label>
+            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-3'>
-                <select class='form-control' name='selectcategory'>
+                <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         $resultcategories = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
         foreach ($resultcategories as $myrow) {
