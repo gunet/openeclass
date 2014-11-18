@@ -65,10 +65,12 @@ $displayForm = true;
 if (isset($_GET['down'])) {
     $thisNoteId = intval($_GET['down']);
     Notes::movedown_note($thisNoteId);
+    redirect_to_home_page('main/notes/index.php');  
 }
 if (isset($_GET['up'])) {
     $thisNoteId = intval($_GET['up']);
     Notes::moveup_note($thisNoteId);
+    redirect_to_home_page('main/notes/index.php');  
 }
 
 /* submit form: new or updated note */
@@ -80,10 +82,12 @@ if (isset($_POST['submitNote'])) {
     if (!empty($_POST['id'])) { //existing note
         $id = intval($_POST['id']);
         Notes::update_note($id, $newTitle, $newContent, $refobjid);
-        $message = "<div class='alert alert-success'>$langNoteModify</div>";
+        Session::Messages($langNoteModify, 'alert-success');
+        redirect_to_home_page('main/notes/index.php');        
     } else { // new note
         $id = Notes::add_note($newTitle, $newContent, $refobjid);
-        $message = "<div class='alert alert-success'>$langNoteAdd</div>";
+        Session::Messages($langNoteAdd, 'alert-success');
+        redirect_to_home_page('main/notes/index.php');
     }
 } // end of if $submit
 
@@ -91,7 +95,8 @@ if (isset($_POST['submitNote'])) {
 if (isset($_GET['delete'])) {
     $thisNoteId = intval($_GET['delete']);
     Notes::delete_note($thisNoteId);
-    $message = "<div class='alert alert-success'>$langNoteDel</div>";
+    Session::Messages($langNoteDel, 'alert-success');
+    redirect_to_home_page('main/notes/index.php');
 }
 
 /* edit */
