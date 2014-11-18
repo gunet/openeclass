@@ -144,9 +144,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('leftNavClass', 'no-embed');
     }
     //Remove search if not enabled
-    if (!get_config('enable_search')) {
-        $t->set_block('mainBlock', 'LoggedInBlock');
-        $t->set_block('LoggedInBlock', 'searchBlock', 'delete');
+    if (!get_config('enable_search') or !$GLOBALS['uid']) {
+        $t->set_block('mainBlock', 'searchBlock', 'delete');
     }
     
     //	BEGIN constructing of left navigation

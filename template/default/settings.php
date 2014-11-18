@@ -70,8 +70,6 @@ function template_callback($template, $menuTypeID)
             }, $uid);
 
 
-    } else {
-        $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
     }
 
     if (!$course_id or !isset($professor) or !$professor) {
