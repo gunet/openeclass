@@ -395,20 +395,20 @@ if (count($result) > 0) {
         if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                    array('title' => $langModify,
-                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
-                          'icon' => 'fa-edit'),
+                    array('title' => $langDelete,
+                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDeleteEvent),
                     array('title' => $langConfirmDeleteRecursive,
                           'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;rep=yes",
                           'icon' => 'fa-times-circle-o',
                           'class' => 'delete',
                           'confirm' => $langConfirmDeleteRecursiveEvents,
                           'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
-                    array('title' => $langDelete,
-                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDeleteEvent),
+                    array('title' => $langModify,
+                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
+                          'icon' => 'fa-edit'),
                     array('title' => $langVisible,
                           'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
                           'icon' => $myrow->visible ? 'fa-eye' : 'fa-eye-slash')
