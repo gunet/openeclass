@@ -118,11 +118,11 @@ $(function() {
 if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 
     //--if add event
-    $head_content .= <<<hContent
-<script type="text/javascript">
+    $head_content .= 
+"<script type='text/javascript'>
 function checkrequired(thisform) {
     if ($('#event_title').val()=='' || $('#startdate').val()=='') {
-            bootbox.alert("$langTitleDateNotEmpty");
+            bootbox.alert('$langTitleDateNotEmpty');
             return false;
     }
     if($('#id').val()>0 && $('#rep').val() != ''){
@@ -131,8 +131,7 @@ function checkrequired(thisform) {
         thisform.submit();
     }
 }
-</script>
-hContent;
+</script>";
 }
 
 $result = Database::get()->queryArray("SELECT id FROM agenda WHERE course_id = ?d", $course_id);
@@ -326,9 +325,7 @@ if (count($result) > 0) {
     $tool_content .= "<div class='table-responsive'><table class='table-default'>
                     <tr><th class='left'>$langEvents</th>";
     if ($is_editor) {
-        $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
-    } else {
-        $tool_content .= "<th width='50'>&nbsp;</th>";
+        $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
     }
     $tool_content .= "</tr>";
 
@@ -411,7 +408,7 @@ if (count($result) > 0) {
                           'icon' => 'fa-edit'),
                     array('title' => $langVisible,
                           'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
-                          'icon' => $myrow->visible ? 'fa-eye' : 'fa-eye-slash')
+                          'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
                 ));
            $tool_content .= "</td>";                                 
         }
