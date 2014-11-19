@@ -343,13 +343,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
 $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
 $month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
 $year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
-if ($_SESSION['theme'] != 'bootstrap') {
-    $tool_content .= '<div id="monthcalendar" style="width:100%">';
-    $tool_content .= Calendar_Events::calendar_view($day, $month, $year);
-    $tool_content .= '</div>';
-} else {
-    $tool_content .= ''
-            . '<div id="calendar_wrapper" class="row">
+$tool_content .= '<div id="calendar_wrapper" class="row">
                 <div class="col-md-12">
                     <div class="row calendar-header">
                     <div class="col-md-12">
@@ -405,7 +399,6 @@ if ($_SESSION['theme'] != 'bootstrap') {
     });
 
     </script>';
-}
 
 add_units_navigation(TRUE);
 

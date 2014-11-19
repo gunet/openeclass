@@ -839,107 +839,26 @@ class Calendar_Events {
         return $calendar_content;
     }
 
-     /**
+    /**
       * A function to generate month view of a set of events small enough for the portfolio page
       * @param array $day day to show
       * @param integer $month month to show
       * @param integer $year year to show
       * @param array $weekdaynames
       * @return object with `count` attribute containing the number of associated events with the item
-     */
-   public static function small_month_calendar($day, $month, $year) {
-       global $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
-       if ($_SESSION['theme'] == 'default') {           
-           return Calendar_Events::small_month_bootstrap_calendar();
-       }
-       $calendar_content = "";
-        //Handle leap year
-        $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
-            $numberofdays[2] = 29;
-        }
-        
-        $eventlist = Calendar_Events::get_calendar_events("month", "$year-$month-$day");
-              
-        $events = array();
-        if ($eventlist) {
-            foreach($eventlist as $event){
-                $eventday = new DateTime($event->startdate);
-                $eventday = $eventday->format('d');
-                if(!array_key_exists($eventday,$events)){
-                        $events[$eventday] = array();
-                }
-                array_push($events[$eventday], $event);
-            }
-        }
-
-        //Get the first day of the month
-        $dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
-        //Start the week on monday
-        $startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-
-        $backward = array('month'=>$month == 1 ? 12 : $month - 1, 'year' => $month == 1 ? $year - 1 : $year);
-        $foreward = array('month'=>$month == 12 ? 1 : $month + 1, 'year' => $month == 12 ? $year + 1 : $year);
-
-        $calendar_content .= "<table class='title1' style='with:450px;'>";
-        $calendar_content .= "<tr>";
-        $calendar_content .= '<td style="width:25px;"><a href="#" onclick="show_month(1,'.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
-        $calendar_content .= "<td class='center' style='width:400px;font-size:11px;'><b>{$langMonthNames['long'][$month-1]} $year</b></td>";
-        $calendar_content .= '<td style="width:25px;"><a href="#" onclick="show_month(1,'.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
-        $calendar_content .= "</tr>";
-        $calendar_content .= "</table>";
-        $calendar_content .= "<table style='min-width:450px;font-size:10px;' class='tbl_1'><tr>";
-        for ($ii = 1; $ii < 8; $ii++) {
-            $calendar_content .= "<th class='center'>" . $langDay_of_weekNames['short'][$ii % 7] . "</th>";
-        }
-        $calendar_content .= "</tr>";
-        $curday = -1;
-        $today = getdate();
-        while ($curday <= $numberofdays[$month]) {
-            $calendar_content .= "<tr>";
-
-            for ($ii = 0; $ii < 7; $ii++) {
-                if (($curday == -1) && ($ii == $startdayofweek)) {
-                    $curday = 1;
-                }
-                if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-                    $bgcolor = $ii < 5 ? "class='alert alert-danger'" : "class='odd'";
-                    $dayheader = "$curday";
-                    $class_style = "class=odd";
-                    if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-                        $dayheader = "<b>$curday</b> <small>($langToday)</small>";
-                        $class_style = "class='today'";
-                    }
-                    $calendar_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
-                    $thisDayItems = "";
-                    if(array_key_exists($curday, $events)){
-                        foreach($events[$curday] as $ev){
-                            $thisDayItems .= Calendar_Events::month_calendar_item($ev, Calendar_Events::$calsettings->{$ev->event_group."_color"});
-                        }
-                        $calendar_content .= "$thisDayItems</td>";
-                    }
-                    $curday++;
-                } else {
-                    $calendar_content .= "<td width=14%>&nbsp;</td>";
-                }
-            }
-            $calendar_content .= "</tr>";
-        }
-        $calendar_content .= "</table>";
-
-        /* Legend */
-        $calendar_content .= Calendar_Events::calendar_legend();
-        return $calendar_content;
+      */
+    public static function small_month_calendar($day, $month, $year) {
+       return Calendar_Events::small_month_bootstrap_calendar();
     }
 
-   /**
+    /**
       * A function to generate week view of a set of events
       * @param array $day day to show
       * @param integer $month month to show
       * @param integer $year year to show
       * @param array $weekdaynames
       * @return object with `count` attribute containing the number of associated events with the item
-     */
+      */
     public static function week_calendar($day, $month, $year){
         global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langView;
         $calendar_content = "";
