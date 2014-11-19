@@ -910,6 +910,9 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             if (version_compare($oldversion, '2.11', '<')) {
                 upgrade_course_2_11($code[0], $lang, "($i / $total)");
             }
+            if (version_compare($oldversion, '2.12', '<')) {
+                upgrade_course_2_12($code[0], $lang, "($i / $total)");
+            }            
             if (!get_config('exercise_strings_updated')) {
                 upgrade_course_fix_exercise_math($code[0]);
             }

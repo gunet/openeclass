@@ -331,6 +331,7 @@ function upgrade_course($code, $lang)
         upgrade_course_2_9($code, $lang);
         upgrade_course_2_10($code, $lang);
         upgrade_course_2_11($code, $lang);
+        upgrade_course_2_12($code, $lang);
 }
 
 function fix_math($str) {
@@ -367,6 +368,23 @@ function upgrade_course_fix_exercise_math($code) {
             db_query($fixes_sql);
         }
     }
+}
+
+function upgrade_course_2_12($code, $lang, $extramessage = '') {
+    
+    global $langUpgCourse;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.12) $extramessage<br>";
+    flush();
+    
+    if (!mysql_field_exists($code, 'exercise_user_record', 'TotalScore')) {
+        db_query("ALTER TABLE exercise_user_record MODIFY `TotalScore` FLOAT(5,2)");
+    }
+    
+    if (!mysql_field_exists($code, 'exercise_user_record', 'TotalWeighting')) {
+        db_query("ALTER TABLE exercise_user_record MODIFY `TotalWeighting` FLOAT(5,2)");
+    }    
 }
 
 function upgrade_course_2_11($code, $lang, $extramessage = '') {
