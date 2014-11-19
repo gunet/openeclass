@@ -106,7 +106,7 @@ $(function() {
         language: '".$language."',
         autoclose: true
     });
-    $('#enddatecal').datepicker({
+    $('#enddate').datepicker({
         format: 'dd-mm-yyyy', pickerPosition: 'bottom-left', 
         language: '".$language."',
         autoclose: true
@@ -280,14 +280,11 @@ if ($is_editor) {
                         </select>
                         </div>
                     </div>";
-            $tool_content .= "<div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+            $tool_content .= "
+                <div class='form-group'>
                 <label for='Enddate' class='col-sm-2 control-label'>$langUntil :</label>
-                    <div class='col-xs-10 col-sm-9'>
-                        <input class='form-control' name='enddate' id='enddate' type='text' value = '" . $enddate . "'>
-                    </div>
-                    <div class='col-xs-2 col-sm-1'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    <div class='col-sm-10'>
+                        <input class='form-control' name='enddate' id='enddate' data-date='$langDate' type='text' value = '" . $enddate . "'>
                     </div>
                 </div>";
         }
