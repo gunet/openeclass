@@ -1893,25 +1893,31 @@ table.dataTable tbody td.right-cell {
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1776, ../SASS/inventory.scss */
+/* line 1775, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1782, ../SASS/inventory.scss */
+/* line 1781, ../SASS/inventory.scss */
 .event-legend {
-  font-size: 11px;
+  font-size: 12px;
   color: #666;
-  line-height: 13px;
+  line-height: 15px;
+  padding: 0px;
+  margin: 0px;
 }
-/* line 1786, ../SASS/inventory.scss */
+/* line 1787, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
+  margin-right: 5px;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 4px !important;
 }
 
-/* line 1792, ../SASS/inventory.scss */
+/* line 1797, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1928,7 +1934,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1804, ../SASS/inventory.scss */
+/* line 1809, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1938,7 +1944,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1810, ../SASS/inventory.scss */
+/* line 1815, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

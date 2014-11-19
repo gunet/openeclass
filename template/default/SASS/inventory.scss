@@ -1765,7 +1765,6 @@ table.dataTable tbody td.right-cell{
 
         .form-inline{
             padding: 10px 0;
-            
         }
     }
 }
@@ -1780,12 +1779,18 @@ span[data-cal-date]
 }
 
 .event-legend{
-    font-size: 11px;
+    font-size: 12px;
     color: #666;
-    line-height: 13px;
+    line-height: 15px;
+    padding: 0px;
+    margin: 0px;
     .event{
         margin-top: 0px !important;
         margin-bottom: 0px !important;
+        margin-right: 5px;
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 4px !important;
     }
 }
 
