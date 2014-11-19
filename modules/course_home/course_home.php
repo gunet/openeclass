@@ -610,19 +610,19 @@ if (isset($level) && !empty($level)) {
     ";
 }
 
-if (!empty($license_info_box)) {
-    $tool_content .= "
-        
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h3 class='content-title'>$langLicense</h3>
-                <div class='panel license_info_box'>
-                    <div class='panel-body'>
-                        $license_info_box
-                    </div>
-                </div>
-            </div>
-        ";
-}
+//if (!empty($license_info_box)) {
+//    $tool_content .= "
+//        
+//            <div class='col-md-$cunits_sidebar_subcolumns'>
+//                <h3 class='content-title'>$langLicense</h3>
+//                <div class='panel license_info_box'>
+//                    <div class='panel-body'>
+//                        $license_info_box
+//                    </div>
+//                </div>
+//            </div>
+//        ";
+//}
 
 
 //BEGIN - Get user personal calendar
