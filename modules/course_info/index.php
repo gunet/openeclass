@@ -176,7 +176,7 @@ $nameTools = $langCourseInfo;
 
 // if the course is opencourses certified, disable visibility choice in form
 $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?d", $course_id)) ? $creview->is_certified : false;
-$disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
+$disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
@@ -425,21 +425,21 @@ if (isset($_POST['submit'])) {
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset><div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langCourseIden</label></div>
 	<div class='form-group'>
-            <label for='Code' class='col-sm-2 control-label'>$langCode</label>
+            <label for='fcode' class='col-sm-2 control-label'>$langCode</label>
             <div class='col-sm-10'>
-                <input type='text' name='fcode' value='$public_code' size='60' />
+                <input type='text' class='form-control' name='fcode' id='fcode' value='$public_code' size='60' />
             </div>
         </div>
         <div class='form-group'>	    
-            <label for='Title' class='col-sm-2 control-label'>$langCourseTitle:</label>
+            <label for='title' class='col-sm-2 control-label'>$langCourseTitle:</label>
             <div class='col-sm-10'>
-		<input type='text' name='title' value='" . q($title) . "' size='60' />
+		<input type='text' class='form-control' name='title' id='title' value='" . q($title) . "' size='60' />
 	    </div>
         </div>
         <div class='form-group'>
-            <label for='Teacher' class='col-sm-2 control-label'>$langTeachers:</label>
+            <label for='titulary' class='col-sm-2 control-label'>$langTeachers:</label>
             <div class='col-sm-10'>
-		<input type='text' name='titulary' value='$titulary' size='60' />
+		<input type='text' class='form-control' name='titulary' id='titulary' value='$titulary' size='60' />
 	    </div>
         </div>
         <div class='form-group'>
@@ -451,9 +451,9 @@ if (isset($_POST['submit'])) {
         $tool_content .= $html;
         @$tool_content .= "</div></div>
 	    <div class='form-group'>
-		<label for='Keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
+		<label for='course_keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
 		<div class='col-sm-10'>
-                    <input type='text' name='course_keywords' value='$course_keywords' size='60' />
+                    <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='$course_keywords' size='60' />
                 </div>
 	    </div>
             
@@ -531,7 +531,7 @@ if (isset($_POST['submit'])) {
             </div>
             <div class='form-group'>
                 <div class='col-sm-10' id = 'cc'>            
-                    " . selection($cc_license, 'cc_use', $course_license, $disabledVisibility) . "
+                    " . selection($cc_license, 'cc_use', $course_license, 'class="form-control"'.$disabledVisibility) . "
                 </div>
             </div>
         </div>
@@ -539,9 +539,9 @@ if (isset($_POST['submit'])) {
         <div class='form-wrapper'>
 	<div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langConfidentiality</label></div>
 	    <div class='form-group'>
-		<label for='Pass' class='col-sm-3 control-label'>$langOptPassword</label>
+		<label for='password' class='col-sm-3 control-label'>$langOptPassword</label>
                 <div class='col-sm-9'>
-                    <input id='coursepassword' type='text' name='password' value='$password' autocomplete='off' />
+                    <input id='coursepassword' class='form-control' type='text' name='password' id='password' value='$password' autocomplete='off' />
                 </div>
 	    </div>
 	    <div class='form-group'>
@@ -565,7 +565,7 @@ if (isset($_POST['submit'])) {
 	<div class='form-wrapper'>
 	    <div class='form-group'>
             <label for='Options' class='col-sm-3 control-label'>$langLanguage</label>
-            <div class='col-sm-9'>" . lang_select_options('localize') . "</div>	        
+            <div class='col-sm-9'>" . lang_select_options('localize', 'class="form-control"') . "</div>	        
 	    </div>";
 
     if (!is_sharing_allowed($course_id)) {
