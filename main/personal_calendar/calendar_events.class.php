@@ -574,7 +574,7 @@ class Calendar_Events {
         $dc = str_replace('start','ag.start',$datecond);
         $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
-                . "WHERE ag.course_id =?d "
+                . "WHERE ag.course_id =?d AND ag.visible = 1 "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -597,7 +597,7 @@ class Calendar_Events {
         $dc = str_replace('start','ass.deadline',$datecond);
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
-                . "WHERE ass.course_id =?d "
+                . "WHERE ass.course_id =?d AND ass.active = 1 "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -608,7 +608,7 @@ class Calendar_Events {
         $dc = str_replace('start','ex.end_date',$datecond);
         $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
-                . "WHERE ex.course_id =?d "
+                . "WHERE ex.course_id =?d AND ex.active = 1 "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
