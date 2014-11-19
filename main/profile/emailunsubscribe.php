@@ -62,6 +62,11 @@ if (isset($_POST['submit'])) {
                         'level' => 'primary-label')));
     }
 } else {
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+          'url' => 'display_profile.php',
+          'icon' => 'fa-reply',
+          'level' => 'primary-label')));    
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
     if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
@@ -92,7 +97,10 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;" . q($course_title) . "<br />";
         }
     }
-    $tool_content .= "</div><br /><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>";
+    $tool_content .= "</div>
+                    <br>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                        <a class='btn btn-default' href='display_profile.php'>$langCancel<a>";
     $tool_content .= "</form>";
 }
 

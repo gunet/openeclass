@@ -2370,6 +2370,7 @@ $langIs = "is";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
 $langMemorizeYourPassord = "Memorize them, you will use them the next time you will enter to this site.";
+$langMyProfile = "Μy Profile";
 $langModifyProfile = "Modify my Profile";
 $langOfficialCode = "Administrative code";
 $langOneResp = "One of the course administrators";

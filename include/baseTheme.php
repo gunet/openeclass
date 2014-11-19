@@ -251,8 +251,19 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
         $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
         $t->set_var('USERNAME', q($_SESSION['uname']));
+        $t->set_var('LANG_PROFILE', $GLOBALS['langMyProfile']);
+        $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
+        $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
+        $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
+        $t->set_var('LANG_AGENDA', $langMyAgenda);
+        $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
+        $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
+        $t->set_var('NOTES_LINK', $urlServer . 'main/notes/index.php');
+        $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
+        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");        
         $t->set_var('LANG_LOGOUT', $langLogout);
-        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
+        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');        
+       
     $t->set_var('LOGGED_IN', 'true');
     } else {
         if (!get_config('dont_display_login_form')) {

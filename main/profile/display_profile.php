@@ -21,9 +21,9 @@
 
 
 $require_login = true;
-include '../../include/baseTheme.php';
 $require_valid_uid = TRUE;
-
+include '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 
@@ -45,12 +45,43 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
 }
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, email, phone, am,
-                                            has_icon, description,
+                                            has_icon, description, password,
                                             email_public, phone_public, am_public
                                         FROM user
                                         WHERE id = ?d", $id);
 
 if ($userdata) {
+    $auth = array_search($userdata->password, $auth_ids);
+    if (!$auth) {
+        $auth = 1;
+    }    
+    if ($auth != 1) {
+        $allow_password_change = false;
+    } else {
+        $allow_password_change = true;
+    }    
+    $passurl = $urlSecure . 'main/profile/password.php';
+    $tool_content .= 
+            action_bar(array(
+                array('title' => $langModifyProfile,
+                    'url' => "profile.php",
+                    'icon' => 'fa-edit',
+                    'level' => 'primary-label'),
+                array('title' => $langChangePass,
+                    'url' => "$passurl",
+                    'icon' => 'fa-key',
+                    'show' => $allow_password_change,
+                    'level' => 'primary'),
+                array('title' => $langEmailUnsubscribe,
+                    'url' => "emailunsubscribe.php",
+                    'icon' => 'fa-envelope',
+                    'level' => 'primary'),
+                array('title' => $langUnregUser,
+                    'url' => "../unreguser.php",
+                    'icon' => 'fa-times',
+                    'button-class'=>'btn-danger',
+                    'level' => 'primary')
+                ));    
     $tool_content .= "<table class='tbl'>
             <tr>
                 <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata->has_icon) . "</td>

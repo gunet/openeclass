@@ -3356,6 +3356,7 @@ $langGroup = "Ομάδα Χρηστών";
 $langIs = "είναι";
 $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";
+$langMyProfile = "Το Προφίλ μου";
 $langModifyProfile = "Αλλαγή του Προφίλ μου";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";

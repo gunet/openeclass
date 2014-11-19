@@ -283,8 +283,8 @@ function loggedInMenu() {
         array_push($sideMenuImg, "arrow.png");
     }
     
-    array_push($sideMenuText, $GLOBALS['langModifyProfile']);
-    array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
+    array_push($sideMenuText, $GLOBALS['langMyProfile']);
+    array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);

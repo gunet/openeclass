@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,
-          'url' => 'profile.php',
+          'url' => 'display_profile.php',
           'icon' => 'fa-reply',
           'level' => 'primary-label')));
 
