@@ -169,7 +169,14 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
                         {%PERSONAL_CALENDAR_CONTENT%}
                     </div>
                     <div class='panel-footer'>
-                    <span class='event event-important'></span><span class='event event-info'></span><span class='event event-info'></span><span class='event event-warning'></span><span class='event event-inverse'></span><span class='event event-success'></span><span class='event event-special'></span>
+                        <div class='event-legend'>
+                            <span class='event event-important'></span><span>$langAgendaDueDay</span>
+                            <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                        </div>
+                        <div class='event-legend'>
+                            <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
+                            <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1900,6 +1900,18 @@ span[data-cal-date] {
 }
 
 /* line 1781, ../SASS/inventory.scss */
+.event-legend {
+  font-size: 11px;
+  color: #666;
+  line-height: 13px;
+}
+/* line 1785, ../SASS/inventory.scss */
+.event-legend .event {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+/* line 1791, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1916,7 +1928,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1793, ../SASS/inventory.scss */
+/* line 1803, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1926,7 +1938,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1799, ../SASS/inventory.scss */
+/* line 1809, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

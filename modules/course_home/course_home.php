@@ -635,6 +635,16 @@ $tool_content .="
                             <div class='panel-body'>
                                 $user_personal_calendar
                             </div>
+                            <div class='panel-footer'>
+                                <div class='event-legend'>
+                                    <span class='event event-important'></span><span>$langAgendaDueDay</span>
+                                    <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                                </div>
+                                <div class='event-legend'>
+                                    <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
+                                    <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 

@@ -1778,6 +1778,16 @@ span[data-cal-date]
   margin-top: 5px !important;
 }
 
+.event-legend{
+    font-size: 11px;
+    color: #666;
+    line-height: 13px;
+    .event{
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+}
+
 .event
 {
   width: 14px !important;
