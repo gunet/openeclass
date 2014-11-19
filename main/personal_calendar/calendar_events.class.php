@@ -585,7 +585,7 @@ class Calendar_Events {
         $dc = str_replace('start','bbb.start_date',$datecond);
         $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                 . "FROM bbb_session bbb JOIN course c ON bbb.course_id=c.id "
-                . "WHERE bbb.course_id =?d "
+                . "WHERE bbb.course_id =?d AND bbb.active = '1' "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
