@@ -16,12 +16,6 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
-Open eClass was initially based on Claroline 1.3.0, by:
-  Thomas De Praetere <depraetere@ipm.ucl.ac.be>
-  Hugues Peeters    <peeters@ipm.ucl.ac.be>
-  Christophe Gesche <gesche@ipm.ucl.ac.be>
-  Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
-
 ************************************************************************/
  Project Management and Core Developers
 ************************************************************************/
@@ -131,6 +125,9 @@ Messages translated to:
 ************************************************************************/
 Various components which are used (or have used in previous releases)
 ************************************************************************/
+
+Initially inspired and partially based on Claroline 1.3.0, (www.claroline.net)
+  Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 

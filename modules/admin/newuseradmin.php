@@ -98,7 +98,12 @@ if (isset($_GET['id'])) {
               'icon' => 'fa-close',
               'level' => 'primary')));
 } else {
-    $backlink = $_SERVER['SCRIPT_NAME'] . isset($rid) ? ('?id=' . intval($rid)) : '';
+    if (isset($rid) and $rid) {
+        $backlink = "$_SERVER[SCRIPT_NAME]?id=$rid";
+    } else {
+        $backlink = $_SERVER['SCRIPT_NAME'];
+    }
+       
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'url' => "../admin/index.php",
@@ -176,7 +181,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
     }
 } else {
     $lang = false;
-    $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $language = '';
+    $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $language = $pdate = '';
     if (isset($_GET['id'])) { // if we come from prof request
         $id = intval($_GET['id']);
 
