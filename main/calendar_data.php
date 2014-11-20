@@ -28,7 +28,7 @@ require_once '../include/lib/textLib.inc.php';
 if (!session_id()) {
     session_start();
 }
-if(isset($_SESSION['dbname'])){
+if (isset($_GET['course'])){
     $require_current_course = true;
 }
 require_once '../include/init.php';

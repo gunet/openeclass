@@ -70,7 +70,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
-                    events_source: "'.$urlAppend.'main/calendar_data.php",
+                    events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
                     language: "'.$langLanguageCode.'",
                     views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
                     onAfterViewLoad: function(view) {
