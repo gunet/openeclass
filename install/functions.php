@@ -59,6 +59,7 @@ function draw($toolContent, $options=null) {
 
     if (isset($options['no-menu'])) {
         $t->set_block('mainBlock', 'leftNavBlock', 'delete');
+        $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
     } else {
         //display the left column (installation steps)
         $toolArr = installerMenu();
