@@ -246,13 +246,13 @@ if (!isset($_POST['create_course'])) {
             <div class='form-group'>
                 <label for='prof_names' class='col-sm-2 control-label'>$langTeachers:</label>
                 <div class='col-sm-10'>
-                      <input type='text' name='prof_names' id='prof_names' value='" . q($prof_names) . "'>
+                      <input class='form-control' type='text' name='prof_names' id='prof_names' value='" . q($prof_names) . "'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>
-                      " . lang_select_options('localize') . "
+                      " . lang_select_options('localize', "class='form-control'") . "
                 </div>
             </div>
             <div class='form-group'>
@@ -353,9 +353,9 @@ if (!isset($_POST['create_course'])) {
                     </div>                   
                 </div>
                 <div class='form-group'>
-                    <label for='description' class='col-sm-2 control-label'>$langOptPassword:</label>
+                    <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
-                          <input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
+                          <input class='form-control' id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
                     </div>
                 </div>
                 <div class='form-group'>
