@@ -205,7 +205,7 @@ class Calendar_Events {
             $dc = str_replace('start','ag.start',$datecond);
             $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                     . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) "
+                    . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
 
@@ -216,7 +216,7 @@ class Calendar_Events {
             $dc = str_replace('start','bbb.start_date',$datecond);
             $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d "
+                    . "WHERE cu.user_id =?d AND bbb.active='1' "
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
 
@@ -229,7 +229,7 @@ class Calendar_Events {
             $dc = str_replace('start','ass.deadline',$datecond);
             $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
-                    . "WHERE cu.user_id =?d AND (ass_sp.user_id = ?d OR cu.status = 1)"
+                    . "WHERE cu.user_id =?d AND (ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
                     . $dc;
             $q_args = array_merge($q_args, array($user_id));
             $q_args = array_merge($q_args, $q_args_templ);
@@ -241,7 +241,7 @@ class Calendar_Events {
             $dc = str_replace('start','ex.end_date',$datecond);
             $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1)"
+                    . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1) AND ex.active = 1"
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
         }
