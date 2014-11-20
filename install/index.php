@@ -511,7 +511,7 @@ elseif (isset($_POST['install1'])) {
           <fieldset>
             <div class='form-group'>
               <label for='lang' class='col-sm-2 control-label'>$langChooseLang:</label>
-              <div class='col-sm-10'>" . selection($langLanguages, 'lang', $lang, 'onChange=\"document.langform.submit();\"') . "</div>
+              <div class='col-sm-10'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
             </div>
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10 text-left'>
