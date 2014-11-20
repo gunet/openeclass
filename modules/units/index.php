@@ -79,79 +79,60 @@ if ($is_editor) {
     $tool_content .= "
 
 <div class='row'>
-  <div class='col-md-12'>
+  <div class='col-md-12'>";  
+$tool_content .= action_bar(array(
+            array('title' => $langEditUnitSection,
+                  'url' => 'info.php?course=$course_code&amp;edit=$id&amp;next=1',
+                  'icon' => 'fa fa-edit',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
+            array('title' => $langAdd.$langInsertExercise,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertDoc,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertText,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertLink,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langLearningPath1,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertVideo,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertForum,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertEBook,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertWork,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertPoll,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            array('title' => $langAdd.$langInsertWiki,
+                  'url' => '#',
+                  'icon' => 'fa fa-paste',
+                  'level' => 'secondary'),
+            ));
     
-    <div class='toolbox pull-right margin-top-thin margin-bottom-thin'>
-      
-
-      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertExercise' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...'>
-        <i class='fa fa-paste space-after-icon'></i>$langAdd
-      </a>
-      <a class='btn-default-eclass place-at-toolbox' title='$langAdd $langInsertDoc' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...'>
-        <i class='fa fa-file-o space-after-icon'></i>$langAdd
-      </a>
-      
-      $comment_edit_link
-
-    </div>
-
-
-    <div class='toolbox pull-right margin-top-thin margin-bottom-thin margin-right'>
-      <ul class='toolbox-submenu'>
-        <li>
-          $langAdd 
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertText' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-file-text-o'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertLink' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-link'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langLearningPath1' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-random'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertVideo' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-video-camera'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertForum' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-comment'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertEBook' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-book'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertWork' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-paste'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertPoll' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-paste'></i>
-          </a>
-        </li>
-        <li>
-          <a class='btn-default-eclass place-at-toolbox submenu-button' title='$langAdd $langInsertWiki' rel='tooltip' data-toggle='tooltip' data-placement='top' href='...''>
-            <i class='fa fa-paste'></i>
-          </a>
-        </li>
-      </ul>
-      <button class='btn-default-eclass place-at-toolbox' title=''>
-        <i class='fa fa-th-large'></i>
-      </button>
-    </div>
-
+    $tool_content .="
   </div>
 </div>
 
