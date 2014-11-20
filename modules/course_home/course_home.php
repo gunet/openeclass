@@ -514,6 +514,11 @@ if ($is_editor) {
                 } else {
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langCourseUnitDeleteConfirm),
                         array('title' => $langVisibility,
                               'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
                               'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
@@ -531,12 +536,7 @@ if ($is_editor) {
                         array('title' => $langUp,
                               'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
                               'icon' => 'fa-arrow-up',
-                              'show' => $count_index != 1),
-                        array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langCourseUnitDeleteConfirm))) .
+                              'show' => $count_index != 1))) .
                     '</div>';
                 }
             }
