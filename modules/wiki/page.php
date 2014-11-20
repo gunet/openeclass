@@ -543,46 +543,38 @@ if (!$is_allowedToRead) {
 
 if (!isset($_GET['edit'])) {
 // Wiki navigation bar
-$tool_content .= '
-  <div id="operations_container">
-    <ul id="opslist">' . "\n";
-$tool_content .= '          <li>'
-        . '<img src="' . $themeimg . '/wiki.png" align="middle" />&nbsp;<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-        . '&amp;wikiId=' . $wiki->getWikiId()
-        . '&amp;action=show'
-        . '&amp;title=__MainPage__'
-        . '">'
-        . $langWikiMainPage . '</a></li>' . "\n"
-;
-$tool_content .= '          <li>'
-        . '<img src="' . $themeimg . '/history.png" align="middle" />&nbsp;<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-        . '&amp;wikiId=' . $wiki->getWikiId()
-        . '&amp;action=recent'
-        . '">'
-        . $langWikiRecentChanges . '</a></li>' . "\n"
-;
-
-$tool_content .= '          <li>'
-        . '<img src="' . $themeimg . '/book.png" align="middle" />&nbsp;<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-        . '&amp;wikiId=' . $wiki->getWikiId()
-        . '&amp;action=all">'
-        . $langWikiAllPages . '</a></li>' . "\n"
-;
-
-$tool_content .= '<li>'
-        . '<img src="' . $themeimg . '/list.png" align="middle" />&nbsp;<a class="claroCmd" href="' . 'index.php?course=' . $course_code . '&amp;gid=' . $groupId
-        . '">'
-        . $langWikiList . '</a></li>' . "\n"
-;
-
-$tool_content .= '          <li>'
-        . '<img src="' . $themeimg . '/search.png" align="middle" />&nbsp;<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-        . '&amp;wikiId=' . $wiki->getWikiId()
-        . '&amp;action=rqSearch">'
-        . $langSearch . '</a></li>' . "\n"
-;
-
-$tool_content .= '</ul></div>';
+$tool_content .= action_bar(array(
+    array(
+        'title' => $langWikiMainPage,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=show&amp;title=__MainPage__",
+        'icon' => 'fa-wikipedia',
+        'level' => 'primary-label'
+    ),        
+    array(
+        'title' => $langWikiRecentChanges,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=recent",
+        'icon' => 'fa-history',
+        'level' => 'primary'
+    ),
+    array(
+        'title' => $langWikiAllPages,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=all",
+        'icon' => 'fa-files-o',
+        'level' => 'primary'
+    ),
+    array(
+        'title' => $langWikiList,
+        'url' => "index.php?course=$course_code&amp;gid=$groupId",
+        'icon' => 'fa-list',
+        'level' => 'primary'
+    ),     
+    array(
+        'title' => $langSearch,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=rqSearch",
+        'icon' => 'fa-search',
+        'level' => 'primary'
+    )
+));    
 }
 
 if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {

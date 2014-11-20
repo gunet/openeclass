@@ -602,7 +602,7 @@ function edit_bbb_session($session_id) {
                     <div class='form-group'>
                         <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                         <div class='col-sm-10'>
-                            <input type='text' name='title' id='title' value='".q($row->title)."'>
+                            <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -614,7 +614,7 @@ function edit_bbb_session($session_id) {
                     <div class='form-group'>
                         <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
                         <div class='col-sm-10'>
-                            <input type='text' name='start_session' id='start_session' value='".q($start)."'>
+                            <input class='form-control' type='text' name='start_session' id='start_session' value='".q($start)."'>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -686,7 +686,7 @@ function edit_bbb_session($session_id) {
                     <div class='form-group'>
                         <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
                         <div class='col-sm-10'>
-                                <select name='minutes_before' id='minutes_before'>
+                                <select class='form-control' name='minutes_before' id='minutes_before'>
                                     <option value='15' ".(($row->unlock_interval=='15') ? "selected" : "").">15</option>
                                     <option value='30' ".(($row->unlock_interval=='30') ? "selected" : "").">30</option>
                                     <option value='10' ".(($row->unlock_interval=='10') ? "selected" : "").">10</option>
@@ -696,14 +696,14 @@ function edit_bbb_session($session_id) {
                     <div class='form-group'>
                         <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
                         <div class='col-sm-10'>
-                            <input type='text' name='sessionUsers' id='sessionUsers' size='5' value='".$row->sessionUsers."'> $langBBBSessionSuggestedUsers:
+                            <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' size='5' value='".$row->sessionUsers."'> $langBBBSessionSuggestedUsers:
                             <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
                         </div>
                     </div>                    
                     <div class='form-group'>
                         <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
                         <div class='col-sm-10'>
-                            <input id='tags_1' name='external_users' type='text' class='tags' value='".trim($row->external_users)."'>
+                            <input class='form-control tags' id='tags_1' name='external_users' type='text' value='".trim($row->external_users)."'>
                         </div>
                     </div>                    
                     <div class='form-group'>
