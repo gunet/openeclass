@@ -2,13 +2,8 @@
 *   Open eClass 3.0
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
-*
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
-*				Tilemachos Raptis <traptis@noc.uoa.gr>
+*  Copyright(c) 2003-2014  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".				
 *
 *  Open eClass is an open platform distributed in the hope that it will
 *  be useful (without any warranty), under the terms of the GNU (General
@@ -27,28 +22,52 @@ Open eClass was initially based on Claroline 1.3.0, by:
   Christophe Gesche <gesche@ipm.ucl.ac.be>
   Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
 
-Special Credits to:
-
-/************************************************************************
-
-Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
-
-for his important contribution in Open eClass 2.0 & 2.1
-Design & Developement: main template file, engine and css, 
-                      personalised portfolio
-                      Platform's User Interface  
+************************************************************************/
+ Project Management and Core Developers
+************************************************************************/
+ Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+ Yannis Exidaridis <jexi@noc.uoa.gr>
+ Alexandros Diamantidis <adia@noc.uoa.gr>
 
 ************************************************************************/
-
-Also Special Credits to:
- Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
- Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
- Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
+Developers and Contributors
+************************************************************************/
+ Thanos Kyritsis <atkyritsis@upnet.gr>
  Panayotis Katsaloulis <panayotis@panayotis.com>
+ Nikos Vavoulas <nikos.va@gmail.com>
+ Anastasios Karakostas <akarakos@csd.auth.gr> (Aristotele University of Thessaloniki)
+ Ananias Tsalouchidis <atsaloux@it.auth.gr> (Aristotele University of Thessaloniki)
+ Sakis Agorastos <th_agorastos@hotmail.com>
+ Angela Dimitriou <a.dimitriou@noc.ntua.gr> (National Technical University of Athens)
+ Athanasios Plessas <plessas@ceid.upatras.gr> (University of Patras)
+ Evangelia Boufardea <mpoufard@westgate.gr>
 
 ************************************************************************/
+ UI Team
+************************************************************************/
+ Ioannis Feneris <ifeneris@it.auth.gr> (Aristotele University of Thessaloniki)
+ Theodore Schizas <tioschizas@gmail.com>
+ Manina Dourali <info@groovygraphics.gr>
+ George Piskopanis <gpiskopanis@gmail.com>
 
-Also Credits to:
+************************************************************************/
+ Security Team
+************************************************************************/
+ Ioannis Stais <istais@di.uoa.gr>
+ George Arygoros <argyros.george@gmail.com>
+
+************************************************************************/
+Documentation and Testing Team
+************************************************************************/
+ Tilemachos Raptis <traptis@noc.uoa.gr>
+ Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
+
+************************************************************************/
+Previous Developers and Contributors
+************************************************************************/
+ Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
+ Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
+ Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete) 
  Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
  Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
  Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
@@ -56,7 +75,6 @@ Also Credits to:
  Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
  Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
  Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
- Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
  Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
  Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)
  Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
@@ -66,10 +84,10 @@ Also Credits to:
  Konstantinidis K. (Aristotele University of Thessaloniki)
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
  George Doukas <geodoukas@upatras.gr> (University of Patras)
- Kostantinos Tsakaloglou <tsakf@yahoo.com>
- Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
+ Kostantinos Tsakaloglou <tsakf@yahoo.com> 
  Apostolos Kechagias <apkech@gmail.com>
  Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
+ Yury Kherimyan <yurissudavar@gmail.com> (University of Athens)
 
 Also we would like to thank:
  Aristotelis Glentis <arisg@noc.uoa.gr> (University of Athens)
@@ -89,6 +107,11 @@ Also we would like to thank:
 for their contribution in security issues. 
 
 /***********************************************************************
+Porting to IOS by:
+	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras) 
+ 	Panayotis Katsaloulis <panayotis@panayotis.com>
+
+/***********************************************************************
 Porting to Android OS by:
 	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras) 
  	Panayotis Katsaloulis <panayotis@panayotis.com>
@@ -104,7 +127,27 @@ Messages translated to:
         French by Mavina Pantazara <mavinap@frl.uoa.gr>
 ************************************************************************/
 
+
+************************************************************************/
+Various components which are used (or have used in previous releases)
+************************************************************************/
+
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
+
+Bootstrap Code licensed under MIT, documentation under CC BY 3.0.
+        http://getbootstrap.com
+
+Bootstrap Slider distributed under Apache License Version 2.0
+            https://github.com/seiyria/bootstrap-slider
+
+Bootstrap distributed under Apache License Version 2.0
+        http://www.malot.fr/bootstrap-datetimepicker/
+
+Datatables distributed under MIT license
+    http://www.datatables.net
+
+Colorbox distributed under MIT license
+    http://www.jacklmoore.com/colorbox/
 
 PclZip 2.8.2 : Vincent Blavet <vincent@phpconcept.net>
 	Distributed under the GNU Lesser General Public License.
@@ -127,8 +170,6 @@ POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 Flot Javascript plotting library for jQuery: Copyright (c) 2007-2012 IOLA and Ole Laursen.
 Licensed under the MIT license.
 
-Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
-
 Wiki module: Frederic Minne <zefredz@gmail.com>
 class wiki2xhtml based on DotClear version 3.1d licensed under GPL
 Copyright (c) 2004 Olivier Meunier and contributors.
@@ -137,8 +178,6 @@ Copyright (c) 2004 Olivier Meunier and contributors.
 
 Learnpath module: Piraux Sebastien <pir@cerdecam.be>
         Lederer Guillaume <led@cerdecam.be>
-
-Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
 
 PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
   http://www.xm1math.net/phpmathpublisher/
