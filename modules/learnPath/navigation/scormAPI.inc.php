@@ -994,10 +994,6 @@ $sco['session_time'] = "0000:00:00.00";
     //
     //
     function do_commit() {
-		setTimeout(function(){do_commit_late()},1000);
-	}
-	
-    function do_commit_late() {
         // target form is in a hidden frame
         cmiform = upFrame.document.forms[0];
         // user module progress id
