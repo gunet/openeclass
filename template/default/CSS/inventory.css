@@ -1758,17 +1758,12 @@ tr.not_visible td:not(:last-child) a {
 }
 
 /* line 1652, ../SASS/inventory.scss */
-#leftnav.no-embed {
-  top: -70px;
-}
-
-/* line 1656, ../SASS/inventory.scss */
 .row-main {
   padding-bottom: 2em;
   padding-top: 1em;
 }
 
-/* line 1660, ../SASS/inventory.scss */
+/* line 1656, ../SASS/inventory.scss */
 #background-cheat {
   position: absolute;
   background-color: #fafafa;
@@ -1777,52 +1772,73 @@ tr.not_visible td:not(:last-child) a {
   padding: 0px;
 }
 
-/* line 1669, ../SASS/inventory.scss */
+/* line 1665, ../SASS/inventory.scss */
 #my-courses .panel .alert {
   margin: 15px;
 }
 
 /*# sourceMappingURL=inventory.css.map */
-/* line 1676, ../SASS/inventory.scss */
+/* line 1672, ../SASS/inventory.scss */
 th.option-btn-cell {
   width: 56px;
   padding-right: 0px !important;
   padding-left: 0px !important;
 }
 
-/* line 1682, ../SASS/inventory.scss */
+/* line 1678, ../SASS/inventory.scss */
 td.option-btn-cell {
   width: 56px;
   padding: 0px !important;
 }
 
-/* line 1686, ../SASS/inventory.scss */
-.container {
-  margin-top: 15px;
-  margin-bottom: 15px;
+/* line 1683, ../SASS/inventory.scss */
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+  margin-left: 0px;
+  padding: 2px 0;
 }
 
-/* line 1691, ../SASS/inventory.scss */
+/* line 1688, ../SASS/inventory.scss */
+#wholesearch {
+  padding: 80px 10px 15px 10px;
+}
+
+/* line 1692, ../SASS/inventory.scss */
 #Frame {
   padding: 0 0;
   margin: 0 0;
 }
 
-/* line 1696, ../SASS/inventory.scss */
+/* line 1698, ../SASS/inventory.scss */
+.container-fluid {
+  position: relative;
+}
+/* line 1700, ../SASS/inventory.scss */
+.container-fluid .navbar-header {
+  position: relative;
+  width: 100%;
+}
+
+/* line 1706, ../SASS/inventory.scss */
 .side_content {
   padding-top: 24px;
 }
 
-/* line 1701, ../SASS/inventory.scss */
+/* line 1710, ../SASS/inventory.scss */
+.content-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* line 1714, ../SASS/inventory.scss */
 #dropboxTabs .nav-tabs {
   margin-bottom: 15px;
 }
 
-/* line 1705, ../SASS/inventory.scss */
+/* line 1718, ../SASS/inventory.scss */
 #portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter {
   position: relative;
 }
-/* line 1708, ../SASS/inventory.scss */
+/* line 1721, ../SASS/inventory.scss */
 #portfolio_lessons_filter:before, #inbox_table_filter:before, #outbox_table_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -1831,35 +1847,35 @@ td.option-btn-cell {
   content: "\f002";
   color: #999;
 }
-/* line 1716, ../SASS/inventory.scss */
+/* line 1729, ../SASS/inventory.scss */
 #portfolio_lessons_filter label, #inbox_table_filter label, #outbox_table_filter label {
   margin: 0 0 10px 0;
 }
-/* line 1719, ../SASS/inventory.scss */
+/* line 1732, ../SASS/inventory.scss */
 #portfolio_lessons_filter input, #inbox_table_filter input, #outbox_table_filter input {
   margin: 0px;
   padding-right: 25px;
 }
 
-/* line 1724, ../SASS/inventory.scss */
+/* line 1737, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1729, ../SASS/inventory.scss */
+/* line 1742, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 10px;
 }
 
-/* line 1735, ../SASS/inventory.scss */
+/* line 1748, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1741, ../SASS/inventory.scss */
+/* line 1754, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1868,38 +1884,38 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1749, ../SASS/inventory.scss */
+/* line 1762, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1752, ../SASS/inventory.scss */
+/* line 1765, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1756, ../SASS/inventory.scss */
+/* line 1769, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1760, ../SASS/inventory.scss */
+/* line 1773, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1766, ../SASS/inventory.scss */
+/* line 1779, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1775, ../SASS/inventory.scss */
+/* line 1788, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1781, ../SASS/inventory.scss */
+/* line 1794, ../SASS/inventory.scss */
 .event-legend {
   font-size: 12px;
   color: #666;
@@ -1907,7 +1923,7 @@ span[data-cal-date] {
   padding: 0px;
   margin: 0px;
 }
-/* line 1787, ../SASS/inventory.scss */
+/* line 1800, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
@@ -1917,7 +1933,7 @@ span[data-cal-date] {
   border-radius: 4px !important;
 }
 
-/* line 1797, ../SASS/inventory.scss */
+/* line 1810, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1934,7 +1950,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1809, ../SASS/inventory.scss */
+/* line 1822, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1944,7 +1960,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1815, ../SASS/inventory.scss */
+/* line 1828, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

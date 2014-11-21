@@ -1649,10 +1649,6 @@ ul.expandable{
 {
     position: relative !important;
 }
-#leftnav.no-embed
-{
-    top: -70px;
-}
 .row-main{
     padding-bottom: 2em;
     padding-top: 1em;
@@ -1683,9 +1679,14 @@ td.option-btn-cell{
    width: 56px;
    padding: 0px !important;
 }
-.container{
-    margin-top: 15px;
-    margin-bottom: 15px;
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
+    margin-left: 0px;
+    padding: 2px 0;
+}
+
+#wholesearch{
+    padding: 80px 10px 15px 10px;
 }
 
 #Frame
@@ -1693,11 +1694,23 @@ td.option-btn-cell{
     padding: 0 0;
     margin: 0 0;
 }
+
+.container-fluid{
+    position: relative;
+    .navbar-header{
+        position: relative;
+        width: 100%;
+    }
+}
+
 .side_content
 {
     padding-top: 24px;
 }
-
+.content-container{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 #dropboxTabs .nav-tabs{
     margin-bottom: 15px;
 }

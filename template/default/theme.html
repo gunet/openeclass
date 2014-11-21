@@ -52,6 +52,61 @@
 </head>
 
 <body>
+<<<<<<< mine
+    <nav id="header" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{%URL_PATH%}">
+                    <img class="img-responsive hidden-xs hidden-sm img-responsive" alt="open eclass logo" src="{%template_base%}/img/logo_eclass.png">
+                    <img class="img-responsive hidden-md hidden-lg img-responsive" alt="open eclass logo" src="{%template_base%}/img/logo_eclass_small.png" >
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#lefnav-menu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="nav navbar-nav navbar-right">
+                <!-- BEGIN LoggedInBlock -->
+                <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-book"></i></a></li>
+
+                <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+
+                <li id="profile_menu_dropdown" class="dropdown">
+                    <a class="dropdown-toggle" role="button" id="dropdownMenu1" data-toggle="dropdown">
+                         <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
+                     </a>
+
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user"></i>{%LANG_PROFILE%}</a>
+                         </li>                                        
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o"></i>{%LANG_MESSAGES%}</a>
+                         </li>                                    
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><i class="fa fa-calendar"></i>{%LANG_AGENDA%}</a>
+                         </li>
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><i class="fa fa-edit"></i>{%LANG_NOTES%}</a>
+                         </li>
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><i class="fa fa-area-chart"></i>{%LANG_STATS%}</a>
+                         </li>                                    
+                         <hr>
+                         <li role="presentation">
+                             <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-unlock"></i>{%LANG_LOGOUT%}</a>
+                         </li>                                    
+                     </ul>
+                 </li>
+
+                <li><a id="toggle-sidebar"><i class="fa fa-sign-in fa-rotate-180"></i></a></li>
+                <!-- END LoggedInBlock -->
+                <!-- BEGIN LoggedOutBlock -->
+                <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+
+                {%LANG_SELECT%}
+=======
 	<div class="container">
         <!-- BEGIN headerBlock -->
             <div class="row" id="header_section">
@@ -96,26 +151,40 @@
                                 </ul>
                             </li>
 
-                            <li><a id="toggle-sidebar"><i class="fa fa-sign-in fa-rotate-180"></i></a></li>
+                            <li><a id="toggle-sidebar"><i class="fa fa-sliders"></i></a></li>
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
                             <!-- BEGIN searchBlock -->
                             <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
                             <!-- END searchBlock -->
                             {%LANG_SELECT%}
-
                             <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-lock"></i></a></li>
                             <!-- END LoggedOutBlock -->
-
                         </ul>
-                    </nav>
-                </div>
             </div>
+>>>>>>> theirs
+
+            
+<<<<<<< mine
+        </div>
+    </nav>
+	<div class="container">
+=======
         <!-- END headerBlock -->
+>>>>>>> theirs
 
         <!-- LeftNav & Main Content Section -->
 
         <div class="row" id="Frame">
+<<<<<<< mine
+            <div id="leftnav" class="col-xs-2 col-sm-1 col-md-2 sidebar hidden-xs">
+                <div id="wholesearch">
+                    <form role="search">
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Αναζήτηση...">
+                        </div>
+                    </form>
+=======
             <!-- BEGIN leftNavBlock -->
             <div id="leftnav" class="col-xs-2 col-sm-1 col-md-2 sidebar {%leftNavClass%}">
 
@@ -125,6 +194,7 @@
                     <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/eclass-new-logo.png" alt=''>
                     <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/eclass-new-logo-small.png" alt=''>
                     </a>
+>>>>>>> theirs
                 </div>
                 <!-- END logoBlock -->
 
@@ -156,6 +226,10 @@
                     <!-- END leftNavCategoryBlock -->
                 </div>
             </div>
+<<<<<<< mine
+            <div id="background-cheat" class="col-xs-12 col-sm-11 col-md-10"></div>
+            <div id="main-content" class="col-xs-12 col-sm-11 col-md-10">
+=======
             <!-- END leftNavBlock -->
             <!-- BEGIN normalViewOpenDiv -->
             <div id="background-cheat" class="col-xs-10 col-sm-11 col-md-10"></div>
@@ -165,6 +239,7 @@
             <div id="background-cheat" class="col-xs-12"></div>
             <div id="main-content" class="col-xs-12">
             <!-- END mobileViewOpenDiv -->
+>>>>>>> theirs
 
                 <div class="row row-main">
                     <div class="col-md-12 add-gutter">
@@ -327,6 +402,12 @@
 
             <!-- END sideBarBlock -->
         </div>
+<<<<<<< mine
+    </div>
+    <!-- Footer Section -->
+            <footer class="footer">
+                <div class="container-fluid">
+=======
 
         <!-- BEGIN footerBlock -->
         <div class="row" id="footer_section">
@@ -337,13 +418,19 @@
             <div class="col-xs-12">
             <!-- END mobileViewOpenDiv -->
                 <footer class="footer">
+>>>>>>> theirs
                     <span>GUNET © eClass</span>
+<<<<<<< mine
+                </div>
+            </footer>
+=======
                 </footer>
             </div>
         </div>
         <!-- END footerBlock -->
 
     </div>
+>>>>>>> theirs
     <!-- BEGIN modalWindowBlock -->
         <!-- Dialog show event handler -->
         <script type='text/javascript'>
