@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,6 +28,12 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Initialize the incoming variables
 $username = isset($_POST['username']) ? $_POST['username'] : '';
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 if (isset($_POST['submit']) and ! empty($username)) {
 
@@ -77,15 +83,14 @@ if (isset($_POST['submit']) and ! empty($username)) {
 
 $tool_content .= printform($langUsername);
 
-$tool_content .= "
-  <table class='tbl_alt' width='100%'>
-  <tr>
-    <th class='center'>ID</th>
-    <th>$langSurnameName</th>
-    <th>$langUsername</th>
-    <th class='center'>$langRole</th>
-    <th class='text-center'>" . icon('fa-gears') . "</th>
-  </tr>";
+$tool_content .= "<table class='table-default'>
+        <tr>
+          <th class='center'>ID</th>
+          <th>$langSurnameName</th>
+          <th>$langUsername</th>
+          <th class='center'>$langRole</th>
+          <th class='text-center'>" . icon('fa-gears') . "</th>
+        </tr>";
 
 // Display the list of admins
 Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privilege as privilege
@@ -121,53 +126,65 @@ Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privi
     }
     $tool_content .= "</tr>";
 });
-$tool_content .= "</table><br />";
-
-// Display link back to index.php
-$tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
+$tool_content .= "</table>";
 
 draw($tool_content, 3);
 
-/* * ***************************************************************************
-  function printform()
- * *****************************************************************************
-  This method constructs a simple form where the administrator searches for
-  a user by username to give user administrator permissions
 
-  @returns
-  $ret: (String) The constructed form
- * **************************************************************************** */
-
+/**
+ * @brief display administrator search form for grantint user administrator privileges
+ * @global type $langAdd
+ * @global type $langAdministrator
+ * @global type $langPowerUser
+ * @global type $langManageUser
+ * @global type $langAddRole
+ * @global type $langHelpAdministrator
+ * @global type $langHelpPowerUser
+ * @global type $langHelpManageUser
+ * @global type $langUserFillData
+ * @global type $langManageDepartment
+ * @global type $langHelpManageDepartment
+ * @param type $message
+ * @return string
+ */
 function printform($message) {
 
-    global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-    $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData,
+    global $langAdd, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
+    $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUsername,
     $langManageDepartment, $langHelpManageDepartment;
 
-    $ret = "<form method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
-    $ret .= "
-        <fieldset>
-        <legend>$langUserFillData</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-            <th class='left'>" . $message . "</th>
-            <td><input type='text' name='username' size='30' maxlength='30'></td>
-        </tr>
-        <tr><th rowspan='4'>$langAddRole</th>
-            <td><input type='radio' name='adminrights' value='admin' checked>&nbsp;$langAdministrator&nbsp;
-        <span class='smaller'>($langHelpAdministrator)</span></td></tr>
-        <tr>
-        <td><input type='radio' name='adminrights' value='poweruser'>&nbsp;$langPowerUser&nbsp;
-            <span class='smaller'>($langHelpPowerUser)</span></td></tr>
-        <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
-            <span class='smaller'>($langHelpManageUser)</span></td></tr>
-        <tr><td><input type='radio' name='adminrights' value='managedepartment'>&nbsp;$langManageDepartment&nbsp;
-            <span class='smaller'>($langHelpManageDepartment)</span></td></tr>
-        <tr>
-            <td colspan='2' class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langAdd'></td>
-        </tr>
-        </table>
-        </fieldset>
-    </form>";
+    $ret = "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
+    $ret .= "<fieldset>
+                <div class='form-group'>
+                    <label for='username' class='col-sm-2 control-label'>" . $message . "</label>
+                    <div class='col-sm-10'><input type='text' name='username' size='30' maxlength='30' placeholder='$langUsername'></div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langAddRole</label>
+                        <div class='col-sm-10'>
+                            <div class='radio'>
+                                <input type='radio' name='adminrights' value='admin' checked>$langAdministrator<span class='help-block'><small>$langHelpAdministrator</small></span>
+                            </div>
+                            <div class='radio'>
+                                <input type='radio' name='adminrights' value='poweruser'>$langPowerUser<span class='help-block'><small>$langHelpPowerUser&nbsp;</small></span>
+                            </div>
+                            <div class='radio'>
+                                <input type='radio' name='adminrights' value='manageuser'>$langManageUser<span class='help-block'><small>$langHelpManageUser</small></span>
+                            </div>
+                            <div class='radio'>
+                                <input type='radio' name='adminrights' value='managedepartment'>$langManageDepartment<span class='help-block'><small>$langHelpManageDepartment</small></span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
+                    </div>
+                </div>       
+            </fieldset>
+            </form>
+        </div>";
     return $ret;
 }

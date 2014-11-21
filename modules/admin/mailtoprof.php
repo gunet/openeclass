@@ -31,6 +31,12 @@ $user = new User();
 $nameTools = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
+// Display link back to index.php
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 /* * ***************************************************************************
   MAIN BODY
  * **************************************************************************** */
@@ -80,7 +86,7 @@ $langEmail: " . get_config('email_helpdesk') . "
         if (get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
-        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
+        $linkhere = "&nbsp;<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
         $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribeFromPlatform, $siteName);
         $emailcontent = $emailbody . $unsubscribe . $linkhere;
         if (count($recipients) >= 50) {
@@ -95,33 +101,30 @@ $langEmail: " . get_config('email_helpdesk') . "
     $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
 } else {
     // Display form to administrator
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-      <fieldset>
-        <legend>$langMessage</legend>
-	<table class='tbl' width='100%'>
-	<tr>
-	  <td>$typeyourmessage<br />
-	      <textarea name='body_mail' rows='10' cols='60'></textarea></td>
-	</tr>
-	<tr>
-	  <td>$langSendMessageTo
-	    <select name='sendTo'>
+    $tool_content .= "<div class='form-wrapper'>
+    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+    <fieldset>        	
+	<div class='form-group'>
+	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
+              <div class='col-sm-10'>
+	      <textarea name='body_mail' rows='10' cols='60'></textarea>
+              </div/>
+	</div>
+	<div class='form-group'>
+	  <label class='col-sm-2 control-label'>$langSendMessageTo</label>
+              <div class='col-sm-10'>
+	    <select class='form-control' name='sendTo'>
 	      <option value='1'>$langProfOnly</option>
 		<option value='2'>$langStudentsOnly</option>
 	      <option value='0'>$langToAllUsers</option>
-	      </select>	    </td>
-	  </tr>
-	<tr>
-	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' /></td>
-	  </tr>
-	</table>
-        </fieldset>
-	</form>";
+	      </select>	    
+            </div>
+        </div>
+	<div class='col-sm-offset-2 col-sm-10'>	
+	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />
+        </div>	
+    </fieldset>
+    </form>
+    </div>";
 }
-// Display link back to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3);

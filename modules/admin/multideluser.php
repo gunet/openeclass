@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,7 +22,6 @@
 
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
-require_once 'admin.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
@@ -202,22 +201,25 @@ if (isset($_POST['submit'])) {
     }
 
 
-    $tool_content .= "<div class='noteit'>" . $langMultiDelUserInfo . "</div>
-        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
+    $tool_content .= "<div class='alert alert-info'>" . $langMultiDelUserInfo . "</div>
+        <div class='form-wrapper'>
+        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
         <fieldset>
-        <legend>" . $langMultiDelUserData . "</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-            <th>" . $langUsersData . ":</th>
-            <td><textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea></td>
-        </tr>
-        <tr>
-            <th>&nbsp;</th>
-            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' /></td>
-        </tr>
-        </table>
+        <label>$langMultiDelUserData</label>
+        <div class='form-group'>
+        <label class='col-sm-2 control-label>$langUsersData:</label>
+            <div class='col-sm-9'>
+                <textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-9 col-sm-offset-3'>            
+                <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' />
+            </div>
+        </div>        
         </fieldset>
-        </form>";
+        </form>
+        </div>";
 }
 
 $tool_content .= action_bar(array(
