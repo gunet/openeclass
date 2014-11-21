@@ -174,7 +174,7 @@ elseif(isset($_GET['choice']))
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
                 $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);
 
-                if( ($c > 0) && ($c < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
+                if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
                 {
                     $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBMaxUsersJoinError</p>";
                     break;
