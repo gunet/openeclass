@@ -67,33 +67,29 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     // set display title
     $localtitle = ( $title === '__MainPage__' ) ? $langWikiMainPage : $title;
 
-    // display title
-    $out = '<div class="wikiTitle">' . "\n";
-    $out .= '<h1>' . $localtitle . '</h1>' . "\n";
-    $out .= '</div>' . "<br />";
-
-    // display editor
-    $out .= '<form method="POST" action="' . $script . '"'
-            . ' name="editform" id="editform">' . "\n"
-    ;
-
+    $out = "<div class='wikiTitle'>
+                <h1>$localtitle</h1>
+            </div><br>
+            <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
+  
     if ($showWikiToolBar === true) {
         $wikiarea = new Wiki2xhtmlArea($content, 'wiki_content', 80, 15, null);
-        $out .= $wikiarea->toHTML();
-    } else {
-        $out .= '<label>Texte :</label><br />' . "\n";
-        $out .= '<textarea name="wiki_content" id="wiki_content"'
-                . ' cols="80" rows="15" wrap="virtual">'
-        ;
-        $out .= q($content);
-        $out .= '</textarea>' . "\n";
+        $out .= "<div class='form-group'><div class='col-xs-12'>". $wikiarea->toHTML() . "</div></div>";
+    } else { // Does it ever gets in here?
+        $out .= "<label>Texte :</label><br>
+                <textarea class='form-control' name='wiki_content' id='wiki_content'vcols='80' rows='15' wrap='virtual'>
+                    ". q($content) ."
+                </textarea>";
     }
 	
     //notes
-    $out .= '<div style="padding:10px;">' . "\n";
-    $out .= '<b>'.$langNote.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
-	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
-    $out .= '</div>' . "\n";
+    $out .= "<div class='form-group'>
+                <label for='changelog' class='col-sm-2 control-label'>$langNote:</label>
+                <div class='col-sm-10'>    
+                    <input class='form-control' type='text'  id='changelog' value='".q($changelog)."' name='changelog' size='70' maxlength='200' wrap='virtual'>
+                </div>        
+            </div>";
     //end notes
 
     $out .= '<div style="padding:10px;">' . "\n";
@@ -121,11 +117,10 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= disp_button($location, $langCancel);
-
-    $out .= '</div>' . "\n";
-
-    $out .= "</form>\n";
+    $out .= "   <a class='btn btn-default' href='$location'>$langCancel</a>
+            </div>
+        </form>
+    </div>";
 
     return $out;
 }
@@ -179,39 +174,21 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $out = '<br><div><form method="POST" action="' . $script
-            . '" name="previewform" id="previewform">' . "\n"
-    ;
-    $out .= '<input type="hidden" name="wiki_content" value="'
-            . q($content) . '" />' . "\n"
-    ;
-
-    $out .= '<input type="hidden" name="changelog" value="'
-            . q($changelog) . '" />' . "\n"
-    ;
-    				
-    $out .= '<input type="hidden" name="title" value="'
-            . q($title)
-            . '" />' . "\n"
-    ;
-
-    $out .= '<input type="hidden" name="wikiId" value="'
-            . $wikiId
-            . '" />' . "\n"
-    ;
-
-    $out .= '<input class="btn btn-primary" type="submit" name="action[save]" value="'
-            . $langSave . '" />' . "\n"
-    ;
-    $out .= '<input class="btn btn-primary" type="submit" name="action[edit]" value="'
-            . $langEdit . '"/>' . "\n"
-    ;
+    $out = "<br>
+            <div><form method='POST' action='$script' name='previewform' id='previewform'>
+             <input type='hidden' name='wiki_content' value='". q($content) . "'>
+             <input type='hidden' name='changelog' value='". q($changelog) . "'>
+             <input type='hidden' name='title' value='". q($title) ."'>
+             <input type='hidden' name='wikiId' value='$wikiId'>
+             <input class='btn btn-primary' type='submit' name='action[save]' value='$langSave'>
+             <input class='btn btn-primary' type='submit' name='action[edit]' value='$langEdit'>
+            ";
 
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "title", $title);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= disp_button($location, $langCancel);
+    $out .= "<a class='btn btn-default' href='$location'>$langCancel</a>";
 
     $out .= "</form></div>";
 

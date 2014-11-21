@@ -541,7 +541,7 @@ if (!$is_allowedToRead) {
 }
 
 
-if (!isset($_GET['edit'])) {
+if ($action != "edit") {
 // Wiki navigation bar
 $tool_content .= action_bar(array(
     array(
@@ -579,16 +579,16 @@ $tool_content .= action_bar(array(
 
 if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {
 
-    $tool_content .= '<p align="right">';
     if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
-        $tool_content .= ''
-                . '<img src="' . $themeimg . '/back.png" align="middle" />&nbsp;'
-                . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-                . '&amp;wikiId=' . $wiki->getWikiId()
-                . '&amp;action=show'
-                . '&amp;title=' . rawurlencode($wiki_title)
-                . '">' . $langWikiBackToPage . '</a>'
-        ;
+        $tool_content .= action_bar(array(
+            array(
+                'title' => $langWikiBackToPage,
+                'level' => 'primary-label',
+                'icon' => 'fa-reply',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=show&amp;title=". rawurlencode($wiki_title)
+            )
+        ));
+
     }
 
     if ($is_allowedToEdit || $is_allowedToCreate) {
@@ -620,7 +620,7 @@ if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action 
         }
     }
 
-    if ($action == "show" || $action == "edit" || $action == "history" || $action == "diff") {
+    if ($action == "show" || $action == "history" || $action == "diff") {
         // active
         $tool_content .= '&nbsp;&nbsp;&nbsp;'
                 . '<img src="' . $themeimg . '/version.png" align="middle" />&nbsp;'
@@ -631,8 +631,7 @@ if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action 
                 . '">'
                 . $langWikiPageHistory . '</a>'
         ;
-    }
-    
+    }  
     if ( $action == "show" )
     {
         $tool_content .= '&nbsp;&nbsp;&nbsp;'
@@ -656,7 +655,6 @@ if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action 
           . $langWikiHelpSyntax . '</a>'
           ; */
     }
-    $tool_content .= "</p>";
 }
 
 switch ($action) {
@@ -836,16 +834,23 @@ switch ($action) {
                                         	            
                                         	$(document).ready(function(){
                                         	    countdown(function() {
-                                        	        alert('".$langWikiLockTimeEnd."');
+                                        	        bootbox.alert('".$langWikiLockTimeEnd."');
                                         	    });
                                             })
                                     </script>\n";
                     
-                    $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span></div>
-                                      <div class='progress'>
-                                        <div class='bar' id='progress'></div>
-                                      </div>";
-                    $tool_content .= "<noscript><div><img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId' /></div></noscript>";
+                    $tool_content .= "  <div>
+                                            $langWikiLockTimeRemaining
+                                            <span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span>
+                                        </div>
+                                        <div class='progress'>
+                                            <div class='progress-bar progress-bar-striped active' id='progress'></div>
+                                        </div>
+                                        <noscript>
+                                            <div>
+                                                <img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId'>
+                                            </div>
+                                       </noscript>";
                 }
                 
                 $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
