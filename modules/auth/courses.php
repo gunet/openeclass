@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
         if (count($tree->buildRootsArray()) > 1)
             $tool_content .= $tree->buildRootsSelectForm($fc);
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<table width='100%' class='tbl_border'>
+        $tool_content .= "<table class='table-default'>
                                   <tr><th><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </th></tr></table><br />";
@@ -214,7 +214,7 @@ function expanded_faculte($facid, $uid) {
 
     $retString .= $tree->buildDepartmentChildrenNavigationHtml($facid, 'courses');
 
-    $retString .= "\n    <table class='tbl_alt' width='100%'>";
+    $retString .= "\n    <div class='table-responsive'><table class='table-default'>";
     $retString .= "\n    <tr>";
     $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
     $retString .= "\n      <th>$langCourseCode</th>";
@@ -295,7 +295,7 @@ function expanded_faculte($facid, $uid) {
         $retString .= "</td></tr>";
         $k++;
     }, intval($facid), COURSE_INACTIVE);
-    $retString .= "</table>";
+    $retString .= "</table></div>";
 
     return $retString;
 }

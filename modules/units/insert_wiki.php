@@ -62,7 +62,7 @@ function list_wikis() {
                     </tr>";
         $i = 0;
         foreach ($wikiinfo as $entry) {
-            $tool_content .= "<tr $rowClass>
+            $tool_content .= "<tr>
                                 <td>&nbsp;<img src='$themeimg/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
                                 <td>$entry[description]</td>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>

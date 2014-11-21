@@ -96,7 +96,7 @@ class References {
          * values: general module ids or -1 for course
          */
         $gen_type_selected = (is_null($course_selected))? $module_selected:-1;
-        $object_select_fields = "<span id='refobjgentypecont' style=\"display:block;float:left;\"><select id='refobjgentype' name='refobjgentype'>";
+        $object_select_fields = "<span id='refobjgentypecont'><select class='form-control' id='refobjgentype' name='refobjgentype'>";
         $objgentypes = array(0 => $langSelectFromMenu) + self::get_object_general_types();
         foreach($objgentypes as $k => $v){
              $selected = ($k == $gen_type_selected)? " selected":"";

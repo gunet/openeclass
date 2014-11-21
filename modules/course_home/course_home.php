@@ -70,7 +70,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
-                    events_source: "'.$urlAppend.'main/calendar_data.php",
+                    events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
                     language: "'.$langLanguageCode.'",
                     views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
                     onAfterViewLoad: function(view) {
@@ -291,15 +291,15 @@ if ($is_editor) {
                                     WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
     }
 }
-
-$bar_content .= "<b style='color:#999999; font-size:13px;'>" . $langCode . ":</b> " . q($public_code) . "" .
-                "<b style='color:#999999; font-size:13px;'> / " . $langTeachers . ":</b> " . q($professor) . "" .
-                "<b style='color:#999999; font-size:13px;'> / " . $langFaculty . ":</b> ";
+//style='color:#999999; font-size:13px;'
+$bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
+                "<br><b>" . $langTeachers . ":</b> " . q($professor) . "" .
+                "<br><b>" . $langFaculty . ":</b> ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
 foreach ($departments as $dep) {
-    $br = ($i < count($departments)) ? '<br/>' : '';
+    $br = ($i < count($departments)) ? '<br>' : '';
     $bar_content .= $tree->getFullPath($dep) . $br;
     $i++;
 }
@@ -327,13 +327,13 @@ switch ($visible) {
             break;
         }
 }
-$bar_content_2 = "<b style='color:#999999; font-size:12px;'>$langConfidentiality:</b> $lessonStatus";
+$bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content_2 .= "<b style='color:#999999; font-size:13px;'> / $langUsers:</b> $link";
+$bar_content_2 .= "<br><b>$langUsers:</b> $link";
 
 // display course license
 if ($course_license) {
@@ -427,15 +427,21 @@ $tool_content .= "
             <div class='col-md-7 col-sm-7 col-xs-12'>
                 <div class=''>$main_content</div>
             </div>
-
-            <div class ='col-md-12 col-sm-12 col-xs-12'>
-                <hr class='margin-top-thin margin-bottom-thin'/>
-                $bar_content
+            <div class ='col-xs-12'>
+                <hr class='margin-top-thin margin-bottom-thin'>
             </div>
-            <div class ='col-md-12 col-sm-12 col-xs-12'>
-                $bar_content_2
-            </div>
+            <div class ='".(!empty($license_info_box) ? 'col-sm-8' : 'col-sm-12')."'>              
+                 $bar_content
+                 $bar_content_2
+            </div>";
+        if(!empty($license_info_box)){
+            $tool_content .= "
+                    <div class ='col-sm-4 text-center margin-top-fat'>
+                       $license_info_box
+                    </div>";   
+        }
 
+$tool_content .= "
         </div>
     </div>
 </div>
@@ -604,19 +610,19 @@ if (isset($level) && !empty($level)) {
     ";
 }
 
-if (!empty($license_info_box)) {
-    $tool_content .= "
-        
-            <div class='col-md-$cunits_sidebar_subcolumns'>
-                <h3 class='content-title'>$langLicense</h3>
-                <div class='panel license_info_box'>
-                    <div class='panel-body'>
-                        $license_info_box
-                    </div>
-                </div>
-            </div>
-        ";
-}
+//if (!empty($license_info_box)) {
+//    $tool_content .= "
+//        
+//            <div class='col-md-$cunits_sidebar_subcolumns'>
+//                <h3 class='content-title'>$langLicense</h3>
+//                <div class='panel license_info_box'>
+//                    <div class='panel-body'>
+//                        $license_info_box
+//                    </div>
+//                </div>
+//            </div>
+//        ";
+//}
 
 
 //BEGIN - Get user personal calendar

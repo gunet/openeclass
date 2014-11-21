@@ -65,7 +65,7 @@ if (isset($_GET['add'])) {
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary'
+                  'level' => 'primary-label'
                  )));
 
     $tool_content .= "<div class='alert alert-info'>$langAskUser</div>
@@ -74,22 +74,27 @@ if (isset($_GET['add'])) {
                 <fieldset>
                 <div class='form-group'>
                 <label for='surname' class='col-sm-2 control-label'>$langSurname:</label>
-                    <div class='col-sm-10'><input id = 'surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
+                <div class='col-sm-10'>
+                    <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
                 </div>
                 <div class='form-group'>
                 <label for='name' class='col-sm-2 control-label'>$langName:</label>
-                    <div class='col-sm-10'><input id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
+                <div class='col-sm-10'>
+                    <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
                 </div>
                 <div class='form-group'>
                 <label for='username' class='col-sm-2 control-label'>$langUsername:</label>
-                    <div class='col-sm-10'><input id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
+                <div class='col-sm-10'>
+                    <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
                 </div>
                 <div class='form-group'>
                 <label for='am' class='col-sm-2 control-label'>$langAm:</label>
-                    <div class='col-sm-10'><input id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
+                <div class='col-sm-10'>
+                    <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
+                    <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
                 </div>
                 </fieldset>
                 </form>

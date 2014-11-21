@@ -216,10 +216,6 @@ if (isset($message) && $message) {
 
 /* display form */
 if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
-    $tool_content .= "       
-    <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\" style='display:inline'>
-    <legend>$langEvent</legend>
-    <table class='tbl' width='100%'>";
     if (isset($_GET['modify'])) {
         $langAdd = $nameTools = $langModifEvent;
     } else {
@@ -243,81 +239,105 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
     if (!isset($type_selected))
         $type_selected = null;
     if (!isset($object_selected))
-        $object_selected = null;
-
+        $object_selected = null;    
     $tool_content .= "
-    <input type='hidden' name='id' value='$eventToModify' />
-    <tr><th>$langEventTitle:</th></tr>
-    <tr>
-      <td><input type='text' name='newTitle' value='$titleToModify' size='50' /></td>
-    </tr>
-    <tr><th>$langEventBody:</th></tr>
-    <tr>
-      <td>" . rich_text_editor('newContent', 4, 20, $contentToModify) . "</td>
-    </tr>
-    <tr><th>$langDate:</th></tr>
-    <tr>
-        <td> <input type='text' name='startdate' id='startdate' value='$datetimeToModify'></td>
-    </tr>
-    <tr><th>$langDuration:</th></tr>
-    <tr>
-        <td><input type=\"text\" name=\"duration\" id='duration' value='$durationToModify'></td>
-    </tr>";
-    if (!isset($_GET['modify'])) {
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\" style='display:inline'>
+        <input type='hidden' name='id' value='$eventToModify'>
+        <div class='form-group'>
+          <label for='newTitle' class='col-sm-2 control-label'>$langEventTitle:</label>
+          <div class='col-sm-10'>
+               <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langEventTitle'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='newContent' class='col-sm-2 control-label'>$langEventBody:</label>
+          <div class='col-sm-10'>
+               " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='startdate' class='col-sm-2 control-label'>$langDate:</label>
+          <div class='col-sm-10'>
+               <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
+          </div>
+        </div>
+        <div class='form-group'>
+          <label for='duration' class='col-sm-2 control-label'>$langDuration:</label>
+          <div class='col-sm-10'>
+               <input class='form-control' type='text' name='duration' id='duration' value='$durationToModify'>
+          </div>
+        </div>";
+        if (!isset($_GET['modify'])) {
         $tool_content .= "
-        <tr><th>$langRepeat:</th></tr>
-        <tr>
-            <td> $langEvery: "
-                . "<select name='frequencynumber'>"
-                . "<option value=\"0\">$langSelectFromMenu</option>";
-        for ($i = 1; $i < 10; $i++) {
-            $tool_content .= "<option value=\"$i\">$i</option>";
+        <div class='form-group'>
+          <label for='frequencynumber' class='col-sm-2 control-label'>$langRepeat $langEvery:</label>
+          <div class='col-sm-2'>
+                <select class='form-control' name='frequencynumber' id='frequencynumber'>
+                    <option value='0'>$langSelectFromMenu</option>";
+            for ($i = 1; $i < 10; $i++) {
+                $tool_content .= "<option value=\"$i\">$i</option>";
+            }
+            $tool_content .= "</select>
+          </div>
+          <div class='col-sm-2'>
+                <select class='form-control' name='frequencyperiod'>
+                    <option value=''>$langSelectFromMenu...</option>
+                    <option value='D'>$langDays</option>
+                    <option value='W'>$langWeeks</option>
+                    <option value='M'>$langMonthsAbstract</option>
+                </select>
+          </div>
+          <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
+          <div class='col-sm-2'>
+               <input class='form-control' type='text' name='enddate' id='enddate' value=''>
+          </div>          
+        </div>";
         }
-        $tool_content .= "</select>"
-                . "<select name='frequencyperiod'> "
-                . "<option value=\"\">$langSelectFromMenu...</option>"
-                . "<option value=\"D\">$langDays</option>"
-                . "<option value=\"W\">$langWeeks</option>"
-                . "<option value=\"M\">$langMonthsAbstract</option>"
-                . "</select>"
-                . " $langUntil: <input type='text' name='enddate' id='enddate' value=''></td>
-        </tr>";
-    }
-    if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
-        $eventtype = 'personal';
+        if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
+            $eventtype = 'personal';
+            $tool_content .= "
+            <div class='form-group'>
+              <label for='startdate' class='col-sm-2 control-label'>$langReferencedObject:</label>
+              <div class='col-sm-10'>
+                   " . References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected) . "
+              </div>
+            </div>";
+        } else {
+            $eventtype = 'admin';
+            $selectedvis = array(0 => "", USER_TEACHER => "", USER_STUDENT => "", USER_GUEST => "");
+            if (isset($visibility_level)) {
+                $selectedvis[$visibility_level] = "selected";
+            }            
+            $tool_content .= "
+            <div class='form-group'>
+              <label for='startdate' class='col-sm-2 control-label'>$langShowTo:</label>
+              <div class='col-sm-10'>
+                <select class='form-control' name='visibility_level'>
+                    <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>
+                    <option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>
+                    <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
+                    <option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>
+                </select>
+              </div>
+            </div>";            
+        }
         $tool_content .= "
-        <tr><th>$langReferencedObject:</th></tr>
-        <tr>
-          <td>" .
-                References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected)
-                . "</td>";
-    } else {
-        $eventtype = 'admin';
-        $selectedvis = array(0 => "", USER_TEACHER => "", USER_STUDENT => "", USER_GUEST => "");
-        if (isset($visibility_level)) {
-            $selectedvis[$visibility_level] = "selected";
-        }
-        $tool_content .= "<tr><th>$langShowTo:</th></tr>"
-                . "<tr><td><select name='visibility_level'> "
-                . "<option value=\"0\" " . $selectedvis[0] . ">$langShowToAdminsOnly</option>"
-                . "<option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>"
-                . "<option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>"
-                . "<option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>"
-                . "</select></td></tr>";
-    }
-    $tool_content .= "
-        </tr>";
-    $tool_content .= "</table>
-            <input class='btn btn-primary' type='submit' name='submitEvent' value='$langAdd' />
-            </form> 
-            <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
-                <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
-            </form>        
+        <div class='form-group'>
+          <div class='col-sm-10 col-sm-offset-2'>
+               <input class='btn btn-primary' type='submit' name='submitEvent' value='$langAdd'>
+               <a class='btn btn-default' href='index.php'>$langCancel</a>
+          </div>
+        </div>            
+    </form>
+</div>
+    <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
+        <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+    </form>        
    ";
 } else {
     /* display actions toolbar */
-    $tool_content .= "
-            <div id='operations_container'>" .
+    $tool_content .= 
                 action_bar(array(
                     array('title' => $langAddEvent,
                         'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
@@ -334,8 +354,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
                         'url' => "icalendar.php",
                         'icon' => 'fa-calendar',
                         'level' => 'primary'),
-                )) .
-            "</div>";
+                ));
 }
 
 

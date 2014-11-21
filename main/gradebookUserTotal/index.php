@@ -28,25 +28,34 @@ require_once '../../include/baseTheme.php';
 //Module name
 $nameTools = $langGradebook;
 $userID = $uid;
-$tool_content .= "<table class='sortable' width='100%' id='t2'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
-
+$content = false;
+$grade_content = '';
 $courses = Database::get()->queryArray("SELECT course.id course_id, code, title FROM course, course_user, user 
                                             WHERE course.id = course_user.course_id
                                             AND course_user.user_id = ?d 
                                             AND user.id = ?d
                                             AND course.visible != " . COURSE_INACTIVE . "", $userID, $userID);
-//print_r($courses);
-foreach ($courses as $course1) {
-    $course_id = $course1->course_id;    
-    $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);
-    if ($gradebook) {
-        $gradebook_id = $gradebook->id;  
-        $tool_content .= "<tr><td>".$course1->title."</td><td>".userGradeTotal($gradebook_id, $userID)." ($langMax: ".$gradebook->range.")</td>
-                               <td><a href='../../modules/gradebook/index.php?course=".$course1->code."'>$langMore</a></td></tr>";
+if (count($courses) > 0) {
+    $grade_content .= "<table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
+    foreach ($courses as $course1) {
+        $course_id = $course1->course_id;    
+        $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
+        if ($gradebook) {
+            $content = true;
+            $gradebook_id = $gradebook->id;  
+            $grade_content .= "<tr><td>".$course1->title."</td><td>".userGradeTotal($gradebook_id, $userID)." ($langMax: ".$gradebook->range.")</td>
+                                   <td><a href='../../modules/gradebook/index.php?course=".$course1->code."'>$langMore</a></td></tr>";
+        }
     }
+    $grade_content .= "</table>";
+    if (!$content) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
+    } else {
+        $tool_content .= $grade_content;
+    }
+} else {
+    $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
 }
-$tool_content .= "</table>";
-
 
 
 /**

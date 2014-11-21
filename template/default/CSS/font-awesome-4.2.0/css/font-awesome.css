@@ -1670,3 +1670,5 @@
 .fa-meanpath:before {
   content: "\f20c";
 }
+/*This is custom by Nikos Vavoulas*/
+.fa-wikipedia:before { font-family: 'Times New Roman', Times, serif; content: "W"; }

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,24 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* ===========================================================================
-  auth.php
-  @last update: 27-06-2006 by Stratos Karatzidis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Platform Authentication Methods and their settings
-
-  This script displays the alternative methods of authentication
-  and their settings.
-
-  The admin can: - choose a method and define its settings
-
-  ==============================================================================
+/**
+ * @brief define authentication methods and settings
+ * @file auth.php
  */
 
-//$require_power_user = true;
+
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -47,7 +35,7 @@ $auth = isset($_GET['auth']) ? $_GET['auth'] : '';
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
 if (!empty($auth) and ! empty($active)) {
-    $s = get_auth_settings($auth);
+    $s = get_auth_settings($auth);    
     $settings = $s['auth_settings'];
 
     switch ($active) {
@@ -64,7 +52,7 @@ if (!empty($auth) and ! empty($active)) {
 $auth_methods = get_auth_active_methods();
 
 if (empty($auth)) {
-    $tool_content .= '<p>' . $langMethods . '</p>';
+    $tool_content .= "<div class='alert alert-info'><label>$langMethods</label>";
     if ($auth_methods) {
         $tool_content .= "<ul>";
         foreach ($auth_methods as $k => $v) {
@@ -84,6 +72,7 @@ if (empty($auth)) {
         }
         $tool_content .= "</ul>";
     }
+    $tool_content .= "</div>";
 } else {
     if (empty($settings)) {
         $tool_content .= "<div class='alert alert-danger'>$langErrActiv $langActFailure</div>";
@@ -100,48 +89,28 @@ if (empty($auth)) {
     }
 }
 
-$tool_content .= "<table width='100%' class='tbl_alt'>
-<tr>
-<th colspan='3'>$langChooseAuthMethod</th>
-</tr><tr><td width='90'><b>POP3:</b></td><td width='90'>[";
-
-$tool_content .= in_array("2", $auth_methods) ? "<a class='add' href='auth.php?auth=2&amp;active=no'>" . $langDeactivate . "</a>]" : "<a class='revoke'  href=\"auth.php?auth=2&amp;active=yes\">" . $langActivate . "</a>]";
-
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "&nbsp;&nbsp;<a href='auth_process.php?auth=2'>$langAuthSettings</a>";
-$tool_content .= "</div></td></tr>
-<tr class='odd'><td><b>IMAP:</b></td><td>[";
-
-$tool_content .= in_array("3", $auth_methods) ? "<a class='add' href='auth.php?auth=3&amp;active=no'>" . $langDeactivate . "</a>]" : "<a class='revoke' href=\"auth.php?auth=3&amp;active=yes\">" . $langActivate . "</a>]";
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "&nbsp;&nbsp;<a href='auth_process.php?auth=3'>$langAuthSettings</a>";
-$tool_content .= "</div></td></tr><tr><td><b>LDAP:</b></td><td>[";
-
-$tool_content .= in_array("4", $auth_methods) ? "<a class='add' href='auth.php?auth=4&amp;active=no'>" . $langDeactivate . "</a>]" : "<a class='revoke' href=\"auth.php?auth=4&amp;active=yes\">" . $langActivate . "</a>]";
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";
-$tool_content .= "</div></td></tr><tr class='odd'><td><b>External DB:</b></td><td>[";
-
-$tool_content .= in_array("5", $auth_methods) ? "<a class='add' href=\"auth.php?auth=5&amp;active=no\">" . $langDeactivate . "</a>]" : "<a class='revoke' href=\"auth.php?auth=5&amp;active=yes\">" . $langActivate . "</a>]";
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "<a href=\"auth_process.php?auth=5\">$langAuthSettings</a>";
-
-$tool_content .= "</div></td></tr><tr><td><b>Shibboleth:</b></td><td>[";
-
-$tool_content .= in_array("6", $auth_methods) ? "<a class='add' href=\"auth.php?auth=6&amp;active=no\">" . $langDeactivate . "</a>]" : "<a class='revoke' href=\"auth.php?auth=6&amp;active=yes\">" . $langActivate . "</a>]";
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "<a href=\"auth_process.php?auth=6\">$langAuthSettings</a>";
-$tool_content .= "</div></td></tr><tr class='odd'><td><b>CAS:</b></td><td>[";
-
-$tool_content .= in_array("7", $auth_methods) ? "<a class='add' href=\"auth.php?auth=7&amp;active=no\">" . $langDeactivate . "</a>]" : "<a class='revoke' href=\"auth.php?auth=7&amp;active=yes\">" . $langActivate . "</a>]";
-$tool_content .= "</td><td><div align='right'>";
-
-$tool_content .= "<a href=\"auth_process.php?auth=7\">$langAuthSettings</a>";
-$tool_content .= "</div></td></tr></table>";
+$tool_content .= "<table class='table-default'>";
+$tool_content .= "<th>$langAllAuthTypes</th><th>$langActions</th>";
+foreach ($auth_ids as $auth_id => $auth_name) {
+        $tool_content .= "<tr><td>".  strtoupper($auth_name).":</td><td width='90'>";
+        if (in_array($auth_id, $auth_methods)) {
+                $activation_url = "auth.php?auth=$auth_id&amp;active=no";
+                $activation_title = $langDeactivate;
+                $activation_icon = "fa-toggle-off";
+        } else {
+                $activation_url = "auth.php?auth=$auth_id&amp;active=yes";
+                $activation_title = $langActivate;
+                $activation_icon = "fa-toggle-on";
+        }
+        $tool_content .= action_button(array(
+                array('title' => $activation_title,
+                      'url' => $activation_url,
+                      'icon' => $activation_icon),
+                array('title' => $langAuthSettings,                      
+                      'url' => "auth_process.php?auth=$auth_id",
+                      'icon' => 'fa-gear')));
+        $tool_content .= "</td><tr>";
+}
+$tool_content .= "</table>";
 
 draw($tool_content, 3);

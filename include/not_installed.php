@@ -43,6 +43,8 @@ $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbStartBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbEndBlock', 'delete');
 $t->set_block('mainBlock', 'modalWindowBlock', 'delete');
+$t->set_block('mainBlock', 'breadCrumbs', 'delete');
+$t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
 $t->set_var('template_base', 'template/default');
 $t->set_var('PAGE_TITLE', 'Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass');
 $t->set_var('TOOL_CONTENT', "
