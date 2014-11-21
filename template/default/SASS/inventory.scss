@@ -1702,6 +1702,10 @@ td.option-btn-cell{
     margin-bottom: 15px;
 }
 
+#profile_menu_dropdown ul li:last-child{
+    border-top: 1px #ddd solid;
+}
+
 #portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter
 {
     position: relative;
