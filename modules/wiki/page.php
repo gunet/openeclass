@@ -332,7 +332,7 @@ switch ($action) {
             } else {
             	if ($content == '') {
             		$message = $langWikiNoContent;
-            		$style = 'caution';
+            		$style = 'alert-warning';
             	}
             }
         } else {//already locked by another user
@@ -355,7 +355,7 @@ switch ($action) {
             $wiki_title = $wikiPage->getTitle();
         } else {
             $message = $langWikiPageNotFound;
-            $style = 'caution';
+            $style = 'alert-warning';
         }
         break;
     }
@@ -522,14 +522,7 @@ switch ($action) {
 }
 
 if (!empty($message)) {
-    $tool_content .= "<table width=\"99%\">
-	<tbody><tr>
-	<td class='$style'>
-	    <p><b>$message</b></p>
-	  </td>
-	</tr>
-	</tbody>
-	</table><br />";
+    $tool_content .= "<div class='alert $style'>$message</div>";
 }
 
 // user is not allowed to read this page
@@ -541,7 +534,7 @@ if (!$is_allowedToRead) {
 }
 
 
-if ($action != "edit") {
+if ($action != "edit" && $action != "history") {
 // Wiki navigation bar
 $tool_content .= action_bar(array(
     array(
@@ -561,101 +554,35 @@ $tool_content .= action_bar(array(
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=all",
         'icon' => 'fa-files-o',
         'level' => 'primary'
+    ),   
+    array(
+        'title' => $langSearch,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=rqSearch",
+        'icon' => 'fa-search',
+        'level' => 'primary'
     ),
     array(
         'title' => $langWikiList,
         'url' => "index.php?course=$course_code&amp;gid=$groupId",
         'icon' => 'fa-list',
         'level' => 'primary'
-    ),     
-    array(
-        'title' => $langSearch,
-        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=rqSearch",
-        'icon' => 'fa-search',
-        'level' => 'primary'
-    )
+    )    
 ));    
 }
 
-if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {
 
-    if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langWikiBackToPage,
-                'level' => 'primary-label',
-                'icon' => 'fa-reply',
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=show&amp;title=". rawurlencode($wiki_title)
-            )
-        ));
+if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langWikiBackToPage,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=show&amp;title=". rawurlencode($wiki_title)
+        )
+    ));
 
-    }
-
-    if ($is_allowedToEdit || $is_allowedToCreate) {
-        // Show context
-        if ($action == "show" || $action == "history" || $action == "diff") {
-            $tool_content .= '&nbsp;&nbsp;&nbsp;'
-                    . '<img src="' . $themeimg . '/edit.png" align="middle" />&nbsp;'
-                    . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-                    . '&amp;wikiId=' . $wiki->getWikiId()
-                    . '&amp;action=edit'
-                    . '&amp;title=' . rawurlencode($wiki_title)
-                    . '&amp;versionId=' . $versionId
-                    . '">'
-                    . $langWikiEditPage . '</a>'
-            ;
-            
-            if($wiki_title != "__MainPage__" and $is_editor) { //only teacher can delete a wiki page
-                $tool_content .= '&nbsp;&nbsp;&nbsp;'
-                    . '<img src="'. $themeimg .'/delete.png" align="middle" />&nbsp;'
-                    . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] .'?course='. $course_code
-                    . '&amp;wikiId=' . $wiki->getWikiId()
-                    . '&amp;action=delete'
-                    . '&amp;title=' . rawurlencode($wiki_title)
-                    . '" onClick="return confirm(\''.$langWikiDeletePageWarning.'\');">'
-                    . $langWikiDeletePage.'</a>'
-                ;
-            }
-            
-        }
-    }
-
-    if ($action == "show" || $action == "history" || $action == "diff") {
-        // active
-        $tool_content .= '&nbsp;&nbsp;&nbsp;'
-                . '<img src="' . $themeimg . '/version.png" align="middle" />&nbsp;'
-                . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
-                . '&amp;wikiId=' . $wiki->getWikiId()
-                . '&amp;action=history'
-                . '&amp;title=' . rawurlencode($wiki_title)
-                . '">'
-                . $langWikiPageHistory . '</a>'
-        ;
-    }  
-    if ( $action == "show" )
-    {
-        $tool_content .= '&nbsp;&nbsp;&nbsp;'
-            . '<img src="' . $themeimg . '/printer.png" align="middle" />&nbsp;'
-            . '<a target="_blank" class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'].'?course=' . $course_code
-            . '&amp;wikiId=' . $wiki->getWikiId()
-            . '&amp;action=show&amp;printable=yes&amp;versionId=' . $versionId
-            . '&amp;title=' . rawurlencode($wiki_title)
-            . '">'
-       		. $langWikiPagePrintable . '</a>'
-        ;
-    }
-
-    if ($action == "edit" || $action == "diff") {
-        /* $tool_content .= '&nbsp;&nbsp;&nbsp;'
-          . '<img src="'.$themeimg.'/help.png" border="0" alt="history" />&nbsp;'
-          . '<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
-          . '../help/help.php?topic=WikiSyntax&amp;language=' . $language
-          . '\',\'MyWindow\',\'toolbar=no,location=no,directories=no,status=yes,menubar=no'
-          . ',scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10\'); return false;">'
-          . $langWikiHelpSyntax . '</a>'
-          ; */
-    }
 }
+
 
 switch ($action) {
     case "diff": {
@@ -702,16 +629,16 @@ switch ($action) {
         }
     case "recent": {
             if (is_array($recentChanges)) {
-                $tool_content .= '<ul>' . "\n";
+                $tool_content .= '<div class="list-group">' . "\n";
 
                 foreach ($recentChanges as $recentChange) {
                     $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title
                     ;
 
-                    $entry = '<strong><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $entry = '<a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . rawurlencode($recentChange->title)
                             . '&amp;action=show"'
-                            . '>' . $pgtitle . '</a></strong>'
+                            . '><strong>' . $pgtitle . '</strong><small>'
                     ;
 
                     $time = nice_format($recentChange->last_mtime,TRUE);
@@ -720,32 +647,31 @@ switch ($action) {
 
                     $userStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
                     $userUrl = $userStr;
-                    $tool_content .= '<li>'
-                            . sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl)
-                            . '</li>'
+                    $tool_content .=
+                            sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl)
+                            . '</small></a>'
                             . "\n"
                     ;
                 }
 
-                $tool_content .= '</ul>' . "\n";
+                $tool_content .= '</div>' . "\n";
             }
             break;
         }
     case "all": {
             // handle main page
 
-            $tool_content .= '<ul><li><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+            $tool_content .= '<div class="list-group"><a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;wikiId=' . $wikiId
                     . '&amp;title=' . rawurlencode("__MainPage__")
                     . '&amp;action=show">'
                     . $langWikiMainPage
-                    . '</a></li></ul>' . "\n"
+                    . '</a>'
             ;
 
             // other pages
 
             if (is_array($allPages)) {
-                $tool_content .= '<ul>' . "\n";
 
                 foreach ($allPages as $page) {
                     if ($page->title == "__MainPage__") {
@@ -755,14 +681,14 @@ switch ($action) {
 
                     $pgtitle = rawurlencode($page->title);
 
-                    $link = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $link = '<a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
                             . '>' . $page->title . '</a>'
                     ;
 
-                    $tool_content .= '<li>' . $link . '</li>' . "\n";
+                    $tool_content .= $link . "\n";
                 }
-                $tool_content .= '</ul>' . "\n";
+                $tool_content .= '</div>' . "\n";
             }
             break;
         }
@@ -866,15 +792,15 @@ switch ($action) {
                  if ($wikiStore->pageExists($wikiId, $wiki_title)) {
                      $wikiPage->loadPage($wiki_title);
                      if ($wikiPage->delete()) {
-                         $message = "<div class='alert alert-success'>$langWikiPageDeleted</div>";
-                         $tool_content .= $message . "<br>";
+                         Session::Messages($langWikiPageDeleted, 'alert-success');
+                         redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
-                         $message = "<div class='alert alert-danger'>$langWikiDeletePageError</div>";
-                         $tool_content .= $message . "<br>";
+                         Session::Messages($langWikiDeletePageError, 'alert-danger');
+                         redirect_to_home_page("modules/wiki/page.php?course=$course_code&action=show&title=".rawurlencode($wiki_title)."&wikiId=$wikiId");                         
                      }
                  } else {
-                     $message = "<div class='alert alert-danger'>$langWikiPageNotFound</div>";
-                     $tool_content .= $message . "<br/>";
+                    Session::Messages($langWikiPageNotFound);
+                    redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");                     
                  }
              }
              break;
@@ -969,18 +895,10 @@ switch ($action) {
                 	$printable_content .= $versionInfo;
                 	$printable_content .= '</body></html>';
                 }
-                else {
-                    $tool_content .= '<div class="wikiTitle">' . "\n";
-                    $tool_content .= '<h2>'.$displaytitle
-                    . $versionInfo
-                    . '</h2>'
-                    . "\n";
-                    $tool_content .= '</div>' . "\n";               
-                    $tool_content .= '<div id="mainContent" class="wiki2xhtml">' . "\n";
-                    $tool_content .= $wikiRenderer->render($content);
-                    $tool_content .= '</div>' . "\n";
-                
-                    $tool_content .= '<div style="clear:both;"><!-- spacer --></div>' . "\n";
+                else {           
+                    $wiki_content = "<div id='mainContent' class='wiki2xhtml'>
+                                    ". $wikiRenderer->render($content) ."
+                                    </div>";
                 }
             }
 
@@ -1009,11 +927,10 @@ switch ($action) {
                 . '<input type="hidden" name="course" value="' . $course_code . '" />' . "\n"
                 . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
                 . '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n"
-                . '<input class="btn btn-primary" type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" />' . "\n"
                 . '</div>' . "\n"
         ;
 
-        $tool_content .= '<table style="border: 0px;">' . "\n";
+        $tool_content .= '<table class="table-default">' . "\n";
 
         if (is_array($history)) {
             $firstPass = true;
@@ -1078,7 +995,7 @@ switch ($action) {
         }
 
         $tool_content .= '</table>' . "\n";
-        $tool_content .= '</form>';
+        $tool_content .= '<input class="btn btn-primary" type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" /></form>';
         break;
     }
     case 'exSearch':
@@ -1114,28 +1031,66 @@ switch ($action) {
     }
     case 'rqSearch':
     {
-        $searchForm = '<form method="post" action="'
-            . htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)
-            .'">'."\n"
-            . '<input type="hidden" name="action" value="exSearch" />'. "\n"
-            . '<label for="searchPattern">'
-            . $langSearch
-            . '</label><br />'."\n"
-            . '<input type="text" id="searchPattern" name="searchPattern" />'."\n"
-            . '<input class="btn btn-primary" type="submit" value="'.$langSubmit.'" />'."\n"
-            . disp_button(
-                htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code), $langCancel)
-            . '</form>'."\n";
-        
-        $tool_content .= $searchForm;
-
+        $tool_content .= "
+            <div class='form-wrapper'>
+                <form class='form-inline' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
+                    <input type='hidden' name='action' value='exSearch'>
+                    <div class='form-group'>
+                        <label for='searchPattern'>$langSearch:</label>
+                        <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
+                    </div>
+                    <div class='form-group'>
+                        <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
+                        <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                    </div>
+                </form>
+            </div>";
         break;
     }
     default: {
         trigger_error("Invalid action supplied to " . $_SERVER['SCRIPT_NAME'], E_USER_ERROR);
     }
 }
-
+$print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
+if ($action == 'show') {
+        $tool_content .= "<div class='panel panel-action-btn-default'>
+                                <div class='panel-heading'>
+                                    <div class='pull-right'>
+                                    ".action_button(array(
+                                      array(
+                                          'title' => $langWikiEditPage,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=edit&amp;title=". rawurlencode($wiki_title). "&amp;versionId=$versionId",
+                                          'icon' => 'fa-edit',
+                                          'show' => ($is_allowedToEdit || $is_allowedToCreate)
+                                      ),
+                                      array(
+                                          'title' => $langWikiDeletePage,
+                                          'class' => 'delete',
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
+                                          'icon' => 'fa-times',
+                                          'confirm' => $langWikiDeletePageWarning,
+                                          'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
+                                      ),
+                                      array(
+                                          'title' => $langWikiPageHistory,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=history&amp;title=". rawurlencode($wiki_title),
+                                          'icon' => 'fa-history'
+                                      ),
+                                      array(
+                                          'title' => $langWikiPagePrintable,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title),
+                                          'icon' => 'fa-print'
+                                      )                                        
+                                    ))."</div>
+                                    <h3 class='panel-title'>
+                                        ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ." 
+                                     </h3>
+                                </div>
+                                <div class='panel-body'>
+                                    $wiki_content
+                                </div>
+                          </div>";
+}
 add_units_navigation(TRUE);
 if (isset($_GET['printable']) and $_GET['printable']=="yes") {
     print $printable_content;
