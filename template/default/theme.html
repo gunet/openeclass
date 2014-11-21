@@ -1,0 +1,379 @@
+<!-- BEGIN mainBlock -->
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>{%PAGE_TITLE%}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{%template_base%}/js/bootstrap.min.js"></script>
+
+     <!-- BootBox -->
+    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js"></script>
+    <script>
+    bootbox.setDefaults({
+      locale: "{%LANG%}"
+    });
+    </script>
+    <!-- Our javascript -->
+    <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-theme.min.css">
+
+    <!-- Font Awesome - A font of icons -->
+    <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+
+
+	<!-- Our main styles -->
+    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/global.css">
+    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/structure.css">
+    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/inventory.css">
+
+
+	<!-- Open Sans font from google -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,300,600,700,800&amp;subset=latin,greek-ext' rel='stylesheet' type='text/css'>
+
+    {%EXTRA_CSS%}
+    {%TOOL_CSS%}
+    {%HEAD_EXTRAS%}
+
+</head>
+
+<body>
+	<div class="container">
+        <!-- BEGIN headerBlock -->
+            <div class="row" id="header_section">
+                <!-- BEGIN normalViewOpenDiv -->
+                <div class="col-xs-10 col-sm-11 col-md-10 col-xs-offset-2 col-sm-offset-1 col-md-offset-2">
+                <!-- END normalViewOpenDiv -->
+                <!-- BEGIN mobileViewOpenDiv -->
+                <div class="col-xs-12">
+                <!-- END mobileViewOpenDiv -->
+                    <nav id="header" class="navbar navbar-default" role="navigation">
+                        <ul class="nav navbar-nav navbar-right">
+                            <!-- BEGIN LoggedInBlock -->
+                            <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-book"></i></a></li>
+                            <!-- BEGIN searchBlock -->
+                            <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+                            <!-- END searchBlock -->
+                            <li id="profile_menu_dropdown" class="dropdown">
+                               <a class="dropdown-toggle" role="button" id="dropdownMenu1" data-toggle="dropdown">
+                                    <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user"></i>{%LANG_PROFILE%}</a>
+                                    </li>                                        
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o"></i>{%LANG_MESSAGES%}</a>
+                                    </li>                                    
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><i class="fa fa-calendar"></i>{%LANG_AGENDA%}</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><i class="fa fa-edit"></i>{%LANG_NOTES%}</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><i class="fa fa-area-chart"></i>{%LANG_STATS%}</a>
+                                    </li>                                    
+                                    <hr>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-unlock"></i>{%LANG_LOGOUT%}</a>
+                                    </li>                                    
+                                </ul>
+                            </li>
+
+                            <li><a id="toggle-sidebar"><i class="fa fa-sign-in fa-rotate-180"></i></a></li>
+                            <!-- END LoggedInBlock -->
+                            <!-- BEGIN LoggedOutBlock -->
+                            <!-- BEGIN searchBlock -->
+                            <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
+                            <!-- END searchBlock -->
+                            {%LANG_SELECT%}
+
+                            <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-lock"></i></a></li>
+                            <!-- END LoggedOutBlock -->
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        <!-- END headerBlock -->
+
+        <!-- LeftNav & Main Content Section -->
+
+        <div class="row" id="Frame">
+            <!-- BEGIN leftNavBlock -->
+            <div id="leftnav" class="col-xs-2 col-sm-1 col-md-2 sidebar {%leftNavClass%}">
+
+                <!-- BEGIN logoBlock -->
+                <div class="logo">
+                    <a href='{%URL_PATH%}'>
+                    <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/eclass-new-logo.png" alt=''>
+                    <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/eclass-new-logo-small.png" alt=''>
+                    </a>
+                </div>
+                <!-- END logoBlock -->
+
+                <div class="panel-group" id="sidebar-accordion">                   
+                    <!-- BEGIN leftNavCategoryBlock -->
+                    <div class="panel">
+
+                        <!-- BEGIN leftNavCategoryTitleBlock -->
+                        <a class="collapsed" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <i class="fa fa-dashboard space-after-icon"></i>
+                                    <span class="hidden-sm hidden-xs">{%ACTIVE_TOOLS%}</span>
+                                </h4>
+                            </div>
+                        </a>
+                        <!-- END leftNavCategoryTitleBlock -->
+
+                        <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse {%GROUP_CLASS%}">
+                            <!-- BEGIN leftNavLinkBlock -->
+                            <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}">
+                                <i class="fa {%IMG_CLASS%} "></i>
+                                <span class="hidden-sm hidden-xs">{%TOOL_TEXT%}</span>
+                            </a>
+                            <!-- END leftNavLinkBlock -->
+                        </div>
+
+                    </div>
+                    <!-- END leftNavCategoryBlock -->
+                </div>
+            </div>
+            <!-- END leftNavBlock -->
+            <!-- BEGIN normalViewOpenDiv -->
+            <div id="background-cheat" class="col-xs-10 col-sm-11 col-md-10"></div>
+            <div id="main-content" class="col-xs-10 col-sm-11 col-md-10">
+            <!-- END normalViewOpenDiv -->
+            <!-- BEGIN mobileViewOpenDiv -->
+            <div id="background-cheat" class="col-xs-12"></div>
+            <div id="main-content" class="col-xs-12">
+            <!-- END mobileViewOpenDiv -->
+
+                <div class="row row-main">
+                    <div class="col-md-12 add-gutter">
+                        <!-- BEGIN breadCrumbs -->
+                        <div class="row">
+                            <div class="col-md-12"> 
+                                <ol class="breadcrumb">
+                                    <!-- BEGIN breadCrumbHomeBlock -->
+                                    <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+                                    <!-- END breadCrumbHomeBlock -->
+                                    <!-- BEGIN breadCrumbStartBlock -->
+                                    <li>{%BREAD_HREF_FRONT%}{%BREAD_TEXT%}{%BREAD_HREF_END%}</li>
+                                    <!-- END breadCrumbStartBlock -->
+                                    <!-- BEGIN breadCrumbEndBlock -->
+                                    <!-- END breadCrumbEndBlock -->
+                                </ol>
+                                
+                            </div>
+                        </div>
+                        <!-- END breadCrumbs -->
+
+                        <!-- BEGIN titleRowBlock -->
+                        <div class="row title-row margin-top">
+
+                            <div class="col-md-9">
+
+                                <!-- BEGIN pageTitleBlock -->
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <h1 class='page-title'>{%SECTION_TITLE%}</h1>
+                                        <!-- BEGIN professorBlock -->
+                                        <h2 class='page-subtitle'>{%PROFESSOR%}</h2>
+                                        <!-- END professorBlock -->
+
+                                    </div>
+                                </div>
+                                <!-- END pageTitleBlock -->
+
+
+                                <!-- BEGIN toolTitleBlock -->
+                                <div class='row'>
+                                    <div class='col-md-12'>
+                                        <h2 class='page-subtitle'>
+                                            {%TOOL_NAME%}
+                                            {%HELP_LINK_ICON%}
+                                            {%RSS_LINK_ICON%}
+                                            {%ACTIVATE_MODULE%}
+                                        </h2>
+                                    </div>
+                                </div>
+                                <!-- END toolTitleBlock -->
+
+                            </div>
+
+
+                            <div class='col-md-3'>
+                                <!-- BEGIN statusSwitchBlock -->
+                                <div class='pull-right'>
+                                    <form method='post' action='{%STUDENT_VIEW_URL%}' id='student-view-form'>
+                                        <button class='btn-toggle place-at-toolbox {%STUDENT_VIEW_CLASS%}' rel='tooltip' data-toggle='tooltip' data-placement='top' title='{%STUDENT_VIEW_TITLE%}'>
+                                            <span class='on'><i class='fa fa-users'></i></span>
+                                            <span class='off'><i class='fa fa-graduation-cap'></i></span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <!-- END statusSwitchBlock -->
+                            </div>
+                        </div>
+                        <!-- END titleRowBlock -->
+
+                        <!-- BEGIN TOOL CONTENT -->
+                        {%EXTRA_MSG%}
+                        {%TOOL_CONTENT%}
+                        <!-- END TOOL CONTENT -->
+                    </div>
+                </div>
+
+            </div>
+            <!-- BEGIN sideBarBlock -->
+            <div id="sidebar-container">
+                <aside id="sidebar" class="outer">
+                    <div class="panel-group outerpanel" id="accordion-right-parent">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
+                                <h4 class="panel-title title">
+                                    <span class="txt" style="line-height: 14px;">Courses Activity</span><br><i class="fa fa-list-alt fa-2x"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseCourses" class="panel-collapse collapse side-list">
+                                <div class="panel-body">
+                                    <div class="panel-group innerpanel" id="accordion-right">
+                                        <!-- BEGIN sideBarCourseBlock -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{%sideBarCollapseId%}-right">
+                                                <h4 class="panel-title lesson-title">
+                                                    {%sideBarCourseTitle%}
+                                                </h4>
+                                            </div>
+                                            <div id="collapse{%sideBarCollapseId%}-right" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        <li class="lesson-id">ID: <a href="{%sideBarCourseURL%}">{%sideBarCourseCode%}</a></li>
+                                                        <li class="lesson-professor">{%sideBarCourseProf%}</li>
+                                                        <li class="lesson-notifications">
+                                                            <!-- BEGIN sideBarCourseNotifyBlock -->
+                                                            <span class="item"><i class="fa {%sideBarCourseNotifyIcon%}"></i><span class="count">{%sideBarCourseNotifyCount%}</span></span>
+                                                            <!-- END sideBarCourseNotifyBlock -->
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END sideBarCourseBlock -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
+                                <h4 class="panel-title title">
+                                    <span class="txt" style="line-height: 14px;">My Messages</span><br><i class="fa fa-envelope fa-2x"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseMessages" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="input-parent input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input class="recipients-input" type="text" placeholder="Recipients...">
+                                    </div>
+                                    <div class="input-parent input-group">
+                                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                        <textarea placeholder="Message..."></textarea>
+                                    </div>
+                                    <button data-label="Send" class="btn btn-default-eclass btn-sm">SAVE</button>
+                                    <a class="goto" href="#">All messages</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
+                                <h4 class="panel-title title">
+                                    <span class="txt" style="line-height: 14px;">My Notes</span><br><i class="fa fa-pencil fa-2x"></i>
+                                </h4>
+                            </div>
+                            <div id="collapseNotices" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="input-parent input-group">
+                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <textarea placeholder="Type a note..."></textarea>
+                                    </div>
+                                    <button data-label="Save" class="btn btn-default-eclass btn-sm">SAVE</button>
+                                    <a class="goto" href="#">All notes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- END sideBarBlock -->
+        </div>
+
+        <!-- BEGIN footerBlock -->
+        <div class="row" id="footer_section">
+            <!-- BEGIN normalViewOpenDiv -->
+            <div class="col-xs-10 col-sm-11 col-md-10 col-xs-offset-2 col-sm-offset-1 col-md-offset-2">
+            <!-- END normalViewOpenDiv -->
+            <!-- BEGIN mobileViewOpenDiv -->
+            <div class="col-xs-12">
+            <!-- END mobileViewOpenDiv -->
+                <footer class="footer">
+                    <span>GUNET © eClass</span>
+                </footer>
+            </div>
+        </div>
+        <!-- END footerBlock -->
+
+    </div>
+    <!-- BEGIN modalWindowBlock -->
+        <!-- Dialog show event handler -->
+        <script type='text/javascript'>
+          $('.confirmAction').on('click', function(e){
+                var message = $(this).attr('data-message');
+                var title = $(this).attr('data-title');
+                var cancel_text = $(this).attr('data-cancel-txt');
+                var action_text = $(this).attr('data-action-txt');
+                var action_btn_class = $(this).attr('data-action-class');
+                var form = $(this).closest('form');
+                bootbox.dialog({
+                 message: message,
+                 title: title,
+                 buttons: {
+                   cancel_btn: {
+                     label: cancel_text,
+                     className: "btn-default"
+                   },
+                   action_btn: {
+                     label: action_text,
+                     className: action_btn_class,
+                     callback: function() {
+                       form.submit();
+                     }
+                   }
+                 }
+               });
+          });
+        </script>
+    <!-- END modalWindowBlock -->
+</body>
+</html>
+<!-- END mainBlock -->
