@@ -69,7 +69,7 @@ if (isset($_GET['mid'])) {
         }
         
         $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
-        $out .= "<tr><td>$langMessage:</td><td>".standard_text_escape($msg->body)."</td></tr>";
+        $out .= "<tr><td>$langMessage:</td><td>".str_replace('<a href=', '<a class="outtabs" href=', standard_text_escape($msg->body))."</td></tr>";
 
         if ($msg->filename != '' && $msg->filesize != 0) {
             $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
