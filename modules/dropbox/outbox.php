@@ -63,7 +63,7 @@ if (isset($_GET['mid'])) {
         }
         
         $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
-        $out .= "<tr><td>$langMessage:</td><td>".str_replace('<a href=', '<a class="outtabs" href=', standard_text_escape($msg->body))."</td></tr>";
+        $out .= "<tr><td>$langMessage:</td><td id='out_msg_body'>".standard_text_escape($msg->body)."</td></tr>";
 
         if ($msg->filename != '') {
             $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
@@ -74,6 +74,8 @@ if (isset($_GET['mid'])) {
 
         $out .= '<script>
         $(function() {
+        $("#out_msg_body").find("a").addClass("outtabs");          
+                      
         $(".delete").click(function() {
             if (confirm("' . $langConfirmDelete . '")) {
             var rowContainer = $(this).parent().parent();
