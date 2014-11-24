@@ -50,7 +50,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
     $tool_content .= "<fieldset>
         <legend>" . $langFileSent . "</legend>
-        <table class='tbl' width='100%'>
+        <table class='table-default'>
                    <tr><th width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
                    <tr><th>$langFileSentSize</td><td>" . q($_FILES['archiveZipped']['size']) . "</th></tr>
                    <tr><th>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
@@ -58,7 +58,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </table></fieldset>
                         <fieldset>
         <legend>" . $langFileUnzipping . "</legend>
-        <table class='tbl' width='100%'>
+        <table class='table-default'>
                     <tr><td>" . unpack_zip_show_files($_FILES['archiveZipped']['tmp_name']) . "</td></tr>
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
@@ -69,7 +69,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
-        <table class='tbl' width='100%'>";
+        <table class='table-default'>";
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
@@ -582,36 +582,28 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
 // Display restore info form
 // -------------------------------------
-    $tool_content .= "<br />
-       <fieldset>
-      <legend>$langFirstMethod</legend>
-        <table width='100%' class='tbl'><tr>
-          <td>$langRequest1
-          <br /><br />
-          <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>
-            <input type='file' name='archiveZipped' />
-            <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "' />
+    $tool_content .= "<div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div>
+        <div class='form-wrapper'>
+            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
+            <div class='form-group'>
+                <div class='col-sm-4'>
+                    <input type='file' name='archiveZipped' />
+                </div>
+                <div class='col-sm-6'>
+                    <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "'>
+                    <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
+                </div>
+            </div>
             </form>
-            <div class='right smaller'>$langMaxFileSize " .
-            ini_get('upload_max_filesize') . "</div>
-            </td>
-        </tr></table>
-        </fieldset>
-<br />
-
- <fieldset>
-    <legend>$langSecondMethod</legend>
-    <table width='100%' class='tbl'>
-        <tr>
-          <td>$langRequest2
-          <br /><br />
-          <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
-            <input type='text' name='pathToArchive' />
-            <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "' />
+        </div> 
+    <div class='alert alert-info'><label>$langSecondMethod</label> $langRequest2</div>        
+        <div class='form-wrapper'>
+          <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
+            <div class='form-group'>
+                <input type='text' name='pathToArchive' />
+                <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
+            </div>
           </form>
-          </td>
-        </tr>
-        </table></fieldset>
-        <br />";
+        </div>";
 }
 draw($tool_content, 3, null, $head_content);

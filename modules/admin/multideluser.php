@@ -200,6 +200,11 @@ if (isset($_POST['submit'])) {
         }, $terms);
     }
 
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
     $tool_content .= "<div class='alert alert-info'>" . $langMultiDelUserInfo . "</div>
         <div class='form-wrapper'>
@@ -221,12 +226,6 @@ if (isset($_POST['submit'])) {
         </form>
         </div>";
 }
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 draw($tool_content, 3, 'admin', $head_content);
 
