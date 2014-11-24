@@ -9,6 +9,45 @@
 input[type="file"] {
     padding-top: 7px;
 }
+.bubble 
+{
+position: relative;
+width: 100%;
+padding: 5px 20px 5px 20px;
+background: #FFFFFF;
+-webkit-border-radius: 7px;
+-moz-border-radius: 7px;
+border-radius: 7px;
+border: #dddddd solid 2px;
+}
+
+.bubble:after 
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 10px 14px 10px 0;
+border-color: transparent #FFFFFF;
+display: block;
+width: 0;
+z-index: 1;
+left: -14px;
+top: 9px;
+}
+
+.bubble:before 
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 11px 15px 11px 0;
+border-color: transparent #dddddd;
+display: block;
+width: 0;
+z-index: 0;
+left: -17px;
+top: 8px;
+}
 
 //Custom Form Wrapper class
 .form-wrapper {

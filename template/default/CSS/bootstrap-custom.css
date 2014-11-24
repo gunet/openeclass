@@ -9456,28 +9456,68 @@ input[type="file"] {
   padding-top: 7px;
 }
 
-/* line 24, ../SASS/bootstrap-custom.scss */
+/* line 13, ../SASS/bootstrap-custom.scss */
+.bubble {
+  position: relative;
+  width: 100%;
+  padding: 5px 20px 5px 20px;
+  background: #FFFFFF;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: #dddddd solid 2px;
+}
+
+/* line 25, ../SASS/bootstrap-custom.scss */
+.bubble:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 14px 10px 0;
+  border-color: transparent #FFFFFF;
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -14px;
+  top: 9px;
+}
+
+/* line 39, ../SASS/bootstrap-custom.scss */
+.bubble:before {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 11px 15px 11px 0;
+  border-color: transparent #dddddd;
+  display: block;
+  width: 0;
+  z-index: 0;
+  left: -17px;
+  top: 8px;
+}
+
+/* line 63, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 27, ../SASS/bootstrap-custom.scss */
+/* line 66, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 30, ../SASS/bootstrap-custom.scss */
+/* line 69, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 37, ../SASS/bootstrap-custom.scss */
+/* line 76, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 40, ../SASS/bootstrap-custom.scss */
+/* line 79, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 43, ../SASS/bootstrap-custom.scss */
+/* line 82, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }

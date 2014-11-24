@@ -98,7 +98,7 @@ Class Commenting {
                     <a class='media-left' href='#'>
                         ". profile_image(1, IMAGESIZE_SMALL, true) ."
                     </a>
-                    <div class='media-body'>
+                    <div class='media-body bubble'>
                         <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
                             $langBlogPostUser.display_user($comment->getAuthor(), false, false)."
                             <br>". q($comment->getContent()) ."
