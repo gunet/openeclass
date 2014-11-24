@@ -1039,7 +1039,7 @@ switch ($action) {
     }
 }
 $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
-if ($action == 'show') {
+if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
         $tool_content .= "<div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
                                     <div class='pull-right'>
