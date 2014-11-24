@@ -336,17 +336,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <strong>$langExerciseStart:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $exerciseType
-                </div>                
-            </div>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseType:</strong>
-                </div>
-                <div class='col-sm-9'>
                     $exerciseStartDate
                 </div>                
-            </div> 
+            </div>
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseEnd:</strong>
