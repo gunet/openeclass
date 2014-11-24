@@ -194,17 +194,17 @@ if ($action == "delPost") {
     if ($post->loadFromDB($pId)) {
         if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
             if($post->delete()) {
-                $message = "<div class='alert alert-success'>$langBlogPostDelSucc</div>";
+                Session::Messages($langBlogPostDelSucc, 'alert-success');
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostDelFail</div>";
+                Session::Messages($langBlogPostDelFail);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedDel</div>";
+            Session::Messages($langBlogPostNotAllowedDel);
         }
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);      
     }
-    $action = "showBlog";
+    redirect_to_home_page("modules/blog/index.php?course=$course_code");
 }
 
 //create blog post form
@@ -237,7 +237,8 @@ if ($action == "createPost") {
             </form>
         </div>";
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
+        Session::Messages($langBlogPostNotAllowedCreate);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");
     }
     
 }
@@ -275,12 +276,13 @@ if ($action == "editPost") {
             </form>
         </div>";
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
+            Session::Messages($langBlogPostNotAllowedEdit);
+            redirect_to_home_page("modules/blog/index.php?course=$course_code");            
         }
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");        
     }
-
 }
 
 //save blog post
@@ -290,31 +292,30 @@ if ($action == "savePost") {
         if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
             $post = new BlogPost();
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
-                $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
+                Session::Messages($langBlogPostSaveSucc, 'alert-success');
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
+                Session::Messages($langBlogPostSaveFail);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
+            Session::Messages($langBlogPostNotAllowedCreate);
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
             if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
-                    $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
+                    Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 } else {
-                    $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
+                    Session::Messages($langBlogPostSaveFail);
                 }
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
+                Session::Messages($langBlogPostNotAllowedEdit);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+            Session::Messages($langBlogPostNotFound);                      
         }
     } 
-    $action = "showBlog";
-    
+    redirect_to_home_page("modules/blog/index.php?course=$course_code");      
 }
 
 if (isset($message) && $message) {
@@ -368,7 +369,8 @@ if ($action == "showPost") {
         }
         
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");  
     }
 
 }
