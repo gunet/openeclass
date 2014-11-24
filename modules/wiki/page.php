@@ -534,7 +534,7 @@ if (!$is_allowedToRead) {
 }
 
 
-if ($action != "edit" && $action != "history") {
+if ($action != "edit" && $action != "history" && $action != "diff") {
 // Wiki navigation bar
 $tool_content .= action_bar(array(
     array(
