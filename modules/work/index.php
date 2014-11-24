@@ -1173,7 +1173,7 @@ function show_student_assignment($id) {
 
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
     global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
-    $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code;
+    $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack;
 
     $group_select_hidden_input = $group_select_form = '';
     $is_group_assignment = is_group_assignment($id);
@@ -1221,7 +1221,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         <div class='form-group'>
                             <label for='userfile' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
                             <div class='col-sm-10'>
-                              " .selection($users_with_no_submissions, 'user_id') . "
+                              " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
                             </div>
                         </div>";                 
             } else {
@@ -1234,21 +1234,31 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         <div class='form-group'>
                             <label for='userfile' class='col-sm-2 control-label'>$m[grade]:</label>
                             <div class='col-sm-10'>
-                              <input type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]:)
+                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]:)
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='email_button' class='col-sm-2 control-label'>$m[email_users]: </label>
-                            <div class='col-sm-10'>
-                              <input type='checkbox' name='email' id='email_button' value='1'> 
+                            <div class='col-sm-10 col-sm-offset-2'>
+                                <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' name='email' id='email_button' value='1'> 
+                                    $m[email_users]
+                                  </label>
+                                </div>
                             </div>
                         </div>" : '';
     if (!$is_group_assignment or count($user_group_info) or $on_behalf_of) {
-        $tool_content .= "
-                    <h3>$langSubmit</h3>
-                    <hr><br>
+        $tool_content .= action_bar(array(
+                array(
+                    'title' => $langBack,
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label',
+                    'url' => "index.php?course=$course_code&id=$id"
+                )
+            ))."
                     $notice
+                    <div class='form-wrapper'>
                      <form class='form-horizontal' role='form' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
                         <fieldset>
@@ -1262,15 +1272,18 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         <div class='form-group'>
                             <label for='stud_comments' class='col-sm-2 control-label'>$m[comments]:</label>
                             <div class='col-sm-10'>
-                              <textarea name='stud_comments' id='stud_comments' rows='5' cols='55'></textarea>
+                              <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                             </div>
                         </div>
                         $extra
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit' />
+                        <div class='form-group'>
+                            <div class='col-sm-10 col-sm-offset-2'>
+                                <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit' />
+                            </div>
                         </div>
                         </fieldset>
                      </form>
+                     </div>
                      <div class='pull-right'><small>$GLOBALS[langMaxFileSize] " .
                 ini_get('upload_max_filesize') . "</small></div><br>";
     }
