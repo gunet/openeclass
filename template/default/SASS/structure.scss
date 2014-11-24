@@ -12,7 +12,6 @@ body
 {
     background: $color-background;
     font-family: 'Open Sans';
-    padding-top: 53px;
 }
  
 body > .container{
@@ -165,7 +164,7 @@ body > .container{
     background-color: $color-header;
     border-bottom: 1px solid #DBDBDB;
     
-		.navbar-nav{
+		.custom-nav{
 			margin: 0;
 			float:right;
 
