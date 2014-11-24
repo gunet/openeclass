@@ -67,9 +67,9 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     // set display title
     $localtitle = ( $title === '__MainPage__' ) ? $langWikiMainPage : $title;
 
-    $out = "<div class='wikiTitle'>
-                <h1>$localtitle</h1>
-            </div><br>
+    $out = "
+            <h1>$localtitle</h1>
+            <br>
             <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
   

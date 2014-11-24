@@ -596,23 +596,10 @@ switch ($action) {
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
-            $versionInfo = '('
-                    . sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr)
-                    . ')'
-            ;
-
-            $versionInfo = '<span style="font-size: 10px; font-weight: normal; color: red;">'
-                    . $versionInfo . '</span>'
-            ;
-
-            $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $versionInfo
-                    . '</h2>'
-                    . "\n"
-            ;
-            $tool_content .= '</div>' . "\n";
-
-            $tool_content .= '<strong>' . $langWikiDifferenceKeys . '</strong>';
+            $tool_content .= "<div class='alert alert-info'>
+                             ". sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr) ."
+                             </div>
+                             <strong>$langWikiDifferenceKeys</strong>";
 
             $tool_content .= '<div class="diff">' . "\n";
             $tool_content .= '= <span class="diffEqual" >' . $langWikiDiffUnchangedLine . '</span><br />';
@@ -880,7 +867,7 @@ switch ($action) {
                     $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
                     //remove the toc script (if it exists) with preg_replace
                     $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
-                    $printable_content .= '<hr/>';
+                    $printable_content .= '<hr>';
                 		
                     $editorInfo = user_get_data($wikiPage->getEditorId());
                     $editorStr = $editorInfo->givenname . "&nbsp;" . $editorInfo->surname;
@@ -1087,7 +1074,7 @@ if ($action == 'show') {
                                      </h3>
                                 </div>
                                 <div class='panel-body'>
-                                    $wiki_content
+                                    ". (isset($wiki_content) ? $wiki_content : "") ."
                                 </div>
                           </div>";
 }
