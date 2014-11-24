@@ -306,7 +306,7 @@ if (isset($_POST['formSent'])) {
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
-    <h3 class='panel-title'>$exerciseTitle ".(isset($timeleft) && $timeleft>0 ? "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>" : "" )."</h3>
+    <h3 class='panel-title'>".(isset($timeleft) && $timeleft>0 ? "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>" : "" )."$exerciseTitle</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
     $tool_content .= "<div class='panel-body'>
