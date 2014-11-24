@@ -334,34 +334,49 @@ if ($action == "showPost") {
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         $post->incViews();
-        
-        $tool_content .= "<div class='blog_post'>";
-        $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
-        
-        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
-            $tool_content .= "
-            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-            <img src='$themeimg/edit.png' alt='".$langModify."' title='".$langModify."'/></a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-            <img src='$themeimg/delete.png' alt='".$langDelete."' title='".$langDelete."' /></a>";
-        }
-        
-        $tool_content .= "</h2></div>";
-        
-        $tool_content .= "<div class='blog_post_content'>".standard_text_escape($post->getContent())."</div>";
-        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.display_user($post->getAuthor(), false, false)."</div>";
-        $tool_content .= "</div>";
-        
-        if ($ratings_enabled == 1) {
-        	$rating = new Rating('up_down', 'blogpost', $post->getId());
-        	$tool_content .= $rating->put($is_editor, $uid, $course_id);
-        }
-        
         if ($sharing_allowed) {
-            if ($sharing_enabled == 1) {
-                $tool_content .= print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle());
-            }
+            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
         }
+        if ($ratings_enabled == 1) {
+            $rating = new Rating('up_down', 'blogpost', $post->getId());
+            $rating_content = $rating->put($is_editor, $uid, $course_id);
+        }        
+        $tool_content .= "<div class='panel panel-action-btn-default'>
+                            <div class='panel-heading'>
+                                <div class='pull-right'>
+                                    ". action_button(array(
+                                        array(
+                                            'title' => $langModify,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-edit',
+                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                        ),
+                                        array(
+                                            'title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=delPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-times',
+                                            'class' => 'delete',
+                                            'confirm' => $langSureToDelBlogPost,
+                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                        )                                        
+                                    ))."
+                                </div>
+                                <h3 class='panel-title'>
+                                    ".q($post->getTitle())."
+                                </h3>
+                            </div>
+                            <div class='panel-body'><div class='label label-success'>" . nice_format($post->getTime(), true). "</div>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."<br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-footer'>
+                                <div class='row'>
+                                    <div class='col-sm-6'>$rating_content</div>
+                                    <div class='col-sm-6 text-right'>$sharing_content</div>
+                                </div>
+                            </div>
+                        </div>";
+        
+
+        
+
         
         if ($comments_enabled == 1) {
             $comm = new Commenting('blogpost', $post->getId());
