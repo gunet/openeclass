@@ -9,11 +9,10 @@ function getInfoAreas() {
 function updateInfo($percent, $infoText) {
     echo '<script language="javascript">';
     if ($percent >= 0) {
-        echo '    document.getElementById("progress").innerHTML="<div style=\"width:' . ($percent * 100) . '%;background-color:#ddd;\">&nbsp;</div>";
-';
+        echo 'document.getElementById("progress").innerHTML="<div style=\"width:' . ($percent * 100) . '%;background-color:#ddd;\">&nbsp;</div>";';
     }
-    echo '    document.getElementById("information").innerHTML="' . $infoText . '";
-    </script>';
+    echo 'document.getElementById("information").innerHTML="' . addslashes($infoText) . '";</script>
+';
     // This is for the buffer achieve the minimum size in order to flush data
 //    echo str_repeat(' ', 1024 * 64);
     // Send output to browser immediately

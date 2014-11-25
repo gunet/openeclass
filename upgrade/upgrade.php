@@ -2383,7 +2383,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     updateInfo(1, $langUpgradeSuccess);
 
-    updateInfo(1, "<div class='alert alert-success'>$langUpgradeSuccess
-        <br><b>$langUpgReady</b></div>
-        <div class='alert alert-info'>$langUpgSucNotice</div>");
+    updateInfo(1, "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b></div>");
+    echo "<div class='alert alert-info'>$langUpgSucNotice</div>";
 } // end of if not submit                
