@@ -195,21 +195,20 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         $_POST['telephone'] = @$telephone;
         $_POST['fax'] = @$fax;        
     } else {
-
         // Main part of upgrade starts here
-        ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-        <html>
-            <head>
-                <title><?php echo $langUpgrade; ?></title>
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <link href="../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
-            </head>
-            <body class='upgrade-main'>
-                <div id="container" style="padding: 30px;">
-                    <div id="header">
+        echo'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>' . $langUpgrade . '</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="../template/' . $theme . '/theme.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body class=\'upgrade-main\'>
+        <div id="container" style="padding: 30px;">
+            <div id="header">
 
-                        <a href="<?php echo $urlAppend ?>" title="<?php echo q($siteName) ?>" class="logo"></a></div>
-                    <?php
+                <a href="' . $urlAppend . '" title="'. q($siteName) .'" class="logo"></a></div>
+';
                     echo "<p class='title1'>$langUpgradeStart</p>",
                     "<p class='sub_title1'>$langUpgradeConfig</p>";
                     flush();
