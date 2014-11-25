@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,28 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file delcours.php
+ * @brief delete course
+ */
 
-/* * ===========================================================================
-  delcours.php
-  @last update: 31-05-2006 by Pitsiougas Vagelis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Delete a course
-
-  This script allows the administrator to delete a course
-
-  The user can : - Confirm for course deletion
-  - Delete a cours
-  - Return to course list
-
-  @Comments: The script is organised in three sections.
-
-  1) Confirm course deletion
-  2) Delete course
-  3) Display all on an HTML page
-
-  ============================================================================== */
 
 $require_departmentmanage_user = true;
 
@@ -68,6 +51,21 @@ $nameTools = $langCourseDel;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
+// If course deleted go back to listcours.php
+if (isset($_GET['c']) && !isset($_GET['delete'])) {
+    $tool_content .= action_bar(array(
+     array('title' => $langBack,
+           'url' => "listcours.php",
+           'icon' => 'fa-reply',
+           'level' => 'primary-label')));   
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+}
+
 // Delete course
 if (isset($_GET['delete']) && $course_id) {
     delete_course($course_id);
@@ -80,26 +78,13 @@ else {
         draw($tool_content, 3);
         exit();
     }
+    $tool_content .= "<div class='alert alert-danger'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
+		<br><br><i>" . $langNoticeDel . "</i><br>
+		</div>";
+    $tool_content .= "<ul class='list-group'>
+                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
+                        <li class='list-group-item'><a href='listcours.php'><b>$langNo</b></a></li>
+                    </ul>";
+}
 
-    $tool_content .= "<fieldset>
-	<legend>" . $langCourseDelConfirm . "</legend>
-	<table class='tbl' width='100%'>";
-    $tool_content .= "<tr><td>
-		<div class='alert alert-danger'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
-		<br /><br /><i>" . $langNoticeDel . "</i><br />
-		</div></td></tr>";
-    $tool_content .= "<tr>
-	<td><ul class='custom_list'><li><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
-	<li><a href='listcours.php'><b>$langNo</b></a></li></ul></td>
-	</tr>";
-    $tool_content .= "</table></fieldset>";
-}
-// If course deleted go back to listcours.php
-if (isset($_GET['c']) && !isset($_GET['delete'])) {
-    $tool_content .= "<p class='right'><a href='listcours.php'>$langBack</a></p>";
-}
-// Display link to index.php
-else {
-    $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
-}
 draw($tool_content, 3);
