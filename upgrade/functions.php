@@ -303,19 +303,14 @@ function upgrade_course($code, $lang) {
  * @global type $langUpgCourse
  * @global type $mysqlMainDb
  * @global type $webDir
- * @global type $langUpgradeCourseDone
  * @param type $code
  * @param type $extramessage
  * @param type $return_mapping
  * @return type
  */
-function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mapping = false) {
-    global $langUpgCourse, $mysqlMainDb, $webDir, $langUpgradeCourseDone;
+function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
+    global $langUpgCourse, $mysqlMainDb, $webDir;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
-    
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     // move forum tables to central db
@@ -1146,7 +1141,6 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
     
     
     if ($q1 and $q2) { // if everything ok drop course db
-        echo $langUpgradeCourseDone;
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
@@ -1164,14 +1158,11 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_11($code, $extramessage = '') {
+function upgrade_course_2_11($code) {
     
     global $langUpgCourse;
        
     Database::get()->query("USE `$code`");
-    
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
-    flush();
     
     if (!DBHelper::fieldExists('video', 'category', $code)) {
         Database::get()->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
@@ -1198,11 +1189,8 @@ function upgrade_course_2_11($code, $extramessage = '') {
  * @param type $course_id
  * @param type $extramessage
  */
-function upgrade_course_2_10($code, $course_id, $extramessage = '') {
+function upgrade_course_2_10($code, $course_id) {
     global $langUpgCourse;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
     
@@ -1229,13 +1217,10 @@ function upgrade_course_2_10($code, $course_id, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_9($code, $lang, $extramessage = '') {
+function upgrade_course_2_9($code, $lang) {
 
     global $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
@@ -1253,12 +1238,9 @@ function upgrade_course_2_9($code, $lang, $extramessage = '') {
  * @param type $extramessage
  * 
  */
-function upgrade_course_2_8($code, $lang, $extramessage = '') {
+function upgrade_course_2_8($code, $lang) {
 
     global $langUpgCourse, $global_messages;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
     
@@ -1288,13 +1270,10 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_5($code, $lang, $extramessage = '') {
+function upgrade_course_2_5($code, $lang) {
 
     global $langUpgCourse, $global_messages;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     Database::get()->query("UPDATE `accueil` SET `rubrique` = " .
@@ -1352,12 +1331,9 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_4($code, $course_id, $lang, $extramessage = '') {
+function upgrade_course_2_4($code, $course_id, $lang) {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
     
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
-    flush();
-
     Database::get()->query("USE `$code`");
     
     // not needed anymore
@@ -1495,12 +1471,9 @@ function upgrade_course_2_4($code, $course_id, $lang, $extramessage = '') {
  * @param type $code
  * @param type $extramessage
  */
-function upgrade_course_2_3($code, $extramessage = '') {
+function upgrade_course_2_3($code) {
     global $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
-    flush();
-        
     Database::get()->query("USE `$code`");
     
     // upgrade exercises
@@ -1516,11 +1489,8 @@ function upgrade_course_2_3($code, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_2($code, $lang, $extramessage = '') {
+function upgrade_course_2_2($code, $lang) {
     global $langUpgCourse, $global_messages;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
 
@@ -1565,12 +1535,9 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
  * @param type $code
  * @param type $extramessage
  */
-function upgrade_course_2_1_3($code, $extramessage = '') {
+function upgrade_course_2_1_3($code) {
     global $langEncodeDropBoxDocuments, $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
 
     // added field visibility in agenda

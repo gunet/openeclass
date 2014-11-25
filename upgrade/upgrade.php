@@ -25,6 +25,7 @@ require '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
+require_once 'upgradeHelper.php';
 
 stop_output_buffering();
 
@@ -188,6 +189,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
             <p class='pull-right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></p>
             </form>
             </div>";
+    draw($tool_content, 0);
 } else {
     // Main part of upgrade starts here
     if ($command_line) {
@@ -195,25 +197,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         $_POST['postaddress'] = @$postaddress;
         $_POST['telephone'] = @$telephone;
         $_POST['fax'] = @$fax;
-    } else {
-        // Main part of upgrade starts here
-        echo'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <title>' . $langUpgrade . '</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="../template/' . $theme . '/theme.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body class=\'upgrade-main\'>
-        <div id="container" style="padding: 30px;">
-            <div id="header">
-
-                <a href="' . $urlAppend . '" title="' . q($siteName) . '" class="logo"></a></div>
-';
-        echo "<p class='title1'>$langUpgradeStart</p>",
-        "<p class='sub_title1'>$langUpgradeConfig</p>";
-        flush();
     }
+
+    $tool_content .= getInfoAreas();
+    draw($tool_content, 0);
+    updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
 
     if (isset($telephone)) {
         // Upgrade to 3.x-style config
@@ -269,8 +257,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // 		upgrade eclass main database
     // ****************************************************
 
-    echo "<p class='sub_title1'>$langUpgradeBase <b>$mysqlMainDb</b></p>\n\n";
-    flush();
+    updateInfo(-1, $langUpgradeBase . " " . $mysqlMainDb);
 
     // Create or upgrade config table
     if (DBHelper::fieldExists('config', 'id')) {
@@ -307,11 +294,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('restrict_teacher_owndep', '0')");
 
     if (version_compare($oldversion, '2.1.3', '<') or ( !isset($oldversion))) {
-        echo "<hr><div class='alert alert-warning'>$langUpgTooOld</div>
-                        <p class='right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
-        echo '</div></body></html>';
+        updateInfo(1, $langUpgTooOld);
         exit;
-        draw($tool_content, 0);
     }
 
     if (version_compare($oldversion, '2.2', '<')) {
@@ -382,7 +366,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '2.4', '<')) {
         if (DBHelper::fieldExists('cours', 'faculte')) {
-            echo delete_field('cours', 'faculte');
+            delete_field('cours', 'faculte');
+            updateInfo(-1, $langDeleteField);
         }
 
         Database::get()->query("ALTER TABLE user CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el'");
@@ -2039,10 +2024,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
 
+    updateInfo(-1, $langDeleteField, delete_field('cours', 'faculte'));
+
     // // ----------------------------------
     // creation of indexes
     // ----------------------------------
-    echo "<p>$langIndexCreation</p><br />";
+    updateInfo(-1, $langIndexCreation);
 
     DBHelper::indexExists('actions_daily', 'actions_daily_index') or
             Database::get()->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
@@ -2287,42 +2274,51 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     $total = count($res);
     $i = 1;
     foreach ($res as $row) {
+        updateInfo($i / ($total + 1), $langUpgCourse);
+
         if (version_compare($oldversion, '2.2', '<')) {
-            upgrade_course_2_2($row->code, $row->lang, "($i / $total)");
+            upgrade_course_2_2($row->code, $row->lang);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.2");
         }
         if (version_compare($oldversion, '2.3', '<')) {
-            upgrade_course_2_3($row->code, "($i / $total)");
+            upgrade_course_2_3($row->code);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.3");
         }
         if (version_compare($oldversion, '2.4', '<')) {
             convert_description_to_units($row->code, $row->id);
             upgrade_course_index_php($row->code);
-            upgrade_course_2_4($row->code, $row->id, $row->lang, "($i / $total)");
+            upgrade_course_2_4($row->code, $row->id, $row->lang);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.4");
         }
         if (version_compare($oldversion, '2.5', '<')) {
-            upgrade_course_2_5($row->code, $row->lang, "($i / $total)");
+            upgrade_course_2_5($row->code, $row->lang);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.5");
         }
         if (version_compare($oldversion, '2.8', '<')) {
-            upgrade_course_2_8($row->code, $row->lang, "($i / $total)");
+            upgrade_course_2_8($row->code, $row->lang);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.8");
         }
         if (version_compare($oldversion, '2.9', '<')) {
-            upgrade_course_2_9($row->code, $row->lang, "($i / $total)");
+            upgrade_course_2_9($row->code, $row->lang);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.9");
         }
         if (version_compare($oldversion, '2.10', '<')) {
-            upgrade_course_2_10($row->code, $row->id, "($i / $total)");
+            upgrade_course_2_10($row->code, $row->id);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
         }
         if (version_compare($oldversion, '2.11', '<')) {
-            upgrade_course_2_11($row->code, "($i / $total)");
+            upgrade_course_2_11($row->code);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
         }
         if (version_compare($oldversion, '3.0', '<')) {
-            upgrade_course_3_0($row->code, $row->id, "($i / $total)");
+            upgrade_course_3_0($row->code, $row->id);
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
         }
-        echo "</p>";
         $i++;
     }
-    echo "<hr>";
 
     if (version_compare($oldversion, '2.1.3', '<')) {
-        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
+        updateInfo(0.98, $langChangeDBCharset . " " . $mysqlMainDb . " " . $langToUTF);
         convert_db_utf8($mysqlMainDb);
     }
 
@@ -2385,13 +2381,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
-    echo "<hr><div class='alert alert-success'>$langUpgradeSuccess
+    updateInfo(1, $langUpgradeSuccess);
+
+    updateInfo(1, "<div class='alert alert-success'>$langUpgradeSuccess
         <br><b>$langUpgReady</b></div>
-        <div class='alert alert-info'>$langUpgSucNotice</div>
-        <p class='pull-right'><a href='$urlServer?logout=yes'>$langBack</a></p>";
-
-
-    echo '</div></body></html>';
-    exit;
+        <div class='alert alert-info'>$langUpgSucNotice</div>");
 } // end of if not submit                
-draw($tool_content, 0);
