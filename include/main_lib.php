@@ -351,24 +351,24 @@ function uid_to_am($uid) {
  * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
  * @return string
  */
-function user_icon($uid, $size=null) {
+function user_icon($uid, $size = null) {
     global $themeimg, $urlAppend;
 
-    if (!$size) {
-        $size = IMAGESIZE_SMALL;
-    }
-    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
-    if ($user) {
-        if ($user->has_icon) {
-            return "${urlAppend}courses/userimg/${uid}_$size.jpg";
-        } else {
-            return "$themeimg/default_$size.jpg";
+    if (DBHelper::fieldExists("user", "id")) {
+        $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
+        if ($user) {
+            if (!$size) {
+                $size = IMAGESIZE_SMALL;
+            }
+            if ($user->has_icon) {
+                return "${urlAppend}courses/userimg/${uid}_$size.jpg";
+            } else {
+                return "$themeimg/default_$size.jpg";
+            }
         }
-    } else {
-        return '';
     }
+    return '';
 }
-
 
 /**
  * @brief Display links to the groups a user is member of

@@ -415,6 +415,13 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
             });
         }
 
+        
+        if (!DBHelper::fieldExists('video', 'visible', $code)) {
+            Database::get()->query("ALTER TABLE video ADD visible TINYINT(4) NOT NULL DEFAULT 1 AFTER date");
+        }
+        if (!DBHelper::fieldExists('video', 'public', $code)) {
+            Database::get()->query("ALTER TABLE video ADD public TINYINT(4) NOT NULL DEFAULT 1 AFTER visible");
+        }
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,

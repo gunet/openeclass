@@ -130,9 +130,11 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function fieldExistsImpl($table, $field, $db) {
-    	global $mysqlMainDb;
+        global $mysqlMainDb;
         if ($db == null)
             $db = $mysqlMainDb;
+        if (!DBHelper::tableExists($table, $db))
+            return 0;
         return count(Database::get()->queryArray("SHOW COLUMNS from `$db`.`$table` LIKE '$field'")) > 0;
     }
 
@@ -140,6 +142,8 @@ class _DBHelper_MYSQL extends DBHelper {
         global $mysqlMainDb;
         if ($db == null)
             $db = $mysqlMainDb;
+        if (!DBHelper::tableExists($table, $db))
+            return 0;
         return count(Database::get()->queryArray("SHOW INDEX FROM `$db`.`$table` WHERE Key_name = ?s", $index_name)) > 0;
     }
 
