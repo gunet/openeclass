@@ -203,7 +203,8 @@ function getdepnumcourses($fac) {
 function expanded_faculte($fac_name, $facid, $uid) {
 	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
                $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-               $langpres, $langposts, $langothers, $themeimg, $courses_list, $urlAppend;
+               $langpres, $langposts, $langothers, $themeimg, $courses_list, $urlAppend,
+               $is_admin;
 
 	$retString = "";
 
@@ -307,7 +308,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $courses_list[$cid] = array($mycours['k'], $mycours['visible']);
                         $password = $mycours['password'];
 			// link creation
-                        if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
+                        if ($mycours['visible'] == COURSE_OPEN or $is_admin) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
                                 if (@$myCourses[$cid]['statut'] == 5) {
