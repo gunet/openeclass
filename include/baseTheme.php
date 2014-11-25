@@ -135,7 +135,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('LANG', $language);
     
     if ($is_embedonce) {
-        $t->set_block('mainBlock', 'breadCrumbs', 'delete');
         $t->set_block('mainBlock', 'footerBlock', 'delete');
         $t->set_block('mainBlock', 'headerBlock', 'delete');
         $t->set_block('mainBlock', 'logoBlock', 'delete');
