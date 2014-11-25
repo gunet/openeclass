@@ -71,21 +71,27 @@ Class Commenting {
      * @param $uid the user id
      * @return string
      */
-    public function put($courseCode, $isEditor, $uid) {
+    public function put($courseCode, $isEditor, $uid, $always_open = false) {
         global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
         $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content;
         
-        $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/comments/style.css">';
+        //$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/comments/style.css">';
         
         $commentsNum = $this->getCommentsNum();
-        
+
+        if (!$always_open) {
+            $comments_title = "<a id='comments_title' href='javascript:void(0)' onclick='showComments(\"$this->rid\")'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</a><br>";
+            $comments_display = "style='display:none'";
+        } else {
+            $comments_title = "<h3 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h3><br>";
+            $comments_display = "";            
+        }
         //the array is declared in commenting.js
-        $out = '<script type="text/javascript">showCommentArea['.$this->rid.'] = false;</script>';
-        
-        $out .= '<div class="commenting">';
-        $out .= '<a href="javascript:void(0)" onclick="showComments('.$this->rid.')">'.$langComments.' (<span id="commentsNum-'.$this->rid.'">'.$commentsNum.'</span>)</a><br/>';
-        $out .= '<div class="commentArea" id="commentArea-'.$this->rid.'">';
-        $out .= '<div id="comments-'.$this->rid.'">';
+        $out = "<script type='text/javascript'>showCommentArea[$this->rid] = false;</script>
+                <div class='commenting'>
+                    $comments_title
+                <div class='commentArea' id='commentArea-$this->rid' $comments_display>
+                <div id='comments-$this->rid'>";
         
         if ($commentsNum != 0) {
             //retrieve comments

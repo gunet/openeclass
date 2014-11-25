@@ -367,7 +367,7 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body'><div class='label label-success'>" . nice_format($post->getTime(), true). "</div>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."<br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body'><div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer'>
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
@@ -380,9 +380,9 @@ if ($action == "showPost") {
         
 
         
-        if ($comments_enabled == 1) {
+        if ($comments_enabled) {
             $comm = new Commenting('blogpost', $post->getId());
-            $tool_content .= $comm->put($course_code, $is_editor, $uid);
+            $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
         }
         
     } else {
@@ -435,7 +435,7 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = $comm->put($course_code, $is_editor, $uid);
+                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }            
