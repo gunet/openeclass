@@ -111,11 +111,12 @@ Class Blog {
     public function popularBlogPostsHTML($num) {
         global $course_code, $langBlogPopular;
         $posts = $this->getPopularBlogPostsDB($num);
-        $out = "<table><tr><th style=\"border:0px;\">$langBlogPopular</th></tr>";
+        $out = "<h5><strong>$langBlogPopular</strong></h5>
+                    <div class='list-group'>";
         foreach ($posts as $post) {
-            $out .= "<tr><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></td></tr>";
+            $out .= "<a class='list-group-item' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
         }
-        $out .= "</table><br>";
+        $out .= "</div>";
         return $out;
     }
     
