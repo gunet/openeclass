@@ -92,7 +92,7 @@ if ($is_editor) {
         	unset($message);
         }
         
-        $tool_content .= "<form action=\"\" method=\"post\" >";
+        
         
         if (setting_get(SETTING_BLOG_STUDENT_POST, $course_id) == 1) {
             $checkTeach = "";
@@ -101,16 +101,6 @@ if ($is_editor) {
             $checkTeach = "checked ";
             $checkStud = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langBlogPerm</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"1_radio\" $checkTeach/>$langBlogPermTeacher</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"1_radio\" $checkStud/>$langBlogPermStudents</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-        
         if (setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id) == 1) {
         	$checkDis = "";
         	$checkEn = "checked ";
@@ -118,16 +108,6 @@ if ($is_editor) {
         	$checkDis = "checked ";
         	$checkEn = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langCommenting</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"2_radio\" $checkEn/>$langCommentsEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"2_radio\" $checkDis/>$langCommentsDis</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-        
         if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
         	$checkDis = "";
         	$checkEn = "checked ";
@@ -135,16 +115,6 @@ if ($is_editor) {
         	$checkDis = "checked ";
         	$checkEn = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langRating</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"3_radio\" $checkEn/>$langRatingEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"3_radio\" $checkDis/>$langRatingDis</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-		
         if (!$sharing_allowed) {
             $radio_dis = " disabled";
             $sharing_dis_label = "<tr><td><em>";
@@ -168,19 +138,83 @@ if ($is_editor) {
             $checkEn = "";
         }
         
-        $tool_content .= "<fieldset><legend>$langSharing</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"4_radio\" $checkEn $radio_dis/>$langSharingEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"4_radio\" $checkDis $radio_dis/>$langSharingDis</td></tr>";
-        $tool_content .= "<tr><td>$sharing_dis_label</tr></td>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
         
-        $tool_content .= "<p class=\"right\"><input type=\"submit\" name=\"submitSettings\" value=\"$langSubmit\" /></p>";
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div class='form-wrapper'>
+                        <form class='form-horizontal' action='' role='form' method='post'>
+                            <fieldset>
+                                <legend>$langBlogPerm</legend>
+                                <div class='form-group'>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
+                                        </label>
+                                    </div>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='1' name='1_radio' $checkStud>$langBlogPermStudents
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>$langCommenting</legend>
+                                <div class='form-group'>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='1' name='2_radio' $checkEn>$langCommentsEn
+                                        </label>
+                                    </div>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='0' name='2_radio' $checkDis>$langCommentsDis
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>$langRating</legend>
+                                <div class='form-group'>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='1' name='3_radio' $checkEn>$langRatingEn
+                                        </label>
+                                    </div>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='0' name='3_radio' $checkDis>$langRatingDis
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>$langSharing</legend>
+                                <div class='form-group'>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='1' name='4_radio' $checkEn $radio_dis>$langSharingEn
+                                        </label>
+                                    </div>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' value='0' name='4_radio' $checkDis $radio_dis>$langSharingDis
+                                        </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class='form-group'>
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                  <button type='submit' class='btn btn-default' name='submitSettings' value='$langSubmit'>Sign in</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>";
         
-        $tool_content .= "</form>";
+        
         
     }
 }
