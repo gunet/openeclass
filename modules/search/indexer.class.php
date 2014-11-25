@@ -27,6 +27,7 @@ require_once 'Zend/Search/Exception.php';
 require_once 'Zend/Search/Lucene.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
+require_once 'Zend/Search/Lucene/Exception.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
 require_once 'agendaindexer.class.php';
 require_once 'announcementindexer.class.php';

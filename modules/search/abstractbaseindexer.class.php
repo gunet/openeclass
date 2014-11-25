@@ -20,6 +20,8 @@
  * ======================================================================== 
  */
 
+require_once 'Zend/Search/Lucene/Exception.php';
+
 abstract class AbstractBaseIndexer {
     
     protected $__indexer = null;
@@ -109,14 +111,14 @@ abstract class AbstractBaseIndexer {
         if (!$resource) {
             return;
         }
-
-        // delete existing resource from index
-        $this->remove($id, false, false);
-
-        // add the resource back to the index
-        $this->__index->addDocument($this->makeDoc($resource));
-
-        $this->optimizeOrCommit($optimize);
+        
+        try {
+            $this->remove($id, false, false);                       // delete existing resource from index
+            $this->__index->addDocument($this->makeDoc($resource)); // add the resource back to the index
+            $this->optimizeOrCommit($optimize);
+        } catch (Zend_Search_Lucene_Exception $e) {
+            $this->handleWriteErrors($e);
+        }
     }
     
     /**
@@ -169,6 +171,39 @@ abstract class AbstractBaseIndexer {
         }
 
         $this->optimizeOrCommit($optimize);
+    }
+    
+    /**
+     * Handle Write Exceptions.
+     * 
+     * @global string                       $urlAppend
+     * @param  Zend_Search_Lucene_Exception $e
+     */
+    protected function handleWriteErrors($e) {
+        if (preg_match("/too many open files/i", $e->getMessage())) {
+            global $urlAppend;
+            echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+                <html xmlns=\"http://www.w3.org/1999/xhtml\">
+                  <head>
+                    <title>Asynchronous eLearning Platform Open eClass</title>
+                    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+                    <link href='${urlAppend}/install/install.css' rel='stylesheet' type='text/css' />
+                  </head>
+                  <body>
+                  <div class='install_container'>
+                  <p align='center'><img src='${urlAppend}/template/classic/img/logo_openeclass.png' alt='logo' /></p>
+                  <div class='alert' align='center'>
+                  <p>The asynchronous eLearning Platform Open eClass is not operational.</p>
+                  <p>This is caused by a possible maximum open files (ulimit) problem for the search engine indexing directory (courses/idx/).</p>
+                  <p>Please inform the platform administrator.</p>
+                  </div>
+                  </div>
+                  </body>
+                </html>";
+            exit();
+        } else {
+            require_once 'fatal_error.php';
+        }
     }
     
 }

@@ -132,6 +132,7 @@ if (get_config('enable_indexing')) {
 
     // optimize index
     if (isset($_GET['optimize'])) {
+        set_time_limit(0);
         $idx->getIndex()->optimize();
     }
 
@@ -154,7 +155,7 @@ if (get_config('enable_indexing')) {
                 if ($idx->getIndex()->hasDeletions()) {
                     $tool_content .= "
                     <dt></dt>
-                    <dd><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></dd>";
+                    <dd><a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a></dd>";
                 }
                 $tool_content .="
             </dl>
@@ -186,5 +187,29 @@ if (count($res) >= 1) {
 </div>";
 }
 
+$head_content = <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
 
-draw($tool_content, 3);
+var optwindow = null;
+                
+function optpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (optwindow == null || optwindow.closed) {
+        optwindow = window.open(url, 'optpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && optwindow !== null) {
+            optwindow.focus();
+        }
+    } else {
+        optwindow.focus();
+    }
+    
+    return false;
+}
+
+/* ]]> */
+</script>
+EOF;
+draw($tool_content, 3, null, $head_content);

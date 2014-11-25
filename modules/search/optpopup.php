@@ -22,32 +22,35 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/cronutil.class.php';
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title><?php echo $logo; ?></title>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <link href='../../install/install.css' rel='stylesheet' type='text/css' />
+  </head>
+  <body style='background-color: #ffffff;'>
+    <div class='container'>
+      <p align='center'><img src='../../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+      <div class='alert' align='center'>
+        <p><?php echo $langIndexingOptAlert1; ?></p>
+        <p><?php echo $langIndexingOptAlert2; ?></p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<?php
+
+session_write_close();
+ignore_user_abort(true);
+CronUtil::flush();
+
 require_once 'modules/search/indexer.class.php';
-header('Content-Type: application/json; charset=utf-8');
-
-// fetch number of courses waiting in index queue
-$n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM idx_queue")->count;
-$rem = $n;
-
-if ($n > 0) {
-    // fetch next waiting course
-    $cid = Database::get()->querySingle("SELECT course_id FROM idx_queue LIMIT 1")->course_id;
-    
-    // re-index
-    $idx = new Indexer();
-    $idx->removeAllByCourse($cid);
-    $idx->storeAllByCourse($cid);
-    set_time_limit(0);
-    $idx->getIndex()->optimize();
-    
-    // remove course from queue
-    Database::get()->query("DELETE FROM idx_queue WHERE course_id = ?d", $cid);
-    $rem = $n - 1;
-}
-
-$data = array(
-    "remaining" => $rem
-);
-
-echo json_encode($data);
-exit();
+$idx = new Indexer();
+set_time_limit(0);
+$idx->getIndex()->optimize();
