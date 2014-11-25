@@ -145,7 +145,11 @@ abstract class AbstractBaseIndexer {
             $this->__index->delete($id);
         }
 
-        $this->optimizeOrCommit($optimize);
+        try {
+            $this->optimizeOrCommit($optimize);
+        } catch (Zend_Search_Lucene_Exception $e) {
+            $this->handleWriteErrors($e);
+        }
     }
     
     /**
