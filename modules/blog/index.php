@@ -205,7 +205,7 @@ if ($is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group'>
-                                <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='col-sm-10'>
                                   <button type='submit' class='btn btn-default' name='submitSettings' value='$langSubmit'>Sign in</button>
                                 </div>
                             </div>
