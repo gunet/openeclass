@@ -138,10 +138,20 @@ function mysql_table_exists($db, $table)
 // check if a mysql table field exists
 function mysql_field_exists($db,$table,$field)
 {
-	$fields = db_query("SHOW COLUMNS from $table LIKE '$field'",$db);
+	$fields = db_query("SHOW COLUMNS from `$table` LIKE '$field'",$db);
 	if (mysql_num_rows($fields) > 0)
 	return TRUE;
 
+}
+
+function db_field_type($db,$table,$field)
+{
+	$fields = db_query_get_single_row("SHOW FIELDS FROM `$table` LIKE '$field'", $db);
+	if (count($fields)) {
+        return($fields['Type']);
+    } else {
+        return false;
+    }
 }
 
 // check if a mysql index exists
@@ -379,12 +389,16 @@ function upgrade_course_2_12($code, $lang, $extramessage = '') {
     flush();
     
     if (!mysql_field_exists($code, 'exercise_user_record', 'TotalScore')) {
-        db_query("ALTER TABLE exercise_user_record MODIFY `TotalScore` FLOAT(5,2)");
+        db_query("ALTER TABLE exercise_user_record ADD `TotalScore` FLOAT(5,2)");
+    } elseif (db_field_type($code, 'exercise_user_record', 'TotalScore') != 'float(5,2)'); {
+        db_query("ALTER TABLE exercise_user_record CHANGE `TotalScore` `TotalScore` FLOAT(5,2)");
     }
     
     if (!mysql_field_exists($code, 'exercise_user_record', 'TotalWeighting')) {
-        db_query("ALTER TABLE exercise_user_record MODIFY `TotalWeighting` FLOAT(5,2)");
-    }    
+        db_query("ALTER TABLE exercise_user_record ADD `TotalWeighting` FLOAT(5,2)");
+    } elseif (db_field_type($code, 'exercise_user_record', 'TotalWeighting') != 'float(5,2)'); {
+        db_query("ALTER TABLE exercise_user_record CHANGE `TotalWeighting` `TotalWeighting` FLOAT(5,2)");
+    }
 }
 
 function upgrade_course_2_11($code, $lang, $extramessage = '') {
