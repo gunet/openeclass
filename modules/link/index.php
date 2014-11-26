@@ -265,7 +265,12 @@ if ($countlinks > 0) {
     $resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
     $aantalcategories = count($resultcategories);
    
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+            <div class='panel'>
+            <div class='table-responsive'>
+            <table class='table-default'>";
     // uncategorized links
     if ($numberofzerocategory !== 0) {
         $tool_content .= "<tr><th class='text-left'>$langNoCategory</th><th class='text-center'>" . icon('fa-gears') . "</th></tr>";
@@ -333,7 +338,7 @@ if ($countlinks > 0) {
         }        
         $i++;
     }
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div></div></div></div>";
 } else {   // no links
     $tool_content .= "<div class='alert alert-warning text-center'>$langNoLinksExist</div>";
 }
