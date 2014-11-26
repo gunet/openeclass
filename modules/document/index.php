@@ -1154,6 +1154,7 @@ if ($doc_count == 0) {
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
+                <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
     $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
@@ -1264,6 +1265,11 @@ if ($doc_count == 0) {
 
                     $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
                     $tool_content .= action_button(array(
+                                    array('title' => $langDelete,
+                                          'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => "$langConfirmDelete $entry[filename]"),
                                     array('title' => $langGroupSubmit,
                                           'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=$cmdDirName",
                                           'icon' => 'fa-book',
@@ -1301,12 +1307,7 @@ if ($doc_count == 0) {
                                     array('title' => $langResourceAccess,
                                           'url' => "{$base_url}public=$cmdDirName",
                                           'icon' => 'fa-lock',
-                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public']),
-                                    array('title' => $langDelete,
-                                          'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
-                                          'icon' => 'fa-times',
-                                          'class' => 'delete',
-                                          'confirm' => "$langConfirmDelete $entry[filename]")));
+                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public'])));
                     $tool_content .= "</td>";
                 } else { // student view
                     $tool_content .= "<td class='text-center'>" . icon('fa-save', $dload_msg, $download_url) . "</td>";
@@ -1316,6 +1317,7 @@ if ($doc_count == 0) {
         }
     }
     $tool_content .= "</table>
+            </div>
             </div>
         </div>
     </div>";
