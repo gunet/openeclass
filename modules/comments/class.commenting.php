@@ -122,20 +122,6 @@ Class Commenting {
                 </div>
             </div>
         </div>";              
-//                $out .= '<div class="comment" id="comment-'.$comment->getId().'">';
-//                $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.display_user($comment->getAuthor(), false, false).':</div>';
-//                $out .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
-//                
-//                if ($comment->permEdit($isEditor, $uid)) {
-//                    $out .= '<div class="comment_actions">';
-//                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-//                    $out .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
-//                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-//                    $out .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
-//                    $out .='</div>';
-//                }
-//                
-//                $out .= '</div>';
             }
         }
         $out .= "</div>";

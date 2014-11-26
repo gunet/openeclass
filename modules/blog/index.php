@@ -143,69 +143,74 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>
-                                <legend>$langBlogPerm</legend>
+                            <fieldset>                               
                                 <div class='form-group'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='1' name='1_radio' $checkStud>$langBlogPermStudents
-                                        </label>
+                                    <label class='col-sm-3'>$langBlogPerm</label>
+                                    <div class='col-sm-9'> 
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='1_radio' $checkStud>$langBlogPermStudents
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <legend>$langCommenting</legend>
                                 <div class='form-group'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='1' name='2_radio' $checkEn>$langCommentsEn
-                                        </label>
+                                    <label class='col-sm-3'>$langCommenting</label>
+                                    <div class='col-sm-9'>    
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='2_radio' $checkEn>$langCommentsEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='2_radio' $checkDis>$langCommentsDis
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='0' name='2_radio' $checkDis>$langCommentsDis
-                                        </label>
+                                </div>                            
+                                <div class='form-group'>
+                                    <label class='col-sm-3'>$langRating:</label>
+                                    <div class='col-sm-9'>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='3_radio' $checkEn>$langRatingEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='3_radio' $checkDis>$langRatingDis
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend>$langRating</legend>
                                 <div class='form-group'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='1' name='3_radio' $checkEn>$langRatingEn
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='0' name='3_radio' $checkDis>$langRatingDis
-                                        </label>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend>$langSharing</legend>
-                                <div class='form-group'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='1' name='4_radio' $checkEn $radio_dis>$langSharingEn
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' value='0' name='4_radio' $checkDis $radio_dis>$langSharingDis
-                                        </label>
+                                    <label class='col-sm-3'>$langSharing:</label>
+                                    <div class='col-sm-9'>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='4_radio' $checkEn $radio_dis>$langSharingEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='4_radio' $checkDis $radio_dis>$langSharingDis
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <div class='form-group'>
-                                <div class='col-sm-10'>
-                                  <button type='submit' class='btn btn-default' name='submitSettings' value='$langSubmit'>Sign in</button>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                  <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit'>
+                                  <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
                                 </div>
                             </div>
                         </form>
