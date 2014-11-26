@@ -26,7 +26,6 @@ $helpTopic = 'Gradebook';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'modules/admin/admin.inc.php';
 
 define('COURSE_USERS_PER_PAGE', 15);
 

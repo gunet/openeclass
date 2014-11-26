@@ -26,7 +26,6 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 
 //Identifying ajax request
