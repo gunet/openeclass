@@ -196,7 +196,7 @@ hContent;
 
     if (isset($_POST['submitCategory'])) {
         submit_video_category();
-        Session::Messages($langFAdd,"alert-success");
+        Session::Messages($langCatVideoDirectoryCreated,"alert-success");
         redirect_to_home_page("modules/video/index.php");
     }
 
@@ -529,14 +529,14 @@ if ($count_video[0] > 0 or $count_video_links[0] > 0) {
             $tool_content .= "</th><td class='option-btn-cell'>";
             if ($is_editor) {
                 $tool_content .= action_button(array(
-                    array('title' => $langModify,
-                          'icon' => 'fa-edit',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory"),
                     array('title' => $langDelete,
                           'icon' => 'fa-times',
                           'class' => 'delete',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
-                          'confirm' => $langCatDel)));
+                          'confirm' => $langCatDel),
+                    array('title' => $langModify,
+                          'icon' => 'fa-edit',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
             }
             $tool_content .= '</td></tr>';
             if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
@@ -750,6 +750,11 @@ function showlinksofcategory($cat_id = 0) {
                 $tool_content .= "</td><td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
                     "</td><td class='option-btn-cell'>" .
                     action_button(array(
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
+                              'icon' => 'fa-times',
+                              'confirm' => $langConfirmDelete,
+                              'class' => 'delete'),
                         array('title' => $langSave,
                               'url' => $link_to_save,
                               'icon' => 'fa-floppy-o'),
@@ -757,11 +762,6 @@ function showlinksofcategory($cat_id = 0) {
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
                               'icon' => 'fa-edit',
                               'show' => !$is_in_tinymce and $is_editor),
-                        array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
-                              'icon' => 'fa-times',
-                              'confirm' => $langConfirmDelete,
-                              'class' => 'delete'),
                         array('title' => $langVisible,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
                                        ($myrow->visible? '0': '1'),

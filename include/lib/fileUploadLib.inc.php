@@ -420,32 +420,33 @@ function showquota($quota, $used) {
     );     
     $retstring .= action_bar($action_bar_options);
 $retstring .= "
-<div class='panel padding'>
+<div class='row'><div class='col-sm-12'>
+<div class='panel no-borders'>
 <form class='form-horizontal' role='form'>
   <div class='form-group'>
     <label class='col-sm-2'>$langQuotaUsed:</label>
     <div class='col-sm-10'>
-      <input type='text' class='form-control' value='$used' disabled>
+      <p class='form-control-static'>$used</p>
     </div>
   </div>
   <div class='form-group'>
     <label class='col-sm-2'>$langQuotaPercentage:</label>
     <div class='col-sm-10'>
         <div class='progress'>
-          <div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
+          <p class='progress-bar progress-bar-striped active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
             $diskUsedPercentage
-          </div>
+          </p>
         </div>
     </div>
   </div>
   <div class='form-group'>
     <label class='col-sm-2'>$langQuotaTotal:</label>
     <div class='col-sm-10'>
-      <input type='text' class='form-control' value='$quota' disabled>
+          <p class='form-control-static'>$quota</p>
     </div>
   </div>  
 </form>
-</div>";
+</div></div></div>";
     $tmp_cwd = getcwd();
 
     return $retstring;

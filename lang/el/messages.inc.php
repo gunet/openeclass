@@ -3345,6 +3345,7 @@ $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τ�
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
 $langVideoDirectory = "Πολυμεσικά αρχεία";
 $langCatVideoDirectory = "Κατηγοριοποιημένα πολυμεσικά αρχεία";
+$langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
 
 /* * ***********************************************************
  * wiki.php
