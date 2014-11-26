@@ -784,7 +784,21 @@ if ($can_upload) {
         if ($result) {
             $filename = q($result->filename);
             $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
-            
+            $dialogBox = "
+                                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
+                                <fieldset>
+                                <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
+                                $group_hidden_input
+                                        <table class='table-default'>
+                                        <tr>
+                                                <td>$replacemessage</td>
+                                                <td><input type='file' name='newFile' size='35' /></td>
+                                                <td><input class='btn btn-primary' type='submit' value='$langReplace' /></td>
+                                        </tr>
+                                        </table>
+                                </fieldset>
+                                </form>
+                                <br />";
         }
     }
 
@@ -1150,7 +1164,7 @@ if ($doc_count == 0) {
 
     <div class='row'>
         <div class='col-md-12'>
-            <div class='panel'>
+            <div class='panel no-borders'>
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";

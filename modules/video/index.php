@@ -159,7 +159,7 @@ hContent;
     if (isset($_GET['action'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
         $nameTools =  ($_GET['action'] == 'edit-category') ? $langCategoryMod : $langCategoryAdd;
-        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
         $tool_content .=  "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         if ($_GET['action'] == 'editcategory') {
             $myrow = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
@@ -191,7 +191,7 @@ hContent;
                             </div>
                         </div>
                         </fieldset></form>
-                    </div>";
+                    </div></div></div>";
     }
 
     if (isset($_POST['submitCategory'])) {
@@ -424,7 +424,7 @@ hContent;
             $publisher = $myrow->publisher;
             $category = $myrow->category;
             
-            $tool_content .= "<div class='form-wrapper'>
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>";
             if ($table_edit == 'videolink') {
@@ -477,7 +477,7 @@ hContent;
                 </div>
                 </fieldset>
                 </form>
-                </div>";
+                </div></div></div>";
     }
 
 }   // end of admin check
@@ -490,7 +490,7 @@ $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM
 
 $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
 if ($count_video[0] > 0 or $count_video_links[0] > 0) {
-    $tool_content .= "<div class='table-responsive'><table class='table-default'>
+    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel no-borders'><div class='table-responsive'><table class='table-default'>
         <tr><th>$langVideoDirectory</th>
         <th class='text-center'>$langDate</th>
         <th class='text-center'>" . icon('fa-gears') . "</th>";        
@@ -540,7 +540,7 @@ if ($count_video[0] > 0 or $count_video_links[0] > 0) {
             }
         }
     }
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table></div></div></div></div>";
 } else {
     $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
 }
