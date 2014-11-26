@@ -59,6 +59,8 @@ if ($is_editor) {
         } else {
             updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
         }
+        Session::Messages("Ok","alert-success");
+        redirect_to_home_page("modules/course_description/index.php");
     } else if (isset($_POST['submit']) && isset($_POST['edIdBloc'])) {
         // Save results from block edit (save action)
         $res_id = intval($_POST['edIdBloc']);
@@ -81,19 +83,19 @@ if ($q && count($q) > 0) {
                 <div class='pull-right'>".
                 action_button(
                         array(
-                            array(
-                                'title' => q($langEdit),
-                                'url' => "edit.php?course=$course_code&amp;id=$row->id",
-                                'icon' => 'fa-edit'
-                            ),
                             array('title' => q($langDelete),
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$row->id",
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete),
+                            array(
+                                'title' => q($langEdit),
+                                'url' => "edit.php?course=$course_code&amp;id=$row->id",
+                                'icon' => 'fa-edit'
+                            ),
                             array('title' => $langAddToCourseHome,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$row->id",
-                                'icon' => $row->visible ? 'fa-eye' : 'fa-eye-slash'
+                                'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye'
                             ),
                             array('title' => q($langUp),
                                 'icon' => 'fa-arrow-up',
