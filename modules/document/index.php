@@ -485,7 +485,7 @@ if ($can_upload) {
                                                    path = ?s", $_GET['rename'])->filename;
         $dialogBox .= "
             
-            <div class='row'>
+            <div id='rename_doc_file' class='row'>
                 <div class='col-xs-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -494,7 +494,7 @@ if ($can_upload) {
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
-                                        <label for='renameTo' class='col-sm-2 control-label' >" . q($fileName) . "</label>
+                                        <label for='renameTo' class='col-sm-2 control-label word-wrapping' >" . q($fileName) . "</label>
                                         <div class='col-sm-10'>
                                             <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
                                         </div>
