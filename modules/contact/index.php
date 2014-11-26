@@ -39,7 +39,7 @@ $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM 
 
 if (empty($userdata->email)) {
     if ($uid) {
-        $tool_content .= sprintf('<p>' . $langEmailEmpty . '</p>', $urlServer . 'modules/profile/profile.php');
+        $tool_content .= sprintf('<p>' . $langEmailEmpty . '</p>', $urlServer . 'main/profile/profile.php');
     } else {
         $tool_content .= sprintf('<p>' . $langNonUserContact . '</p>', $urlServer);
     }
