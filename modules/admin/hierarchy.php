@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -66,16 +66,24 @@ if (!in_array($language, $session->active_ui_languages)) {
 }
 
 // link to add a new node
-$tool_content .= "
-    <div id='operations_container'>" .
-        action_bar(array(
+if (!isset($_REQUEST['action'])) {
+    $tool_content .= action_bar(array(
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
-        )) .
-        "</div>";
+        array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+} else {
+    $tool_content .= action_bar(array(            
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+}
 
 // Display all available nodes
 if (!isset($_GET['action'])) {
@@ -91,7 +99,7 @@ if (!isset($_GET['action'])) {
 
     // Construct a table
     $tool_content .= "
-    <table width='100%' class='tbl_border'>
+    <table class='table-default'>
     <tr>
     <td colspan='" . ($maxdepth + 4) . "' class='right'>
             $langManyExist: <b>$nodesCount</b> $langHierarchyNodes
@@ -181,14 +189,8 @@ function customMenu(node) {
 hContent;
 
     $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr>";
-
     // Close table correctly
-    $tool_content .= "</table>\n";
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    $tool_content .= "</table>";    
 }
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -233,59 +235,60 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         }
     } else {
         // Display form for new node information
-        $tool_content .= "
-    <form method=\"post\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?action=add\" onsubmit=\"return validateNodePickerForm();\">
-    <fieldset>
-      <legend>$langNodeAdd</legend>
-      <table width='100%' class='tbl'>
-      <tr>
-        <th width=\"180\" class='left'>" . $langNodeCode1 . ":</th>
-        <td><input type='text' name='code' /> <i>" . $langCodeFaculte2 . "</i></td>
-      </tr>
-      <tr>
-        <th class='left'>" . $langNodeName . ":</th>";
+        $tool_content .= "<div class='form-wrapper'>
+            <form role='form' class='form-horizontal' method=\"post\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?action=add\" onsubmit=\"return validateNodePickerForm();\">
+            <fieldset>
+            <div class='form-group'>
+                <label class='col-sm-3 control-label'>$langNodeCode1:</label>
+                <div class='col-sm-9'>
+                    <input type='text' name='code' placeholder='$langCodeFaculte2'>
+                </div>
+            </div>";
+            $i = 0;
+            foreach ($session->active_ui_languages as $key => $langcode) {
+                $tool_content .= "<div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langNodeName:</label>";
+                $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+                $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+                $tool_content .= $tdpre . "<input type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
+                $i++;
+            }
 
-        $i = 0;
-        foreach ($session->active_ui_languages as $key => $langcode) {
-            $tdpre = ($i > 0) ? "<tr><td></td>" : '';
-            $tool_content .= $tdpre . "<td><input type='text' name='name-" . $langcode . "' /> <i>" . $langFaculte2 . " (" . $langNameOfLang[langcode_to_name($langcode)] . ")</i></td></tr>";
-            $i++;
-        }
-
-        $tool_content .= "
-      <tr>
-        <th class='left'>" . $langNodeParent . ":</th>
-        <td>";
+        $tool_content .= "<div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langNodeParent:</label>
+                        <div class='col-sm-9'>";
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $tool_content .= $html;
-        $tool_content .= " <i>" . $langNodeParent2 . "</i></td>
-      </tr>
-      <tr>
-        <th class='left'>" . $langNodeAllowCourse . ":</th>
-        <td><input type='checkbox' name='allow_course' value='1' checked='checked' /> <i>" . $langNodeAllowCourse2 . "</i></td>
-      </tr>
-      <tr>
-        <th class='left'>" . $langNodeAllowUser . ":</th>
-        <td><input type='checkbox' name='allow_user' value='1' checked='checked' /> <i>" . $langNodeAllowUser2 . "</i></td>
-      </tr>
-      <tr>
-        <th class='left'>" . $langNodeOrderPriority . ":</th>
-        <td><input type='text' name='order_priority' /> <i>" . $langNodeOrderPriority2 . "</i></td>
-      </tr>
-      <tr>
-        <th>&nbsp;</th>
-        <td class='right'><input class='btn btn-primary' type='submit' name='add' value='" . $langAdd . "' /></td>
-      </tr>
-    </table>
-    </fieldset>
-    </form>";
-    }
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+        $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
+        </div></div>
+        <div class='form-group'>
+          <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
+            <div class='col-sm-9'>
+                  <input type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
+          </div>
+        </div>
+        <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
+          <div class='col-sm-9'>
+              <input type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
+          </div>
+        </div>
+        <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
+          <div class='col-sm-9'>
+              <input type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+          </div>
+        </div>
+        <div class='form-group'>
+          <div class='col-sm-10 col-sm-offset-2'>
+              <input class='btn btn-primary' type='submit' name='add' value='" . $langAdd . "' />
+          </div>
+        </div>
+        </fieldset>
+        </form>
+        </div>";
+    }    
 }
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
@@ -303,26 +306,19 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 
         // for each subtree node, check if it has belonging children (courses, users)
         foreach ($subres as $subnode) {
-            $c += Database::get()->querySingle("select count(*) as count from course_department where department = ?d", intval($subnode->id))->count;
-            $c += Database::get()->querySingle("select count(*) as count from user_department where department = ?d", intval($subnode->id))->count;
+            $c += Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_department WHERE department = ?d", intval($subnode->id))->count;
+            $c += Database::get()->querySingle("SELECT COUNT(*) AS count FROM user_department WHERE department = ?d", intval($subnode->id))->count;
         }
 
         if ($c > 0) {
             // The node cannot be deleted
-            $tool_content .= "<p>" . $langNodeProErase . "</p><br />";
-            $tool_content .= "<p>" . $langNodeNoErase . "</p><br />";
+            $tool_content .= "<div class='alert alert-danger'>$langNodeProErase<br >$langNodeNoErase</div>";            
         } else {
             // The node can be deleted
             $tree->deleteNode($id);
             $tool_content .= "<div class='alert alert-success'>$langNodeErase</div>";
         }
-    }
-
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    }    
 }
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
@@ -367,77 +363,78 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
         // Display form for edit node information
-        $tool_content .= "
-       <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
-       <fieldset>
-       <legend>$langNodeEdit</legend>
-       <table width='100%' class='tbl'>
-       <tr>
-           <th class='left' width='180'>" . $langNodeCode1 . ":</th>
-           <td><input type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i></td>
-       </tr>
-       <tr>
-           <th class='left'>" . $langNodeName . ":</th>";
+        $tool_content .= "<div class='form-wrapper'>
+        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
+        <fieldset>
+        <div class='form-group'>
+            <label class='col-sm-3 control-label'>$langNodeCode1:</label>
+            <div class='col-sm-9'>
+                <input type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
+            </div>
+        </div>";            
 
         $is_serialized = false;
         $names = @unserialize($mynode->name);
         if ($names !== false) {
             $is_serialized = true;
         }
-
         $i = 0;
         foreach ($session->active_ui_languages as $key => $langcode) {
             $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
             if (!$is_serialized && $key == 0) {
                 $n = $mynode->name;
             }
-
-            $tdpre = ($i > 0) ? "<tr><td></td>" : '';
-            $tool_content .= $tdpre . "<td><input type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' /> <i>" . $langFaculte2 . " (" . $langNameOfLang[langcode_to_name($langcode)] . ")</i></td></tr>";
+            $tool_content .= "<div class='form-group'>
+                     <label class='col-sm-3 control-label'>$langNodeName:</label>";
+             $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+             $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+            $tool_content .= $tdpre . "<input type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' placeholder='$placeholder'></div></div>";
             $i++;
         }
 
-        $tool_content .= "<tr>
-           <th class='left'>" . $langNodeParent . ":</th>
-           <td>";
-        if ($is_admin)
+        $tool_content .= "<div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langNodeParent:</label>
+                        <div class='col-sm-9'>";
+        if ($is_admin) {
             list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
-        else
+        } else {
             list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+        }
         $head_content .= $js;
         $tool_content .= $html;
-        $tool_content .= " <i>" . $langNodeParent2 . "</i></td>
-       </tr>
-       <tr>
-           <th class='left'>" . $langNodeAllowCourse . ":</th>
-           <td><input type='checkbox' name='allow_course' value='1' $check_course /> <i>" . $langNodeAllowCourse2 . "</i></td>
-       </tr>
-       <tr>
-           <th class='left'>" . $langNodeAllowUser . ":</th>
-           <td><input type='checkbox' name='allow_user' value='1' $check_user /> <i>" . $langNodeAllowUser2 . "</i></td>
-       </tr>
-       <tr>
-           <th class='left'>" . $langNodeOrderPriority . ":</th>
-           <td><input type='text' name='order_priority' value='" . q($mynode->order_priority) . "' /> <i>" . $langNodeOrderPriority2 . "</i></td>
-       </tr>
-       <tr>
-           <th>&nbsp;</th>
-           <td class='right'><input type='hidden' name='id' value='$id' />
-           <input type='hidden' name='parentLft' value='" . $parentLft->lft . "'/>
-           <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
-           <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
-           <input class='btn btn-primary' type='submit' name='edit' value='$langAcceptChanges' />
-           </td>
-       </tr>
-       </table>
-       </fieldset>
-       </form>";
-    }
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+        $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
+        </div></div>        
+        <div class='form-group'>
+          <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
+            <div class='col-sm-9'>
+                  <input type='checkbox' name='allow_course' value='1' $check_course><span class='help-block'><small>$langNodeAllowCourse2</small></span>
+          </div>
+        </div>
+        <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
+          <div class='col-sm-9'>
+              <input type='checkbox' name='allow_user' value='1' $check_user><span class='help-block'><small>$langNodeAllowUser2</small></span>
+          </div>
+        </div>
+        <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
+          <div class='col-sm-9'>
+              <input type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+          </div>
+        </div>
+        <input type='hidden' name='id' value='$id' />
+               <input type='hidden' name='parentLft' value='" . $parentLft->lft . "'/>
+               <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
+               <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
+        <div class='form-group'>
+          <div class='col-sm-10 col-sm-offset-2'>
+              <input class='btn btn-primary' type='submit' name='edit' value='$langAcceptChanges'>
+          </div>
+        </div>        
+        </fieldset>
+        </form>
+        </div>";           
+    }    
 }
 
 draw($tool_content, 3, null, $head_content);

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,6 +25,12 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langCleanUp;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
+
 if (isset($_POST['submit'])) {
     foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
         $tool_content .= sprintf("<div class='alert alert-success'>$langCleaningUp</div>", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
@@ -32,18 +38,14 @@ if (isset($_POST['submit'])) {
     }
 } else {
     $tool_content .= "
-<div class='alert alert-danger'>$langCleanupInfo</div>
-<div class='center'>
-	     <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-		 <input class='btn btn-primary' type='submit' name='submit' value='$langCleanup'>
-	     </form></div>";
+    <div class='alert alert-danger'>$langCleanupInfo</div>
+    <div class='col-sm-12 col-sm-offset-5'>
+    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <input class='btn btn-primary' type='submit' name='submit' value='$langCleanup'>
+    </form>
+    </div>";
 }
 
-$tool_content .= action_bar(array(
-    array('title' => $langBackAdmin,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 draw($tool_content, 3);
 
@@ -84,5 +86,3 @@ function file_older($path, $seconds) {
         return true;
     }
 }
-
-?>
