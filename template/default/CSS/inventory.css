@@ -1808,26 +1808,31 @@ td.option-btn-cell {
   word-wrap: break-word;
 }
 
-/* line 1696, ../SASS/inventory.scss */
+/* line 1697, ../SASS/inventory.scss */
+.no-borders {
+  border: 0px;
+}
+
+/* line 1701, ../SASS/inventory.scss */
 .side_content {
   padding-top: 24px;
 }
 
-/* line 1701, ../SASS/inventory.scss */
+/* line 1706, ../SASS/inventory.scss */
 #dropboxTabs .nav-tabs {
   margin-bottom: 15px;
 }
 
-/* line 1705, ../SASS/inventory.scss */
+/* line 1710, ../SASS/inventory.scss */
 #profile_menu_dropdown ul li:last-child {
   border-top: 1px #ddd solid;
 }
 
-/* line 1709, ../SASS/inventory.scss */
+/* line 1714, ../SASS/inventory.scss */
 #portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter {
   position: relative;
 }
-/* line 1712, ../SASS/inventory.scss */
+/* line 1717, ../SASS/inventory.scss */
 #portfolio_lessons_filter:before, #inbox_table_filter:before, #outbox_table_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -1836,36 +1841,36 @@ td.option-btn-cell {
   content: "\f002";
   color: #999;
 }
-/* line 1720, ../SASS/inventory.scss */
+/* line 1725, ../SASS/inventory.scss */
 #portfolio_lessons_filter label, #inbox_table_filter label, #outbox_table_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
-/* line 1724, ../SASS/inventory.scss */
+/* line 1729, ../SASS/inventory.scss */
 #portfolio_lessons_filter input, #inbox_table_filter input, #outbox_table_filter input {
   margin: 0px;
   padding-right: 25px;
 }
 
-/* line 1729, ../SASS/inventory.scss */
+/* line 1734, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1734, ../SASS/inventory.scss */
+/* line 1739, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 10px;
 }
 
-/* line 1740, ../SASS/inventory.scss */
+/* line 1745, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1746, ../SASS/inventory.scss */
+/* line 1751, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1874,50 +1879,50 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1754, ../SASS/inventory.scss */
+/* line 1759, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1757, ../SASS/inventory.scss */
+/* line 1762, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1761, ../SASS/inventory.scss */
+/* line 1766, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1765, ../SASS/inventory.scss */
+/* line 1770, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1771, ../SASS/inventory.scss */
+/* line 1776, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1780, ../SASS/inventory.scss */
+/* line 1785, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1786, ../SASS/inventory.scss */
+/* line 1791, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 13px;
 }
-/* line 1790, ../SASS/inventory.scss */
+/* line 1795, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 1796, ../SASS/inventory.scss */
+/* line 1801, ../SASS/inventory.scss */
 .event {
   width: 14px !important;
   height: 14px !important;
@@ -1934,7 +1939,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1808, ../SASS/inventory.scss */
+/* line 1813, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1944,7 +1949,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1814, ../SASS/inventory.scss */
+/* line 1819, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

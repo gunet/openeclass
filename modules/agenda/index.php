@@ -319,7 +319,7 @@ if ($is_editor) {
 if (count($result) > 0) {
     $barMonth = '';
     $nowBarShowed = false;
-    $tool_content .= "<div class='table-responsive'><table class='table-default'>
+    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel no-borders'><div class='table-responsive'><table class='table-default'>
                       <tr><th class='left'>$langEvents</th>";
     if ($is_editor) {
         $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
@@ -411,7 +411,7 @@ if (count($result) > 0) {
         }
         $tool_content .= "</tr>";
     }
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table></div></div></div></div>";
 } else {
     $tool_content .= "<p class='alert alert-warning text-center'>$langNoEvents</p>";
 }
