@@ -86,14 +86,14 @@ function showlinksofcategory($catid) {
                 $editlink .= "&amp;category=$category";
             }
             $tool_content .= action_button(array(
-                array('title' => $langModify,
-                      'icon' => 'fa-edit',
-                      'url' => $editlink),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
                       'confirm' => $langLinkDelconfirm),
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => $editlink),
                 array('title' => $langUp,
                       'icon' => 'fa-arrow-up',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
@@ -133,14 +133,14 @@ function showcategoryadmintools($categoryid) {
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
-                array('title' => $langModify,
-                      'icon' => 'fa-edit',
-                      'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'url' => "$basecaturl" . "action=deletecategory",
                       'class' => 'delete',
                       'confirm' => $langCatDel),
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langUp,
                       'icon' => 'fa-arrow-up',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",
