@@ -400,7 +400,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
 
         // Agenda
-        restore_table($restoreThis, 'agenda', array('delete' => array('id'), 'set' => array('course_id' => $course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        $agenda_map = restore_table($restoreThis, 'agenda', array(
+            'return_mapping' => 'id', 
+            'set' => array('course_id' => $course_id)
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Exercises
         $exercise_map = restore_table($restoreThis, 'exercise', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
@@ -475,6 +478,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 'gradebook_id' => $gradebook_map,
                 'uid' => $userid_map
             ), 
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Notes
+        restore_table($restoreThis, 'note', array(
+            'set' => array('reference_obj_course' => $course_id),
+            'map' => array('user_id' => $userid_map),
+            'map_function' => 'notes_map_function',
+            'map_function_data' => array($course_id, $agenda_map, $document_map, $link_map, 
+                $video_map, $videolink_map, $assignments_map, $exercise_map, $ebook_map,
+                $lp_learnPath_map),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
 
