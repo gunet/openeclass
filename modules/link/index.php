@@ -105,16 +105,20 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($is_editor) {
     if (isset($_POST['submitLink'])) {
         submit_link();
+        redirect_to_home_page("modules/link/index.php");
     }
     if (isset($_POST['submitCategory'])) {
         submit_category();
+        redirect_to_home_page("modules/link/index.php");
     }
     switch ($action) {
         case 'deletelink':
             delete_link($id);
+            redirect_to_home_page("modules/link/index.php");
             break;
         case 'deletecategory':
             delete_category($id);
+            redirect_to_home_page("modules/link/index.php");
             break;
     }
 
