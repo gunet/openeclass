@@ -474,7 +474,8 @@ if ($can_upload) {
                 metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
             }
         }
-        $action_message = "<div class='alert alert-success'>$langElRen</div><br>";
+        Session::Messages($langElRen, 'alert-success');
+        redirect_to_home_page($redirect_base_url, true);
     }
 
     // Step 1: Show rename dialog box

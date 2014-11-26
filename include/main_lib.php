@@ -2045,11 +2045,14 @@ function redirect($path) {
     exit;
 }
 
-function redirect_to_home_page($path = '') {
+function redirect_to_home_page($path='', $absolute=false) {
     global $urlServer;
     
-    $path = preg_replace('+^/+', '', $path);
-    header("Location: $urlServer$path");
+    if (!$absolute) {
+        $path = preg_replace('+^/+', '', $path);
+        $path = $urlServer . $path;
+    }
+    header("Location: $path");
     exit;
 }
 
