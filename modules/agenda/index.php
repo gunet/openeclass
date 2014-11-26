@@ -231,7 +231,7 @@ if ($is_editor) {
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = date('d-m-Y', strtotime('now +1 week'));
         } 
-        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$rep'>";
@@ -298,7 +298,7 @@ if ($is_editor) {
                             <input type='button' class='btn btn-default' id='submitbtn' name='submitbtn' value='$langAddModify'>
                         </div>
                       </div>                
-            </form></div>";
+            </form></div></div></div>";
     }
 }
 
