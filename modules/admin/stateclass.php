@@ -27,7 +27,6 @@
   ============================================================================== */
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 $nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);

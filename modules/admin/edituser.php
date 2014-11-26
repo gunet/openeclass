@@ -26,7 +26,6 @@
 
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'admin.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
