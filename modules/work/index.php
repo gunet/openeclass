@@ -551,6 +551,7 @@ function new_assignment() {
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
     $tool_content .= "
+        <div class='row'><div class='col-sm-12'>
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
@@ -682,7 +683,7 @@ function new_assignment() {
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
             </div>                   
         </fieldset>
-        </form></div>";    
+        </form></div></div></div>";    
 }
 
 //form for editing
@@ -1645,7 +1646,9 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkGroupNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <table width='100%' class='sortable'>
+                            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+                            <div class='table-responsive'>    
+                            <table class='sortable'>
                             <tr>
                           <th width='3'>&nbsp;</th>";
                 sort_link($langGroup, 'username');
@@ -1663,7 +1666,7 @@ function show_non_submitted($id) {
                             </tr>";
                     $i++;
                 }
-                $tool_content .= "</table>";
+                $tool_content .= "</table></div></div></div></div>";
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
@@ -1682,6 +1685,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
+                            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
                             <div class='table-responsive'>
                             <table class='table-default'>
                             <tr>
@@ -1704,7 +1708,7 @@ function show_non_submitted($id) {
                             
                     $i++;
                 }
-                $tool_content .= "</table></div>";
+                $tool_content .= "</table></div></div></div></div>";
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
@@ -1733,7 +1737,9 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
     
     if (count($result)>0) {
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>
+        $tool_content .= "
+            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+            <div class='table-responsive'><table class='table-default'>
                                   <tr>
                                       <th>$m[title]</th>
                                       <th class='text-center'>$m[deadline]</th>
@@ -1786,7 +1792,7 @@ function show_student_assignments() {
             $k++;
         }
         $tool_content .= '
-                                  </table></div>';
+                                  </table></div></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
@@ -1811,6 +1817,7 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
+            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
                     <div class='table-responsive'>
                     <table class='table-default'>
                     <tr>
@@ -1849,6 +1856,11 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDelete),
                     array('title' => $langEdit,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
@@ -1857,18 +1869,13 @@ function show_assignments() {
                           'icon' => 'fa-eraser',
                           'confirm' => $langWarnForSubmissions. $langDelSure,
                           'show' => is_numeric($num_submitted) && $num_submitted > 0),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'))).
                    "</td></tr>";
             $index++;
         }
-        $tool_content .= '</table></div>';
+        $tool_content .= '</table></div></div></div></div>';
     } else {
         $tool_content .= "\n<div class='alert alert-warning'>$langNoAssign</div>";        
     }
