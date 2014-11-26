@@ -202,6 +202,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     $tool_content .= getInfoAreas();
     draw($tool_content, 0);
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
+    Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
+        $debug_output .= $message;
+        if ($level > Debug::WARNING)
+            $debug_error = true;
+    });
+    Debug::setLevel(Debug::WARNING);
 
     if (isset($telephone)) {
         // Upgrade to 3.x-style config
@@ -2277,42 +2283,42 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo($i / ($total + 1), $langUpgCourse);
 
         if (version_compare($oldversion, '2.2', '<')) {
-            upgrade_course_2_2($row->code, $row->lang);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.2");
+            upgrade_course_2_2($row->code, $row->lang);
         }
         if (version_compare($oldversion, '2.3', '<')) {
-            upgrade_course_2_3($row->code);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.3");
+            upgrade_course_2_3($row->code);
         }
         if (version_compare($oldversion, '2.4', '<')) {
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.4");
             convert_description_to_units($row->code, $row->id);
             upgrade_course_index_php($row->code);
             upgrade_course_2_4($row->code, $row->id, $row->lang);
-            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.4");
         }
         if (version_compare($oldversion, '2.5', '<')) {
-            upgrade_course_2_5($row->code, $row->lang);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.5");
+            upgrade_course_2_5($row->code, $row->lang);
         }
         if (version_compare($oldversion, '2.8', '<')) {
-            upgrade_course_2_8($row->code, $row->lang);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.8");
+            upgrade_course_2_8($row->code, $row->lang);
         }
         if (version_compare($oldversion, '2.9', '<')) {
-            upgrade_course_2_9($row->code, $row->lang);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.9");
+            upgrade_course_2_9($row->code, $row->lang);
         }
         if (version_compare($oldversion, '2.10', '<')) {
-            upgrade_course_2_10($row->code, $row->id);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
+            upgrade_course_2_10($row->code, $row->id);
         }
         if (version_compare($oldversion, '2.11', '<')) {
-            upgrade_course_2_11($row->code);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
+            upgrade_course_2_11($row->code);
         }
         if (version_compare($oldversion, '3.0', '<')) {
-            upgrade_course_3_0($row->code, $row->id);
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
+            upgrade_course_3_0($row->code, $row->id);
         }
         $i++;
     }
@@ -2383,6 +2389,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     updateInfo(1, $langUpgradeSuccess);
 
-    updateInfo(1, "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b></div>");
-    echo "<div class='alert alert-info'>$langUpgSucNotice</div>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b></div><p/>";
+    if ($debug_error) {
+        $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>" . $debug_output;
+    }
+    updateInfo(1, $output_result, false);
 } // end of if not submit                

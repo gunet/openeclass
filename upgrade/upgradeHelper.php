@@ -6,7 +6,9 @@ function getInfoAreas() {
 ';
 }
 
-function updateInfo($percent, $infoText) {
+function updateInfo($percent, $infoText, $debug = true) {
+    if ($debug)
+        Debug::message($infoText, Debug::WARNING);
     echo '<script language="javascript">';
     if ($percent >= 0) {
         echo 'document.getElementById("progress").innerHTML="<div style=\"width:' . ($percent * 100) . '%;background-color:#ddd;\">&nbsp;</div>";';

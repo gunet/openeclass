@@ -2048,8 +2048,7 @@ $langConfigError2 = "No se ha podido leer config.php! Por favor, comprueba los p
 $langConfigError3 = "config.php NO ha sido modificado! Por favor, comprueba los permisos.";
 $langUpgradeSuccess = "¡La acturalización de la Base de datos de Open eClass ha terminado correctamente!";
 $langUpgReady = "¡Estás a punto de utilizar una nueva versión de Open eClass!";
-$langUpgSucNotice = "Si ocurre un error como ese, puedes tener problemas.<br><br><br>
-En tal caso, por favor contacta con nosotros en <a href='mailto:info@openeclass.org'>info@openeclass.org</a><br><br> describiendo exactamente el problema <br>, incluyendo (si es posible) todos los mensajes de error.";
+$langUpgSucNotice = "Se ocurre un error, puedes tener problemas.<br>En tal caso, por favor contacta con nosotros en <a href='mailto:info@openeclass.org'>info@openeclass.org</a><br><br> describiendo exactamente el problema <br>, incluyendo (si es posible) todos los mensajes de error.";
 $langUpgCourse = "Actualización del curso";
 $langUpgFileNotRead = "El archivo no se ha podido leer. Por favor, comprueba los permisos.";
 $langUpgFileNotModify = "El archivo no se ha podido modificar. Por favor, comprueba los permisos.";
