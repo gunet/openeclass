@@ -70,6 +70,7 @@ if ($is_editor) {
 }
 
 $tool_content .= "
+    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
    <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>
     <legend>$langTypeMessage</legend>
@@ -86,7 +87,7 @@ $tool_content .= "
         </div>       
     </div>   
    </fieldset>
-   </form>";
+   </form></div></div></div>";
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
