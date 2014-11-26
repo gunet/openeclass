@@ -483,20 +483,31 @@ if ($can_upload) {
                                              WHERE $group_sql AND
                                                    path = ?s", $_GET['rename'])->filename;
         $dialogBox .= "
-                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <fieldset>
-                  <legend>$langRename:</legend>
-                  <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
-                  $group_hidden_input
-                  <table class='table-default'>
-                    <tr>
-                      <td><b>" . q($fileName) . "</b> $langIn:
-                        <input type='text' name='renameTo' value='" . q($fileName) . "' size='50' /></td>
-                      <td class='right'><input class='btn btn-primary' type='submit' value='$langRename' /></td>
-                    </tr>
-                  </table>
-                </fieldset>
-                </form>";
+            
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='form-wrapper'>
+                        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                            <fieldset>
+                                <legend>$langRename:</legend>
+                                    <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
+                                    $group_hidden_input
+                                    <div class='form-group'>
+                                        <label for='renameTo' class='col-sm-2 control-label' >" . q($fileName) . "</label>
+                                        <div class='col-sm-10'>
+                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
+                                        </div>
+                                    </div>
+                                    <div class='form-group'>
+                                        <div class='col-sm-offset-2 col-sm-10'>
+                                            <input class='btn btn-primary' type='submit' value='$langRename' >
+                                        </div>
+                                    </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>";
     }
 
     // create directory
@@ -757,8 +768,7 @@ if ($can_upload) {
                         <input type='hidden' size='80' name='file_date' value='$oldDate' />
                         <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
                         </fieldset>
-                        </form>
-                        \n\n";
+                        </form>";
         } else {
             $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
         }
