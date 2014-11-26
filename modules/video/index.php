@@ -309,6 +309,8 @@ hContent;
                     $tool_content .= "<div class='alert alert-success'>$langFAdd</div>";
                 }
             }
+            Session::Messages($langFAdd,"alert-success");
+            redirect_to_home_page("modules/video/index.php");
         }	// end of add
         if (isset($_GET['delete'])) {
                 if ($_GET['delete'] == 'delcat') { // delete video category
