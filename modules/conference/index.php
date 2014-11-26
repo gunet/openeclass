@@ -29,6 +29,28 @@ $require_help = TRUE;
 $helpTopic = 'Conference';
 
 require_once '../../include/baseTheme.php';
+$coursePath = $webDir . '/courses/';
+    $fileChatName = $coursePath . $course_code . '/chat.txt';
+    $tmpArchiveFile = $coursePath . $course_code . '/tmpChatArchive.txt';
+
+    $nick = uid_to_name($uid);
+
+// How many lines to show on screen
+    define('MESSAGE_LINE_NB', 40);
+// How many lines to keep in temporary archive
+// (the rest are in the current chat file)
+    define('MAX_LINE_IN_FILE', 80);
+
+    if ($GLOBALS['language'] == 'el') {
+        $timeNow = date("d-m-Y / H:i", time());
+    } else {
+        $timeNow = date("Y-m-d / H:i", time());
+    }
+
+    if (!file_exists($fileChatName)) {
+        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
+        fclose($fp);
+    }
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -53,6 +75,22 @@ function prepare_message() {
 }
 </script>';
 
+// reset command
+    if (isset($_GET['reset']) && $is_editor) {        
+        $fchat = fopen($fileChatName, 'w');
+        if (flock($fchat, LOCK_EX)) {
+            ftruncate($fchat, 0);
+            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
+            fflush($fchat);
+            flock($fchat, LOCK_UN);
+        }
+        fclose($fchat);
+        @unlink($tmpArchiveFile);
+        
+        Session::Messages("ok","alert-success");
+        redirect_to_home_page("modules/conference/index.php");
+    }
+
 if ($is_editor) {
     $tool_content .= action_bar(array(
         array('title' => $langSave,
@@ -61,8 +99,8 @@ if ($is_editor) {
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ),
-        array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;reset=true",
+        array('title' => $langWash,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset=true",
             'icon' => 'fa-university',
             'level' => 'primary'
             )
