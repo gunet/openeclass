@@ -272,7 +272,7 @@ if ($countlinks > 0) {
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
-            <div class='panel'>
+            <div class='panel no-borders'>
             <div class='table-responsive'>
             <table class='table-default'>";
     // uncategorized links
