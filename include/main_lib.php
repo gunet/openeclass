@@ -168,6 +168,9 @@ function load_js($file, $init='') {
         if ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'jstree3') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jstree3/themes/proton/style.min.css'>";
+            $file = 'jstree3/jstree.min.js';
         } elseif ($file == 'jquery-ui') {
             if ($theme == 'modern' || $theme == 'ocean') {
                 $uiTheme = 'redmond';
