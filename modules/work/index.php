@@ -1646,7 +1646,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkGroupNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+                            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
                             <div class='table-responsive'>    
                             <table class='sortable'>
                             <tr>
@@ -1685,7 +1685,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+                            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
                             <div class='table-responsive'>
                             <table class='table-default'>
                             <tr>
@@ -1738,7 +1738,7 @@ function show_student_assignments() {
     
     if (count($result)>0) {
         $tool_content .= "
-            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr>
                                       <th>$m[title]</th>
@@ -1817,7 +1817,7 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
-            <div class='row'><div class='col-sm-12'><div clss='panel no-borders'>
+            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
                     <div class='table-responsive'>
                     <table class='table-default'>
                     <tr>
