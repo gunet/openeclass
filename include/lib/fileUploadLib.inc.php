@@ -421,7 +421,7 @@ function showquota($quota, $used) {
     $retstring .= action_bar($action_bar_options);
 $retstring .= "
 <div class='row'><div class='col-sm-12'>
-<div class='panel no-borders'>
+<div class='form-wrapper'>
 <form class='form-horizontal' role='form'>
   <div class='form-group'>
     <label class='col-sm-2'>$langQuotaUsed:</label>
