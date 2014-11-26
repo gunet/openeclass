@@ -196,6 +196,8 @@ hContent;
 
     if (isset($_POST['submitCategory'])) {
         submit_video_category();
+        Session::Messages($langFAdd,"alert-success");
+        redirect_to_home_page("modules/video/index.php");
     }
 
     if (isset($_POST['edit_submit'])) { // edit
@@ -336,7 +338,7 @@ hContent;
                   }
                 $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
                 
-                $tool_content .= "<div class='form-wrapper'>";
+                $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
                 if ($_GET['form_input'] == 'file') {
                     $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">";
                 } else {
@@ -405,7 +407,7 @@ hContent;
                     $tool_content .= "<div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
                 }
                 $tool_content .= "</form>
-                </div>";
+                </div></div></div>";
         }
 
     // ------------------- if no submit -----------------------
