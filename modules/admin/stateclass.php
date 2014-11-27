@@ -18,61 +18,37 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+
+
 /**
- * 
-  @file.stateclass.php
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  @description: Various Statistics
-  ============================================================================== */
+ * @file stateclass.php
+ * @brief display various statistics 
+ */ 
+  
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'admin_statistics_tools_bar.php';
+
 $nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-/* * ***************************************************************************
-  general statistics
- * **************************************************************************** */
-
-require_once 'admin_statistics_tools_bar.php';
 admin_statistics_tools("stateclass");
 
-// Actions
-$tool_content .= "<table class='tbl_alt' width='100%'>
-	<tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=login'>$langNbLogin</a></td>
-	</tr>
-        <tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a> <small>($langLast15Days)</small></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=users'>$langUsers</a></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=percourse'>$langUsersPerCourse</a></td>
-	</tr>
-	<tr>
-	<th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=cours'>$langStatCour</a></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td>
-	<a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td>
-	</tr>
-	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=vmusers'>$langMailVerification</a></td>
-	</tr>
-         <tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[SCRIPT_NAME]?stats=unregusers'>$langUnregUsers</a>  <small>($langLastMonth)</small></td></td>
-	</tr>
-	</table>";
+$tool_content .= "<div class='table-responsive'>
+                <table class='table-default'>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=login'>$langNbLogin</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=users'>$langUsers</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=percourse'>$langUsersPerCourse</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=cours'>$langStatCour</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=vmusers'>$langMailVerification</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=unregusers'>$langUnregUsers</a><small> ($langLastMonth)</small></td></tr>
+                </table>            
+            </div>";
 
 // ---------------------
 // actions
@@ -128,94 +104,91 @@ if (isset($_GET['stats'])) {
             }
             $uptime = date("d-m-Y", $first_date_time);
 
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
+            $tool_content .= "<div class='col-sm-12'>
+                        <h3 class='content-title'>$langNbLogin</h3>
+                        <ul class='list-group'>
+			<li class='list-group-item'><label>$langFrom
+			" . nice_format(Database::get()->querySingle("SELECT loginout.when AS `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when, true) . "
+			</label>
+                        <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM loginout
+				WHERE loginout.action ='LOGIN'")->cnt . "</span>
+                        </li>
+			<li class='list-group-item'><label>$langLast30Days</label>
+			<span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM loginout
+                                                WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")->cnt . "</span>
+                        </li>
+			
+			<li class='list-group-item'><label>$langLast7Days</label>
+			<span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM loginout
+				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")->cnt . "</span>
+                        </li>
+			<li class='list-group-item'><label>$langToday</label>
+			<span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM loginout
+				WHERE action ='LOGIN' AND (loginout.when > curdate())")->cnt . "</span>
+			</li>
+			<li class='list-group-item'><label>$langTotalHits</label>			
+                            <span class='badge'>$totalHits</span>
+			</li>
 			<tr>
-			<th colspan='2'>$langNbLogin</th>
-			</tr>
-			<tr>
-			<td>$langFrom " . Database::get()->querySingle("SELECT loginout.when as `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</td>
-			<td class='right' width='200'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
-				WHERE loginout.action ='LOGIN'")->cnt . "</b></td>
-			</tr>
-			<tr>
-			<td>$langLast30Days</td>
-			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")->cnt . "</b></td>
-			</tr>
-			<tr>
-			<td>$langLast7Days</td>
-			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")->cnt . "</b></td>
-			</tr>
-			<tr>
-			<td>$langToday</td>
-			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM loginout
-				WHERE action ='LOGIN' AND (loginout.when > curdate())")->cnt . "</b></td>
-			</tr>
-			<tr>
-			<td>$langTotalHits</td>
-			<td class='right'><b>$totalHits</b></td>
-			</tr>
-			<tr>
-			<td>$langUptime</td>
-			<td class='right'><b>$uptime</b></td>
-			</tr>
-			</table>";
+			<li class='list-group-item'><label>$langUptime</label>
+                            <span class='badge'>$uptime</span>
+			</li>
+                        </ul>
+                        </div>";
             break;
         case 'users':
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-                                <tr><th class='left' colspan='2'>$langUsers</th></tr>
-                                <tr><td>$langNbProf</td>
-                                    <td class='right' width='200'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_TEACHER . ";")->cnt .
-                    "</b></td></tr>
-                                <tr><td>$langNbStudents</td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_STUDENT . ";")->cnt .
-                    "</b></td></tr>
-                                <tr><td>$langNumGuest</td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE status = " . USER_GUEST . ";")->cnt .
-                    "</b></td></tr>
-                                <tr><td>$langTotal</td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt .
-                    "</b></td></tr>
-                                <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
-				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . Database::get()->querySingle("SELECT loginout.when as `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when . "</a></td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) as cnt FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;")->cnt .
-                    "</b></td></tr>
-                            </table>";
+            $tool_content .= "<div class='col-sm-12'>
+                        <h3 class='content-title'>$langUsers</h3>
+                        <ul class='list-group'>
+                        <li class='list-group-item'><label>$langNbProf</label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label>$langNbStudents</label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label>$langNumGuest</label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_GUEST . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label>$langTotal</label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'>
+                            <label>$langUserNotLogin <a href='listusers.php?search=no_login'>$langFrom2 " . nice_format(Database::get()->querySingle("SELECT loginout.when as `when` FROM loginout ORDER BY loginout.when LIMIT 1")->when, true) . "</a></label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;")->cnt . "</span>
+                        </li>
+                        </ul>
+                        </div>";
             break;
         case 'cours':
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-			<tr>
-			<th class='left' colspan='2'><b>$langCoursesHeader</b></th>
-			</tr>
-			<tr>
-			<td class='left'>$langNumCourses</td>
-			<td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course")->cnt . "</b></td>
-			</tr>
-			<tr>
-			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*) AS nb
-				FROM course GROUP BY visible ", 'visible')) . "
-			<tr>
-			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*) AS nb
-				FROM course, course_department, hierarchy
-                                WHERE course.id = course_department.course
-                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id", 'faculte')) . "
-			<tr>
-			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
-			</tr>" . tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) AS nb FROM course 
-					GROUP BY lang DESC", 'lang')) . "			
-			</tr>
-			</table>";
+            $tool_content .= "<div class='table-responsive'>
+                            <table class='table-default'>
+                            <tr>
+                            <th class='left' colspan='2'><b>$langCoursesHeader</b></th>
+                            </tr>
+                            <tr>
+                            <td class='left'>$langNumCourses</td>
+                            <td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course")->cnt . "</b></td>
+                            </tr>
+                            <tr>
+                            <th class='left' colspan='2'><b>$langNunEachAccess</b></th>
+                            </tr>" . tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*) AS nb
+                                    FROM course GROUP BY visible ", 'visible')) . "
+                            <tr>
+                            <th class='left' colspan='2'><b>$langNumEachCourse</b></th>
+                            </tr>" . tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*) AS nb
+                                    FROM course, course_department, hierarchy
+                                    WHERE course.id = course_department.course
+                                      AND hierarchy.id = course_department.department GROUP BY hierarchy.id", 'faculte')) . "
+                            <tr>
+                            <th class='left' colspan='2'><b>$langNumEachLang</b></th>
+                            </tr>" . tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) AS nb FROM course 
+                                            GROUP BY lang DESC", 'lang')) . "			
+                            </tr>
+                            </table></div>";
             break;
         case 'musers':
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>";
+            $tool_content .= "<div class='table-responsive'>
+                            <table class='table-default'>";
             $loginDouble = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
 				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC", 'username');
             $tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
@@ -227,14 +200,15 @@ if (isset($_GET['stats'])) {
             } else {
                 $tool_content .= "<tr><td class='right' colspan='2'>" . ok_message() . "</td></tr>";
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div>";
             break;
         case 'percourse':
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
+            $tool_content .= "<div class='table-responsive'>
+                    <table class='table-default'>
+                    <tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
             $teachers = $students = $visitors = 0;
             foreach (Database::get()->queryArray("SELECT id, code, title, prof_names FROM course ORDER BY title") as $row) {
-                $cu_key = q("$row->title ($row->code) -- $row->prof_names");
+                $cu_key = q($row->title)." (".q($row->code).") &mdash; ".q($row->prof_names);
                 foreach (Database::get()->queryArray("SELECT user.id, course_user.status FROM course_user, user, course
                                                         WHERE course.id = ?d AND course_user.course_id = ?d
                                                         AND course_user.user_id = user.id", $row->id, $row->id) as $numrows) {
@@ -248,20 +222,21 @@ if (isset($_GET['stats'])) {
                         default: break;
                     }
                 }
-                $cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
+                $cu[$cu_key] = "<small>$teachers $langTeachers &mdash; $students $langStudents &mdash; $visitors $langGuests</small>";
                 $teachers = $students = $visitors = 0;
             }
-            $tool_content .= "</tr>" . tablize($cu) . "</table>";
+            $tool_content .= "</tr>" . tablize($cu) . "</table></div>";
             break;
         case 'memail':
             $sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email
 				HAVING nb > 1 ORDER BY nb DESC";
             $loginDouble = list_ManyResult($sqlLoginDouble, 'email');
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-			<tr>
-			<th><b>$langMultipleAddr e-mail</b></th>
-			<th class='right'><strong>$langResult</strong></th>
-			</tr>";
+            $tool_content .= "<div class='table-responsive'>
+                            <table class='table-default'>
+                            <tr>
+                            <th><b>$langMultipleAddr e-mail</b></th>
+                            <th class='right'><strong>$langResult</strong></th>
+                            </tr>";
             if (count($loginDouble) > 0) {
                 $tool_content .= tablize($loginDouble);
                 $tool_content .= "<tr><td class=right colspan='2'>";
@@ -272,17 +247,18 @@ if (isset($_GET['stats'])) {
                 $tool_content .= ok_message();
                 $tool_content .= "</td></tr>";
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div>";
             break;
         case 'mlogins':
             $sqlLoginDouble = "SELECT DISTINCT CONCAT(username, \" -- \", password) AS paire,
 				COUNT(*) AS nb FROM user GROUP BY BINARY paire HAVING nb > 1 ORDER BY nb DESC";
             $loginDouble = list_ManyResult($sqlLoginDouble, 'paire');
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-				<tr>
-				<th><b>$langMultiplePairs LOGIN - PASS</b></th>
-				<th class='right'><b>$langResult</b></th>
-				</tr>";
+            $tool_content .= "<div class='table-responsive'>
+                            <table class='table-default'>
+                            <tr>
+                            <th><b>$langMultiplePairs LOGIN - PASS</b></th>
+                            <th class='right'><b>$langResult</b></th>
+                            </tr>";
             if (count($loginDouble) > 0) {
                 $tool_content .= tablize($loginDouble);
                 $tool_content .= "<tr><td class='right' colspan='2'>";
@@ -293,36 +269,34 @@ if (isset($_GET['stats'])) {
                 $tool_content .= ok_message();
                 $tool_content .= "</td></tr>";
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div>";
             break;
         case 'vmusers':
-            $tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-                                <tr><th class='left' colspan='2'>$langUsers</th></tr>
-                                <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
-                                    <td class='right' width='200'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</b></td></tr>
-                                <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt . "</b></td></tr>
-                                <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
-                                    <td class='right'><b>" .
-                    Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt . "</b></td></tr>
-                                <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
-                                    <td class='right'><b>" . Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt . "</b></td></tr>
-                            </table>";
+            $tool_content .= "<div class='col-sm-12'>
+                        <h3 class='content-title'>$langUsers</h3>
+                        <ul class='list-group'>
+                        <li class='list-group-item'><label><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></label>          
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></label>                            
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt . "</span>
+                        </li>
+                        <li class='list-group-item'><label><a href='listusers.php?search=yes'>$langTotal</a></label>
+                            <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt . "</span>
+                        </li>
+                        </ul>
+                        </div>";
             break;
         default:
             break;
     }
 }
-$tool_content .= action_bar(array(
-    array('title' => $langBackAdmin,
-        'url' => "",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 /**
- * output a <table> with an array
+ * @brief output a <tr> with an array
  * @global type $langTypesClosed
  * @global type $langTypesRegistration
  * @global type $langTypesOpen
@@ -401,6 +375,12 @@ function error_message() {
     return "<b><span style='color: #FF0000'>$langExist</span></b>";
 }
 
+/**
+ * 
+ * @param type $sql
+ * @param type $fieldname
+ * @return type
+ */
 function list_ManyResult($sql, $fieldname) {
     // require hierarchy
     if ($fieldname == 'faculte') {

@@ -259,9 +259,9 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
             <div class='col-sm-10'>";
         $verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
         if (isset($pv)) {
-            $tool_content .= selection($verified_mail_data, "verified_mail_form", $pv);
+            $tool_content .= selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'");
         } else {
-            $tool_content .= selection($verified_mail_data, "verified_mail_form");
+            $tool_content .= selection($verified_mail_data, "verified_mail_form", '', "class='form-control'");
         }
         $tool_content .= "</div></div>
         <div class='form-group'>
@@ -291,7 +291,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <div class='form-group'>
         <label for='lang' class='col-sm-2 control-label'>$langLanguage:</label>
         <div class='col-sm-10'>";
-        $tool_content .= lang_select_options('language', '', $language);
+        $tool_content .= lang_select_options('language', "class='form-control'", $language);
         $tool_content .= "</div></div>";
         if (isset($_GET['id'])) {
             @$tool_content .= "<div class='form-group'><label for='comments' class='col-sm-2 control-label'>$langComments</label>

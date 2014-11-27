@@ -195,96 +195,110 @@ if ($is_editor) {
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
 
         $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>
-            <legend>$langGradebookActAttend</legend>
-            <table class='tbl' width='100%'>";
-        
-        if (isset($_GET['modify'])) { //edit an existed activity            
-            $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
             
-            //All activity data (check if it is in this gradebook)
-            $modifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
-            if ($modifyActivity) {
-                $titleToModify = $modifyActivity->title;
-                $contentToModify = $modifyActivity->description;
-                $date = $modifyActivity->date;
-                $module_auto_id = $modifyActivity->module_auto_id;
-                $auto = $modifyActivity->auto;
-                $weight = $modifyActivity->weight;
-                $activity_type = $modifyActivity->activity_type;
-                $visible = $modifyActivity->visible;
-            } else {
-                $activity_type = '';
-            }            
-            $gradebookActivityToModify = $id;
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div class='form-wrapper'>
+                        <form <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                            <fieldset>
+                                <legend>$langGradebookActAttend</legend>";
+                                if (isset($_GET['modify'])) { //edit an existed activity            
+                                    $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
 
-        } else { //new activity 
-            $gradebookActivityToModify = "";
-            $activity_type = "";
-            $date = date("Y-n-j", time());
-        }
+                                    //All activity data (check if it is in this gradebook)
+                                    $modifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
+                                    if ($modifyActivity) {
+                                        $titleToModify = $modifyActivity->title;
+                                        $contentToModify = $modifyActivity->description;
+                                        $date = $modifyActivity->date;
+                                        $module_auto_id = $modifyActivity->module_auto_id;
+                                        $auto = $modifyActivity->auto;
+                                        $weight = $modifyActivity->weight;
+                                        $activity_type = $modifyActivity->activity_type;
+                                        $visible = $modifyActivity->visible;
+                                    } else {
+                                        $activity_type = '';
+                                    }            
+                                    $gradebookActivityToModify = $id;
 
-        if (!isset($contentToModify)) $contentToModify = "";
+                                } else { //new activity 
+                                    $gradebookActivityToModify = "";
+                                    $activity_type = "";
+                                    $date = date("Y-n-j", time());
+                                }
 
-        @$tool_content .= "
-            <tr><th>$langGradebookType:</th></tr>
-            <tr>
-              <td><select name='activity_type'>
-                    <option value=''  " . typeSelected($activity_type, '') . " >-</option>
-                    <option value='4' " . typeSelected($activity_type, 4) . " >" . $gradebook_exams . "</option>
-                    <option value='2' " . typeSelected($activity_type, 2) . " >" . $gradebook_labs . "</option>
-                    <option value='1' " . typeSelected($activity_type, 1) . " >" . $gradebook_oral . "</option>
-                    <option value='3' " . typeSelected($activity_type, 3) . " >" . $gradebook_progress . "</option>
-                    <option value='5' " . typeSelected($activity_type, 5) . " >" . $gradebook_other_type . "</option>
-                  </select>
-              </td>
-            </tr>
+                                if (!isset($contentToModify)) $contentToModify = "";
+                                @$tool_content .= "<div class='form-group'>
+                                    <label for='activity_type' class='col-sm-2 control-label'>$langGradebookType:</label>
+                                    <div class='col-sm-10'>
+                                        <select name='activity_type' class='form-control'>
+                                            <option value=''  " . typeSelected($activity_type, '') . " >-</option>
+                                            <option value='4' " . typeSelected($activity_type, 4) . " >" . $gradebook_exams . "</option>
+                                            <option value='2' " . typeSelected($activity_type, 2) . " >" . $gradebook_labs . "</option>
+                                            <option value='1' " . typeSelected($activity_type, 1) . " >" . $gradebook_oral . "</option>
+                                            <option value='3' " . typeSelected($activity_type, 3) . " >" . $gradebook_progress . "</option>
+                                            <option value='5' " . typeSelected($activity_type, 5) . " >" . $gradebook_other_type . "</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
+                                    <div class='col-sm-10'>
+                                        <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='date' class='col-sm-2 control-label'>$langGradebookActivityDate2:</label>
+                                    <div class='col-sm-10'>
+                                        <input type='text' class='form-control' name='date' value='" . datetime_remove_seconds($date) . "'/>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='weight' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
+                                    <div class='col-sm-10'>
+                                        <input type='text' class='form-control' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, '') . " % $langGradebookActivityWeightLeft)
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
+                                    <div class='col-sm-10'>
+                                        <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
+                                        if($visible){
+                                            $tool_content .= " checked />";
+                                        }
+                                    $tool_content .= " </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='actDesc' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
+                                    <div class='col-sm-10'>
+                                        " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
+                                    </div>
+                                </div>";
+                                if (isset($module_auto_id)) { //accept the auto booking mechanism
+                                    $tool_content .= "<div class='form-group'>
+                                    <label for='weight' class='col-sm-2 control-label'>$langGradebookInsAut:</label> 
+                                            <div class='col-sm-10'><input type='checkbox' class='form-control' value='1' name='auto' ";
+                                    if ($auto) {
+                                        $tool_content .= " checked";
+                                    }
+                                    $tool_content .= "
+                                        /></div>";
+                                }
+                                $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                                                <input class='btn btn-primary' type='submit' name='submitGradebookActivity' value='$langAdd' />
+                                            </div>";
+                                if (isset($_GET['modify'])) {
+                                    $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "' />";
+                                }else{
+                                    $tool_content .= " <input type='hidden' name='id' value='' />";
+                                }
+                            $tool_content .= "</fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>";
 
-            <tr><th>$langTitle:</th></tr>
-            <tr>
-              <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
-            </tr>
-            <tr><th>$langGradebookActivityDate2:</th></tr>
-            <tr>
-              <td><input type='text' name='date' value='" . datetime_remove_seconds($date) . "'></td>
-            </tr>
-            <tr><th>$langGradebookActivityWeight:</th></tr>
-            <tr>
-              <td><input type='text' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, '') . " % $langGradebookActivityWeightLeft)</td>
-            </tr>
-            <tr>
-            <th>$langGradeVisible
-            <input type='checkbox' id='visible' name='visible' value='1'";
-            if($visible){
-                $tool_content .= " checked ";
-            }
-            $tool_content .= "
-                ></th>
-            </tr>
-            <tr><td>&nbsp;</td></tr>
-            <tr><th>$langGradebookDesc:</th></tr>
-            <tr>
-              <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
-            </tr>";
-        if (isset($module_auto_id)) { //accept the auto booking mechanism
-            $tool_content .= "<tr><td>$langGradebookInsAut: <input type='checkbox' value='1' name='auto' ";
-            if ($auto) {
-                $tool_content .= " checked";
-            }
-            $tool_content .= "
-                /></td>";
-        }
-        $tool_content .= "<tr>
-                  <td class='right'><input type='submit' name='submitGradebookActivity' value='$langAdd' /></td>
-                </tr>
-            </table>";
-        if (isset($_GET['modify'])) {
-            $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "' />";
-        }else{
-            $tool_content .= " <input type='hidden' name='id' value='' />";
-        }
-         $tool_content .= "</fieldset></form>";        
+                    
         //do not show the activities list
         $showGradebookActivities = 0;
     }
@@ -395,6 +409,8 @@ if ($is_editor) {
         }
         //show activities list
         $showGradebookActivities = 1;
+        Session::Messages("ok", "alert-success");
+        redirect_to_home_page("modules/gradebook/index.php");
     }
 
     //DELETE DB: delete activity form to gradebook module (plus delete all the marks for alla students for this activity)
