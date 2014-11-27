@@ -301,10 +301,10 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
                         ($answerCorrect? 'true': 'false') . "'></div>";	
 					$tool_content .= "
 					</td>
-					<td><pre>". $answer ."</pre></td>
+					<td>". showAnswer($answer) . "</td>
 					<td>";
 					if ($studentChoice) {
-						$tool_content .= "<pre>$answerComment</pre>"; 
+						$tool_content .= showAnswer($answerComment);
 					} else { 
 						$tool_content .= '&nbsp;';
 					} 
