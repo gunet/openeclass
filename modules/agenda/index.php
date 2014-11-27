@@ -348,7 +348,7 @@ if(!isset($_GET['addEvent']) && !isset($_GET['edit'])){
                     }
                     $nowBarShowed = TRUE;
                     $tool_content .= "<tr class='success'>";
-                    $tool_content .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
+                    $tool_content .= "<td colspan='2' class='text-center'>$langDateNow $dateNow</td>";
                     $tool_content .= "</tr>";
                 }
             }
@@ -373,25 +373,25 @@ if(!isset($_GET['addEvent']) && !isset($_GET['edit'])){
             } else {
                 $tool_content .= "<td colspan='2'>";
             }
-
-            $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
+     
             if ($myrow->duration != '') {
                 if ($myrow->duration == 1) {
                     $message = $langHour;
                 } else {
                     $message = $langHours;
                 }
-                $msg = "($langDuration: " . q($myrow->duration) . " $message)";
+                $msg = " - $langDuration: " . q($myrow->duration) . " $message)";
             } else {
-                $msg = '';
+                $msg = ')';
             }
-            $tool_content .= "<br><b>";
+            $day_data = "<small>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . " ($langHour: " . ucfirst(date('H:i', $d)) . "$msg</small>";            
+            $tool_content .= "<b>";
             if ($myrow->title == '') {
                 $tool_content .= $langAgendaNoTitle;
             } else {
                 $tool_content .= q($myrow->title);
             }
-            $tool_content .= " $msg $content</b></td>";
+            $tool_content .= " $msg</b><br>$day_data<br><br> $content</td>";
 
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
