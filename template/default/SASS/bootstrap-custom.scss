@@ -24,6 +24,11 @@ input[type="file"] {
 }
 @media(min-width: $screen-lg-desktop){
    .affix {
+    width: 17%;
+  }   
+}
+@media(min-width: 1450px){
+   .affix {
     width: 12.4%;
   }   
 }
