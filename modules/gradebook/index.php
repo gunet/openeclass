@@ -260,7 +260,7 @@ if ($is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='weight' class='col-sm-2 control-label'>$langGradeVisible</label>
+                                    <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
                                     <div class='col-sm-10'>
                                         <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
                                         if($visible){
@@ -301,7 +301,6 @@ if ($is_editor) {
                     
         //do not show the activities list
         $showGradebookActivities = 0;
-        
     }
 
     //UPDATE/INSERT DB: new activity from exersices, assignments, lps or scorm
@@ -410,6 +409,8 @@ if ($is_editor) {
         }
         //show activities list
         $showGradebookActivities = 1;
+        Session::Messages("ok", "alert-success");
+        redirect_to_home_page("modules/gradebook/index.php");
     }
 
     //DELETE DB: delete activity form to gradebook module (plus delete all the marks for alla students for this activity)
