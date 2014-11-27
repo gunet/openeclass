@@ -33,56 +33,50 @@ function update_field($table, $field, $field_name, $id_col, $id) {
 function add_field($table, $field, $type) {
     global $langToTable, $langAddField, $BAD;
 
-    $retString = "";
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` ADD `$field` $type")) {
-            $retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function add_field_after_field($table, $field, $after_field, $type) {
     global $langToTable, $langAddField, $langAfterField, $BAD;
 
-    $retString = "";
-
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
-            $retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function rename_field($table, $field, $new_field, $type) {
     global $langToA, $langRenameField, $langToTable, $BAD;
 
-    $retString = "";
-
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$new_field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
-            $retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function delete_field($table, $field) {
     global $langOfTable, $langDeleteField, $BAD;
 
-    $retString = "";
     if (!Database::get()->query("ALTER TABLE `$table` DROP `$field`")) {
-        $retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
+        $retString = "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-    return $retString;
 }
 
 function delete_table($table) {
@@ -90,16 +84,14 @@ function delete_table($table) {
     $retString = "";
 
     if (!Database::get()->query("DROP TABLE IF EXISTS $table")) {
-        $retString .= "$langDeleteTable <b>$table</b>: ";
+        $retString = "$langDeleteTable <b>$table</b>: ";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-    return $retString;
 }
 
 function merge_tables($table_destination, $table_source, $fields_destination, $fields_source) {
     global $langMergeTables, $BAD;
-
-    $retString = "";
 
     $query = "INSERT INTO $table_destination (";
     foreach ($fields_destination as $val) {
@@ -111,11 +103,10 @@ function merge_tables($table_destination, $table_source, $fields_destination, $f
     }
     $query = substr($query, 0, -1) . " FROM " . $table_source;
     if (!Database::get()->query($query)) {
-        $retString .= " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
+        $retString = " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-
-    return $retString;
 }
 
 // add index/indexes in specific table columns
@@ -170,7 +161,7 @@ function update_assignment_submit() {
         }
     });
     if ($updated) {
-        echo "$langTable assignment_submit: $GLOBALS[OK]<br>\n";
+        Debug::message("$langTable assignment_submit: $GLOBALS[OK]<br>\n", Debug::WARNING);
     }
 }
 
@@ -274,7 +265,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
         Database::get()->query("UPDATE dropbox_file SET filename = '$new_filename'
 	        	WHERE id = '$id'", $code);
     } else {
-        echo "$langEncDropboxError<br>";
+        Debug::message($langEncDropboxError, Debug::ERROR);
     }
 }
 
