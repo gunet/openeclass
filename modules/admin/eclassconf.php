@@ -338,7 +338,7 @@ else {
     
     $tool_content .= "
 <div class='row'>
-    <div class='col-sm-10'>
+    <div class='col-sm-9'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
             <div class='panel panel-default' id='one'>
                 <div class='panel-heading'>
@@ -586,7 +586,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
     $tool_content .= "
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='five'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langCourseSettings</h2>
                 </div>
@@ -623,7 +623,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='six'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langMetaCommentary</h2>
                 </div>
@@ -673,7 +673,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
         $tool_content .= "
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='seven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langOtherOptions</h2>
                 </div>
@@ -783,7 +783,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='eight'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDefaultQuota</h2>
                 </div>
@@ -816,7 +816,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='nine'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUploadWhitelist</h2>
                 </div>
@@ -843,7 +843,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
     
 $tool_content .= "    
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
                 </div>
@@ -887,7 +887,7 @@ $tool_content .= "
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default'>
+            <div class='panel panel-default' id='eleven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLoginFailCheck</h2>
                 </div>
@@ -946,12 +946,19 @@ $tool_content .= "
         });
         </script>";
     $tool_content .= "
-        <div class='col-sm-2' id='affixedSideNav'>
-            <ul id='floatMenu' class='nav nav-pills nav-stacked' role='tablist'>
+        <div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+            <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
                 <li><a href='#three'>$langEclassThemes</a></li>
                 <li><a href='#four'>$langEmailSettings</a></li>
+                <li><a href='#five'>$langCourseSettings</a></li>
+                <li><a href='#six'>$langMetaCommentary</a></li>
+                <li><a href='#seven'>$langOtherOptions</a></li>
+                <li><a href='#eight'>$langDefaultQuota</a></li>
+                <li><a href='#nine'>$langUploadWhitelist</a></li>
+                <li><a href='#ten'>$langLogActions</a></li>
+                <li><a href='#eleven'>$langLoginFailCheck</a></li>     
             </ul>
         </div>
     </div>";

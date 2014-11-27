@@ -10,8 +10,22 @@ input[type="file"] {
     padding-top: 7px;
 }
 .affix {
-    width: 16%;
     top: 40px;
+}
+@media(min-width: $screen-tablet){
+  .affix {
+    width: 20%;
+  }     
+}
+@media(min-width: $screen-desktop){
+   .affix {
+    width: 18%;
+  }   
+}
+@media(min-width: $screen-lg-desktop){
+   .affix {
+    width: 12.4%;
+  }   
 }
 .bubble 
 {

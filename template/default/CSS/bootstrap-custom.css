@@ -9458,11 +9458,28 @@ input[type="file"] {
 
 /* line 12, ../SASS/bootstrap-custom.scss */
 .affix {
-  width: 16%;
   top: 40px;
 }
 
-/* line 17, ../SASS/bootstrap-custom.scss */
+@media (min-width: 768px) {
+  /* line 16, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 20%;
+  }
+}
+@media (min-width: 992px) {
+  /* line 21, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 18%;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 26, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 12.4%;
+  }
+}
+/* line 31, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9474,7 +9491,7 @@ input[type="file"] {
   border: #dddddd solid 2px;
 }
 
-/* line 29, ../SASS/bootstrap-custom.scss */
+/* line 43, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9488,7 +9505,7 @@ input[type="file"] {
   top: 9px;
 }
 
-/* line 43, ../SASS/bootstrap-custom.scss */
+/* line 57, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9502,28 +9519,28 @@ input[type="file"] {
   top: 8px;
 }
 
-/* line 67, ../SASS/bootstrap-custom.scss */
+/* line 81, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 70, ../SASS/bootstrap-custom.scss */
+/* line 84, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 73, ../SASS/bootstrap-custom.scss */
+/* line 87, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 80, ../SASS/bootstrap-custom.scss */
+/* line 94, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 83, ../SASS/bootstrap-custom.scss */
+/* line 97, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 86, ../SASS/bootstrap-custom.scss */
+/* line 100, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
