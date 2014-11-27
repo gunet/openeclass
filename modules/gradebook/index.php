@@ -825,24 +825,18 @@ if ($is_editor) {
                                 NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2)", $course_id);
         $checkForExerNumber = count($checkForExer);
         if ($checkForExerNumber > 0) {
-            $tool_content .= "<table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th colspan=2>$langExercises</th></tr>";
-            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' class='text-center'>$langActions</th>";
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
+            $tool_content .= "<table class='table-default'>";
+            $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";
             
-            $k = 0;
             foreach ($checkForExer as $newExerToGradebook) {
                 $content = ellipsize_html($newExerToGradebook->description, 50);
                 $d = strtotime($newExerToGradebook->end_date);
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
+               
 
-                $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                $tool_content .= "<tr>
                         <td><b>";
 
                 if (empty($newExerToGradebook->title)) {
@@ -855,10 +849,12 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")."&nbsp;";
-                $k++;
+                $tool_content .= "<td class='text-center option-btn-cell'>".  action_button(array(
+                    array('title' => $langAdd,
+                          'icon' => 'fa-plus',
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")));
             } // end of while        
-            $tool_content .= "</table>";
+            $tool_content .= "</td></tr></table></div></div></div>";
         } else {
             $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageExe4</p>";
         }
