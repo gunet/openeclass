@@ -322,6 +322,13 @@ EOF;
 } // end of if($submit)
 // Display config.php edit form
 else {
+    $head_content .= "
+        <script>
+        $(function() {
+            $('body').scrollspy({ target: '#affixedSideNav' });
+        });
+        </script>
+    ";
     // Display link to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -939,7 +946,7 @@ $tool_content .= "
         });
         </script>";
     $tool_content .= "
-        <div class='col-sm-2' id='sidenav'>
+        <div class='col-sm-2' id='affixedSideNav'>
             <ul id='floatMenu' class='nav nav-pills nav-stacked' role='tablist'>
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
