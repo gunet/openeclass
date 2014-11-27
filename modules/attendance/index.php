@@ -159,7 +159,7 @@ if ($is_editor) {
             <table class='tbl' width='100%'>";
         
         if (isset($_GET['modify'])) { //edit an existed activity
-            $id = intval(getDirectReference($_GET['modify']));
+            $id = intval($_GET['modify']);
             
             //all activity data (check if it is in this attendance)
             $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
@@ -203,7 +203,7 @@ if ($is_editor) {
             </table>";
         if (isset($_GET['modify'])) { 
             $tool_content .= "
-                            <input type='hidden' name='id' value='" . getIndirectReference($attendanceActivityToModify) . "' />";
+                            <input type='hidden' name='id' value='" . $attendanceActivityToModify . "' />";
         }
          $tool_content .= "
             </fieldset>
@@ -215,7 +215,7 @@ if ($is_editor) {
 
     //EDIT DB: add to the attendance module new activity from exersices or assignments
     elseif(isset($_GET['addCourseActivity'])){
-        $id = intval(getDirectReference($_GET['addCourseActivity']));
+        $id = intval($_GET['addCourseActivity']);
         $type = intval($_GET['type']);
         
         //check the type of the module (assignments)
@@ -297,7 +297,7 @@ if ($is_editor) {
         
         if (isset($_POST['id'])) {
             //update
-            $id = intval(getDirectReference($_POST['id']));
+            $id = intval($_POST['id']);
             Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
             $message = "<p class='success'>$langAttendanceEdit</p>";
             $tool_content .= $message . "<br/>";
@@ -323,7 +323,7 @@ if ($is_editor) {
 
     //DELETE DB: delete activity form to attendance module
     elseif (isset($_GET['delete'])) {
-            $delete = intval(getDirectReference($_GET['delete']));
+            $delete = intval($_GET['delete']);
             $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $delete, $attendance_id)->affectedRows;
             $delActBooks = Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $delete)->affectedRows;
             $showAttendanceActivities = 1; //show list activities
@@ -343,12 +343,12 @@ if ($is_editor) {
         }        
         //record booking
         if(isset($_POST['bookUser'])){                        
-            $userID = intval(getDirectReference($_POST['userID'])); //user
+            $userID = intval($_POST['userID']); //user
             //get all the activies
             $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
             if ($result){                
                 foreach ($result as $announce) {
-                    $attend = intval(@$_POST[getIndirectReference($announce->id)]); //get the record from the teacher (input name is the activity id)    
+                    $attend = intval(@$_POST[$announce->id]); //get the record from the teacher (input name is the activity id)    
                     //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);
                     
@@ -369,7 +369,7 @@ if ($is_editor) {
         //View activities for one user - (check for auto mechanism) 
         if(isset($_GET['book'])) {
             $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;            
-            $userID = intval(getDirectReference($_GET['book'])); //user            
+            $userID = intval($_GET['book']); //user
             //check if there are booking records for the user, otherwise alert message for first input
             $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
             if(!$checkForRecords){
@@ -383,7 +383,7 @@ if ($is_editor) {
             if ($announcementNumber > 0) {
                 $tool_content .= "<fieldset><legend>" . display_user($userID) . "</legend>";
                 $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . getIndirectReference($userID) . "'>
+                                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "'>
                                   <table width='100%' class='sortable' id='t2'>";
                 $tool_content .= "<tr><th  colspan='2'>" . $m['title'] . "</th>"
                                 . "<th >" . $langdate . "</th>"                                
@@ -454,12 +454,12 @@ if ($is_editor) {
                     }
 
                     $tool_content .= "<td width='70' class='center'>
-                    <input type='checkbox' value='1' name='" . getIndirectReference($activ->id) . "'";
+                    <input type='checkbox' value='1' name='" . $activ->id . "'";
                     if(isset($userAttend) && $userAttend) {
                         $tool_content .= " checked";
                     }    
                     $tool_content .= ">
-                    <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>    
+                    <input type='hidden' value='" . $userID . "' name='userID'>    
                     </td>";
                     $k++;
                 } // end of while
@@ -621,7 +621,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newAssToAttendance->id) . "&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")."&nbsp;";
                 $k++;         
             }
             $tool_content .= "</table>";
@@ -671,7 +671,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newExerToAttendance->id) . "&amp;type=2")."&nbsp;";                     
+                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")."&nbsp;";                     
                 $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
@@ -695,7 +695,7 @@ if ($is_editor) {
             if ($activeUsers){                
                 foreach ($activeUsers as $result) {
                     
-                    $userInp = intval(@$_POST[getIndirectReference($result->userID)]); //get the record from the teacher (input name is the user id)    
+                    $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)    
                     
                     // //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $result->userID);
@@ -726,7 +726,7 @@ if ($is_editor) {
         if ($resultUsers) {
             //table to display the users
             $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . getIndirectReference($actID) . "'>
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
             <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
                 <thead>
                     <tr>
@@ -749,15 +749,15 @@ if ($is_editor) {
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
                         <td width='70' class='center'>
-                            <input type='checkbox' value='1' name='" . getIndirectReference($resultUser->userID) . "'";
+                            <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
-                            $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, getIndirectReference($resultUser->userID));
+                            $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                             if(isset($q->attend) && $q->attend == 1) {
                                 $tool_content .= " checked";
                             }    
                         $tool_content .= ">
-                            <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
+                            <input type='hidden' value='" . $actID . "' name='actID'>
                         </td>";   
                         $tool_content .= "
                     </tr>";

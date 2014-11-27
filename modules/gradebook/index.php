@@ -280,7 +280,7 @@ if ($is_editor) {
                 </tr>
             </table>";
         if (isset($_GET['modify'])) {
-            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($gradebookActivityToModify) . "' />";
+            $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "' />";
         }else{
             $tool_content .= " <input type='hidden' name='id' value='' />";
         }
@@ -292,7 +292,7 @@ if ($is_editor) {
     //UPDATE/INSERT DB: new activity from exersices, assignments, lps or scorm
     elseif(isset($_GET['addCourseActivity'])){
 
-        $id = intval(getDirectReference($_GET['addCourseActivity']));
+        $id = intval($_GET['addCourseActivity']);
         $type = intval($_GET['type']);
 
         //check the type of the module (1 for assignments)
@@ -374,7 +374,7 @@ if ($is_editor) {
         $actDate = $_POST['date'];
         $visible = isset($_POST['visible']) ? 1 : 0;
         
-        if (($_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))) && $weight != 100) || (!$_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))))){
+        if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
             $tool_content .= $message . "<br/>";
         } else {            
@@ -399,7 +399,7 @@ if ($is_editor) {
 
     //DELETE DB: delete activity form to gradebook module (plus delete all the marks for alla students for this activity)
     elseif (isset($_GET['delete'])) {
-            $delete = intval(getDirectReference($_GET['delete']));
+            $delete = intval($_GET['delete']);
             $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $delete, $gradebook_id)->affectedRows;
             $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $delete)->affectedRows;
             $showGradebookActivities = 1; //show list activities
@@ -422,14 +422,14 @@ if ($is_editor) {
         //record booking
         if(isset($_POST['bookUser'])){
 
-            $userID = intval(getDirectReference($_POST['userID'])); //user
+            $userID = intval($_POST['userID']); //user
             //get all the gradebook activies --> for each gradebook activity update or insert grade
             $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
 
             if ($result){
                 foreach ($result as $announce) {
 
-                    $attend = floatval($_POST[getIndirectReference($announce->id)]); //get the record from the teacher (input name is the activity id)
+                    $attend = floatval($_POST[$announce->id]); //get the record from the teacher (input name is the activity id)
                     //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID);
 
@@ -449,7 +449,7 @@ if ($is_editor) {
         //View activities for a user - (check for auto mechanism)
         if(isset($_GET['book'])){
             if(weightleft($gradebook_id, 0) == 0){
-                $userID = intval(getDirectReference($_GET['book'])); //user
+                $userID = intval($_GET['book']); //user
 
                 //check if there are booking records for the user, otherwise alert message for first input
                 $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
@@ -464,7 +464,7 @@ if ($is_editor) {
                 if ($actNumber > 0) {
                     $tool_content .= "<fieldset><legend>" . display_user($userID) . "</legend>";
                     $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . getIndirectReference($userID) . "' onsubmit=\"return checkrequired(this, 'antitle');\">
+                                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                                       <table width='100%' class='sortable' id='t2'>";
                     $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
                     $tool_content .= "<th width='10' class='center'>$langGradebookBooking</th>";
@@ -535,9 +535,9 @@ if ($is_editor) {
                         }
                         $tool_content .= "<td width='' class='center'>" . $activity->weight . "%</td>";
                         @$tool_content .= "<td  class='center'>
-                        <input style='width:30px' type='text' value='" . $userGrade . "' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
+                        <input style='width:30px' type='text' value='" . $userGrade . "' name='" . $activity->id . "'"; //SOS 4 the UI!!
                         $tool_content .= ">
-                        <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>    
+                        <input type='hidden' value='" . $userID . "' name='userID'>    
                         </td>";
                         $k++;
                     } // end of while
@@ -618,7 +618,7 @@ if ($is_editor) {
         //delete users from gradebook list
         if (isset($_POST['deleteSelectedUsers'])) {
             foreach ($_POST['recID'] as $value) {
-                $value = intval(getDirectReference($value));
+                $value = intval($value);
                 //delete users from gradebook users table
                 Database::get()->query("DELETE FROM gradebook_users WHERE id=?d ", $value);
             }
@@ -744,7 +744,7 @@ if ($is_editor) {
                 $tool_content .= "</td>"
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1")."&nbsp;";
                 $k++;
             } // end of while        
             $tool_content .= "</table>";
@@ -791,7 +791,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2")."&nbsp;";
+                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")."&nbsp;";
                 $k++;
             } // end of while        
             $tool_content .= "</table>";
@@ -869,7 +869,7 @@ if ($is_editor) {
             if ($activeUsers){                
                 foreach ($activeUsers as $result) {
                     
-                    $userInp = intval(@$_POST[getIndirectReference($result->userID)]); //get the record from the teacher (input name is the user id)    
+                    $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)    
                     
                     // //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $result->userID);
@@ -900,7 +900,7 @@ if ($is_editor) {
         if ($resultUsers) {
             //table to display the users
             $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . getIndirectReference($actID) . "'>
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
             <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
                 <thead>
                     <tr>
@@ -933,17 +933,17 @@ if ($is_editor) {
                             $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                         }
                         $tool_content .= "<td class='center'>
-                            <input type='text' name='" . getIndirectReference($resultUser->userID) . "'";
+                            <input type='text' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
-                            $q = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getIndirectReference($resultUser->userID));
+                            $q = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                             if(isset($q->grade)) {
                                 $tool_content .= " value = '$q->grade'";
                             } else{
                                 $tool_content .= " value = ''";
                             }
 
-                        $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
+                        $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'>
                         </td>";   
                         $tool_content .= "
                     </tr>";
