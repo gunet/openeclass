@@ -240,9 +240,9 @@ function expanded_faculte($facid, $uid) {
         $course_title = q($mycours->i);
         $password = q($mycours->password);
         // link creation
-        if ($mycours->visible == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course                
+        if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user']) { // open course, or power_user who can see all
             $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
-        } elseif ($mycours->visible == COURSE_CLOSED) { //closed course
+        } elseif ($mycours->visible == COURSE_CLOSED) { // closed course
             $codelink = "<a href='../contact/index.php?course_id=$cid'>$course_title</a>";
         } else {
             $codelink = $course_title;
