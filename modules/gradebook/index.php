@@ -467,7 +467,7 @@ if ($is_editor) {
                                         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                                       <table width='100%' class='sortable' id='t2'>";
                     $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
-                    $tool_content .= "<th width='10' class='center'>$langGradebookBooking</th>";
+                    $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
                     $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
@@ -533,8 +533,8 @@ if ($is_editor) {
                         } else {
                             $tool_content .= "<td class='smaller'>$langGradebookActAttend</td>";
                         }
-                        $tool_content .= "<td width='' class='center'>" . $activity->weight . "%</td>";
-                        @$tool_content .= "<td  class='center'>
+                        $tool_content .= "<td width='' class='text-center'>" . $activity->weight . "%</td>";
+                        @$tool_content .= "<td  class='text-center'>
                         <input style='width:30px' type='text' value='" . $userGrade . "' name='" . $activity->id . "'"; //SOS 4 the UI!!
                         $tool_content .= ">
                         <input type='hidden' value='" . $userID . "' name='userID'>    
@@ -576,9 +576,9 @@ if ($is_editor) {
                         <tr>
                           <th width='1'>$langID</th>
                           <th><div align='left' width='100'>$langName $langSurname</div></th>
-                          <th class='center' width='80'>$langRegistrationDateShort</th>
-                          <th class='center'>$langGradebookGrade</th>
-                          <th class='center'>$langActions</th>
+                          <th class='text-center' width='80'>$langRegistrationDateShort</th>
+                          <th class='text-center'>$langGradebookGrade</th>
+                          <th class='text-center'>$langActions</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -599,7 +599,7 @@ if ($is_editor) {
                         if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
                             $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                         }
-                    $tool_content .="</td><td class='center'>"
+                    $tool_content .="</td><td class='text-center'>"
                                 .icon('add', $langGradebookBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")."&nbsp;"
                                 .icon('delete', $langGradebookDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes", "onClick=\"return confirmation('$langConfirmDelete');\"").
                             "</td></tr>";
@@ -710,7 +710,7 @@ if ($is_editor) {
                               <table width='100%' class='sortable' id='t1'>";
             $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
             $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langDescription</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>"; 
+            $tool_content .= "<th width='60' class='text-center'>$langActions</th>"; 
             $tool_content .= "</tr>";        
             $k = 0;        
             foreach ($checkForAss as $newAssToGradebook) {
@@ -744,7 +744,7 @@ if ($is_editor) {
                 $tool_content .= "</td>"
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1")."&nbsp;";
                 $k++;
             } // end of while        
             $tool_content .= "</table>";
@@ -764,7 +764,7 @@ if ($is_editor) {
             $tool_content .= "<table width='100%' class='sortable' id='t1'>";
             $tool_content .= "<tr><th colspan=2>$langExercises</th></tr>";
             $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
+            $tool_content .= "<th width='60' class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";
             
             $k = 0;
@@ -791,7 +791,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")."&nbsp;";
+                $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")."&nbsp;";
                 $k++;
             } // end of while        
             $tool_content .= "</table>";
@@ -816,19 +816,14 @@ if ($is_editor) {
         $checkForLpNumber = count($checkForLp);
         
         if ($checkForLpNumber > 0) {
-            $tool_content .= "<table width='100%' class='sortable' id='t1'>";
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
+            $tool_content .= "<table class='table-default' id='t1'>";
             $tool_content .= "<tr><th colspan='2'>$langLearningPath</th></tr>";
             $tool_content .= "<tr><th colspan='2'>$langTitle</th><th>$langLearningPath</th><th>$langGradebookType</th>";
-            $tool_content .= "<th class='center'>$langActions</th>";
+            $tool_content .= "<th class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";
-        
-            $k = 0;        
+             
             foreach ($checkForLp as $newExerToGradebook) {
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
                 $tool_content .= "<td width='16' valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
@@ -845,10 +840,10 @@ if ($is_editor) {
                 $tool_content .= "</td>";
                 $tool_content .= "
                 <td width='70' class='right'>";
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3")."&nbsp;";
+                $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=$newExerToGradebook->module_id&amp;type=3")."&nbsp;";
                 $k++;
             } // end of while        
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div></div></div>";
         } else {
             $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageLp4</p>";
         }
@@ -906,9 +901,9 @@ if ($is_editor) {
                     <tr>
                       <th width='1'>$langID</th>
                       <th><div align='left' width='150'>$langName $langSurname</div></th>
-                      <th class='center' width='80'>$langRegistrationDateShort</th>
-                      <th class='center'>$langGradebookGrade</th>
-                      <th class='center'>$langAttendanceBooking</th>
+                      <th class='text-center' width='80'>$langRegistrationDateShort</th>
+                      <th class='text-center'>$langGradebookGrade</th>
+                      <th class='text-center'>$langAttendanceBooking</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -932,7 +927,7 @@ if ($is_editor) {
                         if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
                             $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                         }
-                        $tool_content .= "<td class='center'>
+                        $tool_content .= "<td class='text-center'>
                             <input type='text' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
@@ -968,15 +963,16 @@ if ($is_editor) {
         $activityNumber = count($result);
 
         if ($activityNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langGradebookActList</legend>";
+            $tool_content .= "<h3>$langGradebookActList</h3>";
             $tool_content .= $weightLeftMessage;
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
-            $tool_content .= "<th width='40' class='center'>$langView</th>";
-            $tool_content .= "<th width='60' class='center'>$langScore</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
-            $tool_content .= "</tr>";
+            $tool_content .= "
+                <div class='row'><div class='col-sm-12'><div class='table-responsive'>
+                              <table class='table-default'>
+                              <tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
+                              <th width='40' class='text-center'>$langView</th>
+                              <th width='60' class='text-center'>$langScore</th>
+                              <th width='60' class='text-center'><i class='fa fa-cogs'></i></th>
+                              </tr>";
         }
         else{
             $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
@@ -993,8 +989,7 @@ if ($is_editor) {
                     $tool_content .= "<tr class='odd'>";
                 }
 
-                $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                $tool_content .= "
                         <td><b>";
 
                 if (empty($announce->title)) {
@@ -1047,16 +1042,16 @@ if ($is_editor) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
                 }
 
-                $tool_content .= "<td class='center'>" . $announce->weight . "%</td>";
-                $tool_content .= "<td width='' class='center'>";
+                $tool_content .= "<td class='text-center'>" . $announce->weight . "%</td>";
+                $tool_content .= "<td width='' class='text-center'>";
                 if ($announce->visible) {
                     $tool_content .= $langYes;
                 } else {
                     $tool_content .= $langNo;
                 }
                 $tool_content .= "</td>";
-                $tool_content .= "<td width='120' class='center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
-                $tool_content .= "<td width='70' class='center'>"
+                $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
+                $tool_content .= "<td width='70' class='text-center'>"
                       .icon('add', $langGradebookBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id")."&nbsp;"
                       .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"                      
                       .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langGradebookDeleteAlert');\"").
@@ -1064,7 +1059,7 @@ if ($is_editor) {
                 $k++;
             } // end of while
         }
-        $tool_content .= "</table></fieldset>";       
+        $tool_content .= "</table></div></div></div>";       
     }
 
 } else { //==========Student View==============
@@ -1122,7 +1117,7 @@ if ($is_editor) {
                     . "<td>" . $content . "</td>"
                     . "<td>" . q($announce->weight) . "%</td>";
 
-            $tool_content .= "<td width='70' class='center'>";
+            $tool_content .= "<td width='70' class='text-center'>";
 
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID);
