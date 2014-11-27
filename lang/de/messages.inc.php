@@ -2591,6 +2591,7 @@ $langToReqOpen = "Usera can register themselves without administration approval"
 $lang_email_required = "$langsOfStudent email address is required during registration";
 $lang_am_required = "$langsOfStudent ID is required during registration";
 $lang_dropbox_allow_student_to_student = "Allow file uploading between $langsOfStudents in 'Dropbox'";
+$lang_login_form = "Login Form";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
 $lang_block_username_change = "Don't allow users to change their 'username'";
 $lang_display_captcha = "Display captcha during users registration";
