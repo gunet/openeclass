@@ -542,7 +542,7 @@ if ($can_upload) {
                     <div class='form-group'>
                         <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
                     </div>
-                    <button type='submit' class='btn-default-eclass color-green'>
+                    <button type='submit' class='btn btn-primary'>
                         <i class='fa fa-plus space-after-icon'></i>
                         $langCreateDir
                     </button>
@@ -1148,14 +1148,9 @@ if ($doc_count == 0) {
     if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content.=" <div class='pull-right'>
-                            <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-caret-up'></i>$langUp</a>
+                            <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-level-up'></i> $langUp</a>
                         </div>";
-//        $tool_content .= action_bar(array(
-//                    array('title' => $langUp,
-//                          'url' => "$parentlink",
-//                          'icon' => 'fa-caret-up',
-//                          'level' => 'primary-label',
-//                          'button-class' => 'btn-success')));
+
     }
     $tool_content .= "</div>
             </div>

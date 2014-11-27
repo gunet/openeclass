@@ -186,10 +186,11 @@ if ($can_upload) {
   $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-5 col-sm-12'>
-          <button type='submit' class='btn-default-eclass color-green size-l'>
+          <button type='submit' class='btn btn-primary'>
             <i class='fa fa-arrow-up space-after-icon'></i>
             $langUpload
           </button>
+          <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
         </div>
       </div>
     </form>
