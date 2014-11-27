@@ -391,7 +391,7 @@ if(!isset($_GET['addEvent']) && !isset($_GET['edit'])){
             } else {
                 $tool_content .= q($myrow->title);
             }
-            $tool_content .= " $msg</b><br>$day_data<br><br> $content</td>";
+            $tool_content .= " </b><br>$day_data<br><br> $content</td>";
 
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
