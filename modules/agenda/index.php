@@ -149,7 +149,7 @@ if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary',
+                  'level' => 'primary-label',
                   'show' => $is_editor)));
 } else {
     $tool_content .= action_bar(array(
@@ -178,9 +178,11 @@ if ($is_editor) {
     if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
         Database::get()->query("UPDATE agenda SET visible = 0 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
+        redirect_to_home_page("modules/agenda/index.php?course_code=$course_code"); 
     } elseif (isset($_GET['mkVisibl']) and ( $_GET['mkVisibl'] == true)) {
         Database::get()->query("UPDATE agenda SET visible = 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
+        redirect_to_home_page("modules/agenda/index.php?course_code=$course_code"); 
     }
     if (isset($_POST['event_title'])) {
         register_posted_variables(array('startdate' => true, 'event_title' => true, 'content' => true, 'duration' => true));
@@ -202,14 +204,16 @@ if ($is_editor) {
             foreach($ev['event'] as $id) {
                 $agdx->store($id);                
             }
-        }        
-        $tool_content .= "<div class='alert alert-success text-center' role='alert'>$langStoredOK</div>";        
+        }
+        Session::Messages($langStoredOK, 'alert-success');
+        redirect_to_home_page("modules/agenda/index.php?course_code=$course_code");     
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
         $resp = (isset($_GET['rep']) && $_GET['rep'] == 'yes')? delete_recursive_event($id):delete_event($id);
         $agdx->remove($id);
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
-        $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
-        $tool_content .= "<div class='alert $alerttype text-center' role='alert'>$msgresp</div><br>";        
+        $alerttype = ($resp['success'])? 'alert-success' : 'alert-danger';
+        Session::Messages($msgresp, $alerttype);
+        redirect_to_home_page("modules/agenda/index.php?course_code=$course_code");                
     }
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
@@ -295,7 +299,8 @@ if ($is_editor) {
                       </div>            
                       <div class='form-group'>
                         <div class='col-sm-offset-2 col-sm-10'>
-                            <input type='button' class='btn btn-default' id='submitbtn' name='submitbtn' value='$langAddModify'>
+                            <input type='button' class='btn btn-primary' id='submitbtn' name='submitbtn' value='$langAddModify'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                         </div>
                       </div>                
             </form></div></div></div>";
@@ -305,116 +310,120 @@ if ($is_editor) {
 /* ---------------------------------------------
  *  End  of  prof only
  * ------------------------------------------- */
-if (!isset($_GET['sens'])) {
-    $sens = " ASC";
-}
-if ($is_editor) {
-    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end FROM agenda WHERE course_id = ?d
-		ORDER BY start " . $sens, $course_id);
-} else {
-    $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
-		AND visible = 1 ORDER BY start " . $sens, $course_id);
-}
+if(!isset($_GET['addEvent']) && !isset($_GET['edit'])){
 
-if (count($result) > 0) {
-    $barMonth = '';
-    $nowBarShowed = false;
-    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel no-borders'><div class='table-responsive'><table class='table-default'>
-                      <tr><th class='left'>$langEvents</th>";
-    if ($is_editor) {
-        $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
+    if (!isset($_GET['sens'])) {
+        $sens = " ASC";
     }
-    $tool_content .= "</tr>";
+    if ($is_editor) {
+        $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end FROM agenda WHERE course_id = ?d
+                    ORDER BY start " . $sens, $course_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
+                    AND visible = 1 ORDER BY start " . $sens, $course_id);
+    }
 
-    foreach ($result as $myrow) {
-        $content = standard_text_escape($myrow->content);
-        $d = strtotime($myrow->start);
-        if (!$nowBarShowed) {
-            // Following order
-            if ((($d > time()) and ($sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
-                if ($barMonth != date("m", time())) {
-                    $barMonth = date("m", time());
-                    $tool_content .= "<tr>";
-                    // current month
-                    $tool_content .= "<td colspan='2' class='monthLabel'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
-                    $tool_content .= "</tr>";
-                }
-                $nowBarShowed = TRUE;
-                $tool_content .= "<tr>";
-                $tool_content .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
-                $tool_content .= "</tr>";
-            }
-        }
-        if ($barMonth != date("m", $d)) {
-            $barMonth = date("m", $d);
-            // month LABEL
-            $tool_content .= "<tr>";            
-            $tool_content .= "<td colspan='2' class='monthLabel'>";            
-            $tool_content .= "<div align='center'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
-            $tool_content .= "</tr>";
-        }
-         
-        $classvis = '';         
+    if (count($result) > 0) {
+        $barMonth = '';
+        $nowBarShowed = false;
+        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+                          <tr><th class='left'>$langEvents</th>";
         if ($is_editor) {
-            if ($myrow->visible == 0) {
-                $classvis = 'class = "not_visible"';
-            }
-        }
-        $tool_content .= "<tr $classvis>";
-        if ($is_editor) {
-            $tool_content .= "<td>";
-        } else {
-            $tool_content .= "<td colspan='2'>";
-        }
-
-        $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
-        if ($myrow->duration != '') {
-            if ($myrow->duration == 1) {
-                $message = $langHour;
-            } else {
-                $message = $langHours;
-            }
-            $msg = "($langDuration: " . q($myrow->duration) . " $message)";
-        } else {
-            $msg = '';
-        }
-        $tool_content .= "<br><b>";
-        if ($myrow->title == '') {
-            $tool_content .= $langAgendaNoTitle;
-        } else {
-            $tool_content .= q($myrow->title);
-        }
-        $tool_content .= " $msg $content</b></td>";
-
-        if ($is_editor) {
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                    array('title' => $langDelete,
-                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDeleteEvent),
-                    array('title' => $langConfirmDeleteRecursive,
-                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;rep=yes",
-                          'icon' => 'fa-times-circle-o',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDeleteRecursiveEvents,
-                          'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
-                    array('title' => $langModify,
-                          'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
-                          'icon' => 'fa-edit'),
-                    array('title' => $langVisible,
-                          'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
-                          'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
-                ));
-           $tool_content .= "</td>";                                 
+            $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
+
+        foreach ($result as $myrow) {
+            $content = standard_text_escape($myrow->content);
+            $d = strtotime($myrow->start);
+            if (!$nowBarShowed) {
+                // Following order
+                if ((($d > time()) and ($sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
+                    if ($barMonth != date("m", time())) {
+                        $barMonth = date("m", time());
+                        $tool_content .= "<tr class='info'>";
+                        // current month
+                        $tool_content .= "<td colspan='2'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
+                        $tool_content .= "</tr>";
+                    }
+                    $nowBarShowed = TRUE;
+                    $tool_content .= "<tr class='success'>";
+                    $tool_content .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
+                    $tool_content .= "</tr>";
+                }
+            }
+            if ($barMonth != date("m", $d)) {
+                $barMonth = date("m", $d);
+                // month LABEL
+                $tool_content .= "<tr class='info'>";            
+                $tool_content .= "<td colspan='2'>";            
+                $tool_content .= "<div align='center'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
+                $tool_content .= "</tr>";
+            }
+
+            $classvis = '';         
+            if ($is_editor) {
+                if ($myrow->visible == 0) {
+                    $classvis = 'class = "not_visible"';
+                }
+            }
+            $tool_content .= "<tr $classvis>";
+            if ($is_editor) {
+                $tool_content .= "<td>";
+            } else {
+                $tool_content .= "<td colspan='2'>";
+            }
+
+            $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
+            if ($myrow->duration != '') {
+                if ($myrow->duration == 1) {
+                    $message = $langHour;
+                } else {
+                    $message = $langHours;
+                }
+                $msg = "($langDuration: " . q($myrow->duration) . " $message)";
+            } else {
+                $msg = '';
+            }
+            $tool_content .= "<br><b>";
+            if ($myrow->title == '') {
+                $tool_content .= $langAgendaNoTitle;
+            } else {
+                $tool_content .= q($myrow->title);
+            }
+            $tool_content .= " $msg $content</b></td>";
+
+            if ($is_editor) {
+                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= action_button(array(
+                        array('title' => $langDelete,
+                              'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDeleteEvent),
+                        array('title' => $langConfirmDeleteRecursive,
+                              'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;rep=yes",
+                              'icon' => 'fa-times-circle-o',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDeleteRecursiveEvents,
+                              'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
+                        array('title' => $langModify,
+                              'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langVisible,
+                              'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
+                              'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
+                    ));
+               $tool_content .= "</td>";                                 
+            }
+            $tool_content .= "</tr>";
+        }
+        $tool_content .= "</table></div></div></div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoEvents</div>";
     }
-    $tool_content .= "</table></div></div></div></div>";
-} else {
-    $tool_content .= "<p class='alert alert-warning text-center'>$langNoEvents</p>";
+    add_units_navigation(TRUE);
 }
-add_units_navigation(TRUE);
+
 
 draw($tool_content, 2, null, $head_content);
