@@ -497,6 +497,10 @@ function submit_work($id, $on_behalf_of = null) {
                     'filename' => $file_name,
                     'comments' => $stud_comments,
                     'group_id' => $group_id));
+                
+                // update attendance book as well
+                update_attendance_book($id, 'assignment');
+                
                 if ($on_behalf_of and isset($_POST['email'])) {
                     $email_grade = $_POST['grade'];
                     $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
@@ -1897,7 +1901,10 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
                 'title' => $title,
                 'grade' => $grade,
                 'comments' => $comment));
-       Session::Messages($langGrades, 'alert-success'); 
+        //update gradebook if needed
+        $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+        update_gradebook_book($quserid, $id, $grade, 'assignment');
+        Session::Messages($langGrades, 'alert-success'); 
     } else {
         Session::Messages($langGrades);
     }
@@ -1925,6 +1932,11 @@ function submit_grades($grades_id, $grades, $email = false) {
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                         'title' => $title,
                         'grade' => $grade));
+                
+                //update gradebook if needed
+                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
+                
                 if ($email) {
                     grade_email_notify($grades_id, $sid, $grade, '');
                 }          

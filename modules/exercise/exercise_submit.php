@@ -274,6 +274,12 @@ if (isset($_POST['formSent'])) {
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                                 total_weighting = ?f, secs_remaining = ?d WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $secs_remaining, $eurid);
         
+        if ($attempt_status == ATTEMPT_COMPLETED) {
+            // update attendance book
+            update_attendance_book($exerciseId, 'exercise');
+            // update gradebook
+            update_gradebook_book($uid, $exerciseId, $totalScore, 'exercise');
+        }
         unset($objExercise);
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
