@@ -105,7 +105,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($is_editor) {
     if (isset($_POST['submitLink'])) {
         submit_link();
-        $messsage = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
+        $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
         Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
