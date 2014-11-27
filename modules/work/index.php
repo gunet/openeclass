@@ -1650,7 +1650,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkGroupNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
+                            <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>    
                             <table class='sortable'>
                             <tr>
@@ -1670,7 +1670,7 @@ function show_non_submitted($id) {
                             </tr>";
                     $i++;
                 }
-                $tool_content .= "</table></div></div></div></div>";
+                $tool_content .= "</table></div></div></div>";
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
@@ -1689,7 +1689,7 @@ function show_non_submitted($id) {
                 $tool_content .= "
                             <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
                             <p>$num_of_submissions</p>
-                            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
+                            <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>
                             <table class='table-default'>
                             <tr>
@@ -1712,7 +1712,7 @@ function show_non_submitted($id) {
                             
                     $i++;
                 }
-                $tool_content .= "</table></div></div></div></div>";
+                $tool_content .= "</table></div></div></div>";
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
@@ -1742,7 +1742,7 @@ function show_student_assignments() {
     
     if (count($result)>0) {
         $tool_content .= "
-            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
+            <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr>
                                       <th>$m[title]</th>
@@ -1796,7 +1796,7 @@ function show_student_assignments() {
             $k++;
         }
         $tool_content .= '
-                                  </table></div></div></div></div>';
+                                  </table></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
@@ -1821,7 +1821,7 @@ function show_assignments() {
 
     if (count($result)>0) {
         $tool_content .= "
-            <div class='row'><div class='col-sm-12'><div class='panel no-borders'>
+            <div class='row'><div class='col-sm-12'>
                     <div class='table-responsive'>
                     <table class='table-default'>
                     <tr>
@@ -1879,7 +1879,7 @@ function show_assignments() {
                    "</td></tr>";
             $index++;
         }
-        $tool_content .= '</table></div></div></div></div>';
+        $tool_content .= '</table></div></div></div>';
     } else {
         $tool_content .= "\n<div class='alert alert-warning'>$langNoAssign</div>";        
     }

@@ -1164,7 +1164,6 @@ if ($doc_count == 0) {
 
     <div class='row'>
         <div class='col-md-12'>
-            <div class='panel no-borders'>
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
@@ -1328,7 +1327,6 @@ if ($doc_count == 0) {
         }
     }
     $tool_content .= "</table>
-            </div>
             </div>
         </div>
     </div>";
