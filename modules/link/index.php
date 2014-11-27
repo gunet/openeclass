@@ -105,30 +105,29 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($is_editor) {
     if (isset($_POST['submitLink'])) {
         submit_link();
+        $messsage = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
+        Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
     if (isset($_POST['submitCategory'])) {
         submit_category();
+        $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
+        Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
     switch ($action) {
         case 'deletelink':
             delete_link($id);
+            Session::Messages($langLinkDeleted, 'alert-success');
             redirect_to_home_page("modules/link/index.php");
             break;
         case 'deletecategory':
             delete_category($id);
+            Session::Messages($langCategoryDeleted, 'alert-success');
             redirect_to_home_page("modules/link/index.php");
             break;
     }
 
-    if (!empty($catlinkstatus)) {
-        if ($catlinkstatus == $langCategoryDeleted or $catlinkstatus == $langLinkDeleted) {
-            $tool_content .= "<div class='alert alert-warning text-center'>$catlinkstatus</div>";
-        } else {
-            $tool_content .= "<div class='alert alert-success text-center'>$catlinkstatus</div>";
-        }
-    }
 
     if (!$is_in_tinymce) {
         if (isset($_GET['action'])) {
