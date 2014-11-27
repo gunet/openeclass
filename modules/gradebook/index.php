@@ -109,24 +109,44 @@ if ($is_editor) {
     }
 
     // Top menu
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+    $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
     if(isset($_GET['editUsers'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $nameTools = $langConfig;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['gradebookBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $nameTools = $langUsers;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $nameTools = $langModify;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $nameTools = $langGradebookBook;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         if (isset($_GET['addActivityAs'])) {
@@ -136,22 +156,50 @@ if ($is_editor) {
         } else {
             $nameTools = $langGradebookAddActivity;
         }
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $nameTools = $langGradebookBook;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1'>$langGradebookBook</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label'),
+            array('title' => $langGradebookBook,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
+                  'icon' => 'fa fa-reply',
+                  'level' => 'primary-label')
+            ));
     } else {
         $nameTools = $langGradebook;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1'>$langConfig</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1'>$langUsers</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookAddActivity</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1'>$langAdd $langInsertWork</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1'>$langAdd $langInsertExercise</a></li>";
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1'>$langAdd $langLearningPath1</a></li>";
+        $tool_content .= action_bar(array(
+            array('title' => $langConfig,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                  'icon' => 'fa fa-cog space-after-icon',
+                  'level' => 'primary-label'),
+            array('title' => $langUsers,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
+                  'icon' => 'fa fa-plus'),
+            array('title' => $langGradebookAddActivity,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                  'icon' => 'fa fa-plus'),
+            array('title' => "$langAdd $langInsertWork",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
+                  'icon' => 'fa fa-plus'),
+            array('title' => "$langAdd $langInsertExercise",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
+                  'icon' => 'fa fa-plus'),
+            array('title' => "$langAdd $langLearningPath1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
+                  'icon' => 'fa fa-plus'),
+            ));
     }               
-    $tool_content .= "</ul></div>";
+    $tool_content .= "</div></div>";
 
     //FLAG: flag to show the activities
     $showGradebookActivities = 1;
@@ -615,7 +663,7 @@ if ($is_editor) {
                         if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
                             $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                         }
-                    $tool_content .="</td><td class='text-center'>"
+                    $tool_content .="</td><td class='text-center '>"
                                 .icon('add', $langGradebookBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")."&nbsp;"
                                 .icon('delete', $langGradebookDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes", "onClick=\"return confirmation('$langConfirmDelete');\"").
                             "</td></tr>";
