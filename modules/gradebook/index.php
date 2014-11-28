@@ -1037,20 +1037,13 @@ if ($is_editor) {
         else{
             $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
         }
-        $k = 0;
         if ($result){
             foreach ($result as $announce) {                
                 $content = ellipsize_html($announce->description, 50);
                 $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
 
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-
                 $tool_content .= "
-                        <td><b>";
+                        <tr><td><b>";
 
                 if (empty($announce->title)) {
                     $tool_content .= "$langGradebookNoTitle<br>";
@@ -1116,7 +1109,6 @@ if ($is_editor) {
                       .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"                      
                       .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langGradebookDeleteAlert');\"").
                       "</td>";
-                $k++;
             } // end of while
         }
         $tool_content .= "</table></div></div></div>";       
