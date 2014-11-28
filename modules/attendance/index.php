@@ -559,8 +559,14 @@ if ($is_editor) {
                             <td>" . nice_format($resultUser->reg_date) . "</td>
                             <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
                             <td class='option-btn-cell'>"
-                                .icon('add', $langAttendanceBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID). "&nbsp;" 
-                                .icon('delete', $langAttendanceDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes", "onClick=\"return confirmation('$langConfirmDelete');\"")."</td>
+                               . action_button(array(
+                                    array('title' => $langAttendanceBook,
+                                          'icon' => 'fa-add',
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID),
+                                    array('title' => $langAttendanceDelete,
+                                       'icon' => 'fa-times',
+                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
+                                       'confirm' => $langConfirmDelete)))."</td>
                         </tr>";
                 }
                 $tool_content .= "</tbody></table>";
@@ -908,10 +914,21 @@ if ($is_editor) {
                 $tool_content .= "</td>";
                 $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".
-                        icon('add', $langAttendanceBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id")."&nbsp;"
-                       .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"
-                       .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langConfirmDelete');\"")
-                      ."</td></tr>";
+                        
+                        action_button(array(
+                                    array('title' => $langDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete'),
+                                    array('title' => $langAttendanceBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"),
+                                    array('title' => $langModify,
+                                        'icon' => 'fa-edit',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
+                                        ))).
+                        "</td></tr>";
             } // end of while
         }
         $tool_content .= "</table></div></div></div>";
