@@ -867,39 +867,36 @@ if ($is_editor) {
         if ($announcementNumber > 0) {
             $tool_content .= "<h3>$langAttendanceActList</h3>
                               <div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                              <table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langType</th>";
-            $tool_content .= "<th>$langAttendanceAbsences</th>";
-            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-            $tool_content .= "</tr>";
+                              <table class='table-default'>
+                            <tr>
+                                <th>$langTitle</th>
+                                <th>$langAttendanceActivityDate</th>
+                                <th>$langType</th>
+                                <th>$langAttendanceAbsences</th>
+                                <th class='text-center'><i class='fa fa-cogs'></i></th>
+                            </tr>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
+            Session::Messages("$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3");
         }
         if ($result){
             foreach ($result as $announce) {               
                 $content = ellipsize_html($announce->description, 50);
-                
                 $d = strtotime($announce->date);
-               
-
-                $tool_content .= "
-                        <td><b>";
-
-                if (empty($announce->title)) {
+                $tool_content .= "<tr><td>";
+                 if (empty($announce->title)) {
                     $tool_content .= $langAnnouncementNoTille;
                 } else {
                     $tool_content .= q($announce->title);
                 }
-                $tool_content .= "</b>";
-                $tool_content .= "</td>"
-                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>";
+                $tool_content .= "</td>
+                        <td>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . " ($langHour: " . ucfirst(date('H:i', $d)) . ")</td>";
                 $tool_content .= "<td class='smaller'>";
                 if($announce->module_auto_id) {
-                	if($announce->module_auto_id == 1) {
-                		$tool_content .= $langExercise;
-                	}elseif($announce->module_auto_id == 2) {
-                		$tool_content .= $langAssignment;
-                	}
+                    if($announce->module_auto_id == 1) {
+                            $tool_content .= $langExercise;
+                    }elseif($announce->module_auto_id == 2) {
+                            $tool_content .= $langAssignment;
+                    }
                     if($announce->auto){
                         $tool_content .= "<br>($langAttendanceInsAut)";
                     } else {
@@ -909,12 +906,12 @@ if ($is_editor) {
                     $tool_content .= $langAttendanceActivity;
                 }
                 $tool_content .= "</td>";
-                $tool_content .= "<td class='text-right'>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
+                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".
                         icon('add', $langAttendanceBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id")."&nbsp;"
                        .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"
                        .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langConfirmDelete');\"")
-                      ."</td>";
+                      ."</td></tr>";
             } // end of while
         }
         $tool_content .= "</table></div></div></div>";
