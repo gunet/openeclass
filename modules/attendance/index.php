@@ -198,62 +198,77 @@ if ($is_editor) {
     //DISPLAY: new (or edit) activity form to attendance module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
 
-        $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>
-            <legend>$langAttendanceActivity</legend>
-            <table class='tbl' width='100%'>";
         
-        if (isset($_GET['modify'])) { //edit an existed activity
-            $id = intval($_GET['modify']);
-            
-            //all activity data (check if it is in this attendance)
-            $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
-            $titleToModify = $mofifyActivity->title;
-            $contentToModify = $mofifyActivity->description;
-            $attendanceActivityToModify = $id;
-            $date = $mofifyActivity->date;
-            $module_auto_id = $mofifyActivity->module_auto_id;
-            $auto = $mofifyActivity->auto;
-
-        } else { //new activity 
-            $attendanceActivityToModify = "";
-            $titleToModify = '';
-            $contentToModify = '';
-        }
-
         $tool_content .= "
-            <tr><th>$langTitle:</th></tr>
-            <tr>
-              <td><input type='text' name='actTitle' value='$titleToModify' size='50' /></td>
-            </tr>
-            <tr><th>$langAttendanceActivityDate:</th></tr>
-            <tr>
-              <td><input type='text' name='date' value='" . @datetime_remove_seconds($date) . "'></td>
-            </tr>
-            <tr><th>$langDescription:</th></tr>
-            <tr>
-              <td>" . rich_text_editor('actDesc', 4, 20, $contentToModify) . "</td>
-            </tr>";
-        if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism            
-            $tool_content .= "<tr><td>$langAttendanceAutoBook: <input type='checkbox' value='1' name='auto' ";
-            if ($auto) {
-                $tool_content .= " checked";
-            }
-            $tool_content .= " /></td>";
-        }    
-        $tool_content .= "
-                <tr>
-                  <td class='right'><input type='submit' name='submitAttendanceActivity' value='$langAdd' /></td>
-                </tr>
-            </table>";
-        if (isset($_GET['modify'])) { 
-            $tool_content .= "
-                            <input type='hidden' name='id' value='" . $attendanceActivityToModify . "' />";
-        }
-         $tool_content .= "
-            </fieldset>
-            </form>";
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' >
+                        <fieldset>
+                            <legend>$langAttendanceActivity</legend>";
+                                if (isset($_GET['modify'])) { //edit an existed activity
+                                    $id = intval($_GET['modify']);
+
+                                    //all activity data (check if it is in this attendance)
+                                    $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
+                                    $titleToModify = $mofifyActivity->title;
+                                    $contentToModify = $mofifyActivity->description;
+                                    $attendanceActivityToModify = $id;
+                                    $date = $mofifyActivity->date;
+                                    $module_auto_id = $mofifyActivity->module_auto_id;
+                                    $auto = $mofifyActivity->auto;
+
+                                } else { //new activity 
+                                    $attendanceActivityToModify = "";
+                                    $titleToModify = '';
+                                    $contentToModify = '';
+                                }
+        $tool_content .= "<div class='form-group'>
+                                <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='actTitle' value='$titleToModify' />
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label for='date' class='col-sm-2 control-label'>$langAttendanceActivityDate:</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='date' value='" . @datetime_remove_seconds($date) . "'>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label for='actDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                                <div class='col-sm-10'>
+                                    " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
+                                </div>
+                            </div>";
+                            if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism            
+                                $tool_content .= "<div class='form-group'>
+                                <label for='actDesc' class='col-sm-2 control-label'>$langAttendanceAutoBook:</label>
+                                        <div class='col-sm-10'>
+                                        <input class='form-control' type='checkbox' value='1' name='auto' ";
+                                if ($auto) {
+                                    $tool_content .= " checked";
+                                }
+                                $tool_content .= " /></div></div>";
+                            }  
+                           $tool_content .= "
+                            <div class='form-group'>
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' name='submitAttendanceActivity' value='$langAdd' />
+                                </div>
+                            </div>";
+                            if (isset($_GET['modify'])) { 
+                                $tool_content .= "
+                                                <input type='hidden' name='id' value='" . $attendanceActivityToModify . "' />";
+                            }
+                        $tool_content .= "</fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
+        
+        
+        
         
         //do not show the activities list
         $showAttendanceActivities = 0;
@@ -586,6 +601,7 @@ if ($is_editor) {
                 redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendanceBook=1&update=true');
             } else {
                 $tool_content .= "<div class='alert1'>$langNoStudents</div>";
+                
             }            
         }
         
