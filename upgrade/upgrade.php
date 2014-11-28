@@ -2015,7 +2015,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `actionsdailymoduleindex` (`module_id`),
                 KEY `actionsdailycourseindex` (`course_id`) )");
 
-
+    Database::get()->query("ALTER TABLE monthly_summary CHANGE details details MEDIUMTEXT");
+    
     // drop stale full text indexes
     if (DBHelper::indexExists('document', 'document')) {
         Database::get()->query("ALTER TABLE document DROP INDEX document");
@@ -2029,9 +2030,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (DBHelper::indexExists('unit_resources', 'unit_resources_title')) {
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
-
-    updateInfo(-1, $langDeleteField, delete_field('cours', 'faculte'));
-
+    
     // // ----------------------------------
     // creation of indexes
     // ----------------------------------

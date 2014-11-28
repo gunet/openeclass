@@ -404,7 +404,7 @@ $db->query("CREATE TABLE monthly_summary (
         visitorsNum int(11) NOT NULL default 0,
         coursNum int(11) NOT NULL default 0,
         logins int(11) NOT NULL default 0,
-        details text,
+        details MEDIUMTEXT,
         PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
