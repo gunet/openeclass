@@ -537,7 +537,7 @@ if ($is_editor) {
             if ($resultUsers) {
                 //table to display the users
                 $tool_content .= "
-                <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+                <table width='100%' id='users_table{$course_id}' class='table-default custom_list_order'>
                     <thead>
                         <tr>
                           <th width='1'>$langID</th>
