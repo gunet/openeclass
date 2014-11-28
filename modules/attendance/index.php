@@ -267,9 +267,6 @@ if ($is_editor) {
             </div>
         </div>";
         
-        
-        
-        
         //do not show the activities list
         $showAttendanceActivities = 0;
     }
@@ -360,14 +357,16 @@ if ($is_editor) {
             //update
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
-            $message = "<p class='success'>$langAttendanceEdit</p>";
-            $tool_content .= $message . "<br/>";
+            
+            Session::Messages($langAttendanceEdit,"alert-success");
+            redirect_to_home_page("modules/attendance/index.php");
         }
         else{
             //insert
             $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s", $attendance_id, $actTitle, $actDate, $actDesc);            
-            $message = "<p class='success'>$langAttendanceSucInsert</p>";
-            $tool_content .= $message . "<br/>";
+            
+            Session::Messages($langAttendanceSucInsert,"alert-success");
+            redirect_to_home_page("modules/attendance/index.php");
         }
         //show activities list
         $showAttendanceActivities = 1;
