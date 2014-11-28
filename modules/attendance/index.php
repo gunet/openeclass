@@ -363,8 +363,8 @@ if ($is_editor) {
         $attendance_limit = intval($_POST['limit']);
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
-        $message = "<p class='success'>$langAttendanceLimit</p>";
-        $tool_content .= $message . "<br/>";
+        Session::Messages($langAttendanceLimit,"alert-success");
+        redirect_to_home_page("modules/attendance/index.php");
     }
 
     //DELETE DB: delete activity form to attendance module
