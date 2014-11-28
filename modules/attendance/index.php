@@ -103,7 +103,7 @@ if ($is_editor) {
     }
         
     // action and navigation bar
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+    $tool_content .= "<div class='row'><div class='col-sm-12'>";
     if(isset($_GET['editUsers'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $nameTools = $langConfig;
@@ -190,7 +190,7 @@ if ($is_editor) {
         
     }       
     
-    $tool_content .= "</ul></div>";
+    $tool_content .= "</div></div>";
 
     //FLAG: flag to show the activities
     $showAttendanceActivities = 1;       
