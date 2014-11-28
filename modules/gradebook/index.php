@@ -247,7 +247,7 @@ if ($is_editor) {
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
-                        <form <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                             <fieldset>
                                 <legend>$langGradebookActAttend</legend>";
                                 if (isset($_GET['modify'])) { //edit an existed activity            

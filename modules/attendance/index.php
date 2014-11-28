@@ -597,34 +597,60 @@ if ($is_editor) {
         
         //section to reset the attendance users list
         $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-            <fieldset>
-            <h3>$langRefreshList</h3><small>($langAttendanceInfoForUsers)</small><br><br>
-            <select name='usersLimit'>                
-                <option value='1'>$langAttendanceActiveUsers6</option>
-                <option value='2'>$langAttendanceActiveUsers3</option>
-                <option value='3'>$langAttendanceActiveUsersAll</option>
-            </select>
-            <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
-            </fieldset>
-        </form>";
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <fieldset>
+                            <h3>$langRefreshList</h3><small>($langAttendanceInfoForUsers)</small><br><br>
+                            <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <select name='usersLimit' class='form-control'>                
+                                        <option value='1'>$langAttendanceActiveUsers6</option>
+                                        <option value='2'>$langAttendanceActiveUsers3</option>
+                                        <option value='3'>$langAttendanceActiveUsersAll</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
                                
         //=================
         //attendance limit
         //=================
-        $tool_content .= "<fieldset><legend>$langAttendanceLimitTitle</legend>";
-        $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">            
-            <table class='tbl' width='50%'>
-                <tr>
-                  <th>$langAttendanceLimitNumber:</th><td><input type='text' name='limit' value='$attendance_limit' size='5' /></td>
-                </tr>
-                <tr>
-                  <td class='left'><input type='submit' name='submitAttendanceLimit' value='$langAttendanceUpdate' /></td>
-                </tr>
-            </table>            
-            </form>
-            </fieldset>";
+        
+         $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <fieldset>
+                            <h3>$langAttendanceLimitTitle</h3><br><br>
+                            <div class='form-group'>
+                                <label for='limit' class='col-sm-2 control-label'>$langAttendanceLimitNumber:</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' name='submitAttendanceLimit' value='$langAttendanceUpdate' />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
+        
         //do not show activities list 
         $showAttendanceActivities = 0;
     }
