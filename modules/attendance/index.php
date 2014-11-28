@@ -544,7 +544,7 @@ if ($is_editor) {
                           <th><div align='left' width='100'>$langName $langSurname</div></th>
                           <th class='center' width='80'>$langRegistrationDateShort</th>
                           <th class='center'>$langAttendanceAbsences</th>
-                          <th class='center'>$langActions</th>
+                          <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -558,7 +558,7 @@ if ($is_editor) {
                             <td>" . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                             <td>" . nice_format($resultUser->reg_date) . "</td>
                             <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
-                            <td class='center'>"
+                            <td class='option-btn-cell'>"
                                 .icon('add', $langAttendanceBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID). "&nbsp;" 
                                 .icon('delete', $langAttendanceDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes", "onClick=\"return confirmation('$langConfirmDelete');\"")."</td>
                         </tr>";
