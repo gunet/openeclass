@@ -50,6 +50,12 @@ $(function() {
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
+               'fnDrawCallback': function( oSettings ) {
+                            $('#users_table{$course_id} label input').attr({
+                              class : 'form-control input-sm',
+                              placeholder : '$langSearch...'
+                            });
+                        },
                'sPaginationType': 'full_numbers',              
                 'bSort': true,
                 'oLanguage': {                       
@@ -59,7 +65,7 @@ $(function() {
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
+                       'sSearch':       '',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
@@ -490,7 +496,7 @@ if ($is_editor) {
                         $tool_content .= "<tr class='odd'>";
                     }
 
-                    $tool_content .= "<td width='16' valign='top'>
+                    $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
 
@@ -515,7 +521,7 @@ if ($is_editor) {
                         $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                     }
 
-                    $tool_content .= "<td width='70' class='center'>
+                    $tool_content .= "<td class='center'>
                     <input type='checkbox' value='1' name='" . $activ->id . "'";
                     if(isset($userAttend) && $userAttend) {
                         $tool_content .= " checked";
@@ -537,12 +543,12 @@ if ($is_editor) {
             if ($resultUsers) {
                 //table to display the users
                 $tool_content .= "
-                <table width='100%' id='users_table{$course_id}' class='table-default custom_list_order'>
+                <table id='users_table{$course_id}' class='table-default custom_list_order'>
                     <thead>
                         <tr>
                           <th width='1'>$langID</th>
-                          <th><div align='left' width='100'>$langName $langSurname</div></th>
-                          <th class='center' width='80'>$langRegistrationDateShort</th>
+                          <th><div align='left'>$langName $langSurname</div></th>
+                          <th class='center'>$langRegistrationDateShort</th>
                           <th class='center'>$langAttendanceAbsences</th>
                           <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>
@@ -702,7 +708,7 @@ if ($is_editor) {
                     $tool_content .= "<tr class='odd'>";
                 }
 
-                $tool_content .= "<td width='16' valign='top'>
+                $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
 
@@ -716,7 +722,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")."&nbsp;";
+                $tool_content .= "<td class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")."&nbsp;";
                 $k++;         
             }
             $tool_content .= "</table>";
@@ -752,7 +758,7 @@ if ($is_editor) {
                     $tool_content .= "<tr class='odd'>";
                 }
 
-                $tool_content .= "<td width='16' valign='top'>
+                $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
 
@@ -766,7 +772,7 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td width='70' class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")."&nbsp;";                     
+                $tool_content .= "<td class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")."&nbsp;";                     
                 $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
@@ -804,7 +810,7 @@ if ($is_editor) {
                     }
                 }
                 
-                $message = "<p class='success'>$langAttendanceEdit</p>";
+                Session::Messages($langAttendanceEdit,"alert-success");
                 $tool_content .= $message . "<br/>";
             }
         }
@@ -822,7 +828,7 @@ if ($is_editor) {
             //table to display the users
             $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
-            <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+            <table width='100%' id='users_table{$course_id}' class='table-default custom_list_order'>
                 <thead>
                     <tr>
                       <th width='1'>$langID</th>
@@ -843,7 +849,7 @@ if ($is_editor) {
                         <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
-                        <td width='70' class='center'>
+                        <td class='center'>
                             <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
@@ -962,7 +968,7 @@ if ($is_editor) {
                 $tool_content .= "<tr class='odd'>";
             }
 
-            $tool_content .= "<td width='16' valign='top'>
+            $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
 
@@ -976,7 +982,7 @@ if ($is_editor) {
                     . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                     . "<td>" . $content . "</td>";
 
-            $tool_content .= "<td width='70' class='center'>";
+            $tool_content .= "<td class='center'>";
             //check if the user has attend for this activity
             $userAttend = Database::get()->querySingle("SELECT attend FROM attendance_book
                                                         WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);

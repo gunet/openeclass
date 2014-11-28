@@ -1829,11 +1829,11 @@ td.option-btn-cell {
 }
 
 /* line 1714, ../SASS/inventory.scss */
-#portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter {
+.dataTables_filter {
   position: relative;
 }
 /* line 1717, ../SASS/inventory.scss */
-#portfolio_lessons_filter:before, #inbox_table_filter:before, #outbox_table_filter:before {
+.dataTables_filter:before {
   position: absolute;
   font-family: FontAwesome;
   top: 6px;
@@ -1842,12 +1842,12 @@ td.option-btn-cell {
   color: #999;
 }
 /* line 1725, ../SASS/inventory.scss */
-#portfolio_lessons_filter label, #inbox_table_filter label, #outbox_table_filter label {
+.dataTables_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
 /* line 1729, ../SASS/inventory.scss */
-#portfolio_lessons_filter input, #inbox_table_filter input, #outbox_table_filter input {
+.dataTables_filter input {
   margin: 0px;
   padding-right: 25px;
 }

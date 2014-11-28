@@ -1711,7 +1711,7 @@ td.option-btn-cell{
     border-top: 1px #ddd solid;
 }
 
-#portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter
+.dataTables_filter
 {
     position: relative;
     &:before{
