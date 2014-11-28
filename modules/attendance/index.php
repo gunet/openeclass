@@ -822,31 +822,24 @@ if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
         $announcementNumber = count($result);
         if ($announcementNumber > 0) {
-            $tool_content .= "<fieldset><legend>$langAttendanceActList</legend>";
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t2'>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langType</th>";
-            $tool_content .= "<th width='80'>$langAttendanceAbsences</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
+            $tool_content .= "<h3>$langAttendanceActList</h3>
+                              <div class='row'><div class='col-sm-12'><div class='table-responsive'>
+                              <table class='table-default'>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate</th><th>$langType</th>";
+            $tool_content .= "<th>$langAttendanceAbsences</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
         }
-        $k = 0;
         if ($result){
             foreach ($result as $announce) {               
                 $content = ellipsize_html($announce->description, 50);
                 
                 $d = strtotime($announce->date);
-                
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
+               
 
-                $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                $tool_content .= "
                         <td><b>";
 
                 if (empty($announce->title)) {
@@ -873,16 +866,15 @@ if ($is_editor) {
                     $tool_content .= $langAttendanceActivity;
                 }
                 $tool_content .= "</td>";
-                $tool_content .= "<td width='70' class='center'>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
-                $tool_content .= "<td width='70' class='right'>".
+                $tool_content .= "<td class='text-right'>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
+                $tool_content .= "<td class='text-center option-btn-cell'>".
                         icon('add', $langAttendanceBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id")."&nbsp;"
                        .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"
                        .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langConfirmDelete');\"")
                       ."</td>";
-                $k++;
             } // end of while
         }
-        $tool_content .= "</table></fieldset>";
+        $tool_content .= "</table></div></div></div>";
 
         
     }    
