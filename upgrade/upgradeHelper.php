@@ -1,9 +1,7 @@
 <?php
 
 function getInfoAreas() {
-    return '<div id="progress" style="width:500px;border:1px solid #ccc;"></div>
-<div id="information" style="width"></div>
-';
+    return '<div id="progressbar-outer"><div id="progressbar-inner"></div></div><div id="progressbar-info"></div>';
 }
 
 function updateInfo($percent, $infoText, $debug = true) {
@@ -11,9 +9,9 @@ function updateInfo($percent, $infoText, $debug = true) {
         Debug::message($infoText, Debug::WARNING);
     echo '<script language="javascript">';
     if ($percent >= 0) {
-        echo 'document.getElementById("progress").innerHTML="<div style=\"width:' . ($percent * 100) . '%;background-color:#ddd;\">&nbsp;</div>";';
+        echo 'document.getElementById("progressbar-inner").style="width:' . ($percent * 100) . '%;";';
     }
-    echo 'document.getElementById("information").innerHTML="' . addslashes($infoText) . '";</script>
+    echo 'document.getElementById("progressbar-info").innerHTML="' . addslashes($infoText) . '";</script>
 ';
     // This is for the buffer achieve the minimum size in order to flush data
 //    echo str_repeat(' ', 1024 * 64);
