@@ -2387,10 +2387,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
     updateInfo(1, $langUpgradeSuccess);
+    $logdate = date("Y-m-d_G:i:s");
 
-    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b></div><p/>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">Log output</a></div><p/>";
     if ($debug_error) {
-        $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>" . $debug_output;
+        $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
     }
     updateInfo(1, $output_result, false);
+    $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
+    file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
 } // end of if not submit                
