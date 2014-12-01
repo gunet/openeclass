@@ -50,12 +50,12 @@ if (count($courses) > 0) {
     }
     $grade_content .= "</table></div></div></div>";
     if (!$content) {
-        Session::Messages($langNoGradebook);
+        $tool_content .= "<div class='alert1'>$langNoGradebook</div>";
     } else {
         $tool_content .= $grade_content;
     }
 } else {
-    Session::Messages($langNoGradebook);
+    $tool_content .= "<div class='alert1'>$langNoGradebook</div>";
 }
 
 
