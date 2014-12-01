@@ -287,6 +287,7 @@ if ($is_editor) {
                     $thisAnnouncementOrderFound = true;
                 }
            }
+           redirect_to_home_page("modules/announcements/index.php?course=$course_code");
   }
 
     /* modify */
@@ -448,7 +449,7 @@ if ($is_editor) {
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary')));
+                      'level' => 'primary-label')));
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
