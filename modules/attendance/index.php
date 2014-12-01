@@ -164,7 +164,6 @@ if ($is_editor) {
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $nameTools = $langAttendanceBook;
-        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1'>$langAttendanceBook</a></li>";
         $tool_content .= action_bar(array(
             array('title' => $langAttendanceBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
@@ -569,13 +568,14 @@ if ($is_editor) {
                             <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
                             <td class='option-btn-cell'>"
                                . action_button(array(
-                                    array('title' => $langAttendanceBook,
-                                          'icon' => 'fa-add',
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID),
                                     array('title' => $langAttendanceDelete,
-                                       'icon' => 'fa-times',
-                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
-                                       'confirm' => $langConfirmDelete)))."</td>
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete'),
+                                    array('title' => $langAttendanceBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID)))."</td>
                         </tr>";
                 }
                 $tool_content .= "</tbody></table>";
