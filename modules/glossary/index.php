@@ -144,8 +144,8 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit'])) {
-        if (!isset($_POST['category_id']) or $_POST['category_id'] == 'none') {
-            $category_id = 'NULL';
+        if (!isset($_POST['category_id']) || $_POST['category_id'] == 0) {
+            $category_id = NULL;
         } else {
             $category_id = intval($_POST['category_id']);
         }
@@ -263,7 +263,7 @@ if ($is_editor) {
             $submit_value = $langModify;
         }
         if ($categories) {
-            $categories['none'] = '-';
+            $categories[0] = '-';
             $category_selection = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
@@ -330,19 +330,6 @@ if ($is_editor) {
     }
 }
 
-if ($glossary_index and count($prefixes) > 1) {
-    $tool_content .= "<div class='alphabetic_index'>";
-    $begin = true;
-    foreach ($prefixes as $letter) {
-        $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
-                (isset($_GET['prefix']) and $_GET['prefix'] == $letter);
-        $tool_content .= ($begin ? '' : ' | ') .
-                ($active ? '<b>' : "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
-                q($letter) . ($active ? '</b>' : '</a>');
-        $begin = false;
-    }
-    $tool_content .= "</div>";
-}
 
 /* * ***********************************************
   // display glossary
@@ -365,77 +352,92 @@ if (isset($_GET['edit'])) {
     $where = "AND term LIKE ?s";
     $terms[] = $prefixes[0] . '%';
 }
-if ($cat_id) {
-    $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-    $nameTools = q($categories[$cat_id]);
-    $where .= " AND category_id = $cat_id";
-}
-$sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
-                        FROM glossary WHERE course_id = ?d $where
-                        GROUP BY term
-                        ORDER BY term", $course_id, $terms);
-if (count($sql) > 0) {
-    $tool_content .= "<div class='table-responsive'>";
-    $tool_content .= "<table class='table-default'>";
-    $tool_content .= "<tr>
-		 <th class='text-left'>$langGlossaryTerm</th>
-		 <th class='text-left'>$langGlossaryDefinition</th>";
-    if ($is_editor) {
-        $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+
+if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
+    if ($glossary_index and count($prefixes) > 1) {
+        $tool_content .= "<div class='alphabetic_index'>";
+        $begin = true;
+        foreach ($prefixes as $letter) {
+            $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
+                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter);
+            $tool_content .= ($begin ? '' : ' | ') .
+                    ($active ? '<b>' : "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
+                    q($letter) . ($active ? '</b>' : '</a>');
+            $begin = false;
+        }
+        $tool_content .= "</div>";
+    }    
+    if ($cat_id) {
+        $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
+        $nameTools = q($categories[$cat_id]);
+        $where .= " AND category_id = $cat_id";
     }
-    $tool_content .= "</tr>";    
-    foreach ($sql as $g) {
-        if (isset($_GET['id'])) {
-            $nameTools = q($g->term);
-        }        
-        if (!empty($g->url)) {
-            $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .
-                    "' target='_blank'>" . q($g->url) . "</a>)</span></div>";
-        } else {
-            $urllink = '';
-        }
-
-        if (!empty($g->category_id)) {
-            $cat_descr = "<span class='smaller'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
-        } else {
-            $cat_descr = '';
-        }
-
-        if (!empty($g->notes)) {
-            $urllink .= "<br>" . standard_text_escape($g->notes);
-        }
-
-        if (!empty($g->definition)) {
-            $definition_data = q($g->definition);
-        } else {
-            $definition_data = '-';
-        }
-
+    $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+                            FROM glossary WHERE course_id = ?d $where
+                            GROUP BY term
+                            ORDER BY term", $course_id, $terms);
+    if (count($sql) > 0) {
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr>
-		 <th width='150'><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a> <div class='invisible'>$cat_descr</div></th>
-                 <td><em>$definition_data</em>$urllink</td>";
-        
+                     <th class='text-left'>$langGlossaryTerm</th>
+                     <th class='text-left'>$langGlossaryDefinition</th>";
         if ($is_editor) {
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                    array('title' => $langEdit,
-                          'url' => "$edit_url&amp;edit=$g->id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $langDelete,
-                          'url' => "$edit_url&amp;delete=$g->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete))
-                );
-           $tool_content .= "</td>";
-        }                        
-        $tool_content .= "</tr>";        
-    }
-    $tool_content .= "</table></div>";
-} else {
-    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
-}
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+        }
+        $tool_content .= "</tr>";    
+        foreach ($sql as $g) {
+            if (isset($_GET['id'])) {
+                $nameTools = q($g->term);
+            }        
+            if (!empty($g->url)) {
+                $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .
+                        "' target='_blank'>" . q($g->url) . "</a>)</span></div>";
+            } else {
+                $urllink = '';
+            }
 
+            if (!empty($g->category_id)) {
+                $cat_descr = "<span class='smaller'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
+            } else {
+                $cat_descr = '';
+            }
+
+            if (!empty($g->notes)) {
+                $urllink .= "<br>" . standard_text_escape($g->notes);
+            }
+
+            if (!empty($g->definition)) {
+                $definition_data = q($g->definition);
+            } else {
+                $definition_data = '-';
+            }
+
+            $tool_content .= "<tr>
+                     <th width='150'><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a> <div class='invisible'>$cat_descr</div></th>
+                     <td><em>$definition_data</em>$urllink</td>";
+
+            if ($is_editor) {
+                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= action_button(array(
+                        array('title' => $langEdit,
+                              'url' => "$edit_url&amp;edit=$g->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                              'url' => "$edit_url&amp;delete=$g->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDelete))
+                    );
+               $tool_content .= "</td>";
+            }                        
+            $tool_content .= "</tr>";        
+        }
+        $tool_content .= "</table></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+    }
+}
 draw($tool_content, 2, null, $head_content);
 
 
