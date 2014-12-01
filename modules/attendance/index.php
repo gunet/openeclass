@@ -693,19 +693,18 @@ if ($is_editor) {
         $checkForAssNumber = count($checkForAss);        
         
         if ($checkForAssNumber > 0) {
+            $tool_content .= "<h3>$langWorks</h3>";
+            $tool_content .= "<div class='row'><div class='col-sm-12><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
-            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";       
             foreach ($checkForAss as $newAssToAttendance) {
                 $content = ellipsize_html($newAssToAttendance->description, 50);
                 $d = strtotime($newAssToAttendance->deadline);
                 
                 $tool_content .= "<tr>";
-                $tool_content .= "<td valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+                $tool_content .= "<td><b>";
 
                 if (empty($newAssToAttendance->title)) {
                     $tool_content .= $langAnnouncementNoTille;
@@ -717,19 +716,17 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td class='center'>".action_button(array(
+                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                     array('title' => $langAdd,
                                         'icon' => 'fa-plus',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")));
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div></div></div>";
         } else {
             Session::Messages($langAttendanceNoActMessageAss4);
         }
         
         $showAttendanceActivities = 0;
-        Session::Messages("ok","alert-success");
-        redirect_to_home_page("modules/attendance/index.php");
     }
     
     //
