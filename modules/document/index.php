@@ -711,7 +711,7 @@ if ($can_upload) {
                           </tr>
                           <tr>
                             <th>$langTitle:</th>
-                            <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+                            <td><input type='text' name='file_title' value='$oldTitle' /></td>
                           </tr>
                           <tr>
                             <th>$langComment:</th>
@@ -841,11 +841,11 @@ if ($can_upload) {
                           </tr>
                           <tr>
                             <th>$langTitle:</th>
-                            <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+                            <td><input class='form-control' type='text' name='file_title' value='$oldTitle'></td>
                           </tr>
                           <tr>
                             <th>$langComment:</th>
-                            <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
+                            <td><input class='form-control' type='text' name='file_comment' value='$oldComment'></td>
                           </tr>
                           <tr>
                             <th>$langCategory:</th>
@@ -856,22 +856,22 @@ if ($can_upload) {
                         '3' => $langCategoryEssay,
                         '4' => $langCategoryDescription,
                         '5' => $langCategoryExample,
-                        '6' => $langCategoryTheory), 'file_category', $oldCategory) . "</td>
+                        '6' => $langCategoryTheory), 'file_category', $oldCategory, "class='form-control'") . "</td>
                           </tr>
                           <tr>
                             <th>$langSubject : </th>
-                            <td><input type='text' size='60' name='file_subject' value='$oldSubject' /></td>
+                            <td><input class='form-control' type='text' name='file_subject' value='$oldSubject'></td>
                           </tr>
                           <tr>
                             <th>$langDescription : </th>
-                            <td><input type='text' size='60' name='file_description' value='$oldDescription' /></td>
+                            <td><input class='form-control' type='text' name='file_description' value='$oldDescription'></td>
                           </tr>
                           <tr>
                             <th>$langAuthor : </th>
-                            <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
+                            <td><input class='form-control' type='text' name='file_author' value='$oldAuthor'></td>
                           </tr>";
             $dialogBox .= "<tr><th>$langCopyrighted : </th><td>";
-            $dialogBox .= selection($copyright_titles, 'file_copyrighted', $oldCopyrighted) . "</td></tr>";
+            $dialogBox .= selection($copyright_titles, 'file_copyrighted', $oldCopyrighted, "class='form-control'") . "</td></tr>";
 
             // display combo box for language selection
             $dialogBox .= "
@@ -883,7 +883,7 @@ if ($can_upload) {
                         'de' => $langGerman,
                         'el' => $langGreek,
                         'it' => $langItalian,
-                        'es' => $langSpanish), 'file_language', $oldLanguage) .
+                        'es' => $langSpanish), 'file_language', $oldLanguage, "class='form-control'") .
                     "</td>
                         </tr>
                         <tr>
