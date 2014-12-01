@@ -184,7 +184,7 @@ if ($is_editor) {
                   'level' => 'primary-label'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-users'),
             array('title' => $langGradebookAddActivity,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
                   'icon' => 'fa fa-plus'),
@@ -797,12 +797,12 @@ if ($is_editor) {
         
         if ($checkForAssNumber > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
-            $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langDescription</th>";
-            $tool_content .= "<th width='60' class='text-center'>$langActions</th>"; 
-            $tool_content .= "</tr>";        
-            $k = 0;        
+                <div class='row'><div class='col-sm-12'><div class='table-responsive'>
+                <h4>$langWorks</h4>
+                              <table class='table-default sortable' id='t1'>";
+            $tool_content .= "<tr><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>"; 
+            $tool_content .= "</tr>";           
             foreach ($checkForAss as $newAssToGradebook) {
                 $content = ellipsize_html($newAssToGradebook->description, 50);
                 if($newAssToGradebook->assign_to_specific){
@@ -813,17 +813,16 @@ if ($is_editor) {
                     }
                 }
 
-                $d = strtotime($newAssToGradebook->deadline);
-
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
+                if((int) $newAssToGradebook->deadline){
+                    $d = strtotime($newAssToGradebook->deadline);
+                    $date_str = ucfirst(claro_format_locale_date($dateFormatLong, $d));
+                    $hour_str = "($langHour: " . ucfirst(date('H:i', $d)).")";
+                }else{
+                    $date_str = $m['no_deadline'];
+                    $hour_str = "";
                 }
 
-                $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+                $tool_content .= "<tr><td><b>";
 
                 if (empty($newAssToGradebook->title)) {
                     $tool_content .= $langAnnouncementNoTille;
@@ -832,12 +831,11 @@ if ($is_editor) {
                 }
                 $tool_content .= "</b>";
                 $tool_content .= "</td>"
-                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
+                        . "<td><div class='smaller'><span class='day'>$date_str</span> $hour_str </div></td>"
                         . "<td>" . $content . "</td>";
                 $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1")."&nbsp;";
-                $k++;
             } // end of while        
-            $tool_content .= "</table>";
+            $tool_content .= "</tr></table></div></div></div>";
         } else {
                $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageAss4</p>";
         }
