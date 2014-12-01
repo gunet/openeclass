@@ -183,7 +183,7 @@ if ($is_editor) {
                   'level' => 'primary-label'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-users'),
             array('title' => $langGradebookAddActivity,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
                   'icon' => 'fa fa-plus'),
@@ -693,21 +693,16 @@ if ($is_editor) {
         $checkForAssNumber = count($checkForAss);        
         
         if ($checkForAssNumber > 0) {
-            $tool_content .= "<table width='100%' class='sortable' id='t1'>";
+            $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr><th colspan='2'>$langWorks</th></tr>";
             $tool_content .= "<tr><th colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
-            $tool_content .= "</tr>";
-            $k = 0;        
+            $tool_content .= "</tr>";       
             foreach ($checkForAss as $newAssToAttendance) {
                 $content = ellipsize_html($newAssToAttendance->description, 50);
                 $d = strtotime($newAssToAttendance->deadline);
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-
+                
+                $tool_content .= "<tr>";
                 $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td><b>";
@@ -722,15 +717,19 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")."&nbsp;";
-                $k++;         
+                $tool_content .= "<td class='center'>".action_button(array(
+                                    array('title' => $langAdd,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")));
             }
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageAss4</p>";
+            Session::Messages($langAttendanceNoActMessageAss4);
         }
         
         $showAttendanceActivities = 0;
+        Session::Messages("ok","alert-success");
+        redirect_to_home_page("modules/attendance/index.php");
     }
     
     //
