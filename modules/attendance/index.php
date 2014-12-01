@@ -451,12 +451,13 @@ if ($is_editor) {
             $announcementNumber = count($result);
 
             if ($announcementNumber > 0) {
-                $tool_content .= "<fieldset><legend>" . display_user($userID) . "</legend>";
+                $tool_content .= "<h4>". display_user($userID) ."</h4>";
+                $tool_content .= "<fieldset>";
                 $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                                     <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "'>
-                                  <table width='100%' class='sortable' id='t2'>";
-                $tool_content .= "<tr><th  colspan='2'>" . $m['title'] . "</th>"
-                                . "<th >" . $langdate . "</th>"                                
+                                  <table class='table-default sortable' id='t2'>";
+                $tool_content .= "<tr><th>" . $m['title'] . "</th>"
+                                . "<th>" . $langdate . "</th>"                                
                                 . "<th>$langType</th>";
                 $tool_content .= "<th width='60' class='center'>" . $langAttendanceBooking . "</th>";
                 $tool_content .= "</tr>";
@@ -465,7 +466,6 @@ if ($is_editor) {
             }
             
             //ui counter 
-            $k = 0;
             if ($result){                
                 foreach ($result as $activ) {                    
                     //check if there is auto mechanism
@@ -492,15 +492,7 @@ if ($is_editor) {
                     $content = standard_text_escape($activ->description);
                     $activ->date = claro_format_locale_date($dateFormatLong, strtotime($activ->date));
 
-                    if ($k % 2 == 0) {
-                        $tool_content .= "<tr class='even'>";
-                    } else {
-                        $tool_content .= "<tr class='odd'>";
-                    }
-
-                    $tool_content .= "<td valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+                    $tool_content .= "<tr><td><b>";
 
                     if (empty($activ->title)) {
                         $tool_content .= $langAnnouncementNoTille;
@@ -530,12 +522,10 @@ if ($is_editor) {
                     }    
                     $tool_content .= ">
                     <input type='hidden' value='" . $userID . "' name='userID'>    
-                    </td>";
-                    $k++;
+                    </td></tr>";
                 } // end of while
             }
-            $tool_content .= "<tr><td colspan=6 class='right'><input type='submit' name='bookUser' value='$langAttendanceBooking' /></td></tr>";
-            $tool_content .= "</table></form></fieldset>";
+            $tool_content .= "</table><input type='submit' class='btn btn-default' name='bookUser' value='$langAttendanceBooking' /></form></fieldset>";
         } elseif (isset($_GET['attendanceBook'])) {        
             //======================
             //show all the students
