@@ -211,6 +211,8 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
             $message = "<p class='success'>$langGradebookEdit</p>";
             $tool_content .= $message . "<br/>";
+            Session::Messages($langGradebookEdit);
+            redirect_to_home_page("modules/gradebook/index.php");
         }
     }
     
@@ -445,14 +447,14 @@ if ($is_editor) {
                 $id = $_POST['id'];
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
                 $langAnnDel = "$langGradebookEdit";
-                $message = "<p class='success'>$langAnnDel</p>";
-                $tool_content .= $message . "<br/>";
+                Session::Messages("$langAnnDel", "alert-success");
+                redirect_to_home_page("modules/gradebook/index.php");
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type);
                 $langAnnDel = "$langGradebookSucInsert";
-                $message = "<p class='success'>$langAnnDel</p>";
-                $tool_content .= $message . "<br/>";
+                Session::Messages("$langAnnDel");
+                redirect_to_home_page("modules/gradebook/index.php");
             }
         }
         //show activities list
@@ -468,11 +470,12 @@ if ($is_editor) {
             $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $delete)->affectedRows;
             $showGradebookActivities = 1; //show list activities
             if($delAct){
-                $langAnnDel = $langGradebookDel;
-                $message = "<p class='success'>$langAnnDel</p>";
+                Session::Messages("$langAnnDel", "alert-success");
+                redirect_to_home_page("modules/gradebook/index.php");
             }else{
                 $langAnnDel = $langGradebookDelFailure;
-                $message = "<p class='alert1'>$langAnnDel</p>";
+                Session::Messages("$langAnnDel");
+                redirect_to_home_page("modules/gradebook/index.php");
             }
             $tool_content .= $message . "<br/>";
         }
