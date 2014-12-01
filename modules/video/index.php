@@ -486,69 +486,70 @@ hContent;
 
 }   // end of admin check
 
-ModalBoxHelper::loadModalBox(true);
+if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['table_edit'])) {
+    ModalBoxHelper::loadModalBox(true);
 
-$count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d ORDER BY title", $course_id)->count;
-$count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d ORDER BY title", $course_id)->count;
-$num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
+    $count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d ORDER BY title", $course_id)->count;
+    $count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d ORDER BY title", $course_id)->count;
+    $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 
-$expand_all = isset($_GET['d']) && $_GET['d'] == '1';
-if ($count_video[0] > 0 or $count_video_links[0] > 0) {
-    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-        <tr><th>$langVideoDirectory</th>
-        <th class='text-center'>$langDate</th>
-        <th class='text-center'>" . icon('fa-gears') . "</th>";        
-    $tool_content .= "</tr>";
-    //display uncategorized links
-    showlinksofcategory();
+    $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
+    if ($count_video[0] > 0 or $count_video_links[0] > 0) {
+        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+            <tr><th>$langVideoDirectory</th>
+            <th class='text-center'>$langDate</th>
+            <th class='text-center'>" . icon('fa-gears') . "</th>";        
+        $tool_content .= "</tr>";
+        //display uncategorized links
+        showlinksofcategory();
 
-    if ($num_of_categories > 0) { // categories found ?
-        $tool_content .= "<tr><th colspan='2'>$langCatVideoDirectory</th>
-            <td class='text-center'>" .
-            ($expand_all?
-                icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
-                icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
-            "</td></tr>";
-        $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
-        foreach ($resultcategories as $myrow) {
-            $description = standard_text_escape($myrow->description);
-            if ((isset($_GET['d']) and $_GET['d'] == 1) or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                $folder_icon = icon('fa-folder-open-o', $shownone);
-            } else {
-                $folder_icon = icon('fa-folder-o', $showall);
-            }
-            $tool_content .= "<tr><th colspan='2'>$folder_icon ";
-            if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
-            }
-            if (!empty($description)) {
-                    $tool_content .= '<br>' . $description;
-            }
-            $tool_content .= "</th><td class='option-btn-cell'>";
-            if ($is_editor) {
-                $tool_content .= action_button(array(
-                    array('title' => $langDelete,
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
-                          'confirm' => $langCatDel),
-                    array('title' => $langModify,
-                          'icon' => 'fa-edit',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
-            }
-            $tool_content .= '</td></tr>';
-            if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                showlinksofcategory($myrow->id);
+        if ($num_of_categories > 0) { // categories found ?
+            $tool_content .= "<tr><th colspan='2'>$langCatVideoDirectory</th>
+                <td class='text-center'>" .
+                ($expand_all?
+                    icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
+                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
+                "</td></tr>";
+            $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
+            foreach ($resultcategories as $myrow) {
+                $description = standard_text_escape($myrow->description);
+                if ((isset($_GET['d']) and $_GET['d'] == 1) or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
+                    $folder_icon = icon('fa-folder-open-o', $shownone);
+                } else {
+                    $folder_icon = icon('fa-folder-o', $showall);
+                }
+                $tool_content .= "<tr><th colspan='2'>$folder_icon ";
+                if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
+                } else {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
+                }
+                if (!empty($description)) {
+                        $tool_content .= '<br>' . $description;
+                }
+                $tool_content .= "</th><td class='option-btn-cell'>";
+                if ($is_editor) {
+                    $tool_content .= action_button(array(
+                        array('title' => $langDelete,
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
+                              'confirm' => $langCatDel),
+                        array('title' => $langModify,
+                              'icon' => 'fa-edit',
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
+                }
+                $tool_content .= '</td></tr>';
+                if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
+                    showlinksofcategory($myrow->id);
+                }
             }
         }
+        $tool_content .= "</table></div></div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
     }
-    $tool_content .= "</table></div></div></div>";
-} else {
-    $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
 }
-
 add_units_navigation(TRUE);
 
 draw($tool_content, $menuTypeID, null, $head_content);
@@ -710,9 +711,9 @@ function showlinksofcategory($cat_id = 0) {
 
     $i = 0;
     foreach($results as $table => $result) {
-        foreach ($result as $myrow) {
+        foreach ($result as $myrow) {  
             $myrow->course_id = $course_id;
-            if (resource_access($myrow->visible, $myrow->public)) {
+            if (resource_access($myrow->visible, $myrow->public) || $is_editor) {
                 switch($table) {
                     case 'video':
                         $vObj = MediaResourceFactory::initFromVideo($myrow);
@@ -730,7 +731,8 @@ function showlinksofcategory($cat_id = 0) {
                     default:
                         exit;
                 }
-                $tool_content .= "<tr><td>". $link_href;
+                $row_class = !$myrow->visible ? "class='not_visible'" : "";
+                $tool_content .= "<tr $row_class><td>". $link_href;
                 if (!$is_in_tinymce and (!empty($myrow->creator) or !empty($myrow->publisher))) {
                     $tool_content .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
