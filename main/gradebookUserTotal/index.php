@@ -36,7 +36,8 @@ $courses = Database::get()->queryArray("SELECT course.id course_id, code, title 
                                             AND user.id = ?d
                                             AND course.visible != " . COURSE_INACTIVE . "", $userID, $userID);
 if (count($courses) > 0) {
-    $grade_content .= "<table class='sortable' width='100%' id='t2'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
+    $grade_content .= "<div class='row'><div class='col-sm-12'><div class ='table-responsive'>
+            <table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;    
         $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
@@ -47,14 +48,14 @@ if (count($courses) > 0) {
                                    <td><a href='../../modules/gradebook/index.php?course=".$course1->code."'>$langMore</a></td></tr>";
         }
     }
-    $grade_content .= "</table>";
+    $grade_content .= "</table></div></div></div>";
     if (!$content) {
-        $tool_content .= "<div class='alert1'>$langNoGradebook</div>";
+        Session::Messages($langNoGradebook);
     } else {
         $tool_content .= $grade_content;
     }
 } else {
-    $tool_content .= "<div class='alert1'>$langNoGradebook</div>";
+    Session::Messages($langNoGradebook);
 }
 
 
