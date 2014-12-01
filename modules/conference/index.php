@@ -66,7 +66,7 @@ if (check_guest()) {
     draw($tool_content, 2, 'conference');
 }
 
-$head_content = '<script type="text/javascript">
+$head_content .= '<script type="text/javascript">
     function prepare_message() {
             document.chatForm.chatLine.value=document.chatForm.msg.value;
             document.chatForm.msg.value = "";
@@ -75,7 +75,7 @@ $head_content = '<script type="text/javascript">
     }
     setTimeout(function(){
         $( "#iframe" ).attr( "src", function ( i, val ) { return val; });
-    }, 4000);        
+    }, 2000);        
 </script>';
 
 // reset command
