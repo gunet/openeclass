@@ -104,7 +104,7 @@ if (isset($_GET['forumgo'])) {
             <div class='form-group'>
                 <label for='forum_desc' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'>
-                    <textarea name='forum_desc' id='forum_desc' cols='37' rows='3'></textarea>
+                    <textarea class='form-control' name='forum_desc' id='forum_desc' rows='3'></textarea>
                 </div>
             </div>
             <div class='form-group'>
@@ -266,8 +266,8 @@ elseif (isset($_GET['forumgoadd'])) {
         }
     }
     // end of notification
-    $tool_content .= "<div class='alert alert-success'>$langForumCategoryAdded</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+    Session::Messages($langForumCategoryAdded, 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
 
 // delete forum category
@@ -303,8 +303,8 @@ elseif (isset($_GET['forumcatdel'])) {
     Database::get()->query("DELETE FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_category WHERE id = ?d AND course_id = ?d", $cat_id, $course_id);
-    $tool_content .= "<div class='alert alert-success'>$langCatForumDelete</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+    Session::Messages($langCatForumDelete, 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
 
 // delete forum
@@ -340,9 +340,9 @@ elseif (isset($_GET['forumgodel'])) {
     $fidx->remove($forum_id);
     Database::get()->query("UPDATE `group` SET forum_id = 0
                     WHERE forum_id = ?d
-                    AND course_id = ?d", $forum_id, $course_id);    
-    $tool_content .= "<div class='alert alert-success'>$langForumDelete</div>
-                                <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
+                    AND course_id = ?d", $forum_id, $course_id);
+    Session::Messages($langForumDelete, 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 } elseif (isset($_GET['forumtopicedit'])) {
    $topic_id = intval($_GET['topic_id']);
    

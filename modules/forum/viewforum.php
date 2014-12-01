@@ -37,8 +37,8 @@ if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
 
-require_once 'config.php';
-require_once 'functions.php';
+require_once 'modules/forum/config.php';
+require_once 'modules/forum/functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
