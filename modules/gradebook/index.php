@@ -209,8 +209,6 @@ if ($is_editor) {
         $gradebook_range = intval($_POST['degreerange']);
         if($gradebook_range == 10 || $gradebook_range == 100 || $gradebook_range == 5){
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
-            $message = "<p class='success'>$langGradebookEdit</p>";
-            $tool_content .= $message . "<br/>";
             Session::Messages($langGradebookEdit);
             redirect_to_home_page("modules/gradebook/index.php");
         }
@@ -714,53 +712,78 @@ if ($is_editor) {
             if ($newUsersQuery) {
                 redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebookBook=1&update=true');
             } else {
-                $tool_content .= "<div class='alert1'>$langNoStudents</div>";
+                $tool_content .= "<div class='alert-warning'>$langNoStudents</div>";
             }
         }
 
         //section to reset the gradebook users list
+        
         $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-            <fieldset>
-            <h3>$langRefreshList</h3>
-            <select name='usersLimit'>                
-                <option value='1'>$langAttendanceActiveUsers6</option>
-                <option value='2'>$langAttendanceActiveUsers3</option>
-                <option value='3'>$langAllRegStudents</option>
-            </select>
-            <input type='submit' name='resetAttendance' value='$langAttendanceUpdate'>
-            </fieldset>
-        </form>";
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <fieldset>
+                            <h3>$langRefreshList</h3><small>($langAttendanceInfoForUsers)</small><br><br>
+                            <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <select name='usersLimit' class='form-control'>                
+                                        <option value='1'>$langAttendanceActiveUsers6</option>
+                                        <option value='2'>$langAttendanceActiveUsers3</option>
+                                        <option value='3'>$langAttendanceActiveUsersAll</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
+  
         //==============================================
         //show degree range
         //==============================================
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-        <fieldset>
-        <legend>$langGradebookRange</legend>
-        <table class='tbl' width='40%'>
-            <tr>
-              <th>
-              <select name='degreerange'><option value=10";
-        if (isset($gradebook_range) and $gradebook_range == 10) {
-            $tool_content .= " selected ";
-        }
-        $tool_content .= ">0-10</option><option value=5";
-        if (isset($gradebook_range) and $gradebook_range == 5) {
-            $tool_content .= " selected ";
-        }
-        $tool_content .= ">0-5</option><option value=100";
-        if (isset($gradebook_range) and $gradebook_range == 100) {
-            $tool_content .= " selected ";
-        }
-        $tool_content .= ">0-100</option></select>";
-
-        $tool_content .= "</td></tr>
-        <tr>
-          <td class='left'><input type='submit' name='submitGradebookRange' value='$langGradebookUpdate' /></td>
-        </tr>
-        </table>
-        </fieldset>
-        </form>";
+        
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <fieldset>
+                            <h3>$langAttendanceLimitTitle</h3><br><br>
+                            <div class='form-group'>
+                                <label for='degreerange' class='col-sm-2 control-label'>$langAttendanceLimitNumber:</label>
+                                <div class='col-sm-10'>
+                                    <select name='degreerange'><option value=10";
+                                        if (isset($gradebook_range) and $gradebook_range == 10) {
+                                            $tool_content .= " selected ";
+                                        }
+                                        $tool_content .= ">0-10</option><option value=5";
+                                        if (isset($gradebook_range) and $gradebook_range == 5) {
+                                            $tool_content .= " selected ";
+                                        }
+                                        $tool_content .= ">0-5</option><option value=100";
+                                        if (isset($gradebook_range) and $gradebook_range == 100) {
+                                            $tool_content .= " selected ";
+                                        }
+                                        $tool_content .= ">0-100</option></select>";
+                            $tool_content .= "</div>
+                            </div>
+                            <div class='form-group'>
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate' />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
         
         //do not show activities list
         $showGradebookActivities = 0;
