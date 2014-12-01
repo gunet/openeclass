@@ -247,9 +247,9 @@ if ($is_editor) {
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>
+                    <h4>$langGradebookActAttend</h4>
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                            <fieldset>
-                                <legend>$langGradebookActAttend</legend>";
+                            <fieldset>";
                                 if (isset($_GET['modify'])) { //edit an existed activity            
                                     $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
 
@@ -276,7 +276,8 @@ if ($is_editor) {
                                 }
 
                                 if (!isset($contentToModify)) $contentToModify = "";
-                                @$tool_content .= "<div class='form-group'>
+                                @$tool_content .= "
+                                <div class='form-group'>
                                     <label for='activity_type' class='col-sm-2 control-label'>$langGradebookType:</label>
                                     <div class='col-sm-10'>
                                         <select name='activity_type' class='form-control'>
@@ -312,9 +313,9 @@ if ($is_editor) {
                                     <div class='col-sm-10'>
                                         <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
                                         if($visible){
-                                            $tool_content .= " checked />";
+                                            $tool_content .= " checked";
                                         }
-                                    $tool_content .= " </div>
+                                    $tool_content .= " /></div>
                                 </div>
                                 <div class='form-group'>
                                     <label for='actDesc' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
