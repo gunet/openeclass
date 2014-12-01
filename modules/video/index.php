@@ -178,11 +178,11 @@ hContent;
         $tool_content .= "<fieldset>
                         <div class='form-group'>
                             <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
-                            <div class='col-sm-10'><input type='text' name='categoryname' size='53'$form_name /></div>
+                            <div class='col-sm-10'><input class='form-control' type='text' name='categoryname' size='53'$form_name /></div>
                         </div>
                         <div class='form-group'>
                             <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
-                            <div class='col-sm-10'><textarea rows='5' cols='50' name='description'>$form_description</textarea></div>
+                            <div class='col-sm-10'><textarea class='form-control' rows='5' name='description'>$form_description</textarea></div>
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>
