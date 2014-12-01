@@ -339,6 +339,9 @@ if ($is_editor) {
                 }
             }
         }
+        
+        Session::Messages("Ok","alert-success");
+        redirect_to_home_page("modules/attendance/index.php");
         $showAttendanceActivities = 1;
     }
 
@@ -742,17 +745,10 @@ if ($is_editor) {
             $tool_content .= "<tr><th colspan='2'>$langExercises</th></tr>";
             $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th width='60' class='center'>$langActions</th>";
-            $tool_content .= "</tr>";
-            $k = 0;        
+            $tool_content .= "</tr>";      
             foreach ($checkForExer as $newExerToAttendance) {
                 $content = ellipsize_html($newExerToAttendance->description, 50);
                 $d = strtotime($newExerToAttendance->end_date);
-
-                if ($k % 2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
 
                 $tool_content .= "<td valign='top'>
                         <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
@@ -769,7 +765,6 @@ if ($is_editor) {
                         . "<td>" . $content . "</td>";
 
                 $tool_content .= "<td class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")."&nbsp;";                     
-                $k++;
             } // end of while
             $tool_content .= "</table></fieldset>";
         } else {
