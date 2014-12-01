@@ -67,12 +67,15 @@ if (check_guest()) {
 }
 
 $head_content = '<script type="text/javascript">
-function prepare_message() {
-	document.chatForm.chatLine.value=document.chatForm.msg.value;
-	document.chatForm.msg.value = "";
-	document.chatForm.msg.focus();
-	return true;
-}
+    function prepare_message() {
+            document.chatForm.chatLine.value=document.chatForm.msg.value;
+            document.chatForm.msg.value = "";
+            document.chatForm.msg.focus();
+            return true;
+    }
+    setTimeout(function(){
+        $( "#iframe" ).attr( "src", function ( i, val ) { return val; });
+    }, 4000);        
 </script>';
 
 // reset command
@@ -121,7 +124,7 @@ $tool_content .= "
           </span>
         </div>
         <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;'></iframe>
+          <iframe class='embed-responsive-item' id='iframe' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;'></iframe>
         </div>       
     </div>   
    </fieldset>
