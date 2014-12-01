@@ -1032,9 +1032,9 @@ if ($is_editor) {
                 <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
                               <tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
-                              <th width='40' class='text-center'>$langView</th>
-                              <th width='60' class='text-center'>$langScore</th>
-                              <th width='60' class='text-center'><i class='fa fa-cogs'></i></th>
+                              <th class='text-center'>$langView</th>
+                              <th class='text-center'>$langScore</th>
+                              <th class='text-center'><i class='fa fa-cogs'></i></th>
                               </tr>";
         }
         else{
@@ -1107,11 +1107,20 @@ if ($is_editor) {
                 }
                 $tool_content .= "</td>";
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
-                $tool_content .= "<td width='70' class='text-center'>"
-                      .icon('add', $langGradebookBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id")."&nbsp;"
-                      .icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id")."&nbsp;"                      
-                      .icon('delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id", "onClick=\"return confirmation('$langGradebookDeleteAlert');\"").
-                      "</td>";
+                $tool_content .= "<td class='option-btn-cell text-center'>".
+                        action_button(array(
+                                    array('title' => $langDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete'),
+                                    array('title' => $langModify,
+                                        'icon' => 'fa-edit',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"),
+                                    array('title' => $langGradebookBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"))).
+                        "</td>";
             } // end of while
         }
         $tool_content .= "</table></div></div></div>";       
