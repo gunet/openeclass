@@ -172,34 +172,31 @@ if (isset($_POST['submit'])) {
                 array('title' => $langBack,
                     'url' => "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label'),
-                array('title' => $langTopicReview,
-                    'url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id",
-                    'icon' => 'fa-eye',
-                    'level' => 'primary')));
-
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
-	<input type='hidden' name='parent_post' value='$parent_post'>
-	<fieldset>
-        <legend>$langTopicAnswer: " . q($topic_title) . "</legend>
-	<table class='tbl' width='100%'>
-        <tr>
-        <td>$langBodyMessage:";
+                    'level' => 'primary-label')
+                ));
     if (!isset($reply)) {
         $reply = "";
     }
-    $tool_content .= "</td>
-        </tr>
-	<tr>
-          <td>" . rich_text_editor('message', 15, 70, $reply, "") . "</td>
-        </tr>
-	<tr>
-	  <td class='right'>	 
-	    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>&nbsp;	    
- 	  </td>
-	</tr>
-	</table>
+    $tool_content .= "
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+            <input type='hidden' name='parent_post' value='$parent_post'>
+            <fieldset>        
+            <legend>$langTopicAnswer: " . q($topic_title) . "</legend>
+            <div class='form-group'>
+              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
+              <div class='col-sm-10'>
+                " . rich_text_editor('message', 15, 70, $reply, "") . "
+              </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                    <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id'>$langCancel</a>
+                </div>
+            </div>              
         </fieldset>
-	</form>";
+	</form>
+    </div>";
 }
 draw($tool_content, 2, null, $head_content);

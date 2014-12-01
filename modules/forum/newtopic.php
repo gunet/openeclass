@@ -155,40 +155,33 @@ if (isset($_POST['submit'])) {
     }
     // end of notification
 
-    $dynbar = array(
-            array('title' => $langReturnMessages,
-                    'url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label'),
-            array('title' => $langReturnTopic,
-                    'url' => "viewforum.php?course=$course_code&forum=$forum_id",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
-    );
-    $tool_content .= action_bar($dynbar);
-    $tool_content .= "<div class='alert alert-success'>$langStored</div>";
+    Session::Messages($langStored, 'alert-success');
+    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 } else {
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
         <fieldset>
-          <legend>$langTopicData</legend>
-	  <table class='tbl' width='100%'>
-	  <tr>
-	    <th>$langSubject:</th>
-	    <td><input type='text' name='subject' size='53' maxlength='100' /></td>
-	  </tr>
-	  <tr>
-            <th valign='top'>$langBodyMessage:</th>
-            <td>" . rich_text_editor('message', 14, 50, '', '') . "</td>
-          </tr>
-	  <tr>
-            <th>&nbsp;</th>
-	    <td class='right'>
-	       <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />&nbsp;	       
-	    </td>
-          </tr>
-	  </table>
+            <div class='form-group'>
+              <label for='subject' class='col-sm-2 control-label'>$langSubject:</label>
+              <div class='col-sm-10'>
+                <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
+              </div>
+            </div>   
+            <div class='form-group'>
+              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
+              <div class='col-sm-10'>
+                " . rich_text_editor('message', 14, 50, '', '') . "
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                <a class='btn btn-default' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
+              </div>
+            </div>            
 	</fieldset>
-	</form>";
+	</form>
+    </div>";
 }
 draw($tool_content, 2, null, $head_content);
