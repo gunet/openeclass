@@ -209,7 +209,7 @@ if ($is_editor) {
         $gradebook_range = intval($_POST['degreerange']);
         if($gradebook_range == 10 || $gradebook_range == 100 || $gradebook_range == 5){
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
-            Session::Messages($langGradebookEdit);
+            Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/gradebook/index.php");
         }
     }
@@ -452,7 +452,7 @@ if ($is_editor) {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type);
                 $langAnnDel = "$langGradebookSucInsert";
-                Session::Messages("$langAnnDel");
+                Session::Messages("$langAnnDel","alert-success");
                 redirect_to_home_page("modules/gradebook/index.php");
             }
         }
@@ -483,7 +483,7 @@ if ($is_editor) {
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])){        
         if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='success'>$langAttendanceUsers</div>";
+            $tool_content .= "<div class='alert-success'>$langAttendanceUsers</div>";
         }        
         //record booking
         if(isset($_POST['bookUser'])){
@@ -756,9 +756,8 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h3>$langAttendanceLimitTitle</h3><br><br>
+                            <h3>$langGradebookRange</h3><br>
                             <div class='form-group'>
-                                <label for='degreerange' class='col-sm-2 control-label'>$langAttendanceLimitNumber:</label>
                                 <div class='col-sm-10'>
                                     <select name='degreerange'><option value=10";
                                         if (isset($gradebook_range) and $gradebook_range == 10) {
@@ -776,7 +775,7 @@ if ($is_editor) {
                             $tool_content .= "</div>
                             </div>
                             <div class='form-group'>
-                                <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='col-sm-12'>
                                     <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate' />
                                 </div>
                             </div>
@@ -983,7 +982,7 @@ if ($is_editor) {
             //table to display the users
             $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
-            <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+            <table id='users_table{$course_id}' class='table-default custom_list_order'>
                 <thead>
                     <tr>
                       <th width='1'>$langID</th>
@@ -1030,7 +1029,7 @@ if ($is_editor) {
                         $tool_content .= "
                     </tr>";
             }
-            $tool_content .= "</tbody></table> <input type='submit' name='bookUsersToAct' value='$langGradebookBooking' /></form>";
+            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-default' name='bookUsersToAct' value='$langGradebookBooking' /></form>";
         }
         $showGradebookActivities = 0;
     }
