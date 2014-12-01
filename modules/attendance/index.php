@@ -803,7 +803,7 @@ if ($is_editor) {
                 }
                 
                 Session::Messages($langAttendanceEdit,"alert-success");
-                $tool_content .= $message . "<br/>";
+                redirect_to_home_page("modules/attendance/index.php");
             }
         }
 
@@ -820,7 +820,7 @@ if ($is_editor) {
             //table to display the users
             $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
-            <table width='100%' id='users_table{$course_id}' class='table-default custom_list_order'>
+            <table id='users_table{$course_id}' class='table-default custom_list_order'>
                 <thead>
                     <tr>
                       <th width='1'>$langID</th>
@@ -842,7 +842,7 @@ if ($is_editor) {
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
                         <td class='center'>
-                            <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
+                            <input class='form-control' type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
                             $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -855,7 +855,7 @@ if ($is_editor) {
                         $tool_content .= "
                     </tr>";
             }
-            $tool_content .= "</tbody></table> <input type='submit' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
+            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-default' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
         }
         $showAttendanceActivities = 0;
     }
@@ -940,29 +940,21 @@ if ($is_editor) {
     $announcementNumber = count($result);
 
     if ($announcementNumber > 0) {
-        $tool_content .= "<fieldset><legend>$langAttendanceAbsences</legend>";
+        $tool_content .= "<h4>$langAttendanceAbsences</h4>";
         $tool_content .= "<div class='info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div><br>";
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                            <table width='100%' class='sortable' id='t2'>";
-        $tool_content .= "<tr><th colspan='2'>$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceAbsencesYes</th></tr>";
+                            <div class='row'><div class='col-sm-12'><div class='table-responsive'>
+                            <table class='table-default sortable' id='t2'>";
+        $tool_content .= "<tr><th >$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceAbsencesYes</th></tr>";
     } else {
         $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage5</p>";
     }    
-    $k = 0;
     if ($result) {        
         foreach ($result as $announce) {
             $content = standard_text_escape($announce->description);
             $d = strtotime($announce->date);
-            
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
 
-            $tool_content .= "<td valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+            $tool_content .= "<tr><td><b>";
 
             if (empty($announce->title)) {
                 $tool_content .= $langAnnouncementNoTille;
@@ -981,23 +973,22 @@ if ($is_editor) {
             if ($userAttend) {
                 $attend = $userAttend->attend;            
                 if ($attend) {
-                    $tool_content .= icon('tick', $langAttendanceAbsencesYes);
+                    $tool_content .= icon('fa-check-circle', $langAttendanceAbsencesYes);
                 } else {
                     $auto_activity = Database::get()->querySingle("SELECT auto FROM attendance_activities WHERE id = ?d", $announce->id)->auto;
                     if (!$auto_activity and ($announce->date > date("Y-m-d"))) {
-                        $tool_content .= icon('error', $langAttendanceStudentFailure);
+                        $tool_content .= icon('fa-question-circle', $langAttendanceStudentFailure);
                     } else {
-                        $tool_content .= icon('delete', $langAttendanceAbsencesNo);
+                        $tool_content .= icon('fa-times-circle', $langAttendanceAbsencesNo);
                     }
                 }
             } else {
-                $tool_content .= icon('error', $langAttendanceStudentFailure);
+                $tool_content .= icon('fa-question-circle', $langAttendanceStudentFailure);
             }
             $tool_content .= "</td>";
-            $k++;
         } // end of while
     }
-    $tool_content .= "</table></fieldset>";
+    $tool_content .= "</tr></table></div></div></div>";
 }
 
 
