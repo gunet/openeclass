@@ -172,7 +172,12 @@ if ($topic_locked == 1) {
                     'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+                    'button-class' => 'btn-success'),
+                array('title' => $langBack,
+                    'url' => "viewforum.php?course=$course_code&forum=$forum",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')                
+                ));
 }
 
 if ($paging and $total > $posts_per_page) {

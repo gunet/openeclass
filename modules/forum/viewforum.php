@@ -73,7 +73,12 @@ if ($can_post) {
                     'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+                    'button-class' => 'btn-success'),
+                array('title' => $langBack,
+                    'url' => "index.php?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')                
+                ));
 }
 
 /*
