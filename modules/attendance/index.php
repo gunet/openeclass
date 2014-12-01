@@ -740,19 +740,17 @@ if ($is_editor) {
         $checkForExerNumber = count($checkForExer);
         
         if ($checkForExerNumber > 0) {            
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                              <table width='100%' class='sortable' id='t1'>";
-            $tool_content .= "<tr><th colspan='2'>$langExercises</th></tr>";
-            $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th width='60' class='center'>$langActions</th>";
+            $tool_content .= "<h3>$langExercises</h3>";
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
+            $tool_content .= "<table class='table-default'>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";      
             foreach ($checkForExer as $newExerToAttendance) {
                 $content = ellipsize_html($newExerToAttendance->description, 50);
                 $d = strtotime($newExerToAttendance->end_date);
 
-                $tool_content .= "<td valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+                $tool_content .= "<tr><td><b>";
 
                 if (empty($newExerToAttendance->title)) {
                     $tool_content .= $langAnnouncementNoTille;
@@ -764,11 +762,14 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td class='center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")."&nbsp;";                     
+                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
+                                    array('title' => $langAdd,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")));                
             } // end of while
-            $tool_content .= "</table></fieldset>";
+            $tool_content .= "</tr></table></div></div></div>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageExe4</p>";
+            Session::Messages($langAttendanceNoActMessageExe4);
         }    
         $showAttendanceActivities = 0;
     }
