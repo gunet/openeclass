@@ -22,17 +22,17 @@
 $require_help = TRUE;
 $helpTopic = 'PersonalStats';
 include '../../include/baseTheme.php';
-require_once 'modules/auth/auth.inc.php';
+require_once 'modules/graphics/plotter.php';
 
 $require_valid_uid = TRUE;
 
 check_uid();
-$nameTools = $langPersonalStats;
 check_guest();
+
+$nameTools = $langPersonalStats;
 
 $totalHits = 0;
 $totalDuration = 0;
-require_once 'modules/graphics/plotter.php';
 
 $result = Database::get()->queryArray("SELECT a.code code, a.title title
                                         FROM course AS a LEFT JOIN course_user AS b
@@ -73,10 +73,9 @@ if (count($result) > 0) {  // found courses ?
     $tool_content .= $chart->plot();
 
     $totalDuration = format_time_duration(0 + $totalDuration);
-    $tool_content .= "
-                <fieldset>
+    $tool_content .= "<fieldset>
                 <legend>$langPlatformGenStats</legend>
-                <table width='100%'>
+                <table class='table-default'>
                 <tr>
                 <th>$langTotalVisitsCourses:</th>
                 <td>$totalHits</td>
@@ -88,21 +87,13 @@ if (count($result) > 0) {  // found courses ?
                 <tr>
                 <th valign='top'>$langDurationVisitsPerCourse:</th>
                 <td>
-                <table class='tbl_alt' width='550'>
+                <table class='table-default' width='550'>
                 <tr>
-                <th colspan='2'>$langCourseTitle</th>                   
+                <th>$langCourseTitle</th>                   
                 <th width='160'>$langDuration</th>
-                </tr>";
-    $i = 0;
-    foreach ($duration as $code => $time) {
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $i++;        
-        $tool_content .= "
-                <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+                </tr>";    
+    foreach ($duration as $code => $time) {        
+        $tool_content .= "                
                 <td>" . q(course_code_to_title($code)) . "</td>
                 <td width='140'>" . format_time_duration(0 + $time) . "</td>
                 </tr>";
@@ -111,10 +102,10 @@ if (count($result) > 0) {  // found courses ?
 }
 // End of chart display; chart unlinked at end of script.
 
-$tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
-$tool_content .= "<table class='tbl_alt' width='550'>
+$tool_content .= "<tr><th>$langLastVisits:</th><td>";
+$tool_content .= "<table class='table-default' width='550'>
             <tr>
-              <th colspan='2'>$langDate</th>
+              <th>$langDate</th>
               <th width='140'>$langAction</th>
             </tr>";
 $act["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
@@ -122,21 +113,14 @@ $act["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
 $q = Database::get()->queryArray("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 10", $uid);
 
-$i = 0;
 foreach ($q as $result) {
     $when = $result->when;
     $action = $result->action;
-    if ($i % 2 == 0) {
-        $tool_content .= "<tr class='even'>";
-    } else {
-        $tool_content .= "<tr class='odd'>";
-    }
-    $tool_content .= "
-        <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+    
+    $tool_content .= "        
         <td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
         <td>" . $act[$action] . "</td>
         </tr>";
-    $i++;
 }
 $tool_content .= "</table>";
 $tool_content .= "</td></tr></table></fieldset>";
