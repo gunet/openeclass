@@ -548,24 +548,18 @@ if ($is_editor) {
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
-        $tool_content .= "<table width='100%' align='left' class='tbl_alt'>
+        $tool_content .= "<table class='table-default'>
                 <tr>
-                  <th colspan='2'><div align='left'>$langGroupName</div></th>
+                  <th><div align='left'>$langGroupName</div></th>
                   <th width='250'>$langGroupTutor</th>";
         $tool_content .= "<th width='50'>$langRegistration</th>";
 
         $tool_content .= "<th width='50'>$langRegistered</th><th width='50'>$langMax</th></tr>";
-        $k = 0;
         foreach ($q as $row) {
             $group_id = $row->id;
             initialize_group_info($group_id);
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-            $tool_content .= "<td width='2'><img src='$themeimg/arrow.png' alt='' /></td>
-                          <td class='left'>";
+            $tool_content .= "
+                          <td class='text-left'>";
             // Allow student to enter group only if member
             if ($is_member) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
@@ -599,7 +593,6 @@ if ($is_editor) {
             $tool_content .= "<td class='center'>$member_count</td><td class='center'>" .
                     ($max_members ? $max_members : '-') . "</td></tr>";
             $totalRegistered += $member_count;
-            $k++;
         }
         $tool_content .= "</table>";
     }
