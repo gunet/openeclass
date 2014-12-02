@@ -447,6 +447,7 @@ $langExplainShib = "Enter the names of the variables returned by the Shibboleth 
 $langCharSeparator = "Delimiter character";
 $langConference = "Teleconference";
 $langWash = "Cleaning";
+$langWashSuccess = "Chat was succeessfully cleared.";
 $langWashFrom = "Chat cleared from";
 $langSave = "Save";
 $langClearedBy = "cleared by";

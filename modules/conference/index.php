@@ -90,7 +90,7 @@ $head_content .= '<script type="text/javascript">
         fclose($fchat);
         @unlink($tmpArchiveFile);
         
-        Session::Messages("ok","alert-success");
+        Session::Messages($langWashSuccess, "alert-success");
         redirect_to_home_page("modules/conference/index.php");
     }
 

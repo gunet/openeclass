@@ -749,6 +749,7 @@ $langCheckOk = "Έχετε εγκαταστήσει όλα τα προαπαιτ
 
 $langConference = "Τηλεσυνεργασία";
 $langWash = "Καθάρισμα";
+$langWashSuccess = "Η κουβέντα καθάρισε με επιτυχία.";
 $langWashFrom = "Η κουβέντα καθάρισε από";
 $langSave = "Αποθήκευση";
 $langClearedBy = "καθαρισμός από";
