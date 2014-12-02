@@ -1150,7 +1150,14 @@ function show_student_assignment($id) {
     $user_group_info = user_group_info($uid, $course_id);
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                          FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-
+    $tool_content .= action_bar(array(
+       array(
+           'title' => $langBack,
+           'icon' => 'fa-reply',
+           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+           'level' => "primary-label"
+       ) 
+    ));
     assignment_details($id, $row);
 
     $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
@@ -1173,12 +1180,11 @@ function show_student_assignment($id) {
     if ($submit_ok) {
         show_submission_form($id, $user_group_info);
     }
-    $tool_content .= "<br/><div class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
     global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
-    $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack;
+    $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack, $is_editor, $langCancel;
 
     $group_select_hidden_input = $group_select_form = '';
     $is_group_assignment = is_group_assignment($id);
@@ -1253,13 +1259,15 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                                 </div>
                             </div>
                         </div>" : '';
-    if (!$is_group_assignment or count($user_group_info) or $on_behalf_of) {
+    if (!$is_group_assignment || count($user_group_info) || $on_behalf_of) {
+        $back_link = $is_editor ? "index.php?course=$course_code&id=$id" : "index.php?course=$course_code";
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
                     'icon' => 'fa-reply',
                     'level' => 'primary-label',
-                    'url' => "index.php?course=$course_code&id=$id"
+                    'url' => "index.php?course=$course_code&id=$id",
+                    'show' => $is_editor
                 )
             ))."
                     $notice
@@ -1283,7 +1291,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         $extra
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                                <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit' />
+                                <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit'>
+                                <a class='btn btn-default' href='$back_link'>$langCancel</a>
                             </div>
                         </div>
                         </fieldset>
@@ -1625,8 +1634,8 @@ function show_assignment($id, $display_graph_results = false) {
                       <p class='sub_title1'>$langSubmissions:</p>
                       <div class='alert alert-warning'>$langNoSubmissions</div>";
     }
-    $tool_content .= "<br/>
-                <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+//    $tool_content .= "<br/>
+//                <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 function show_non_submitted($id) {
