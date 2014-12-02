@@ -84,7 +84,7 @@ if ($userdata) {
                 ));    
     $tool_content .= "<table class='tbl'>
             <tr>
-                <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata->has_icon) . "</td>
+                <td>" . profile_image($id, IMAGESIZE_LARGE) . "</td>
                 <td><b>" . q("$userdata->givenname $userdata->surname") . "</b><br>";
     if (!empty($userdata->email) and allow_access($userdata->email_public)) {
         $tool_content .= "<b>$langEmail:</b> " . mailto($userdata->email) . "<br>";

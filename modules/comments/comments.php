@@ -54,7 +54,7 @@ if (setting_get($setting_id, $course_id) == 1) {
                     <div class='col-xs-12'>
                         <div class='media'>
                             <a class='media-left' href='#'>
-                                ". profile_image(1, IMAGESIZE_SMALL, true) ."
+                                ". profile_image(1, IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble'>
                                 <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.

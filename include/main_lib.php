@@ -270,7 +270,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
             $user = $r;
         } else {
             if ($icon) {
-                return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;' . $langAnonymous;
+                return profile_image(0, IMAGESIZE_SMALL) . '&nbsp;' . $langAnonymous;
             } else {
                 return $langAnonymous;
             }
@@ -282,11 +282,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        if ($user->has_icon) {
-            $icon = profile_image($user->id, IMAGESIZE_SMALL) . '&nbsp;';
-        } else {
-            $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
-        }
+        $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
     }
     
     if (!empty($class)) {
@@ -2155,13 +2151,12 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
  * Link for displaying user profile
  * @param type $uid
  * @param type $size
- * @param type $default = false
  * @return type
  */
-function profile_image($uid, $size, $default = false) {
+function profile_image($uid, $size) {
     global $urlServer, $themeimg;
 
-    if (!$default) {
+    if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='" . q(uid_to_name($uid)) . "'>";
     } else {
         $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
