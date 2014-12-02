@@ -1166,35 +1166,26 @@ if ($is_editor) {
     $announcementNumber = count($result);
 
     if ($announcementNumber > 0) {
-        $tool_content .= "<fieldset><legend>$langGradebookGrades</legend>";
+        $tool_content .= "<h4>$langGradebookGrades</h4>";
         $tool_content .= "<div class='info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $userID) . "</b> </div><br>";
 
         if(weightleft($gradebook_id, 0) != 0){
             $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
         }
 
-        $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                            <table width='100%' class='sortable' id='t2'>";
-        $tool_content .= "<tr><th colspan='2'>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
+        $tool_content .= "
+                            <table class='table-default' >";
+        $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
     } else {
-        $tool_content .= "<p class='alert1'>$langGradebookNoActMessage5</p>";
+        $tool_content .= "<div class='alert-warning'>$langGradebookNoActMessage5</div>";
     }
-    $k = 0;
 
     if ($result) {
         foreach ($result as $announce) {            
             $content = standard_text_escape($announce->description);
             $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
 
-            if ($k % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
-
-            $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
+            $tool_content .= "<tr><td><b>";
 
             if (empty($announce->title)) {
                 $tool_content .= $langAnnouncementNoTille;
@@ -1217,10 +1208,9 @@ if ($is_editor) {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
-            $k++;
         } // end of while
     }
-    $tool_content .= "</table></fieldset>";
+    $tool_content .= "</table>";
 }
 
 //================================================
