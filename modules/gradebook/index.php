@@ -796,10 +796,10 @@ if ($is_editor) {
         $checkForAssNumber = count($checkForAss);
         
         if ($checkForAssNumber > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $tool_content .= "
                 <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                 <h4>$langWorks</h4>
-                              <table class='table-default sortable' id='t1'>";
+                              <table class='table-default'";
             $tool_content .= "<tr><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>"; 
             $tool_content .= "</tr>";           
@@ -833,7 +833,7 @@ if ($is_editor) {
                 $tool_content .= "</td>"
                         . "<td><div class='smaller'><span class='day'>$date_str</span> $hour_str </div></td>"
                         . "<td>" . $content . "</td>";
-                $tool_content .= "<td width='70' class='text-center'>".icon('add', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1")."&nbsp;";
+                $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
             } // end of while        
             $tool_content .= "</tr></table></div></div></div>";
         } else {
