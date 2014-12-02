@@ -83,7 +83,7 @@ $head_content .= '<script type="text/javascript">
         $fchat = fopen($fileChatName, 'w');
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
-            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
+            fwrite($fchat,  "systemMsg - $timeNow ---- " . $langWashFrom . " ---- " . $nick . " --------</div>\n");
             fflush($fchat);
             flock($fchat, LOCK_UN);
         }
@@ -124,7 +124,7 @@ $tool_content .= "
           </span>
         </div>
         <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' id='iframe' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;'></iframe>
+          <iframe class='embed-responsive-item' id='iframe' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
         </div>       
     </div>   
    </fieldset>

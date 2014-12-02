@@ -29,6 +29,20 @@ require_once '../../include/baseTheme.php';
 <head>
     <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
     <title>Chat messages</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-2.1.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
+        
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
+    
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
+        
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
@@ -68,7 +82,7 @@ require_once '../../include/baseTheme.php';
         $fchat = fopen($fileChatName, 'w');
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
-            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
+            fwrite($fchat, "systemMsg"." - " . $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
             fflush($fchat);
             flock($fchat, LOCK_UN);
         }
@@ -99,7 +113,7 @@ require_once '../../include/baseTheme.php';
         echo $alert_div, "</body></html>\n";
         exit;
     }
-
+  
 // add new line
     if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
         $chatLine = purify($_GET['chatLine']);
@@ -120,11 +134,50 @@ require_once '../../include/baseTheme.php';
     }
     $tmp = array_splice($fileContent, 0, $lineToRemove);
     $fileReverse = array_reverse($fileContent);
-
+//            <div class="col-xs-12">
+//                <div class="media">
+//                    <a class="media-left" href="#">
+//                        <img src="/OPENECLASS-3/template/default/img/default_32.jpg" title=" Διαχειριστής Πλατφόρμας" alt=" Διαχειριστής Πλατφόρμας">
+//                    </a>
+//                    <div class="media-body bubble">
+//                            <div class="label label-success media-heading">24-11-2014 15:17:59</div>
+//                            <div class="margin-top-thin" id="comment_content-5">test 2
+//                            </div>
+//                    </div>
+//                </div>
+//            </div>  
     foreach ($fileReverse as $thisLine) {
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
-        echo '<div>' . purify($newline) . "</div>\n";
+        $str_1 = explode(' - ', $newline);
+        if ($str_1[0] == "systemMsg") {
+            echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                        <div class='col-xs-12'>
+                            <div class='alert alert-success text-center'>
+                                $str_1[1]
+                            </div>
+                        </div>
+                  </div>\n";        
+        } else {
+            $datetime = $str_1[0];
+            $str_2 = explode(' : ', $str_1[1]);
+            echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                        <div class='col-xs-12'>
+                            <div class='media'>
+                                <a class='media-left' href='#'>
+                                    <img src='/OPENECLASS-3/template/default/img/default_32.jpg' title=' Διαχειριστής Πλατφόρμας' alt=' Διαχειριστής Πλατφόρμας'>
+                                </a>
+                                <div class='media-body bubble'>
+                                    <div class='label label-success media-heading'>$datetime</div>
+                                    <small>$langBlogPostUser $str_2[0]</small>    
+                                    <div class='margin-top-thin'>
+                                        " . $str_2[1] . "
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                  </div>\n";
+        }
     }
     echo "</body></html>\n";
 
