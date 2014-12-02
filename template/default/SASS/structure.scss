@@ -28,7 +28,7 @@ body > .container{
 
 
 	.logo{
-		margin:2em 1em;
+		margin:2em 1em;a
 		img{margin:0 auto;}
 	}
 
@@ -92,11 +92,10 @@ body > .container{
 
 
 			&.list-group-item{
-
-				border: none;
-        border-top: 1px solid rgba(255,255,255,.075);
-				padding: 1em;
-        text-align: center;
+                            border: none;
+                            border-top: 1px solid rgba(255,255,255,.075);
+                            padding: 0.5em;
+                            text-align: center;
 
         @include transition(all $transition-time linear);
 
@@ -908,7 +907,7 @@ form.login-form{
   }
 
   #leftnav .panel a.list-group-item{
-      padding:1em 0.8em;
+      padding:0.5em 0.8em;
   }
 
   #main-content,
