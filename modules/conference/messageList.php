@@ -27,6 +27,7 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
+    <base target="_parent">
     <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
@@ -82,7 +83,7 @@ require_once '../../include/baseTheme.php';
         $fchat = fopen($fileChatName, 'w');
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
-            fwrite($fchat, "systemMsg"." - " . $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " --------\n");
+            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsg\n");
             fflush($fchat);
             flock($fchat, LOCK_UN);
         }
@@ -121,7 +122,7 @@ require_once '../../include/baseTheme.php';
         if ($is_editor) {
             $nick = "<b>$nick</b>";
         }
-        fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . "\n");
+        fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid\n");
         fclose($fchat);
     }
 
@@ -133,45 +134,39 @@ require_once '../../include/baseTheme.php';
         $lineToRemove = 0;
     }
     $tmp = array_splice($fileContent, 0, $lineToRemove);
-    $fileReverse = array_reverse($fileContent);
-//            <div class="col-xs-12">
-//                <div class="media">
-//                    <a class="media-left" href="#">
-//                        <img src="/OPENECLASS-3/template/default/img/default_32.jpg" title=" Διαχειριστής Πλατφόρμας" alt=" Διαχειριστής Πλατφόρμας">
-//                    </a>
-//                    <div class="media-body bubble">
-//                            <div class="label label-success media-heading">24-11-2014 15:17:59</div>
-//                            <div class="margin-top-thin" id="comment_content-5">test 2
-//                            </div>
-//                    </div>
-//                </div>
-//            </div>  
+    $fileReverse = array_reverse($fileContent); 
     foreach ($fileReverse as $thisLine) {
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
-        $str_1 = explode(' - ', $newline);
-        if ($str_1[0] == "systemMsg") {
+        $str_1 = explode(' !@#$ ', $newline);
+
+        if (trim($str_1[1]) == "systemMsg") {
             echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                         <div class='col-xs-12'>
                             <div class='alert alert-success text-center'>
-                                $str_1[1]
+                                $str_1[0]
                             </div>
                         </div>
                   </div>\n";        
         } else {
-            $datetime = $str_1[0];
-            $str_2 = explode(' : ', $str_1[1]);
+            $user_id = trim($str_1[1]);
+            $str_2 = explode(' - ', $str_1[0]);
+            $datetime = $str_2[0];
+            $str_3 = explode(' : ', $str_2[1]);
+            $username = $str_3[0];
+            $usertext = $str_3[1];
+            $token = token_generate($user_id, true);
             echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                         <div class='col-xs-12'>
                             <div class='media'>
-                                <a class='media-left' href='#'>
-                                    <img src='/OPENECLASS-3/template/default/img/default_32.jpg' title=' Διαχειριστής Πλατφόρμας' alt=' Διαχειριστής Πλατφόρμας'>
+                                <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&token=$token'>
+                                    ". profile_image($user_id, IMAGESIZE_SMALL, true) ."
                                 </a>
                                 <div class='media-body bubble'>
                                     <div class='label label-success media-heading'>$datetime</div>
-                                    <small>$langBlogPostUser $str_2[0]</small>    
+                                    <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>    
                                     <div class='margin-top-thin'>
-                                        " . $str_2[1] . "
+                                        " . $usertext . "
                                     </div>
                                 </div>    
                             </div>

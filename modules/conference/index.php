@@ -83,7 +83,7 @@ $head_content .= '<script type="text/javascript">
         $fchat = fopen($fileChatName, 'w');
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
-            fwrite($fchat,  "systemMsg - $timeNow ---- " . $langWashFrom . " ---- " . $nick . " --------</div>\n");
+            fwrite($fchat,  "$timeNow ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsg\n");
             fflush($fchat);
             flock($fchat, LOCK_UN);
         }
