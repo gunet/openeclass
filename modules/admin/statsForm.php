@@ -36,65 +36,56 @@ if (isset($_GET['first'])) {
     $terms[] = $firstletter . '%';
 }
 
-$user_opts = '<option value="-1">' . q($langAllUsers) . "</option>\n";
+$user_opts = '<option value="-1">' . q($langAllUsers) . "</option>";
 foreach (Database::get()->queryArray($qry, $terms) as $row) {
     if ($u_user_id == $row->id) {
         $selected = 'selected';
     } else {
         $selected = '';
     }
-    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>\n";
+    $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>";
 }
 
-$statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ? ('selected') : ('')) . ' >' . $langDaily . "</option>\n" .
-        '<option value="weekly"  ' . (($u_interval == 'weekly') ? ('selected') : ('')) . '>' . $langWeekly . "</option>\n" .
-        '<option value="monthly" ' . (($u_interval == 'monthly') ? ('selected') : ('')) . '>' . $langMonthly . "</option>\n" .
-        '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>\n" .
-        '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>\n";
+$statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ? ('selected') : ('')) . ' >' . $langDaily . "</option>" .
+        '<option value="weekly"  ' . (($u_interval == 'weekly') ? ('selected') : ('')) . '>' . $langWeekly . "</option>" .
+        '<option value="monthly" ' . (($u_interval == 'monthly') ? ('selected') : ('')) . '>' . $langMonthly . "</option>" .
+        '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>" .
+        '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>";
 
-$tool_content .= '
-<form method="post">
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">' . $langStartDate . ':</th>
-    <td>';
-$tool_content .= "<div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
-            <div class='col-xs-11'>        
-                <input class='form-control' name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
-            </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>";
-$tool_content .= '</td>
-  </tr>
-  <tr>
-    <th class="left">' . $langEndDate . ':</th>
-    <td>';
-$tool_content .= "<div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
-                <div class='col-xs-11'>
-                    <input class='form-control' name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
-                </div>
+$tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';   
+$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label'>$langStartDate:</label>
+        <div class='col-xs-10 col-sm-9'>               
+            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        </div>
+        <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
-            </div>";        
-$tool_content .= '</td>
-  </tr>
-  <tr>
-    <th class="left">' . $langFirstLetterUser . ':</th>
-    <td>' . $letterlinks . '</td>
-  </tr>
-  <tr>
-    <th class="left">' . $langUser . ':</th>
-    <td><select name="u_user_id">' . $user_opts . '</select></td>
-  </tr>
-  <tr>
-    <th class="left">' . $langInterval . ':</th>
-    <td><select name="u_interval">' . $statsIntervalOptions . '</select></td>
-  </tr>
-  <tr>
-    <th>&nbsp;</th>
-    <td><input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '"></td>
-  </tr>
-</table>
-</form>';
+        </div>
+        </div>";        
+$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";
+$tool_content .= '<div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-10">' . $letterlinks . '</div>
+  </div>
+  <div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langUser . ':</label>
+     <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+  </div>
+  <div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langInterval . ':</label>
+     <div class="col-sm-10"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
+  </div>
+  <div class="col-sm-offset-2 col-sm-10">    
+    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>  
+</form></div>';

@@ -22,20 +22,24 @@
 
 require_once 'modules/graphics/plotter.php';
 
-if (isset($_POST['u_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');        
+if (isset($_POST['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+    $user_date_start = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P30D'));       
-    $u_date_start = $date_start->format('d-m-Y H:i');
+    $date_start->sub(new DateInterval('P30D'));    
+    $u_date_start = $date_start->format('Y-m-d H:i');
+    $user_date_start = $date_start->format('d-m-Y H:i');
 }
-if (isset($_POST['u_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['u_date_end']);
-    $u_date_end = $ude->format('Y-m-d H:i');            
+if (isset($_POST['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $u_date_end = $ude->format('Y-m-d H:i');
+    $user_date_end = $ude->format('d-m-Y H:i');
 } else {
-    $date_end = new DateTime();    
-    $u_date_end = $date_end->format('d-m-Y H:i');
+    $date_end = new DateTime();
+    $u_date_end = $date_end->format('Y-m-d H:i');
+    $user_date_end = $date_end->format('d-m-Y H:i');
 }
 
 $usage_defaults = array(
@@ -53,7 +57,6 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 #see if chart has content
-
 $date_fmt = '%Y-%m-%d';
 $date_where = " (`when` BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "DATE_FORMAT(MIN(`when`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`when`), '$date_fmt') AS date_end ";
@@ -93,7 +96,7 @@ if ($u_user_id != -1) {
 
 
 switch ($u_stats_type) {
-    case "visits":
+    case "visits":                
         $result = Database::get()->queryArray("SELECT " . $date_what . " COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC");
         $chart = new Plotter(220, 200);
         $chart->setTitle($langVisits);
