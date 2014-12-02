@@ -190,13 +190,13 @@ if ($is_editor) {
                   'icon' => 'fa fa-plus'),
             array('title' => "$langAdd $langInsertWork",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-flask'),
             array('title' => "$langAdd $langInsertExercise",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-edit'),
             array('title' => "$langAdd $langLearningPath1",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-ellipsis-h'),
             ));
     }               
     $tool_content .= "</div></div>";
@@ -507,8 +507,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $announce->id, $attend, '');
                     }
                 }
-                $message = "<p class='success'>$langGradebookEdit</p>";
-                $tool_content .= $message . "<br/>";
+                $message = "<div class='alert-success'>$langGradebookEdit</div>";
             }
         }
 
@@ -520,7 +519,7 @@ if ($is_editor) {
                 //check if there are booking records for the user, otherwise alert message for first input
                 $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
                 if(!$checkForRecords){
-                    $tool_content .="<div class='info'>$langGradebookNewUser</div>";
+                    $tool_content .="<div class='alert-success'>$langGradebookNewUser</div>";
                 }
 
                 //get all the activities
@@ -528,15 +527,14 @@ if ($is_editor) {
                 $actNumber = count($result);
 
                 if ($actNumber > 0) {
-                    $tool_content .= "<fieldset><legend>" . display_user($userID) . "</legend>";
-                    $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
-                                      <table width='100%' class='sortable' id='t2'>";
+                    $tool_content .= "<h4>" . display_user($userID) . "</h4>";
+                    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
+                                      <table class='table-default'>";
                     $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
                     $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
-                    $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+                    $tool_content .= "<div class='alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
                 }
                 //ui counter
                 $k = 0;
@@ -601,7 +599,7 @@ if ($is_editor) {
                         }
                         $tool_content .= "<td width='' class='text-center'>" . $activity->weight . "%</td>";
                         @$tool_content .= "<td  class='text-center'>
-                        <input style='width:30px' type='text' value='" . $userGrade . "' name='" . $activity->id . "'"; //SOS 4 the UI!!
+                        <input style='width:30px' type='text' value='".$userGrade."' name='" . $activity->id . "'"; //SOS 4 the UI!!
                         $tool_content .= ">
                         <input type='hidden' value='" . $userID . "' name='userID'>    
                         </td>";
@@ -617,7 +615,7 @@ if ($is_editor) {
                 }
                 
                 $tool_content .= "</td></tr>";
-                $tool_content .= "<tr><td colspan=7 class='smaller'>" . $langGradebookUpToDegree . $gradebook_range . "</td></tr></table></form></fieldset>";
+                $tool_content .= "<tr><td colspan=7 class='smaller'>" . $langGradebookUpToDegree . $gradebook_range . "</td></tr></table></form>";
 
             } else {
                 $tool_content .="<div class='alert1'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
@@ -637,14 +635,14 @@ if ($is_editor) {
             if (count($resultUsers)> 0) {
                 //table to display the users
                 $tool_content .= "
-                <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
+                <table id='users_table{$course_id}' class='table-default custom_list_order'>
                     <thead>
                         <tr>
                           <th width='1'>$langID</th>
                           <th><div align='left' width='100'>$langName $langSurname</div></th>
-                          <th class='text-center' width='80'>$langRegistrationDateShort</th>
-                          <th class='text-center'>$langGradebookGrade</th>
-                          <th class='text-center'>$langActions</th>
+                          <th>$langRegistrationDateShort</th>
+                          <th>$langGradebookGrade</th>
+                          <th class='text-center'><i class='cogs'></i></th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -665,14 +663,21 @@ if ($is_editor) {
                         if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
                             $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                         }
-                    $tool_content .="</td><td class='text-center '>"
-                                .icon('add', $langGradebookBook, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")."&nbsp;"
-                                .icon('delete', $langGradebookDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes", "onClick=\"return confirmation('$langConfirmDelete');\"").
-                            "</td></tr>";
+                    $tool_content .="</td><td class='option-btn-cell'>".
+                            action_button(array(
+                                array('title' => $langGradebookDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete),
+                                array('title' => $langGradebookBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")))
+                                ."</td></tr>";
                 }
                 $tool_content .= "</tbody></table>";
             } else {
-                $tool_content .= "<div class='alert1'>$langNoRegStudent <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;editUsers=1'>$langHere</a>.</div>";
+                $tool_content .= "<div class='alert-warning'>$langNoRegStudent <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;editUsers=1'>$langHere</a>.</div>";
             }
         }
         //do not show activities list
