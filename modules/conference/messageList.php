@@ -149,7 +149,7 @@ require_once '../../include/baseTheme.php';
                         </div>
                   </div>\n";        
         } else {
-            $user_id = trim($str_1[1]);
+            $user_id = (int) trim($str_1[1]);
             $str_2 = explode(' - ', $str_1[0]);
             $datetime = $str_2[0];
             $str_3 = explode(' : ', $str_2[1]);
