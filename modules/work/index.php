@@ -1634,8 +1634,6 @@ function show_assignment($id, $display_graph_results = false) {
                       <p class='sub_title1'>$langSubmissions:</p>
                       <div class='alert alert-warning'>$langNoSubmissions</div>";
     }
-//    $tool_content .= "<br/>
-//                <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 function show_non_submitted($id) {
