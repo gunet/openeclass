@@ -84,7 +84,7 @@ require_once '../../include/baseTheme.php';
 
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
-            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsg\n");
+            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsgClear\n");
             fflush($fchat);
             flock($fchat, LOCK_UN);
         }
@@ -99,14 +99,14 @@ require_once '../../include/baseTheme.php';
         $saveIn = "chat." . date("Y-m-j-his") . ".txt";
         $chat_filename = '/' . safe_filename('txt');
         
-        //Concat temp & chat file 
+        //Concat temp & chat file removing system messages and html tags
         $exportFileChat = $coursePath . $course_code . '/chat_export.txt';
         $fp = fopen($exportFileChat, 'a+');        
         $tmp_file = @file_get_contents($tmpArchiveFile);
-        $tmp_file = preg_replace('/!@#\$.*/', '', $tmp_file);
-        $chat_file = @file_get_contents($fileChatName);
-        $chat_file = preg_replace('/!@#\$.*/', '', $chat_file);
-        fwrite($fp, strip_tags($tmp_file.$chat_file));
+        $chat_file = @file_get_contents($fileChatName);        
+        $con_file = preg_replace(array('/^(.*?)!@#\$ systemMsg.*\n/m','/!@#\$.*/'), '', strip_tags($tmp_file.$chat_file));
+
+        fwrite($fp, $con_file);
         fclose($fp);
         
         if (copy($exportFileChat, $basedir . $chat_filename)) {            
@@ -118,12 +118,15 @@ require_once '../../include/baseTheme.php';
                                 format='txt',
                                 date = NOW(),
                                 date_modified = NOW()", $course_id, $subsystem, $chat_filename, $saveIn);
-
-            $alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-info'>$langSaveMessage</div></div></div>";
+            $fchat = fopen($fileChatName, 'a');
+            fwrite($fchat, $timeNow." ---- ".$langSaveMessage . " ---- !@#$ systemMsgSave\n");
+            fclose($fchat);
+            //$alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-info'>$langSaveMessage</div></div></div>";
         } else {
-            $alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-danger'>$langSaveErrorMessage</div></div></div>";
+            //$alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-danger'>$langSaveErrorMessage</div></div></div>";
         }
         @unlink($exportFileChat);
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
         echo $alert_div."</body></html>\n";
         exit;
     }
@@ -155,10 +158,15 @@ require_once '../../include/baseTheme.php';
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
         $str_1 = explode(' !@#$ ', $newline);
 
-        if (trim($str_1[1]) == "systemMsg") {
+        if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
+            if (trim($str_1[1]) == "systemMsgClear"){
+                $class = 'alert-success';
+            } else {
+                $class = 'alert-info';
+            }
             echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                         <div class='col-xs-12'>
-                            <div class='alert alert-success text-center'>
+                            <div class='alert $class text-center'>
                                 $str_1[0]
                             </div>
                         </div>
