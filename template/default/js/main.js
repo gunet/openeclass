@@ -26,7 +26,18 @@ $(document).ready( function () {
                     'value': window.location.pathname + window.location.search,
                     'type': 'hidden'})).submit();
     });
-
+    
+    // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
+    // and the menu is not inside the viwport. This snippet scrolls the page to the top.
+    $('.panel-collapse').on('shown.bs.collapse', function () {
+        var targetElement = $(this).prev('a');
+        if($(window).scrollTop()!=0){
+            $('html, body').animate({
+                //scrollTop: $(targetElement).offset().top
+                scrollTop: $('html, body').offset().top
+            }, 300);
+        };
+    });
 
     // Action Bar - More Options Button
     $(".expandable-btn").click(function(){
@@ -57,18 +68,12 @@ $(document).ready( function () {
             $("#sidebar").animate(
                     {"right": inOut}, {duration: 150, easing: "linear",
                 start: function () {
-                    if (!$("#sidebar").hasClass("in"))
-                    {
-                        $("#sidebar-container").css({"display":"block"});
-                    }
+                    if (!$("#sidebar").hasClass("in")) $("#sidebar-container").css({"display":"block"});
                 },
                 complete: function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
                     $("#toggle-sidebar i").toggleClass("fa-rotate-180");
-                    if ($("#sidebar").hasClass("in"))
-                    {
-                        $("#sidebar-container").css({"display":"none"});
-                    }
+                    if ($("#sidebar").hasClass("in")) $("#sidebar-container").css({"display":"none"});
                     $("#sidebar").toggleClass("in");
                 }
             });
