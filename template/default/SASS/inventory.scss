@@ -1736,10 +1736,17 @@ table#portfolio-lessons tr
     padding: 5px 0;
 }
 
+
+.panel-footer .event-legend > div{
+    margin-bottom: 5px;
+}
 .panel-footer .event
 {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
 }
 
 p.link-to-more{
@@ -1791,7 +1798,7 @@ span[data-cal-date]
 .event-legend{
     font-size: 11px;
     color: #666;
-    line-height: 13px;
+    line-height: 10px;
     .event{
         margin-top: 0px !important;
         margin-bottom: 0px !important;
@@ -1800,12 +1807,12 @@ span[data-cal-date]
 
 .event
 {
-  width: 14px !important;
-  height: 14px !important;
+  width: 14px;
+  height: 14px;
   opacity: 0.7 !important;
-  border-radius: 7px !important;
+  border-radius: 7px;
   border: 0px !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 4px;
 
   @include box-shadow(0 0px 0px #BBBBBB !important);
   @include transition(all $transition-time linear);
