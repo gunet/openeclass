@@ -78,34 +78,20 @@ $head_content .= '<script type="text/javascript">
     }, 2000);        
 </script>';
 
-// reset command
-    if (isset($_GET['reset']) && $is_editor) {        
-        $fchat = fopen($fileChatName, 'w');
-        if (flock($fchat, LOCK_EX)) {
-            ftruncate($fchat, 0);
-            fwrite($fchat,  "$timeNow ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsg\n");
-            fflush($fchat);
-            flock($fchat, LOCK_UN);
-        }
-        fclose($fchat);
-        @unlink($tmpArchiveFile);
-        
-        Session::Messages($langWashSuccess, "alert-success");
-        redirect_to_home_page("modules/conference/index.php");
-    }
-
 if ($is_editor) {
     $tool_content .= action_bar(array(
         array('title' => $langSave,
             'url' => "messageList.php?course=$course_code&amp;store=true",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'
+            'button-class' => 'btn-success',
+            'link-attrs' => "target='messageList'"
         ),
         array('title' => $langWash,
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset=true",
+            'url' => "messageList.php?course=$course_code&amp;reset=true",
             'icon' => 'fa-university',
-            'level' => 'primary'
+            'level' => 'primary',
+            'link-attrs' => "target='messageList'"
             )
     ));
 }

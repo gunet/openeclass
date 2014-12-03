@@ -61,10 +61,10 @@ require_once '../../include/baseTheme.php';
     $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-    define('MESSAGE_LINE_NB', 40);
+    define('MESSAGE_LINE_NB', 20);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 80);
+    define('MAX_LINE_IN_FILE', 20);
 
     if ($GLOBALS['language'] == 'el') {
         $timeNow = date("d-m-Y / H:i", time());
@@ -81,6 +81,7 @@ require_once '../../include/baseTheme.php';
 // reset command
     if (isset($_GET['reset']) && $is_editor) {        
         $fchat = fopen($fileChatName, 'w');
+
         if (flock($fchat, LOCK_EX)) {
             ftruncate($fchat, 0);
             fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsg\n");
@@ -89,17 +90,26 @@ require_once '../../include/baseTheme.php';
         }
         fclose($fchat);
         @unlink($tmpArchiveFile);
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
     }
 
 // store
     if (isset($_GET['store']) && $is_editor) {
         require_once 'modules/document/doc_init.php';
-        $saveIn = "chat." . date("Y-m-j-B") . ".txt";
+        $saveIn = "chat." . date("Y-m-j-his") . ".txt";
         $chat_filename = '/' . safe_filename('txt');
-
-        buffer(implode('', file($fileChatName)), $tmpArchiveFile);
-        if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
-            $alert_div = "<div class='alert alert-info'>$langSaveMessage</div>";
+        
+        //Concat temp & chat file 
+        $exportFileChat = $coursePath . $course_code . '/chat_export.txt';
+        $fp = fopen($exportFileChat, 'a+');        
+        $tmp_file = @file_get_contents($tmpArchiveFile);
+        $tmp_file = preg_replace('/!@#\$.*/', '', $tmp_file);
+        $chat_file = @file_get_contents($fileChatName);
+        $chat_file = preg_replace('/!@#\$.*/', '', $chat_file);
+        fwrite($fp, strip_tags($tmp_file.$chat_file));
+        fclose($fp);
+        
+        if (copy($exportFileChat, $basedir . $chat_filename)) {            
             Database::get()->query("INSERT INTO document SET
                                 course_id = ?d,
                                 subsystem = ?d,
@@ -108,10 +118,13 @@ require_once '../../include/baseTheme.php';
                                 format='txt',
                                 date = NOW(),
                                 date_modified = NOW()", $course_id, $subsystem, $chat_filename, $saveIn);
+
+            $alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-info'>$langSaveMessage</div></div></div>";
         } else {
-            $alert_div = $langSaveErrorMessage;
+            $alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-danger'>$langSaveErrorMessage</div></div></div>";
         }
-        echo $alert_div, "</body></html>\n";
+        @unlink($exportFileChat);
+        echo $alert_div."</body></html>\n";
         exit;
     }
   
@@ -122,11 +135,12 @@ require_once '../../include/baseTheme.php';
         if ($is_editor) {
             $nick = "<b>$nick</b>";
         }
-        fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid\n");
+        fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
     }
 
-// display message list
+    // display message list
     $fileContent = file($fileChatName);
     $FileNbLine = count($fileContent);
     $lineToRemove = $FileNbLine - MESSAGE_LINE_NB;
@@ -134,7 +148,8 @@ require_once '../../include/baseTheme.php';
         $lineToRemove = 0;
     }
     $tmp = array_splice($fileContent, 0, $lineToRemove);
-    $fileReverse = array_reverse($fileContent); 
+    
+    $fileReverse = array_reverse($fileContent);    
     foreach ($fileReverse as $thisLine) {
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');

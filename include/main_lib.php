@@ -535,9 +535,11 @@ function check_guest($id = FALSE) {
  * @global type $course_id
  * @return boolean
  */
-function check_editor() {
+function check_editor($id = NULL) {
     global $uid, $course_id;
-
+    if(isset($id)) {
+        $uid = $id;
+    }
     if (isset($uid) and $uid) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
@@ -2725,24 +2727,29 @@ function action_bar($options) {
         } else {
             $button_class = $option['button-class'];
         }
+        if (isset($option['link-attrs'])) {
+            $link_attrs = " ".$option['link-attrs'];
+        } else {
+            $link_attrs = "";
+        }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
                 "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                " title='$title'>" .
+                " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
                 "<span class='hidden-xs'>$title</span></a>$form_end</li>");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
                 "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                " title='$title'>" .
+                " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon]'></i></a>$form_end</li>");
         } else {
             array_unshift($out_secondary,
                     "<li$class>$form_begin<a$confirm_extra  class='btn $button_class$confirm_modal_class'" . $href .
                     " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                    " title='$title'>" .
+                    " title='$title'$link_attrs>" .
                     "<i class='fa $option[icon]'></i></a>$form_end</li>");
         }
         $i++;
