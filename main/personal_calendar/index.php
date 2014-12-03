@@ -374,10 +374,10 @@ $tool_content .= '<div id="calendar_wrapper" class="row">
                                     <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . $langNext . ' &rarr;</button>
                             </div>
                             <div class="btn-group">
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="year">' . $langYear . '</button>
-                                    <button class="btn btn-warning btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
+                                    <button class="btn btn-default btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="week">' . $langWeek . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="day">' . $langDay . '</button>
                             </div>
                         </div>
                         <h4></h4>
