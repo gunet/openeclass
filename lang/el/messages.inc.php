@@ -585,9 +585,9 @@ $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langAgendaDueDay = "Προθεσμία";
-$langAgendaCourseEvent = "Γεγονός μαθήματος";
-$langAgendaPersonalEvent = "Προσωπικό μήνυμα";
-$langAgendaSystemEvent = "Γογονός συστήματος";
+$langAgendaCourseEvent = "Γεγ. μαθήματος";
+$langAgendaPersonalEvent = "Προσ. μήνυμα";
+$langAgendaSystemEvent = "Γεγ. συστήματος";
 
 // week days
 $langDay_of_weekNames = array();
