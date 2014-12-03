@@ -20,18 +20,9 @@
  * ======================================================================== */
 
 
-/*
-  ===========================================================================
-  usage/userlogins.php
- * @version $Id$
-  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
-  Ophelia Neofytou ophelia@ucnet.uoc.gr
-  ==============================================================================
-  @Description: Shows logins made by a user or all users of a course, during a specific period.
-  Takes data from table 'logins'
-
-  ==============================================================================
+/**
+ * @file userlogins.php
+ * @brief Shows logins made by a user or all users of a course, during a specific period.  
  */
 
 $require_current_course = true;
@@ -44,35 +35,46 @@ require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
 require_once 'statistics_tools_bar.php';
 
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#user_date_start, #user_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
 statistics_tools($course_code, "userlogins");
 
 $nameTools = $langUserLogins;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
+if (isset($_POST['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+    $user_date_start = $uds->format('d-m-Y H:i');
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P2D'));    
+    $u_date_start = $date_start->format('Y-m-d H:i');
+    $user_date_start = $date_start->format('d-m-Y H:i');       
+}
+if (isset($_POST['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $u_date_end = $ude->format('Y-m-d H:i');
+    $user_date_end = $ude->format('d-m-Y H:i');        
+} else {
+    $date_end = new DateTime();
+    $u_date_end = $date_end->format('Y-m-d H:i');
+    $user_date_end = $date_end->format('d-m-Y H:i');        
+}
+
 $usage_defaults = array(
-    'u_user_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 day')),
-    'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
+    'u_user_id' => -1    
 );
 
 foreach ($usage_defaults as $key => $val) {
@@ -108,7 +110,7 @@ $unknown_users = array();
 $result = Database::get()->queryArray("SELECT user_id, ip, date_time FROM logins 
                  WHERE course_id = ?d AND $date_where $user_where
                  ORDER BY date_time DESC", $course_id, $date_terms, $terms);
-$k = 0;
+
 foreach ($result as $row) {
     $known = false;
     if (isset($users[$row->user_id])) {
@@ -123,23 +125,17 @@ foreach ($result as $row) {
         }
         $unknown_users[$row->user_id] = $user;
     }
-    if ($k % 2 == 0) {
-        $table_cont .= "<tr class='even'>";
-    } else {
-        $table_cont .= "<tr class='odd'>";
-    }
-    $table_cont .= "<td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
-                <td>";
+    
+    $table_cont .= "<td>";
     if ($known) {
         $table_cont .= q($user);
     } else {
         $table_cont .= "<span class='red'>" . q($user) . "</span>";
     }
     $table_cont .= "</td>
-                <td align='center'>" . $row->ip . "</td>
-                <td align='center'>" . $row->date_time . "</td>
-                </tr>";
-    $k++;
+                <td align='text-center'>" . $row->ip . "</td>
+                <td align='text-center'>" . nice_format($row->date_time, true) . "</td>
+                </tr>"; 
 }
 
 //Records exist?
@@ -148,18 +144,16 @@ if (count($unknown_users) > 0) {
 }
 
 if ($table_cont) {
-    $tool_content .= "
-        <table width='100%' class='tbl_alt'>
+    $tool_content .= "<div class='table-responsive'>
+        <table class='table-default'>
+        <tr><th colspan='4'>$langUserLogins</th></tr>
         <tr>
-        <th colspan='4'>$langUserLogins</th>
-        </tr>
-        <tr>
-        <th colspan='2' class='left'>" . $langUser . "</th>
+        <th class='text-left'>" . $langUser . "</th>
         <th>" . $langAddress . "</th>
         <th>" . $langLoginDate . "</th>
         </tr>";
     $tool_content .= "" . $table_cont . "";
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 }
 
 if (!($table_cont)) {
@@ -197,30 +191,39 @@ foreach ($result as $row) {
     $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' . q($row->givenname . ' ' . $row->surname) . "</option>";
 }
 
-$tool_content .= '
-<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
-<fieldset>
-  <legend>' . $langUserLogins . '</legend>
-  <table class="tbl">
-  <tbody>
-  <tr>
-    <th>&nbsp;</th>
-    <td><b>' . $langCreateStatsGraph . ':</b></td>
-  </tr>
-  <tr>
-    <th>' . $langStartDate . ':</th>
-    <td><input type=text name = "u_date_start" value="' . $u_date_start . '"></td>
-  </tr>
-  <tr>
-    <th>' . $langEndDate . ':</th>
-    <td><input type=text name = "u_date_end" value="' . $u_date_end . '"></td>
-  </tr>
-  <tr>
-    <th valign="top">' . $langUser . ':</th>
-    <td>' . $langFirstLetterUser . ': ' . $letterlinks . ' <br /><select name="u_user_id">' . $user_opts . '</select></td>
-  </tr>
-  </table>
-</fieldset>
-</form>';
+$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
+$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label'>$langStartDate:</label>
+        <div class='col-xs-10 col-sm-9'>               
+            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";        
+$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";
+$tool_content .= '<div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-10">' . $letterlinks . '</div>
+  </div>
+  <div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langUser . ':</label>
+     <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+  </div>  
+  <div class="col-sm-offset-2 col-sm-10">    
+    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>  
+</form></div>';
 
 draw($tool_content, 2, null, $head_content);

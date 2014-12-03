@@ -33,38 +33,27 @@ require_once '../../include/baseTheme.php';
 require_once "statistics_tools_bar.php";
 
 load_js('tools.js');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd', 
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#user_date_start, #user_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
 statistics_tools($course_code, "index");
 
-$dateNow = date("d-m-Y / H:i:s", time());
 $nameTools = $langUsage;
 
-if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
-    require_once "analyze.php";
-} else {
-    $made_chart = true;
-    ob_start();
-    require_once "results.php";
-    require_once "form.php";
-}
+$made_chart = true;
+ob_start();
+require_once "results.php";
+require_once "form.php";
+
 add_units_navigation(true);
 draw($tool_content, 2, null, $head_content);

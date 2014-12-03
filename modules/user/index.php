@@ -319,8 +319,7 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
-$tool_content .= "
-<div id='operations_container'>" .
+$tool_content .= 
         action_bar(array(
             array('title' => $langOneUser,
                 'url' => "adduser.php?course=$course_code",
@@ -345,14 +344,13 @@ $tool_content .= "
                 'icon' => 'fa-times',
                 'button-class' => 'btn-danger',
                 'level' => 'primary'),
-        )) .
-        "</div>";
-
-// display number of users
-$tool_content .= "
-<div class='alert alert-info'><b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
-       2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
-  </div>";
+            array('title' => "$langDumpUser ($langCsv $langcsvenc1)",
+                'url' => "dumpuser.php?course=$course_code",
+                'icon' => 'fa-file-archive-o'),
+            array('title' => "$langDumpUser ($langCsv $langcsvenc2)",
+                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
+                'icon' => 'fa-file'),
+        ));
 
 
 $tool_content .= "

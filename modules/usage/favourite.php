@@ -34,36 +34,47 @@ require_once 'include/action.php';
 require_once 'modules/graphics/plotter.php';
 require_once 'statistics_tools_bar.php';
 
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
-<script type='text/javascript'>
-$(function() {
-$('input[name=u_date_start]').datetimepicker({
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mm'
-    });
-});
-
-$(function() {
-$('input[name=u_date_end]').datetimepicker({
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mm'
-    });
-});
-</script>";
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#user_date_start, #user_date_end').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
+        });
+    </script>";
 
 statistics_tools($course_code, "favourite");
 
 $nameTools = $langFavourite;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
+if (isset($_POST['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+    $user_date_start = $uds->format('d-m-Y H:i');
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P30D'));    
+    $u_date_start = $date_start->format('Y-m-d H:i');
+    $user_date_start = $date_start->format('d-m-Y H:i');       
+}
+if (isset($_POST['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $u_date_end = $ude->format('Y-m-d H:i');
+    $user_date_end = $ude->format('d-m-Y H:i');        
+} else {
+    $date_end = new DateTime();
+    $u_date_end = $date_end->format('Y-m-d H:i');
+    $user_date_end = $date_end->format('d-m-Y H:i');        
+}
+
 $usage_defaults = array(
     'u_stats_value' => 'visits',
-    'u_user_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
-    'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
+    'u_user_id' => -1
 );
 
 foreach ($usage_defaults as $key => $val) {
@@ -91,10 +102,9 @@ switch ($u_stats_value) {
         $chart = new Plotter(400, 300);
         $chart->setTitle($langFavourite);
         $result = Database::get()->queryArray("SELECT module_id, SUM(hits) AS cnt FROM actions_daily
-                        WHERE $date_where AND
-                              course_id = ?d
-                              $user_where
-                        GROUP BY module_id", $course_id, $terms);
+                        WHERE $date_where $user_where 
+                            AND course_id = ?d              
+                        GROUP BY module_id", $terms, $course_id);
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course units
@@ -108,18 +118,16 @@ switch ($u_stats_value) {
 
     case "duration":
         $chart = new Plotter(400, 300);
-        $chart->setTitle($langFavourite);
+        $chart->setTitle($langFavourite);                
         $result = Database::get()->queryArray("SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
-                        WHERE $date_where
-                        AND course_id = ?d
-                        $user_where GROUP BY module_id", $course_id);
-
+                        WHERE $date_where                        
+                        $user_where AND course_id = ?d GROUP BY module_id", $terms, $course_id);
         foreach ($result as $row) {
             $mid = $row->module_id;
             if ($mid == MODULE_ID_UNITS) { // course inits
                 $chart->growWithPoint($langCourseUnits, $row->tot_dur);
             } else { // other modules
-                $chart->growWithPoint($modules[$mid]['title'], $row->tot_dur);
+                $chart->growWithPoint($modules[$mid]['title'], $row->tot_dur);                
             }
         }
         $chart_error = $langDurationExpl;
@@ -166,35 +174,44 @@ foreach ($result as $row) {
 $statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>" .
         '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>";
 
-$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    <fieldset>
-     <legend>$langFavourite</legend>
-     <table class='tbl'>
-     <tr>
-       <td>&nbsp;</td>
-       <td class='bold'>$langCreateStatsGraph:</td>
-     </tr>
-     <tr>
-       <td>$langValueType':</td>
-       <td><select name='u_stats_value'>$statsValueOptions</select></td>
-     </tr>
-     <tr>
-       <td>$langStartDate:</td>
-       <td><input type='text' name ='u_date_start' value='$u_date_start'></td>
-     </tr>
-     <tr>
-       <td>$langEndDate:</td>
-       <td><input type='text' name='u_date_end' value='$u_date_end'></td>
-     </tr>
-     <tr>
-       <td rowspan='2' valign='top'>$langUser:</td>
-       <td>$langFirstLetterUser: $letterlinks</td>
-     </tr>
-     <tr>
-       <td><select name='u_user_id'>$user_opts</select></td>
-     </tr>
-     </table>
-    </fieldset>
-    </form>";
+
+$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
+$tool_content .= '<div class="form-group">  
+                    <label class="col-sm-2 control-label">' . $langValueType . ':</label>
+                    <div class="col-sm-10"><select name="u_stats_value" class="form-control">' . $statsValueOptions . '</select></div>
+                  </div>';
+$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label'>$langStartDate:</label>
+        <div class='col-xs-10 col-sm-9'>               
+            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";        
+$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";
+$tool_content .= '<div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-10">' . $letterlinks . '</div>
+  </div>
+  <div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langUser . ':</label>
+     <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+  </div>  
+  <div class="col-sm-offset-2 col-sm-10">    
+    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>  
+</form></div>';
 
 draw($tool_content, 2, null, $head_content);
