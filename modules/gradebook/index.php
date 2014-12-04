@@ -483,7 +483,7 @@ if ($is_editor) {
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])){        
         if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='alert-success'>$langAttendanceUsers</div>";
+            $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }        
         //record booking
         if(isset($_POST['bookUser'])){

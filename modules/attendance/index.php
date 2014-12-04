@@ -408,8 +408,7 @@ if ($is_editor) {
     //DISPLAY: list of users for booking and form for each user
     elseif(isset($_GET['attendanceBook']) || isset($_GET['book'])){
         if (isset($_GET['update']) and $_GET['update']) {
-            Session::Messages($langAttendanceUsers,"alert-success");
-            redirect_to_home_page("modules/attendance/index.php");
+            $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }        
         //record booking
         if(isset($_POST['bookUser'])){                        
