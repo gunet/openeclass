@@ -447,8 +447,8 @@ if (isset($_GET['modifyAnswers'])) {
             }
 
             $tool_content .= "
-                            <td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, @$reponse[$i], "", true) . "</td>
-                            <td style='width:42%'>" . text_area("comment[$i]", 7, 40, @$comment[$i], "class=''") . "</td>
+                            <td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, @$reponse[$i], true) . "</td>
+                            <td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, @$comment[$i], true) . "</td>
                             <td class='text-center'><input type='text' name=\"weighting[" . $i . "]\" size=\"10\" value=\"";
             if (isset($weighting[$i])) {
                 $tool_content .= $weighting[$i];
@@ -668,7 +668,7 @@ if (isset($_GET['modifyAnswers'])) {
         $tool_content .= "
   <input type='hidden' name='reponse[1]' value='$langCorrect' />
   <td>" .
-                rich_text_editor("comment[1]", 4, 30, @$comment[1], "", true)
+                rich_text_editor("comment[1]", 4, 30, @$comment[1], true)
                 . "</td>
   <td><input type='text' name='weighting[1]' value=\"";
         if (isset($weighting[1])) {
@@ -689,7 +689,7 @@ if (isset($_GET['modifyAnswers'])) {
         $tool_content .= "
                     <input type='hidden' name='reponse[2]' value='$langFalse'>
                   <td style='width:100%;'>" .
-                text_area("comment[2]", 4, 40, @$comment[2], "class=''")
+                rich_text_editor("comment[2]", 4, 40, @$comment[2])
                 . "</td>
                     <td valign='top'><input type='text' name='weighting[2]' size='5' value=\"";
         if (isset($weighting[2])) {

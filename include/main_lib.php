@@ -1599,7 +1599,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $extra = '', $onFocus = false) {
+function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
     global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
     if (!$init_done) {
@@ -1709,7 +1709,7 @@ tinymce.init({
       array('[m]', '[/m]', '[m]', '[/m]'),
       $text); */
 
-    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols' $extra>" .
+    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols'>" .
             q(str_replace('{', '&#123;', $text)) .
             "</textarea>\n";
 }
