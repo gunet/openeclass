@@ -549,7 +549,7 @@ function new_assignment() {
     
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary',
+              'level' => 'primary-label',
               'url' => "$_SERVER[PHP_SELF]?course=$course_code",
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
