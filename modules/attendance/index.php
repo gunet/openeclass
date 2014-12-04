@@ -188,10 +188,10 @@ if ($is_editor) {
                   'icon' => 'fa fa-plus'),
             array('title' => "$langAdd $langInsertWork",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa fa-flask'),
             array('title' => "$langAdd $langInsertExercise",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-plus')));
+                  'icon' => 'fa fa-edit')));
         
     }       
     
