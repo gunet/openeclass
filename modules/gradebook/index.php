@@ -1051,7 +1051,9 @@ if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
         $activityNumber = count($result);
 
-        if ($activityNumber > 0) {
+        if (!$result or $activityNumber == 0) {
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>";
+        } else {
             $tool_content .= "<h3>$langGradebookActList</h3>";
             $tool_content .= $weightLeftMessage;
             $tool_content .= "
@@ -1062,12 +1064,7 @@ if ($is_editor) {
                               <th class='text-center'>$langScore</th>
                               <th class='text-center'><i class='fa fa-cogs'></i></th>
                               </tr>";
-        }
-        else{
-            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>";
-        }
-        if ($result){
-            foreach ($result as $announce) {                
+            foreach ($result as $announce) {
                 $content = ellipsize_html($announce->description, 50);
                 $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
 
@@ -1103,20 +1100,20 @@ if ($is_editor) {
                 $tool_content .= "</td>"
                         . "<td><div class='smaller'>" . nice_format($announce->date) . "</div></td>";
 
-                if($announce->module_auto_id) {
-                    if($announce->module_auto_type == 1){
+                if ($announce->module_auto_id) {
+                    if ($announce->module_auto_type == 1) {
                         $tool_content .= "<td class='smaller'>$langGradebookAss";
                     }
-                    if($announce->module_auto_type == 2){
+                    if ($announce->module_auto_type == 2) {
                         $tool_content .= "<td class='smaller'>$langExercise ";
                     }
-                    if($announce->module_auto_type == 3){
+                    if ($announce->module_auto_type == 3) {
                         $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
                     }
 
-                    if($announce->auto){
+                    if ($announce->auto) {
                         $tool_content .= "<br>($langGradebookInsAut)";
-                    }else{
+                    } else {
                         $tool_content .= "<br>($langGradebookInsMan)";
                     }
                     $tool_content .= "</td>";
@@ -1148,8 +1145,8 @@ if ($is_editor) {
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"))).
                         "</td>";
             } // end of while
+            $tool_content .= "</table></div></div></div>";       
         }
-        $tool_content .= "</table></div></div></div>";       
     }
 
 } else { //==========Student View==============
