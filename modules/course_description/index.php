@@ -59,7 +59,7 @@ if ($is_editor) {
         } else {
             updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
         }
-        Session::Messages("Ok","alert-success");
+        Session::Messages($langCourseUnitAdded,"alert-success");
         redirect_to_home_page("modules/course_description/index.php");
     } else if (isset($_POST['submit']) && isset($_POST['edIdBloc'])) {
         // Save results from block edit (save action)
@@ -157,7 +157,7 @@ function processActions() {
         $res_id = intval($_REQUEST['del']);
         Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
-        Session::Messages($langResourceCourseUnitDeleted,"alert-success");
+        Session::Messages($langResourceCourseUnitDeleted, "alert-success");
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
         $res_id = intval($_REQUEST['vis']);
