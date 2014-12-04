@@ -158,20 +158,23 @@ function processActions() {
         Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::Messages($langResourceCourseUnitDeleted,"alert-success");
+        redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
         $res_id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         $newvis = (intval($vis->visible) === 1) ? 0 : 1;
         Database::get()->query("UPDATE course_description SET `visible` = ?d, update_dt = NOW() WHERE id = ?d AND course_id = ?d", $newvis, $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
+        redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
         move_order('course_description', 'id', $res_id, 'order', 'down', "course_id = $course_id");
+        redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['up'])) { // change order up
         $res_id = intval($_REQUEST['up']);
         move_order('course_description', 'id', $res_id, 'order', 'up', "course_id = $course_id");
+        redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     }
-    redirect_to_home_page("modules/course_description/index.php?course=$course_code");
 }
 
 function updateCourseDescription($cdId, $title, $comments, $type) {
