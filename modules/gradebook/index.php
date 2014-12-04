@@ -1064,7 +1064,7 @@ if ($is_editor) {
                               </tr>";
         }
         else{
-            $tool_content .= "<div class='alert alert-warning'><p>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p></div>\n";
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>";
         }
         if ($result){
             foreach ($result as $announce) {                
