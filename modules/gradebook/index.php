@@ -507,7 +507,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $announce->id, $attend, '');
                     }
                 }
-                $message = "<div class='alert-success'>$langGradebookEdit</div>";
+                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             }
         }
 
@@ -519,7 +519,7 @@ if ($is_editor) {
                 //check if there are booking records for the user, otherwise alert message for first input
                 $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
                 if(!$checkForRecords){
-                    $tool_content .="<div class='alert-success'>$langGradebookNewUser</div>";
+                    $tool_content .="<div class='alert alert-success'>$langGradebookNewUser</div>";
                 }
 
                 //get all the activities
@@ -534,7 +534,7 @@ if ($is_editor) {
                     $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
-                    $tool_content .= "<div class='alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+                    $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
                 }
                 //ui counter
                 $k = 0;
@@ -618,7 +618,7 @@ if ($is_editor) {
                 $tool_content .= "<tr><td colspan=7 class='smaller'>" . $langGradebookUpToDegree . $gradebook_range . "</td></tr></table></form>";
 
             } else {
-                $tool_content .="<div class='alert1'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
+                $tool_content .="<div class='alert alert-success'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
             }
         } else {            
         //========================
@@ -677,7 +677,7 @@ if ($is_editor) {
                 }
                 $tool_content .= "</tbody></table>";
             } else {
-                $tool_content .= "<div class='alert-warning'>$langNoRegStudent <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;editUsers=1'>$langHere</a>.</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;editUsers=1'>$langHere</a>.</div>";
             }
         }
         //do not show activities list
@@ -718,7 +718,7 @@ if ($is_editor) {
             if ($newUsersQuery) {
                 redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebookBook=1&update=true');
             } else {
-                $tool_content .= "<div class='alert-warning'>$langNoStudents</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langNoStudents</div>";
             }
         }
 
@@ -885,7 +885,7 @@ if ($is_editor) {
             } // end of while        
             $tool_content .= "</td></tr></table></div></div></div>";
         } else {
-            $tool_content .= "<div class='alert-warning'>$langAttendanceNoActMessageExe4</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div>";
         }
         $showGradebookActivities = 0;
     }
@@ -934,7 +934,7 @@ if ($is_editor) {
             } // end of while        
             $tool_content .= "</table></div></div></div>";
         } else {
-            $tool_content .= "<div class='alert-warning'>$langAttendanceNoActMessageLp4</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageLp4</div>";
         }
         $showGradebookActivities = 0;
     }
@@ -1174,7 +1174,7 @@ if ($is_editor) {
                             <table class='table-default' >";
         $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
     } else {
-        $tool_content .= "<div class='alert-warning'>$langGradebookNoActMessage5</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage5</div>";
     }
 
     if ($result) {
