@@ -885,7 +885,7 @@ if ($is_editor) {
             } // end of while        
             $tool_content .= "</td></tr></table></div></div></div>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageExe4</p>";
+            $tool_content .= "<div class='alert-warning'>$langAttendanceNoActMessageExe4</div>";
         }
         $showGradebookActivities = 0;
     }
@@ -934,7 +934,7 @@ if ($is_editor) {
             } // end of while        
             $tool_content .= "</table></div></div></div>";
         } else {
-            $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageLp4</p>";
+            $tool_content .= "<div class='alert-warning'>$langAttendanceNoActMessageLp4</div>";
         }
         $showGradebookActivities = 0;
     }
@@ -1064,7 +1064,7 @@ if ($is_editor) {
                               </tr>";
         }
         else{
-            $tool_content .= "<p class='alert1'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'><p>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p></div>\n";
         }
         if ($result){
             foreach ($result as $announce) {                

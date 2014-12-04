@@ -870,7 +870,7 @@ if ($is_editor) {
                                 <th class='text-center'><i class='fa fa-cogs'></i></th>
                             </tr>";
         } else {
-            Session::Messages("$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3");
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
         }
         if ($result){
             foreach ($result as $announce) {               
