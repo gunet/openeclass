@@ -418,7 +418,7 @@ if(!isset($_GET['addEvent']) && !isset($_GET['edit'])){
             }
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table></div></div></div></div>";
+        $tool_content .= "</table></div></div></div>";
     } else {
         $tool_content .= "<div class='alert alert-warning text-center'>$langNoEvents</div>";
     }
