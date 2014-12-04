@@ -153,44 +153,55 @@ require_once 'include/lib/textLib.inc.php';
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
         $str_1 = explode(' !@#$ ', $newline);
-
-        if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
-            if (trim($str_1[1]) == "systemMsgClear"){
-                $class = 'alert-success';
+        
+        //New message system (Opecart 3.0 generated conferences)
+        if (isset($str_1[1])) {
+            if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
+                if (trim($str_1[1]) == "systemMsgClear"){
+                    $class = 'alert-success';
+                } else {
+                    $class = 'alert-info';
+                }
+                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                            <div class='col-xs-12'>
+                                <div class='alert $class text-center'>
+                                    $str_1[0]
+                                </div>
+                            </div>
+                      </div>\n";        
             } else {
-                $class = 'alert-info';
+                $user_id = (int) trim($str_1[1]);
+                $str_2 = explode(' - ', $str_1[0]);
+                $datetime = $str_2[0];
+                $str_3 = explode(' : ', $str_2[1]);
+                $username = $str_3[0];
+                $usertext = $str_3[1];
+                $token = token_generate($user_id, true);
+                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                            <div class='col-xs-12'>
+                                <div class='media'>
+                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&token=$token'>
+                                        ". profile_image($user_id, IMAGESIZE_SMALL) ."
+                                    </a>
+                                    <div class='media-body bubble'>
+                                        <div class='label label-success media-heading'>$datetime</div>
+                                        <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>    
+                                        <div class='margin-top-thin'>
+                                            " . $usertext . "
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
+                      </div>\n";
             }
-            echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                        <div class='col-xs-12'>
-                            <div class='alert $class text-center'>
-                                $str_1[0]
+        } else { //prior to version 3.0 generated conferences
+                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                            <div class='col-xs-12'>
+                                <div class='alert alert-default'>
+                                    $str_1[0]
+                                </div>
                             </div>
-                        </div>
-                  </div>\n";        
-        } else {
-            $user_id = (int) trim($str_1[1]);
-            $str_2 = explode(' - ', $str_1[0]);
-            $datetime = $str_2[0];
-            $str_3 = explode(' : ', $str_2[1]);
-            $username = $str_3[0];
-            $usertext = $str_3[1];
-            $token = token_generate($user_id, true);
-            echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                        <div class='col-xs-12'>
-                            <div class='media'>
-                                <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&token=$token'>
-                                    ". profile_image($user_id, IMAGESIZE_SMALL) ."
-                                </a>
-                                <div class='media-body bubble'>
-                                    <div class='label label-success media-heading'>$datetime</div>
-                                    <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>    
-                                    <div class='margin-top-thin'>
-                                        " . $usertext . "
-                                    </div>
-                                </div>    
-                            </div>
-                        </div>
-                  </div>\n";
+                      </div>\n";            
         }
     }
     echo "</body></html>\n";

@@ -6,9 +6,17 @@
 .tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
     @extend .table, .table-striped;  
 }
+//Input file global fix
 input[type="file"] {
     padding-top: 7px;
 }
+//New alert style (probably more styling needed)
+.alert-default {
+    background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+    border-color: #ccc;
+}
+
+// Affix styles
 .affix {
     top: 40px;
 }
@@ -32,6 +40,7 @@ input[type="file"] {
     width: 12.4%;
   }   
 }
+//Speech bubble styles
 .bubble 
 {
 position: relative;
