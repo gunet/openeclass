@@ -89,7 +89,7 @@ if ($is_editor) {
         ),
         array('title' => $langWash,
             'url' => "messageList.php?course=$course_code&amp;reset=true",
-            'icon' => 'fa-university',
+            'icon' => 'fa-trash',
             'level' => 'primary',
             'link-attrs' => "target='messageList'"
             )

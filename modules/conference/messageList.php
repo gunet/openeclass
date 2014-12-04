@@ -25,34 +25,7 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<head>
-    <base target="_parent">
-    <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
-    <title>Chat messages</title>
-    <!-- jQuery -->
-    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-2.1.1.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
-        
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
-    
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
-        
-    <style type="text/css">
-        span { color: #727266; font-size: 11px; }
-        div { font-size: 12px; }
-        body { font-family: Verdana, Arial, Helvetica, sans-serif; }
-    </style>
-</head>
-<body>
-    <?php
-    require_once 'include/lib/textLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 
     $coursePath = $webDir . '/courses/';
     $fileChatName = $coursePath . $course_code . '/chat.txt';
@@ -121,14 +94,10 @@ require_once '../../include/baseTheme.php';
             $fchat = fopen($fileChatName, 'a');
             fwrite($fchat, $timeNow." ---- ".$langSaveMessage . " ---- !@#$ systemMsgSave\n");
             fclose($fchat);
-            //$alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-info'>$langSaveMessage</div></div></div>";
         } else {
-            //$alert_div = "<div class='row margin-right-thin margin-left-thin margin-top-thin'><div class='col-xs-12'><div class='alert alert-danger'>$langSaveErrorMessage</div></div></div>";
         }
         @unlink($exportFileChat);
         redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
-        echo $alert_div."</body></html>\n";
-        exit;
     }
   
 // add new line
@@ -142,7 +111,34 @@ require_once '../../include/baseTheme.php';
         fclose($fchat);
         redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
     }
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+    <base target="_parent">
+    <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
+    <title>Chat messages</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-2.1.1.min.js"></script>
 
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
+        
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
+    
+    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
+        
+    <style type="text/css">
+        span { color: #727266; font-size: 11px; }
+        div { font-size: 12px; }
+        body { font-family: Verdana, Arial, Helvetica, sans-serif; }
+    </style>
+</head>
+<body>
+<?php
     // display message list
     $fileContent = file($fileChatName);
     $FileNbLine = count($fileContent);
