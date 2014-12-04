@@ -286,10 +286,10 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='form-group' id='weeklyDates'>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langStartDate <input class='dateInForm' type='text' name='start_date' value='' readonly>
+                      $langStartDate <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
                 </div>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langDuration <input class='dateInForm' type='text' name='finish_date' value='' readonly>
+                      $langDuration <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
                 </div>                
             </div>
             <div class='form-group'>
@@ -317,7 +317,7 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='form-group' id='cc'>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      " . selection($cc_license, 'cc_use') . "
+                      " . selection($cc_license, 'cc_use', "",'class="form-control"') . "
                 </div>              
             </div>
             <div class='form-group'>
@@ -355,7 +355,7 @@ if (!isset($_POST['create_course'])) {
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
-                          <input class='form-control' id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
+                          <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
                     </div>
                 </div>
                 <div class='form-group'>
