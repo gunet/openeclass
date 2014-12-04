@@ -29,14 +29,25 @@ $(document).ready( function () {
     
     // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
     // and the menu is not inside the viwport. This snippet scrolls the page to the top.
-    $('.panel-collapse').on('shown.bs.collapse', function () {
-        var targetElement = $(this).prev('a');
+    function scrollToTop(element, time){
+        var targetElement;
+        var animateTime;
         if($(window).scrollTop()!=0){
+            (typeof element === 'undefined')?targetElement ="html, body":targetElement=element;
+            (typeof time === 'undefined')?animateTime = 300:animateTime = time;
             $('html, body').animate({
-                //scrollTop: $(targetElement).offset().top
-                scrollTop: $('html, body').offset().top
-            }, 300);
+                scrollTop: $(targetElement).offset().top
+            }, animateTime);
         };
+    }
+    
+    $("#scrollToTop i").on('click', function(){
+        scrollToTop("html, body",500);
+    });
+    
+    $('.panel-collapse').on('shown.bs.collapse', function () {
+        //scrollToTop($(this).prev('a'),500);
+        scrollToTop("html, body",500);
     });
 
     // Action Bar - More Options Button
