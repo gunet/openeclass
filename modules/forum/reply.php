@@ -186,7 +186,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
               <div class='col-sm-10'>
-                " . rich_text_editor('message', 15, 70, $reply, "") . "
+                " . rich_text_editor('message', 15, 70, $reply) . "
               </div>
             </div>
             <div class='form-group'>

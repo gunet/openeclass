@@ -61,7 +61,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     
     if ($answerType == FREE_TEXT) {
             $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
-            $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text, '');            
+            $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text);            
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
          $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";

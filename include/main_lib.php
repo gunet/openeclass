@@ -1679,7 +1679,7 @@ function openDocsPicker(field_name, url, type, win) {
 
 tinymce.init({
     // General options
-    selector: 'textarea:not(.mceNoEditor)',
+    selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
@@ -1709,7 +1709,7 @@ tinymce.init({
       array('[m]', '[/m]', '[m]', '[/m]'),
       $text); */
 
-    return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
+    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols' $extra>" .
             q(str_replace('{', '&#123;', $text)) .
             "</textarea>\n";
 }

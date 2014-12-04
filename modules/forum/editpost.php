@@ -114,7 +114,7 @@ if (isset($_POST['submit'])) {
                 </tr>";
     }
     $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />" .
-            rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
+            rich_text_editor('message', 10, 50, $message)
             . "
         </td></tr>
         <tr><td class='right'>";
