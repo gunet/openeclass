@@ -243,14 +243,14 @@ if ($uid AND !isset($_GET['logout'])) {
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://opencourses.gr'>
-                            <img src='$themeimg/open_courses_bnr.png'>
+                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
                         </a>
                     </div>
                 </div>
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://www.openeclass.org/'>
-                            <img src='$themeimg/open_eclass_bnr.png'>
+                            <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
                         </a>
                     </div>
                 </div>
