@@ -39,7 +39,8 @@ $this->_securitySalt = $salt;
 $this->_bbbServerBaseUrl = $bbb_url;	
 }
 
-private function _processXmlResponse($url){
+
+private function _processXmlResponse($url){    
 /*
 A private utility method used by other public methods to process XML responses.
 */
