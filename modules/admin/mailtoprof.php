@@ -107,7 +107,7 @@ $langEmail: " . get_config('email_helpdesk') . "
 	<div class='form-group'>
 	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
               <div class='col-sm-10'>
-	      <textarea name='body_mail' rows='10' cols='60'></textarea>
+	      <textarea class='form-control' name='body_mail' rows='10'></textarea>
               </div/>
 	</div>
 	<div class='form-group'>
@@ -121,7 +121,8 @@ $langEmail: " . get_config('email_helpdesk') . "
             </div>
         </div>
 	<div class='col-sm-offset-2 col-sm-10'>	
-	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />
+	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+          <a class='btn btn-default' href='index.php'>$langCancel</a>
         </div>	
     </fieldset>
     </form>
