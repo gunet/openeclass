@@ -35,16 +35,21 @@ $imaphost = isset($_POST['imaphost']) ? $_POST['imaphost'] : $imaphost;
 $auth_instructions = isset($_POST['auth_instructions']) ? $_POST['auth_instructions'] : $auth_instructions;
 
 $tool_content .= "
-    <tr>
-      <th class='left'>$langimaphost:</th>
-      <td><input class='FormData_InputText' name='imaphost' type='text' size='30' value='" . q($imaphost) . "' /></td>
-    </tr>
-    <tr>
-      <th class='left'>$langimapport:</th>
-      <td>143</td>
-    </tr>
-    <tr>
-      <th class='left'>$langInstructionsAuth:</th>
-      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
-    </tr>
-";
+    <div class='form-group'>
+        <label for='imaphost' class='col-sm-2 control-label'>$langimaphost:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='imaphost' id='imaphost' type='text' value='" . q($imaphost) . "'>
+        </div>
+    </div>       
+    <div class='form-group'>
+        <label for='imaport' class='col-sm-2 control-label'>$langimapport:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='imaport' id='imaport' type='text' value='143' disabled>
+        </div>
+    </div> 
+    <div class='form-group'>
+        <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+        <div class='col-sm-10'>
+            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+        </div>
+    </div>";

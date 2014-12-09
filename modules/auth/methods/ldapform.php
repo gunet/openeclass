@@ -55,32 +55,45 @@ if (!empty($ldapdata)) {
 }
 
 $tool_content .= "
-    <tr>
-      <th class='left'>$langldap_host_url:</th>
-      <td><input class='FormData_InputText' name='ldaphost' type='text' size='30' value='" . q($ldaphost) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langldap_base:</th>
-      <td><input class='FormData_InputText' name='ldap_base' type='text' size='30' value='" . q($ldap_base) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langldap_bind_dn:</th>
-      <td><input class='FormData_InputText' name='ldapbind_dn' type='text' size='30' value='" . q($ldapbind_dn) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langldap_bind_pw:</th>
-      <td><input class='FormData_InputText' name='ldapbind_pw' type='password' size='30' value='" . q($ldapbind_pw) . "' autocomplete='off'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langldap_login_attr:</th>
-      <td><input class='FormData_InputText' name='ldap_login_attr' type='text' size='30' value='" . q($ldap_login_attr) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langldap_login_attr2:</th>
-      <td><input class='FormData_InputText' name='ldap_login_attr2' type='text' size='30' value='" . q($ldap_login_attr2) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langInstructionsAuth:</th>
-      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
-    </tr>
-";
+    <div class='form-group'>
+        <label for='ldaphost' class='col-sm-2 control-label'>$langldap_host_url:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldaphost' id='ldaphost' type='text' value='" . q($ldaphost) . "'>
+        </div>
+    </div>     
+    <div class='form-group'>
+        <label for='ldap_base' class='col-sm-2 control-label'>$langldap_base:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_base' id='ldap_base' type='text' value='" . q($ldap_base) . "'>
+        </div>
+    </div>  
+    <div class='form-group'>
+        <label for='ldapbind_dn' class='col-sm-2 control-label'>$langldap_bind_dn:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldapbind_dn' id='ldapbind_dn' type='text' value='" . q($ldapbind_dn) . "'>
+        </div>
+    </div>      
+    <div class='form-group'>
+        <label for='ldapbind_pw' class='col-sm-2 control-label'>$langldap_bind_pw:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldapbind_pw' id='ldapbind_pw' type='password' value='" . q($ldapbind_pw) . "' autocomplete='off'>
+        </div>
+    </div>  
+    <div class='form-group'>
+        <label for='ldap_login_attr' class='col-sm-2 control-label'>$langldap_login_attr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_login_attr' id='ldap_login_attr' type='text' value='" . q($ldap_login_attr) . "'>
+        </div>
+    </div>  
+    <div class='form-group'>
+        <label for='ldap_login_attr2' class='col-sm-2 control-label'>$langldap_login_attr2:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_login_attr2' id='ldap_login_attr2' type='text' value='" . q($ldap_login_attr2) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+        <div class='col-sm-10'>
+            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+        </div>
+    </div>";
