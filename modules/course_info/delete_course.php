@@ -27,37 +27,38 @@ require_once 'include/log.php';
 $nameTools = $langDelCourse;
 
 if (isset($_POST['delete'])) {
+    $tool_content .= action_bar(array(
+        array('title' => "$langBackHome $siteName",
+            'url' => '../../index.php',
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+    
     delete_course($course_id);
     // logging
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
-        'code' => $course_code,
-        'title' => $title));
-    $tool_content .= "<div class='alert alert-success'>$langTheCourse <b>(" . q($title) . " $course_code)</b> $langHasDel</div>
-                      <br /><p align='pull-right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
+                                               'code' => $course_code,
+                                               'title' => $title));
+    $tool_content .= "<div class='alert alert-success'>$langTheCourse <b>(" . q($title) . " $course_code)</b> $langHasDel</div>";
     unset($course_code);
     unset($_SESSION['dbname']);
     draw($tool_content, 1);
     exit();
 } else {
-    $tool_content .= "
-    <table class='tbl'>
-    <tr>
-    <td class='alert alert-danger' height='60' colspan='3'>
-            <p>$langByDel_A <b>" . q($title) . " ($course_code) </b>&nbsp;?  </p>
-    </td>
-    </tr>
-    <tr>
-    <th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
-    <td width='52' align='center'>
-    <form method='post' action='delete_course.php?course=$course_code'>
-    <input class='btn btn-primary' type='submit' name='delete' value='$langDelete' /></form></td>
-    <td><small>$langByDel</small></td>
-    </tr>
-    </table>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=" . q($course_code),
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+              'url' => "index.php?course=" . q($course_code),
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+    
+    $tool_content .= "<div class='alert alert-danger'>
+            $langByDel_A <b>" . q($title) . " ($course_code) ;</b></div>
+    <div class='form-wrapper'>
+    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-5'>
+            <input class='btn btn-primary' type='submit' name='delete' value='$langDelete'>
+        </div>
+    </div>
+    <span class='help-block'><small>$langByDel</small></span></form></div>";
 }
 draw($tool_content, 2);
