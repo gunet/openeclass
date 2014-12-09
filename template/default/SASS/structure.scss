@@ -33,33 +33,32 @@ body > .container{
 	}
 
 	.panel{
-		border: none;
-    margin: 0;
-    margin-bottom: 1em;
-    background: inherit;
-		
-    border-top: 2px solid rgba(255,255,255,.1);
-    border-bottom: 2px solid rgba(255,255,255,.1);
+            border: none;
+            margin: 0;
+            margin-bottom: 1em;
+            background: inherit;		
+            border-top: 2px solid rgba(255,255,255,.1);
+            border-bottom: 2px solid rgba(255,255,255,.1);
+            border-radius: 5px 0px 0px 5px;
 
-    border-radius: 5px 0px 0px 5px;
+            .list-group{
+                border-radius:0;
+                @include box-shadow(none);
 
-    .list-group{
-      border-radius:0;
-      @include box-shadow(none);
+            }
 
-    }
+            .panel-heading{
+                border-radius: 4px 0px 0px 0px!important;
+                padding: 10px 7px;
 
-		.panel-heading{
-			border-radius: 4px 0px 0px 0px!important;
+                .panel-title{
+                    text-align: center;
+                    font-size: 0.85em;
+                    font-weight: bold;
+                }
 
-			.panel-title{
-        text-align: center;
-				font-size: 0.85em;
-				font-weight: bold;
-			}
-
-			&:hover{
-				color: $color-hover;
+                &:hover{
+                    color: $color-hover;
 
         @include transition(all $transition-time linear);
 			}
@@ -94,7 +93,7 @@ body > .container{
 			&.list-group-item{
                             border: none;
                             border-top: 1px solid rgba(255,255,255,.075);
-                            padding: 0.5em;
+                            padding: 0.6em 15px;
                             text-align: center;
 
         @include transition(all $transition-time linear);
