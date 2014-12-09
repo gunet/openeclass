@@ -128,7 +128,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
               'button-class' => 'btn-success'))): '') . "
-    <div class='row margin-top-fat'>
+    <div class='row'>
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
