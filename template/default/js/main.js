@@ -27,6 +27,14 @@ $(document).ready( function () {
                     'type': 'hidden'})).submit();
     });
     
+    // Leftnav - rotate Category Menu Item icon
+    $('.panel-collapse').on('shown.bs.collapse', function () {
+        $(this).prev("a").find("i").addClass("fa-rotate-90");
+    });
+    $('.panel-collapse').on('hidden.bs.collapse', function () {
+        $(this).prev("a").find("i").removeClass("fa-rotate-90");
+    });
+    
     // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
     // and the menu is not inside the viwport. This snippet scrolls the page to the top.
     function scrollToTop(element, time){
@@ -46,7 +54,7 @@ $(document).ready( function () {
     });
     
     $('.panel-collapse').on('shown.bs.collapse', function () {
-        //scrollToTop($(this).prev('a'),500);
+        //scrollToTop($(this).prev('a'),500);  // Uncomment this if you want to make anchor the Parent Menu Item
         scrollToTop("html, body",500);
     });
 

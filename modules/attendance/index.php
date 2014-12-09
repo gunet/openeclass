@@ -715,7 +715,7 @@ if ($is_editor) {
             }
             $tool_content .= "</table></div></div></div>";
         } else {
-            Session::Messages($langAttendanceNoActMessageAss4);
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
         }
         
         $showAttendanceActivities = 0;
@@ -857,7 +857,10 @@ if ($is_editor) {
         //get all the available activities
         $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
         $announcementNumber = count($result);
-        if ($announcementNumber > 0) {
+        
+        if (!$result or $activityNumber == 0) {
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
+        }else{
             $tool_content .= "<h3>$langAttendanceActList</h3>
                               <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
@@ -868,10 +871,7 @@ if ($is_editor) {
                                 <th>$langAttendanceAbsences</th>
                                 <th class='text-center'><i class='fa fa-cogs'></i></th>
                             </tr>";
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
-        }
-        if ($result){
+        
             foreach ($result as $announce) {               
                 $content = ellipsize_html($announce->description, 50);
                 $d = strtotime($announce->date);
@@ -917,8 +917,9 @@ if ($is_editor) {
                                         ))).
                         "</td></tr>";
             } // end of while
+            $tool_content .= "</table></div></div></div>";
         }
-        $tool_content .= "</table></div></div></div>";
+        
 
         
     }    

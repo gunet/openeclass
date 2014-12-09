@@ -215,7 +215,7 @@ function loggedInMenu() {
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
     array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-list");
 
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
