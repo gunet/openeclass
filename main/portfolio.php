@@ -121,13 +121,20 @@ jQuery(document).ready(function() {
 
 require_once 'perso.php';
 
-$tool_content = ($_SESSION['status'] == USER_TEACHER?
-    action_bar(array(
-        array('title' => $langCourseCreate,
+$tool_content .= action_bar(array(
+        array('title' => $langRegCourses, 
+              'url' => $urlAppend . 'modules/auth/courses.php',
+              'icon' => 'fa-check',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success'),
+    array('title' => $langCourseCreate,
               'url' => $urlAppend . 'modules/create_course/create_course.php',
+              'show' => $_SESSION['status'] == USER_TEACHER,
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'))): '') . "
+              'button-class' => 'btn-success')));
+
+$tool_content .= "
     <div class='row'>
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
