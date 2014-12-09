@@ -145,8 +145,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             'icon' => 'fa-reply',
             'url' => $_SERVER['SCRIPT_NAME']
         )
-    ));
-    $tool_content .= "
+    )). "
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
@@ -177,17 +176,52 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <input type='hidden' name='id' value='$noteToModify' />
     </fieldset>
     </form></div>";
+    
+} elseif (isset($_GET['nid'])) {
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => $_SERVER['SCRIPT_NAME']
+        )
+    ));
+    
+    $note = Notes::get_note(intval($_GET['nid']));
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
+    $nameTools = q($note->title);    
+    $tool_content .= "
+        <div class='panel panel-action-btn-default'>
+            <div class='panel-heading'>
+                <div class='pull-right'>".
+                    action_button(array(
+                        array('title' => $langModify,
+                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langGroupProperties,
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
+                            'confirm' => $langSureToDelNote,
+                            'class' => 'delete',
+                            'icon' => 'fa-times')
+                    ))
+               ."</div>
+                <h3 class='panel-title'>$note->title</h3>
+            </div>
+            <div class='panel-body'>
+                <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
+                $note->content
+            </div>
+        </div>
+    ";
 } else {
     /* display actions toolbar */
-    $tool_content .= "
-    <div id='operations_container'>"
-            . action_bar(array(
+    $tool_content .= action_bar(array(
                 array('title' => $langAddNote,
                     'url' => "$_SERVER[SCRIPT_NAME]?addNote=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'))) .
-            "</div>";
+                    'button-class' => 'btn-success')
+            ));
 
 
 
@@ -197,11 +231,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         $cid = course_code_to_id($_GET['course']);
         $notelist = Notes::get_all_course_notes($cid);
     } else { 
-        if (isset($_GET['nid'])) {
-            $notelist = array(Notes::get_note(intval($_GET['nid'])));
-        } else {
-            $notelist = Notes::get_user_notes();
-        }
+        $notelist = Notes::get_user_notes();
     }
     //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
 
@@ -217,54 +247,49 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
-    if ($notelist)
-        foreach ($notelist as $note) {
-            $content = standard_text_escape($note->content);
-            $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
-            $tool_content .= "<tr><td><b>";
-            if (empty($note->title)) {
-                $tool_content .= $langNoteNoTitle;
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'>" . q($note->title) . "</a>";
-            }
-            $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
-            if (!is_null($note->reference_obj_type)) {
-                $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
-            }
-            if (isset($_GET['nid'])) {
-                $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
-                $nameTools = q($note->title);
-                $tool_content .= $content;
-            } else {
-                $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
-            }
-            $tool_content .= "</td>";
 
-            $tool_content .= "<td class='option-btn-cell'>" .
-                    action_button(array(
-                        array('title' => $langModify,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
-                            'icon' => 'fa-edit'),
-                        array('title' => $langGroupProperties,
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
-                            'confirm' => $langSureToDelNote,
-                            'class' => 'delete',
-                            'icon' => 'fa-times'),
-                        array('title' => $langMove . " " . $langUp,
-                            'url' => "$_SERVER[SCRIPT_NAME]?up=$note->id",
-                            'show' => $iterator != 1,
-                            'icon' => 'fa-arrow-up'),
-                        array('title' => $langMove . " " . $langDown,
-                            'url' => "$_SERVER[SCRIPT_NAME]?down=" . $note->id,
-                            'show' => $iterator < $bottomNote,
-                            'icon' => 'fa-arrow-down')
-                    )) .
-                    "</td>";
+    foreach ($notelist as $note) {
+        $content = standard_text_escape($note->content);
+        $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
+        $tool_content .= "<tr><td><b>";
+        if (empty($note->title)) {
+            $tool_content .= $langNoteNoTitle;
+        } else {
+            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'>" . q($note->title) . "</a>";
+        }
+        $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
+        if (!is_null($note->reference_obj_type)) {
+            $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
+        }
 
-            $tool_content .= "</tr>";
-            $iterator ++;
-        } // end of while
-        $tool_content .= "</table></div>";
+        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
+        $tool_content .= "</td>";
+
+        $tool_content .= "<td class='option-btn-cell'>" .
+                action_button(array(
+                    array('title' => $langModify,
+                        'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
+                        'icon' => 'fa-edit'),
+                    array('title' => $langGroupProperties,
+                        'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
+                        'confirm' => $langSureToDelNote,
+                        'class' => 'delete',
+                        'icon' => 'fa-times'),
+                    array('title' => $langMove . " " . $langUp,
+                        'url' => "$_SERVER[SCRIPT_NAME]?up=$note->id",
+                        'show' => $iterator != 1,
+                        'icon' => 'fa-arrow-up'),
+                    array('title' => $langMove . " " . $langDown,
+                        'url' => "$_SERVER[SCRIPT_NAME]?down=" . $note->id,
+                        'show' => $iterator < $bottomNote,
+                        'icon' => 'fa-arrow-down')
+                )) .
+                "</td>";
+
+        $tool_content .= "</tr>";
+        $iterator ++;
+    } // end of while
+    $tool_content .= "</table></div>";
 
     if ($noteNumber < 1) {
         $no_content = true;
