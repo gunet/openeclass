@@ -215,8 +215,7 @@ function new_bbb_session() {
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
     global $tool_content, $langBBBAddSuccessful;
-    global $langBBBScheduledSession;
-    global $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $course_code, $langBack;
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2;
 
     // Groups of participants per session
     $r_group = "";
@@ -241,8 +240,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
         . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
     
-    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";
-    $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";   
 
     // if we have to notify users for new session
     if($notifyUsers=="1")
@@ -718,10 +716,13 @@ function enable_bbb_session($id)
 }
 
 
-
 /**
  * @brief delete bbb sessions
-*/
+ * @global type $langBBBDeleteSuccessful
+ * @global type $tool_content
+ * @param type $id
+ * @return type
+ */
 function delete_bbb_session($id)
 {
     global $langBBBDeleteSuccessful, $tool_content;
@@ -839,8 +840,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             // If we get a null response, then we're not getting any XML back from BBB.
             echo "<div class='alert-danger'>$langBBBConnectionError</div>";
             exit;
-        }
-        else {            
+        } else {
             if ($result['returncode'] == 'SUCCESS') {
                 // Then do stuff ...
                 //echo "<p>Meeting succesfullly created.</p>";
@@ -853,8 +853,17 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
     }
 }
 
-//create join as moderator link
-function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
+
+/**
+ * @brief create join as moderator link
+ * @param type $meeting_id
+ * @param type $mod_pw
+ * @param type $att_pw
+ * @param type $surname
+ * @param type $name
+ * @return string
+ */
+function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name){
     
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
@@ -895,16 +904,22 @@ function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
 return;
 }
 
-// create join as simple user link
-function bbb_join_user($meeting_id,$att_pw,$surname,$name){
+/**
+ * @brief create join as simple user link
+ * @param type $meeting_id
+ * @param type $att_pw
+ * @param type $surname
+ * @param type $name
+ * @return type
+ */
+function bbb_join_user($meeting_id, $att_pw, $surname, $name){
+    
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
     }
 
-    $res = Database::get()->querySingle("SELECT *
-                        FROM bbb_servers
-                        WHERE id=?d", $running_server);
+    $res = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id = ?d", $running_server);
 
     $salt = $res->server_key;
     $bbb_url = $res->api_url;
@@ -920,31 +935,24 @@ function bbb_join_user($meeting_id,$att_pw,$surname,$name){
         'userId' => '',	// OPTIONAL - string
         'webVoiceConf' => ''	// OPTIONAL - string
     );
-
     // Get the URL to join meeting:
-    $itsAllGood = true;
-    try {$result = $bbb->getJoinMeetingURL($joinParams);}
-        catch (Exception $e) {
-            //echo 'Caught exception: ', $e->getMessage(), "\n";
-            $itsAllGood = false;
-    }
-
-    if ($itsAllGood == true) {
-        //Output results to see what we're getting:
-        //print_r($result);
-    }
+    $result = $bbb->getJoinMeetingURL($joinParams);       
 
     return $result;
 }
 
-// Generate random strings. Used to create meeting_id, attendance password and moderator password
+
+/**
+ * @brief Generate random strings. Used to create meeting_id, attendance password and moderator password
+ * @param type $length
+ * @return type
+ */
 function generateRandomString($length = 10) {
     return substr(str_shuffle(implode(array_merge(range(0,9), range('A', 'Z'), range('a', 'z')))), 0, $length);
 }
 
 function bbb_session_running($meeting_id)
-{
-    //echo "SELECT running_at FROM bbb_session WHERE meeting_id = '$meeting_id'";    
+{    
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
 
     if (! isset($res->running_at)) {
@@ -986,7 +994,13 @@ function bbb_session_running($meeting_id)
     }else return true;
 }
 
-//Function to calculate date diff in minutes in order to enable join link
+
+/**
+ * @brief function to calculate date diff in minutes in order to enable join link
+ * @param type $start_date
+ * @param type $current_date
+ * @return type
+ */
 function date_diff_in_minutes($start_date,$current_date)
 {
     return round((strtotime($start_date) - strtotime($current_date)) /60);
@@ -1025,6 +1039,12 @@ function get_connected_users($salt, $bbb_url, $ip)
 
 }
 
+/**
+ * @brief get number of active rooms
+ * @param type $salt
+ * @param type $bbb_url
+ * @return int
+ */
 function get_active_rooms($salt,$bbb_url)
 {
     $sum = 0;
@@ -1048,16 +1068,27 @@ function get_total_bbb_servers()
 {
     $total = 0;
     
-    $total = Database::get()->querySingle("SELECT count(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
+    $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
     
     return $total;
 }
 
-function publish_video_recordings($course_id,$id)
-{
-    $sessions = Database::get()->queryArray("SELECT bbb_session.id,bbb_session.course_id as course_id,"
+/**
+ * @brief display video recordings in multimedia
+ * @global type $langBBBImportRecordingsOK
+ * @global type $langBBBImportRecordingsNo
+ * @global type $tool_content;
+ * @param type $course_id
+ * @param type $id
+ * @return boolean
+ */
+function publish_video_recordings($course_id, $id)
+{    
+    global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $tool_content;
+    
+    $sessions = Database::get()->queryArray("SELECT bbb_session.id,bbb_session.course_id AS course_id,"
             . "bbb_session.title,bbb_session.description,bbb_session.start_date,"
-            . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id,$id);
+            . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
 
@@ -1080,13 +1111,15 @@ function publish_video_recordings($course_id,$id)
                 {
                     $url = (string) $xml->recordings->recording->playback->format->url;
 
-                    #Check if recording allready in videolinks and if not insert
-                    $c = Database::get()->querySingle("SELECT count(*) AS cnt FROM videolink WHERE url = ?s",$url);
-                    if($c->cnt == 0)
-                    {
+                    #Check if recording already in videolinks and if not insert
+                    $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
+                    if($c->cnt == 0) {
                         Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
                         . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
+                        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
                     }
+                } else {
+                        $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNo</div>";
                 }
             }
         }
@@ -1094,8 +1127,20 @@ function publish_video_recordings($course_id,$id)
     return true;
 }
 
+/**
+ * @brief get number of meeting users
+ * @global type $langBBBGetUsersError
+ * @global type $langBBBConnectionError
+ * @param type $salt
+ * @param type $bbb_url
+ * @param type $meeting_id
+ * @param type $pw
+ * @return type
+ */
 function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
 {
+    global $langBBBGetUsersError, $langBBBConnectionError;
+            
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
@@ -1104,31 +1149,21 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
         'password' => $pw,	// REQUIRED - Must match moderator pass for meeting.
     );
 
-    // Now get meeting info and display it:
-    $itsAllGood = true;
-    try {$result = $bbb->getMeetingInfoWithXmlResponseArray($infoParams);}
-    catch (Exception $e) {
-        echo 'Caught exception: ', $e->getMessage(), "\n";
-        $itsAllGood = false;
-    }
+    // Now get meeting info and display it:    
+    $result = $bbb->getMeetingInfoWithXmlResponseArray($infoParams);
+    // If it's all good, then we've interfaced with our BBB php api OK:
+    if ($result == null) {
+        // If we get a null response, then we're not getting any XML back from BBB.
+        echo "<div class='alert-danger'>$langBBBConnectionError</div>";
+    }	
+    else {
+        // We got an XML response, so let's see what it says:                
+        if (!isset($result['messageKey'])) {
 
-    if ($itsAllGood == true) {
-        // If it's all good, then we've interfaced with our BBB php api OK:
-            if ($result == null) {
-                // If we get a null response, then we're not getting any XML back from BBB.
-                echo "Failed to get any response. Maybe we can't contact the BBB server.";
-            }	
-            else {
-                // We got an XML response, so let's see what it says:
-                //var_dump($result);
-                if (!isset($result['messageKey'])) {
-                    // Then do stuff ...
-                    echo "<p>Meeting info was found on the server.</p>";
-                }
-                else {
-                    echo "<p>Failed to get meeting info.</p>";
-                }
-            }
+        } else {
+            echo "<div class='alert alert-danger'>$langBBBGetUsersError.</div>";
+            exit;                    
+        }
     }
 
     return (int)$result['participantCount'];

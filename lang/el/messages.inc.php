@@ -4208,9 +4208,9 @@ $langNewBBBSessionStatus = "Κατάσταση";
 $langNewBBBSessionActive = "Ορατή";
 $langNewBBBSessionInActive = "Μη ορατή";
 
-$langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεσυνεργασίας πραγματοποιήθηκε επιτυχώς";
+$langBBBAddSuccessful = "Ο προγραμματισμός της νέας τηλεσυνεργασίας πραγματοποιήθηκε με επιτυχία.";
 
-$langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίας είναι σε εξέλιξη";
+$langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη";
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης";
 
 $langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
@@ -4228,12 +4228,14 @@ $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνε�
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρετητή";
 $langBBBConnectionError = "Η σύνδεση με τον εξυπηρέτη τηλεσυνεργασιών δεν είναι δυνατή";
+$langBBBGetUsersError = "Δεν ήταν δυνατή η ανάκτηση πληροφοριών για την τηλεσυνεργασία ";
 $langBBBCreationRoomError = "Η δημιουργία αίθουσας  στον εξυπηρέτη τηλεσυνεργασιών δεν είναι δυνατή";
 $langBBBRecord = "Καταγραφή τηλεσυνεργασίας";
 $langBBBRecordTrue = "Ναί";
 $langBBBRecordFalse = "Όχι";
 $langBBBImportRecordings = "Εισαγωγή καταγεγραμμένων τηλεσυνεργασιών στα πολυμέσα";
-$langBBBImportRecordingsOK = "Η εισαγωγή στα πολυμέσα ολοκληρώθηκε επιτυχώς!";
+$langBBBImportRecordingsOK = "Η εισαγωγή στα πολυμέσα ολοκληρώθηκε με επιτυχία!";
+$langBBBImportRecordingsNo = "Η εισαγωγή στα πολυμέσα δεν πραγματοποιήθηκε επειδή δεν υπάρχει δυνατότητα καταγραφής.";
 $langMaxUsers = "Μέγ. αριθμός χρηστών";
 $langMaxRooms = "Μέγ. αριθμός δωματίων";
 $langPresharedKey = "Διαμοιραζόμενο κλειδί";

@@ -43,8 +43,6 @@ $action->record(MODULE_ID_BBB);
 
 $nameTools = $langBBB;
 
-global $langBBBImportRecordingsΟΚ,$langBBBMaxUsersJoinError;
-
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
@@ -112,19 +110,25 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label',
-                  'show' => $is_editor)));
+                  'level' => 'primary-label')));
     } else {
-        $tool_content .= action_bar(array(
-            array('title' => $langNewBBBSession,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
-                  'icon' => 'fa-calendar',
-                  'level' => 'primary-label',
-                  'show' => $is_editor)));
-    }
-    
+        if (isset($_GET['id'])) {
+            $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
+        } else {
+            $tool_content .= action_bar(array(
+                array('title' => $langNewBBBSession,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
+                      'icon' => 'fa-calendar',
+                      'level' => 'primary-label')));
+        }
+    }    
 }
-if (isset($_GET['add'])) {
+
+if (isset($_GET['add'])) {    
     $nameTools = $langNewBBBSession;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     new_bbb_session();
@@ -186,11 +190,10 @@ elseif(isset($_GET['choice']))
             publish_video_recordings($course_code,$_GET['id']);
             break;
     } 
-    if($_GET['choice']=='import_video')
-    {
-        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsΟΚ</div>";
-    }
-} elseif(isset($_POST['new_bbb_session'])) {  
+   
+} elseif(isset($_POST['new_bbb_session'])) {
+    $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+    
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');    
     add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
